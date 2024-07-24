@@ -54,7 +54,7 @@ Our ultimate mission is to help you move data from any source to any destination
 
 - **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
 
-- **Schemaless**: [VARIANT data type](https://docs.databend.com/sql/sql-reference/data-types/data-type-variant) enabling schemaless data storage and flexible data modeling.
+- **Schemafull**: [Type system](./docs/typesystem.md) enabling schema-full data storage with flexible data modeling.
 
 - **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
 
@@ -185,7 +185,7 @@ Data Plane is a golang pluggable package that include into data-plane binary and
 3. [Source](./arcadia/transfer_manager/go/pkg/abstract/source.go) - streaming data reader
 
 Data pipeline composes with two [Endpoint](./transfer_manager/go/pkg/server/endpoint_params.go)-s: [Source](./transfer_manager/go/pkg/server/endpoint_params.go) and [Destination](./transfer_manager/go/pkg/server/endpoint_params.go).
-Each Data pipeline essentially link between **Source** {`Storage`|`Source`|`Provider`} and **Destination** {`Sink`|`Target`}.
+Each Data pipeline essentially link between **Source** {`Storage`|`Source`} and **Destination** {`Sink`}.
 **Transfer** is a **LOGICAL** data transfer service. The minimum unit of data is a logical **ROW** (object). Between **source** and **target** we communicate via [ChangeItem](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/changeset.go?rev=r10623357#L57)-s.
 Those items batched and we may apply stateless [Transformations](./transfer_manager/go/pkg/transformer).
 Overall this pipeline called [Transfer](./transfer_manager/go/pkg/server/model_transfer.go?rev=420c3cb117#L31)
