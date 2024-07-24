@@ -1,0 +1,52 @@
+{
+    "AllowTTLRewind": false,
+    "Cluster": "",
+    "Consumer": "",
+    "Credentials": null,
+    "Database": "",
+    "EnrichTopic": false,
+    "Extra": {},
+    "HashColumn": "",
+    "InferSchema": false,
+    "InferTimezone": false,
+    "Instance": "",
+    "IsLbSink": false,
+    "LfParser": false,
+    "MaxConcurrentPartitions": 0,
+    "MaxIdleTime": 0,
+    "MaxMemory": 52428800,
+    "MaxReadMessagesCount": 0,
+    "MaxReadSize": 1048576,
+    "MaxTimeLag": 0,
+    "OnlyLocal": false,
+    "ParserConfig": {
+        "yql.lb": {
+            "AddRest": true,
+            "AddSyntheticKeys": false,
+            "Fields": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint64"
+                }
+            ],
+            "SchemaResourceName": "",
+            "TableSplitter": null,
+            "TimeField": null,
+            "YqlOutputKeys": null,
+            "YqlScript": "SELECT * FROM $rows;"
+        }
+    },
+    "Port": 0,
+    "Sniff": false,
+    "Token": "",
+    "Topics": null
+}

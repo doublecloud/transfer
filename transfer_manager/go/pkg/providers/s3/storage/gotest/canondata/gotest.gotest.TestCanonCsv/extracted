@@ -1,0 +1,256 @@
+file: "s3_file_name" = 'test_csv_large/people-500000.csv'
+{
+    "ColumnNames": {
+        "type": "[]string",
+        "value": [
+            "__file_name",
+            "__row_index",
+            "Index",
+            "User Id",
+            "First Name",
+            "Last Name",
+            "Sex",
+            "Email",
+            "Phone",
+            "Date of birth",
+            "Job Title"
+        ]
+    },
+    "ColumnValues": {
+        "type": "[]interface {}",
+        "value": [
+            {
+                "type": "string",
+                "value": "test_csv_large/people-500000.csv"
+            },
+            {
+                "type": "uint64",
+                "value": 1
+            },
+            {
+                "type": "json.Number",
+                "value": 1
+            },
+            {
+                "type": "string",
+                "value": "db484997Aa2e723"
+            },
+            {
+                "type": "string",
+                "value": "Marcia"
+            },
+            {
+                "type": "string",
+                "value": "Morrison"
+            },
+            {
+                "type": "string",
+                "value": "Female"
+            },
+            {
+                "type": "string",
+                "value": "yvonnemcknight@example.net"
+            },
+            {
+                "type": "string",
+                "value": "892.956.5029x7469"
+            },
+            {
+                "type": "string",
+                "value": "1963-06-30"
+            },
+            {
+                "type": "string",
+                "value": "Set designer"
+            }
+        ]
+    },
+    "CommitTime": {
+        "type": "uint64",
+        "value": 0
+    },
+    "Counter": {
+        "type": "int",
+        "value": 0
+    },
+    "ID": {
+        "type": "uint32",
+        "value": 0
+    },
+    "Kind": {
+        "type": "changeitem.Kind",
+        "value": "insert"
+    },
+    "LSN": {
+        "type": "uint64",
+        "value": 0
+    },
+    "OldKeys": {
+        "type": "changeitem.OldKeysType",
+        "value": {}
+    },
+    "PartID": {
+        "type": "string",
+        "value": "test_csv_large/people-500000.csv"
+    },
+    "Query": {
+        "type": "string",
+        "value": ""
+    },
+    "Schema": {
+        "type": "string",
+        "value": "test_namespace"
+    },
+    "Size": {
+        "type": "changeitem.EventSize",
+        "value": {
+            "Read": 501,
+            "Values": 0
+        }
+    },
+    "Table": {
+        "type": "string",
+        "value": "test_name"
+    },
+    "TableSchema": {
+        "type": "[]changeitem.ColSchema",
+        "value": [
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "__file_name",
+                "type": "utf8",
+                "key": true,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": ""
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "__row_index",
+                "type": "uint64",
+                "key": true,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": ""
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "0",
+                "name": "Index",
+                "type": "double",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:double"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "1",
+                "name": "User Id",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "2",
+                "name": "First Name",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "3",
+                "name": "Last Name",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "4",
+                "name": "Sex",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "5",
+                "name": "Email",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "6",
+                "name": "Phone",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "7",
+                "name": "Date of birth",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "8",
+                "name": "Job Title",
+                "type": "utf8",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "csv:utf8"
+            }
+        ]
+    },
+    "TxID": {
+        "type": "string",
+        "value": ""
+    }
+}

@@ -1,0 +1,42 @@
+package config
+
+import (
+	"time"
+
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+)
+
+type Endpoint struct {
+	ID, Name string
+	Type     abstract.ProviderType
+	Params   string
+}
+
+type Runtime struct {
+	Type   string
+	Params interface{}
+}
+
+type UploadTables struct {
+	Tables []abstract.TableDescription
+}
+
+type TransferYamlView struct {
+	ID                string
+	TransferName      string
+	Description       string
+	Labels            string
+	Status            model.TransferStatus
+	Type              abstract.TransferType
+	FolderID          string
+	CloudID           string
+	CreatedAt         time.Time `db:"created_at"`
+	Runtime           Runtime
+	Src               Endpoint
+	Dst               Endpoint
+	RegularSnapshot   *abstract.RegularSnapshot `yaml:"regular_snapshot"`
+	Transformation    string                    `yaml:"transformation"`
+	DataObjects       *model.DataObjects        `yaml:"data_objects"`
+	TypeSystemVersion int                       `yaml:"type_system_version"`
+}

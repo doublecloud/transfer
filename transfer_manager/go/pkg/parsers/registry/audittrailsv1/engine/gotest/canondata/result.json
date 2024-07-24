@@ -1,0 +1,5192 @@
+{
+    "gotest.gotest.TestCanonWholeProgram0": {
+        "uri": "file://gotest.gotest.TestCanonWholeProgram0/extracted"
+    },
+    "gotest.gotest.TestCanonWholeProgram1": {
+        "uri": "file://gotest.gotest.TestCanonWholeProgram1/extracted"
+    },
+    "gotest.gotest.TestElastic": [
+        {
+            "columnnames": [
+                "@timestamp",
+                "authentication",
+                "authorization",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "request_metadata",
+                "resource_metadata",
+                "user",
+                "user_agent"
+            ],
+            "columnvalues": [
+                "2022-11-14T10:03:17Z",
+                {},
+                {},
+                {
+                    "cloud": {
+                        "id": "test-resource-id-2",
+                        "name": "test-resource-name-2"
+                    },
+                    "folder": {
+                        "id": "test-resource-id-3",
+                        "name": "test-resource-name-3"
+                    },
+                    "org": {
+                        "id": "test-resource-id-1",
+                        "name": "test-resource-name-1"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {
+                    "service_account_id": "service-account-id",
+                    "service_account_name": "service-account-name"
+                },
+                {
+                    "action": "test-event",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "123",
+                    "kind": "event",
+                    "module": "mia",
+                    "status": "STARTED"
+                },
+                "123",
+                "2022-11-14T10:03:17Z",
+                {
+                    "remote_address": "test-address",
+                    "request_id": "test-id"
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "test-resource-id-1",
+                            "resource_name": "test-resource-name-1",
+                            "resource_type": "test-resource-type-1"
+                        },
+                        {
+                            "resource_id": "test-resource-id-2",
+                            "resource_name": "test-resource-name-2",
+                            "resource_type": "test-resource-type-2"
+                        },
+                        {
+                            "resource_id": "test-resource-id-3",
+                            "resource_name": "test-resource-name-3",
+                            "resource_type": "test-resource-type-3"
+                        }
+                    ]
+                },
+                {
+                    "authenticated": true,
+                    "authorization": true,
+                    "id": "123",
+                    "name": "test@yandex-team.ru",
+                    "type": "FEDERATED_USER_ACCOUNT"
+                },
+                {
+                    "original": "test-agent"
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "@timestamp",
+                "authentication",
+                "authorization",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "request_metadata",
+                "resource_metadata",
+                "user",
+                "user_agent"
+            ],
+            "columnvalues": [
+                "2022-11-14T10:03:18Z",
+                {},
+                {},
+                {
+                    "cloud": {
+                        "id": "resource-id-test",
+                        "name": "arch-test"
+                    },
+                    "folder": {
+                        "id": "test-resource-id",
+                        "name": "test-name"
+                    },
+                    "org": {
+                        "id": "yc.test",
+                        "name": "yc-organization-test"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {
+                    "service_account_id": "account-id-test",
+                    "service_account_name": "yc-test-name"
+                },
+                {
+                    "action": "event-test-type-2",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "456",
+                    "kind": "event",
+                    "module": "mia",
+                    "outcome": "success",
+                    "status": "DONE"
+                },
+                "456",
+                "2022-11-14T10:03:18Z",
+                {
+                    "remote_address": "address-test",
+                    "request_id": "1234-test"
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "yc.test",
+                            "resource_name": "yc-organization-test",
+                            "resource_type": "resource.test"
+                        },
+                        {
+                            "resource_id": "resource-id-test",
+                            "resource_name": "arch-test",
+                            "resource_type": "cloud.test"
+                        },
+                        {
+                            "resource_id": "test-resource-id",
+                            "resource_name": "test-name",
+                            "resource_type": "folder.test"
+                        }
+                    ]
+                },
+                {
+                    "authenticated": true,
+                    "authorization": true,
+                    "id": "456",
+                    "name": "super_test@yandex-team.ru",
+                    "type": "FEDERATED_USER_ACCOUNT"
+                },
+                {
+                    "original": "mozilla-test"
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "@timestamp",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "request_metadata",
+                "resource_metadata"
+            ],
+            "columnvalues": [
+                "2025-09-17T16:20:44.337671492Z",
+                {
+                    "cloud": {
+                        "id": "sdigsjh235",
+                        "name": "test-name"
+                    },
+                    "folder": {
+                        "id": "swiefiuaovmccxn3",
+                        "name": "49-test"
+                    },
+                    "instance": {
+                        "id": "test-id",
+                        "name": "vm-test"
+                    },
+                    "org": {
+                        "id": "192353egref",
+                        "name": "23512fw"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {},
+                {
+                    "action": "cloud.test",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "789",
+                    "kind": "event",
+                    "module": "source-2",
+                    "outcome": "success",
+                    "status": "DONE"
+                },
+                "789",
+                "2025-09-17T16:20:44.337671492Z",
+                {
+                    "request_id": "sdgcvxjgh-52354243"
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "192353egref",
+                            "resource_name": "23512fw",
+                            "resource_type": "manager-test"
+                        },
+                        {
+                            "resource_id": "sdigsjh235",
+                            "resource_name": "test-name",
+                            "resource_type": "cloud-test"
+                        },
+                        {
+                            "resource_id": "swiefiuaovmccxn3",
+                            "resource_name": "49-test",
+                            "resource_type": "test-folder"
+                        }
+                    ]
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "@timestamp",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "request_metadata",
+                "resource_metadata"
+            ],
+            "columnvalues": [
+                "2025-09-03T17:22:44.338248356Z",
+                {
+                    "cloud": {
+                        "id": "dslndjdsf23",
+                        "name": "name-test"
+                    },
+                    "folder": {
+                        "id": "sdgkdsng32",
+                        "name": "test-49"
+                    },
+                    "instance": {
+                        "id": "id-test",
+                        "name": "vm-test"
+                    },
+                    "org": {
+                        "id": "2356346",
+                        "name": "wefw23254"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {},
+                {
+                    "action": "yandex.test",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "012",
+                    "kind": "event",
+                    "module": "source-1",
+                    "outcome": "success",
+                    "status": "DONE"
+                },
+                "012",
+                "2025-09-03T17:22:44.338248356Z",
+                {
+                    "request_id": "sdfgsdg-qw13rgfdsg"
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "2356346",
+                            "resource_name": "wefw23254",
+                            "resource_type": "organization-test"
+                        },
+                        {
+                            "resource_id": "dslndjdsf23",
+                            "resource_name": "name-test",
+                            "resource_type": "resource-test"
+                        },
+                        {
+                            "resource_id": "sdgkdsng32",
+                            "resource_name": "test-49",
+                            "resource_type": "folder-test"
+                        }
+                    ]
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "@timestamp",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "request_metadata",
+                "resource_metadata"
+            ],
+            "columnvalues": [
+                "2024-09-03T17:22:44.338248356Z",
+                {
+                    "cloud": {
+                        "id": "poodfaosdgsg",
+                        "name": "cloud-test"
+                    },
+                    "instance": {
+                        "id": "sdjjsgd7u23u42u3",
+                        "name": "vcxsdf-test"
+                    },
+                    "org": {
+                        "id": "sdgbcxbkx23",
+                        "name": "asdpgpsdpgd"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {},
+                {
+                    "action": "test-instance",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "sdgmdsfgfkdg",
+                    "kind": "event",
+                    "module": "src",
+                    "outcome": "success",
+                    "status": "DONE"
+                },
+                "sdgmdsfgfkdg",
+                "2024-09-03T17:22:44.338248356Z",
+                {
+                    "request_id": "jsdjsdfdsf-sdnsdhjgjgds"
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "sdgbcxbkx23",
+                            "resource_name": "asdpgpsdpgd",
+                            "resource_type": "test-organization"
+                        },
+                        {
+                            "resource_id": "poodfaosdgsg",
+                            "resource_name": "cloud-test",
+                            "resource_type": "test-cloud"
+                        }
+                    ]
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "@timestamp",
+                "authentication",
+                "authorization",
+                "cloud",
+                "details",
+                "event",
+                "event_id",
+                "event_time",
+                "operation_id",
+                "request_metadata",
+                "request_parameters",
+                "resource_metadata",
+                "response",
+                "security_group",
+                "user",
+                "user_agent"
+            ],
+            "columnvalues": [
+                "2022-03-02T19:57:28Z",
+                {
+                    "federation_id": "iqwioasoldsf",
+                    "federation_name": "test-as",
+                    "federation_type": "PRIVATE_FEDERATION"
+                },
+                {},
+                {
+                    "cloud": {
+                        "id": "8923u9thdisuf",
+                        "name": "name"
+                    },
+                    "folder": {
+                        "id": "sduighfaic",
+                        "name": "d-name-prod-2"
+                    },
+                    "org": {
+                        "id": "gsdfgkskjd",
+                        "name": "sdkfsdkjgk"
+                    },
+                    "provider": "yandexcloud",
+                    "service": {
+                        "name": "audittrail"
+                    }
+                },
+                {
+                    "network_id": "skakfkalspwrp",
+                    "network_name": "name-test",
+                    "rules": [
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "kjdsgksg",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.54/32",
+                                    "10.106.10.226/32",
+                                    "10.255.1.6/32"
+                                ]
+                            },
+                            "description": "desc",
+                            "direction": "EGRESS",
+                            "id": "siudgfsuidgkj",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "185.98.81.132/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "vscnjv",
+                            "ports": {
+                                "from_port": "8088",
+                                "to_port": "8088"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32"
+                                ]
+                            },
+                            "direction": "INGRESS",
+                            "id": "sjafknkdsf",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32",
+                                    "10.213.36.27/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "ierhijgieg",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.213.36.27/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "zxnvjnkwqe",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.71/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpc394rvu2clum8n6vd",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpi9ep174ngtuqo5kvq",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32",
+                                    "195.239.64.32/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "oadsjfdaojog",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "vcxvjnsak",
+                            "ports": {
+                                "from_port": "8080",
+                                "to_port": "8080"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.110/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpao4i7e1ndb4bmnaor",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpfiipe4q9qfbe3dtqs",
+                            "protocol_name": "ICMP",
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enp0i339cshq8hhus71f",
+                            "protocol_name": "ICMP",
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.135/32",
+                                    "10.128.0.44/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpdd9ae1c2qssaoh28c",
+                            "ports": {
+                                "from_port": "25",
+                                "to_port": "25"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpoi47h6i09kcol7rg1",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpnbpshl1n6ki98idc1",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enplhbpvmut86nhjn30q",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpv2o93iel97cgf7na0",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        }
+                    ],
+                    "security_group_name": "128rh28t8hds"
+                },
+                {
+                    "action": "group-test",
+                    "category": "",
+                    "dataset": "yandexcloud.audittrail",
+                    "id": "apsflalfdsf",
+                    "kind": "event",
+                    "module": "network-test",
+                    "status": "STARTED"
+                },
+                "apsflalfdsf",
+                "2022-03-02T19:57:28Z",
+                "op-gsfdkgdfg",
+                {
+                    "remote_address": "384.124",
+                    "request_id": "987e-6f747d182eab"
+                },
+                {
+                    "name": "test-app",
+                    "rule_specs": [
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.54/32",
+                                    "10.106.10.226/32",
+                                    "10.255.1.6/32"
+                                ]
+                            },
+                            "description": "muscl-test",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "185.98.81.132/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8088",
+                                "to_port": "8088"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32"
+                                ]
+                            },
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32",
+                                    "10.213.36.27/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.213.36.27/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "fdkgerwt",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.71/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32",
+                                    "195.239.64.32/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8080",
+                                "to_port": "8080"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.110/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {},
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {},
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.135/32",
+                                    "10.128.0.44/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "25",
+                                "to_port": "25"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_number": "6"
+                        }
+                    ],
+                    "security_group_id": "enp5u84mu6nh5bs6mss0",
+                    "update_mask": ""
+                },
+                {
+                    "path": [
+                        {
+                            "resource_id": "gsdfgkskjd",
+                            "resource_name": "sdkfsdkjgk",
+                            "resource_type": "organization-test"
+                        },
+                        {
+                            "resource_id": "8923u9thdisuf",
+                            "resource_name": "name",
+                            "resource_type": "test"
+                        },
+                        {
+                            "resource_id": "sduighfaic",
+                            "resource_name": "d-name-prod-2",
+                            "resource_type": "test-folder"
+                        }
+                    ]
+                },
+                {},
+                {
+                    "id": "sffdkgksdngsad"
+                },
+                {
+                    "authenticated": true,
+                    "authorization": true,
+                    "id": "dgskgbdfkjkjska",
+                    "name": "xcvknxcvn.ru",
+                    "type": "FEDERATED_USER_ACCOUNT"
+                },
+                {
+                    "original": "mozilla-sdfsdfg"
+                }
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "@timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authentication",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorization",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "object_storage",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource_metadata",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "security_group",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ],
+    "gotest.gotest.TestNotElastic": [
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                true,
+                true,
+                null,
+                null,
+                {
+                    "service_account_id": "service-account-id",
+                    "service_account_name": "service-account-name"
+                },
+                "123",
+                "mia",
+                "STARTED",
+                "2022-11-14T10:03:17Z",
+                "test-event",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "test-address",
+                "test-id",
+                null,
+                "123",
+                "test@yandex-team.ru",
+                "FEDERATED_USER_ACCOUNT",
+                "test-agent"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                true,
+                true,
+                null,
+                null,
+                {
+                    "service_account_id": "account-id-test",
+                    "service_account_name": "yc-test-name"
+                },
+                "456",
+                "mia",
+                "DONE",
+                "2022-11-14T10:03:18Z",
+                "event-test-type-2",
+                null,
+                null,
+                null,
+                null,
+                null,
+                "address-test",
+                "1234-test",
+                null,
+                "456",
+                "super_test@yandex-team.ru",
+                "FEDERATED_USER_ACCOUNT",
+                "mozilla-test"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                null,
+                null,
+                null,
+                null,
+                {
+                    "instance_id": "test-id",
+                    "instance_name": "vm-test"
+                },
+                "789",
+                "source-2",
+                "DONE",
+                "2025-09-17T16:20:44.337671492Z",
+                "cloud.test",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "sdgcvxjgh-52354243",
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                null,
+                null,
+                null,
+                null,
+                {
+                    "instance_id": "id-test",
+                    "instance_name": "vm-test"
+                },
+                "012",
+                "source-1",
+                "DONE",
+                "2025-09-03T17:22:44.338248356Z",
+                "yandex.test",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "sdfgsdg-qw13rgfdsg",
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                null,
+                null,
+                null,
+                null,
+                {
+                    "instance_id": "sdjjsgd7u23u42u3",
+                    "instance_name": "vcxsdf-test"
+                },
+                "sdgmdsfgfkdg",
+                "src",
+                "DONE",
+                "2024-09-03T17:22:44.338248356Z",
+                "test-instance",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "jsdjsdfdsf-sdnsdhjgjgds",
+                null,
+                null,
+                null,
+                null,
+                null
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "authenticated",
+                "authorized",
+                "cloud_id",
+                "cloud_name",
+                "details",
+                "event_id",
+                "event_source",
+                "event_status",
+                "event_time",
+                "event_type",
+                "folder_id",
+                "folder_name",
+                "operation_id",
+                "org_id",
+                "org_name",
+                "remote_address",
+                "request_id",
+                "request_parameters",
+                "subject_id",
+                "subject_name",
+                "subject_type",
+                "user_agent"
+            ],
+            "columnvalues": [
+                true,
+                true,
+                null,
+                null,
+                {
+                    "network_id": "skakfkalspwrp",
+                    "network_name": "name-test",
+                    "rules": [
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "kjdsgksg",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.54/32",
+                                    "10.106.10.226/32",
+                                    "10.255.1.6/32"
+                                ]
+                            },
+                            "description": "desc",
+                            "direction": "EGRESS",
+                            "id": "siudgfsuidgkj",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "185.98.81.132/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "vscnjv",
+                            "ports": {
+                                "from_port": "8088",
+                                "to_port": "8088"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32"
+                                ]
+                            },
+                            "direction": "INGRESS",
+                            "id": "sjafknkdsf",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32",
+                                    "10.213.36.27/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "ierhijgieg",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.213.36.27/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "zxnvjnkwqe",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.71/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpc394rvu2clum8n6vd",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpi9ep174ngtuqo5kvq",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32",
+                                    "195.239.64.32/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "oadsjfdaojog",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "vcxvjnsak",
+                            "ports": {
+                                "from_port": "8080",
+                                "to_port": "8080"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.110/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpao4i7e1ndb4bmnaor",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpfiipe4q9qfbe3dtqs",
+                            "protocol_name": "ICMP",
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enp0i339cshq8hhus71f",
+                            "protocol_name": "ICMP",
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.135/32",
+                                    "10.128.0.44/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpdd9ae1c2qssaoh28c",
+                            "ports": {
+                                "from_port": "25",
+                                "to_port": "25"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpoi47h6i09kcol7rg1",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "id": "enpnbpshl1n6ki98idc1",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enplhbpvmut86nhjn30q",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "id": "enpv2o93iel97cgf7na0",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_name": "TCP",
+                            "protocol_number": "6"
+                        }
+                    ],
+                    "security_group_id": "sffdkgksdngsad",
+                    "security_group_name": "128rh28t8hds"
+                },
+                "apsflalfdsf",
+                "network-test",
+                "STARTED",
+                "2022-03-02T19:57:28Z",
+                "group-test",
+                null,
+                null,
+                "op-gsfdkgdfg",
+                null,
+                null,
+                "384.124",
+                "987e-6f747d182eab",
+                {
+                    "name": "test-app",
+                    "rule_specs": [
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.54/32",
+                                    "10.106.10.226/32",
+                                    "10.255.1.6/32"
+                                ]
+                            },
+                            "description": "muscl-test",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "185.98.81.132/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8088",
+                                "to_port": "8088"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32"
+                                ]
+                            },
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.12.33/32",
+                                    "10.255.12.34/32",
+                                    "10.255.1.10/32",
+                                    "10.213.36.27/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.213.36.27/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "fdkgerwt",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.129.7.71/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "22",
+                                "to_port": "22"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "80",
+                                "to_port": "80"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.161/32",
+                                    "10.96.4.115/32",
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32",
+                                    "195.239.64.32/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "443",
+                                "to_port": "443"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.111/32",
+                                    "10.17.1.112/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8080",
+                                "to_port": "8080"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.17.1.110/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "3306",
+                                "to_port": "3306"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.106.10.209/32",
+                                    "10.255.1.17/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {},
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "10.255.1.17/32",
+                                    "10.106.10.209/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {},
+                            "protocol_number": "1"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "195.239.64.135/32",
+                                    "10.128.0.44/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "25",
+                                "to_port": "25"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "EGRESS",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "8400",
+                                "to_port": "8403"
+                            },
+                            "protocol_number": "6"
+                        },
+                        {
+                            "cidr_blocks": {
+                                "v4_cidr_blocks": [
+                                    "172.16.76.129/32",
+                                    "172.16.76.87/32",
+                                    "10.128.0.11/32",
+                                    "10.128.4.11/32"
+                                ]
+                            },
+                            "description": "",
+                            "direction": "INGRESS",
+                            "ports": {
+                                "from_port": "49152",
+                                "to_port": "65535"
+                            },
+                            "protocol_number": "6"
+                        }
+                    ],
+                    "security_group_id": "enp5u84mu6nh5bs6mss0",
+                    "update_mask": ""
+                },
+                "dgskgbdfkjkjska",
+                "xcvknxcvn.ru",
+                "FEDERATED_USER_ACCOUNT",
+                "mozilla-sdfsdfg"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "event_id",
+                    "original_type": "",
+                    "path": "event_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_source",
+                    "original_type": "",
+                    "path": "event_source",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_type",
+                    "original_type": "",
+                    "path": "event_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_time",
+                    "original_type": "",
+                    "path": "event_time",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authenticated",
+                    "original_type": "",
+                    "path": "authentication.authenticated",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_type",
+                    "original_type": "",
+                    "path": "authentication.subject_type",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_id",
+                    "original_type": "",
+                    "path": "authentication.subject_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject_name",
+                    "original_type": "",
+                    "path": "authentication.subject_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "authorized",
+                    "original_type": "",
+                    "path": "authorization.authorized",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "remote_address",
+                    "original_type": "",
+                    "path": "request_metadata.remote_address",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "user_agent",
+                    "original_type": "",
+                    "path": "request_metadata.user_agent",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_id",
+                    "original_type": "",
+                    "path": "request_metadata.request_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "event_status",
+                    "original_type": "",
+                    "path": "event_status",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "details",
+                    "original_type": "",
+                    "path": "details",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "org_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[0].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "cloud_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[1].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_id",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "folder_name",
+                    "original_type": "",
+                    "path": "resource_metadata..path[2].resource_name",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "request_parameters",
+                    "original_type": "",
+                    "path": "request_parameters",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "operation_id",
+                    "original_type": "",
+                    "path": "response.operation_id",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

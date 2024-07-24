@@ -1,0 +1,18 @@
+id: dtttest
+transfername: pg-to-ch-test
+description: ""
+type: INCREMENT_ONLY
+src:
+  id: dtetestsource
+  name: pg-source
+  type: pg
+  params: |
+    {
+    }
+dst:
+  id: dtetesttarget
+  name: ch-target
+  type: ch
+  params: |
+    {
+    }

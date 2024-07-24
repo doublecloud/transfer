@@ -1,0 +1,444 @@
+{
+    "gotest.gotest.TestClient": [
+        {
+            "columnnames": [
+                "id",
+                "source",
+                "type",
+                "dataschema",
+                "subject",
+                "time",
+                "payload"
+            ],
+            "columnvalues": [
+                "d7b3a474-d721-4065-a9c5-de6ee548a42d",
+                "local://test",
+                "created",
+                "http://localhost:8081/schemas/ids/2",
+                "profile-subject",
+                "2023-06-09T13:12:20.163335Z",
+                {
+                    "created_at": {
+                        "seconds": 1686316340
+                    },
+                    "ext_blogger_id": 35011,
+                    "ext_brand_id": 0,
+                    "ext_business_id": 0,
+                    "id": "be9d10fa-e6da-4e3c-8bdd-ea65cd7d30cc",
+                    "is_blocked": false,
+                    "name": "Marco Tremblay",
+                    "pics": [
+                        {
+                            "created_at": {
+                                "seconds": 1686316340
+                            },
+                            "group_id": 90894,
+                            "id": "1f59e0b7-47a0-4f4d-8308-71afe3d986ea",
+                            "name": "ef8d1e94-18ca-482a-9ee5-ceb0421aa35f",
+                            "namespace": "corwin"
+                        },
+                        {
+                            "created_at": {
+                                "seconds": 1686316340
+                            },
+                            "group_id": 776883690,
+                            "id": "045bee18-34e7-445f-9f44-2efa15b4c368",
+                            "name": "48d4e273-1f8c-4c15-938f-3b841617a433",
+                            "namespace": "bosco"
+                        },
+                        {
+                            "created_at": {
+                                "seconds": 1686316340
+                            },
+                            "group_id": 4016855,
+                            "id": "4c22a909-ab77-4333-a1b3-f88c5e4ca58c",
+                            "name": "f2b5ab4a-e3db-4498-adb8-bc156c23df14",
+                            "namespace": "hane"
+                        }
+                    ],
+                    "updated_at": null,
+                    "users": [
+                        {
+                            "created_at": {
+                                "seconds": 1686316340
+                            },
+                            "ext_user_id": 58531675,
+                            "id": "060376c1-c4c6-4c71-99fc-b89faf85d4dd",
+                            "updated_at": null
+                        },
+                        {
+                            "created_at": {
+                                "seconds": 1686316340
+                            },
+                            "ext_user_id": 27909808,
+                            "id": "e1411849-704d-4640-9a60-cc8a132c6f0f",
+                            "updated_at": null
+                        }
+                    ],
+                    "version": 0
+                }
+            ],
+            "commitTime": 1580674820000000020,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "type",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "dataschema",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "time",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "payload",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "id",
+                "source",
+                "type",
+                "dataschema",
+                "subject",
+                "time",
+                "payload"
+            ],
+            "columnvalues": [
+                "6f9d07a9-c410-4d81-8237-efddce899670",
+                "local://test",
+                "created",
+                "http://localhost:8081/schemas/ids/1",
+                "shot-subject",
+                "2023-06-09T13:12:20.289164Z",
+                {
+                    "created_at": {
+                        "seconds": 1686316340
+                    },
+                    "description": {
+                        "uri": "file://gotest.gotest.TestClient/extracted"
+                    },
+                    "ext_user_id": 43155,
+                    "id": "17cac720-9933-47ea-8ff8-f60911be9b05",
+                    "is_banned": false,
+                    "is_main": true,
+                    "is_whitelisted": true,
+                    "model_id": 5169385840748893321,
+                    "picture": {
+                        "created_at": {
+                            "seconds": 1686316340
+                        },
+                        "group_id": 85,
+                        "id": "fb6ca788-f3d8-4673-bd90-88048201c35c",
+                        "name": "turcotte",
+                        "namespace": ""
+                    },
+                    "profile_id": "d40345c8-ad38-4951-b9d7-0d22616d369b",
+                    "sku": "252-62-5901",
+                    "status_code": 0,
+                    "updated_at": null,
+                    "version": 0,
+                    "video": null
+                }
+            ],
+            "commitTime": 1580674820000000020,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 1,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "type",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "dataschema",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "time",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "payload",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "id",
+                "source",
+                "type",
+                "dataschema",
+                "subject",
+                "time",
+                "payload"
+            ],
+            "columnvalues": [
+                "c6b94372-81f1-4d93-8b80-79d6733a912f",
+                "http://localhost",
+                "test",
+                "http://localhost:8081/schemas/ids/3",
+                "",
+                "2024-02-09T11:51:19.135153Z",
+                {
+                    "aggregate_type": "init-process"
+                }
+            ],
+            "commitTime": 1580674820000000020,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 2,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "source",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "type",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "dataschema",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "subject",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "time",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "payload",
+                    "original_type": "",
+                    "path": "",
+                    "required": true,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

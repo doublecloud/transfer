@@ -1,0 +1,9 @@
+{
+  ".":"transfer_manager/go/github",
+  ".gitignore":"transfer_manager/go/github/.gitignore",
+  "CONTRIBUTING.md":"transfer_manager/go/CONTRIBUTING.md",
+  "GLOSSARY.md":"transfer_manager/go/GLOSSARY.md",
+  "README.md":"transfer_manager/go/README.md",
+  "go.mod":"",
+  "go.sum":""
+}

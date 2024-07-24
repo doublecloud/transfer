@@ -1,0 +1,2 @@
+59252969;40;29825;tskv	id=1	message=\\good escaping\= \\\=: select 333, *,\npg_sleep(2)\n\t\rfrom t1\norder by\nid\ndesc;
+59252969;40;29825;tskv	id=2	message=\\broken escaping\= \\\=: 2003.259 ms  statement: select 333, *,\npg_sleep(2)\n\t\rfrom t1\norder by\nid\ndesc\

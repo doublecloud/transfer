@@ -1,0 +1,38 @@
+{
+  "id": 0,
+  "nextlsn": 23430616,
+  "commitTime": 1652444893446899000,
+  "txPosition": 0,
+  "kind": "insert",
+  "schema": "public",
+  "table": "basic_types",
+  "columnnames": [
+	"id",
+	"udt"
+  ],
+  "columnvalues": [
+	1,
+	"(1,123)"
+  ],
+  "table_schema": [
+	{
+	  "path": "",
+	  "name": "id",
+	  "type": "int32",
+	  "key": true,
+	  "required": false,
+	  "original_type": "pg:integer"
+	},
+	{
+	  "path": "",
+	  "name": "udt",
+	  "type": "any",
+	  "key": false,
+	  "required": false,
+	  "original_type": "pg:\"public\".\"udt\""
+	}
+  ],
+  "oldkeys": {},
+  "tx_id": "",
+  "query": ""
+}

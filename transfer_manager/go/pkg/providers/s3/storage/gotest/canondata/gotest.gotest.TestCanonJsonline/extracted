@@ -1,0 +1,159 @@
+file: test_jsonline_files/test.jsonl
+{
+    "ColumnNames": {
+        "type": "[]string",
+        "value": [
+            "__file_name",
+            "__row_index",
+            "Date",
+            "Hit_ID",
+            "Time_Spent"
+        ]
+    },
+    "ColumnValues": {
+        "type": "[]interface {}",
+        "value": [
+            {
+                "type": "string",
+                "value": "test_jsonline_files/test.jsonl"
+            },
+            {
+                "type": "uint64",
+                "value": 1
+            },
+            {
+                "type": "time.Time",
+                "value": "2017-09-09T00:00:00Z"
+            },
+            {
+                "type": "json.Number",
+                "value": 40668
+            },
+            {
+                "type": "[]interface {}",
+                "value": [
+                    {
+                        "type": "string",
+                        "value": "730.875"
+                    }
+                ]
+            }
+        ]
+    },
+    "CommitTime": {
+        "type": "uint64",
+        "value": 0
+    },
+    "Counter": {
+        "type": "int",
+        "value": 0
+    },
+    "ID": {
+        "type": "uint32",
+        "value": 0
+    },
+    "Kind": {
+        "type": "changeitem.Kind",
+        "value": "insert"
+    },
+    "LSN": {
+        "type": "uint64",
+        "value": 0
+    },
+    "OldKeys": {
+        "type": "changeitem.OldKeysType",
+        "value": {}
+    },
+    "PartID": {
+        "type": "string",
+        "value": "test_jsonline_files/test.jsonl"
+    },
+    "Query": {
+        "type": "string",
+        "value": ""
+    },
+    "Schema": {
+        "type": "string",
+        "value": "test_namespace"
+    },
+    "Size": {
+        "type": "changeitem.EventSize",
+        "value": {
+            "Read": 255,
+            "Values": 0
+        }
+    },
+    "Table": {
+        "type": "string",
+        "value": "test_name"
+    },
+    "TableSchema": {
+        "type": "[]changeitem.ColSchema",
+        "value": [
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "__file_name",
+                "type": "utf8",
+                "key": true,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": ""
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "__row_index",
+                "type": "uint64",
+                "key": true,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": ""
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "Date",
+                "type": "timestamp",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "jsonl:timestamp"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "Hit_ID",
+                "type": "double",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "jsonl:number"
+            },
+            {
+                "table_schema": "",
+                "table_name": "",
+                "path": "",
+                "name": "Time_Spent",
+                "type": "any",
+                "key": false,
+                "fake_key": false,
+                "required": false,
+                "expression": "",
+                "original_type": "jsonl:array"
+            }
+        ]
+    },
+    "TxID": {
+        "type": "string",
+        "value": ""
+    }
+}

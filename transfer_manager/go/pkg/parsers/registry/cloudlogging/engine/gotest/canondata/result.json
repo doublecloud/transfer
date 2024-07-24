@@ -1,0 +1,154 @@
+{
+    "gotest.gotest.TestParser": [
+        {
+            "columnnames": [
+                "ingestedAt",
+                "jsonPayload",
+                "level",
+                "message",
+                "resource",
+                "savedAt",
+                "streamName",
+                "timestamp",
+                "uid"
+            ],
+            "columnvalues": [
+                "2022-11-18T05:39:48.017249902Z",
+                {
+                    "test": "me"
+                },
+                "FATAL",
+                "my secret message",
+                {
+                    "id": "res-id",
+                    "type": "type"
+                },
+                "2022-11-18T05:39:48.017249944Z",
+                "stream",
+                "2022-11-18T05:39:48.017249864Z",
+                "1:2:3e7"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"my-topic-name\"}",
+            "query": "",
+            "schema": "",
+            "table": "my-topic-name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "timestamp",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "uid",
+                    "original_type": "",
+                    "path": "uid",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "resource",
+                    "original_type": "",
+                    "path": "resource",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "ingestedAt",
+                    "original_type": "",
+                    "path": "ingestedAt",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "savedAt",
+                    "original_type": "",
+                    "path": "savedAt",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "level",
+                    "original_type": "",
+                    "path": "level",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "message",
+                    "original_type": "",
+                    "path": "message",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "jsonPayload",
+                    "original_type": "",
+                    "path": "jsonPayload",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "streamName",
+                    "original_type": "",
+                    "path": "streamName",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

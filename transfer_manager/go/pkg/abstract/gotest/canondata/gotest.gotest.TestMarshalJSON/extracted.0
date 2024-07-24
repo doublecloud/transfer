@@ -1,0 +1,68 @@
+{
+    "id": 100,
+    "nextlsn": 200,
+    "commitTime": 1961,
+    "txPosition": 9,
+    "kind": "insert",
+    "schema": "schema",
+    "table": "table",
+    "part": "part_id",
+    "columnnames": [
+        "a",
+        "b"
+    ],
+    "columnvalues": [
+        "av",
+        "bv"
+    ],
+    "table_schema": [
+        {
+            "table_schema": "schema",
+            "table_name": "table",
+            "path": "path",
+            "name": "a",
+            "type": "data",
+            "key": true,
+            "fake_key": true,
+            "required": true,
+            "expression": "expression",
+            "system_key": true,
+            "original_type": "orig",
+            "properties": {
+                "k": "v"
+            }
+        },
+        {
+            "table_schema": "schema",
+            "table_name": "table",
+            "path": "path",
+            "name": "b",
+            "type": "data",
+            "key": true,
+            "fake_key": true,
+            "required": true,
+            "expression": "expression",
+            "system_key": true,
+            "original_type": "orig",
+            "properties": {
+                "x": "y"
+            }
+        }
+    ],
+    "oldkeys": {
+        "keynames": [
+            "a",
+            "b"
+        ],
+        "keytypes": [
+            "at",
+            "bt"
+        ],
+        "keyvalues": [
+            "av",
+            "bv"
+        ]
+    },
+    "tx_id": "tx_id",
+    "query": "query"
+}

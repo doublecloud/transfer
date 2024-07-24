@@ -1,0 +1,1 @@
+{"uid":"1:2:3e7", "resource":{"type":"type", "id":"res-id"}, "timestamp":"2022-11-18T05:39:48.017249864Z", "ingestedAt":"2022-11-18T05:39:48.017249902Z", "savedAt":"2022-11-18T05:39:48.017249944Z", "level":"FATAL", "message":"my secret message", "jsonPayload":{"test":"me"}, "streamName":"stream"}

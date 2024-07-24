@@ -1,0 +1,8 @@
+{
+    "tests.tests.TestEnum": {
+        "uri": "file://tests.tests.TestEnum/extracted"
+    },
+    "tests.tests.TestNegativeTimestamp": {
+        "uri": "file://tests.tests.TestNegativeTimestamp/extracted"
+    }
+}

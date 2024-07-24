@@ -1,0 +1,556 @@
+{
+    "gotest.gotest.TestBase64Unpack": [
+        {
+            "columnnames": [
+                "id",
+                "stringVal",
+                "bytesVal"
+            ],
+            "columnvalues": [
+                1,
+                "{\"key\":\"val\"}",
+                "dGVzdA=="
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "stringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "bytesVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "id",
+                "stringVal",
+                "bytesVal"
+            ],
+            "columnvalues": [
+                2,
+                "some string with\nnew line",
+                "dGVzdDI="
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 1,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "stringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "bytesVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ],
+    "gotest.gotest.TestParserNumberTypes": {
+        "UseNumbersFalse": [
+            {
+                "columnnames": [
+                    "id",
+                    "number_field",
+                    "float_field",
+                    "obj_field",
+                    "array_field"
+                ],
+                "columnvalues": [
+                    1,
+                    1234567123123,
+                    12345678765432.234,
+                    {
+                        "int_field": 123123123123123330
+                    },
+                    [
+                        0,
+                        1,
+                        2,
+                        4,
+                        12313.12241632513,
+                        -123123.13117532,
+                        12345678987654320,
+                        -12345678987654320,
+                        100000,
+                        1e-07
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+                "query": "",
+                "schema": "",
+                "table": "my_topic_name",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "id",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int8"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "number_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "float_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "double"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "obj_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "array_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            }
+        ],
+        "UseNumbersTrue": [
+            {
+                "columnnames": [
+                    "id",
+                    "number_field",
+                    "float_field",
+                    "obj_field",
+                    "array_field"
+                ],
+                "columnvalues": [
+                    1,
+                    1234567123123,
+                    12345678765432.234,
+                    {
+                        "int_field": 123123123123123321
+                    },
+                    [
+                        0,
+                        1,
+                        2,
+                        4,
+                        12313.12241632513,
+                        -123123.13117532,
+                        12345678987654321,
+                        -12345678987654321,
+                        100000.0,
+                        1e-07
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+                "query": "",
+                "schema": "",
+                "table": "my_topic_name",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "id",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int8"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "number_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "float_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "double"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "obj_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "array_field",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            }
+        ]
+    },
+    "gotest.gotest.TestUnescapeJSON": [
+        {
+            "columnnames": [
+                "id",
+                "stringVal",
+                "escapedStringVal"
+            ],
+            "columnvalues": [
+                1,
+                "{\"key\":\"val\"}",
+                "{\"key\":\"val\"}"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "stringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "escapedStringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "id",
+                "stringVal",
+                "escapedStringVal"
+            ],
+            "columnvalues": [
+                2,
+                "some string with\nnew line",
+                "some string with\nnew line"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 1,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "stringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "escapedStringVal",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ],
+    "gotest.gotest.TestUnescapeTSKV": [
+        {
+            "columnnames": [
+                "id",
+                "message"
+            ],
+            "columnvalues": [
+                1,
+                "\\good escaping= \\=: select 333, *,\npg_sleep(2)\n\t\rfrom t1\norder by\nid\ndesc;"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "message",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "id",
+                "message"
+            ],
+            "columnvalues": [
+                2,
+                "\\\\broken escaping\\= \\\\\\=: 2003.259 ms  statement: select 333, *,\\npg_sleep(2)\\n\\t\\rfrom t1\\norder by\\nid\\ndesc\\"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 1,
+            "oldkeys": {},
+            "part": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}",
+            "query": "",
+            "schema": "",
+            "table": "my_topic_name",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "message",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

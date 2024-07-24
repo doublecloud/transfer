@@ -1,0 +1,109 @@
+package queues
+
+import (
+	"fmt"
+	"path"
+	"time"
+
+	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/tross/library/go/core/log"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+)
+
+func ChangeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMessage, abstract.Partition) {
+	partition := ci.ColumnValues[1].(int)
+	seqNo := ci.ColumnValues[2].(uint64)
+	wTime := ci.ColumnValues[3].(time.Time)
+	var data []byte
+	switch v := ci.ColumnValues[4].(type) {
+	case []byte:
+		data = v
+	case string:
+		data = []byte(v)
+	}
+	return persqueue.ReadMessage{
+			Offset:     ci.LSN,
+			SeqNo:      seqNo,
+			CreateTime: time.Unix(0, int64(ci.CommitTime)),
+			WriteTime:  wTime,
+			Data:       data,
+		}, abstract.Partition{
+			Cluster:   "", // v1 protocol does not contains such entity
+			Partition: uint32(partition),
+			Topic:     ci.Table,
+		}
+}
+
+func MessageAsChangeItem(m persqueue.ReadMessage, b persqueue.MessageBatch) abstract.ChangeItem {
+	topicID := path.Base(b.Topic)
+	if len(topicID) == 0 {
+		topicID = b.Topic
+	}
+	return abstract.MakeRawMessage(
+		topicID,
+		m.WriteTime,
+		b.Topic,
+		int(b.Partition),
+		int64(m.Offset),
+		m.Data,
+	)
+}
+
+type TransformFunc func([]abstract.ChangeItem) []abstract.ChangeItem
+
+func Parse(buffer []*persqueue.Data, parser parsers.Parser, metrics *stats.SourceStats, logger log.Logger, transformFunc TransformFunc) []abstract.ChangeItem {
+	totalSize := 0
+	st := time.Now()
+	var data []abstract.ChangeItem
+	for _, item := range buffer {
+		for _, b := range item.Batches() {
+			for _, m := range b.Messages {
+				data = append(data, MessageAsChangeItem(m, b))
+				totalSize += len(m.Data)
+			}
+		}
+	}
+	if transformFunc != nil {
+		data = transformFunc(data)
+	}
+	if parser != nil {
+		var res []abstract.ChangeItem
+		for _, row := range data {
+			changeItem, partition := ChangeItemAsMessage(row)
+			res = append(res, parser.Do(changeItem, partition)...)
+		}
+		data = res
+		metrics.DecodeTime.RecordDuration(time.Since(st))
+		logger.Debugf("Converter done in %v, %v rows", time.Since(st), len(data))
+	}
+	metrics.ChangeItems.Add(int64(len(data)))
+	for _, ci := range data {
+		if ci.IsRowEvent() {
+			if parsers.IsUnparsed(ci) {
+				metrics.Unparsed.Inc()
+			} else {
+				metrics.Parsed.Inc()
+			}
+		}
+	}
+	return data
+}
+
+// BuildMapPartitionToLbOffsetsRange - is used only in logging
+func BuildMapPartitionToLbOffsetsRange(v []persqueue.MessageBatch) map[string][]uint64 {
+	partitionToLbOffsetsRange := make(map[string][]uint64)
+	for _, b := range v {
+		partition := fmt.Sprintf("%v@%v", b.Topic, b.Partition)
+		partitionToLbOffsetsRange[partition] = make([]uint64, 0)
+
+		if len(b.Messages) == 1 {
+			partitionToLbOffsetsRange[partition] = append(partitionToLbOffsetsRange[partition], b.Messages[0].Offset)
+		} else if len(b.Messages) > 1 {
+			partitionToLbOffsetsRange[partition] = append(partitionToLbOffsetsRange[partition], b.Messages[0].Offset)
+			partitionToLbOffsetsRange[partition] = append(partitionToLbOffsetsRange[partition], b.Messages[len(b.Messages)-1].Offset)
+		}
+	}
+	return partitionToLbOffsetsRange
+}

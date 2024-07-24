@@ -1,0 +1,30 @@
+{
+  "0": {
+    "schema": "{\"type\":\"object\",\"properties\":{\"col0_number\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"number\"}]}},\"title\":\"schema_Bzgba.table_iCMRA\"}",
+    "schemaType": "JSON"
+  },
+  "1": {
+    "schema": "{\"type\":\"object\",\"properties\":{\"col0_object\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"object\"}]},\"col1_number\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"number\"}]}},\"title\":\"schema_Hctcu.table_AxhxK\"}",
+    "schemaType": "JSON"
+  },
+  "2": {
+    "schema": "{\"type\":\"object\",\"properties\":{\"col0_number\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"number\"}]},\"col1_array\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"array\"}]},\"col2_string\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"string\"}]},\"col3_integer\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"integer\"}]}},\"title\":\"schema_FbcXo.table_EFfRs\"}",
+    "schemaType": "JSON"
+  },
+  "3": {
+    "schema": "{\"type\":\"object\",\"properties\":{\"col0_bool\":{\"type\":\"boolean\"},\"col1_number\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"number\"}]},\"col2_number\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"number\"}]}},\"title\":\"schema_ObCsN.table_VlgTe\"}",
+    "schemaType": "JSON"
+  },
+  "4": {
+    "schema": "{\"type\":\"object\",\"properties\":{\"col0_integer\":{\"type\":\"integer\"},\"col1_integer\":{\"type\":\"integer\"},\"col2_integer\":{\"type\":\"integer\"},\"col3_array\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"array\"}]},\"col4_integer\":{\"oneOf\":[{\"type\":\"null\"},{\"type\":\"integer\"}]}},\"title\":\"schema_YzRyW.table_JjPjz\"}",
+    "schemaType": "JSON"
+  },
+  "5": {
+      "schema": "syntax = \"proto3\";\npackage dbserver1.public.timmyb32r_favourite_table;\n\nmessage Value {\n  int32 id = 1;\n  string val = 2;\n}\n",
+      "schemaType": "PROTOBUF"
+  },
+  "6": {
+    "schema": "syntax = \"proto3\";\npackage dbserver1.public.timmyb32r_favourite_table;\n\nimport \"confluent/type/decimal.proto\";\n\nmessage Value {\n  bool bl = 1;\n  bool b = 2;\n  bytes b8 = 3;\n  bytes vb = 4;\n  int32 si = 5 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"int16\",\n        key: \"connect.type\"\n      }\n    ]\n  }];\n  int32 ss = 6 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"int16\",\n        key: \"connect.type\"\n      }\n    ]\n  }];\n  int32 int = 7;\n  int32 aid = 8;\n  int64 id = 9;\n  int64 bid = 10;\n  int64 oid_ = 11;\n  float real_ = 12;\n  double d = 13;\n  string c = 14;\n  string str = 15;\n  string character_ = 16;\n  string character_varying_ = 17;\n  string timestamptz_ = 18;\n  string tst = 19;\n  string timetz_ = 20;\n  string time_with_time_zone_ = 21;\n  int64 iv = 22;\n  bytes ba = 23;\n  string j = 24;\n  string jb = 25;\n  string x = 26;\n  string uid = 27;\n  Point pt = 28;\n  string it = 29;\n  string int4range_ = 30;\n  string int8range_ = 31;\n  string numrange_ = 32;\n  string tsrange_ = 33;\n  string tstzrange_ = 34;\n  string daterange_ = 35;\n  double f = 36;\n  int32 i = 37;\n  string t = 38;\n  int32 date_ = 39;\n  int64 time_ = 40;\n  int32 time1 = 41;\n  int64 time6 = 42;\n  string timetz_z = 43;\n  string timetz1 = 44;\n  string timetz6 = 45;\n  int64 timestamp1 = 46;\n  int64 timestamp6 = 47;\n  int64 timestamp = 48;\n  VariableScaleDecimal numeric_ = 49;\n  confluent.type.Decimal numeric_5 = 50 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"5\",\n        key: \"precision\"\n      },\n      {\n        value: \"0\",\n        key: \"scale\"\n      }\n    ]\n  }];\n  confluent.type.Decimal numeric_5_2 = 51 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"5\",\n        key: \"precision\"\n      },\n      {\n        value: \"2\",\n        key: \"scale\"\n      }\n    ]\n  }];\n  VariableScaleDecimal decimal_ = 52;\n  confluent.type.Decimal decimal_5 = 53 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"5\",\n        key: \"precision\"\n      },\n      {\n        value: \"0\",\n        key: \"scale\"\n      }\n    ]\n  }];\n  confluent.type.Decimal decimal_5_2 = 54 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"5\",\n        key: \"precision\"\n      },\n      {\n        value: \"2\",\n        key: \"scale\"\n      }\n    ]\n  }];\n  confluent.type.Decimal money_ = 55 [(confluent.field_meta) = {\n    params: [\n      {\n        value: \"2\",\n        key: \"scale\"\n      }\n    ]\n  }];\n  string hstore_ = 56;\n  string inet_ = 57;\n  string cidr_ = 58;\n  string macaddr_ = 59;\n  string citext_ = 60;\n\n  message Point {\n    double x = 1;\n    double y = 2;\n    bytes wkb = 3;\n    int32 srid = 4;\n  }\n  message VariableScaleDecimal {\n    int32 scale = 1;\n    bytes value = 2;\n  }\n}\n",
+    "schemaType": "PROTOBUF"
+  }
+}

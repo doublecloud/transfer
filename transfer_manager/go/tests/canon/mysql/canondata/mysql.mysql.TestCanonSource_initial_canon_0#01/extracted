@@ -1,0 +1,1418 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "pk",
+                "bigint5",
+                "bigint_",
+                "bigint_u",
+                "binary5",
+                "binary_",
+                "bit",
+                "bit16",
+                "blob_",
+                "bool1",
+                "bool2",
+                "char5",
+                "char_",
+                "datetime0",
+                "datetime1",
+                "datetime2",
+                "datetime3",
+                "datetime4",
+                "datetime5",
+                "datetime6",
+                "datetime_",
+                "date_",
+                "DECIMAL_",
+                "DECIMAL_5",
+                "DECIMAL_5_2",
+                "double_",
+                "double_precision",
+                "enum_",
+                "float_",
+                "float_53",
+                "integer5",
+                "integer_",
+                "int_",
+                "int_u",
+                "json_",
+                "longblob_",
+                "longtext_",
+                "mediumblob_",
+                "mediumint5",
+                "mediumint_",
+                "mediumint_u",
+                "mediumtext_",
+                "NUMERIC_",
+                "NUMERIC_5",
+                "NUMERIC_5_2",
+                "real_",
+                "real_10_2",
+                "set_",
+                "smallint5",
+                "smallint_",
+                "smallint_u",
+                "text_",
+                "time0",
+                "time1",
+                "time2",
+                "time3",
+                "time4",
+                "time5",
+                "time6",
+                "timestamp0",
+                "timestamp1",
+                "timestamp2",
+                "timestamp3",
+                "timestamp4",
+                "timestamp5",
+                "timestamp6",
+                "timestamp_",
+                "time_",
+                "tinyblob_",
+                "tinyint1",
+                "tinyint1u",
+                "tinyint_",
+                "tinyint_def",
+                "tinyint_u",
+                "tinytext_",
+                "varbinary5",
+                "varchar5",
+                "year4",
+                "year_"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "uint32",
+                    "value": 1
+                },
+                {
+                    "type": "int64",
+                    "value": 88
+                },
+                {
+                    "type": "int64",
+                    "value": 8
+                },
+                {
+                    "type": "uint64",
+                    "value": 888
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "nwAAAAA="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "nw=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AQ=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AJ8="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "/w=="
+                },
+                {
+                    "type": "int8",
+                    "value": 0
+                },
+                {
+                    "type": "int8",
+                    "value": 1
+                },
+                {
+                    "type": "string",
+                    "value": "abc"
+                },
+                {
+                    "type": "string",
+                    "value": "a"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.1Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.12Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.123Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.1234Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.12345Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10.123456Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-01-01T15:10:10Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1000-01-01T00:00:00Z"
+                },
+                {
+                    "type": "json.Number",
+                    "value": 2345678901
+                },
+                {
+                    "type": "json.Number",
+                    "value": 23451
+                },
+                {
+                    "type": "json.Number",
+                    "value": 231.45
+                },
+                {
+                    "type": "json.Number",
+                    "value": 2.34
+                },
+                {
+                    "type": "json.Number",
+                    "value": 2.34
+                },
+                {
+                    "type": "string",
+                    "value": "x-small"
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1.23
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1.23
+                },
+                {
+                    "type": "int32",
+                    "value": 999
+                },
+                {
+                    "type": "int32",
+                    "value": 99
+                },
+                {
+                    "type": "int32",
+                    "value": 9
+                },
+                {
+                    "type": "uint32",
+                    "value": 9999
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "k1": {
+                            "type": "string",
+                            "value": "v1"
+                        }
+                    }
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "q80="
+                },
+                {
+                    "type": "string",
+                    "value": "my-longtext"
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "q80="
+                },
+                {
+                    "type": "int32",
+                    "value": 11
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "uint32",
+                    "value": 111
+                },
+                {
+                    "type": "string",
+                    "value": "my-mediumtext"
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 12345
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123.45
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123.45
+                },
+                {
+                    "type": "json.Number",
+                    "value": 99999.99
+                },
+                {
+                    "type": "string",
+                    "value": "a"
+                },
+                {
+                    "type": "int16",
+                    "value": 100
+                },
+                {
+                    "type": "int16",
+                    "value": 1000
+                },
+                {
+                    "type": "uint16",
+                    "value": 10
+                },
+                {
+                    "type": "string",
+                    "value": "my-text"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.1"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.12"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.123"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.1234"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.12345"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06.123456"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1999-10-19T10:23:54Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.1Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.12Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.123Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.1234Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.12345Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2004-10-19T10:23:54.123456Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1999-01-01T00:00:01Z"
+                },
+                {
+                    "type": "string",
+                    "value": "04:05:06"
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "n5+f"
+                },
+                {
+                    "type": "int8",
+                    "value": 1
+                },
+                {
+                    "type": "uint8",
+                    "value": 1
+                },
+                {
+                    "type": "int8",
+                    "value": 1
+                },
+                {
+                    "type": "int8",
+                    "value": 22
+                },
+                {
+                    "type": "uint8",
+                    "value": 255
+                },
+                {
+                    "type": "string",
+                    "value": "qwerty12345"
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "n58="
+                },
+                {
+                    "type": "string",
+                    "value": "blab"
+                },
+                {
+                    "type": "string",
+                    "value": "2155"
+                },
+                {
+                    "type": "string",
+                    "value": "1901"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 3816,
+                "Values": 2785
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "initial"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "pk",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(10) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bigint5",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bigint_",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bigint_u",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "binary5",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:binary(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "binary_",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:binary(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bit",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bit16",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(16)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "blob_",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:blob"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bool1",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "bool2",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "char5",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:char(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "char_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:char(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime0",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime1",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime2",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime3",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(3)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime4",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime5",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime6",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "datetime_",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:datetime"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "date_",
+                    "type": "date",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:date"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "DECIMAL_",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "DECIMAL_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "DECIMAL_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "double_",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "enum_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:enum('x-small','small','medium','large','x-large')"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "float_",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "integer5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "integer_",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "int_",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "int_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(10) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "json_",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:json"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "longblob_",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:longblob"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "longtext_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:longtext"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "mediumblob_",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumblob"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "mediumint5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "mediumint_",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(9)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "mediumint_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(8) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "mediumtext_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumtext"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "NUMERIC_",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "NUMERIC_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "NUMERIC_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "real_",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "set_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:set('a','b','c','d')"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "smallint5",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "smallint_",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "smallint_u",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "text_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:text"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time0",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time1",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time2",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time3",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(3)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time4",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time5",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time6",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp0",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp1",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp2",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp3",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(3)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp4",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp5",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp6",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "timestamp_",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:timestamp"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "time_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:time"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyblob_",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyblob"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyint1",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyint1u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyint_",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyint_def",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinyint_u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(3) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "tinytext_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinytext"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "varbinary5",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:varbinary(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "varchar5",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:varchar(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "year4",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:year(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "initial",
+                    "path": "",
+                    "name": "year_",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:year(4)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

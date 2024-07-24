@@ -1,0 +1,17 @@
+{
+    "1": {
+        "schema": "syntax = \"proto3\";\n\npackage ru.yandex.market.x_func_tech.temporal.business;\n\nmessage EventInfo {\n  .ru.yandex.market.x_func_tech.temporal.business.EEventType event_type = 1;\n\n  optional .ru.yandex.market.x_func_tech.temporal.business.EEventResult event_result = 2;\n\n  optional string event_result_message = 3;\n\n  int64 event_ts = 4;\n\n  optional string activity_type_nm = 5;\n\n  string workflow_type_nm = 6;\n\n  optional string signal_nm = 7;\n\n  string workflow_id = 8;\n\n  optional string parent_workflow_id = 9;\n\n  string root_workflow_id = 10;\n\n  string run_id = 11;\n}\n\nenum EEventResult {\n  EVENT_RESULT_UNSPECIFIED = 0;\n\n  EVENT_RESULT_SUCCESS = 1;\n\n  EVENT_RESULT_FAIL = 2;\n}\n\nenum EEventType {\n  EVENT_TYPE_UNSPECIFIED = 0;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_STARTED = 1;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED = 2;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_FAILED = 3;\n\n  EVENT_TYPE_WORKFLOW_TASK_STARTED = 6;\n\n  EVENT_TYPE_WORKFLOW_TASK_COMPLETED = 7;\n\n  EVENT_TYPE_WORKFLOW_TASK_TIMED_OUT = 8;\n\n  EVENT_TYPE_WORKFLOW_TASK_FAILED = 9;\n\n  EVENT_TYPE_ACTIVITY_TASK_STARTED = 11;\n\n  EVENT_TYPE_ACTIVITY_TASK_COMPLETED = 12;\n\n  EVENT_TYPE_ACTIVITY_TASK_FAILED = 13;\n\n  EVENT_TYPE_ACTIVITY_TASK_CANCEL_REQUESTED = 15;\n\n  EVENT_TYPE_ACTIVITY_TASK_CANCELED = 16;\n\n  EVENT_TYPE_TIMER_STARTED = 17;\n\n  EVENT_TYPE_TIMER_FIRED = 18;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_CANCEL_REQUESTED = 20;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_CANCELED = 21;\n\n  EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED = 22;\n\n  EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED = 23;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED = 26;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_TERMINATED = 27;\n\n  EVENT_TYPE_WORKFLOW_EXECUTION_CONTINUED_AS_NEW = 28;\n}\n",
+        "schemaType": "PROTOBUF"
+    },
+    "2": {
+        "schema": "syntax = \"proto3\";\n\npackage ru.yandex.market.maroco.workflow.v2;\n\nimport \"market/x_func_tech/x_func_tech_jvm/temporal-business-logs-spring-boot-starter/proto/event_info.proto\";\n\nmessage ReadyForLastMileBusinessContext {\n  optional .ru.yandex.market.x_func_tech.temporal.business.EventInfo event_info = 1;\n\n  optional int64 order_id = 2;\n\n  optional int64 puid = 3;\n\n  optional string app_platform = 4;\n\n  optional string order_status = 5;\n\n  optional string order_substatus = 6;\n\n  optional string last_order_substatus = 7;\n\n  optional string communication_id = 8;\n\n  optional string communication_title = 9;\n\n  optional string communication_text = 10;\n\n  optional string communication_link = 11;\n\n  optional string communication_picture = 12;\n\n  optional string communication_provider = 13;\n\n  repeated string order_ids = 14;\n\n  optional bool has_push_subscriptions = 15;\n}\n",
+        "schemaType": "PROTOBUF",
+        "references": [
+            {
+                "name": "market/x_func_tech/x_func_tech_jvm/temporal-business-logs-spring-boot-starter/proto/event_info.proto",
+                "subject": "ru.yandex.market.x_func_tech.temporal.business.event_info",
+                "version": 1
+            }
+        ]
+    }
+}

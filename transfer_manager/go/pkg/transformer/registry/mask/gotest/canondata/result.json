@@ -1,0 +1,287 @@
+{
+    "gotest.gotest.TestHmacHasherTransformer": [
+        {
+            "Errors": [],
+            "Transformed": [
+                {
+                    "columnnames": [
+                        "column1",
+                        "column2",
+                        "column3",
+                        "column4"
+                    ],
+                    "columnvalues": [
+                        "930544e0f6a08ecfe3f3b3c911b9af1e892ab640a537b4669f85fc67a833544b",
+                        "dbd7eaed678bd897f1604e8bbc8b16402c9fbf61b633754725ee865d61d300c8",
+                        "248782b19d286401f8f938c59494059bbe1dcfb8ed66c93b6f7a1e04fa7289d8",
+                        "ce6ca9abe157b74cb2c1015608c513c57c6e23716a6093be6a6ff706011efc16"
+                    ],
+                    "commitTime": 0,
+                    "id": 0,
+                    "kind": "Insert",
+                    "nextlsn": 0,
+                    "oldkeys": {},
+                    "part": "",
+                    "query": "",
+                    "schema": "db",
+                    "table": "table1",
+                    "table_schema": [
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": true,
+                            "name": "column1",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column2",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column3",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column4",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        }
+                    ],
+                    "txPosition": 0,
+                    "tx_id": ""
+                }
+            ]
+        },
+        {
+            "Errors": [],
+            "Transformed": [
+                {
+                    "columnnames": [
+                        "column1",
+                        "column2",
+                        "column3",
+                        "column4"
+                    ],
+                    "columnvalues": [
+                        "930544e0f6a08ecfe3f3b3c911b9af1e892ab640a537b4669f85fc67a833544b",
+                        "f258b4cab3acf8905988eb0419c29dec4205da94f727827995f095285278e9f0",
+                        "55139dbbd1b54309482ed2be8c176be2af388c7e7050aa63f0ebdd30182bd3e5",
+                        "bf07c69507bc15a222adbb8973f64416ab7a7a395bc809b3c4699643499e0d65"
+                    ],
+                    "commitTime": 0,
+                    "id": 0,
+                    "kind": "Insert",
+                    "nextlsn": 0,
+                    "oldkeys": {},
+                    "part": "",
+                    "query": "",
+                    "schema": "db",
+                    "table": "table2",
+                    "table_schema": [
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column1",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column2",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column3",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column4",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        }
+                    ],
+                    "txPosition": 0,
+                    "tx_id": ""
+                }
+            ]
+        },
+        {
+            "Errors": [],
+            "Transformed": [
+                {
+                    "columnnames": [
+                        "column2",
+                        "column3",
+                        "column4"
+                    ],
+                    "columnvalues": [
+                        "a3902f70c37b7251f18e14c88e2dc2ee33f3124468ef267c5bb9459431bab3fd",
+                        "7d1312f6124fde1b8135690591c4ccd28e2a807d8aead87aab6f3673ee0ac842",
+                        "292d599046a6433540a3b40ef1675e6619346a7ec0c7ea83cd511df474f0a550"
+                    ],
+                    "commitTime": 0,
+                    "id": 0,
+                    "kind": "Insert",
+                    "nextlsn": 0,
+                    "oldkeys": {},
+                    "part": "",
+                    "query": "",
+                    "schema": "db",
+                    "table": "a_table3",
+                    "table_schema": [
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column2",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column3",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column4",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        }
+                    ],
+                    "txPosition": 0,
+                    "tx_id": ""
+                }
+            ]
+        },
+        {
+            "Errors": [],
+            "Transformed": [
+                {
+                    "columnnames": [],
+                    "commitTime": 0,
+                    "id": 0,
+                    "kind": "Insert",
+                    "nextlsn": 0,
+                    "oldkeys": {},
+                    "part": "",
+                    "query": "",
+                    "schema": "db",
+                    "table": "a_table3",
+                    "table_schema": [
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column2",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column3",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        },
+                        {
+                            "expression": "",
+                            "fake_key": false,
+                            "key": false,
+                            "name": "column4",
+                            "original_type": "",
+                            "path": "",
+                            "required": false,
+                            "table_name": "",
+                            "table_schema": "",
+                            "type": "utf8"
+                        }
+                    ],
+                    "txPosition": 0,
+                    "tx_id": ""
+                }
+            ]
+        }
+    ]
+}

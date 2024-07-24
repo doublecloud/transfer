@@ -1,0 +1,461 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bit",
+                "t_bit1",
+                "t_bit16",
+                "t_bit64"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 11000
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AA=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AA=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AAA="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AAAAAAAAAAA="
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 264,
+                "Values": 216
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_bit"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit1",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit16",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(16)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit64",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(64)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bit",
+                "t_bit1",
+                "t_bit16",
+                "t_bit64"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 11001
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AQ=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "AQ=="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "//8="
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "//////////8="
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 264,
+                "Values": 216
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_bit"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit1",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit16",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(16)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit64",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(64)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bit",
+                "t_bit1",
+                "t_bit16",
+                "t_bit64"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 801640048
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 264,
+                "Values": 108
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_bit"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit1",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit16",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(16)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_bit",
+                    "path": "",
+                    "name": "t_bit64",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bit(64)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

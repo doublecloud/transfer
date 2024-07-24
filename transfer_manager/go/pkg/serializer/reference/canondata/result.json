@@ -1,0 +1,47 @@
+{
+    "reference.reference.TestBatchSerializer/csv:default": {
+        "uri": "file://reference.reference.TestBatchSerializer_csv_default/result"
+    },
+    "reference.reference.TestBatchSerializer/json:default": {
+        "uri": "file://reference.reference.TestBatchSerializer_json_default/result"
+    },
+    "reference.reference.TestBatchSerializer/json:newline": {
+        "uri": "file://reference.reference.TestBatchSerializer_json_newline/result"
+    },
+    "reference.reference.TestBatchSerializer/raw:default": {
+        "uri": "file://reference.reference.TestBatchSerializer_raw_default/result"
+    },
+    "reference.reference.TestBatchSerializer/raw:newline": {
+        "uri": "file://reference.reference.TestBatchSerializer_raw_newline/result"
+    },
+    "reference.reference.TestSerialize/csv:default": {
+        "uri": "file://reference.reference.TestSerialize_csv_default/result"
+    },
+    "reference.reference.TestSerialize/json:default": {
+        "uri": "file://reference.reference.TestSerialize_json_default/result"
+    },
+    "reference.reference.TestSerialize/json:newline": {
+        "uri": "file://reference.reference.TestSerialize_json_newline/result"
+    },
+    "reference.reference.TestSerialize/raw:default": {
+        "uri": "file://reference.reference.TestSerialize_raw_default/result"
+    },
+    "reference.reference.TestSerialize/raw:newline": {
+        "uri": "file://reference.reference.TestSerialize_raw_newline/result"
+    },
+    "reference.reference.TestStreamSerializer/csv:default": {
+        "uri": "file://reference.reference.TestStreamSerializer_csv_default/result"
+    },
+    "reference.reference.TestStreamSerializer/json:default": {
+        "uri": "file://reference.reference.TestStreamSerializer_json_default/result"
+    },
+    "reference.reference.TestStreamSerializer/json:newline": {
+        "uri": "file://reference.reference.TestStreamSerializer_json_newline/result"
+    },
+    "reference.reference.TestStreamSerializer/raw:default": {
+        "uri": "file://reference.reference.TestStreamSerializer_raw_default/result"
+    },
+    "reference.reference.TestStreamSerializer/raw:newline": {
+        "uri": "file://reference.reference.TestStreamSerializer_raw_newline/result"
+    }
+}

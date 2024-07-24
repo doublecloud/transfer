@@ -1,0 +1,1 @@
+{"_rest":{"find_writer_stat":{"{\"cluster\":\"vla\",\"partition\":180,\"topic\":\"strm-stream/strm-access-log\"}":"4.043µs"},"write_stat":{"{\"cluster\":\"vla\",\"partition\":180,\"topic\":\"strm-stream/strm-access-log\"}":"277.590725ms"}}}

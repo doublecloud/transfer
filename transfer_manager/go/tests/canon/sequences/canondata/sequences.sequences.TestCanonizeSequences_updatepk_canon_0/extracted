@@ -1,0 +1,526 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "i1",
+                "i2",
+                "t"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "string",
+                    "value": "a"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 1
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 192,
+                "Values": 97
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "insert_update_delete"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i1",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i2",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "t",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:text"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "i1",
+                "i2",
+                "t"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "string",
+                    "value": "b"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 2
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "update"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {
+                "keynames": [
+                    "i1",
+                    "i2",
+                    "t"
+                ],
+                "keytypes": [
+                    "integer",
+                    "integer",
+                    "text"
+                ],
+                "keyvalues": [
+                    1,
+                    1,
+                    "a"
+                ]
+            }
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 319,
+                "Values": 97
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "insert_update_delete"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i1",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i2",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "t",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:text"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "i1",
+                "i2",
+                "t"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 2
+                },
+                {
+                    "type": "int32",
+                    "value": 2
+                },
+                {
+                    "type": "string",
+                    "value": "b"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 3
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "update"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {
+                "keynames": [
+                    "i1",
+                    "i2",
+                    "t"
+                ],
+                "keytypes": [
+                    "integer",
+                    "integer",
+                    "text"
+                ],
+                "keyvalues": [
+                    1,
+                    1,
+                    "b"
+                ]
+            }
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 319,
+                "Values": 97
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "insert_update_delete"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i1",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i2",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "t",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:text"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "i1",
+                "i2",
+                "t"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 2
+                },
+                {
+                    "type": "int32",
+                    "value": 2
+                },
+                {
+                    "type": "string",
+                    "value": "c"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 4
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "update"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {
+                "keynames": [
+                    "i1",
+                    "i2",
+                    "t"
+                ],
+                "keytypes": [
+                    "integer",
+                    "integer",
+                    "text"
+                ],
+                "keyvalues": [
+                    2,
+                    2,
+                    "b"
+                ]
+            }
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 319,
+                "Values": 97
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "insert_update_delete"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i1",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "i2",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "insert_update_delete",
+                    "path": "",
+                    "name": "t",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:text"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

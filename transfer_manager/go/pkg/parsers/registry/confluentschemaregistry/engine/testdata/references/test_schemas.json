@@ -1,0 +1,17 @@
+{
+    "1": {
+        "schema": "syntax = \"proto3\";\n\nmessage my_msg1 {\n    string msg1_string_field = 1;\n}\n",
+        "schemaType": "PROTOBUF"
+    },
+    "2": {
+        "schema": "syntax = \"proto3\";\n\nimport \"my_file1.proto\";\n\nmessage my_msg2 {\n    my_msg1 msg1_field = 1;\n    string msg2_string_field = 2;\n}\n",
+        "schemaType": "PROTOBUF",
+        "references": [
+            {
+                "name": "my_file1.proto",
+                "subject": "my_file1.proto",
+                "version": 1
+            }
+        ]
+    }
+}

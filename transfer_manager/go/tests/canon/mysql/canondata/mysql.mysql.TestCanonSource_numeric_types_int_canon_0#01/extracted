@@ -1,0 +1,1175 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bigint",
+                "t_bigint5",
+                "t_bigint_u",
+                "t_int",
+                "t_integer",
+                "t_integer5",
+                "t_int_u",
+                "t_mediumint",
+                "t_mediumint5",
+                "t_mediumint_u",
+                "t_smallint",
+                "t_smallint5",
+                "t_smallint_u",
+                "t_tinyint",
+                "t_tinyint1",
+                "t_tinyint1u",
+                "t_tinyint_default0",
+                "t_tinyint_u"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 12000
+                },
+                {
+                    "type": "int64",
+                    "value": -9223372036854775807
+                },
+                {
+                    "type": "int64",
+                    "value": -99999
+                },
+                {
+                    "type": "uint64",
+                    "value": 0
+                },
+                {
+                    "type": "int32",
+                    "value": -2147483648
+                },
+                {
+                    "type": "int32",
+                    "value": -2147483648
+                },
+                {
+                    "type": "int32",
+                    "value": -99999
+                },
+                {
+                    "type": "uint32",
+                    "value": 0
+                },
+                {
+                    "type": "int32",
+                    "value": -8388608
+                },
+                {
+                    "type": "int32",
+                    "value": -99999
+                },
+                {
+                    "type": "uint32",
+                    "value": 0
+                },
+                {
+                    "type": "int16",
+                    "value": -32768
+                },
+                {
+                    "type": "int16",
+                    "value": -32768
+                },
+                {
+                    "type": "uint16",
+                    "value": 0
+                },
+                {
+                    "type": "int8",
+                    "value": -128
+                },
+                {
+                    "type": "int8",
+                    "value": -1
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                },
+                {
+                    "type": "int8",
+                    "value": -128
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 936,
+                "Values": 395
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_int"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint5",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint_u",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(10) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(9)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(8) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint5",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint_u",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_default0",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(3) unsigned"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bigint",
+                "t_bigint5",
+                "t_bigint_u",
+                "t_int",
+                "t_integer",
+                "t_integer5",
+                "t_int_u",
+                "t_mediumint",
+                "t_mediumint5",
+                "t_mediumint_u",
+                "t_smallint",
+                "t_smallint5",
+                "t_smallint_u",
+                "t_tinyint",
+                "t_tinyint1",
+                "t_tinyint1u",
+                "t_tinyint_default0",
+                "t_tinyint_u"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 12001
+                },
+                {
+                    "type": "int64",
+                    "value": -9223372036854775807
+                },
+                {
+                    "type": "int64",
+                    "value": -99999
+                },
+                {
+                    "type": "uint64",
+                    "value": 18446744073709551615
+                },
+                {
+                    "type": "int32",
+                    "value": 2147483647
+                },
+                {
+                    "type": "int32",
+                    "value": 2147483647
+                },
+                {
+                    "type": "int32",
+                    "value": 99999
+                },
+                {
+                    "type": "uint32",
+                    "value": 0
+                },
+                {
+                    "type": "int32",
+                    "value": 8388607
+                },
+                {
+                    "type": "int32",
+                    "value": 99999
+                },
+                {
+                    "type": "uint32",
+                    "value": 16777215
+                },
+                {
+                    "type": "int16",
+                    "value": 32767
+                },
+                {
+                    "type": "int16",
+                    "value": 32767
+                },
+                {
+                    "type": "uint16",
+                    "value": 65535
+                },
+                {
+                    "type": "int8",
+                    "value": 127
+                },
+                {
+                    "type": "int8",
+                    "value": 1
+                },
+                {
+                    "type": "uint8",
+                    "value": 1
+                },
+                {
+                    "type": "int8",
+                    "value": 127
+                },
+                {
+                    "type": "uint8",
+                    "value": 255
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 936,
+                "Values": 395
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_int"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint5",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint_u",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(10) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(9)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(8) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint5",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint_u",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_default0",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(3) unsigned"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_bigint",
+                "t_bigint5",
+                "t_bigint_u",
+                "t_int",
+                "t_integer",
+                "t_integer5",
+                "t_int_u",
+                "t_mediumint",
+                "t_mediumint5",
+                "t_mediumint_u",
+                "t_smallint",
+                "t_smallint5",
+                "t_smallint_u",
+                "t_tinyint",
+                "t_tinyint1",
+                "t_tinyint1u",
+                "t_tinyint_default0",
+                "t_tinyint_u"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 801640048
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 936,
+                "Values": 332
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_int"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint5",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_bigint_u",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:bigint(20) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_integer5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_int_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:int(10) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(9)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint5",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_mediumint_u",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:mediumint(8) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(6)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint5",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_smallint_u",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:smallint(5) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint1u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(1) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_default0",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(4)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_int",
+                    "path": "",
+                    "name": "t_tinyint_u",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:tinyint(3) unsigned"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

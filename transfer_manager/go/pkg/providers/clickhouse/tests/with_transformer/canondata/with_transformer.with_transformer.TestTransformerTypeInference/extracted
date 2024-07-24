@@ -1,0 +1,40 @@
+
+"test"."test"
+{
+	"meta":
+	[
+		{
+			"name": "_id",
+			"type": "String"
+		},
+		{
+			"name": "name",
+			"type": "String"
+		},
+		{
+			"name": "isActive",
+			"type": "UInt8"
+		},
+		{
+			"name": "isArchived",
+			"type": "UInt8"
+		},
+		{
+			"name": "tagIdsAsArray",
+			"type": "Array(String)"
+		}
+	],
+
+	"data":
+	[
+		{
+			"_id": "test",
+			"name": "D - Le Lab Virgin Radio ",
+			"isActive": 1,
+			"isArchived": 0,
+			"tagIdsAsArray": ["\"5f6da21bdbe1f\"","\"5f6da23aaf579\""]
+		}
+	],
+
+	"rows": 1
+}

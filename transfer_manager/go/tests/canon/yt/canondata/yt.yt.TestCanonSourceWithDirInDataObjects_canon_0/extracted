@@ -1,0 +1,1827 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "t_int8",
+                "t_int16",
+                "t_int32",
+                "t_int64",
+                "t_uint8",
+                "t_uint16",
+                "t_uint32",
+                "t_uint64",
+                "t_float",
+                "t_double",
+                "t_bool",
+                "t_string",
+                "t_utf8",
+                "t_date",
+                "t_datetime",
+                "t_timestamp",
+                "t_interval",
+                "t_yson",
+                "t_opt_int64",
+                "t_list",
+                "t_struct",
+                "t_tuple",
+                "t_variant_named",
+                "t_variant_unnamed",
+                "t_dict",
+                "t_tagged",
+                "row_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int8",
+                    "value": -128
+                },
+                {
+                    "type": "int16",
+                    "value": -32768
+                },
+                {
+                    "type": "int32",
+                    "value": -2147483648
+                },
+                {
+                    "type": "int64",
+                    "value": -9223372036854775808
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                },
+                {
+                    "type": "uint16",
+                    "value": 0
+                },
+                {
+                    "type": "uint32",
+                    "value": 0
+                },
+                {
+                    "type": "uint64",
+                    "value": 0
+                },
+                {
+                    "type": "float32",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "type": "[]uint8",
+                    "value": ""
+                },
+                {
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1970-01-01T00:00:00Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1970-01-01T00:00:00Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "1970-01-01T00:00:00Z"
+                },
+                {
+                    "type": "time.Duration",
+                    "value": -4291747199999999000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": null
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "fieldFloat32": {
+                            "type": "float64",
+                            "value": 100.01
+                        },
+                        "fieldInt16": {
+                            "type": "int64",
+                            "value": 100
+                        },
+                        "fieldString": {
+                            "type": "string",
+                            "value": "abc"
+                        }
+                    }
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": -5
+                        },
+                        {
+                            "type": "float64",
+                            "value": 300.03
+                        },
+                        {
+                            "type": "string",
+                            "value": "my data"
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldInt16"
+                        },
+                        {
+                            "type": "int64",
+                            "value": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        {
+                            "type": "int64",
+                            "value": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": null
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldInt16"
+                        },
+                        {
+                            "type": "int64",
+                            "value": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "int64",
+                    "value": 0
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "0_3"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 532,
+                "Values": 1219
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_dir3/some_table2"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int8",
+                    "type": "int8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int16",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int32",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint16",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint32",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint64",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "float",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_string",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_utf8",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_date",
+                    "type": "date",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_datetime",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_timestamp",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_interval",
+                    "type": "interval",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_yson",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_opt_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_struct",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tuple",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_named",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_unnamed",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_dict",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tagged",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "row_idx",
+                    "type": "int64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "t_int8",
+                "t_int16",
+                "t_int32",
+                "t_int64",
+                "t_uint8",
+                "t_uint16",
+                "t_uint32",
+                "t_uint64",
+                "t_float",
+                "t_double",
+                "t_bool",
+                "t_string",
+                "t_utf8",
+                "t_date",
+                "t_datetime",
+                "t_timestamp",
+                "t_interval",
+                "t_yson",
+                "t_opt_int64",
+                "t_list",
+                "t_struct",
+                "t_tuple",
+                "t_variant_named",
+                "t_variant_unnamed",
+                "t_dict",
+                "t_tagged",
+                "row_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int8",
+                    "value": 10
+                },
+                {
+                    "type": "int16",
+                    "value": -2000
+                },
+                {
+                    "type": "int32",
+                    "value": -200000
+                },
+                {
+                    "type": "int64",
+                    "value": -20000000000
+                },
+                {
+                    "type": "uint8",
+                    "value": 20
+                },
+                {
+                    "type": "uint16",
+                    "value": 2000
+                },
+                {
+                    "type": "uint32",
+                    "value": 2000000
+                },
+                {
+                    "type": "uint64",
+                    "value": 20000000000
+                },
+                {
+                    "type": "float32",
+                    "value": 2.2
+                },
+                {
+                    "type": "json.Number",
+                    "value": 2.2
+                },
+                {
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "VGVzdCBieXRlIHN0cmluZyAy"
+                },
+                {
+                    "type": "string",
+                    "value": "Test utf8 string 2"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2021-12-27T00:00:00Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2021-12-27T11:20:30Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2021-12-27T11:20:30.502383Z"
+                },
+                {
+                    "type": "time.Duration",
+                    "value": 60000000000
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "uint64",
+                            "value": 100
+                        },
+                        {
+                            "type": "uint64",
+                            "value": 200
+                        },
+                        {
+                            "type": "uint64",
+                            "value": 300
+                        }
+                    ]
+                },
+                {
+                    "type": "int64",
+                    "value": 9223372036854775807
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "float64",
+                            "value": -1.01
+                        }
+                    ]
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "fieldFloat32": {
+                            "type": "float64",
+                            "value": 100.01
+                        },
+                        "fieldInt16": {
+                            "type": "int64",
+                            "value": 100
+                        },
+                        "fieldString": {
+                            "type": "string",
+                            "value": "abc"
+                        }
+                    }
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": -5
+                        },
+                        {
+                            "type": "float64",
+                            "value": 300.03
+                        },
+                        {
+                            "type": "string",
+                            "value": "my data"
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldFloat32"
+                        },
+                        {
+                            "type": "float64",
+                            "value": 100.01
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        {
+                            "type": "float64",
+                            "value": 100.01
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "string",
+                                    "value": "my_key"
+                                },
+                                {
+                                    "type": "int64",
+                                    "value": 100
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldFloat32"
+                        },
+                        {
+                            "type": "float64",
+                            "value": 100.01
+                        }
+                    ]
+                },
+                {
+                    "type": "int64",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "0_3"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 646,
+                "Values": 1491
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_dir3/some_table2"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int8",
+                    "type": "int8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int16",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int32",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint16",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint32",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint64",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "float",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_string",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_utf8",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_date",
+                    "type": "date",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_datetime",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_timestamp",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_interval",
+                    "type": "interval",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_yson",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_opt_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_struct",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tuple",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_named",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_unnamed",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_dict",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tagged",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "row_idx",
+                    "type": "int64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "t_int8",
+                "t_int16",
+                "t_int32",
+                "t_int64",
+                "t_uint8",
+                "t_uint16",
+                "t_uint32",
+                "t_uint64",
+                "t_float",
+                "t_double",
+                "t_bool",
+                "t_string",
+                "t_utf8",
+                "t_date",
+                "t_datetime",
+                "t_timestamp",
+                "t_interval",
+                "t_yson",
+                "t_opt_int64",
+                "t_list",
+                "t_struct",
+                "t_tuple",
+                "t_variant_named",
+                "t_variant_unnamed",
+                "t_dict",
+                "t_tagged",
+                "row_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int8",
+                    "value": 127
+                },
+                {
+                    "type": "int16",
+                    "value": 32767
+                },
+                {
+                    "type": "int32",
+                    "value": 2147483647
+                },
+                {
+                    "type": "int64",
+                    "value": 9223372036854775807
+                },
+                {
+                    "type": "uint8",
+                    "value": 255
+                },
+                {
+                    "type": "uint16",
+                    "value": 32767
+                },
+                {
+                    "type": "uint32",
+                    "value": 2147483647
+                },
+                {
+                    "type": "uint64",
+                    "value": 9223372036854775807
+                },
+                {
+                    "type": "float32",
+                    "value": 42
+                },
+                {
+                    "type": "json.Number",
+                    "value": 42
+                },
+                {
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "VGVzdCBieXRlIHN0cmluZyAz"
+                },
+                {
+                    "type": "string",
+                    "value": "Test utf8 string 3"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2105-12-31T00:00:00Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2105-12-31T23:59:59Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2105-12-31T23:59:59Z"
+                },
+                {
+                    "type": "time.Duration",
+                    "value": 4291747199999999000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "float64",
+                            "value": -1.01
+                        },
+                        {
+                            "type": "float64",
+                            "value": 2
+                        },
+                        {
+                            "type": "float64",
+                            "value": 1294.21
+                        }
+                    ]
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "fieldFloat32": {
+                            "type": "float64",
+                            "value": 100.01
+                        },
+                        "fieldInt16": {
+                            "type": "int64",
+                            "value": 100
+                        },
+                        "fieldString": {
+                            "type": "string",
+                            "value": "abc"
+                        }
+                    }
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": -5
+                        },
+                        {
+                            "type": "float64",
+                            "value": 300.03
+                        },
+                        {
+                            "type": "string",
+                            "value": "my data"
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldString"
+                        },
+                        {
+                            "type": "string",
+                            "value": "magotan"
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 2
+                        },
+                        {
+                            "type": "string",
+                            "value": "magotan"
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "string",
+                                    "value": "key1"
+                                },
+                                {
+                                    "type": "int64",
+                                    "value": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "string",
+                                    "value": "key2"
+                                },
+                                {
+                                    "type": "int64",
+                                    "value": 20
+                                }
+                            ]
+                        },
+                        {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "string",
+                                    "value": "key3"
+                                },
+                                {
+                                    "type": "int64",
+                                    "value": 300
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "fieldString"
+                        },
+                        {
+                            "type": "string",
+                            "value": "100"
+                        }
+                    ]
+                },
+                {
+                    "type": "int64",
+                    "value": 2
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "0_3"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 682,
+                "Values": 1671
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_dir3/some_table2"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int8",
+                    "type": "int8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int16",
+                    "type": "int16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int32",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint16",
+                    "type": "uint16",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint32",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_uint64",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "float",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_string",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_utf8",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_date",
+                    "type": "date",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_datetime",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_timestamp",
+                    "type": "timestamp",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_interval",
+                    "type": "interval",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_yson",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_opt_int64",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_struct",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tuple",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_named",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_variant_unnamed",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_dict",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "t_tagged",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "row_idx",
+                    "type": "int64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

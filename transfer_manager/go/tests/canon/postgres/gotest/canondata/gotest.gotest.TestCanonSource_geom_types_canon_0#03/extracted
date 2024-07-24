@@ -1,0 +1,410 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_point",
+                "t_line",
+                "t_lseg",
+                "t_box",
+                "t_path",
+                "t_polygon",
+                "t_circle"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 3
+                },
+                {
+                    "type": "string",
+                    "value": "(1,2)"
+                },
+                {
+                    "type": "string",
+                    "value": "{1,-1,1}"
+                },
+                {
+                    "type": "string",
+                    "value": "(1,2),(2,3)"
+                },
+                {
+                    "type": "string",
+                    "value": "(3,3),(1,1)"
+                },
+                {
+                    "type": "string",
+                    "value": "[(1,1),(2,2),(2,3)]"
+                },
+                {
+                    "type": "string",
+                    "value": "((1,1),(2,2),(2,3),(1,1))"
+                },
+                {
+                    "type": "string",
+                    "value": "\u003c(1,1),10\u003e"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 417,
+                "Values": 357
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "geom_types"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_point",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:point"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_line",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:line"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_lseg",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:lseg"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_box",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:box"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_path",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:path"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_polygon",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:polygon"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_circle",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:circle"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_point",
+                "t_line",
+                "t_lseg",
+                "t_box",
+                "t_path",
+                "t_polygon",
+                "t_circle"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 4
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "public"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 341,
+                "Values": 156
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "geom_types"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "pg:integer"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_point",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:point"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_line",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:line"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_lseg",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:lseg"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_box",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:box"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_path",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:path"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_polygon",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:polygon"
+                },
+                {
+                    "table_schema": "public",
+                    "table_name": "geom_types",
+                    "path": "",
+                    "name": "t_circle",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "pg:circle"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

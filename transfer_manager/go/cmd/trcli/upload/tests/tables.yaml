@@ -1,0 +1,9 @@
+tables:
+  - name: t3
+    schema: public
+    offset: 0
+    etaRow: 3
+  - name: t2
+    schema: public
+    offset: 0
+    etaRow: 4

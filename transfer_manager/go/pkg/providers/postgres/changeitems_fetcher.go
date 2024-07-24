@@ -1,0 +1,136 @@
+package postgres
+
+import (
+	"io"
+	"time"
+
+	"github.com/doublecloud/tross/library/go/core/log"
+	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/dustin/go-humanize"
+	"github.com/jackc/pgtype"
+	"github.com/jackc/pgx/v4"
+)
+
+// ChangeItemsFetcher consolidates multiple objects (of which most important is pgx.Rows) into a single one, providing bufferized fetching and parsing of rows from a postgres source
+type ChangeItemsFetcher struct {
+	rows             pgx.Rows
+	connInfo         *pgtype.ConnInfo
+	template         abstract.ChangeItem
+	parseSchema      abstract.TableColumns
+	sourceStats      *stats.SourceStats
+	unmarshallerData UnmarshallerData
+	limitCount       int
+	limitBytes       server.BytesSize
+	maybeHasMore     bool
+	logger           log.Logger
+}
+
+// NewChangeItemsFetcher constructs minimal working fetcher.
+// ChangeItems fetched are shallow copies of the template except for ColumnValues - these are filled by the fetcher.
+// The sequence of ColumnValues, ColSchemas (in TableSchema) and rows.FieldDescriptions() MUST BE THE SAME.
+func NewChangeItemsFetcher(rows pgx.Rows, conn *pgx.Conn, template abstract.ChangeItem, sourceStats *stats.SourceStats) *ChangeItemsFetcher {
+	return &ChangeItemsFetcher{
+		rows:             rows,
+		connInfo:         conn.ConnInfo(),
+		template:         template,
+		parseSchema:      template.TableSchema.Columns().Copy(),
+		sourceStats:      sourceStats,
+		unmarshallerData: MakeUnmarshallerData(false, conn),
+		limitCount:       128,
+		limitBytes:       16 * humanize.MiByte,
+		maybeHasMore:     true,
+		logger:           logger.Log,
+	}
+}
+
+func (f *ChangeItemsFetcher) WithUnmarshallerData(data UnmarshallerData) *ChangeItemsFetcher {
+	f.unmarshallerData = data
+	return f
+}
+
+func (f *ChangeItemsFetcher) WithLimitCount(limitCount int) *ChangeItemsFetcher {
+	f.limitCount = limitCount
+	return f
+}
+
+// WithLimitBytes accepts 0 to disable limit
+func (f *ChangeItemsFetcher) WithLimitBytes(limitBytes server.BytesSize) *ChangeItemsFetcher {
+	f.limitBytes = limitBytes
+	return f
+}
+
+func (f *ChangeItemsFetcher) WithLogger(logger log.Logger) *ChangeItemsFetcher {
+	f.logger = logger
+	return f
+}
+
+func (f *ChangeItemsFetcher) MaybeHasMore() bool {
+	return f.maybeHasMore
+}
+
+func (f *ChangeItemsFetcher) Fetch() (items []abstract.ChangeItem, err error) {
+	result := make([]abstract.ChangeItem, f.limitCount)
+	resultCount := 0
+	resultBytes := server.BytesSize(0)
+
+	for f.rows.Next() {
+		ciResult := &result[resultCount]
+		*ciResult = f.template
+
+		ciResult.ColumnValues = make([]interface{}, len(ciResult.TableSchema.Columns()))
+
+		decodeStartT := time.Now()
+		rowRawSize := uint64(0)
+
+		rawData := f.rows.RawValues()
+		for i, fd := range f.rows.FieldDescriptions() {
+			fRawValue := rawData[i]
+
+			resultBytes += server.BytesSize(len(fRawValue))
+			f.sourceStats.Size.Add(int64(len(fRawValue)))
+			rowRawSize += uint64(len(fRawValue))
+
+			// fd can change from row to row, so the caster must be reconstructed for each row
+			// an isolated instance of TableSchema is used in order to not interact with any middlewares down the transfer pipeline
+			caster, err := NewUnmarshaller(&f.unmarshallerData, f.connInfo, &f.parseSchema[i], &fd)
+			if err != nil {
+				return nil, xerrors.Errorf("failed to construct a parser of raw PostgreSQL-format data for field [%d]: %w", i, err)
+			}
+			ciResult.ColumnValues[i], err = caster.Cast(fRawValue)
+			if err != nil {
+				return nil, xerrors.Errorf("failed to parse the value of field [%d] from PostgreSQL format: %w", i, err)
+			}
+		}
+
+		f.sourceStats.DecodeTime.RecordDuration(time.Since(decodeStartT))
+
+		ciResult.Size.Read = rowRawSize
+
+		resultCount += 1
+		f.sourceStats.Parsed.Inc()
+
+		if resultCount >= f.limitCount {
+			f.logger.Debugf("Finishing chunk of %d ChangeItems (%s) due to buffer elements' count limit (%d)", resultCount, humanize.Bytes(uint64(resultBytes)), f.limitCount)
+			return result[:resultCount], nil
+		}
+		if f.limitBytes > 0 && resultBytes >= f.limitBytes {
+			f.logger.Debugf("Finishing chunk of %d ChangeItems (%s) due to buffer size limit (%s)", resultCount, humanize.Bytes(uint64(resultBytes)), humanize.Bytes(uint64(f.limitBytes)))
+			return result[:resultCount], nil
+		}
+	}
+	if err := f.rows.Err(); err != nil {
+		f.maybeHasMore = false
+		if xerrors.Is(err, io.ErrUnexpectedEOF) {
+			err = xerrors.Errorf("connection closed unexpectedly: %w", err)
+		}
+		return nil, xerrors.Errorf("failed while reading data from source: %w", err)
+	}
+
+	f.logger.Debugf("Finishing chunk of %d ChangeItems (%s) due to exhaustion of data in result set", resultCount, humanize.Bytes(uint64(resultBytes)))
+	f.maybeHasMore = false
+	return result[:resultCount], nil
+}

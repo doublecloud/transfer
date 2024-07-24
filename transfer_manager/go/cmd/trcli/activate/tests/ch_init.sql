@@ -1,0 +1,1 @@
+CREATE DATABASE trcli_activate_test_ch;

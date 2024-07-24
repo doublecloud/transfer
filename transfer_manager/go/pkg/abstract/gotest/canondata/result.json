@@ -1,0 +1,18 @@
+{
+    "gotest.gotest.TestMarshalJSON": {
+        "Pointer": {
+            "uri": "file://gotest.gotest.TestMarshalJSON/extracted"
+        },
+        "Value": {
+            "uri": "file://gotest.gotest.TestMarshalJSON/extracted.0"
+        }
+    },
+    "gotest.gotest.TestMarshalYSON": {
+        "Pointer": {
+            "uri": "file://gotest.gotest.TestMarshalYSON/extracted"
+        },
+        "Value": {
+            "uri": "file://gotest.gotest.TestMarshalYSON/extracted.0"
+        }
+    }
+}

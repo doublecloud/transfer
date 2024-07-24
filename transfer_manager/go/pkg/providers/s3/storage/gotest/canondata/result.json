@@ -1,0 +1,11 @@
+{
+    "gotest.gotest.TestCanonCsv": {
+        "uri": "file://gotest.gotest.TestCanonCsv/extracted"
+    },
+    "gotest.gotest.TestCanonJsonline": {
+        "uri": "file://gotest.gotest.TestCanonJsonline/extracted"
+    },
+    "gotest.gotest.TestCanonParquet": {
+        "uri": "file://gotest.gotest.TestCanonParquet/extracted"
+    }
+}

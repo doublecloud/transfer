@@ -1,0 +1,1328 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 12345
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123.45
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": 12345678901234567890123456789012345678901234567890123456789012345
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 102,
+                "Values": 426
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13001
+                },
+                {
+                    "type": "json.Number",
+                    "value": -1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": -12345
+                },
+                {
+                    "type": "json.Number",
+                    "value": -123.45
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": -1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": -1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": -1234567890
+                },
+                {
+                    "type": "json.Number",
+                    "value": -12345678901234567890123456789012345678901234567890123456789012345
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 102,
+                "Values": 424
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13002
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 102,
+                "Values": 308
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13003
+                },
+                {
+                    "type": "json.Number",
+                    "value": 9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 99999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 999.99
+                },
+                {
+                    "type": "json.Number",
+                    "value": 9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": 99999999999999999999999999999999999999999999999999999999999999999
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 102,
+                "Values": 425
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13004
+                },
+                {
+                    "type": "json.Number",
+                    "value": -9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": -99999
+                },
+                {
+                    "type": "json.Number",
+                    "value": -999.99
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": -9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": -9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": -9999999999
+                },
+                {
+                    "type": "json.Number",
+                    "value": -99999999999999999999999999999999999999999999999999999999999999999
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 102,
+                "Values": 424
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_decimal",
+                "t_decimal_5",
+                "t_decimal_5_2",
+                "t_decimal_u",
+                "t_dec",
+                "t_fixed",
+                "t_numeric",
+                "t_decimal_65"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 801640048
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 42,
+                "Values": 172
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_decimal"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_5_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(5,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_u",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0) unsigned"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_dec",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_fixed",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_numeric",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(10,0)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_decimal",
+                    "path": "",
+                    "name": "t_decimal_65",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:decimal(65,0)"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

@@ -1,0 +1,26 @@
+{
+    "gotest.gotest.TestJSONSerializerTopicNameAllTypes": [
+        {
+            "Keys": [
+                "public_table0"
+            ],
+            "Name": "\"public\".\"table0\"",
+            "Values": [
+                {
+                    "uri": "file://gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted"
+                }
+            ]
+        },
+        {
+            "Keys": [
+                "public_table1"
+            ],
+            "Name": "\"public\".\"table1\"",
+            "Values": [
+                {
+                    "uri": "file://gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted.0"
+                }
+            ]
+        }
+    ]
+}

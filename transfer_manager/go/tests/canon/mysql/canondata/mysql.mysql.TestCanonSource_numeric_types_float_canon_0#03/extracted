@@ -1,0 +1,1685 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 14000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0.00000000000000000000000000000000000000000000145
+                },
+                {
+                    "type": "json.Number",
+                    "value": 12345678.9
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": -12345678901234568000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0.000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 84,
+                "Values": 1002
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 14001
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0.00000000000000000000000000000000000001175494351
+                },
+                {
+                    "type": "json.Number",
+                    "value": 99999999.99
+                },
+                {
+                    "type": "json.Number",
+                    "value": -340282350000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 100000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": -179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": -179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 84,
+                "Values": 1010
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 14002
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.123456789
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.12
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.125
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.123456789
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.123456789
+                },
+                {
+                    "type": "json.Number",
+                    "value": 123456.123456789
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 84,
+                "Values": 319
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 14003
+                },
+                {
+                    "type": "json.Number",
+                    "value": 179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 0
+                },
+                {
+                    "type": "json.Number",
+                    "value": 340000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 340000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "json.Number",
+                    "value": 179769313486231570000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 84,
+                "Values": 1242
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13005
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "json.Number",
+                    "value": -340282350000000000000000000000000000000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 44,
+                "Values": 196
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13006
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "json.Number",
+                    "value": 340282350000000000000000000000000000000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 44,
+                "Values": 195
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13007
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "json.Number",
+                    "value": -100000000000000000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 48,
+                "Values": 223
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 13008
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "json.Number",
+                    "value": 100000000000000000000000000000000000000000000000000000000000000000
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 48,
+                "Values": 222
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__primary_key",
+                "t_real",
+                "t_real_10_2",
+                "t_float",
+                "t_float_53",
+                "t_double",
+                "t_double_precision"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "int32",
+                    "value": 801640048
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "source"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 40,
+                "Values": 140
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "numeric_types_float"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "__primary_key",
+                    "type": "int32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": "mysql:int(11)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_real_10_2",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double(10,2)"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:float"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_float_53",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                },
+                {
+                    "table_schema": "source",
+                    "table_name": "numeric_types_float",
+                    "path": "",
+                    "name": "t_double_precision",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "mysql:double"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

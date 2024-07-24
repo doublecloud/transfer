@@ -1,0 +1,96 @@
+{
+    "AllowTTLRewind": true,
+    "Cluster": "logbroker",
+    "Consumer": "/taxi-dwh/prod/taxi-prod-order-offers-consumer",
+    "Credentials": null,
+    "Database": "",
+    "EnrichTopic": false,
+    "Extra": {},
+    "HashColumn": "",
+    "InferSchema": false,
+    "InferTimezone": false,
+    "Instance": "",
+    "IsLbSink": false,
+    "LfParser": false,
+    "MaxConcurrentPartitions": 0,
+    "MaxIdleTime": 0,
+    "MaxMemory": 52000000,
+    "MaxReadMessagesCount": 0,
+    "MaxReadSize": 1048576,
+    "MaxTimeLag": 0,
+    "OnlyLocal": false,
+    "ParserConfig": {
+        "yql.lb": {
+            "AddRest": true,
+            "AddSyntheticKeys": false,
+            "Fields": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "timestamp",
+                    "required": true,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id",
+                    "original_type": "",
+                    "path": "id",
+                    "required": true,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "created",
+                    "original_type": "",
+                    "path": "created",
+                    "required": false,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "doc",
+                    "original_type": "",
+                    "path": "doc",
+                    "required": false,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "SchemaResourceName": "",
+            "TableSplitter": null,
+            "TimeField": null,
+            "YqlOutputKeys": [
+                "timestamp",
+                "id"
+            ],
+            "YqlScript": "$custom_config = AsStruct(\n    \"schema\" as config,\n    true as ignore_unknown_fields,\n    true as add_rest_field,\n    true as erase_extracted_fields,\n    AsDict(\n        AsTuple(\"schema\", FileContent(\"schema\"))\n    ) as resources\n);\n$dumped_config = Unwrap(ToBytes(Yson::SerializeText(Yson::From($custom_config))));\n$parse_raw = YQL::Udf(AsAtom(\"LogFellerParsers.ParseTskv\"), YQL::Void(), YQL::Void(), AsAtom($dumped_config));\n$splitted = select * from (\n    select\n        split_result.SplitRecords as records\n    from (\n        select LogBrokerChunksSplitters::LineBreak(Data) as split_result\n        from Input\n    ) -- where split_result.Successed\n) flatten list by records as raw_record;\n\n$parsed =  SELECT ParsedRecord, Error, Successed FROM(\n    SELECT $parse_raw(raw_record) as parsed_records\n    FROM $splitted\n) FLATTEN COLUMNS;\n\n$rows = select * from (select ParsedRecord, Successed, Error from $parsed) flatten columns;\n\n$filter_tariff_data = ($data) -\u003e {\n    return AsDict(\n        AsTuple('cls', Yson::Lookup($data, 'cls')),\n        AsTuple('price', Yson::Lookup($data, 'price')),\n        AsTuple('cat_type', Yson::Lookup($data, 'cat_type'))\n    )\n};\n\n$get_doc_light = ($doc) -\u003e {\n    return Yson::From(\n        AsDict(\n            AsTuple('prices', Yson::From(ListMap(Yson::LookupList($doc, 'prices'), $filter_tariff_data))),\n            AsTuple('route', Yson::Lookup($doc, 'route')),\n            AsTuple('_id', Yson::Lookup($doc, '_id')),\n            AsTuple('distance', Yson::Lookup($doc, 'distance')),\n            AsTuple('created', Yson::Lookup($doc, 'created'))\n        )\n    )\n};\n\nSELECT rows.*, $get_doc_light(Yson::ParseJson(doc)) as doc without rows.doc\nfrom $rows as rows;"
+        }
+    },
+    "Port": 0,
+    "Sniff": false,
+    "Token": "",
+    "Topics": [
+        "/taxi/taxi-order-offers-log"
+    ]
+}
