@@ -10,19 +10,25 @@
 </h4>
 
 
+</div>
+
 <img src="./assets/logo.png" alt="transfer" />
 
+<div align="center">
+
 ## 🦫 Introduction
+
+</div>
 
 **Transfer**, built in Go, is an open-source cloud native ingestion engine. Essentially we are building no-code (or low-code) EL(T) service that can scale data pipelines from several megabytes of data to dozens of petabytes without hassle.
 
 Transfer provides a convenient way to transfer data between DBMSes, object stores, message brokers or anything that stores data.
 Our ultimate mission is to help you move data from any source to any destination with fast, effective and easy-to-use tool.
 
+<div align="center">
 
 ## ⚡ Performance
 
-<div align="center">
 
 [Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
 
@@ -33,6 +39,8 @@ Our ultimate mission is to help you move data from any source to any destination
 <div align="center">
 
 ## 🚀 Why Transfer
+
+</div>
 
 - **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
 
@@ -50,7 +58,12 @@ Our ultimate mission is to help you move data from any source to any destination
 
 - **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
 
+<div align="center">
+
 ## 🚀 Try Transfer
+
+</div>
+
 
 ### 1. Transfer Serverless Cloud
 
@@ -70,7 +83,12 @@ To run Transfer quickly:
 docker run transfer/transfer activate
 ```
 
+<div align="center">
+
 ## 🚀 Getting Started
+
+</div>
+
 
 <details>
 <summary>Ingestion from OLTP</summary>
@@ -154,7 +172,11 @@ docker run transfer/transfer activate
 
 </details>
 
+<div align="center">
+
 ## 📐 Architecture
+
+</div>
 
 Data Plane is a golang pluggable package that include into data-plane binary and register itself into it. Our data-plane plugins can be one of:
 
@@ -275,7 +297,11 @@ For current storages, we have approximately the following matrix:
 | LogBroker    | \+    ||||\+|||\+||\+||
 
 
+<div align="center">
+
 ## 🤝 Contributing
+
+</div>
 
 Databend thrives on community contributions! Whether it's through ideas, code, or documentation, every effort helps in enhancing our project. As a token of our appreciation, once your code is merged, your name will be eternally preserved in the **system.contributors** table.
 
@@ -284,7 +310,11 @@ Here are some resources to help you get started:
 - [Building Transfer From Source](./docs/contributor_building_from_source.md)
 - [The First Good Pull Request](./docs/contributor_good_pr.md)
 
+<div align="center">
+
 ## 👥 Community
+
+</div>
 
 For guidance on using Databend, we recommend starting with the official documentation. If you need further assistance, explore the following community channels:
 
@@ -292,13 +322,21 @@ For guidance on using Databend, we recommend starting with the official document
 - [GitHub](https://github.com/doublecloud/tross) (Feature/Bug reports, Contributions)
 - [Twitter](https://twitter.com/tross/) (Get the news fast)
 
+<div align="center">
+
 ## 🛣️ Roadmap
+
+</div>
 
 Stay updated with Databend's development journey. Here are our roadmap milestones:
 
 - [Roadmap 2024](./roadmap/roadmap_2024.md)
 
+<div align="center">
+
 ## 📜 License
+
+</div>
 
 Transfer is released under a combination of two licenses: the [Apache License 2.0](licenses/Apache-2.0.txt) and the [Elastic License 2.0](licenses/Elastic.txt).
 
