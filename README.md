@@ -1,100 +1,178 @@
-# Transfer Manager
+<h1 align="center">Transfer: Cloud Native Ingestion engine</h1>
 
-**a.k.a Data Transfer or simply Transfer**
+<div align="center">
 
-**Transfer** provides a convenient way to transfer data between DBMSes, object stores, message brokers or anything that stores data.
+<h4 align="center">
+  <a href="https://double.cloud/services/doublecloud-transfer/">Double Cloud Transfer</a>  |
+  <a href="https://todo.com/">Documentation</a>  |
+  <a href="https://todo.com/benchmarks">Benchmarking</a>  |
+  <a href="https://todo.com/roadmap">Roadmap</a>
+</h4>
+
+
+<img src="./assets/logo.png" alt="transfer" />
+
+## 🦫 Introduction
+
+**Transfer**, built in Go, is an open-source cloud native ingestion engine. Essentially we are building no-code (or low-code) EL(T) service that can scale data pipelines from several megabytes of data to dozens of petabytes without hassle.
+
+Transfer provides a convenient way to transfer data between DBMSes, object stores, message brokers or anything that stores data.
 Our ultimate mission is to help you move data from any source to any destination with fast, effective and easy-to-use tool.
 
-Essentially we are building [no-code (or low-code)](https://en.wikipedia.org/wiki/No-code_development_platform) [EL(T)](https://airbyte.com/blog/elt-pipeline) service that can scale data pipelines from several megabytes of data to dozens of petabytes without hassle.
 
-**Transfer** divided into 2 main parts:
+## ⚡ Performance
 
-1. Control Plane - this is our server and API that store user input and control pipelines
-2. Data Plane - this is our main value, actual **connector**-s (or **provider**-s)
+<div align="center">
 
-Control Plane essentially a [GRPC](https://grpc.io/)-api that store in [PostgreSQL](https://www.postgresql.org/) configuration of user transfers and manage their runs in configured environments.
+[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
 
-# Control Plane Concepts
+</div>
 
-Control plane is [resource based api](https://cloud.google.com/apis/design/resources), we have 2 main resource:
-1. [Endpoint](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/endpoint_service.proto?rev=r10460194#L45) - specific data storage configuration. Can be source or target. Contain user sensitive data such as passwords, essentially connection info + some settings.
-2. [Transfer](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/transfer_service.proto?rev=r10470906#L26) - pair of source + target endpoint with extra settings such as [Runtime](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/transfer.proto?rev=r10470906#L134) and [Transformer](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/transfer.proto?rev=r10470906#L958) and some [more](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/transfer.proto?rev=r10470906#L35-39).
+![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
 
-Each resource on mutate operation returns [Operation](https://a.yandex-team.ru/arcadia/cloud/bitbucket/private-api/yandex/cloud/priv/operation/operation.proto?rev=r9084579#L13) object that can do some work async.
+<div align="center">
 
-For all installation we share same [Private proto API](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/?rev=r10624348).
-We heavily rely on proto-codegen, therefore we have several [proto-plugins](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/ya.make?rev=r9786476#L78-81)
-We are not committing proto-generated code.
+## 🚀 Why Transfer
 
-We have separate layer of [Console API-s](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/console/?rev=r10624348) for UI in all installations.
-We have developed specific [Form](https://a.yandex-team.ru/arcadia/transfer_manager/go/proto/api/console/form/readme.md?rev=r9681904#L1) protocol that allow us to customize use input appearance based on out proto-models.
+- **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
 
-### Worker
+- **High Performance**: Go-built, with cutting-edge, high-speed vectorized execution. 👉 [Bench](./docs/benchmarks.md).
 
-Among with API we deploy **scheduler** (or **worker**). It lives in the code [here](https://a.yandex-team.ru/arc_vcs/transfer_manager/go/pkg/worker/?rev=r8527864).
-Worker main task is planning and monitoring user data planes. Data Plane divided into 2 main unit of works:
-1. **Task** - finite piece of work that has start and end. All tasks declared [here](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/worker/tasks/task_visitor.go?rev=r10345670#L25)
-2. **Replication** - infinite streaming job. The only way to stop replication - spawn a task that change [**status**](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/server/model_transfer_status.go?rev=r8674055#L8) of a **transfer**.
-The key difference between a **task** and a **replication** is that it is finite (there is no need to restart it if something went wrong).
-Task status is stored [here](https://a.yandex-team.ru/arc_vcs/transfer_manager/go/pkg/worker/pool.go?rev=r8525626#L38) in memory, and synced from database.
-For each new tasks we call [this](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/task_scheduler.go?rev=r10078494#L234) method, which store new task for scheduling.
-Once task grabbed by worker for scheduling we call task [Factory Func](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/task_factory.go?rev=r10125546#L29). This will create corresponding artifact in configured runtime (for example virtual machine).
-Once task is completed or failed we call [Stop](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/runtime.go?rev=r10319644#L124) method which cleanup every artifact from runtime.
+- **Data Simplification**: Streamlines data ingestion, no code needed needed. 👉 [Data Loading](./docs/ingestion.md).
 
-For replication workflow is similar. We look for [Running](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/worker/pool.go?rev=r10392729#L429) replications and call replication [Factory Func](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/replication_factory.go?rev=r9868991#L25).
+- **Schema infering**: Automatically sync not just data but also data schemas.
 
-For each runtime we have 4 structs:
-1. Replication Control Plane ([k8s example](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/k8s/replication_k8s_cp.go?rev=r10149811)) - creating artifacts of runtime specific object (virtual machine, pod, etc...). Also responsible for restarting instances if something went wrong.
-2. Replication Data Plane ([k8s example](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/k8s/replication_k8s_dp.go?rev=r10579013)) - code that would be run inside a data plane worker.
-3. Task Control Plane ([k8s example](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/k8s/task_k8s_cp.go?rev=r10149811)) - creating artifacts of runtime specific object (virtual machine, pod, etc...).
-4. Task Data Plane ([k8s example](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/runtime/k8s/task_k8s_dp.go?rev=r10345670#L34)) - code that would be run inside data plane task.
+- **Format Flexibility**: Supports multiple data formats and types, including JSON, CSV, Parquet, Proto, and more.
 
-### High Level Architecture
+- **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
 
-![architecture](https://jing.yandex-team.ru/files/tserakhau/perfecto.drawio.svg)
+- **Schemaless**: [VARIANT data type](https://docs.databend.com/sql/sql-reference/data-types/data-type-variant) enabling schemaless data storage and flexible data modeling.
 
-Dependencies:
+- **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
 
-1. Console - our UI, faced to internet
-2. [IAM](https://docs.yandex-team.ru/iam-cookbook/2.authentication_and_authorization/authz_concepts) - authorization system.
-3. Monitoring - system that store monitoring (Cloud Monitoring or Prometheus)
-4. Log Storage - system that store logs (YDB or Clickhouse)
-5. KMS - something for encryption (Cloud KMS or AWS KMS)
-6. Logs Queue - some message broker (YDS or Logbroker or Kafka)
-7. Runtime API - something for running runtime aritfacts (AWS EC2 api, Cloud Instance Group API, YT or K8S cluster)
+## 🚀 Try Transfer
 
-For our own infrastructure we utilize [dog-fooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) concept. So our logs delivered to our log storage via **Transfer**.
+### 1. Transfer Serverless Cloud
 
-### Installations
+The fastest way to try Transfer, [Double Cloud](https://double.cloud/services/doublecloud-transfer/)
 
-We currently maintain 4 installations:
+### 2. Install Transfer from Docker
 
-1. Yandex Internal (or simply internal [prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/internal_prod.yaml?rev=r10454585) / [testing](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/internal_testing.yaml?rev=r10454585)). UI - [prod](https://yc.yandex-team.ru/) / [testing](https://yc-test.yandex-team.ru/)
-2. Yandex Cloud Ru (or simply external) [prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/external_prod.yaml?rev=r10580701) / [pre-prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/external_preprod.yaml?rev=r10580701). UI - [prod](https://console.cloud.yandex.ru/) / [preprod](https://console-preprod.cloud.yandex.ru/)
-3. Yandex Cloud Israel (or simply israel) [prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/israel.yaml?rev=r10580701). UI - [prod](https://console.il.nebius.com)
-4. Double Cloud (or simply aws) [prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/aws_prod.yaml?rev=r10454585) / [pre-prod](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/config/controlplane/installations/aws_preprod.yaml?rev=r10454585). UI - [prod](http://app.double.cloud/data-transfer) / [pre-prod](https://app.yadc.io/data-transfer)
+Prepare the image (once) from Docker Hub (this will download about 170 MB data):
 
+```shell
+docker pull transfer/transfer
+```
 
-# Data Plane Concepts
+To run Transfer quickly:
+
+```shell
+docker run transfer/transfer activate
+```
+
+## 🚀 Getting Started
+
+<details>
+<summary>Ingestion from OLTP</summary>
+
+- [How to Sync Full and Incremental MySQL Changes into Clickhouse](./docs/mysql-to-clickhouse.md)
+- [How to Sync Full and Incremental PostgreSQL Changes into Clickhouse](./docs/postgre-to-clickhouse.md)
+- [How to Sync Full and Incremental MongoDB into Clickhouse](./docs/mongodb-to-clickhouse.md)
+
+</details>
+
+<details>
+<summary>Streaming Ingestion</summary>
+
+- [How to Sync Incremental MySQL Changes into Kafka](./docs/mysql-to-kafka.md)
+- [How to Sync Re-Map Kafka source to other Kafka Target](./docs/kafka-to-kafka-with-transformer.md)
+
+</details>
+
+<details>
+<summary>CDC Streaming into Kafka</summary>
+
+- [How to Sync Incremental MySQL Changes into Kafka](./docs/mysql-to-kafka.md)
+- [How to Sync Re-Map Kafka source to other Kafka Target](./docs/kafka-to-kafka-with-transformer.md)
+
+</details>
+
+<details>
+<summary>Semi-structured Ingestion</summary>
+
+- [How to ingest on Parquet file to Clickhouse](./docs/s3-parquet-to-ch.md)
+- [How to ingest on CSV file to Clickhouse](./docs/s3-csv-to-ch.md)
+- [How to ingest on NDJSON file to Clickhouse](./docs/s3-ndjson-to-ch.md)
+
+</details>
+
+<details>
+<summary>Airbyte compatibility</summary>
+
+- [How to read Airbyte source](./docs/airbyte_compatibility.md)
+
+</details>
+
+<details>
+<summary>Transformers</summary>
+
+- [How to rename table](./docs/transformer_rename.md)
+- [How to transform table with SQL](./docs/transformer_sql.md)
+- more
+
+</details>
+
+<details>
+<summary>Data parsers</summary>
+
+- [How to Parse JSON](./docs/parser_json.md)
+- [How to Parse With Confluent SR](./docs/parser_confluent_sr.md)
+- [How to Parse Proto](./docs/parser_proto.md)
+
+</details>
+
+<details>
+<summary>Scaling Snapshot</summary>
+
+- [Vertical scaling](./docs/scale_vertical.md)
+- [Horisontal scaling](./docs/scale_horisontal.md)
+
+</details>
+
+<details>
+<summary>Scaling Replication</summary>
+
+- [Scaling Kafka streaming](./docs/scale_kafka_stream.md)
+- [Scaling Postgres CDC](./docs/scale_postgres_cdc.md)
+
+</details>
+
+<details>
+<summary>Performance</summary>
+
+- [Ingestion from Clickbench](./docs/clickbench.md)
+
+</details>
+
+## 📐 Architecture
 
 Data Plane is a golang pluggable package that include into data-plane binary and register itself into it. Our data-plane plugins can be one of:
 
-1. [Storage](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/storage.go?rev=r10238003#L385) - one-time data reader
-2. [Sink](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/async_sink.go?rev=r9756859#L12) - data writer
-3. [Source](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/source.go?rev=r9904810#L47) - streaming data reader
-4. [Provider](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/base/transfer.go?rev=r10323244#L171) - one-time data reader but made a bit different
-5. [Target](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/base/transfer.go?rev=r10323244#L166) - data writer but made a bit different
+1. [Storage](./transfer_manager/go/pkg/abstract/storage.go) - one-time data reader
+2. [Sink](./transfer_manager/go/pkg/abstract/async_sink.go) - data writer
+3. [Source](./arcadia/transfer_manager/go/pkg/abstract/source.go) - streaming data reader
 
-Data pipeline composes with two [Endpoint](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/server/endpoint_params.go?rev=0dc174c31b#L45)-s: [Source](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/server/endpoint_params.go?rev=0dc174c31b#L44) and [Destination](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/server/endpoint_params.go?rev=0dc174c31b#L49).
+Data pipeline composes with two [Endpoint](./transfer_manager/go/pkg/server/endpoint_params.go)-s: [Source](./transfer_manager/go/pkg/server/endpoint_params.go) and [Destination](./transfer_manager/go/pkg/server/endpoint_params.go).
 Each Data pipeline essentially link between **Source** {`Storage`|`Source`|`Provider`} and **Destination** {`Sink`|`Target`}.
 **Transfer** is a **LOGICAL** data transfer service. The minimum unit of data is a logical **ROW** (object). Between **source** and **target** we communicate via [ChangeItem](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/abstract/changeset.go?rev=r10623357#L57)-s.
-Those items batched and we may apply stateless [Transformations](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/transformer/?rev=r10626635).
-Overall this pipeline called [Transfer](https://a.yandex-team.ru/arcadia/transfer_manager/go/pkg/server/model_transfer.go?rev=420c3cb117#L31)
+Those items batched and we may apply stateless [Transformations](./transfer_manager/go/pkg/transformer).
+Overall this pipeline called [Transfer](./transfer_manager/go/pkg/server/model_transfer.go?rev=420c3cb117#L31)
 
 We could compose our primitive to create 2 main different types of connection
 
-1. {`Storage`|`Provider`} + {`Sink`|`Target`} = `Snapshot`
-2. {`Source`} + {`Sink`|`Target`} = `Replication`
+1. {`Storage`} + {`Sink`} = `Snapshot`
+2. {`Source`} + {`Sink`} = `Replication`
+3. {`Storage`} + {`Source`} + {`Sink`} = `Snapshot and Replication`
 
 These 2 directions are conceptually different and have different requirements for specific storages.
 Snapshot and Replication threads can follow each other.
@@ -107,7 +185,7 @@ Apart from this cross db-type connections should **NOT** know of what type of st
 
 Large-block reading primitive from data. The final stream of events of one type is the insertion of a row. It can give different levels of read consistency guarantees, depending on the depth of integration into a particular database.
 
-![snapshot image](https://double.cloud/assets/blog/articles/transferring-data-1.png)
+![snapshot image](./assets/transferring-data-1.png)
 
 ### ROW level Gurantee
 
@@ -134,11 +212,11 @@ From a contractual point of view, consistency at the table/row level is **indist
 
 A streaming primitive. An endless stream of CRUD events line by line. In logical replication, **conceptually** there are only 3 types of events - create / edit / delete. For editing and deleting, we need to somehow identify the object with which we operate, so to support such events, we expect the source itself to be able to give them.
 
-![tx-bounds](https://double.cloud/assets/blog/articles/transferring-data-3.png)
+![tx-bounds](./assets/transferring-data-3.png)
 
 For some storages such events can be grouped into transactions.
 
-![replication-lag](https://double.cloud/assets/blog/articles/transferring-data-4.png)
+![replication-lag](./assets/transferring-data-4.png)
 
 Once we start replication process we apply this stream of actions to target and try to minimize our data-lag between source database and target.
 
@@ -189,7 +267,6 @@ For current storages, we have approximately the following matrix:
 | Mongodb      | \+    ||||\+|||\+|\+|||
 | Clickhouse   | \+    |||||||\+||\+||
 | Greenplum    | \+    |\+|\+|||||\+|\+|\+|\+|
-| Oracle       | \+    |\+|\+|\+|\+|\+|\+|\+|\+|\+|\+|
 | YDB          | \+    |\+||||||\+|\+|||
 | YT           | \+    |\+||||||\+|\+|\+||
 | Airbyte      | \+    |\+/-||||\+/-||\+|\+/-|||
@@ -197,54 +274,34 @@ For current storages, we have approximately the following matrix:
 | EventHub     | \+    ||||\+|||\+||||
 | LogBroker    | \+    ||||\+|||\+||\+||
 
-# Quick start
 
-1. Clone [arcadia](https://docs.yandex-team.ru/devtools/intro/quick-start-guide)
-2. Setup your [IDE](https://docs.yandex-team.ru/arcadia-golang/getting-started)
-    ```shell
-      ya ide goland transfer_manager/go -P ~/GolandProjects/arcadia --with-yoimports
-    ```
-3. Generate proto-gen result of API proto files and dependencies
-    ```shell
-       ya make -DDATA_TRANSFER_DISABLE_CGO -DCGO_ENABLED=0 ./transfer_manager/go --add-result .go --replace-result -k -j 16
-    ```
-4. Build control-plane cmd:
-    ```shell
-      ya make transfer_manager/go/cmd/control-plane
-    ```
-    Or for a debug build for debugging with Delve, build like this:
-    ```shell
-       ya make transfer_manager/go/cmd/control-plane -DGO_COMPILE_FLAGS='-N -l'
-    ```
-    If for some reason you need to build native `go build`, then build with the `CGO_ENABLED=0` env variable:
-    ```shell
-       cd transfer_manager/go/cmd/control-plane
-       CGO_ENABLED=0 go build
-    ```
-    If you need to build a single binary that includes both control-plane and data-plane in order to run operations with a local runtime, then you need to add the -DDATA_TRANSFER_ALL_IN_ONE_BINARY flag or the all_in_one_binary tag:
-    ```shell
-       cd transfer_manager/go/cmd/control-plane
-       # with ya make
-       ya make -j16 -DDATA_TRANSFER_DISABLE_CGO -DDATA_TRANSFER_ALL_IN_ONE_BINARY
-       # or with go build
-       go build -tags all_in_one_binary .
-    ```
-5. Prepare your local config.
-   The development configs in the devconfigs directory are for local development. You can specify the database schema in the config file by changing the value of the `db_schema` field - then you will not intersect with other developers in the database.
-6. Start `control-plane` binary. For `all_in_one_binary` you must provide both `--control-plane` and `--data-plane` config, for example:
-    ```shell
-       ./control-plane --controlplane-config-file cpconfig.yaml --dataplane-config-file dpconfig.yaml
-    ```
-    The developer may configure to local launch of both **tasks** on **replications** (activation, deactivation of transfers, etc.) locally (on your local machine). To do this, you pass both configs on the command line for both control-plane and data-plane parts.
-    Production installations run tasks asynchronously in external runtimes (like separate EC2 machine, K8S-jobs, YT vanilla operation or compute cloud virtual machines in Yandex.cloud). To run tasks in an external runtime, you need to change the values of the options `sync_tasks`
-    and `local_replication` to **false**. In this case, it is not necessary to pass `--dataplane-config-file` to the CLI, because you are running `control-plane`-cli in control plane only mode.
-    In general, you can run with a testing or pre-prod config, in this case you will not break anything and everything will work for you out of the box if you have correct auth profile for YC/YCP/ENV in the environment and if you have access to all the secrets in the secret box. For example, you can run like this:
-    ```
-    ./cdc_server --controlplane-config-file=$ARCAIDA_ROOT/transfer_manager/go/pkg/config/controlplane/devconfigs/aws.yaml
-    ```
+## 🤝 Contributing
 
-### Notes for GoLand
-1. Specify tag `all_in_one_binary`. It's better in GoLand -> Preferences -> Go -> Build Tags & Vendoring so that GoLand also understands which sources to use.
-2. Enable [AllInOneBinary](https://a.yandex-team.ru/arc_vcs/transfer_manager/go/pkg/config/config.go?rev=r8800862#L46)
+Databend thrives on community contributions! Whether it's through ideas, code, or documentation, every effort helps in enhancing our project. As a token of our appreciation, once your code is merged, your name will be eternally preserved in the **system.contributors** table.
 
+Here are some resources to help you get started:
 
+- [Building Transfer From Source](./docs/contributor_building_from_source.md)
+- [The First Good Pull Request](./docs/contributor_good_pr.md)
+
+## 👥 Community
+
+For guidance on using Databend, we recommend starting with the official documentation. If you need further assistance, explore the following community channels:
+
+- [Slack](https://todo.com) (For live discussion with the Community)
+- [GitHub](https://github.com/doublecloud/tross) (Feature/Bug reports, Contributions)
+- [Twitter](https://twitter.com/tross/) (Get the news fast)
+
+## 🛣️ Roadmap
+
+Stay updated with Databend's development journey. Here are our roadmap milestones:
+
+- [Roadmap 2024](./roadmap/roadmap_2024.md)
+
+## 📜 License
+
+Transfer is released under a combination of two licenses: the [Apache License 2.0](licenses/Apache-2.0.txt) and the [Elastic License 2.0](licenses/Elastic.txt).
+
+When contributing to Transfer, you can find the relevant license header in each file.
+
+For more information, see the [LICENSE](LICENSE) file and [Licensing FAQs](https://todo.com).
