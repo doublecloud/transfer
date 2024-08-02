@@ -2,7 +2,6 @@ package httpclient
 
 import (
 	"bytes"
-	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -21,6 +20,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/conn"
+	"github.com/klauspost/compress/zstd"
 )
 
 type httpClientImpl struct {
@@ -57,7 +57,10 @@ func (c *httpClientImpl) QueryStream(ctx context.Context, lgr log.Logger, host s
 
 	st := time.Now()
 	var compressed bytes.Buffer
-	gzw := gzip.NewWriter(&compressed)
+	gzw, err := zstd.NewWriter(&compressed, zstd.WithEncoderLevel(zstd.SpeedFastest))
+	if err != nil {
+		return nil, xerrors.Errorf("unable to construct writer: %w", err)
+	}
 	n, err := io.Copy(gzw, preparedQuery)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to copy buffer for compression: %w", err)
@@ -76,7 +79,7 @@ func (c *httpClientImpl) QueryStream(ctx context.Context, lgr log.Logger, host s
 	}
 
 	req.Header.Add("Content-Type", "application/octet-stream")
-	req.Header.Add("Content-Encoding", "gzip")
+	req.Header.Add("Content-Encoding", "zstd")
 	req.Header.Add("X-ClickHouse-User", c.config.User())
 	p, err := c.config.ResolvePassword()
 	if err != nil {

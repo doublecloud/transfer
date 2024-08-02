@@ -2,13 +2,31 @@ package model
 
 import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/dbaas"
 )
 
-func ShardFromCluster(clusterID string) (map[string][]string, error) {
-	hosts, err := dbaas.ResolveClusterHosts(dbaas.ProviderTypeClickhouse, clusterID)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to list hosts: %w", err)
+func ShardFromCluster(clusterID, shardGroup string) (map[string][]string, error) {
+	var hosts []dbaas.ClusterHost
+	if shardGroup != "" {
+		dbaasResolver, err := dbaas.Current()
+		if err != nil {
+			return nil, xerrors.Errorf("unable to get dbaas resolver: %w", err)
+		}
+		shardGroupResolver, err := dbaasResolver.ShardGroupHostsResolver(dbaas.ProviderTypeClickhouse, clusterID)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to get shard group resolver: %w", err)
+		}
+		hosts, err = shardGroupResolver.ResolveShardGroupHosts(shardGroup)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to resolve shard group hosts: %w", err)
+		}
+	} else {
+		var err error
+		hosts, err = dbaas.ResolveClusterHosts(dbaas.ProviderTypeClickhouse, clusterID)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to list hosts: %w", err)
+		}
 	}
 	shards := make(map[string][]string)
 	for _, h := range hosts {
@@ -17,5 +35,6 @@ func ShardFromCluster(clusterID string) (map[string][]string, error) {
 		}
 		shards[h.ShardName] = append(shards[h.ShardName], h.Name)
 	}
+	logger.Log.Errorf("DEBUG - resolved shards: %v", shards) // TODO: Remove this line (or make info/debug).
 	return shards, nil
 }

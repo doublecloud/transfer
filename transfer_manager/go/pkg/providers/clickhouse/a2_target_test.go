@@ -63,6 +63,7 @@ func TestTargetPush(t *testing.T) {
 						"ORDER BY (BasePath, Code, ServerName) "+
 						"SETTINGS index_granularity = 8192",
 					"MergeTree",
+					"",
 				),
 			},
 		},
@@ -178,7 +179,7 @@ func TestAdjustDDLToTarget(t *testing.T) {
 			"CREATE TABLE db.test_distr ON CLUSTER abc (dt Date, data String) "+
 				"ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/db/test_distr', '{replica}') "+
 				"PARTITION BY dt ORDER BY tuple()",
-			"ReplicatedMergeTree"), true)
+			"ReplicatedMergeTree", ""), true)
 		require.NoError(t, err)
 		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
 			"(dt Date, data String) "+
@@ -192,7 +193,7 @@ func TestAdjustDDLToTarget(t *testing.T) {
 			"CREATE TABLE db.test_distr (dt Date, data String) "+
 				"ENGINE = MergeTree() "+
 				"PARTITION BY dt ORDER BY tuple()",
-			"MergeTree"), true)
+			"MergeTree", ""), true)
 		require.NoError(t, err)
 		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr  ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
 			"(dt Date, data String) "+
@@ -206,7 +207,7 @@ func TestAdjustDDLToTarget(t *testing.T) {
 			"CREATE TABLE db.test_distr ON CLUSTER abc (dt Date, data String) "+
 				"ENGINE = SharedMergeTree('/clickhouse/tables/{shard}/db/test_distr', '{replica}') "+
 				"PARTITION BY dt ORDER BY tuple()",
-			"SharedMergeTree"), true)
+			"SharedMergeTree", ""), true)
 		require.NoError(t, err)
 		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
 			"(dt Date, data String) "+

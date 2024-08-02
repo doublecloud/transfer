@@ -138,7 +138,7 @@ func (c *DataProvider) TablePartToDataObjectPart(tableDescription *abstract.Tabl
 func NewClickhouseProvider(logger log.Logger, registry metrics.Registry, config *model.ChSource, transfer *server.Transfer) (base.SnapshotProvider, error) {
 	shards := config.ToSinkParams().Shards()
 	if config.ToStorageParams().IsManaged() {
-		res, err := model.ShardFromCluster(config.MdbClusterID)
+		res, err := model.ShardFromCluster(config.MdbClusterID, config.ChClusterName)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to resolve cluster from shards: %w", err)
 		}

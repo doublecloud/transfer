@@ -104,16 +104,11 @@ func (s *SinkServer) isOnClusterDDL() bool {
 }
 
 func (s *SinkServer) tableReferenceForDDL(tableName string, onCluster bool) string {
-	return fmt.Sprintf(
-		"`%[1]s`.`%[2]s`%[3]s",
-		s.config.Database(), tableName,
-		func() string {
-			if onCluster && s.isOnClusterDDL() {
-				return fmt.Sprintf(" ON CLUSTER `%s`", s.cluster.topology.ClusterName())
-			}
-			return ""
-		}(),
-	)
+	cluster := ""
+	if onCluster && s.isOnClusterDDL() {
+		cluster = fmt.Sprintf(" ON CLUSTER `%s`", s.cluster.topology.ClusterName())
+	}
+	return fmt.Sprintf("`%s`.`%s`%s", s.config.Database(), tableName, cluster)
 }
 
 func (s *SinkServer) ExecDDL(ctx context.Context, ddl string) error {
@@ -250,15 +245,21 @@ func (s *SinkServer) GetTable(table string, schema *abstract.TableSchema) (*sink
 	}
 
 	tbl := &sinkTable{
-		server:     s,
-		tableName:  normalizeTableName(table),
-		config:     s.config,
-		logger:     log.With(s.logger, log.Any("table", normalizeTableName(table))),
-		colTypes:   nil,
-		cols:       nil,
-		metrics:    s.metrics,
-		avgRowSize: 0,
-		cluster:    s.cluster,
+		server:          s,
+		tableName:       normalizeTableName(table),
+		config:          s.config,
+		logger:          log.With(s.logger, log.Any("table", normalizeTableName(table))),
+		colTypes:        nil,
+		cols:            nil,
+		metrics:         s.metrics,
+		avgRowSize:      0,
+		cluster:         s.cluster,
+		timezoneFetched: false,
+		timezone:        nil,
+	}
+
+	if err := tbl.resolveTimezone(); err != nil {
+		return nil, xerrors.Errorf("failed to resolve CH cluster timezone: %w", err)
 	}
 
 	if err := tbl.Init(schema); err != nil {

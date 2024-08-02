@@ -54,12 +54,13 @@ func testQueryStableMarshalling(t *testing.T, input []abstract.ChangeItem) {
 		"id":    columntypes.NewTypeDescription("Int32"),
 		"value": columntypes.NewTypeDescription("String"),
 	}
-	require.NoError(t, marshalQuery(input, &MarshallingRules{
-		ColSchema:      input[0].TableSchema.Columns(),
-		ColTypes:       colTypes,
-		ColNameToIndex: abstract.MakeMapColNameToIndex(input[0].TableSchema.Columns()),
-		AnyAsString:    false,
-	}, q, 30, 10))
+	require.NoError(t, marshalQuery(input, NewRules(
+		input[0].ColumnNames,
+		input[0].TableSchema.Columns(),
+		abstract.MakeMapColNameToIndex(input[0].TableSchema.Columns()),
+		colTypes,
+		false,
+	), q, 30, 10))
 	data, err := io.ReadAll(q)
 	require.NoError(t, err)
 
@@ -127,12 +128,13 @@ func TestQueryBool(t *testing.T) {
 	colTypes["toplevel"] = &typeDescription
 
 	var buf bytes.Buffer
-	err := MarshalCItoJSON(*changeItem, &MarshallingRules{
-		ColSchema:      changeItem.TableSchema.Columns(),
-		ColNameToIndex: abstract.MakeMapColNameToIndex(changeItem.TableSchema.Columns()),
-		ColTypes:       colTypes,
-		AnyAsString:    true,
-	}, &buf)
+	err := MarshalCItoJSON(*changeItem, NewRules(
+		changeItem.ColumnNames,
+		changeItem.TableSchema.Columns(),
+		abstract.MakeMapColNameToIndex(changeItem.TableSchema.Columns()),
+		colTypes,
+		true,
+	), &buf)
 	require.NoError(t, err)
 
 	var q map[string]interface{}
@@ -184,12 +186,13 @@ func TestOrder(t *testing.T) {
 	colTypes["toplevel"] = &typeDescription
 
 	var buf bytes.Buffer
-	err := MarshalCItoJSON(*changeItem, &MarshallingRules{
-		ColSchema:      changeItem.TableSchema.Columns(),
-		ColNameToIndex: abstract.MakeMapColNameToIndex(changeItem.TableSchema.Columns()),
-		ColTypes:       colTypes,
-		AnyAsString:    true,
-	}, &buf)
+	err := MarshalCItoJSON(*changeItem, NewRules(
+		changeItem.ColumnNames,
+		changeItem.TableSchema.Columns(),
+		abstract.MakeMapColNameToIndex(changeItem.TableSchema.Columns()),
+		colTypes,
+		true,
+	), &buf)
 	require.NoError(t, err)
 
 	var q map[string]interface{}

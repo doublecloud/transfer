@@ -28,17 +28,22 @@ type Batching struct {
 type SerializationFormat struct {
 	Name             SerializationFormatName
 	Settings         map[string]string
+	SettingsKV       [][2]string
 	BatchingSettings *Batching
 }
 
 func (f *SerializationFormat) Copy() *SerializationFormat {
 	result := &SerializationFormat{
 		Name:             f.Name,
-		Settings:         make(map[string]string),
+		Settings:         make(map[string]string, len(f.Settings)),
+		SettingsKV:       make([][2]string, len(f.SettingsKV)),
 		BatchingSettings: nil,
 	}
 	for k, v := range f.Settings {
 		result.Settings[k] = v
+	}
+	for i, kv := range f.SettingsKV {
+		result.SettingsKV[i] = [2]string{kv[0], kv[1]}
 	}
 	if f.BatchingSettings != nil {
 		result.BatchingSettings = &Batching{

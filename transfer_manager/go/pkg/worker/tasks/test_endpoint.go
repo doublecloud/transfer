@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"context"
+	"time"
 
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -56,7 +57,11 @@ func SniffReplicationData(
 	}
 	if transfer.HasPublicTransformation() {
 		for table, rows := range previewMap {
-			collector := &sampleCollector{res: map[abstract.TableID][]abstract.ChangeItem{}}
+			collector := &sampleCollector{
+				res:    map[abstract.TableID][]abstract.ChangeItem{},
+				ctx:    context.Background(),
+				cancel: func() {},
+			}
 			transfer.Transformation.Transformers.ErrorsOutput = &transformer.ErrorsOutput{
 				// force sink error, so user can see all transformer errors in discover results
 				Type:   transformer.SinkErrorsOutput,
@@ -84,14 +89,19 @@ func SniffReplicationData(
 var _ abstract.Sinker = (*sampleCollector)(nil)
 
 type sampleCollector struct {
-	res map[abstract.TableID][]abstract.ChangeItem
+	res    map[abstract.TableID][]abstract.ChangeItem
+	ctx    context.Context
+	cancel func()
 }
 
-func (s *sampleCollector) Close() error { return nil }
+func (s *sampleCollector) Close() error {
+	return nil
+}
 
 func (s *sampleCollector) Push(items []abstract.ChangeItem) error {
 	for _, item := range items {
 		if len(s.res[item.TableID()]) > 3 {
+			s.cancel()
 			continue
 		}
 		if item.IsRowEvent() {
@@ -120,7 +130,12 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 	var errs util.Errors
 	previewSchemas := abstract.TableMap{}
 	for table := range tables {
-		collector := &sampleCollector{res: map[abstract.TableID][]abstract.ChangeItem{}}
+		cctx, cancel := context.WithTimeout(ctx, time.Minute)
+		collector := &sampleCollector{
+			res:    map[abstract.TableID][]abstract.ChangeItem{},
+			ctx:    cctx,
+			cancel: cancel,
+		}
 		wrapper, err := middlewares.Transformation(transfer, logger.Log, metrics)
 		if err != nil {
 			return tr.NotOk(ConfigCheckType, xerrors.Errorf("unable to assign transformer: %w", err))
@@ -136,6 +151,7 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 			EtaRow: 0,
 			Offset: 0,
 		}
+
 		cnt, err := sourceStorage.EstimateTableRowsCount(table)
 		if err != nil {
 			exactCnt, exactErr := sourceStorage.ExactTableRowsCount(table)
@@ -148,15 +164,25 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 		if sampleable, ok := sourceStorage.(abstract.SampleableStorage); ok && cnt > 2000 {
 			err = sampleable.LoadRandomSample(tdesc, sinker.Push)
 		} else {
-			err = sourceStorage.LoadTable(ctx, tdesc, sinker.Push)
+			err = sourceStorage.LoadTable(cctx, tdesc, sinker.Push)
 		}
-		if err != nil {
+
+		if err != nil && len(collector.res) == 0 {
 			logger.Log.Warnf("unable to load: %v: %v", table, err)
 			categorizedErr := errors.ToTransferStatusMessage(err)
 			errs = append(errs, xerrors.Errorf("failed to load: %s: %s: %s", tdesc.String(), categorizedErr.Categories, categorizedErr.Heading))
 		}
 		for tid, items := range collector.res {
 			if len(items) == 0 {
+				schema, err := sourceStorage.TableSchema(ctx, tid)
+				if err != nil {
+					return tr.NotOk(LoadSampleCheckType, xerrors.Errorf("unable to load: %s schema: %w", tid.Fqtn(), err))
+				}
+				previewSchemas[tid] = abstract.TableInfo{
+					EtaRow: 0,
+					IsView: false,
+					Schema: schema,
+				}
 				continue
 			}
 			previewSchemas[tid] = abstract.TableInfo{
@@ -181,9 +207,9 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 	return tr
 }
 
-func TestEndpoint(ctx context.Context, param *TestEndpointParams) *abstract.TestResult {
+func TestEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
 	if !param.IsSource {
-		tr := abstract.NewTestResult(ConfigCheckType, WriteableCheckType)
+		tr.Add(ConfigCheckType, WriteableCheckType)
 		dst, err := model.NewDestination(param.Type, param.Params)
 		if err != nil {
 			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Target, "unable to construct target: %w", err))
@@ -197,7 +223,7 @@ func TestEndpoint(ctx context.Context, param *TestEndpointParams) *abstract.Test
 		tr.Ok(WriteableCheckType)
 		return tr
 	}
-	tr := abstract.NewTestResult(ConfigCheckType)
+	tr.Add(ConfigCheckType)
 	param.Transfer.Dst = new(model.MockDestination)
 	endpointSource, err := model.NewSource(param.Type, param.Params)
 	if err != nil {

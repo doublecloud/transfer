@@ -15,7 +15,7 @@ import (
 
 func ResolveShards(config model.ChSinkParams, transfer *server.Transfer) error {
 	if config.MdbClusterID() != "" {
-		shards, err := model.ShardFromCluster(config.MdbClusterID())
+		shards, err := model.ShardFromCluster(config.MdbClusterID(), config.ChClusterName())
 		if err != nil {
 			return xerrors.Errorf("failed to obtain a list of shards from MDB ClickHouse: %w", err)
 		}

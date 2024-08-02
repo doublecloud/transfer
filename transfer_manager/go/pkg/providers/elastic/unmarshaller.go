@@ -65,7 +65,7 @@ func unmarshalField(value any, colSchema *abstract.ColSchema) (any, error) {
 	case schema.TypeInterval:
 		result, err = strict.Unexpected(value, cast.ToDurationE)
 	case schema.TypeString:
-		result, err = strict.Expected[*json.RawMessage](value, cast.ToStringE)
+		result, err = strict.Expected[*json.RawMessage](value, castx.ToStringE)
 	case schema.TypeAny:
 		result, err = expectedAnyCast(value, colSchema)
 	default:
@@ -144,12 +144,12 @@ func expectedAnyCast(value any, colSchema *abstract.ColSchema) (any, error) {
 	}
 
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("failed to cast %T to any: %w", value, err))
+		return nil, xerrors.Errorf("failed to cast %T to any: %w", value, err)
 	}
 	resultJS, err := ensureJSONMarshallable(result)
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf(
-			"successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err))
+		return nil, xerrors.Errorf(
+			"successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err)
 	}
 	return resultJS, nil
 }

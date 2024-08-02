@@ -6,6 +6,7 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/config"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
 	"github.com/spf13/cobra"
@@ -45,7 +46,7 @@ func testSource(transfer model.Transfer) error {
 		Params:               transfer.SrcJSON(),
 		IsSource:             true,
 		TransformationConfig: transformationJSON,
-	})
+	}, abstract.NewTestResult())
 
 	prettyRes, err := yaml.Marshal(res)
 	if err != nil {
@@ -63,7 +64,7 @@ func testTarget(transfer model.Transfer) error {
 		Params:               transfer.DstJSON(),
 		IsSource:             false,
 		TransformationConfig: nil,
-	}); res.Err() != nil {
+	}, abstract.NewTestResult()); res.Err() != nil {
 		return xerrors.Errorf("unable to check target: %w", res.Err())
 	}
 	logger.Log.Infof("check target done")

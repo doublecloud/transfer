@@ -22,7 +22,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
-	"github.com/spf13/cast"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
 	"github.com/valyala/fastjson"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/yson"
@@ -1103,7 +1103,7 @@ func TableSplitter(sourceName string, columns []string, item map[string]interfac
 				val = columnValues[index]
 			}
 		}
-		if val, err := cast.ToStringE(val); err == nil {
+		if val, err := castx.ToStringE(val); err == nil {
 			tableName = splitStepTableName(tableName, val)
 		}
 	}

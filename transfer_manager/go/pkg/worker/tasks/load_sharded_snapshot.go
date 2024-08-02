@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
@@ -51,6 +52,9 @@ func (l *SnapshotLoader) GetShardState(ctx context.Context) error {
 		func() (string, error) {
 			stateMsg, err := l.cp.GetOperationState(l.operationID)
 			if err != nil {
+				if xerrors.Is(err, coordinator.OperationStateNotFoundError) {
+					return "", nil
+				}
 				return "", errors.CategorizedErrorf(categories.Internal, "failed to get operation state: %w", err)
 			}
 			return stateMsg, nil
@@ -69,11 +73,14 @@ func (l *SnapshotLoader) GetShardState(ctx context.Context) error {
 func (l *SnapshotLoader) OperationStateExists(ctx context.Context) (bool, error) {
 	result, err := backoff.RetryNotifyWithData(
 		func() (bool, error) {
-			stateMsg, err := l.cp.GetOperationState(l.operationID)
+			_, err := l.cp.GetOperationState(l.operationID)
 			if err != nil {
+				if xerrors.Is(err, coordinator.OperationStateNotFoundError) {
+					return false, nil
+				}
 				return false, xerrors.Errorf("failed to get operation state: %w", err)
 			}
-			return stateMsg != "", nil
+			return true, nil
 		},
 		backoff.WithContext(newMetaCheckBackoff(), ctx),
 		util.BackoffLoggerDebug(logger.Log, "waiting for sharded state"),

@@ -23,6 +23,7 @@ type ClickHouseShard struct {
 
 type ChSource struct {
 	MdbClusterID     string `json:"ClusterID"`
+	ChClusterName    string // CH cluster from which data will be transfered. Other clusters would be ignored.
 	ShardsList       []ClickHouseShard
 	HTTPPort         int
 	NativePort       int
@@ -173,7 +174,7 @@ func (s ChSourceWrapper) MdbClusterID() string {
 }
 
 func (s ChSourceWrapper) ChClusterName() string {
-	return s.Model.MdbClusterID // that's intentionally, not copy-paste bug)
+	return s.Model.ChClusterName
 }
 
 func (s ChSourceWrapper) User() string {
@@ -218,6 +219,10 @@ func (s ChSourceWrapper) TTL() string {
 }
 
 func (s ChSourceWrapper) IsUpdateable() bool {
+	return false
+}
+
+func (s ChSourceWrapper) UpsertAbsentToastedRows() bool {
 	return false
 }
 

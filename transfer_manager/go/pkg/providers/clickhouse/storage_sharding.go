@@ -351,6 +351,7 @@ func NewShardedFromUrls(shardUrls map[string][]string, config *model.ChStoragePa
 		st := WithOpts(&Storage{
 			db:        db,
 			database:  config.Database,
+			cluster:   config.ChClusterName,
 			bufSize:   config.BufferSize,
 			logger:    logger.Log,
 			onceClose: sync.Once{},

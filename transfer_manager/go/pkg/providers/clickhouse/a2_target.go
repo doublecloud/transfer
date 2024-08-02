@@ -219,17 +219,6 @@ func (c *HTTPTarget) adjustDDLToTarget(ddl schema.TableDDL, distributed bool) (s
 	return sqlDDL, nil
 }
 
-func (c *HTTPTarget) getClusterName(ctx context.Context) (string, error) {
-	host := c.HostByPart(nil)
-	db, err := conn.ConnectNative(host, c.config)
-	if err != nil {
-		return "", xerrors.Errorf("error getting native service connection to %s: %w", host, err)
-	}
-	defer db.Close()
-
-	return topology.ClusterName(ctx, db, c.config)
-}
-
 func (c *HTTPTarget) HostByPart(part *TablePartA2) string {
 	host := ""
 	if c.config.Host() != nil {
@@ -266,16 +255,11 @@ func (c *HTTPTarget) HostByPart(part *TablePartA2) string {
 }
 
 func (c *HTTPTarget) tableReferenceForDDL(name string, distributed bool) string {
-	return fmt.Sprintf(
-		"`%[1]s`.`%[2]s`%[3]s",
-		c.config.Database(), name,
-		func() string {
-			if distributed {
-				return fmt.Sprintf(" ON CLUSTER `%s`", c.cluster.Name())
-			}
-			return ""
-		}(),
-	)
+	cluster := ""
+	if distributed {
+		cluster = fmt.Sprintf(" ON CLUSTER `%s`", c.cluster.Name())
+	}
+	return fmt.Sprintf("`%s`.`%s`%s", c.config.Database(), name, cluster)
 }
 
 func (c *HTTPTarget) resolveCluster() error {

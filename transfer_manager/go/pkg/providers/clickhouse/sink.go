@@ -172,11 +172,9 @@ func newSinkImpl(transfer *server.Transfer, config model.ChSinkParams, logger lo
 		}
 	}
 
-	shards := make([]lazySinkShard, len(shardNamesSorted))
 	shardMap := sharding.ShardMap[*lazySinkShard]{}
 	for shardIdx, shardName := range shardNamesSorted {
 		shard := *newLazySinkShard(shardName, config.MakeChildShardParams(config.Shards()[shardName]), topology, logger, metrics)
-		shards[shardIdx] = shard
 		shardMap[sharding.ShardID(shardIdx)] = &shard
 	}
 

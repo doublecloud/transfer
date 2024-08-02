@@ -71,12 +71,13 @@ func (s *ClickhouseTransformer) Type() abstract.TransformerType {
 func (s *ClickhouseTransformer) Apply(input []abstract.ChangeItem) abstract.TransformerResult {
 	s.engineMutex.Lock()
 	defer s.engineMutex.Unlock()
-	marshallingRules := &httpuploader.MarshallingRules{
-		ColSchema:      input[0].TableSchema.Columns(),
-		ColNameToIndex: abstract.MakeMapColNameToIndex(input[0].TableSchema.Columns()),
-		ColTypes:       map[string]*columntypes.TypeDescription{},
-		AnyAsString:    true,
-	}
+	marshallingRules := httpuploader.NewRules(
+		input[0].ColumnNames,
+		input[0].TableSchema.Columns(),
+		abstract.MakeMapColNameToIndex(input[0].TableSchema.Columns()),
+		map[string]*columntypes.TypeDescription{},
+		true,
+	)
 	var totalRes abstract.TransformerResult
 	for _, subinput := range abstract.SplitUpdatedPKeys(input) {
 		input = abstract.Collapse(subinput)
@@ -124,7 +125,7 @@ func (s *ClickhouseTransformer) prepareInput(input []abstract.ChangeItem, marsha
 			s.logger.Errorf("col %s not found type %s in typesystem", col.ColumnName, col.DataType)
 			return nil, xerrors.Errorf("col %s not found type %s in typesystem", col.ColumnName, col.DataType)
 		}
-		marshallingRules.ColTypes[col.ColumnName] = columntypes.NewTypeDescription(chType)
+		marshallingRules.SetColType(col.ColumnName, columntypes.NewTypeDescription(chType))
 	}
 	buffer := bytes.Buffer{}
 	for _, row := range input {

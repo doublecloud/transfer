@@ -54,14 +54,15 @@ func TestValidJSON(t *testing.T) {
 				ColumnNames:  []string{"bytes_with_jsons"},
 				ColumnValues: []any{[]byte(tc.value)},
 				TableSchema:  tschema,
-			}, &MarshallingRules{
-				ColSchema:      tschema.Columns(),
-				ColNameToIndex: abstract.MakeMapColNameToIndex(tschema.Columns()),
-				ColTypes: map[string]*columntypes.TypeDescription{
+			}, NewRules(
+				tschema.ColumnNames(),
+				tschema.Columns(),
+				abstract.MakeMapColNameToIndex(tschema.Columns()),
+				map[string]*columntypes.TypeDescription{
 					"bytes_with_jsons": new(columntypes.TypeDescription),
 				},
-				AnyAsString: false,
-			}, buf))
+				false,
+			), buf))
 			fmt.Printf("\n%v", buf.String())
 			var r map[string]string
 
@@ -82,14 +83,15 @@ func TestEscapNotCurraptNonUTF8(t *testing.T) {
 		ColumnNames:  []string{"bytes_with_jsons"},
 		ColumnValues: []any{value},
 		TableSchema:  tschema,
-	}, &MarshallingRules{
-		ColSchema:      tschema.Columns(),
-		ColNameToIndex: abstract.MakeMapColNameToIndex(tschema.Columns()),
-		ColTypes: map[string]*columntypes.TypeDescription{
+	}, NewRules(
+		tschema.ColumnNames(),
+		tschema.Columns(),
+		abstract.MakeMapColNameToIndex(tschema.Columns()),
+		map[string]*columntypes.TypeDescription{
 			"bytes_with_jsons": new(columntypes.TypeDescription),
 		},
-		AnyAsString: false,
-	}, buf))
+		false,
+	), buf))
 	fmt.Printf("\n%v", buf.String())
 	hackyByteInPlace := false
 	for _, b := range buf.Bytes() {

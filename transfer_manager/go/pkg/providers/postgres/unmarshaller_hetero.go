@@ -97,11 +97,11 @@ func expectedAnyCast(value any, colSchema *abstract.ColSchema, connInfo *pgtype.
 	case *GenericArray:
 		result, err = unmarshalGenericArray(v, colSchema, connInfo)
 	case *pgtype.GenericText:
-		result, err = strict.ExpectedSQL[*pgtype.GenericText](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.GenericText](v, castx.ToStringE)
 	case *pgtype.Varbit:
-		result, err = strict.ExpectedSQL[*pgtype.Varbit](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Varbit](v, castx.ToStringE)
 	case *pgtype.Bit:
-		result, err = strict.ExpectedSQL[*pgtype.Varbit]((*pgtype.Varbit)(v), cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Varbit]((*pgtype.Varbit)(v), castx.ToStringE)
 	case *pgtype.Record:
 		result, err = unmarshalRecord(v)
 	case *pgtype.JSON:
@@ -111,9 +111,9 @@ func expectedAnyCast(value any, colSchema *abstract.ColSchema, connInfo *pgtype.
 	case *pgtype.CIDR:
 		result, err = unmarshalCIDR(v)
 	case *pgtype.Inet:
-		result, err = strict.ExpectedSQL[*pgtype.Inet](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Inet](v, castx.ToStringE)
 	case *pgtype.Tstzrange:
-		result, err = strict.ExpectedSQL[*pgtype.Tstzrange](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Tstzrange](v, castx.ToStringE)
 	case *pgtype.Daterange:
 		result, err = unmarshalDaterange(v)
 	case driver.Valuer:
@@ -137,11 +137,11 @@ func expectedAnyCast(value any, colSchema *abstract.ColSchema, connInfo *pgtype.
 	}
 
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("failed to cast %T to any: %w", value, err))
+		return nil, xerrors.Errorf("failed to cast %T to any: %w", value, err)
 	}
 	resultJS, err := ensureJSONMarshallable(result)
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err))
+		return nil, xerrors.Errorf("successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err)
 	}
 	return resultJS, nil
 }
@@ -261,24 +261,24 @@ func expectedStringCast(value any) (any, error) {
 
 	switch v := value.(type) {
 	case *pgtype.GenericText:
-		result, err = strict.ExpectedSQL[*pgtype.GenericText](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.GenericText](v, castx.ToStringE)
 	case *pgtype.Text:
-		result, err = strict.ExpectedSQL[*pgtype.Text](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Text](v, castx.ToStringE)
 	case *pgtype.Varchar:
-		result, err = strict.ExpectedSQL[*pgtype.Varchar](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Varchar](v, castx.ToStringE)
 	case *pgtype.Interval:
 		// funny that Interval is schema.String, while Tstzrange and Daterange are schema.Any
 		// Note that none of them are schema.Interval
-		result, err = strict.ExpectedSQL[*pgtype.Interval](v, cast.ToStringE)
+		result, err = strict.ExpectedSQL[*pgtype.Interval](v, castx.ToStringE)
 	case string:
 		// this should never appear, but has been present since https://github.com/doublecloud/tross/review/757334/files/2#file-/trunk/arcadia/transfer_manager/go/pkg/storage/pg/scanner.go:R24
 		result, err = v, nil
 	default:
-		result, err = strict.UnexpectedSQL(v, cast.ToStringE)
+		result, err = strict.UnexpectedSQL(v, castx.ToStringE)
 	}
 
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("failed to cast %T to string: %w", value, err))
+		return nil, xerrors.Errorf("failed to cast %T to string: %w", value, err)
 	}
 	return result, nil
 }

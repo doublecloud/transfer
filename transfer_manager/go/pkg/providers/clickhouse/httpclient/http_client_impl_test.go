@@ -2,7 +2,6 @@ package httpclient
 
 import (
 	"bytes"
-	"compress/gzip"
 	"context"
 	"io"
 	"net"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/conn"
+	"github.com/klauspost/compress/zstd"
 	"github.com/stretchr/testify/require"
 )
 
@@ -66,10 +66,10 @@ func TestCompression(t *testing.T) {
 		testServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusOK)
 			encoding := r.Header.Get("Content-Encoding")
-			require.Equal(t, encoding, "gzip")
+			require.Equal(t, encoding, "zstd")
 			rawData, err := io.ReadAll(r.Body)
 			require.NoError(t, err)
-			rr, err := gzip.NewReader(bytes.NewReader(rawData))
+			rr, err := zstd.NewReader(bytes.NewReader(rawData))
 			require.NoError(t, err)
 			unzippedData, err := io.ReadAll(rr)
 			require.NoError(t, err)

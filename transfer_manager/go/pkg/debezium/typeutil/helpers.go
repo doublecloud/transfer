@@ -278,6 +278,22 @@ func DecimalToDebezium(decimal, decimalWithoutProvider string, connectorParamete
 	}
 }
 
+func fillByZeroesToAlignL(in string, lengthMustBe int) (string, error) {
+	zeroesNum := lengthMustBe - len(in)
+	if zeroesNum < 0 {
+		return "", xerrors.Errorf("unable to align string L, which is larger than lengthMustBe, in:%s, lengthMustBe:%d", in, lengthMustBe)
+	}
+	return strings.Repeat("0", zeroesNum) + in, nil
+}
+
+func fillByZeroesToAlignR(in string, lengthMustBe int) (string, error) {
+	zeroesNum := lengthMustBe - len(in)
+	if zeroesNum < 0 {
+		return "", xerrors.Errorf("unable to align string R, which is larger than lengthMustBe, in:%s, lengthMustBe:%d", in, lengthMustBe)
+	}
+	return in + strings.Repeat("0", zeroesNum), nil
+}
+
 func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 	if strings.HasSuffix(in, "e0") {
 		return in[0 : len(in)-2], nil
@@ -304,8 +320,11 @@ func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 			return "0." + strings.Repeat("0", expVal) + basePart[1:], nil
 		} else {
 			if expVal >= len(basePart) {
-				zeroesNum := expVal - len(basePart)
-				return "0." + strings.Repeat("0", zeroesNum) + basePart, nil
+				result, err := fillByZeroesToAlignL(basePart, expVal)
+				if err != nil {
+					return "", xerrors.Errorf("unable to align L, err:%w", err)
+				}
+				return "0." + result, nil
 			} else {
 				index := len(basePart) - expVal
 				return basePart[0:index] + "." + basePart[index:], nil
@@ -314,8 +333,11 @@ func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 	} else if sign == "+" {
 		basePart = basePart[1:]
 		if expVal >= len(basePart) {
-			zeroesNum := expVal - len(basePart)
-			return basePart + strings.Repeat("0", zeroesNum), nil
+			result, err := fillByZeroesToAlignR(basePart, expVal)
+			if err != nil {
+				return "", xerrors.Errorf("unable to align R, err:%w", err)
+			}
+			return result, nil
 		} else {
 			index := len(basePart) - expVal
 			return basePart[0:index] + "." + basePart[index:], nil
@@ -443,7 +465,10 @@ func ParsePgDateTimeWithTimezone(in string) (time.Time, error) {
 
 func ParsePostgresInterval(interval, intervalHandlingMode string) (interface{}, error) {
 	if intervalHandlingMode == debeziumparameters.IntervalHandlingModeNumeric {
-		arrStr := ExtractPostgresIntervalArray(interval)
+		arrStr, err := ExtractPostgresIntervalArray(interval)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to extract postgres interval array, interval: %s, intervalHandlingMode: %s, err: %w", interval, intervalHandlingMode, err)
+		}
 
 		arrInt := make([]int64, 0)
 		for _, el := range arrStr {
@@ -632,7 +657,7 @@ var regexYear = *regexp.MustCompile(`(\d+) years?`)
 var regexMonth = *regexp.MustCompile(`(\d+) (?:mon|months?)`)
 var regexDay = *regexp.MustCompile(`(\d+) days?`)
 
-func ExtractPostgresIntervalArray(interval string) []string {
+func ExtractPostgresIntervalArray(interval string) ([]string, error) {
 	result := make([]string, 7)
 
 	arr := regexYear.FindStringSubmatch(interval)
@@ -659,13 +684,14 @@ func ExtractPostgresIntervalArray(interval string) []string {
 
 	if index := strings.Index(interval, "."); index != -1 {
 		result[6] = interval[index+1:]
-		leastZeroesNum := 6 - len(result[6])
-		if leastZeroesNum > 0 {
-			result[6] += strings.Repeat("0", leastZeroesNum)
+		tmp, err := fillByZeroesToAlignR(result[6], 6)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to align R, err:%w", err)
 		}
+		result[6] = tmp
 	}
 
-	return result
+	return result, nil
 }
 
 var timeWithoutTZ0 = "15:04:05"
@@ -1051,7 +1077,7 @@ func LSNToFileAndPos(lsn uint64) (string, uint64) {
 
 func SprintfDebeziumTime(in time.Time) string {
 	ns := in.Nanosecond()
-	nsStr := fmt.Sprintf("%d", ns)
+	nsStr := fmt.Sprintf("%09d", ns)
 	nsStr = strings.TrimRight(nsStr, "0")
 	if len(nsStr) == 0 {
 		return in.UTC().Format("2006-01-02T15:04:05Z")

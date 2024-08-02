@@ -77,6 +77,15 @@ func (f *ChangeItemsFetcher) Fetch() (items []abstract.ChangeItem, err error) {
 	resultCount := 0
 	resultBytes := server.BytesSize(0)
 
+	casters := make([]*Unmarshaller, len(f.rows.FieldDescriptions())) // slice is much faster than map for some reason
+	for i, fd := range f.rows.FieldDescriptions() {
+		caster, err := NewUnmarshaller(&f.unmarshallerData, f.connInfo, &f.parseSchema[i], &fd)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to construct a parser of raw PostgreSQL-format data for field [%d]: %w", i, err)
+		}
+		casters[i] = caster
+	}
+
 	for f.rows.Next() {
 		ciResult := &result[resultCount]
 		*ciResult = f.template
@@ -87,25 +96,19 @@ func (f *ChangeItemsFetcher) Fetch() (items []abstract.ChangeItem, err error) {
 		rowRawSize := uint64(0)
 
 		rawData := f.rows.RawValues()
-		for i, fd := range f.rows.FieldDescriptions() {
+		for i := range f.rows.FieldDescriptions() {
 			fRawValue := rawData[i]
 
 			resultBytes += server.BytesSize(len(fRawValue))
-			f.sourceStats.Size.Add(int64(len(fRawValue)))
 			rowRawSize += uint64(len(fRawValue))
 
-			// fd can change from row to row, so the caster must be reconstructed for each row
-			// an isolated instance of TableSchema is used in order to not interact with any middlewares down the transfer pipeline
-			caster, err := NewUnmarshaller(&f.unmarshallerData, f.connInfo, &f.parseSchema[i], &fd)
-			if err != nil {
-				return nil, xerrors.Errorf("failed to construct a parser of raw PostgreSQL-format data for field [%d]: %w", i, err)
-			}
-			ciResult.ColumnValues[i], err = caster.Cast(fRawValue)
+			ciResult.ColumnValues[i], err = casters[i].Cast(fRawValue)
 			if err != nil {
 				return nil, xerrors.Errorf("failed to parse the value of field [%d] from PostgreSQL format: %w", i, err)
 			}
 		}
 
+		f.sourceStats.Size.Add(int64(rowRawSize))
 		f.sourceStats.DecodeTime.RecordDuration(time.Since(decodeStartT))
 
 		ciResult.Size.Read = rowRawSize

@@ -21,7 +21,7 @@ type ClickHouseColumnValueToShardName struct {
 type ChDestination struct {
 	// ChSinkServerParams
 	MdbClusterID     string `json:"Cluster"`
-	ChClusterName    string
+	ChClusterName    string // CH cluster to which data will be transfered. Other clusters would be ignored.
 	User             string
 	Password         server.SecretString
 	Database         string
@@ -43,11 +43,12 @@ type ChDestination struct {
 	//
 	// JSON protocol implementation currently only supports InsertKind items.
 	// This option used to be public.
-	ForceJSONMode       bool `json:"ForceHTTP"`
-	ProtocolUnspecified bool // Denotes that the original proto configuration does not specify the protocol
-	AnyAsString         bool
-	SystemColumnsFirst  bool
-	IsUpdateable        bool
+	ForceJSONMode           bool `json:"ForceHTTP"`
+	ProtocolUnspecified     bool // Denotes that the original proto configuration does not specify the protocol
+	AnyAsString             bool
+	SystemColumnsFirst      bool
+	IsUpdateable            bool
+	UpsertAbsentToastedRows bool
 
 	// Insert settings
 	InsertParams InsertParams
@@ -297,6 +298,10 @@ func (d ChDestinationWrapper) TTL() string {
 
 func (d ChDestinationWrapper) IsUpdateable() bool {
 	return d.Model.IsUpdateable
+}
+
+func (d ChDestinationWrapper) UpsertAbsentToastedRows() bool {
+	return d.Model.UpsertAbsentToastedRows
 }
 
 func (d ChDestinationWrapper) InferSchema() bool {

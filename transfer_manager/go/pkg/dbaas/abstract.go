@@ -8,6 +8,7 @@ type ResolverFactory interface {
 	HostResolver(typ ProviderType, clusterID string) (HostResolver, error)
 	PasswordResolver(typ ProviderType, clusterID string) (PasswordResolver, error)
 	ShardResolver(typ ProviderType, clusterID string) (ShardResolver, error)
+	ShardGroupHostsResolver(typ ProviderType, clusterID string) (ShardGroupHostsResolver, error)
 }
 
 type HostResolver interface {
@@ -20,6 +21,10 @@ type PasswordResolver interface {
 
 type ShardResolver interface {
 	Sharded() (bool, error)
+}
+
+type ShardGroupHostsResolver interface {
+	ResolveShardGroupHosts(shardGroup string) ([]ClusterHost, error)
 }
 
 type ClusterHost struct {

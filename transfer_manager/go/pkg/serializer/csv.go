@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/spf13/cast"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
 	"golang.org/x/xerrors"
 )
 
@@ -24,7 +24,7 @@ func (s *csvSerializer) Serialize(item *abstract.ChangeItem) ([]byte, error) {
 	rowOut := csv.NewWriter(res)
 	cells := make([]string, len(item.ColumnValues))
 	for i, v := range item.ColumnValues {
-		cell, err := cast.ToStringE(v)
+		cell, err := castx.ToStringE(v)
 		if err != nil {
 			rawJSON, err := json.Marshal(v)
 			if err != nil {

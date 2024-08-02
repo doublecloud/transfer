@@ -27,7 +27,7 @@ func connectionHostsOnPremises(cfg *ChStorageParams, shard string) []string {
 }
 
 func connectionHostsManaged(cfg *ChStorageParams, shard string) ([]string, error) {
-	shards, err := ShardFromCluster(cfg.MdbClusterID)
+	shards, err := ShardFromCluster(cfg.MdbClusterID, cfg.ChClusterName)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list shards: %w", err)
 	}

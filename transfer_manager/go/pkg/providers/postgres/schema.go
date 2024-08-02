@@ -16,8 +16,21 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
+func timescaleDBSchemas() []string {
+	return []string{
+		"_timescaledb_debug",
+		"_timescaledb_cache",
+		"_timescaledb_catalog",
+		"_timescaledb_functions",
+		"_timescaledb_internal",
+		"_timescaledb_config",
+		"timescaledb_information",
+		"timescaledb_experimental",
+	}
+}
+
 func pgSystemSchemas() []string {
-	return []string{"pg_catalog", "information_schema"}
+	return append([]string{"pg_catalog", "information_schema"}, timescaleDBSchemas()...)
 }
 
 func pgSystemTableNames() []string {

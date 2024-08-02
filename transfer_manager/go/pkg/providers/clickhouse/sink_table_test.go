@@ -40,19 +40,22 @@ func emptyRegistry() metrics.Registry {
 
 func makeSchema(cols *abstract.TableSchema, isUpdateable bool) (*Schema, *sinkTable) {
 	config := &model.ChDestination{
-		Database:     "db",
-		MdbClusterID: "asd",
-		IsUpdateable: isUpdateable,
+		Database:                "db",
+		MdbClusterID:            "asd",
+		IsUpdateable:            isUpdateable,
+		UpsertAbsentToastedRows: false,
 	}
 	config.WithDefaults()
 
 	table := &sinkTable{
-		server:    nil,
-		tableName: "test_table",
-		config:    config.ToReplicationFromPGSinkParams().MakeChildServerParams("1.1.1.1"),
-		logger:    logger.Log,
-		cols:      cols,
-		cluster:   &sinkCluster{topology: topology.NewTopology("asd", true)},
+		server:          nil,
+		tableName:       "test_table",
+		config:          config.ToReplicationFromPGSinkParams().MakeChildServerParams("1.1.1.1"),
+		logger:          logger.Log,
+		cols:            cols,
+		cluster:         &sinkCluster{topology: topology.NewTopology("asd", true)},
+		timezoneFetched: true,
+		timezone:        time.UTC,
 	}
 
 	return NewSchema(cols.Columns(), table.config.SystemColumnsFirst(), table.tableName), table

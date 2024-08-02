@@ -13,7 +13,7 @@ import (
 func TestEqualCausesDifferentFiles(t *testing.T) {
 	_, a := castx.ToByteSliceE(time.Unix(0, 0))
 	require.Error(t, a)
-	b := castx.NewCastError(xerrors.Errorf("sample error"))
+	b := xerrors.Errorf("sample error")
 
 	require.False(t, EqualCauses(a, b))
 	require.False(t, EqualCauses(b, a))

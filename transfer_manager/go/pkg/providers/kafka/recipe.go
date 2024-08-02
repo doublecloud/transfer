@@ -88,6 +88,7 @@ func DestinationRecipe() (*KafkaDestination, error) {
 	dst.FormatSettings = server.SerializationFormat{
 		Name:             server.SerializationFormatAuto,
 		Settings:         nil,
+		SettingsKV:       nil,
 		BatchingSettings: nil,
 	}
 	return dst, nil

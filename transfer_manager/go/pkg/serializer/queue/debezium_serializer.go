@@ -109,6 +109,7 @@ func MakeFormatSettingsWithTopicPrefix(format server.SerializationFormat, topicP
 	return server.SerializationFormat{
 		Name:             format.Name,
 		Settings:         formatSettingsCopy,
+		SettingsKV:       format.SettingsKV,
 		BatchingSettings: format.BatchingSettings,
 	}
 }

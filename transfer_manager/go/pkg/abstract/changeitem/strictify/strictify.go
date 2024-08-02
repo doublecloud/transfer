@@ -58,7 +58,7 @@ func strictifyValue(value *any, valueSchema *changeitem.ColSchema) (any, error) 
 	case schema.TypeBoolean:
 		v, err := cast.ToBoolE(*value)
 		if err != nil {
-			return nil, NewStrictifyError(valueSchema, targetType, castx.NewCastError(err))
+			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeInt8:
@@ -112,7 +112,7 @@ func strictifyValue(value *any, valueSchema *changeitem.ColSchema) (any, error) 
 	case schema.TypeFloat32:
 		v, err := cast.ToFloat32E(*value)
 		if err != nil {
-			return nil, NewStrictifyError(valueSchema, targetType, castx.NewCastError(err))
+			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeFloat64:
@@ -128,7 +128,7 @@ func strictifyValue(value *any, valueSchema *changeitem.ColSchema) (any, error) 
 		}
 		return v, nil
 	case schema.TypeString:
-		v, err := cast.ToStringE(*value)
+		v, err := castx.ToStringE(*value)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
@@ -159,7 +159,7 @@ func strictifyValue(value *any, valueSchema *changeitem.ColSchema) (any, error) 
 func toSignedInt[T generics.SignedInt](v any, limitLow int64, limitHigh int64, castFn func(any) (T, error)) (T, error) {
 	result, err := castFn(v)
 	if err != nil {
-		return result, castx.NewCastError(err)
+		return result, xerrors.Errorf("cannot cast to int: %w", err)
 	}
 	v64 := cast.ToInt64(v)
 	if v64 < limitLow || v64 > limitHigh {
@@ -171,7 +171,7 @@ func toSignedInt[T generics.SignedInt](v any, limitLow int64, limitHigh int64, c
 func toUnsignedInt[T generics.UnsignedInt](v any, limitHigh uint64, castFn func(any) (T, error)) (T, error) {
 	result, err := castFn(v)
 	if err != nil {
-		return result, castx.NewCastError(err)
+		return result, xerrors.Errorf("cannot cast to uint: %w", err)
 	}
 	v64 := cast.ToUint64(v)
 	if v64 > limitHigh {

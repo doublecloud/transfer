@@ -119,6 +119,31 @@ func TestUnescapeUnicode(t *testing.T) {
 	require.Equal(t, "<foo>bar</foo>", UnescapeUnicode("\\u003cfoo\\u003ebar\\u003c/foo\\u003e"))
 }
 
+func TestFillLeftByZeroesToAlign(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		_, err := fillByZeroesToAlignL("11", 1)
+		require.Error(t, err)
+	})
+
+	checkL := func(t *testing.T, in string, lengthShouldBe int, expectedOut string) {
+		result, err := fillByZeroesToAlignL(in, lengthShouldBe)
+		require.NoError(t, err)
+		require.Equal(t, expectedOut, result)
+	}
+	checkR := func(t *testing.T, in string, lengthShouldBe int, expectedOut string) {
+		result, err := fillByZeroesToAlignR(in, lengthShouldBe)
+		require.NoError(t, err)
+		require.Equal(t, expectedOut, result)
+	}
+
+	checkL(t, "111", 3, "111")
+	checkL(t, "11", 3, "011")
+	checkL(t, "1", 3, "001")
+	checkR(t, "111", 3, "111")
+	checkR(t, "11", 3, "110")
+	checkR(t, "1", 3, "100")
+}
+
 func helperTestExponentialFloatFormToNumeric(t *testing.T, positiveNumeric, expectedOut string) {
 	q0, err := ExponentialFloatFormToNumeric(positiveNumeric)
 	require.NoError(t, err)
@@ -453,9 +478,13 @@ func TestLSNToFileAndPos(t *testing.T) {
 }
 
 func TestSprintfDebeziumTime(t *testing.T) {
-	tt, err := time.Parse("2006-01-02 15:04:05.000000Z", "2022-08-28 19:49:47.749906Z")
-	require.NoError(t, err)
-	require.Equal(t, "2022-08-28T19:49:47.749906Z", SprintfDebeziumTime(tt))
+	check := func(t *testing.T, in, expectedOut string) {
+		tt, err := time.Parse("2006-01-02 15:04:05.000000Z", in)
+		require.NoError(t, err)
+		require.Equal(t, expectedOut, SprintfDebeziumTime(tt))
+	}
+	check(t, "2022-08-28 19:49:47.749906Z", "2022-08-28T19:49:47.749906Z")
+	check(t, "2022-08-28 19:49:47.090000Z", "2022-08-28T19:49:47.09Z")
 }
 
 func TestUserDefinedTypeToString(t *testing.T) {

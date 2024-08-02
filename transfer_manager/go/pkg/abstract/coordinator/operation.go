@@ -4,9 +4,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 )
+
+var OperationStateNotFoundError = xerrors.New("state is not found")
 
 type TestReporter interface {
 	// UpdateTestResults save transfer test results, used by test operation

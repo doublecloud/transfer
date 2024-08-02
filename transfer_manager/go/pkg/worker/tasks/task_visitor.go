@@ -34,15 +34,31 @@ func (v runTaskVisitor) OnTestEndpoint(t abstract.TestEndpoint) interface{} {
 	// for slow endpoints let it be at least 30 minutes
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
 	defer cancel()
+	tr := abstract.NewTestResult()
+	ticker := time.NewTicker(time.Second * 5)
 	resCh := make(chan error)
 	go func() {
-		res := TestEndpoint(v.ctx, params)
+		res := TestEndpoint(v.ctx, params, tr)
 		if err := v.cp.UpdateTestResults(v.task.OperationID, res); err != nil {
 			logger.Log.Warn("unable to UpdateOtherOperation", log.Error(err))
 			resCh <- err
 		}
 		resCh <- nil
 	}()
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				// refresh test results to CP
+				if err := v.cp.UpdateTestResults(v.task.OperationID, tr); err != nil {
+					logger.Log.Warn("unable to update test result", log.Error(err))
+				}
+			}
+		}
+	}()
+
 	select {
 	case <-ctx.Done():
 		return xerrors.New("timeout reached")
@@ -180,7 +196,7 @@ func (v runTaskVisitor) PushOperationHealthMeta(t time.Time) {
 	if err := v.cp.OperationHealth(v.ctx, v.task.OperationID, v.transfer.CurrentJobIndex(), t); err != nil {
 		logger.Log.Error("unable send operation health", log.Error(err))
 	} else {
-		logger.Log.Info("operation health meta pushed", log.Any("time", t))
+		logger.Log.Debug("operation health meta pushed", log.Any("time", t))
 	}
 }
 

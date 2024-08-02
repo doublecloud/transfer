@@ -22,19 +22,22 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/schema"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/dustin/go-humanize"
 )
 
 type sinkTable struct {
-	server     *SinkServer
-	tableName  string
-	config     model.ChSinkServerParams
-	logger     log.Logger
-	colTypes   columntypes.TypeMapping
-	cols       *abstract.TableSchema // warn: schema can be changed inflight
-	metrics    *stats.ChStats
-	avgRowSize int
-	cluster    *sinkCluster
+	server          *SinkServer
+	tableName       string
+	config          model.ChSinkServerParams
+	logger          log.Logger
+	colTypes        columntypes.TypeMapping
+	cols            *abstract.TableSchema // warn: schema can be changed inflight
+	metrics         *stats.ChStats
+	avgRowSize      int
+	cluster         *sinkCluster
+	timezoneFetched bool
+	timezone        *time.Location
 }
 
 func normalizeTableName(table string) string {
@@ -238,10 +241,22 @@ func (t *sinkTable) ApplyChangeItems(rows []abstract.ChangeItem) error {
 	batches := splitRowsBySchema(rows)
 	for i, batch := range batches {
 		if err := t.applyBatch(batch); err != nil {
-			if i != 0 {
-				t.logger.Warnf("Subbatch #%d failed, so previous subbatches can be redelivered", i)
+			if errors.UpdateToastsError.Contains(err) && t.config.UpsertAbsentToastedRows() {
+				t.logger.Warnf("batch insertion fail, fallback to one-by-one pushing (batch #%d)", i)
+				for j, batchElem := range batch {
+					if err := t.applyBatch([]abstract.ChangeItem{batchElem}); err != nil {
+						t.logger.Warnf(
+							"Subbatch failed on serial insertion, so previous subbatches as well as previous items in batch will be redelivered (batch #%d, item #%d)",
+							i, j,
+						)
+						return xerrors.Errorf("apply serially element %d of batch %d failed: %w", j, i, err)
+					}
+				}
 			}
-			return err
+			if i != 0 {
+				t.logger.Warnf("Subbatch failed, so previous subbatches can be redelivered (batch #%d)", i)
+			}
+			return xerrors.Errorf("apply batch %d failed: %w", i, err)
 		}
 	}
 	return nil
@@ -274,6 +289,13 @@ func (t *sinkTable) applyBatch(items []abstract.ChangeItem) error {
 	if err != nil {
 		return xerrors.Errorf("failed to begin transaction: %w", err)
 	}
+	txRollbacks := util.Rollbacks{}
+	txRollbacks.Add(func() {
+		if err := tx.Rollback(); err != nil {
+			t.logger.Error("transaction rollback error", log.Error(err))
+		}
+	})
+	defer txRollbacks.Do()
 
 	if err := doOperation(t, tx, items); err != nil {
 		if errors.IsFatalClickhouseError(err) {
@@ -289,6 +311,9 @@ func (t *sinkTable) applyBatch(items []abstract.ChangeItem) error {
 		t.logger.Warn("Commit error", log.Any("ch_host", *t.config.Host()), log.Error(err))
 		return xerrors.Errorf("failed to commit: %w", err)
 	}
+	txRollbacks.Cancel()
+	t.metrics.Len.Add(int64(len(items)))
+	t.metrics.Count.Inc()
 
 	t.logger.Debugf("Committed %d changeItems (%s) in %v", len(items), *t.config.Host(), time.Since(start))
 	return nil
@@ -307,12 +332,13 @@ func (t *sinkTable) uploadAsJSON(rows []abstract.ChangeItem) error {
 		t.avgRowSize = int(float64(t.avgRowSize) * 1.5)
 	}
 
-	st, err := httpuploader2.UploadCIBatch(rows, &httpuploader2.MarshallingRules{
-		ColSchema:      currSchema,
-		ColNameToIndex: abstract.MakeMapColNameToIndex(currSchema),
-		ColTypes:       t.colTypes,
-		AnyAsString:    t.config.AnyAsString(),
-	}, t.config, t.tableName, t.avgRowSize, t.logger)
+	st, err := httpuploader2.UploadCIBatch(rows, httpuploader2.NewRules(
+		rows[0].ColumnNames,
+		currSchema,
+		abstract.MakeMapColNameToIndex(currSchema),
+		t.colTypes,
+		t.config.AnyAsString(),
+	), t.config, t.tableName, t.avgRowSize, t.logger)
 	if err != nil {
 		return err
 	}
@@ -512,13 +538,6 @@ func columnNamesAllowedSubset(t *sinkTable, masterChangeItem abstract.ChangeItem
 	for i, colName := range masterChangeItem.ColumnNames {
 		changeItemColNameToIdx[colName] = i
 	}
-	for _, el := range t.cols.Columns() {
-		if _, ok := changeItemColNameToIdx[el.ColumnName]; !ok {
-			if !IsColVirtual(el) {
-				return abstract.NewFatalError(xerrors.Errorf("column %s is TOAST, it's not supported yet", el.ColumnName))
-			}
-		}
-	}
 	return nil
 }
 
@@ -574,10 +593,11 @@ func doOperation(t *sinkTable, tx *sql.Tx, items []abstract.ChangeItem) (err err
 
 	if abstract.FindItemOfKind(items, abstract.UpdateKind) != nil {
 		items = abstract.Collapse(items)
-
-		items, err = convertToastedToNormal(t, items)
+		normalItems, err := convertToastedToNormal(t, items)
 		if err != nil {
 			return xerrors.Errorf("failed to convert toasted items to normal ones: %w", err)
+		} else {
+			items = normalItems
 		}
 	}
 
@@ -637,8 +657,6 @@ func doOperation(t *sinkTable, tx *sql.Tx, items []abstract.ChangeItem) (err err
 		}
 	}
 
-	t.metrics.Len.Add(int64(len(items)))
-	t.metrics.Count.Inc()
 	return err
 }
 
@@ -651,6 +669,28 @@ func (t *sinkTable) checkExist() (bool, error) {
 		return exist, err
 	}
 	return exist, nil
+}
+
+func (t *sinkTable) resolveTimezone() error {
+	if !t.timezoneFetched {
+		row := t.server.db.QueryRow(`SELECT timezone();`)
+		var timezone string
+		err := row.Scan(&timezone)
+		if err != nil {
+			return xerrors.Errorf("failed to fetch CH timezone: %w", err)
+		}
+
+		t.logger.Infof("Fetched CH cluster timezone %s", timezone)
+
+		loc, err := time.LoadLocation(timezone)
+		if err != nil {
+			return xerrors.Errorf("failed to parse CH timezone %s: %w", timezone, err)
+		}
+		t.timezone = loc
+		t.timezoneFetched = true
+	}
+
+	return nil
 }
 
 func restoreVals(vals []interface{}, cols []abstract.ColSchema) []interface{} {
@@ -752,7 +792,7 @@ func compareColumnSets(currentSchema []abstract.ColSchema, newSchema []abstract.
 	return added, removed
 }
 
-func (t *sinkTable) alterTable(addCols []abstract.ColSchema, dropCols []abstract.ColSchema, distributed bool) error {
+func (t *sinkTable) alterTable(addCols, dropCols []abstract.ColSchema, distributed bool) error {
 	ddl := fmt.Sprintf("ALTER TABLE `%s` ", t.tableName)
 	if distributed {
 		ddl += fmt.Sprintf(" ON CLUSTER `%s` ", t.cluster.topology.ClusterName())

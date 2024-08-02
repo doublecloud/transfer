@@ -37,3 +37,4 @@ COMMIT;
 BEGIN;
 insert into __test_incremental_ts (text, cursor) select md5(random()::text), now() from generate_Series(1,10) as s;
 COMMIT;
+

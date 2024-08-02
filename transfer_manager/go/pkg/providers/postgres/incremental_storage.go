@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -47,6 +48,7 @@ func (s *Storage) GetIncrementalState(ctx context.Context, incremental []abstrac
 			}
 			return nil, xerrors.Errorf("unable get type of %s column from table: %s: %w", table.CursorField, table.TableID(), err)
 		}
+		st := time.Now()
 		if err := tx.QueryRow(
 			ctx,
 			fmt.Sprintf(
@@ -76,6 +78,7 @@ func (s *Storage) GetIncrementalState(ctx context.Context, incremental []abstrac
 			EtaRow: 0,
 			Offset: 0,
 		})
+		logger.Log.Infof("fetch next incremental state for: %s, value: %v: %v, in: %v", table.TableID().Fqtn(), table.CursorField, repr, time.Since(st))
 	}
 
 	if err := tx.Commit(ctx); err != nil {

@@ -20,10 +20,7 @@ const (
 
 type ChSinkServerParams interface {
 	MdbClusterID() string
-	// ChClusterName
-	// https://clickhouse.com/docs/ru/operations/system-tables/clusters/
-	// if there are guaranteed only one cluster_name on cluster - then we can
-	ChClusterName() string // TODO - can we derive it?!
+	ChClusterName() string
 	User() string
 	Password() string
 	ResolvePassword() (string, error)
@@ -50,6 +47,12 @@ type ChSinkServerParams interface {
 	//     1) ReplacingMergeTree engine family
 	//     2) table contains data-transfer system columns: '__data_transfer_commit_time', '__data_transfer_delete_time'
 	IsUpdateable() bool
+
+	// UpsertAbsentToastedRows When batch push fails on TOAST, interpret as sequential independent upserts.
+	// Useful in cases:
+	//  1. YDB Source with 'Updates' changefeed mode
+	//  2. Any IncrementOnly transfer in ClickHouse which can bring update for inexistent document (for instance PG->CH)
+	UpsertAbsentToastedRows() bool
 	InferSchema() bool // If table exists - get it schema
 	// MigrationOptions
 	// Sink table modification settings

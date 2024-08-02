@@ -2,7 +2,6 @@ package httpuploader
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"math"
 	"reflect"
@@ -13,6 +12,9 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
+	"github.com/goccy/go-json"
+	"github.com/valyala/fastjson/fastfloat"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 
@@ -23,6 +25,31 @@ type MarshallingRules struct {
 	ColNameToIndex map[string]int
 	ColTypes       columntypes.TypeMapping
 	AnyAsString    bool
+
+	gfMap    *GFMap
+	optTypes []*columntypes.TypeDescription
+}
+
+func (r *MarshallingRules) SetColType(name string, description *columntypes.TypeDescription) {
+	r.ColTypes[name] = description
+	r.optTypes[r.ColNameToIndex[name]] = description
+}
+
+func NewRules(names []string, colSchema []abstract.ColSchema, colNameToIndex map[string]int, colTypes columntypes.TypeMapping, anyAsString bool) *MarshallingRules {
+	optTypes := make([]*columntypes.TypeDescription, len(colNameToIndex))
+	for k, v := range colNameToIndex {
+		optTypes[v] = colTypes[k]
+	}
+
+	return &MarshallingRules{
+		ColSchema:      colSchema,
+		ColNameToIndex: colNameToIndex,
+		ColTypes:       colTypes,
+		AnyAsString:    anyAsString,
+
+		optTypes: optTypes,
+		gfMap:    NewGrishaFMap(names, colNameToIndex),
+	}
 }
 
 func writeColName(buf *bytes.Buffer, colName string) int {
@@ -58,17 +85,6 @@ func marshalByteSliceAsArray(slice []byte) string {
 	return fmt.Sprintf("[%s]", strings.Join(result, ","))
 }
 
-func marshalJSON(v interface{}, buf *bytes.Buffer) error {
-	// for some stupid reason std streaming JSON encoder adds newline at the end of value
-	// https://github.com/golang/go/issues/43961
-	// let's remove it
-	if err := json.NewEncoder(buf).Encode(v); err != nil {
-		return err
-	}
-	buf.Truncate(buf.Len() - 1)
-	return nil
-}
-
 func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *bytes.Buffer) error {
 	buf.WriteByte('{')
 	colNames := row.ColumnNames
@@ -78,7 +94,8 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 		colValues = row.OldKeys.KeyValues
 	}
 	for idx, columnName := range colNames {
-		colSchemaIndex, ok := rules.ColNameToIndex[columnName]
+		// if colNames same as was used to build GFMap return result from slice, otherwise map lookup.
+		colSchemaIndex, ok := rules.gfMap.Lookup(columnName, idx)
 		if !ok {
 			return abstract.NewFatalError(xerrors.Errorf("can't find colSchema for this columnName, columnName: %s", columnName))
 		}
@@ -87,75 +104,77 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 			continue
 		}
 		hLen := writeColName(buf, columnName)
-		colType, ok := rules.ColTypes[columnName]
-		if !ok {
-			return abstract.NewFatalError(xerrors.Errorf("unknown type for column '%s' in target table '%s'", columnName, row.Table))
-		}
+		colType := rules.optTypes[colSchemaIndex]
 		switch v := colValues[idx].(type) {
 		case time.Time:
 			marshalTime(colType, v, buf)
 		case *time.Time:
 			marshalTime(colType, *v, buf)
 		case string:
-			if columntypes.LegacyIsDecimal(*colSchema) || colType.IsDecimal {
+			if columntypes.LegacyIsDecimal(colSchema.OriginalType) || colType.IsDecimal {
 				buf.WriteString(v)
 				break
 			}
-			if err := marshalJSON(v, buf); err != nil {
-				return xerrors.Errorf(marshalErrTpl, columnName, v, err)
+			buf.WriteString(`"`)
+			if bytes.ContainsRune([]byte(v), rune('"')) || bytes.ContainsRune([]byte(v), rune('\\')) {
+				// We  have a " symbol in value, so we must quote string before submit it
+				// we want to preserve bytes as is since, clickhouse can accept them and store properly
+				// that's why we use this custom quote func
+				buf.WriteString(questionableQuoter(v))
+			} else {
+				buf.WriteString(v)
 			}
+			buf.WriteString(`"`)
 		case int, uint, int8, uint8, int16, uint16, int32, uint32, int64, uint64,
 			*int, *uint, *int8, *uint8, *int16, *uint16, *int32, *uint32, *int64, *uint64:
 			if colType.IsString {
 				buf.WriteByte('"')
 			}
-			if err := marshalJSON(v, buf); err != nil {
-				return xerrors.Errorf(marshalErrTpl, columnName, v, err)
+			strV, err := castx.ToStringE(v)
+			if err != nil {
+				return xerrors.Errorf("unexpected cast: %w", err)
 			}
+			buf.WriteString(strV)
 			if colType.IsString {
 				buf.WriteByte('"')
 			}
 		case float32, float64, json.Number:
-			var dbl float64
+			var strV string
 			switch vv := v.(type) {
 			case float32:
-				dbl = float64(vv)
+				strV = strconv.FormatFloat(float64(vv), 'f', -1, 32)
 			case float64:
-				dbl = vv
+				strV = strconv.FormatFloat(vv, 'f', -1, 64)
 			case json.Number:
-				var err error
-				dbl, err = vv.Float64()
 				// Float64 conversion returns Inf and ErrRange for large values like 1E+3000
 				// It's not the real Inf so ignore it
-				if err != nil {
+				if v, err := fastfloat.Parse(vv.String()); err != nil {
 					if xerrors.Is(err, strconv.ErrRange) {
-						dbl = 0
+						if math.IsNaN(v) {
+							strV = "nan"
+							break
+						}
+						if math.IsInf(v, 1) {
+							strV = "inf"
+							break
+						}
+						if math.IsInf(v, -1) {
+							strV = "-inf"
+							break
+						}
 					} else {
 						return xerrors.Errorf("error checking json.Number for nan/inf: %w", err)
 					}
 				}
+				strV = vv.String()
 			default:
 				return xerrors.Errorf("unexpected float type: %T (value=`%v`)", v, v)
 			}
 
-			if math.IsNaN(dbl) {
-				buf.WriteString(`"nan"`)
-				break
-			}
-			if math.IsInf(dbl, 1) {
-				buf.WriteString(`"inf"`)
-				break
-			}
-			if math.IsInf(dbl, -1) {
-				buf.WriteString(`"-inf"`)
-				break
-			}
 			if colType.IsString {
 				buf.WriteByte('"')
 			}
-			if err := marshalJSON(v, buf); err != nil {
-				return xerrors.Errorf(marshalErrTpl, columnName, v, err)
-			}
+			buf.WriteString(strV)
 			if colType.IsString {
 				buf.WriteByte('"')
 			}
@@ -180,7 +199,7 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 				}
 			}
 		case []byte:
-			if columntypes.LegacyIsDecimal(*colSchema) || colType.IsDecimal {
+			if columntypes.LegacyIsDecimal(colSchema.OriginalType) || colType.IsDecimal {
 				buf.WriteString(string(v))
 				break
 			}

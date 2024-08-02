@@ -401,8 +401,31 @@ func (s *Storage) ExactTableDescriptionRowsCount(ctx context.Context, table abst
 }
 
 func (s *Storage) EstimateTableRowsCount(table abstract.TableID) (uint64, error) {
+	tinfo, err := s.getLoadTableMode(context.TODO(), abstract.TableDescription{
+		Name:   table.Name,
+		Schema: table.Namespace,
+		Filter: "",
+		EtaRow: 0,
+		Offset: 0,
+	})
+	if err != nil {
+		return 0, xerrors.Errorf("unable to build table info: %w", err)
+	}
+	if tinfo.tableInfo.HasSubclass || tinfo.tableInfo.IsInherited {
+		var etaRow int64
+		if err := s.Conn.QueryRow(context.TODO(), `
+SELECT COALESCE(sum(reltuples), 0)
+FROM pg_inherits inh
+JOIN pg_class ON inh.inhrelid = pg_class.oid
+WHERE
+  inhparent :: regclass = $1 :: regclass;
+`, table.Fqtn()).Scan(&etaRow); err != nil {
+			return 0, xerrors.Errorf("unable to select sub-tables size: %w", err)
+		}
+		return uint64(etaRow), nil
+	}
 	var etaRow int64
-	err := s.Conn.QueryRow(context.TODO(), fmt.Sprintf(`
+	err = s.Conn.QueryRow(context.TODO(), fmt.Sprintf(`
 		SELECT
 			reltuples as eta_row
 		FROM pg_class
@@ -957,6 +980,28 @@ select * from (%v) as bot
 }
 
 func (s *Storage) TableSizeInBytes(table abstract.TableID) (uint64, error) {
+	tinfo, err := s.getLoadTableMode(context.TODO(), abstract.TableDescription{
+		Name:   table.Name,
+		Schema: table.Namespace,
+		Filter: "",
+		EtaRow: 0,
+		Offset: 0,
+	})
+	if err != nil {
+		return 0, xerrors.Errorf("unable to build table info: %w", err)
+	}
+	if tinfo.tableInfo.HasSubclass || tinfo.tableInfo.IsInherited {
+		var size uint64
+		if err := s.Conn.QueryRow(context.TODO(), `
+SELECT COALESCE(sum(pg_relation_size(inhrelid)), pg_table_size($1))
+FROM pg_inherits
+WHERE
+  inhparent :: regclass = $1 :: regclass;
+`, table.Fqtn()).Scan(&size); err != nil {
+			return 0, xerrors.Errorf("unable to select sub-tables size: %w", err)
+		}
+		return size, nil
+	}
 	var size uint64
 	if err := s.Conn.QueryRow(context.TODO(), "select pg_table_size($1);", table.Fqtn()).Scan(&size); err != nil {
 		return 0, err

@@ -1,24 +1,25 @@
 package clickhouse
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/errors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 )
 
 const verColumnName = "__data_transfer_commit_time"
 
 func getToastedChangeItems(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstract.ChangeItem, error) {
-	tableColNameToIdx := make(map[string]int)
-	for i, el := range t.cols.Columns() {
-		tableColNameToIdx[el.ColumnName] = i
-	}
+	tableColNameToIdx := t.cols.FastColumns()
 
 	virtualColsNum := 0
 	for _, el := range t.cols.Columns() {
@@ -33,12 +34,14 @@ func getToastedChangeItems(t *sinkTable, changeItems []abstract.ChangeItem) ([]a
 			continue
 		}
 		for _, colName := range currChangeItem.ColumnNames {
-			_, ok := tableColNameToIdx[colName]
+			_, ok := tableColNameToIdx[abstract.ColumnName(colName)]
 			if !ok {
 				return nil, abstract.NewFatalError(xerrors.Errorf("column %s is unknown to target scheme", colName))
 			}
 		}
 		if len(t.cols.Columns()) > len(currChangeItem.ColumnNames)+virtualColsNum {
+			t.logger.Debugf("Found differing column lengths for toasted items, on dst: %v, on source: %v", len(t.cols.Columns()), len(currChangeItem.ColumnNames)+virtualColsNum)
+			t.logger.Debugf("The columns for toasted items are on dst: %v, on source: %v", t.cols.Columns(), currChangeItem.ColumnNames)
 			result = append(result, currChangeItem)
 		}
 	}
@@ -148,7 +151,12 @@ func convertToastedToNormal(t *sinkTable, items []abstract.ChangeItem) ([]abstra
 
 	lastVersionFullRows, err := fetchToastedRows(t, toastedItems)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to extract previous versions for %d toasted items: %w", len(toastedItems), err)
+		if len(items) == 1 && t.config.UpsertAbsentToastedRows() {
+			t.logger.Info("cannot extract TOAST for change item, but since UpsertAbsentToastedRows is turned on -- skip toasting",
+				log.Any("table", items[0].TableID()))
+			return items, nil
+		}
+		return nil, coded.Errorf(errors.UpdateToastsError, "failed to extract previous versions for %d toasted items: %w", len(toastedItems), err)
 	}
 	t.logger.Info("previous versions of toasted items extracted successfully", log.Int("len", len(lastVersionFullRows)))
 
@@ -162,7 +170,7 @@ func fetchToastedRows(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstra
 	keyCols := changeItems[0].MakeMapKeys()
 	keyToIdx := make(map[string]int)
 	for i := range changeItems {
-		hashK := changeItems[i].OldOrCurrentKeysString(keyCols)
+		hashK := pKHash(t, changeItems[i], keyCols)
 		keyToIdx[hashK] = i
 	}
 
@@ -195,6 +203,8 @@ func fetchToastedRows(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstra
 		return nil, xerrors.Errorf("failed to calculate primary key values required for %q of toasted values: %w", queryTemplate, err)
 	}
 
+	pkValues = removePKTimezoneInfo(t, pkValues)
+
 	queryResult, err := t.server.db.Query(queryTemplate, pkValues...)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to execute %q for toasted values: %w", queryTemplate, err)
@@ -204,8 +214,10 @@ func fetchToastedRows(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstra
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init values for scan result: %w", err)
 	}
+
 	result := make([]abstract.ChangeItem, 0)
 	for queryResult.Next() {
+
 		err := queryResult.Scan(rowValues...)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to scan row from result: %w", err)
@@ -234,7 +246,7 @@ func fetchToastedRows(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstra
 			Size:  abstract.RawEventSize(util.DeepSizeof(rowValues)),
 		}
 
-		hashK := changeItem.OldOrCurrentKeysString(keyCols)
+		hashK := pKHash(t, changeItem, keyCols)
 		i, ok := keyToIdx[hashK]
 		if !ok {
 			return nil, xerrors.Errorf("unknown pkeys: %s", hashK)
@@ -259,4 +271,62 @@ func fetchToastedRows(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstra
 	}
 
 	return result, nil
+}
+
+func removePKTimezoneInfo(t *sinkTable, pkValues []interface{}) []interface{} {
+	var pkVals []interface{}
+	for _, pkVal := range pkValues {
+		pkVals = append(pkVals, dropTimezone(t, pkVal))
+	}
+
+	return pkVals
+}
+
+// dropTimezone ensures that an incoming value of type time.Time does not contain any timezone info
+// The value itself is also converted to the cluster timezone in order for timestamps to match on CH side.
+// Underlying data type is switched from time.Time -> string.
+func dropTimezone(t *sinkTable, pkVal interface{}) interface{} {
+	timestamp, ok := pkVal.(time.Time)
+	if !ok {
+		return pkVal // leave as is
+	}
+
+	val := timestamp.UTC().In(t.timezone)
+	timeElements := strings.Split(val.String(), " ")
+	if len(timeElements) < 2 {
+		return pkVal
+	}
+	noTimezoneTimestamp := fmt.Sprintf("%s %s", timeElements[0], timeElements[1])
+	return noTimezoneTimestamp
+}
+
+func pKHash(t *sinkTable, item abstract.ChangeItem, keyColumns map[string]bool) string {
+	keys := make(map[string]interface{})
+	for k := range keyColumns {
+		keys[k] = nil
+	}
+
+	if (item.Kind == abstract.UpdateKind || item.Kind == abstract.DeleteKind) && len(item.OldKeys.KeyValues) > 0 {
+		for i, keyName := range item.OldKeys.KeyNames {
+			if keyColumns[keyName] {
+				val := item.OldKeys.KeyValues[i]
+				keys[keyName] = dropTimezone(t, val)
+			}
+		}
+	} else {
+		for i, colName := range item.ColumnNames {
+			if keyColumns[colName] {
+				val := item.ColumnValues[i]
+				keys[colName] = dropTimezone(t, val)
+			}
+		}
+	}
+
+	toMarshal := make([]interface{}, len(keys))
+	for i, colName := range util.MapKeysInOrder(keys) {
+		toMarshal[i] = keys[colName]
+	}
+
+	d, _ := json.Marshal(toMarshal)
+	return string(d)
 }

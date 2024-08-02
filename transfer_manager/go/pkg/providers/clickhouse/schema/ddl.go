@@ -20,13 +20,14 @@ type TableDDL struct {
 	tableID abstract.TableID
 	sql     string
 	engine  string
+	cluster string
 }
 
 func (t TableDDL) ToChangeItem() abstract.ChangeItem {
 	sql := t.sql
 	kind := abstract.ChCreateTableKind
 	if IsDistributedDDL(sql) {
-		sql = ReplaceCluster(sql, "{cluster}")
+		sql = ReplaceCluster(sql, t.cluster)
 		kind = abstract.ChCreateTableDistributedKind
 	}
 	return abstract.ChangeItem{
@@ -64,10 +65,14 @@ func (t TableDDL) IsMatView() bool {
 	return t.Engine() == matViewEngine
 }
 
-func NewTableDDL(tableID abstract.TableID, sql, engine string) TableDDL {
+func NewTableDDL(tableID abstract.TableID, sql, engine, cluster string) TableDDL {
+	if cluster == "" {
+		cluster = "{cluster}"
+	}
 	return TableDDL{
 		tableID: tableID,
 		sql:     sql,
 		engine:  engine,
+		cluster: cluster,
 	}
 }

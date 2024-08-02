@@ -82,11 +82,11 @@ func UnmarshalHetero(value any, colSchema *abstract.ColSchema, location *time.Lo
 	case schema.TypeString:
 		switch v := value.(type) {
 		case string:
-			result, err = strict.Expected[string](v, cast.ToStringE)
+			result, err = strict.Expected[string](v, castx.ToStringE)
 		case int: // representation of `year`
-			result, err = strict.Expected[int](v, cast.ToStringE)
+			result, err = strict.Expected[int](v, castx.ToStringE)
 		default:
-			result, err = strict.Unexpected(v, cast.ToStringE)
+			result, err = strict.Unexpected(v, castx.ToStringE)
 		}
 	case schema.TypeAny:
 		result, err = strict.Expected[string](value, castToAny)
@@ -158,7 +158,7 @@ func castToTimeByTemporalInLocation(value any, location *time.Location) (any, er
 }
 
 func castToAny(value any) (any, error) {
-	vString, err := cast.ToStringE(value)
+	vString, err := castx.ToStringE(value)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to cast %T to string to convert it to any: %w", value, err)
 	}

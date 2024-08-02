@@ -258,15 +258,15 @@ func (c *changeProcessor) restoreType(value any, oid pgtype.OID, colSchema *abst
 	case schema.TypeString:
 		switch ClearOriginalType(colSchema.OriginalType) {
 		case "TEXT", "CHARACTER VARYING":
-			result, err = strict.ExpectedSQL[string](value, cast.ToStringE)
+			result, err = strict.ExpectedSQL[string](value, castx.ToStringE)
 		case "TIME WITH TIME ZONE", "TIME WITHOUT TIME ZONE":
-			result, err = strict.ExpectedSQL[string](value, cast.ToStringE)
+			result, err = strict.ExpectedSQL[string](value, castx.ToStringE)
 		case "INTERVAL":
-			result, err = strict.ExpectedSQL[string](value, cast.ToStringE)
+			result, err = strict.ExpectedSQL[string](value, castx.ToStringE)
 		case "MONEY":
-			result, err = strict.ExpectedSQL[string](value, cast.ToStringE)
+			result, err = strict.ExpectedSQL[string](value, castx.ToStringE)
 		default:
-			result, err = strict.UnexpectedSQL(value, cast.ToStringE)
+			result, err = strict.UnexpectedSQL(value, castx.ToStringE)
 		}
 	case schema.TypeAny:
 		result, err = expectedAnyCastReplication(value, oid, colSchema, &c.connInfo, c.config.IsHomo)
@@ -312,7 +312,7 @@ func unmarshalHexStringBytes(v any) ([]byte, error) {
 	case string:
 		hexString = downcastedHexString
 	default:
-		convertedHexString, err := cast.ToStringE(downcastedHexString)
+		convertedHexString, err := castx.ToStringE(downcastedHexString)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to cast %T to string: %w", downcastedHexString, err)
 		}
@@ -339,7 +339,7 @@ func temporalsUnmarshallerFromDecoder(decoder TextDecoderAndValuerWithHomo, ci *
 		case string:
 			vS = vv
 		default:
-			vvv, err := cast.ToStringE(vv)
+			vvv, err := castx.ToStringE(vv)
 			if err != nil {
 				return time.UnixMicro(0), xerrors.Errorf("failed to cast %T to string: %w", vv, err)
 			}
@@ -401,11 +401,11 @@ func expectedAnyCastReplication(value any, oid pgtype.OID, colSchema *abstract.C
 	}
 
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("failed to cast %T to any: %w", value, err))
+		return nil, xerrors.Errorf("failed to cast %T to any: %w", value, err)
 	}
 	resultJS, err := ensureJSONMarshallable(result)
 	if err != nil {
-		return nil, castx.NewCastError(xerrors.Errorf("successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err))
+		return nil, xerrors.Errorf("successfully casted %T to any (%T), but the result is not JSON-serializable: %w", value, resultJS, err)
 	}
 	return resultJS, nil
 }

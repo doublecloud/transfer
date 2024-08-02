@@ -6,6 +6,7 @@ package model
 type ChStorageParams struct {
 	MdbClusterID   string
 	Hosts          []string
+	ChClusterName  string
 	NativePort     int
 	Secure         bool
 	PemFileContent string
@@ -33,6 +34,7 @@ func (s *ChSource) ToStorageParams() *ChStorageParams {
 	return &ChStorageParams{
 		MdbClusterID:   s.MdbClusterID,
 		Hosts:          hosts,
+		ChClusterName:  s.ChClusterName,
 		NativePort:     s.NativePort,
 		Secure:         secure,
 		PemFileContent: s.PemFileContent,
@@ -56,6 +58,7 @@ func (d *ChDestination) ToStorageParams() *ChStorageParams {
 	}
 	return &ChStorageParams{
 		MdbClusterID:   d.MdbClusterID,
+		ChClusterName:  d.ChClusterName,
 		Hosts:          hosts,
 		NativePort:     d.NativePort,
 		Secure:         secure,

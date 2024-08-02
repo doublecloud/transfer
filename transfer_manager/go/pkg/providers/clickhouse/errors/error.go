@@ -5,6 +5,7 @@ import (
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/proto"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
 )
 
 var (
@@ -59,6 +60,10 @@ var (
 		499: true, // S3_ERROR
 		999: true, // KEEPER_EXCEPTION
 	}
+)
+
+var (
+	UpdateToastsError = coded.Register("ch", "update_toast_error")
 )
 
 func IsClickhouseError(err error) bool {

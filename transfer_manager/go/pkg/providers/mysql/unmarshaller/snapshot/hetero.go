@@ -72,11 +72,11 @@ func unmarshalHetero(value interface{}, colSchema *abstract.ColSchema) (any, err
 	case schema.TypeString:
 		switch v := value.(type) {
 		case *sql.RawBytes:
-			result, err = strict.ExpectedSQL[[]byte](unmarshalRawBytesAsBytes(v), cast.ToStringE)
+			result, err = strict.ExpectedSQL[[]byte](unmarshalRawBytesAsBytes(v), castx.ToStringE)
 		case *sql.NullInt64:
 			result, err = unmarshalInt64AsString(v)
 		default:
-			result, err = strict.UnexpectedSQL(v, cast.ToStringE)
+			result, err = strict.UnexpectedSQL(v, castx.ToStringE)
 		}
 	case schema.TypeAny:
 		result, err = strict.ExpectedSQL[*types.JSON](value, castx.ToJSONMarshallableE[any])

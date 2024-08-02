@@ -13,6 +13,8 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsequeue"
+	sequencer2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/sequencer"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/dustin/go-humanize"
@@ -23,35 +25,34 @@ import (
 )
 
 type replication struct {
-	logger             log.Logger
-	conn               *pgxpool.Pool
-	replConn           *mutexedPgConn
-	metrics            *stats.SourceStats
-	wal2jsonParser     *Wal2JsonParser
-	error              chan error
-	once               sync.Once
-	config             *PgSource
-	transferID         string
-	schema             abstract.DBSchema
-	altNames           map[abstract.TableID]abstract.TableID
-	wg                 sync.WaitGroup
-	slotMonitor        *SlotMonitor
-	stopCh             chan struct{}
-	mutex              *sync.Mutex
-	maxLsn             uint64
-	changesQueue       []abstract.ChangeItem
-	changesBeingPushed []abstract.ChangeItem
-	changesQueued      *sync.Cond
-	changesConsumed    *sync.Cond
-	slot               AbstractSlot
-	pgVersion          PgVersion
-	lastKeeperTime     time.Time
-	includeCache       map[abstract.TableID]bool
-	cp                 coordinator.Coordinator
-	sharedCtx          context.Context
-	sharedCtxCancel    context.CancelFunc
-	changeProcessor    *changeProcessor
-	objects            *server.DataObjects
+	logger          log.Logger
+	conn            *pgxpool.Pool
+	replConn        *mutexedPgConn
+	metrics         *stats.SourceStats
+	wal2jsonParser  *Wal2JsonParser
+	error           chan error
+	once            sync.Once
+	config          *PgSource
+	transferID      string
+	schema          abstract.DBSchema
+	altNames        map[abstract.TableID]abstract.TableID
+	wg              sync.WaitGroup
+	slotMonitor     *SlotMonitor
+	stopCh          chan struct{}
+	mutex           *sync.Mutex
+	maxLsn          uint64
+	slot            AbstractSlot
+	pgVersion       PgVersion
+	lastKeeperTime  time.Time
+	includeCache    map[abstract.TableID]bool
+	cp              coordinator.Coordinator
+	sharedCtx       context.Context
+	sharedCtxCancel context.CancelFunc
+	changeProcessor *changeProcessor
+	objects         *server.DataObjects
+	sequencer       *sequencer2.Sequencer
+	parseQ          *parsequeue.ParseQueue[[]abstract.ChangeItem]
+	objectsMap      map[abstract.TableID]bool //tables to include in transfer
 
 	skippedTables map[abstract.TableID]bool
 }
@@ -62,18 +63,33 @@ var pgFatalCode = map[string]bool{
 	"55000": true, // TRANSFER-145 Object_not_in_prerequisite_state
 }
 
+const BufferLimit = 16 * humanize.MiByte
+
 func (p *replication) Run(sink abstract.AsyncSink) error {
-	if err := p.slot.Init(sink); err != nil {
+	var err error
+	//level of parallelism combined with hardcoded buffer size in receiver(16mb) prevent OOM in parsequeue
+	p.parseQ = parsequeue.New(p.logger, 10, sink, p.WithIncludeFilter, p.ack)
+
+	if err = p.slot.Init(sink); err != nil {
 		return xerrors.Errorf("unable to init slot: %w", err)
 	}
-	if err := p.reloadSchema(); err != nil {
+	if err = p.reloadSchema(); err != nil {
 		return xerrors.Errorf("failed to load schema: %w", err)
 	}
 
+	includedObjects := p.objects.GetIncludeObjects()
+	if len(includedObjects) > 0 {
+		includedObjects = append(includedObjects, p.config.AuxTables()...)
+	}
+
+	if p.objectsMap, err = abstract.BuildIncludeMap(includedObjects); err != nil {
+		return xerrors.Errorf("unable to build transfer data-objects: %w", err)
+	}
+
 	slotTroubleCh := p.slotMonitor.StartSlotMonitoring(int64(p.config.SlotByteLagLimit))
-	p.wg.Add(3)
+
+	p.wg.Add(2)
 	go p.receiver(slotTroubleCh)
-	go p.sender(sink)
 	go p.standbyStatus()
 	select {
 	case err := <-p.error:
@@ -87,8 +103,6 @@ func (p *replication) Stop() {
 	p.once.Do(func() {
 		close(p.stopCh)
 		p.sharedCtxCancel()
-		p.changesQueued.Signal()
-		p.changesConsumed.Signal()
 		if err := p.replConn.Close(context.Background()); err != nil {
 			p.logger.Error("Cannot close replication connection", log.Error(err))
 		}
@@ -99,6 +113,7 @@ func (p *replication) Stop() {
 		p.slotMonitor.Close()
 		p.wal2jsonParser.Close()
 		p.conn.Close()
+		p.parseQ.Close()
 	})
 }
 
@@ -113,70 +128,39 @@ func (p *replication) sendError(err error) {
 	}
 }
 
-func (p *replication) sender(sink abstract.AsyncSink) {
-	defer p.wg.Done()
-	defer logger.Log.Info("Sender stopped")
+func (p *replication) ack(data []abstract.ChangeItem, pushSt time.Time, err error) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
 
-	updateLsnAndConsumeChanges := func(maxLsn uint64) []abstract.ChangeItem {
-		p.mutex.Lock()
-		defer p.mutex.Unlock()
-
-		p.maxLsn = maxLsn
-		for len(p.changesQueue) == 0 && util.IsOpen(p.stopCh) {
-			p.changesQueued.Wait()
-		}
-		if !util.IsOpen(p.stopCh) {
-			return nil
-		}
-		p.changesBeingPushed, p.changesQueue = p.changesQueue, p.changesBeingPushed
-		p.changesQueue = p.changesQueue[:0]
-		return p.changesBeingPushed
-	}
-
-	includedObjects := p.objects.GetIncludeObjects()
-	if len(includedObjects) > 0 {
-		includedObjects = append(includedObjects, p.config.AuxTables()...)
-	}
-
-	objectsMap, err := abstract.BuildIncludeMap(includedObjects)
-	if err != nil {
-		p.sendError(xerrors.Errorf("unable to build transfer data-objects: %w", err))
+	if !util.IsOpen(p.stopCh) {
 		return
 	}
-	var maxLsn, prevLsn uint64
-	var lastID uint32
-	for {
-		changes := updateLsnAndConsumeChanges(maxLsn)
-		if changes == nil {
-			return
-		}
-		p.changesConsumed.Signal()
 
-		pushStart := time.Now()
-		if err := <-sink.AsyncPush(
-			p.WithIncludeFilter(changes, objectsMap),
-		); err != nil {
-			logger.Log.Error("Unable to sink", log.Error(err))
-			p.sendError(err)
-			return
-		}
-		p.metrics.PushTime.RecordDuration(time.Since(pushStart))
-
-		maxLsn = lastFullLSN(changes, lastID, prevLsn, maxLsn)
-		lastID = changes[len(changes)-1].ID
-		prevLsn = changes[len(changes)-1].LSN
+	if err != nil {
+		p.sendError(err)
+		return
 	}
+
+	if committedLsn, err := p.sequencer.Pushed(data); err != nil {
+		logger.Log.Error("sequence of processed changeItems is incorrect", log.Error(err))
+		p.sendError(err)
+		return
+	} else {
+		p.maxLsn = committedLsn
+	}
+
+	p.metrics.PushTime.RecordDuration(time.Since(pushSt))
 }
 
-func (p *replication) WithIncludeFilter(items []abstract.ChangeItem, objectsMap map[abstract.TableID]bool) []abstract.ChangeItem {
+func (p *replication) WithIncludeFilter(items []abstract.ChangeItem) []abstract.ChangeItem {
 	var changes []abstract.ChangeItem
 	for _, change := range items {
 		if _, ok := p.includeCache[change.TableID()]; !ok {
 			// while CollapseInheritTables rename items inplace replication, we have to check both names: original and new
 			p.includeCache[change.TableID()] = p.config.Include(change.TableID()) || p.config.Include(origTableID(&change))
 		}
-		if len(objectsMap) > 0 { // if we have transfer include objects we should strictly push only them
-			_, ok := objectsMap[change.TableID()]
+		if len(p.objectsMap) > 0 { // if we have transfer include objects we should strictly push only them
+			_, ok := p.objectsMap[change.TableID()]
 			if !ok {
 				continue
 			}
@@ -353,7 +337,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 	defer logger.Log.Info("Receiver stopped")
 	var lastLsn uint64
 	var cTime time.Time
-	inflight := false
+	parsed := true
 	var lastMessageTime time.Time
 	var messageCounter int
 	var data []*pglogrepl.XLogData
@@ -408,21 +392,21 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 			p.metrics.DelayTime.RecordDuration(time.Since(xld.ServerTime))
 
 			transactionComplete := string(xld.WALData) == "]}"
-			shouldFlush := (bufferSize > 16*humanize.MiByte) || transactionComplete
+			shouldFlush := (bufferSize > BufferLimit) || transactionComplete
 
-			if inflight && bufferSize > 16*humanize.MiByte {
-				for inflight {
+			if !parsed && bufferSize > BufferLimit {
+				for !parsed {
 					time.Sleep(time.Second)
 					p.logger.Infof("buffer size too large while data inflight, throttle read: %v", format.SizeInt(int(bufferSize)))
 				}
 			}
 
 			data = append(data, &xld)
-			if shouldFlush && !inflight {
-				inflight = true
+			if shouldFlush && parsed {
+				parsed = false
 				go func(data []*pglogrepl.XLogData) {
 					defer func() {
-						inflight = false
+						parsed = true
 					}()
 					var res []abstract.ChangeItem
 					for _, d := range data {
@@ -455,7 +439,12 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 						}
 					}
 
-					if !p.queueChanges(res) {
+					if err = p.sequencer.StartProcessing(res); err != nil {
+						p.sendError(xerrors.Errorf("unable to start processing: %w", err))
+						return
+					}
+					if err = p.parseQ.Add(res); err != nil {
+						p.sendError(xerrors.Errorf("unable to add to pusher q: %w", err))
 						return
 					}
 					cTime = time.Unix(0, int64(res[0].CommitTime))
@@ -477,38 +466,6 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 			}
 		}
 	}
-}
-
-func (p *replication) queueChanges(changes []abstract.ChangeItem) bool {
-	doQueue := func(changes []abstract.ChangeItem) []abstract.ChangeItem {
-		p.mutex.Lock()
-		defer p.mutex.Unlock()
-		for len(p.changesQueue) == int(p.config.BatchSize) && util.IsOpen(p.stopCh) {
-			p.changesConsumed.Wait()
-		}
-		if !util.IsOpen(p.stopCh) {
-			return nil
-		}
-		capacity := int(p.config.BatchSize) - len(p.changesQueue)
-		var numItemsToQueue int
-		if len(changes) < capacity {
-			numItemsToQueue = len(changes)
-		} else {
-			numItemsToQueue = capacity
-		}
-		p.changesQueue = append(p.changesQueue, changes[:numItemsToQueue]...)
-		return changes[numItemsToQueue:]
-	}
-
-	for len(changes) > 0 {
-		remainder := doQueue(changes)
-		if remainder == nil {
-			return false
-		}
-		changes = remainder
-		p.changesQueued.Signal()
-	}
-	return true
 }
 
 func (p *replication) parseWal2JsonChanges(cp *changeProcessor, xld *pglogrepl.XLogData) ([]abstract.ChangeItem, error) {
@@ -594,35 +551,34 @@ func NewReplicationPublisher(version PgVersion, replConn *mutexedPgConn, connPoo
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	return &replication{
-		logger:             lgr,
-		conn:               connPool,
-		replConn:           replConn,
-		metrics:            stats,
-		wal2jsonParser:     NewWal2JsonParser(),
-		error:              make(chan error, 1),
-		once:               sync.Once{},
-		config:             source,
-		transferID:         transferID,
-		schema:             nil,
-		altNames:           nil,
-		wg:                 sync.WaitGroup{},
-		slotMonitor:        NewSlotMonitor(connPool, source.SlotID, source.Database, stats, lgr),
-		stopCh:             make(chan struct{}),
-		mutex:              mutex,
-		maxLsn:             0,
-		changesQueue:       nil,
-		changesBeingPushed: nil,
-		changesQueued:      sync.NewCond(mutex),
-		changesConsumed:    sync.NewCond(mutex),
-		slot:               slot,
-		pgVersion:          version,
-		lastKeeperTime:     time.Now(),
-		includeCache:       map[abstract.TableID]bool{},
-		cp:                 cp,
-		changeProcessor:    nil,
-		sharedCtx:          ctx,
-		sharedCtxCancel:    cancel,
-		objects:            objects,
+		logger:          lgr,
+		conn:            connPool,
+		replConn:        replConn,
+		metrics:         stats,
+		wal2jsonParser:  NewWal2JsonParser(),
+		error:           make(chan error, 1),
+		once:            sync.Once{},
+		config:          source,
+		transferID:      transferID,
+		schema:          nil,
+		altNames:        nil,
+		wg:              sync.WaitGroup{},
+		slotMonitor:     NewSlotMonitor(connPool, source.SlotID, source.Database, stats, lgr),
+		stopCh:          make(chan struct{}),
+		mutex:           mutex,
+		maxLsn:          0,
+		slot:            slot,
+		pgVersion:       version,
+		lastKeeperTime:  time.Now(),
+		includeCache:    map[abstract.TableID]bool{},
+		cp:              cp,
+		changeProcessor: nil,
+		sharedCtx:       ctx,
+		sharedCtxCancel: cancel,
+		objects:         objects,
+		sequencer:       sequencer2.NewSequencer(),
+		parseQ:          nil,
+		objectsMap:      nil,
 
 		skippedTables: make(map[abstract.TableID]bool),
 	}, nil

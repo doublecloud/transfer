@@ -51,7 +51,7 @@ func (f *FakeClient) SetOperationState(taskID string, state string) error {
 }
 
 func (f *FakeClient) GetOperationState(taskID string) (string, error) {
-	return "", nil
+	return "", OperationStateNotFoundError
 }
 
 func (f *FakeClient) UploadTable(transferID string, tables []abstract.TableDescription) error {

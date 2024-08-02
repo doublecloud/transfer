@@ -30,13 +30,13 @@ func (t *Topology) SingleNode() bool {
 	return t.singleNode
 }
 
-func ClusterName(ctx context.Context, db *sql.DB, cfg model.ChSinkServerParams) (string, error) {
-	// case 1: forced cluster name via config
+func resolveClusterName(ctx context.Context, db *sql.DB, cfg model.ChSinkServerParams) (string, error) {
+	// case 1: forced cluster name via config (it could be MDB shard group)
 	if cfgName := cfg.ChClusterName(); cfgName != "" {
 		return cfgName, nil
 	}
 
-	// case 2: resolve default cluster for MDB, currently ignoring shard groups
+	// case 2: resolve default cluster for MDB
 	if cfg.MdbClusterID() != "" {
 		var substitution string
 		if err := db.QueryRowContext(ctx, `select substitution from system.macros where macro = 'cluster';`).Scan(&substitution); err != nil {
@@ -61,7 +61,7 @@ func IsSingleNode(shards map[string][]string) bool {
 	return len(shards) == 1 && len(maps.Values(shards)[0]) == 1
 }
 
-func ValidateShards(shards map[string][]string) error {
+func validateShards(shards map[string][]string) error {
 	if len(shards) < 1 {
 		return xerrors.New("empty shards config")
 	}
@@ -75,7 +75,7 @@ func ValidateShards(shards map[string][]string) error {
 
 func ResolveTopology(params model.ChSinkParams, lgr log.Logger) (*Topology, error) {
 	shards := params.Shards()
-	if err := ValidateShards(shards); err != nil {
+	if err := validateShards(shards); err != nil {
 		return nil, xerrors.Errorf("invalid shards config: %w", err)
 	}
 
@@ -105,7 +105,7 @@ func ResolveTopology(params model.ChSinkParams, lgr log.Logger) (*Topology, erro
 		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 		defer cancel()
 
-		clusterName, err := ClusterName(ctx, conn, params)
+		clusterName, err := resolveClusterName(ctx, conn, params)
 		if xerrors.Is(err, ErrNoCluster) {
 			//nolint:descriptiveerrors
 			return "", backoff.Permanent(err)

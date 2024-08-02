@@ -61,6 +61,8 @@ type ClickhouseStorage interface {
 	Version() semver.Version
 }
 
+var _ ClickhouseStorage = (*Storage)(nil)
+
 type Storage struct {
 	db        *sql.DB
 	bufSize   uint64
@@ -70,6 +72,7 @@ type Storage struct {
 	metrics   *stats.SourceStats
 	version   semver.Version
 	database  string
+	cluster   string
 
 	tableFilter           abstract.Includeable
 	allowSingleHostTables bool
@@ -676,6 +679,7 @@ func (s *Storage) LoadTablesDDL(tables []abstract.TableID) ([]schema.TableDDL, e
 				abstract.TableID{Namespace: database, Name: name},
 				createDDL,
 				engine,
+				"",
 			)
 		}
 		if err := tablesRes.Err(); err != nil {
@@ -860,7 +864,7 @@ func parseSemver(version string) (*semver.Version, error) {
 func NewStorage(config *model.ChStorageParams, transfer *server.Transfer, opts ...StorageOpt) (ClickhouseStorage, error) {
 	singleHost := false
 	if config.IsManaged() {
-		shards, err := model.ShardFromCluster(config.MdbClusterID)
+		shards, err := model.ShardFromCluster(config.MdbClusterID, config.ChClusterName)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to resolve cluster from shards: %w", err)
 		}
@@ -909,6 +913,7 @@ func NewStorage(config *model.ChStorageParams, transfer *server.Transfer, opts .
 	return WithOpts(&Storage{
 		db:        db,
 		database:  config.Database,
+		cluster:   config.ChClusterName,
 		bufSize:   config.BufferSize,
 		logger:    logger.Log,
 		onceClose: sync.Once{},

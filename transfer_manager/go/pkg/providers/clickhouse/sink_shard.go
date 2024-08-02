@@ -14,7 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/errors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	topology2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/topology"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/topology"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 )
@@ -25,10 +25,10 @@ type lazySinkShard struct {
 	logger   log.Logger
 	registry metrics.Registry
 	sink     *sinkShard
-	topology *topology2.Topology
+	topology *topology.Topology
 }
 
-func newLazySinkShard(shardName string, config model.ChSinkShardParams, topology *topology2.Topology, logger log.Logger, registry metrics.Registry) *lazySinkShard {
+func newLazySinkShard(shardName string, config model.ChSinkShardParams, topology *topology.Topology, logger log.Logger, registry metrics.Registry) *lazySinkShard {
 	return &lazySinkShard{
 		Name:     shardName,
 		Config:   config,
@@ -72,7 +72,7 @@ type sinkShard struct {
 	chStats        *stats.ChStats
 	altNames       map[string]string
 	closeReasonErr error
-	topology       *topology2.Topology
+	topology       *topology.Topology
 }
 
 func (s *sinkShard) Close() error {
@@ -311,7 +311,7 @@ func MakeAltNames(config model.ChSinkShardParams) map[string]string {
 	return altNames
 }
 
-func newSinkShard(shardName string, config model.ChSinkShardParams, topology *topology2.Topology, logger log.Logger, chStats *stats.ChStats, sinkStats *stats.SinkerStats) (*sinkShard, error) {
+func newSinkShard(shardName string, config model.ChSinkShardParams, topology *topology.Topology, logger log.Logger, chStats *stats.ChStats, sinkStats *stats.SinkerStats) (*sinkShard, error) {
 	cl, err := newSinkCluster(config, logger, chStats, topology)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create a sink for a concrete ClickHouse cluster: %w", err)

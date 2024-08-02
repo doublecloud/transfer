@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
@@ -69,7 +70,7 @@ func syncMiddleware(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Reg
 		// TODO: apply this middleware for selected sinkers only
 		pipeline = middlewares.NonRowSeparator()(pipeline)
 
-		if transfer.Src.GetProviderType() != transfer.Dst.GetProviderType() {
+		if transfer.Src.GetProviderType() != transfer.Dst.GetProviderType() && env.IsTest() {
 			// only check type strictness in heterogenous transfers
 			pipeline = middlewares.TypeStrictnessTracker(lgr, stats.NewTypeStrictnessStats(mtrcs))(pipeline)
 		}

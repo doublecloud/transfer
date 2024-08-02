@@ -19,7 +19,7 @@ func TestClusterName(t *testing.T) {
 		cfgRaw.WithDefaults()
 		cfg := cfgRaw.ToReplicationFromPGSinkParams()
 
-		name, err := ClusterName(context.Background(), db, cfg)
+		name, err := resolveClusterName(context.Background(), db, cfg)
 		require.NoError(t, err)
 		require.Equal(t, "foo", name)
 		require.NoError(t, mock.ExpectationsWereMet())
@@ -37,7 +37,7 @@ func TestClusterName(t *testing.T) {
 		mockRows := sqlmock.NewRows([]string{"cluster"}).FromCSVString("foo\n")
 		mock.ExpectQuery(`select substitution from system.macros where macro = 'cluster';`).
 			WillReturnRows(mockRows).RowsWillBeClosed()
-		name, err := ClusterName(context.Background(), db, cfg)
+		name, err := resolveClusterName(context.Background(), db, cfg)
 		require.NoError(t, err)
 		require.Equal(t, "foo", name)
 		require.NoError(t, mock.ExpectationsWereMet())
@@ -55,7 +55,7 @@ func TestClusterName(t *testing.T) {
 		mockRows := sqlmock.NewRows([]string{"cluster"}).FromCSVString("foo\n")
 		mock.ExpectQuery(`select cluster from system.clusters limit 1;`).
 			WillReturnRows(mockRows).RowsWillBeClosed()
-		name, err := ClusterName(context.Background(), db, cfg)
+		name, err := resolveClusterName(context.Background(), db, cfg)
 		require.NoError(t, err)
 		require.Equal(t, "foo", name)
 	})
@@ -72,7 +72,7 @@ func TestClusterName(t *testing.T) {
 		mockRows := sqlmock.NewRows([]string{"cluster"})
 		mock.ExpectQuery(`select cluster from system.clusters limit 1;`).
 			WillReturnRows(mockRows).RowsWillBeClosed()
-		name, err := ClusterName(context.Background(), db, cfg)
+		name, err := resolveClusterName(context.Background(), db, cfg)
 		require.ErrorIs(t, err, ErrNoCluster)
 		require.Equal(t, "", name)
 	})

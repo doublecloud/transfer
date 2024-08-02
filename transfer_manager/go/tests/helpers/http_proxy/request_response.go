@@ -2,7 +2,6 @@ package proxy
 
 import (
 	"bytes"
-	"compress/gzip"
 	"encoding/hex"
 	"fmt"
 	"io"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/google/uuid"
+	"github.com/klauspost/compress/zstd"
 )
 
 type RequestResponse struct {
@@ -43,7 +43,7 @@ func isGZIP(header http.Header) bool {
 	for k, vv := range header {
 		if k == "Content-Encoding" {
 			for _, v := range vv {
-				if v == "gzip" {
+				if v == "zstd" {
 					return true
 				}
 			}
@@ -53,7 +53,7 @@ func isGZIP(header http.Header) bool {
 }
 
 func unpackZip(in []byte) ([]byte, error) {
-	rr, err := gzip.NewReader(bytes.NewReader(in))
+	rr, err := zstd.NewReader(bytes.NewReader(in))
 	if err != nil {
 		return nil, err
 	}

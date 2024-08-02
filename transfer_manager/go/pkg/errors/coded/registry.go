@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 )
 
@@ -13,6 +14,18 @@ type Code string
 
 func (c Code) ID() string {
 	return string(c)
+}
+
+func (c Code) Contains(err error) bool {
+	var codedErr CodedError
+	unwrappedErr := err
+	for xerrors.As(unwrappedErr, &codedErr) {
+		if codedErr.Code() == c {
+			return true
+		}
+		unwrappedErr = xerrors.Unwrap(codedErr)
+	}
+	return false
 }
 
 var knownCodes = util.NewSet[Code]()
