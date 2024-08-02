@@ -4,7 +4,6 @@ go 1.22.0
 
 require (
 	cuelang.org/go v0.4.3
-	github.com/OneOfOne/xxhash v1.2.8
 	github.com/brianvoe/gofakeit/v6 v6.22.0
 	github.com/cenkalti/backoff/v4 v4.2.1
 	github.com/cloudevents/sdk-go/binding/format/protobuf/v2 v2.15.0
@@ -15,7 +14,6 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/golang/mock v1.7.0-rc.1
 	github.com/golang/protobuf v1.5.4
-	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgconn v1.14.0
 	github.com/jackc/pgproto3/v2 v2.3.2
@@ -27,8 +25,6 @@ require (
 	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4
 	github.com/montanaflynn/stats v0.7.0
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_model v0.5.0
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/shirou/gopsutil/v3 v3.24.2
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
@@ -56,6 +52,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-sqlite3 v1.14.16 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/spf13/pflag v1.0.6-0.20201009195203-85dd5c8bc61c // indirect
 	go.uber.org/multierr v1.11.0 // indirect
