@@ -334,6 +334,9 @@ type TextDecoderAndValuerWithHomo interface {
 
 func temporalsUnmarshallerFromDecoder(decoder TextDecoderAndValuerWithHomo, ci *pgtype.ConnInfo, isHomo bool) func(v any) (any, error) {
 	return func(v any) (any, error) {
+		if v == nil {
+			return nil, nil
+		}
 		var vS string
 		switch vv := v.(type) {
 		case string:
