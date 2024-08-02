@@ -23,7 +23,7 @@ require (
 	cloud.google.com/go/batch v1.8.0
 	cloud.google.com/go/beyondcorp v1.0.4
 	cloud.google.com/go/bigquery v1.59.1
-	cloud.google.com/go/bigtable v1.16.0
+	cloud.google.com/go/bigtable v1.20.0
 	cloud.google.com/go/billing v1.18.2
 	cloud.google.com/go/binaryauthorization v1.8.1
 	cloud.google.com/go/certificatemanager v1.7.5
@@ -677,7 +677,7 @@ require (
 	github.com/xanzy/go-gitlab v0.73.1
 	github.com/xdg-go/scram v1.1.2
 	github.com/xdg-go/stringprep v1.0.4
-	github.com/xitongsys/parquet-go v1.5.4
+	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xlab/treeprint v1.1.0
 	github.com/xuri/excelize/v2 v2.6.1
 	github.com/yandex-cloud/go-genproto v0.0.0-20240425114406-68c9b49389a1
@@ -962,6 +962,7 @@ require (
 	github.com/antlr/antlr4 v4.11.1+incompatible // indirect
 	github.com/antlr/antlr4/runtime/Go/antlr v1.4.10 // indirect
 	github.com/antonmedv/expr v1.15.3 // indirect
+	github.com/apache/arrow/go/arrow v0.0.0-20211112161151-bc219186db40 // indirect
 	github.com/apache/arrow/go/v12 v12.0.1 // indirect
 	github.com/apache/arrow/go/v14 v14.0.2 // indirect
 	github.com/apcera/termtables v0.0.0-20170405184538-bcbc5dc54055 // indirect
@@ -1304,6 +1305,7 @@ require (
 	github.com/google/tiff v0.0.0-20161109161721-4b31f3041d9a // indirect
 	github.com/google/wire v0.5.0 // indirect
 	github.com/google/wycheproof v0.0.0-20191219022705-2196000605e4 // indirect
+	github.com/googleapis/cloud-bigtable-clients-test v0.0.2 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
@@ -1842,7 +1844,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
-	github.com/xitongsys/parquet-go-source v0.0.0-20200817004010-026bad9b25d0 // indirect
+	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect

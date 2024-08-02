@@ -37,10 +37,7 @@ func (l *StoreCheckpointReader) Read(path string) (iter.Iter[action.Container], 
 		}
 		rows = append(rows, row)
 	}
-	pf, err := buffer.NewBufferFile([]byte(strings.Join(rows, "\n")))
-	if err != nil {
-		return nil, xerrors.Errorf("unable to open parq fail: %w", err)
-	}
+	pf := buffer.NewBufferFileFromBytes([]byte(strings.Join(rows, "\n")))
 	pr, err := reader.NewParquetReader(pf, nil, 4)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to read parquet fail: %w", err)
