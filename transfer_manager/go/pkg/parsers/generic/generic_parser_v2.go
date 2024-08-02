@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"encoding/binary"
 	"fmt"
 	"strings"
 	"time"
@@ -395,6 +396,14 @@ func (l *ysonEventBatch) Event() (base.Event, error) {
 		return nil, l.parseErr
 	}
 	return l.events[l.iter], nil
+}
+
+func (l *ysonEventBatch) Count() int {
+	return len(l.events)
+}
+
+func (l *ysonEventBatch) Size() int {
+	return binary.Size(l.events)
 }
 
 func (l *ysonEventBatch) MarshalYSON(w *yson.Writer) error {

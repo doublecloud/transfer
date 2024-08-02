@@ -44,7 +44,7 @@ func newLoader(sqlxDB *sqlx.DB, config *oracle.OracleSource, position *common.Lo
 const rowsInBatch int = 512
 
 // LoadSnapshot implements snapshot load to the given target
-func (l *loader) LoadSnapshot(ctx context.Context, syncTarget *middlewares.Asynchronizer, sql string) error {
+func (l *loader) LoadSnapshot(ctx context.Context, syncTarget middlewares.Asynchronizer, sql string) error {
 	rawValues, err := createRawValues(l.table)
 	if err != nil {
 		return xerrors.Errorf("Can't create raw values for table '%v': %w", l.table.OracleSQLName(), err)
@@ -102,7 +102,7 @@ func (l *loader) LoadSnapshot(ctx context.Context, syncTarget *middlewares.Async
 	return nil
 }
 
-func (l *loader) pushBatch(batch []base.Event, batchTime *time.Time, syncTarget *middlewares.Asynchronizer) error {
+func (l *loader) pushBatch(batch []base.Event, batchTime *time.Time, syncTarget middlewares.Asynchronizer) error {
 	if err := syncTarget.Push(base.NewEventBatch(batch)); err != nil {
 		return xerrors.Errorf("failed to push a batch of %d events: %w", len(batch), err)
 	}

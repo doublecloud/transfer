@@ -99,7 +99,7 @@ func (s *oracleTableSource) Start(ctx context.Context, target base.EventTarget) 
 	defer s.Stop()
 	s.state.Unlock()
 
-	syncTarget := middlewares.NewAsynchronizer(target)
+	syncTarget := middlewares.NewEventTargetWrapper(target)
 	rollbacks := util.Rollbacks{}
 	rollbacks.Add(func() {
 		if err := syncTarget.Close(); err != nil {

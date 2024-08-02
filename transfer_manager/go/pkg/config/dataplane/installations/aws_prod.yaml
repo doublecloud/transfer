@@ -1,0 +1,67 @@
+type: aws
+
+# Common
+environment:
+  type: aws
+control_plane_api:
+  endpoint: data-transfer.internal.double.tech:443
+  plaintext: false
+log:
+  type: kafka
+  topic: data-transfer-dp
+  brokers: rw.kfcrjjc7jhjakji2lcm7.at.double.cloud:9091
+  user: admin
+  password:
+    type: aws
+    ciphertext: !!binary |
+      AQICAHgyUGD5mj+uTqZvLWxn0ftuOEHeuASTS8541hzkmxnWowFRcsQ8HDV52Q4k8bG+AvFrAAAAbjBsBgkqhkiG9w0BBwagXzBdAgEAMFgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMi01TPv5l02F3UIPgAgEQgCvH92YlJl4HevvDvMEkj4TqqOyuBdTkcMTkD15yh89ldkn2MZrUU0uC4BrY
+  tls_mode:
+    type: disabled
+profiler:
+  type: disabled
+pg_dump_command: ["/usr/bin/pg_dump"]
+clickhouse_local: "clickhouse"
+metering:
+  type: enabled
+  fatal_on_error: true
+  writers:
+    -
+      metrics:
+        datatransfer.data.output.v1: /prod_aws-frankfurt/billing-streams/ingest/billing-datatransfer-aio
+        datatransfer.compute.cpu.v1: /prod_aws-frankfurt/billing-streams/ingest/billing-datatransfer-aio
+      writer:
+        type: kinesis
+        endpoint: "yds.aws-frankfurt.ydb.internal.double.tech:8443"
+        region: "eu-central-1"
+        access_key: "YCACCD0n4rhQhXfDpLUqZ0Xyp"
+        secret_key:
+          type: aws
+          ciphertext: !!binary |
+            AQICAHgyUGD5mj+uTqZvLWxn0ftuOEHeuASTS8541hzkmxnWowEVFsRrDo2JsNy6Gs3GL6VKAAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDNVZWdJ1Nwbxia2cUQIBEIBDpvbBWDYchxcJCJQvdy3K1+Tpt/1SMMQksUVFWwbzLrHEPynqTSt/Q6R47dJfdgcVcStu36Oq1qMe32p2fjrcKZnvew==
+
+root_cert_paths: []
+# AWS
+iam:
+  access_service: prod.iam.internal.double.tech:4286
+  token_service: prod.iam.internal.double.tech:4282
+  session_service: prod.iam.internal.double.tech:8655
+  org_service: prod.iam.internal.double.tech:4290
+mdb_service: data-transfer.internal.double.tech:443 # we proxy all mdb api calls to our control plane for extra security
+cloud_creds:
+  type: service_account_key_file
+  file_name: /var/lib/data-transfer/sa-key.json
+key_id: 'arn:aws:kms:eu-central-1:179772598917:alias/data-transfer-master-key'
+amp_region: eu-central-1
+amp_url: 'https://aps-workspaces.eu-central-1.amazonaws.com/workspaces/ws-a2ea1ab6-82a2-45a3-9bbd-5cff23d2a4e2/api/v1/remote_write' #prod
+
+assume_role_target:
+  type: local_file
+  file_path: /var/lib/data-transfer/override_assume_role_target
+cp_account_id: '179772598917'
+
+assume_role_target_chain:
+  type: local_file # arn:aws:iam::221736954043:role/DoubleCloud/clusters/dataplane-node-ID_OF_INSTANCE
+  file_path: /var/lib/data-transfer/assume_chain
+
+public_container_registry_service: public.ecr.aws/w3e5p8v8
+dbt_image_tag: "12226335"

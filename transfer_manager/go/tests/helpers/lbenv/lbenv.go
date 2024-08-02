@@ -10,14 +10,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type env struct {
+type LBEnv struct {
 	*recipe.Env
 
 	t   *testing.T
 	ctx context.Context
 }
 
-func (e *env) resetConsumerOffsets() {
+func (e *LBEnv) resetConsumerOffsets() {
 	opts := e.ConsumerOptions()
 	opts.ManualPartitionAssignment = true
 
@@ -45,8 +45,8 @@ func (e *env) resetConsumerOffsets() {
 	}
 }
 
-func NewLbEnv(t *testing.T) (e *env, stop func()) {
-	e = &env{t: t}
+func NewLbEnv(t *testing.T) (e *LBEnv, stop func()) {
+	e = &LBEnv{t: t}
 
 	e.Env = recipe.New(t)
 

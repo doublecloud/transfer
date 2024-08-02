@@ -1,6 +1,8 @@
 package airbyte
 
 import (
+	"encoding/binary"
+
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
@@ -56,6 +58,14 @@ func (r *RecordBatch) AsChangeItems() ([]abstract.ChangeItem, error) {
 func (r *RecordBatch) Next() bool {
 	r.iter++
 	return len(r.records) > r.iter
+}
+
+func (r *RecordBatch) Count() int {
+	return len(r.records)
+}
+
+func (r *RecordBatch) Size() int {
+	return binary.Size(r.records)
 }
 
 func (r *RecordBatch) Event() (base.Event, error) {

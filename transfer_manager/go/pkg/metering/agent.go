@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 )
 
 var (
@@ -22,6 +23,7 @@ type MeteringAgent interface {
 	SetOpts(config *MeteringOpts) error
 	CountInputRows(items []abstract.ChangeItem)
 	CountOutputRows(items []abstract.ChangeItem)
+	CountOutputBatch(input base.EventBatch)
 }
 
 type Writer interface {

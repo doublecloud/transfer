@@ -33,6 +33,18 @@ func (b *batch) Next() bool {
 	return len(b.rows) > b.idx
 }
 
+func (b *batch) Count() int {
+	return len(b.rows)
+}
+
+func (b *batch) Size() int {
+	var size int
+	for _, row := range b.rows {
+		size += row.RawSize()
+	}
+	return size
+}
+
 func (b *batch) Event() (base.Event, error) {
 	return NewEventFromLazyYSON(b, b.idx), nil
 }

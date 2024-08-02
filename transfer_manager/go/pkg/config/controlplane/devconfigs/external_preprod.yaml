@@ -1,0 +1,155 @@
+type: external_cloud
+
+# Common
+environment:
+  type: yc
+db_discovery:
+  type: mdb
+  cluster_id: e4uo49d89n34h1o6jkl6
+db_user: db_user
+db_password:
+  type: yav
+  secret_id: sec-01f7txh34cez2shwbgyg89z3a2
+  version: ver-01f7tyyf761hck4nsksz4402n6
+  key: db_password_preprod
+db_name: db
+db_schema: dev
+grpc_port: 8787
+disable_dataplane: false
+public_grpc_port: 9797
+rest_port: 8088
+exported_metrics_http_port: 9092
+profiler:
+  type: disabled
+log:
+  type: stdout
+push_metrics: false
+sync_tasks: true
+skip_auth: false
+local_replication: true
+dataplane_version:
+  type: literal
+  value: x
+health_providers:
+  - type: solomon
+    alert_id: aoerc1it1q975rso0ia8_dta_02_no_items_in_memory
+    name: dta_02_no_items_in_memory
+  - type: solomon
+    alert_id: aoerc1it1q975rso0ia8_dta_03_transfer_time_sound
+    name: dta_03_transfer_time_sound
+  - type: solomon
+    alert_id: aoerc1it1q975rso0ia8_dta_04_row_max_lag_constant
+    name: dta_04_row_max_lag_constant
+  - type: solomon
+    alert_id: aoerc1it1q975rso0ia8_dta_05_replication_restarts
+    name: dta_05_replication_restarts
+  - type: status_message
+  - type: operation_status
+metrics_provider:
+  type: solomon
+
+# Cloud
+cloud_creds:
+  type: yc_profile
+  profile_name: tm-preprod
+console_hostname: console-preprod.cloud.yandex.ru
+ydb_logs_instance: lb.cc803hd4j8tmhgidh880.ydb.mdb.cloud-preprod.yandex.net:2135
+ydb_logs_database: /pre-prod_global/aoerc1it1q975rso0ia8/cc803hd4j8tmhgidh880
+root_cert_paths:
+  - /usr/local/share/ca-certificates/YandexInternalRootCA.crt
+
+ydb_dataplane_log_dir: /pre-prod_global/aoerc1it1q975rso0ia8/cc803hd4j8tmhgidh880/log/dataplane
+mdb_api_url_base: https://mdb.api.cloud-preprod.yandex.net/
+iam_api_url_base: https://iam.api.cloud-preprod.yandex.net/iam/v1/
+cloud_api_endpoint: api.cloud-preprod.yandex.net:443
+iam_access_service_endpoint: as.private-api.cloud-preprod.yandex.net:4286
+events:
+  type: disabled
+serverless_runtime_kubeconfig: |
+  apiVersion: v1
+  clusters:
+    - cluster:
+        certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1EWXlNVEUxTWpBME5Wb1hEVE14TURZeE9URTFNakEwTlZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTEI4CjJTQ29aZlU3aGlCbWZjTkpEVTl6TnhCbnZoM1ZIYldLVTdpaHg4L2RhaC9ueEpMTkNDQlcwUjNjd3FQYWtRZlYKeU1rQVlHRHBlbUkwbVdZMWhKV3lsUlBocjVaSm1ucXJqZ0ZvdGF1WEU3SEp1RGpXTVA1NGFha250NmFjUDQ4ZwpSMkp4cklaZG9FUmtSTEtBeUxOckJtelZQR1liQ3VscEhORTc0b09XMTU5RDhGZUhhRlU4NlAxblZPQ3Nsb2pqCmttZ2JUL1JkNk9NY1EvN2Y0UnVXcGdVSk9WZlZ0b1BvYWxYVnFNQS94UU1pSXo0b3NMNGFYeHhZd1BpWC9aK0oKdlRNazFMLzN1Nm5XcldtUmVvdXU5bkhrdlhuS1NMUzF0Q0VQZllha21tRi80RWI0c0NveVdxQUI1SmZUYVQ0NApUVGlmTUdidGtDQi85Q1o1MDNjQ0F3RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZJNG9Ib1ZzNkp4NElXbkVjVFdxa2QzT2ZpTGhNQTBHQ1NxR1NJYjMKRFFFQkN3VUFBNElCQVFBdGVXSUhucnY0dEZHRzhNakNXTk5mbzBSZjExNTdpdGtNTU9KdXpXWUhvb04xeDlkbApXREtKU2pLdXZrNmF4YnlTZHR0UTdJYllFSXNNT0Y4TXZPUzVKamQzVEhKdE9FQjhiYyt5MVRsR3VUdkhFcFdNCm1nU0dwd2FwU3ZUWElzSE1VZUdIVEw4WmYwMDV5eU5sR1hoaXM3OWpZd01SMFcybGxRZFdKMnNyN0ZnNkVxcXIKTHJUamZadWY2QkVObGtXaHNLdGhIRjc4dVlNdlUrSWp2NzM2REVjVGJ2azhVVjZrMmZFdUlXRE5weEswbW11bworK2hweE9pZlFleVRoTnB3OXJ1SEFEeXN0dVRxMm8rU0JsN216YUpxU090ek9DbVppS1M0QTNtT2pxY1JBNFVrCllzY0xZckM4cGNmS2FXTGVQSms4L3F5NkhFaW5JNWZVbVdGNQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+        server: https://130.193.32.8
+      name: yc-managed-k8s-c49dvuuspe14vq0553ve
+  contexts:
+    - context:
+        cluster: yc-managed-k8s-c49dvuuspe14vq0553ve
+        user: yc-managed-k8s-c49dvuuspe14vq0553ve
+      name: yc-prestable
+  current-context: yc-prestable
+  kind: Config
+  preferences: {}
+  users:
+    - name: yc-managed-k8s-c49dvuuspe14vq0553ve
+      user:
+        exec:
+          apiVersion: client.authentication.k8s.io/v1beta1
+          args:
+            - k8s
+            - create-token
+            - --profile=tm-preprod
+          command: yc
+          env: null
+search:
+  type: disabled
+s3_endpoint: https://storage.cloud-preprod.yandex.net
+s3_region: ru-central1
+
+# External cloud
+solomon_url: https://solomon.cloud-preprod.yandex-team.ru
+service_account_id: bfbgnr9a209qmtjepb55
+service_cloud_id: aoerc1it1q975rso0ia8
+service_folder_id: aoenp6537r7gn90vb4al
+kms_key_id: e10jg948rdlerghctsv3
+kms_discovery_endpoint: kms.cloud-preprod.yandex.net:8443
+net_id: c640ek4eqbrmoaf2t9u3
+transfer_dashboard_id: monkgqmtip9skkdv9d3l
+yds_serverless_endpoint: lb.cc802lcdcldbsh7b5fd1.ydb.mdb.cloud-preprod.yandex.net
+is_prod: false
+yav_token:
+  type: environment_variable
+  variable_name: YAV_TOKEN # Get your token at https://oauth.yandex-team.ru/authorize?response_type=token&client_id=ce68fbebc76c4ffda974049083729982
+
+data_plane_vm_users:
+  ssh_key: cert-authority ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFxDHbZHZCx72sztvWsFSJVUhW+fngANgR5iiIWy9gicOdjYOy0pxpb1U8PqWmJYJYOWLwtfm/f9qnSV3Q/wAX/igCAwdYuwsWtx/0eBp2G3ECIUJzEQRme+TrtECpJHyLFCJonE/Cg24JlQ8N6mVjrQZwLiVjCdVwRFGoXxb3F1N4SHg== bastion
+  users:
+    - svemarch
+    - marufkaraev
+    - ovandriyanov
+    - kateleb
+    - wiftwift
+    - unikoid
+    - timmyb32r
+    - booec
+    - denisevdkmv
+    - kosovgrigorii
+    - kry127
+    - daniilmarukh
+
+data_plane_config_variable_name: DATA_PLANE_CONFIG_RESOURCE
+data_plane_config_variable_value: external_preprod.yaml
+
+dataplane_image_k8s_image: unused
+data_plane_compute_platform_id: standard-v2
+metrika_api_config:
+  endpoint: internalapi.test.metrika.yandex.net
+  tvm_metrika_id: 2000269
+  tvm_self_id: 2038887
+  tvm_secret:
+    type: kms
+    ciphertext: !!binary |
+      AAAAAQAAABRlMTBrN2Jndm1xcGh2YnVja2NxYgAAABCD9bsphJMKF3bjK7X5DiHBAAAADF/mVtsY/aEm3mBEaR5ApOQf9QU7ZdIrfEae6PgfAQNaFRyK1fGAAcVPxueHUC8F6FYObg==
+ntp_servers: ntp1.yandex.net ntp2.yandex.net ntp3.yandex.net ntp4.yandex.net
+fallback_ntp: ru.pool.ntp.org
+
+iam_token_service_endpoint: ts.private-api.cloud-preprod.yandex.net:4282
+instance_service_endpoint: compute-api.private-api.compute.cloud-preprod.yandex.net:9051
+fine_grained_ssa:
+  certificate_path: /usr/local/share/certificates/compute-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-certificate.crt
+  service_id: data-transfer
+  microservice_id: internal-api
+  control_plane_sa_key_secret_id: fc3p1ddvsqcji6hf6lip
+  data_plane_service_accounts:
+    instance_group_sa_id: yc.datatransfer.dataplane-ig
+    instance_sa_id: yc.datatransfer.dataplane

@@ -6,21 +6,24 @@ import (
 
 // Asynchronizer is tasks.asynchronousSnapshotState for abstract2.
 // However, as there is no way to tell if a batch contains "non-row" events, push is always asynchronous.
-type Asynchronizer struct {
-	target base.EventTarget
+type Asynchronizer interface {
+	Close() error
+	Push(input base.EventBatch) error
+}
 
+type EventTargetWrapper struct {
+	target base.EventTarget
 	errChs []chan error
 }
 
-func NewAsynchronizer(target base.EventTarget) *Asynchronizer {
-	return &Asynchronizer{
+func NewEventTargetWrapper(target base.EventTarget) *EventTargetWrapper {
+	return &EventTargetWrapper{
 		target: target,
-
 		errChs: make([]chan error, 0),
 	}
 }
 
-func (s *Asynchronizer) Close() error {
+func (s *EventTargetWrapper) Close() error {
 	for _, errCh := range s.errChs {
 		if err := <-errCh; err != nil {
 			return err
@@ -29,7 +32,7 @@ func (s *Asynchronizer) Close() error {
 	return nil
 }
 
-func (s *Asynchronizer) Push(input base.EventBatch) error {
+func (s *EventTargetWrapper) Push(input base.EventBatch) error {
 	var result error = nil
 	lastReadChI := 0
 

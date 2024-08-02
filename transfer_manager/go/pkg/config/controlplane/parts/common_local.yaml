@@ -1,0 +1,43 @@
+type: internal_cloud
+
+db_discovery:
+  type: on_premise
+  host: postgres
+  port: 5432
+  use_tls: false
+db_user: root
+db_password: 'secret'
+db_name: transferdb
+db_schema: public
+grpc_port: 8787
+public_grpc_port: 9797
+rest_port: 8088
+exported_metrics_http_port: 9092
+profiler:
+  type: disabled
+log:
+  type: stdout
+
+push_metrics: true
+sync_tasks: false
+local_replication: false
+disable_dataplane: true
+skip_auth: true # skip for now, we should wait till IAM create folders for us
+
+dataplane_version:
+  type: arcadia_source_revision
+health_providers:
+  - type: fake
+metrics_provider:
+  type: fake
+search:
+  type: disabled
+events:
+  type: disabled
+
+dataplane_image_k8s_image:
+  type: environment_variable
+  variable_name: DATA_PLANE_K8S_IMAGE
+data_plane_config_variable_name: DATA_PLANE_CONFIG_RESOURCE
+data_plane_config_variable_value: 'x'
+

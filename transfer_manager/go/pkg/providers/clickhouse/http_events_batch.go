@@ -20,6 +20,7 @@ type HTTPEventsBatch struct {
 	readerStart time.Time
 	Format      model.ClickhouseIOFormat
 	RowCount    int
+	SizeBytes   int
 }
 
 func (b *HTTPEventsBatch) ColumnNames() []string {
@@ -34,12 +35,20 @@ func (b *HTTPEventsBatch) Next() bool {
 	return b.scanner.Scan()
 }
 
+func (b *HTTPEventsBatch) Count() int {
+	return b.RowCount
+}
+
+func (b *HTTPEventsBatch) Size() int {
+	return b.SizeBytes
+}
+
 func (b *HTTPEventsBatch) Event() (base.Event, error) {
 	row := b.scanner.Bytes()
 	return format.NewEvent(b.Format, row, b.Cols, b.ColNames, b.Part.TableID, b.readerStart)
 }
 
-func NewHTTPEventsBatch(part *TablePartA2, data []byte, cols *abstract.TableSchema, readerStart time.Time, format model.ClickhouseIOFormat, count int) *HTTPEventsBatch {
+func NewHTTPEventsBatch(part *TablePartA2, data []byte, cols *abstract.TableSchema, readerStart time.Time, format model.ClickhouseIOFormat, count int, size int) *HTTPEventsBatch {
 	scanner := bufio.NewScanner(bytes.NewReader(data))
 	var colNames []string
 	for _, col := range cols.Columns() {
@@ -54,9 +63,10 @@ func NewHTTPEventsBatch(part *TablePartA2, data []byte, cols *abstract.TableSche
 		readerStart: readerStart,
 		Format:      format,
 		RowCount:    count,
+		SizeBytes:   size,
 	}
 }
 
-func NewJSONCompactBatch(part *TablePartA2, data []byte, cols *abstract.TableSchema, readerStart time.Time) *HTTPEventsBatch {
-	return NewHTTPEventsBatch(part, data, cols, readerStart, "JSONCompactEachRow", 0)
+func NewJSONCompactBatch(part *TablePartA2, data []byte, cols *abstract.TableSchema, readerStart time.Time, count int, size int) *HTTPEventsBatch {
+	return NewHTTPEventsBatch(part, data, cols, readerStart, "JSONCompactEachRow", count, size)
 }

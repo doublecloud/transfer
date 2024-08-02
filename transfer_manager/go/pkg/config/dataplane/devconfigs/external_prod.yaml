@@ -1,0 +1,38 @@
+type: external_cloud
+
+# Common
+environment:
+  type: yc
+control_plane_api:
+  endpoint: localhost:8787
+  plaintext: true
+log:
+  type: stdout
+profiler:
+  type: disabled
+pg_dump_command: ["/usr/bin/pg_dump"]
+clickhouse_local: "clickhouse"
+metering:
+  type: disabled
+
+# Cloud
+cloud_creds:
+  type: yc_profile
+  profile_name: tm-prod
+root_cert_paths:
+  - /usr/local/share/ca-certificates/YandexInternalRootCA.crt
+mdb_api_url_base: https://mdb.api.cloud.yandex.net/
+cloud_api_endpoint: api.cloud.yandex.net:443
+yav_token: ''
+
+# External cloud
+service_cloud_id: b1g9jhnga9ji23ii4dks
+service_folder_id: b1gds2039chq7kv8pmvv
+solomon_url: https://solomon.cloud.yandex-team.ru
+cloud_functions_base_url: https://functions.cloud.yandex.net
+kms_key_id: abjvp62i676fpehfd3vj
+kms_discovery_endpoint: kms.yandex:8443
+yds_serverless_endpoint: yds.serverless.yandexcloud.net
+
+metrika:
+  type: disabled

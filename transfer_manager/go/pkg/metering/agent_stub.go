@@ -6,6 +6,7 @@ import (
 
 	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 )
 
 type stubAgent struct {
@@ -18,6 +19,7 @@ func (*stubAgent) SetOpts(*MeteringOpts) error {
 
 func (*stubAgent) CountInputRows(items []abstract.ChangeItem)  {}
 func (*stubAgent) CountOutputRows(items []abstract.ChangeItem) {}
+func (*stubAgent) CountOutputBatch(input base.EventBatch)      {}
 
 func (sa *stubAgent) RunPusher(ctx context.Context, interval time.Duration) error {
 	sa.logger.Warn("it is stub metering agent, exiting...")

@@ -7,6 +7,7 @@ import (
 
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 )
 
@@ -87,6 +88,17 @@ func (rm *RowsMetric) Count(items []abstract.ChangeItem, calculateValuesSize boo
 		} else {
 			rm.parsedSizes.Add(i.Size.Values)
 		}
+	}
+}
+
+func (rm *RowsMetric) CountForBatch(input base.EventBatch) {
+	count := uint64(input.Count())
+	if count > 0 {
+		rm.statsMu.Lock()
+		defer rm.statsMu.Unlock()
+		avgSizePerItem := uint64(input.Size()) / count
+		rm.rawSizes.AddBatch(count, avgSizePerItem)
+		rm.parsedSizes.AddBatch(count, avgSizePerItem)
 	}
 }
 
@@ -217,6 +229,14 @@ func (s *Stats) Add(value uint64) {
 	s.totalSize += value
 }
 
+func (s *Stats) AddBatch(count uint64, avgSize uint64) {
+	s.addToSizeDivisionBatch(avgSize, count)
+	s.updateMin(avgSize)
+	s.updateMax(avgSize)
+	s.totalNumber += count
+	s.totalSize += avgSize * count
+}
+
 func (s *Stats) updateMin(v uint64) {
 	if s.totalNumber == 0 || v < s.minSize {
 		s.minSize = v
@@ -245,6 +265,25 @@ func (s *Stats) addToSizeDivision(size uint64) {
 		s.sizeDivision[bucket10Mb] += 1
 	case size > uint64(bucket10Mb):
 		s.sizeDivision[bucketg10Mb] += 1
+	}
+}
+
+func (s *Stats) addToSizeDivisionBatch(approxItemSize uint64, count uint64) {
+	switch {
+	case approxItemSize <= uint64(bucket1Kb):
+		s.sizeDivision[bucket1Kb] += count
+	case approxItemSize <= uint64(bucket512Kb):
+		s.sizeDivision[bucket512Kb] += count
+	case approxItemSize <= uint64(bucket1Mb):
+		s.sizeDivision[bucket1Mb] += count
+	case approxItemSize <= uint64(bucket2Mb):
+		s.sizeDivision[bucket2Mb] += count
+	case approxItemSize <= uint64(bucket5Mb):
+		s.sizeDivision[bucket5Mb] += count
+	case approxItemSize <= uint64(bucket10Mb):
+		s.sizeDivision[bucket10Mb] += count
+	case approxItemSize > uint64(bucket10Mb):
+		s.sizeDivision[bucketg10Mb] += count
 	}
 }
 

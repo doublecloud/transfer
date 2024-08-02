@@ -2,7 +2,9 @@ package middlewares
 
 import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/metering"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/middlewares"
 )
 
 func InputDataMetering() func(abstract.Sinker) abstract.Sinker {
@@ -14,6 +16,12 @@ func InputDataMetering() func(abstract.Sinker) abstract.Sinker {
 func OutputDataMetering() func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newOutputDataMetering(s)
+	}
+}
+
+func OutputDataBatchMetering() func(middlewares.Asynchronizer) middlewares.Asynchronizer {
+	return func(t middlewares.Asynchronizer) middlewares.Asynchronizer {
+		return newOutputDataBatchMetering(t)
 	}
 }
 
@@ -57,6 +65,28 @@ func (m *outputDataMetering) Push(input []abstract.ChangeItem) error {
 	pushErr := m.sink.Push(input)
 	if pushErr == nil {
 		metering.Agent().CountOutputRows(input)
+	}
+	return pushErr
+}
+
+type outputDataBatchMetering struct {
+	asynk middlewares.Asynchronizer
+}
+
+func newOutputDataBatchMetering(t middlewares.Asynchronizer) *outputDataBatchMetering {
+	return &outputDataBatchMetering{
+		asynk: t,
+	}
+}
+
+func (m *outputDataBatchMetering) Close() error {
+	return m.asynk.Close()
+}
+
+func (m *outputDataBatchMetering) Push(input base.EventBatch) error {
+	pushErr := m.asynk.Push(input)
+	if pushErr == nil {
+		metering.Agent().CountOutputBatch(input)
 	}
 	return pushErr
 }

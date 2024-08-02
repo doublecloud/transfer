@@ -2,6 +2,7 @@ package base
 
 import (
 	"context"
+	"encoding/binary"
 	"fmt"
 	"io"
 
@@ -24,6 +25,8 @@ func EventToString(event Event) string {
 type EventBatch interface {
 	Next() bool
 	Event() (Event, error)
+	Count() int
+	Size() int
 }
 
 type defaultEventBatch struct {
@@ -41,6 +44,14 @@ func (d *defaultEventBatch) Next() bool {
 
 func (d *defaultEventBatch) Event() (Event, error) {
 	return d.events[d.iter], nil
+}
+
+func (d *defaultEventBatch) Count() int {
+	return len(d.events)
+}
+
+func (d *defaultEventBatch) Size() int {
+	return binary.Size(d.events)
 }
 
 func NewEventBatch(events []Event) EventBatch {
@@ -73,6 +84,22 @@ func (b *iteratorOverBatched) Next() bool {
 
 func (b *iteratorOverBatched) Event() (Event, error) {
 	return b.batches[b.iter].Event()
+}
+
+func (b *iteratorOverBatched) Count() int {
+	var cnt int
+	for _, batch := range b.batches {
+		cnt += batch.Count()
+	}
+	return cnt
+}
+
+func (b *iteratorOverBatched) Size() int {
+	var cnt int
+	for _, batch := range b.batches {
+		cnt += batch.Size()
+	}
+	return cnt
 }
 
 func NewBatchFromBatches(batches []EventBatch) EventBatch {

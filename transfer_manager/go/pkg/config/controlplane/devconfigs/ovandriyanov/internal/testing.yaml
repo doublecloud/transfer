@@ -1,0 +1,132 @@
+type: internal_cloud
+
+# Common
+environment:
+  type: internal
+db_discovery:
+  type: on_premise
+  host: localhost
+  port: 6002
+  use_tls: false
+db_user: postgres
+db_password: '123'
+db_name: postgres
+db_schema: dev
+grpc_port: 9876
+public_grpc_port: 9877
+rest_port: 8088
+exported_metrics_http_port: 9092
+profiler:
+  type: disabled
+log:
+  type: stdout
+skip_auth: true
+push_metrics: false
+local_replication: false
+sync_tasks: false
+disable_dataplane: false
+dataplane_version:
+  type: arcadia_source_revision
+health_providers:
+  - type: fake
+metrics_provider:
+  type: fake
+
+# Cloud
+solomon_token:
+  type: yav
+  secret_id: sec-01dpnps7g3jkwwsfhzvdm2ybw4
+  version: ver-01eewths5arkqh0k8d0pnan8vx
+  key: solomon
+logbroker_token:
+  type: yav
+  secret_id: sec-01dpnps7g3jkwwsfhzvdm2ybw4
+  version: ver-01dpnps7ggve70nrybv5ap5taw
+  key: lb
+cloud_creds:
+  type: passport_oauth_token
+  token:
+    type: yav
+    secret_id: sec-01ddj4pn4eg5hmyd3kjkczhm0w
+    version: ver-01fg9r96zjq7hzyzs2bvx1xnj4
+    key: CDC_DBAAS_TOKEN
+console_hostname: yc-test.yandex-team.ru
+ydb_logs_instance: ydb-ru-prestable.yandex.net:2135
+ydb_logs_database: /ru-prestable/home/tserakhau/mydb
+root_cert_paths:
+  - /etc/ssl/certs/YandexInternalCA.pem
+ydb_dataplane_log_dir: /ru-prestable/home/tserakhau/mydb/log/dataplane
+mdb_api_url_base: https://gw.db.yandex-team.ru/
+iam_api_url_base: https://gw.db.yandex-team.ru:443/iam/v1/
+cloud_api_endpoint: gw.db.yandex-team.ru:443
+iam_access_service_endpoint: as.cloud.yandex-team.ru:4286
+events:
+  type: disabled
+search:
+  type: disabled
+s3_endpoint: https://s3.mds.yandex.net
+s3_region: ru-central1
+
+# Internal cloud
+ydb_token:
+  type: yav
+  secret_id: sec-01dpnps7g3jkwwsfhzvdm2ybw4
+  version: ver-01e5wrf991geg3h02pe4n2fcv4
+  key: ydb
+mdb_token:
+  type: yav
+  secret_id: sec-01ddj4pn4eg5hmyd3kjkczhm0w
+  version: ver-01fg9r96zjq7hzyzs2bvx1xnj4
+  key: CDC_DBAAS_TOKEN
+yav_token:
+  type: environment_variable
+  variable_name: YAV_TOKEN
+yt_token:
+  type: yav
+  secret_id: sec-01dpnps7g3jkwwsfhzvdm2ybw4
+  version: ver-01f8t8hy3699hrb2050s680gbt
+  key: yt
+logfeller_yt_token:
+  type: yav
+  secret_id: sec-01e4xz5vc007whwy8pvax96bz2
+  version: ver-01fxsne874kxnvaj19y2x6be32
+  key: nirvana-secret
+logfeller_nirvactor_token:
+  type: yav
+  secret_id: sec-01e4xzjqs0a61e3y576ek5c7zw
+  version: ver-01fxstmtn3mvyyamy050xfkbg5
+  key: nirvana-secret
+logfeller_logbroker_token:
+  type: yav
+  secret_id: sec-01gdn7wkcgc3awnvvtxcpk7rkw
+  version: ver-01gdn7wkcse36m7xk4xsr99czv
+  key: logbroker-token
+logfeller_lf_describer_logbroker_token:
+  type: yav
+  secret_id: sec-01h4k2mwcva6xq9w5p90kkwnpc
+  version: ver-01h52qv834xj62dvmbfsx1d3f6
+  key: logbroker-oauth-token
+tls_server_private_certificate:
+  type: yav
+  secret_id: sec-01eb0yxja1r9p8zj9qmxzd6b5d
+  version: ver-01eca79g4xg1js9z0wcnhn70qr
+  key: b26qyhko6jcler4s.man.yp-c.yandex.net.pem
+dataplane_token:
+  type: yav
+  secret_id: sec-01ddj4pn4eg5hmyd3kjkczhm0w
+  version: ver-01fg9r96zjq7hzyzs2bvx1xnj4
+  key: CDC_DBAAS_TOKEN
+solomon_cluster: rtc-testing
+grpc_ssl_port: 8443
+public_grpc_ssl_port: 9443
+yt_proxy: vanga
+yt_operation_pool: transfer_manager
+udf_dir: /usr/local/bin/udfs
+data_plane_config_variable_name: DATA_PLANE_CONFIG_URL
+data_plane_config_variable_value: http://ovandriyanov.sas.yp-c.yandex.net/dataplane/devconfigs/ovandriyanov/internal/testing.yaml
+task_monitor_lock_path: //home/transfer-manager/task_monitor/ovandriyanov_internal_testing
+notifications_api: ''
+dataplane_image_k8s_image: ''
+solomon_url: https://solomon.yandex-team.ru
+solomon_project: data-transfer
+

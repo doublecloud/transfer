@@ -111,7 +111,7 @@ type TablePartRow struct {
 type partLoadState struct {
 	load       *loader
 	ctx        context.Context
-	syncTarget *middlewares.Asynchronizer
+	syncTarget middlewares.Asynchronizer
 	partRow    TablePartRow
 }
 
@@ -160,7 +160,7 @@ func (s *oracleParallelTableSource) Start(ctx context.Context, target base.Event
 	defer s.Stop()
 	s.state.Unlock()
 
-	ddlSyncTarget := middlewares.NewAsynchronizer(target)
+	ddlSyncTarget := middlewares.NewEventTargetWrapper(target)
 	ddlSyncTargetRollbacks := util.Rollbacks{}
 	ddlSyncTargetRollbacks.Add(func() {
 		if err := ddlSyncTarget.Close(); err != nil {
@@ -185,7 +185,7 @@ func (s *oracleParallelTableSource) Start(ctx context.Context, target base.Event
 		s.partStates[i] = partLoadState{
 			load:       newLoader(s.sqlxDB, s.config, s.position, s.table, s.logger),
 			ctx:        runCtx,
-			syncTarget: middlewares.NewAsynchronizer(target),
+			syncTarget: middlewares.NewEventTargetWrapper(target),
 			partRow:    partRows[i],
 		}
 	}

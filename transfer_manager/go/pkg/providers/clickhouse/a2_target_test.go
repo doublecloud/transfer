@@ -68,15 +68,18 @@ func TestTargetPush(t *testing.T) {
 			},
 		},
 	))
+	dataBytes := []byte(`["server_name","IVA","2021-12-16","2019-01-01 00:00:00","some-host","path",null,123,321,3213213]
+["my-server2", "iva","2019-01-01","2019-01-01 00:00:00","some-host","path",null,123,321,3213213]`)
 	require.NoError(
 		t,
 		<-target.AsyncPush(
 			NewJSONCompactBatch(
 				NewTablePart(1, 1, "_", tID, TablePart{}, ""),
-				[]byte(`["server_name","IVA","2021-12-16","2019-01-01 00:00:00","some-host","path",null,123,321,3213213]
-["my-server2", "iva","2019-01-01","2019-01-01 00:00:00","some-host","path",null,123,321,3213213]`),
+				dataBytes,
 				tInfo.Schema,
 				time.Now(),
+				2,
+				len(dataBytes),
 			),
 		),
 	)

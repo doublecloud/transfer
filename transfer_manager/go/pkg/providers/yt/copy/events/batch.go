@@ -1,6 +1,8 @@
 package events
 
 import (
+	"encoding/binary"
+
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/tablemeta"
@@ -18,6 +20,14 @@ func (e *EventBatch) Next() bool {
 		return true
 	}
 	return false
+}
+
+func (e *EventBatch) Count() int {
+	return len(e.tables)
+}
+
+func (e *EventBatch) Size() int {
+	return binary.Size(e.tables)
 }
 
 func (e *EventBatch) Event() (base.Event, error) {

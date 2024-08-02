@@ -1,12 +1,22 @@
 package schema
 
 import (
+	"encoding/binary"
+
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 )
 
 type DDLBatch struct {
 	DDLs []TableDDL
 	iter int
+}
+
+func (b *DDLBatch) Count() int {
+	return len(b.DDLs)
+}
+
+func (b *DDLBatch) Size() int {
+	return binary.Size(b.DDLs)
 }
 
 func (b *DDLBatch) Next() bool {

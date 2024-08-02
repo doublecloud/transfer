@@ -13,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
+	middlewares2 "github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/format"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
@@ -87,7 +88,7 @@ func (s *HTTPSource) Start(ctx context.Context, target base.EventTarget) error {
 	}()
 	s.state.Unlock()
 
-	syncTarget := middlewares.NewAsynchronizer(target)
+	syncTarget := middlewares2.OutputDataBatchMetering()(middlewares.NewEventTargetWrapper(target))
 	if err := backoff.RetryNotify(
 		func() error {
 			return s.rowsByHTTP(ctx, syncTarget)
@@ -119,7 +120,7 @@ func (s *HTTPSource) fetchCount(ctx context.Context) (uint64, error) {
 	return res, nil
 }
 
-func (s *HTTPSource) rowsByHTTP(ctx context.Context, syncTarget *middlewares.Asynchronizer) error {
+func (s *HTTPSource) rowsByHTTP(ctx context.Context, syncTarget middlewares.Asynchronizer) error {
 	st := time.Now()
 	query := buildQuery(s.query, s.part.Part.Rows, s.state.Current, string(s.IOFormat()))
 	s.lgr.Info("Start query in ClickHouse", log.String("table", s.part.TableID.Fqtn()), log.String("query", query))
@@ -174,7 +175,7 @@ func (s *HTTPSource) rowsByHTTP(ctx context.Context, syncTarget *middlewares.Asy
 				s.lgr.Info("validation buffer is empty", log.Error(err))
 				break
 			}
-			if err := syncTarget.Push(NewHTTPEventsBatch(s.part, tmp, s.cols, util.GetTimestampFromContextOrNow(ctx), s.IOFormat(), rowsCount)); err != nil {
+			if err := syncTarget.Push(NewHTTPEventsBatch(s.part, tmp, s.cols, util.GetTimestampFromContextOrNow(ctx), s.IOFormat(), rowsCount, bytesCount)); err != nil {
 				return xerrors.Errorf("failed to push a batch of %d rows (%s) into destination: %w", rowsCount, humanize.Bytes(uint64(len(tmp))), err)
 			}
 			func() {
@@ -187,7 +188,7 @@ func (s *HTTPSource) rowsByHTTP(ctx context.Context, syncTarget *middlewares.Asy
 	}
 	if validBuffer.Len() > 0 {
 		s.lgr.Infof("leftovers: %s in %v", humanize.Bytes(uint64(validBuffer.Len())), time.Since(st))
-		if err := syncTarget.Push(NewHTTPEventsBatch(s.part, validBuffer.Bytes(), s.cols, util.GetTimestampFromContextOrNow(ctx), s.IOFormat(), 0)); err != nil {
+		if err := syncTarget.Push(NewHTTPEventsBatch(s.part, validBuffer.Bytes(), s.cols, util.GetTimestampFromContextOrNow(ctx), s.IOFormat(), rowsCount, bytesCount)); err != nil {
 			return xerrors.Errorf("failed to push the last batch of %d rows (%s) into destination: %w", rowsCount, humanize.Bytes(uint64(validBuffer.Len())), err)
 		}
 	}

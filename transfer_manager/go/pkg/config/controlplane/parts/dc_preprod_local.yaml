@@ -1,0 +1,152 @@
+type: aws
+environment:
+  type: aws
+
+db_name: transferdb
+db_user: root
+db_password: secret
+db_schema: public
+
+dataplane_sa:
+  id: yc.data-transfer.agent
+  folder_id: yc.data-transfer.service
+assume_role_target: arn:aws:iam::867394682372:role/data-transfer-mdb-cp
+iam:
+  access_service: preprod.iam.internal.yadc.tech:4286
+  token_service: preprod.iam.internal.yadc.tech:4282
+  private_service: preprod.iam.internal.yadc.tech:4283
+mdb_service: preprod.mdb.internal.yadc.tech:443
+mdb_vpc_service: vpc.preprod.mdb.internal.yadc.tech:443
+cloud_creds:
+  type: service_account_key
+  id: yc.data-transfer.agent
+  service_account_id: yc.data-transfer.agent
+  key_algorithm: RSA_4096
+  private_key:
+    type: aws_secret_manager
+    secret_id: arn:aws:secretsmanager:eu-central-1:840525340941:secret:control-plane
+    key: sa_private_key
+  public_key: |
+    -----BEGIN PUBLIC KEY-----
+    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA9cSvRBYEEWopnhw8mrwM
+    ERtBxp8ukJ/nqTUGBR9u6+Boo+pHGY4C3xqFy1dyZxrAcl8eRekMdQEAHmFBo9tG
+    DuYTsO5u3WTdyQkFawLJ/RF3xQOjCSsJMiZrB4N94auHzdIXryzgsK13u3t+X3EA
+    bc+UMGd6Y+3BTmhZMqbDwGkAjufju0f1+R/oNj91Cwu5a4qDbCp4RqRJ3OTWeXEE
+    SZ+a8QIwqkNygrTes5g2SOFPowUbe5GaJmqGMKOR9ZyMUs7CS8Jjhd1/gxoimKoS
+    soT3/oyokwbljOtVeq7owc5ScAdkEhSqh3ZF2O91jU1gEoWZsdia0NTR2hfKR2cI
+    DxUM/Pk0VkZlnbna0J44tU39x/FiaLDZF4yurjs8dOyd/oVFta3gfipft+WoGQr+
+    +SylhfNSgqUu1a3rwsRmOQwJFiFzYnhMOToaQ2KOoM1crW3plQaR9sypWw8tG3gK
+    lxXKnwORHyMpOiX2odmjFiz50LgW07Kc7ruNjk864evQLMGi3LK3TW7eD/hLaqQx
+    rIg4xD99DjOlKU1CrugjrXtJ8cJjVFp+kJJiJ3qmvkjkbPbHc0vSfuo6kYOj4a64
+    O8hwYUVN8xBNkeIXqBr9TJl3d+yZ1Izm+EZHmDI5KEXGQdx03f6hN24x2VSQhDGV
+    G5mGTUfYGy3CBKq6e4rhTisCAwEAAQ==
+    -----END PUBLIC KEY-----
+key_id: 'arn:aws:kms:eu-central-1:840525340941:key/c4b45158-9287-4187-bcff-7ace91df54d2'
+ami_config:
+  instance_profile: data-transfer-mdb-dp
+  region_to_ami: # Dataplane EC2 AMI per-region
+    ap-northeast-1: ami-0e37cf3c46ceb50a6
+    ap-northeast-2: ami-0da0f7dd80a8e3f00
+    ap-northeast-3: ami-0e118b9baecff1d1c
+    ap-south-1: ami-01821392009f8b19f
+    ap-southeast-1: ami-0dcca38f125cf27f3
+    ap-southeast-2: ami-07e1076fba13804ea
+    ca-central-1: ami-047031eed206d251c
+    eu-central-1: ami-009288f3b708bb17f
+    eu-north-1: ami-022e403d440b95b93
+    eu-west-1: ami-0e3baebc0319ec8e0
+    eu-west-2: ami-03dc9dbd59b21f18b
+    eu-west-3: ami-093c1599ac69831d6
+    me-south-1: ami-07439796dcab53531
+    sa-east-1: ami-00e4ae0231e59cbae
+    us-east-1: ami-0ba25297cb72dc55d
+    us-east-2: ami-007be952d54c37388
+    us-west-2: ami-0c5df8193cf8bae9b
+dataplanes: # named list of kubeconfig-s
+  - name: data-transfer-dp-frankfurt-ipv6 # default data plane k8s cluster
+    region: 'eu-central-1'
+    secret: |
+      apiVersion: v1
+      preferences: {}
+      kind: Config
+
+      clusters:
+      - cluster:
+          server: https://66D27AAE164C19A874D59AFE2569313A.gr7.eu-central-1.eks.amazonaws.com
+          certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeU1UQXdOekV3TVRRME0xb1hEVE15TVRBd05ERXdNVFEwTTFvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTHpPCldmN3YwRHRodUhvc0xTc1JHeVA1cFVjbjNHOVlLSFZIY3RPeHU5RG1tbEVQbk15WVUvSmpRekltdUFrUWRYQm0KSmtHTnpyNmxqVm9BM0VTbkJrQXBnRHZNZjZESUdzRlNFbGlydUJJWU0wc3FXVGR5bXAzQUZuRWZpdTJVcjJkegpBWG91UlJmS1VHcmtDdDNKeUhwWk9XZGFyZkhwZm1KWHMvWmczclgyNy85ZlU4dFNXZUE1amcwU1dYYU85eUFDCmRlT09nNFEzeHlscE96VHpadXZJR2NTUG9QNUM0dzBFd2pCVXdDTythOXYvOFdNNFV6cFloSzRTeEMvSjQyUGkKcUdzcDJLYkpJTlNhSnZ6SnprZzVnR25DelQ5eTV0RmFVUUxEWlFyMUVHN2FHY0xCcHdXYlBoVEt4SGp1ZDlHcwpMZVhtcDN0bWl5SEtFYUpqWDdzQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZDWlRwNEVScGtmWlIwZzFiT2tnVGVRdEtIR0RNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBQmExZUdwOXdDV2p0SlMzN3o5VAo3aDJxOVFMbzRvbWtvUSt4c0lLSXNDS1MrbjZ4K2Q5SXFQRDJJVWJYNGxNeUhnbzU1MW50bFU1emdML3R0clp0Cld3WDY4S3FIR3BhcUtFYkN2UE1IWVdVa0diL05BNDE3OXFUeWFjbytFZy9VR0JrSm9nNGkzdGZwek0wRExOc0EKa2RBMHd3ZnB3U3BkMi9ibGRnUzVkMVdMa3RLaHl0Y2NJazZaTXdoTXROdHR0YlJvR2FlMXNNWEU3YTRseDhPYQphbDUzdDB1S0hjdVFaMmdTVzlzM1FacUM2Z3ZFNnUrNEVmYWZmRUxDazVzN2pxdUhPNUVkREpaQWVZc2x2dG5OCktJMFd6SWpVSlRZa0VXdFJiOE9IcjRIZWNGdjBkVDJMdEpDTllqSjZ5MGY2U0k2R0hhd3pWZlRsN1pFekxyS2kKOENRPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+        name: data-transfer-dp-frankfurt-ipv6
+
+      contexts:
+      - context:
+          cluster: data-transfer-dp-frankfurt-ipv6
+          user: data-transfer-dp-frankfurt-ipv6
+        name: data-transfer-dp-frankfurt-ipv6
+
+      current-context: data-transfer-dp-frankfurt-ipv6
+
+      users:
+      - name: data-transfer-dp-frankfurt-ipv6
+        user:
+          exec:
+            apiVersion: client.authentication.k8s.io/v1
+            command: aws
+            args:
+              - --region
+              - eu-central-1
+              - eks
+              - get-token
+              - --cluster-name
+              - "data-transfer-dp-frankfurt-ipv6"
+            interactiveMode: IfAvailable
+
+data_plane_config_variable_name: DATA_PLANE_CONFIG_RESOURCE
+data_plane_config_variable_value: aws_preprod.yaml
+dataplane_spec_s3_bucket: "double-cloud-data-transfer-preprod-specs"
+
+dataplane_image_k8s_image:
+  type: environment_variable
+  variable_name: DATA_PLANE_K8S_IMAGE
+
+notifications_api: 'https://notify.preprod.ui.internal.yadc.tech/v1/send'
+
+# AWS-managed prometheus
+amp_region: eu-central-1
+amp_url: 'https://aps-workspaces.eu-central-1.amazonaws.com/workspaces/ws-195f8815-a36f-445e-aa51-7c9dd93e43b2/api/v1' #preprod
+amp_assume_role_target: 'arn:aws:iam::840525340941:role/cp-prom-reader'
+
+clusters_cp_account_id: '118027436691'
+cp_account_id: '840525340941'
+dp_account_id: '867394682372'
+
+teleport:
+  type: enabled
+  telepass_url: http://telepass.telepass:80/token
+  proxy: doublecloud.teleport.sh:443
+  labels:
+    Infra: preprod
+    Team: data-transfer
+    Plane: data
+    Type: transfer
+
+gcp:
+  byoa_common_account: 'controlplane-preprod@byoa-doublecloud.iam.gserviceaccount.com'
+  image_id: 'projects/mdb-dp-preprod/global/images/dc-gcp-amd64-dt-20231117092546'
+  project_id: 'mdb-dp-preprod'
+  service_account: 'common-dt-dp-sa@mdb-dp-preprod.iam.gserviceaccount.com'
+  creds: |
+    {
+      "type": "external_account",
+      "audience": "//iam.googleapis.com/projects/191556392698/locations/global/workloadIdentityPools/mdb-dt/providers/dt-aws-840525340941",
+      "subject_token_type": "urn:ietf:params:aws:token-type:aws4_request",
+      "token_url": "https://sts.googleapis.com/v1/token",
+      "credential_source": {
+        "environment_id": "aws1",
+        "region_url": "http://169.254.169.254/latest/meta-data/placement/availability-zone",
+        "url": "http://169.254.169.254/latest/meta-data/iam/security-credentials",
+        "regional_cred_verification_url": "https://sts.{region}.amazonaws.com?Action=GetCallerIdentity&Version=2011-06-15"
+      },
+      "service_account_impersonation_url": "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/common-dt-dp-sa@mdb-dp-preprod.iam.gserviceaccount.com:generateAccessToken",
+      "service_account_impersonation": {
+        "token_lifetime_seconds": 3600
+      }
+    }

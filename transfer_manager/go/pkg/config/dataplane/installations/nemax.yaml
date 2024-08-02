@@ -1,0 +1,45 @@
+type: external_cloud
+
+# Common
+environment:
+  type: nebius
+control_plane_api:
+  endpoint: datatransfer.private-api.nemax.nebiuscloud.net:443
+  plaintext: false
+log:
+  type: logbroker
+  endpoint: lb.logbroker-shared.ydb.nemax.nebiuscloud.net:2135
+  creds:
+    type: use_cloud_creds
+  database: /nemax_global/yc.data-transfer/c3f2g6ibhkin2i05re3a
+  topic: /nemax_global/yc.data-transfer/c3f2g6ibhkin2i05re3a/data-plane-log
+  tls_mode:
+    type: enabled
+    ca_certificate_paths:
+      - /usr/local/share/ca-certificates/NemaxInternalRootCA.crt
+  use_topic_api: true
+profiler:
+  type: disabled
+pg_dump_command: ["/usr/bin/pg_dump"]
+clickhouse_local: "clickhouse"
+metering:
+  type: disabled
+
+# Cloud
+cloud_creds:
+  type: instance_metadata
+root_cert_paths:
+  - /usr/local/share/ca-certificates/NemaxInternalRootCA.crt
+mdb_api_url_base: https://mdb.api.nemax.nebius.cloud
+cloud_api_endpoint: api.nemax.nebius.cloud:443
+
+# External cloud
+service_cloud_id: yc.data-transfer
+service_folder_id: yc.data-transfer.dp
+solomon_url: https://solomon.nemax.nebiuscloud.net
+cloud_functions_base_url: ""
+kms_key_id: cqfngimhi1etsvgsrj5u
+kms_discovery_endpoint: dpl.kms.private-api.nemax.nebiuscloud.net:8443
+yds_serverless_endpoint: ""
+metrika:
+  type: disabled

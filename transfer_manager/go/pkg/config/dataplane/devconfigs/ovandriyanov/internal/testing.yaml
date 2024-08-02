@@ -1,0 +1,65 @@
+type: internal_cloud
+
+# Common
+environment:
+  type: internal
+control_plane_api:
+  endpoint: ovandriyanov.sas.yp-c.yandex.net:8443
+  plaintext: false
+log:
+  type: stdout
+profiler:
+  type: disabled
+pg_dump_command: ["pg_dump"]
+clickhouse_local: "clickhouse"
+metering:
+  type: disabled
+
+# Cloud
+cloud_creds:
+  type: passport_oauth_token
+  token:
+    type: environment_variable
+    variable_name: YT_SECURE_VAULT_robot_mdb_token
+root_cert_paths:
+  - /usr/local/share/ca-certificates/YandexInternalRootCA.crt
+mdb_api_url_base: https://gw.db.yandex-team.ru/
+cloud_api_endpoint: gw.db.yandex-team.ru:443
+iam_api_url_base: https://gw.db.yandex-team.ru:443/iam/v1/
+logbroker_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_log_lb_token
+
+# Internal cloud
+solomon_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_solomon_token
+ydb_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_ydb_token
+yt_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_yt_token
+dataplane_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_dp_token
+logfeller_yt_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_logfeller_yt_token
+logfeller_nirvactor_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_logfeller_nirvactor_token
+logfeller_logbroker_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_logfeller_logbroker_token
+logfeller_lf_describer_logbroker_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_logfeller_describer_logbroker_token
+mdb_token:
+  type: environment_variable
+  variable_name: YT_SECURE_VAULT_robot_mdb_token
+solomon_cluster: rtc-testing
+yt_proxy: vanga
+ydb_instance: ydb-ru-prestable.yandex.net:2135
+ydb_tracker_database: /ru-prestable/home/tserakhau/mydb
+udf_dir: ./

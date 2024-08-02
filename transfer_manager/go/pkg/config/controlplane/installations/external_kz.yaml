@@ -1,0 +1,133 @@
+type: external_cloud
+
+# Common
+environment:
+  type: yc
+db_discovery:
+  type: mdb
+  cluster_id: a0d5t9ego1lhcuc3qf37
+db_user: db_user
+db_password:
+  type: kms
+  ciphertext: !!binary |
+    AAAAAQAAABRhcGRub2dzZDQ4ZTNsOWQ1aDR2cQAAABA/zigXordw9bK/bpcHQB2TAAAADHPIZl8d
+    49TWBQsDtL3QDn8Zrpm1gkYCji/w/pMg62icmaU1xSC5XLbwVbeL
+db_name: db
+db_schema: public
+disable_dataplane: false
+grpc_port: 8787
+public_grpc_port: 9797
+rest_port: 80
+exported_metrics_http_port: 9092
+profiler:
+  type: disabled
+log:
+  type: logbroker
+  endpoint: lb.ahid59uhdmk1n56tdq09.ydb.yacloudkz.tech
+  creds:
+    type: use_cloud_creds
+  database: /kz_global/yc.data-transfer/ahin5nt05f2jscbpc9qj
+  topic: /kz_global/yc.data-transfer/ahin5nt05f2jscbpc9qj/control-plane-log
+  tls_mode:
+    type: enabled
+    ca_certificate_paths:
+      - /usr/local/share/ca-certificates/YCKZInternalRootCA.crt
+  use_topic_api: false
+skip_auth: false
+push_metrics: true
+dataplane_version:
+  type: from_database
+# TODO: fix alert IDs
+health_providers:
+  - type: solomon
+    alert_id: b1g9jhnga9ji23ii4dks_dta_02_no_items_in_memory
+    name: dta_02_no_items_in_memory
+  - type: solomon
+    alert_id: b1g9jhnga9ji23ii4dks_dta_03_transfer_time_sound
+    name: dta_03_transfer_time_sound
+  - type: solomon
+    alert_id: b1g9jhnga9ji23ii4dks_dta_04_row_max_lag_constant
+    name: dta_04_row_max_lag_constant
+  - type: solomon
+    alert_id: b1g9jhnga9ji23ii4dks_dta_05_replication_restarts
+    name: dta_05_replication_restarts
+  - type: status_message
+  - type: operation_status
+metrics_provider:
+  type: solomon
+
+# Cloud
+cloud_creds:
+  type: instance_metadata
+console_hostname: kz.console.yandex.cloud
+ydb_logs_instance: lb.ahiosvv2p1l5pvr31el1.ydb.yacloudkz.tech:2135
+ydb_logs_database: /kz_global/yc.data-transfer/ahiosvv2p1l5pvr31el1
+root_cert_paths:
+  - /usr/local/share/ca-certificates/YCKZInternalRootCA.crt
+ydb_dataplane_log_dir: /kz_global/yc.data-transfer/ahiosvv2p1l5pvr31el1/log/dataplane
+mdb_api_url_base: https://mdb.api.yandexcloud.kz/
+iam_api_url_base: https://UNUSED
+cloud_api_endpoint: api.yandexcloud.kz:443
+iam_access_service_endpoint: as.private-api.yacloudkz.tech:14286
+events:
+  type: audit_trails
+serverless_runtime_kubeconfig: UNUSED
+search:
+  type: disabled
+s3_endpoint: https://storage.yandexcloud.kz
+s3_region: kz1
+
+# External cloud
+solomon_url: https://solomon.yacloudkz.tech
+service_account_id: yc.datatransfer.dt
+service_cloud_id: yc.data-transfer
+service_folder_id: ao7p33vbaatr5ar4ls8b # Data plane
+kms_key_id: apdtc557a3tm4ku59v5p
+kms_discovery_endpoint: dpl.kms.private-api.yacloudkz.tech:8443
+net_id: dbp3slie4lkfnvdtijje
+transfer_dashboard_id: biirkhmb694ph4irfuln
+yds_serverless_endpoint: lb.ahid59uhdmk1n56tdq09.ydb.yacloudkz.tech # https://logbroker.yandex-team.ru/docs/concepts/clusters_and_installations#installations
+is_prod: true
+
+data_plane_vm_users:
+  ssh_key: cert-authority ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAFxDHbZHZCx72sztvWsFSJVUhW+fngANgR5iiIWy9gicOdjYOy0pxpb1U8PqWmJYJYOWLwtfm/f9qnSV3Q/wAX/igCAwdYuwsWtx/0eBp2G3ECIUJzEQRme+TrtECpJHyLFCJonE/Cg24JlQ8N6mVjrQZwLiVjCdVwRFGoXxb3F1N4SHg== bastion
+  users:
+    - svemarch
+    - marufkaraev
+    - ovandriyanov
+    - kateleb
+    - wiftwift
+    - unikoid
+    - timmyb32r
+    - booec
+    - denisevdkmv
+    - kosovgrigorii
+    - kry127
+    - daniilmarukh
+
+data_plane_config_variable_name: DATA_PLANE_CONFIG_RESOURCE
+data_plane_config_variable_value: external_kz.yaml
+
+dataplane_image_k8s_image:
+  type: metadata
+  user_data_field: dataplane_image_k8s_image
+data_plane_compute_platform_id: standard-v3
+ntp_servers: kz01.einebox.net
+fallback_ntp: ru.pool.ntp.org
+metrika_api_config: # Metrika source is disabled in KZ grants
+  endpoint: UNUSED
+  tvm_metrika_id: 0
+  tvm_self_id: 0
+  tvm_secret:
+    type: empty
+
+iam_token_service_endpoint: ts.private-api.yacloudkz.tech:14282
+instance_service_endpoint: compute.private-api.yacloudkz.tech:19051
+fine_grained_ssa:
+  certificate_path: /usr/local/share/certificates/compute-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-certificate.crt
+  service_id: data-transfer
+  microservice_id: internal-api
+  control_plane_sa_key_secret_id: ap2mqm8clfam1k6gg0bb
+  data_plane_service_accounts:
+    instance_group_sa_id: yc.datatransfer.dataplane-ig
+    instance_sa_id: yc.datatransfer.dataplane

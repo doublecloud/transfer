@@ -1,6 +1,8 @@
 package events
 
 import (
+	"encoding/binary"
+
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
@@ -109,6 +111,14 @@ func (b *insertsBatch) Next() bool {
 		return true
 	}
 	return false
+}
+
+func (b *insertsBatch) Count() int {
+	return len(b.cols[0].values)
+}
+
+func (b *insertsBatch) Size() int {
+	return binary.Size(b.cols)
 }
 
 type insertBatchEvent struct {
