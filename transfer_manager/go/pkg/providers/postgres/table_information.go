@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgtype/pgxtype"
 )
 
 type tableInformationSchema struct {
@@ -17,7 +17,7 @@ type tableInformationSchema struct {
 	ParentTable   string
 }
 
-func newTableInformationSchema(ctx context.Context, conn *pgxpool.Conn, table abstract.TableDescription) (*tableInformationSchema, error) {
+func newTableInformationSchema(ctx context.Context, conn pgxtype.Querier, table abstract.TableDescription) (*tableInformationSchema, error) {
 	var relkind string
 	var hasSubClass bool
 	var isInherited bool

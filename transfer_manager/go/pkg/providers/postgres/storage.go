@@ -32,6 +32,8 @@ const (
 	SortDesc SortOrder = "desc"
 
 	All DuplicatesPolicy = "all"
+
+	PartitionsFilterPrefix = "__dt_resolved_hard:"
 )
 
 type SnapshotKey string
@@ -62,6 +64,10 @@ type Storage struct {
 	ShardedStateTS      time.Time
 	loadDescending      bool
 	sExTime             time.Time
+}
+
+func (s *Storage) SetLoadDescending(loadDescending bool) {
+	s.loadDescending = loadDescending
 }
 
 func (s *Storage) SnapshotLSN() string {
@@ -119,6 +125,9 @@ func isFilterEmpty(filter abstract.WhereStatement) bool {
 }
 
 func WhereClause(filter abstract.WhereStatement) string {
+	if partitionFilterTable(filter) != "" {
+		return "1 = 1"
+	}
 	if !isFilterEmpty(filter) {
 		return string(filter)
 	}
@@ -126,12 +135,26 @@ func WhereClause(filter abstract.WhereStatement) string {
 	return "1 = 1"
 }
 
+func partitionFilterTable(filter abstract.WhereStatement) string {
+	if strings.HasPrefix(string(filter), PartitionsFilterPrefix) {
+		return strings.ReplaceAll(string(filter), PartitionsFilterPrefix, "")
+	}
+	return ""
+}
+
 func exactCountQuery(t *abstract.TableDescription) string {
-	return fmt.Sprintf("select count(1) from %s where %s", t.Fqtn(), WhereClause(t.Filter))
+	return fmt.Sprintf("select count(1) from %s where %s", TableName(t), WhereClause(t.Filter))
+}
+
+func TableName(t *abstract.TableDescription) string {
+	if partitionFilterTable(t.Filter) != "" {
+		return partitionFilterTable(t.Filter)
+	}
+	return t.Fqtn()
 }
 
 func ReadQuery(t *abstract.TableDescription, columns string) string {
-	return fmt.Sprintf("select %s from %s where %s", columns, t.Fqtn(), WhereClause(t.Filter))
+	return fmt.Sprintf("select %s from %s where %s", columns, TableName(t), WhereClause(t.Filter))
 }
 
 func checkAccessibilityQuery(t *abstract.TableDescription) string {
@@ -179,9 +202,9 @@ const (
 
 func makeFromStatement(t *abstract.TableDescription, excludeDescendants bool) string {
 	if excludeDescendants {
-		return fmt.Sprintf("only %v", t.Fqtn())
+		return fmt.Sprintf("only %v", TableName(t))
 	}
-	return t.Fqtn()
+	return TableName(t)
 }
 
 func (s *Storage) OrderedRead(
@@ -515,7 +538,7 @@ func (m *loadTableMode) SkipLoading() (skip bool, reason string) {
 	return skip, reason
 }
 
-func (s *Storage) discoverTableLoadMode(ctx context.Context, conn *pgxpool.Conn, table abstract.TableDescription) (*loadTableMode, error) {
+func (s *Storage) discoverTableLoadMode(ctx context.Context, conn pgxtype.Querier, table abstract.TableDescription) (*loadTableMode, error) {
 	tableInfo, err := newTableInformationSchema(ctx, conn, table)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to discover table information: %w", err)
