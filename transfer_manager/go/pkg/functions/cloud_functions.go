@@ -48,7 +48,7 @@ const (
 
 type Record struct {
 	CDC               *CDCPayload   `json:"cdc"`
-	CDCSplitted       []CDCPayload  `json:"cdc_splitted"`
+	CDCSplit          []CDCPayload  `json:"cdc_split"`
 	YDS               *YDSPayload   `json:"kinesis"` // maybe YDS?
 	Result            ProcessResult `json:"result"`
 	EventSource       EventSource   `json:"eventSource"`
@@ -88,7 +88,7 @@ func (e *Executor) Do(data []abstract.ChangeItem) ([]abstract.ChangeItem, error)
 		for i, r := range data {
 			reqData.Records[i] = Record{
 				CDC:               &CDCPayload{ChangeItem: r},
-				CDCSplitted:       nil,
+				CDCSplit:          nil,
 				YDS:               nil,
 				Result:            "",
 				EventSource:       CDC,
@@ -108,8 +108,8 @@ func (e *Executor) Do(data []abstract.ChangeItem) ([]abstract.ChangeItem, error)
 				return nil, xerrors.Errorf("unable to get raw message: %w", err)
 			}
 			reqData.Records[i] = Record{
-				CDC:         nil,
-				CDCSplitted: nil,
+				CDC:      nil,
+				CDCSplit: nil,
 				YDS: &YDSPayload{
 					PartitionKey: fmt.Sprintf("%v-%v", r.ColumnValues[0], r.ColumnValues[1]),
 					Data:         base64.StdEncoding.EncodeToString(rawData),
@@ -264,7 +264,7 @@ func (e *Executor) Do(data []abstract.ChangeItem) ([]abstract.ChangeItem, error)
 		case CDC:
 			switch r.Result {
 			case Split:
-				for _, split := range r.CDCSplitted {
+				for _, split := range r.CDCSplit {
 					processed = append(processed, split.ChangeItem)
 				}
 			case OK:
