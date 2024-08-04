@@ -2,7 +2,6 @@ package async
 
 import (
 	"fmt"
-	"sync"
 	"time"
 
 	"github.com/doublecloud/tross/library/go/core/log"
@@ -37,13 +36,10 @@ func (m *measurer) Close() error {
 const measurerMinimumLogDuration time.Duration = time.Second
 
 func (m *measurer) AsyncPush(items []abstract.ChangeItem) chan error {
-	var wg sync.WaitGroup
 	start := time.Now()
 	for i := range items {
-		wg.Add(1)
-		go m.measureItemSize(&items[i], &wg)
+		items[i].Size.Values = util.DeepSizeof(items[i].ColumnValues)
 	}
-	wg.Wait()
 	if elapsed := time.Since(start); elapsed > measurerMinimumLogDuration {
 		var totalValuesSize uint64
 		var totalReadSize uint64
@@ -61,9 +57,4 @@ func (m *measurer) AsyncPush(items []abstract.ChangeItem) chan error {
 		)
 	}
 	return m.sink.AsyncPush(items)
-}
-
-func (m *measurer) measureItemSize(item *abstract.ChangeItem, wg *sync.WaitGroup) {
-	item.Size.Values = util.DeepSizeof(item.ColumnValues)
-	wg.Done()
 }
