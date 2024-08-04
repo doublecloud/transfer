@@ -52,7 +52,7 @@ func (s *Storage) GetIncrementalState(ctx context.Context, incremental []abstrac
 		if err := tx.QueryRow(
 			ctx,
 			fmt.Sprintf(
-				`select max("%s") from "%s"."%s"`,
+				`select "%s" from "%s"."%s" order by "%[1]s" desc limit 1`,
 				table.CursorField,
 				table.Namespace,
 				table.Name,
