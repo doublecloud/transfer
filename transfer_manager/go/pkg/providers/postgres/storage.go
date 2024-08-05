@@ -15,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/dblog/tablequery"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgtype"
@@ -662,51 +663,9 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	readQuery := s.OrderedRead(&table, schema.Columns(), SortAsc, abstract.NoFilter, All, excludeDescendants)
 	logger.Log.Info("SELECT query at source formed", log.String("table", table.String()), log.String("query", readQuery))
 
-	params := readQueryParams(s.Config.UseBinarySerialization, len(schema.Columns()))
-	rows, err := tx.Query(ctx, readQuery, params...)
-	if err != nil {
-		return xerrors.Errorf("failed to execute SELECT: %w", err)
+	if err := s.loadTable(ctx, table, pusher, readQuery, tx.Conn(), loadMode, schema, currentTS); err != nil {
+		return xerrors.Errorf("unable to load table : %w", err)
 	}
-	defer rows.Close()
-
-	ciFetcher := NewChangeItemsFetcher(rows, tx.Conn(), abstract.ChangeItem{
-		ID:           uint32(0),
-		LSN:          0,
-		CommitTime:   uint64(currentTS.UnixNano()),
-		Counter:      0,
-		Kind:         abstract.InsertKind,
-		Schema:       table.Schema,
-		Table:        table.Name,
-		PartID:       table.PartID(),
-		ColumnNames:  schema.Columns().ColumnNames(),
-		ColumnValues: nil,
-		TableSchema:  schema,
-		OldKeys:      abstract.EmptyOldKeys(),
-		TxID:         "",
-		Query:        "",
-		Size:         abstract.EmptyEventSize(),
-	}, s.metrics).WithUnmarshallerData(MakeUnmarshallerData(s.IsHomo, tx.Conn()))
-
-	totalRowsRead := uint64(0)
-	defer func() {
-		logger.Log.Info(fmt.Sprintf("In total, %d rows were read from table", totalRowsRead), log.String("table", table.String()))
-	}()
-
-	logger.Log.Info("extracting data from the source table...", log.String("fqtn", table.Fqtn()))
-	for ciFetcher.MaybeHasMore() {
-		items, err := ciFetcher.Fetch()
-		if err != nil {
-			return xerrors.Errorf("failed to extract data from the table %s: %w", table.Fqtn(), err)
-		}
-		if len(items) > 0 {
-			totalRowsRead += uint64(len(items))
-			s.metrics.ChangeItems.Add(int64(len(items)))
-			if err := pusher(items); err != nil {
-				return xerrors.Errorf("failed to push %d ChangeItems. Error: %w", len(items), err)
-			}
-		}
-	}
-	logger.Log.Info("successfully extracted data from the source table", log.String("fqtn", table.Fqtn()))
 
 	if err := tx.Commit(ctx); err != nil {
 		return xerrors.Errorf("failed to commit transaction: %w", err)
@@ -1193,6 +1152,186 @@ func (s *Storage) BuildTypeMapping(ctx context.Context) (TypeNameToOIDMap, error
 	}
 
 	return typeMap, nil
+}
+
+func (s *Storage) LoadQueryTable(ctx context.Context, tableQuery tablequery.TableQuery, pusher abstract.Pusher) error {
+	conn, err := s.Conn.Acquire(ctx)
+	if err != nil {
+		return xerrors.Errorf("failed to acquire a connection from the pool: %w", err)
+	}
+	defer conn.Release()
+
+	tableDescription := abstract.TableDescription{
+		Name:   tableQuery.TableID.Name,
+		Schema: tableQuery.TableID.Namespace,
+		EtaRow: 0,
+		Filter: "",
+		Offset: 0,
+	}
+
+	loadMode, err := s.discoverTableLoadMode(ctx, conn, tableDescription)
+	if err != nil {
+		return xerrors.Errorf("failed to discover table %v loading mode: %w", tableDescription.Fqtn(), err)
+	}
+
+	excludeDescendants, reason := loadMode.ExcludeDescendants()
+	if excludeDescendants {
+		logger.Log.Infof("Use ONLY statement for selecting from table %v: %v", tableDescription.Fqtn(), reason)
+	}
+
+	schema, err := s.LoadSchemaForTable(ctx, conn.Conn(), tableDescription)
+	if err != nil {
+		return xerrors.Errorf("failed to get schema for table %s: %w", tableQuery.TableID.Fqtn(), err)
+	}
+
+	query := s.queryFromQueryTable(&tableQuery, schema, SortAsc, abstract.NoFilter, All, excludeDescendants)
+
+	if err = s.loadTable(ctx, tableDescription, pusher, query, conn.Conn(), loadMode, schema, time.Now()); err != nil {
+		return xerrors.Errorf("unable to load table : %w", err)
+	}
+
+	return nil
+}
+
+func (s *Storage) queryFromQueryTable(
+	tableQuery *tablequery.TableQuery,
+	tableSchema *abstract.TableSchema,
+	sortOrder SortOrder,
+	filter abstract.WhereStatement,
+	duplicatesPolicy DuplicatesPolicy,
+	excludeDescendants bool,
+) string {
+	var fromStatement string
+
+	if excludeDescendants {
+		fromStatement = fmt.Sprintf("only %v", tableQuery.TableID.Fqtn())
+	} else {
+		fromStatement = tableQuery.TableID.Fqtn()
+	}
+
+	keyCols := make([]string, 0)
+	cols := make([]string, 0)
+
+	for _, col := range tableSchema.Columns() {
+		if s.Config.IgnoreUserTypes {
+			if IsUserDefinedType(&col) {
+				continue
+			}
+		}
+		if col.PrimaryKey && col.ColumnName != "" {
+			keyCols = append(keyCols, fmt.Sprintf("\"%v\"", col.ColumnName))
+		}
+		if col.OriginalType == "pg:hstore" && !s.IsHomo {
+			cols = append(cols, fmt.Sprintf("\"%v\"::json", col.ColumnName))
+		} else {
+			cols = append(cols, fmt.Sprintf("\"%v\"", col.ColumnName))
+		}
+	}
+
+	if len(keyCols) == 0 {
+		return fmt.Sprintf("select * from %s where %s", tableQuery.TableID.Fqtn(), WhereClause(tableQuery.Filter))
+	}
+
+	q := fmt.Sprintf(
+		"select %v %v from %s where (%s) and (%s)",
+		duplicatesPolicy,
+		strings.Join(cols, ","),
+		fromStatement,
+		WhereClause(tableQuery.Filter),
+		WhereClause(filter),
+	)
+	if tableQuery.Offset != 0 || tableQuery.SortByPKeys {
+		if tableQuery.Offset != 0 {
+			q += fmt.Sprintf(
+				" order by %s %s  OFFSET %v",
+				strings.Join(keyCols, ","),
+				sortOrder,
+				tableQuery.Offset,
+			)
+		} else {
+			q += fmt.Sprintf(
+				" order by %s %s",
+				strings.Join(keyCols, ","),
+				sortOrder,
+			)
+		}
+	}
+	if tableQuery.Limit != 0 {
+		q += fmt.Sprintf(
+			" LIMIT %v",
+			tableQuery.Limit)
+	}
+
+	return q
+}
+
+func (s *Storage) loadTable(
+	ctx context.Context,
+	table abstract.TableDescription,
+	pusher abstract.Pusher,
+	readQuery string,
+	conn *pgx.Conn,
+	loadMode *loadTableMode,
+	schema *abstract.TableSchema,
+	startTime time.Time,
+) error {
+
+	if skip, reason := loadMode.SkipLoading(); skip {
+		logger.Log.Infof("Skip load table %v: %v", table.Fqtn(), reason)
+		return nil
+	}
+
+	if _, err := conn.Exec(ctx, MakeSetSQL("statement_timeout", "0")); err != nil {
+		return xerrors.Errorf("failed to SET statement_timeout: %w", err)
+	}
+
+	params := readQueryParams(s.Config.UseBinarySerialization, len(schema.Columns()))
+	rows, err := conn.Query(ctx, readQuery, params...)
+	if err != nil {
+		return xerrors.Errorf("failed to execute SELECT: %w", err)
+	}
+	defer rows.Close()
+
+	ciFetcher := NewChangeItemsFetcher(rows, conn, abstract.ChangeItem{
+		ID:           uint32(0),
+		LSN:          0,
+		CommitTime:   uint64(startTime.UnixNano()),
+		Counter:      0,
+		Kind:         abstract.InsertKind,
+		Schema:       table.Schema,
+		Table:        table.Name,
+		PartID:       table.PartID(),
+		ColumnNames:  schema.Columns().ColumnNames(),
+		ColumnValues: nil,
+		TableSchema:  schema,
+		OldKeys:      abstract.EmptyOldKeys(),
+		TxID:         "",
+		Query:        "",
+		Size:         abstract.EmptyEventSize(),
+	}, s.metrics).WithUnmarshallerData(MakeUnmarshallerData(s.IsHomo, conn))
+
+	totalRowsRead := uint64(0)
+	defer func() {
+		logger.Log.Info(fmt.Sprintf("In total, %d rows were read from table", totalRowsRead), log.String("table", table.String()))
+	}()
+
+	logger.Log.Info("extracting data from the source table...", log.String("fqtn", table.Fqtn()))
+	for ciFetcher.MaybeHasMore() {
+		items, err := ciFetcher.Fetch()
+		if err != nil {
+			return xerrors.Errorf("failed to extract data from the table %s: %w", table.Fqtn(), err)
+		}
+		if len(items) > 0 {
+			totalRowsRead += uint64(len(items))
+			s.metrics.ChangeItems.Add(int64(len(items)))
+			if err := pusher(items); err != nil {
+				return xerrors.Errorf("failed to push %d ChangeItems. Error: %w", len(items), err)
+			}
+		}
+	}
+	logger.Log.Info("successfully extracted data from the source table", log.String("fqtn", table.Fqtn()))
+
+	return nil
 }
 
 func NewStorage(config *PgStorageParams, opts ...StorageOpt) (*Storage, error) {
