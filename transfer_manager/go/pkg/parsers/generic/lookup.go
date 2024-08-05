@@ -1,10 +1,10 @@
 package generic
 
 import (
-	"encoding/json"
 	"strings"
 
 	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/goccy/go-json"
 )
 
 func lookupComplex(obj interface{}, path string) (interface{}, error) {

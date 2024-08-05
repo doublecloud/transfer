@@ -514,12 +514,13 @@ func BenchmarkGenericParser(b *testing.B) {
 
 func BenchmarkGenericParser_Do(b *testing.B) {
 	for _, testCase := range []string{
+		samples.JSONSample,      // json
 		samples.MetrikaSample,   // tskv
 		samples.TaxiSample,      // tskv
 		samples.SensitiveSample, // logfeller
 		samples.KikimrSample,    // logfeller
 	} {
-		for _, size := range []int{1, 5, 10} {
+		for _, size := range []int{1} {
 			b.Run(fmt.Sprint(testCase, "/", size), func(b *testing.B) {
 				parser, err := parsers.NewParserFromMap(ParserConfigMap(testCase), false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
 				require.NoError(b, err)
@@ -534,7 +535,7 @@ func BenchmarkGenericParser_Do(b *testing.B) {
 					r := parser.Do(d, abstract.Partition{})
 					require.True(b, len(r) > 0)
 				}
-				b.SetBytes(int64(len(d.Data) * b.N))
+				b.SetBytes(int64(len(d.Data)))
 				b.ReportAllocs()
 			})
 		}

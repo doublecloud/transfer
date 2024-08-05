@@ -6,7 +6,6 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/binary"
-	"encoding/json"
 	"fmt"
 	"math"
 	"strconv"
@@ -23,7 +22,9 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
+	"github.com/goccy/go-json"
 	"github.com/valyala/fastjson"
+	"github.com/valyala/fastjson/fastfloat"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/yson"
 	"golang.org/x/sync/semaphore"
@@ -393,7 +394,7 @@ func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, lin
 
 	if p.auxOpts.AddDedupeKeys {
 		changeItem.ColumnValues[TimestampIDX(p.columns)] = tsCol
-		changeItem.ColumnValues[PartitionIDX(p.columns)] = partition.String()
+		changeItem.ColumnValues[PartitionIDX(p.columns)] = changeItem.PartID
 		changeItem.ColumnValues[OffsetIDX(p.columns)] = msg.Offset
 		changeItem.ColumnValues[ElemIDX(p.columns)] = uint32(idx)
 	}
@@ -918,7 +919,7 @@ func (p *GenericParser) ParseVal(v interface{}, typ string) (interface{}, error)
 	if vv, ok := v.(json.Number); ok {
 		switch schema.Type(typ) {
 		case schema.TypeFloat64:
-			result, err := vv.Float64()
+			result, err := fastfloat.Parse(vv.String())
 			if err != nil {
 				return nil, xerrors.Errorf("unable to parse float64 %v:, err: %w", vv, err)
 			}
@@ -976,7 +977,7 @@ func (p *GenericParser) ParseVal(v interface{}, typ string) (interface{}, error)
 		case schema.TypeAny:
 			return vv, nil
 		default:
-			result, err := vv.Float64()
+			result, err := fastfloat.Parse(vv.String())
 			if err != nil {
 				return nil, xerrors.Errorf("unable to parse float64 %v:, err: %w", vv, err)
 			}
