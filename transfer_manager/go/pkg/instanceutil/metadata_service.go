@@ -15,6 +15,7 @@ type GoogleCEMetaDataParam string
 
 const (
 	GoogleAllParams         = GoogleCEMetaDataParam("")
+	GoogleIdentityRSA       = GoogleCEMetaDataParam("vendor/identity/rsa")
 	GoogleAttributes        = GoogleCEMetaDataParam("attributes/")
 	GoogleUserData          = GoogleCEMetaDataParam("attributes/user-data")
 	GoogleSSHKeys           = GoogleCEMetaDataParam("attributes/ssh-keys")
@@ -42,6 +43,10 @@ func GetGoogleCEUserData(out interface{}) error {
 		return xerrors.Errorf("cannot get user data: %w", err)
 	}
 	return yaml.Unmarshal([]byte(value), out)
+}
+
+func GetIdentityDocument() (string, error) {
+	return GetGoogleCEMetaData(GoogleIdentityRSA, false)
 }
 
 func makeGoogleMetadataRequest(param GoogleCEMetaDataParam, recursive bool) (*http.Request, error) {
