@@ -147,11 +147,12 @@ metrika_api_config:
       AAAAAQAAABRlMTBrN2Jndm1xcGh2YnVja2NxYgAAABCD9bsphJMKF3bjK7X5DiHBAAAADF/mVtsY/aEm3mBEaR5ApOQf9QU7ZdIrfEae6PgfAQNaFRyK1fGAAcVPxueHUC8F6FYObg==
 
 iam_token_service_endpoint: ts.private-api.cloud-preprod.yandex.net:4282
-instance_service_endpoint: compute-api.private-api.compute.cloud-preprod.yandex.net:9051
+instance_service_endpoint: compute-api.cloud-preprod.yandex.net:9051
+lockbox_payload_service_endpoint: payload.lockbox.cloud-preprod.yandex.net:8443
 fine_grained_ssa:
-  certificate_path: /usr/local/share/certificates/compute-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-certificate.crt
+  certificate_path: /usr/local/share/certificates/compute-preprod-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-preprod-certificate.crt
   service_id: data-transfer
-  microservice_id: internal-api
+  microservice_id: data-plane
   control_plane_sa_key_secret_id: fc3p1ddvsqcji6hf6lip
   data_plane_service_accounts:
     instance_group_sa_id: yc.datatransfer.dataplane-ig

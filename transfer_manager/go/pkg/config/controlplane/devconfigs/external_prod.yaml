@@ -143,11 +143,12 @@ ntp_servers: ntp1.yandex.net ntp2.yandex.net ntp3.yandex.net ntp4.yandex.net
 fallback_ntp: ru.pool.ntp.org
 
 iam_token_service_endpoint: ts.private-api.cloud.yandex.net:4282
-instance_service_endpoint: compute-api.private-api.compute.cloud.yandex.net:9051
+instance_service_endpoint: compute-api.cloud.yandex.net:9051
+lockbox_payload_service_endpoint: payload.lockbox.cloud.yandex.net:8443
 fine_grained_ssa:
-  certificate_path: /usr/local/share/certificates/compute-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-certificate.crt
+  certificate_path: /usr/local/share/certificates/compute-prod-certificate.crt # transfer_manager/ci/teamcity/build_docker_image/control-plane/compute-prod-certificate.crt
   service_id: data-transfer
-  microservice_id: internal-api
+  microservice_id: data-plane
   control_plane_sa_key_secret_id: e6qthg2cplhdepndip5o
   data_plane_service_accounts:
     instance_group_sa_id: yc.datatransfer.dataplane-ig

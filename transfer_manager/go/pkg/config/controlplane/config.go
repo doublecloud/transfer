@@ -129,6 +129,7 @@ type ExternalCloudConfig struct {
 	FineGrainedSSA             config.FineGrainedSSA   `mapstructure:"fine_grained_ssa"`
 	IAMTokenServiceEndpoint    string                  `mapstructure:"iam_token_service_endpoint"`
 	InstanceServiceEndpoint    string                  `mapstructure:"instance_service_endpoint"`
+	PayloadServiceEndpoint     string                  `mapstructure:"lockbox_payload_service_endpoint"`
 }
 
 type InternalCloudConfig struct {
