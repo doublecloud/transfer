@@ -35,6 +35,6 @@ func ShardFromCluster(clusterID, shardGroup string) (map[string][]string, error)
 		}
 		shards[h.ShardName] = append(shards[h.ShardName], h.Name)
 	}
-	logger.Log.Errorf("DEBUG - resolved shards: %v", shards) // TODO: Remove this line (or make info/debug).
+	logger.Log.Infof("resolved shards: %v", shards)
 	return shards, nil
 }
