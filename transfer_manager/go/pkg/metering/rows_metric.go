@@ -83,7 +83,7 @@ func (rm *RowsMetric) Count(items []abstract.ChangeItem, calculateValuesSize boo
 			continue
 		}
 		rm.rawSizes.Add(i.Size.Read)
-		if calculateValuesSize {
+		if calculateValuesSize && i.Size.Values == 0 {
 			rm.parsedSizes.Add(util.DeepSizeof(i.ColumnValues))
 		} else {
 			rm.parsedSizes.Add(i.Size.Values)
