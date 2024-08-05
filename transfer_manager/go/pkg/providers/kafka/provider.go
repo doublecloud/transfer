@@ -43,11 +43,9 @@ var (
 	_ providers.Activator = (*Provider)(nil)
 )
 
-var (
-	systemTopics = util.NewSet(
-		"__consumer_offsets", // is used to store information about committed offsets for each topic:partition per group of consumers (groupID).
-		"_schema",            // is not a default kafka topic (at least at kafka 8,9). This is an internal topic used by the Schema Registry which is a distributed storage layer for Avro schemas.
-	)
+var systemTopics = util.NewSet(
+	"__consumer_offsets", // is used to store information about committed offsets for each topic:partition per group of consumers (groupID).
+	"_schema",            // is not a default kafka topic (at least at kafka 8,9). This is an internal topic used by the Schema Registry which is a distributed storage layer for Avro schemas.
 )
 
 type Provider struct {
@@ -66,6 +64,12 @@ func (p *Provider) Sniffer(ctx context.Context) (abstract.Fetchable, error) {
 	if len(topics) == 0 && src.Topic != "" {
 		topics = append(topics, src.Topic)
 	}
+	var err error
+	src.Auth.Password, err = ResolvePassword(src.Connection, src.Auth)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to get password: %w", err)
+	}
+
 	if len(topics) == 0 { // no topics specified, we should sniff all topics
 		brokers, err := ResolveBrokers(src.Connection)
 		if err != nil {
