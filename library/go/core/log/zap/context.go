@@ -3,9 +3,9 @@ package zap
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log/ctxlog"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log/ctxlog"
 )
 
 type ctxField struct {

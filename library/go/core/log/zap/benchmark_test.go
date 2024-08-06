@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func BenchmarkZapLogger(b *testing.B) {

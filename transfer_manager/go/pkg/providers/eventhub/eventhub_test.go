@@ -9,8 +9,6 @@ import (
 
 	"github.com/Azure/azure-amqp-common-go/v3/sas"
 	eventhubs "github.com/Azure/azure-event-hubs-go/v3"
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -19,6 +17,8 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 const (

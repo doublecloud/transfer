@@ -5,7 +5,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
@@ -14,6 +13,7 @@ import (
 	"github.com/go-mysql-org/go-mysql/schema"
 	"github.com/gofrs/uuid"
 	"github.com/pingcap/parser/ast"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func (c *Canal) startSyncer() (*replication.BinlogStreamer, error) {

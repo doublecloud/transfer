@@ -4,7 +4,6 @@ import (
 	"context"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -13,6 +12,7 @@ import (
 	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/copy/events"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/tablemeta"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/yt"
 )
 

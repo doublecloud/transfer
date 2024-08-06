@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -15,6 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const (

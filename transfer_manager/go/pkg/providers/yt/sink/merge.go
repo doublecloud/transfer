@@ -4,10 +4,10 @@ import (
 	"context"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	yt2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/mapreduce"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"

@@ -7,7 +7,6 @@ import (
 
 	"github.com/blang/semver/v4"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -21,6 +20,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readconcern"
+	"go.ytsaurus.tech/library/go/core/log"
 	goslice "golang.org/x/exp/slices"
 )
 

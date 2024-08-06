@@ -3,7 +3,6 @@ package provider
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -15,6 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/tablemeta"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/gofrs/uuid"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/yson"
 	"go.ytsaurus.tech/yt/go/yt"
 )

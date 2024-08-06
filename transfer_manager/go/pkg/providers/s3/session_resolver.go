@@ -8,9 +8,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	aws_s3 "github.com/aws/aws-sdk-go/service/s3"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	creds "github.com/doublecloud/tross/transfer_manager/go/pkg/credentials"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func findRegion(bucket, region string, s3ForcePathStyle bool) (string, error) {

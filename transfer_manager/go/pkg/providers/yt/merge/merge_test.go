@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/cleanup"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/randutil"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/mapreduce"
 	"go.ytsaurus.tech/yt/go/mapreduce/spec"
 	"go.ytsaurus.tech/yt/go/migrate"

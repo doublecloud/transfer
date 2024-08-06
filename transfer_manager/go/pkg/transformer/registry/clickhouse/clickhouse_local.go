@@ -10,7 +10,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
@@ -21,6 +20,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 

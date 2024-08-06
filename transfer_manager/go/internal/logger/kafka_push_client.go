@@ -7,13 +7,13 @@ import (
 	"io"
 	"os"
 
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/scram"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 type KafkaConfig struct {

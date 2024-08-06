@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/randutil"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"

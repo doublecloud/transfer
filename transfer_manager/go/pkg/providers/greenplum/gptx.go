@@ -4,13 +4,13 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // gpTx is a transaction with a connection

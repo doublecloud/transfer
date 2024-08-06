@@ -3,7 +3,6 @@ package init
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -21,6 +20,7 @@ import (
 	ytsink "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/sink"
 	ytstorage "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/storage"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/targets"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/ypath"
 )
 

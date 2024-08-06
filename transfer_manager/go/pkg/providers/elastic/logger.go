@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type eslogger struct {

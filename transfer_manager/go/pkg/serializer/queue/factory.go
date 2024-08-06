@@ -1,9 +1,9 @@
 package queue
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func New(format server.SerializationFormat, saveTxOrder, dropKeys, isSnapshot bool, logger log.Logger) (Serializer, error) {

@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/araddon/dateparse"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -28,6 +27,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/jsonx"
 	"github.com/jackc/pgtype"
+	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 

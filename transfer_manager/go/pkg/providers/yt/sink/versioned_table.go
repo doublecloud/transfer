@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/core/xerrors/multierr"
 	xslices "github.com/doublecloud/tross/library/go/slices"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/spf13/cast"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/migrate"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"

@@ -12,7 +12,6 @@ import (
 	aws_s3 "github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -22,6 +21,7 @@ import (
 	chunk_pusher "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3/pusher"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

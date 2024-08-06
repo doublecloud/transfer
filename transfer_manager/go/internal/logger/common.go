@@ -5,12 +5,12 @@ import (
 	"os"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/instanceutil"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 type LogLevelSetter struct {

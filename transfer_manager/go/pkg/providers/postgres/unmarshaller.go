@@ -3,7 +3,6 @@ package postgres
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -11,6 +10,7 @@ import (
 	"github.com/jackc/pgproto3/v2"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type UnmarshallerData struct {

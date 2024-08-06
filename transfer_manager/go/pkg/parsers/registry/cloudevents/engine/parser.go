@@ -7,12 +7,12 @@ import (
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	genericparser "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
 	confluentschemaregistryengine "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 

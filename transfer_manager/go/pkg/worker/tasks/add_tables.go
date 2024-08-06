@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"sort"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func AddTables(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, tables []string, registry metrics.Registry) error {

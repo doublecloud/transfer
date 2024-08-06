@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/gob"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -13,6 +12,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/elastic"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {

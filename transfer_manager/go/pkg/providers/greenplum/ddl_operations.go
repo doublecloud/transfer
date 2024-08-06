@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	pgsink "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgx/v4"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func temporaryTable(schema string, name string) (ttSchema string, ttName string) {

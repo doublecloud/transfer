@@ -3,13 +3,13 @@ package tasks
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/cleanup"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func CleanupResource(ctx context.Context, task server.TransferOperation, transfer server.Transfer, logger log.Logger, cp coordinator.Coordinator) error {

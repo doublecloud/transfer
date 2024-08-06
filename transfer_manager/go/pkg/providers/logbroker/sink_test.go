@@ -12,7 +12,6 @@ import (
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/recipe"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -26,6 +25,7 @@ import (
 	ydbsdk "github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicoptions"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topictypes"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var (

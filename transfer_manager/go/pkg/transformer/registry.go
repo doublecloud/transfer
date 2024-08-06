@@ -4,10 +4,10 @@ import (
 	"encoding/gob"
 	"sort"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type TransformerFactory func(protoConfig any, lgr log.Logger, runtime abstract.TransformationRuntimeOpts) (abstract.Transformer, error)

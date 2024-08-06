@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/test/yatest"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -15,6 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
 	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/randutil"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
 )

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/shirou/gopsutil/v3/net"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type LabeledPort struct {

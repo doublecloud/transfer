@@ -5,7 +5,6 @@ import (
 	"crypto/tls"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type clientImpl struct {

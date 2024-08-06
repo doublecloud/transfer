@@ -5,13 +5,13 @@ import (
 	"math"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/filter"
 	yt2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/tablemeta"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/yt"
 	"golang.org/x/exp/slices"
 )

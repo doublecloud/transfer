@@ -1,8 +1,8 @@
 package golog
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	canal_log "github.com/siddontang/go-log/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func SetLevel(level log.Level) {

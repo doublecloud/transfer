@@ -303,7 +303,7 @@ For current storages, we have approximately the following matrix:
 
 </div>
 
-Databend thrives on community contributions! Whether it's through ideas, code, or documentation, every effort helps in enhancing our project. As a token of our appreciation, once your code is merged, your name will be eternally preserved in the **system.contributors** table.
+Transfer thrives on community contributions! Whether it's through ideas, code, or documentation, every effort helps in enhancing our project. As a token of our appreciation, once your code is merged, your name will be eternally preserved in the **system.contributors** table.
 
 Here are some resources to help you get started:
 
@@ -316,7 +316,7 @@ Here are some resources to help you get started:
 
 </div>
 
-For guidance on using Databend, we recommend starting with the official documentation. If you need further assistance, explore the following community channels:
+For guidance on using Transfer, we recommend starting with the official documentation. If you need further assistance, explore the following community channels:
 
 - [Slack](https://todo.com) (For live discussion with the Community)
 - [GitHub](https://github.com/doublecloud/tross) (Feature/Bug reports, Contributions)
@@ -328,7 +328,7 @@ For guidance on using Databend, we recommend starting with the official document
 
 </div>
 
-Stay updated with Databend's development journey. Here are our roadmap milestones:
+Stay updated with Transfer's development journey. Here are our roadmap milestones:
 
 - [Roadmap 2024](./roadmap/roadmap_2024.md)
 

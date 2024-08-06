@@ -6,7 +6,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -14,6 +13,7 @@ import (
 	yt2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"

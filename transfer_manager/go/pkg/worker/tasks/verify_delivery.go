@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/sink"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func VerifyDelivery(transfer server.Transfer, lgr log.Logger, registry metrics.Registry) error {

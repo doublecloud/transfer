@@ -8,7 +8,6 @@ import (
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/proto"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -17,6 +16,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/async/model/db"
 	"github.com/dustin/go-humanize"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const (

@@ -3,7 +3,7 @@ package util
 import (
 	"io"
 
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // Rollbacks is cancellable caller of rollback functions.

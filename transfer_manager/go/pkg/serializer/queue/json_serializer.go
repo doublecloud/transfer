@@ -1,11 +1,11 @@
 package queue
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/serializer"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type JSONSerializer struct {

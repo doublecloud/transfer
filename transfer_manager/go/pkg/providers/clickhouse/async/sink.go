@@ -1,7 +1,6 @@
 package async
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/core/xerrors/multierr"
@@ -17,6 +16,7 @@ import (
 	sharding "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/sharding"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/topology"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type sink struct {

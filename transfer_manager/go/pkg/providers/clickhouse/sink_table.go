@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -24,6 +23,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/dustin/go-humanize"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type sinkTable struct {

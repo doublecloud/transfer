@@ -1,10 +1,10 @@
 package queue
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/blank"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type MirrorSerializer struct {

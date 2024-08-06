@@ -3,10 +3,10 @@ package packer
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func NewKeyPackerFromDebeziumParameters(connectorParameters map[string]string, logger log.Logger) (Packer, error) {

@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/common"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func getRowsCount(logger log.Logger, config *oracle.OracleSource, sqlxDB *sqlx.DB, table *schema.Table) (uint64, error) {

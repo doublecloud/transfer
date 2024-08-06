@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/storage"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/terryid"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // TransitUpload is shitty method mainly for transfers with LB in the middle,

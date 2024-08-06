@@ -10,10 +10,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // Record wraps the record returned from the Kinesis library and

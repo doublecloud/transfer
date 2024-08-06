@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	ytcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
 	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/guid"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"

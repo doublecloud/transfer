@@ -12,11 +12,11 @@ import (
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log/corelogadapter"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/size"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 const (

@@ -4,7 +4,6 @@ import (
 	_ "embed"
 	"os"
 
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/activate"
 	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/check"
@@ -16,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 var defaultLogLevel = "debug"

@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
 	"github.com/jackc/pgtype"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // FallbackTimestampToUTC implements https://st.yandex-team.ru/TM-5092

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/events"
@@ -15,6 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type oracleTableSource struct {

@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
 	tostring "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/to_string"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const Type = abstract.TransformerType("sharder_transformer")

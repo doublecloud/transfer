@@ -5,11 +5,11 @@ import (
 	"testing"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
-	cr "github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest"
+	cr "go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 type adapter struct {

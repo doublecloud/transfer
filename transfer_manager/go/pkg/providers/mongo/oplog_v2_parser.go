@@ -1,10 +1,10 @@
 package mongo
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const OplogProtocolVersion = 2

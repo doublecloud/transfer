@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -13,6 +12,7 @@ import (
 	ytprovider "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
 	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"

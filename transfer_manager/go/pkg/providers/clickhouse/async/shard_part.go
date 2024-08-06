@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/tross/library/go/slices"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/async/model/db"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type shardPart struct {
