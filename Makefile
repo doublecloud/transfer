@@ -6,3 +6,6 @@ clean:
 
 build:
 	go build -o  binaries/$(API) ./transfer_manager/go/cmd/trcli/*.go
+
+test:
+	USE_TESTCONTAINERS=1 gotestsum ./

@@ -12,7 +12,6 @@ import (
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/logbroker"
 	ydbcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/ydb"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/xtls"
@@ -52,12 +51,6 @@ func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, cre
 
 func NewSink(cfg *YDSDestination, registry metrics.Registry, lgr log.Logger, transferID string) (abstract.Sinker, error) {
 	writerFactory := logbroker.DefaultWriterFactory
-	useTopicAPI := false
-
-	if env.Get() == env.EnvironmentNebius {
-		writerFactory = logbroker.NewYDSWriterFactory
-		useTopicAPI = true
-	}
 
 	var tlsConfig *tls.Config
 	if cfg.TLSEnalbed {
@@ -89,7 +82,7 @@ func NewSink(cfg *YDSDestination, registry metrics.Registry, lgr log.Logger, tra
 		transferID,
 		MakeWriterConfigFactory(tlsConfig, cfg.ServiceAccountID, creds),
 		writerFactory,
-		useTopicAPI,
+		false, // TODO: pass this from cfg
 		false,
 	)
 }
