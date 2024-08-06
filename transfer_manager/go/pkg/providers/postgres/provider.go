@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -18,6 +17,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {

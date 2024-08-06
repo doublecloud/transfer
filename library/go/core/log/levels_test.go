@@ -3,8 +3,8 @@ package log_test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var levelsToTest = []struct {

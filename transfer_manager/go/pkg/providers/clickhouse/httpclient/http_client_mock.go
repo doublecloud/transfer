@@ -13,7 +13,7 @@ import (
 	io "io"
 	reflect "reflect"
 
-	log "github.com/doublecloud/tross/library/go/core/log"
+	log "go.ytsaurus.tech/library/go/core/log"
 	gomock "go.uber.org/mock/gomock"
 )
 

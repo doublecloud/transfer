@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func BenchmarkOutput(b *testing.B) {

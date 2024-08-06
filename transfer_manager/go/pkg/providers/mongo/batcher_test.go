@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func TestKeyBatcher(t *testing.T) {

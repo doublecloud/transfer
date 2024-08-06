@@ -1,12 +1,12 @@
 package log
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/yandex/ydb/ydb-topic-fed-sdk/fedlog"
 	"github.com/doublecloud/tross/library/go/yandex/ydb/ydb-topic-fed-sdk/fedtrace"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	ydbLog "github.com/ydb-platform/ydb-go-sdk/v3/log"
 	"github.com/ydb-platform/ydb-go-sdk/v3/trace"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Option = ydbLog.Option

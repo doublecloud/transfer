@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // ZapifyLevel turns interface log level to zap log level

@@ -1,6 +1,6 @@
 package podagent
 
-import "github.com/doublecloud/tross/library/go/core/log"
+import "go.ytsaurus.tech/library/go/core/log"
 
 type Option func(client *Client)
 

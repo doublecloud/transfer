@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 func TestLogrotateSink(t *testing.T) {

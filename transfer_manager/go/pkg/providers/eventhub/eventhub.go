@@ -9,7 +9,6 @@ import (
 	"github.com/Azure/azure-amqp-common-go/v3/sas"
 	eventhubs "github.com/Azure/azure-event-hubs-go/v3"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -18,6 +17,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/functions"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Source struct {

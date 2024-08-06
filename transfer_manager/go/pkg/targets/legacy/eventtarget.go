@@ -3,7 +3,6 @@ package legacy
 import (
 	"runtime"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
@@ -11,6 +10,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/events"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/pool"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks/cleanup"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type legacyEventTarget struct {

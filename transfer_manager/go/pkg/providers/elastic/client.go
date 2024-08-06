@@ -6,11 +6,11 @@ import (
 	"reflect"
 	"unsafe"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/dbaas"
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esapi"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type ServerType int64

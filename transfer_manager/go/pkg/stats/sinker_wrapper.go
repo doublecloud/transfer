@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/dustin/go-humanize"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type WrapperStats struct {

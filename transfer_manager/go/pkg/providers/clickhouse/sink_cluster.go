@@ -8,7 +8,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/ptr"
 	"github.com/doublecloud/tross/library/go/slices"
@@ -19,6 +18,7 @@ import (
 	topology2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/topology"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type sinkCluster struct {

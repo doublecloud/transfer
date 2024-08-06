@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const RenameTablesTransformerType = abstract.TransformerType("rename_tables")

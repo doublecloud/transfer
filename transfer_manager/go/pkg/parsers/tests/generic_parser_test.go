@@ -8,7 +8,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -24,6 +23,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse"
@@ -19,6 +18,7 @@ import (
 	ytStorage "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/storage"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var technicalTables = map[string]bool{

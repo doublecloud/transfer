@@ -7,12 +7,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/conn"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const MemReserveFactor = 1.2

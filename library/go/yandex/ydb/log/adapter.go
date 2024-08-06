@@ -3,8 +3,8 @@ package log
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	ydbLog "github.com/ydb-platform/ydb-go-sdk/v3/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var _ ydbLog.Logger = adapter{}

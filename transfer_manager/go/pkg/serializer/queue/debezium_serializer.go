@@ -3,7 +3,6 @@ package queue
 import (
 	"runtime"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
@@ -11,6 +10,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/packer"
 	lightningcache "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/packer/lightning_cache"
 	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const defaultTopicPrefix = "__data_transfer_stub"

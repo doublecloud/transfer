@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -22,6 +21,7 @@ import (
 	"github.com/jackc/pgtype/pgxtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type SortOrder string

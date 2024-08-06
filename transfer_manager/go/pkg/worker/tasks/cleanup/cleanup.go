@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var cleanupKinds = map[server.CleanupType]abstract.Kind{

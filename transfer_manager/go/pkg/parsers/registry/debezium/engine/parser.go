@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/pool"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type DebeziumImpl struct {

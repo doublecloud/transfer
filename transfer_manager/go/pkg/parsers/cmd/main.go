@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -22,6 +21,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/yson"
 )
 

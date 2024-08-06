@@ -6,7 +6,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	queues "github.com/doublecloud/tross/transfer_manager/go/pkg/util/queues"
 	"github.com/segmentio/kafka-go"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const (

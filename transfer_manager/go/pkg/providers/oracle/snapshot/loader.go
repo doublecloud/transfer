@@ -5,7 +5,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/middlewares"
@@ -13,6 +12,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/common"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // loader is the basic provider of snapshot table load for Oracle source

@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -12,6 +11,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/filter"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type ClusterTables struct {

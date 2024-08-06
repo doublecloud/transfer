@@ -1,8 +1,8 @@
 package local
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // WithLogger temproray hack to injest global logger into dataplane

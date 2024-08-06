@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // Calculate returns the string containing a parsable integer - an index assigned to the current `os.Hostname()`.

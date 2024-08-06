@@ -4,7 +4,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -13,6 +12,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	mathutil "github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Sink struct {

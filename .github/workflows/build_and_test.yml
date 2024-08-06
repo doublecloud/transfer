@@ -1,0 +1,30 @@
+name: Run Build and Test
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: Build and push image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Go 1.22.0
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+      - shell: bash
+        run: |
+          go install gotest.tools/gotestsum@latest
+      - shell: bash
+        run: |
+          make build
+      - shell: bash
+        run: |
+          make test

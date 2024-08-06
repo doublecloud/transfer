@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -15,6 +14,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func PluggableTransformer(transfer *server.Transfer, _ metrics.Registry, cp coordinator.Coordinator) func(abstract.Sinker) abstract.Sinker {

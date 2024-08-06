@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -20,6 +19,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/dustin/go-humanize"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // NoAsyncSinkErr error which indicate that we should try to create sinker from SyncSink

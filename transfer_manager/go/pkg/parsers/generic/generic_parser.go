@@ -14,7 +14,6 @@ import (
 
 	"github.com/araddon/dateparse"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/maxprocs"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -25,6 +24,7 @@ import (
 	"github.com/goccy/go-json"
 	"github.com/valyala/fastjson"
 	"github.com/valyala/fastjson/fastfloat"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/yson"
 	"golang.org/x/sync/semaphore"

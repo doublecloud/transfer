@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -16,6 +15,7 @@ import (
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	yt2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/mapreduce"
 	"go.ytsaurus.tech/yt/go/mapreduce/spec"
 	"go.ytsaurus.tech/yt/go/schema"

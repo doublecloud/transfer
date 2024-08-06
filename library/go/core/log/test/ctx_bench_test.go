@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/ctxlog"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
-	"github.com/doublecloud/tross/library/go/core/log/zap/encoders"
 	uberzap "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/ctxlog"
+	"go.ytsaurus.tech/library/go/core/log/zap"
+	"go.ytsaurus.tech/library/go/core/log/zap/encoders"
 )
 
 type nopWriteSyncer struct{}

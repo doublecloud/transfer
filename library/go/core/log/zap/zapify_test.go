@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // Simple test, that all type of fields are correctly zapified.

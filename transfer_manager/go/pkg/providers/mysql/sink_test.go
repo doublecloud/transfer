@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var random = rand.New(rand.NewSource(time.Now().Unix()))

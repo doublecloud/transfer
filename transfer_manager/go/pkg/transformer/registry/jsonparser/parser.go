@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -20,6 +19,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cast"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const TransformerType = abstract.TransformerType("jsonparser")

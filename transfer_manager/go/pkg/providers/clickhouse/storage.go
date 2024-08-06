@@ -11,7 +11,6 @@ import (
 
 	"github.com/blang/semver/v4"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -28,6 +27,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/size"
 	"github.com/dustin/go-humanize"
+	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/exp/maps"
 )
 

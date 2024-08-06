@@ -14,7 +14,6 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
@@ -24,6 +23,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type SinkServer struct {

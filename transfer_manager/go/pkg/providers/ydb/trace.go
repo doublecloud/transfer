@@ -2,7 +2,7 @@ package ydb
 
 import (
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type LogTrace struct {

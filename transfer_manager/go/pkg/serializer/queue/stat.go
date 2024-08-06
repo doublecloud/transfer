@@ -3,9 +3,9 @@ package queue
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	util "github.com/doublecloud/tross/transfer_manager/go/pkg/util/queues"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func LogBatchingStat(logger log.Logger, input []abstract.ChangeItem, in map[abstract.TablePartID][]SerializedMessage, startTime time.Time) {

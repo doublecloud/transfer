@@ -8,15 +8,14 @@ import (
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log/corelogadapter"
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/logbroker"
 	ydbcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/ydb"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/xtls"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, credentials ydb.Credentials) logbroker.WriterConfigFactory {
@@ -52,12 +51,6 @@ func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, cre
 
 func NewSink(cfg *YDSDestination, registry metrics.Registry, lgr log.Logger, transferID string) (abstract.Sinker, error) {
 	writerFactory := logbroker.DefaultWriterFactory
-	useTopicAPI := false
-
-	if env.Get() == env.EnvironmentNebius {
-		writerFactory = logbroker.NewYDSWriterFactory
-		useTopicAPI = true
-	}
 
 	var tlsConfig *tls.Config
 	if cfg.TLSEnalbed {
@@ -89,7 +82,7 @@ func NewSink(cfg *YDSDestination, registry metrics.Registry, lgr log.Logger, tra
 		transferID,
 		MakeWriterConfigFactory(tlsConfig, cfg.ServiceAccountID, creds),
 		writerFactory,
-		useTopicAPI,
+		false, // TODO: pass this from cfg
 		false,
 	)
 }

@@ -3,7 +3,6 @@ package provider
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -16,6 +15,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/snapshot"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type OracleDataProvider struct {
