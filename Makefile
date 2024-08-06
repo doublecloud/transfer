@@ -8,4 +8,5 @@ build:
 	go build -o  binaries/$(API) ./transfer_manager/go/cmd/trcli/*.go
 
 test:
-	USE_TESTCONTAINERS=1 gotestsum ./
+	USE_TESTCONTAINERS=1 gotestsum --format github-actions ./transfer_manager/go/cmd/...  -timeout=30m
+	USE_TESTCONTAINERS=1 gotestsum --format github-actions ./transfer_manager/go/tests/...  -timeout=30m

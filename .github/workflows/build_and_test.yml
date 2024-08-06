@@ -1,0 +1,22 @@
+name: Run Build and Test
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    name: Build and push image ${{ inputs.binary-name }}
+    runs-on: [self-hosted, doublecloud-ci-runner]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - shell: bash
+        run: |
+          make build
+

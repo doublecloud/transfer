@@ -1,5 +1,6 @@
 {
   ".":"cloud/doublecloud/transfer/github_os",
+  ".github/workflows/build_and_test.yml":"cloud/doublecloud/transfer/github_os/.github/workflows/build_and_test.yml",
   ".gitignore":"cloud/doublecloud/transfer/github_os/.gitignore",
   "CONTRIBUTING.md":"transfer_manager/go/CONTRIBUTING.md",
   "GLOSSARY.md":"transfer_manager/go/GLOSSARY.md",
