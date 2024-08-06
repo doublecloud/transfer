@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build and push image ${{ inputs.binary-name }}
+    name: Build and push image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,13 +18,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup Go 1.22.0
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: "1.22.0"
+      - shell: bash
+        run: |
+          go install gotest.tools/gotestsum@latest
       - shell: bash
         run: |
           make build
       - shell: bash
         run: |
-          go install gotest.tools/gotestsum@latest
           make test
