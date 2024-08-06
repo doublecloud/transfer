@@ -9,6 +9,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/participle v0.4.1
+	github.com/andybalholm/brotli v1.1.0
 	github.com/araddon/dateparse v0.0.0-20190510211750-d2ba70357e92
 	github.com/blang/semver/v4 v4.0.0
 	github.com/brianvoe/gofakeit/v6 v6.22.0
@@ -22,6 +23,7 @@ require (
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/golang/mock v1.7.0-rc.1
 	github.com/golang/protobuf v1.5.4
+	github.com/golang/snappy v0.0.4
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgconn v1.14.0
@@ -36,6 +38,7 @@ require (
 	github.com/montanaflynn/stats v0.7.0
 	github.com/ohler55/ojg v1.15.0
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/pion/logging v0.2.2
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.18.0
 	github.com/prometheus/client_model v0.5.0
@@ -44,6 +47,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.24.2
 	github.com/shopspring/decimal v1.3.1
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
@@ -52,6 +56,7 @@ require (
 	github.com/twmb/franz-go/pkg/kmsg v1.7.0
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
+	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7
 	github.com/ydb-platform/ydb-go-sdk/v3 v3.76.1
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.uber.org/atomic v1.11.0
@@ -83,7 +88,6 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/spf13/pflag v1.0.6-0.20201009195203-85dd5c8bc61c // indirect
-	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7 // indirect
 	go.opentelemetry.io/otel v1.28.0 // indirect
 	go.opentelemetry.io/otel/trace v1.28.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
