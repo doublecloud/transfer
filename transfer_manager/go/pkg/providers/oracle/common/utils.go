@@ -199,59 +199,92 @@ func GetTablesCondition(schemaColumnName string, tableColumnName string, tableID
 	if tableColumnName == "" {
 		return "", xerrors.New("Table column name is empty")
 	}
-
+	// dpiStmt_execute: ORA-01795: maximum number of expressions in a list is 1000
+	var schemasCount, tablesCount int
+	schemas := make([]string, 0)
+	tables := make([]string, 0)
 	schemasBuilder := strings.Builder{}
 	tablesBuilder := strings.Builder{}
+
 	for _, tableID := range tableIDs {
 		if tableID.OracleTableName() == "*" {
+			if schemasCount%1000 == 0 && schemasCount != 0 {
+				schemas = append(schemas, schemasBuilder.String())
+				schemasBuilder.Reset()
+			}
 			if schemasBuilder.Len() > 0 {
 				schemasBuilder.WriteString(", ")
 			}
 			schemasBuilder.WriteRune('\'')
 			schemasBuilder.WriteString(tableID.OracleSchemaName())
 			schemasBuilder.WriteRune('\'')
+
+			schemasCount++
 		} else {
+			if tablesCount%1000 == 0 && tablesCount != 0 {
+				tables = append(tables, tablesBuilder.String())
+				tablesBuilder.Reset()
+			}
 			if tablesBuilder.Len() > 0 {
 				tablesBuilder.WriteString(", ")
 			}
 			tablesBuilder.WriteRune('\'')
 			tablesBuilder.WriteString(tableID.OracleSQLName())
 			tablesBuilder.WriteRune('\'')
+
+			tablesCount++
 		}
 	}
 
-	if schemasBuilder.Len() == 0 && tablesBuilder.Len() == 0 {
+	schemas = append(schemas, schemasBuilder.String())
+	tables = append(tables, tablesBuilder.String())
+
+	if len(schemas[0]) == 0 && len(tables[0]) == 0 {
 		return "1 = 1", nil
 	}
 
 	filters := []string{}
 
-	if schemasBuilder.Len() > 0 {
-		filter, err := getInCondition(schemaColumnName, schemasBuilder.String(), in)
-		if err != nil {
-			//nolint:descriptiveerrors
-			return "", err
+	if len(schemas[0]) > 0 {
+		for _, part := range schemas {
+			filter, err := getInCondition(schemaColumnName, part, in)
+			if err != nil {
+				//nolint:descriptiveerrors
+				return "", err
+			}
+			filters = append(filters, filter)
 		}
-		filters = append(filters, filter)
 	}
 
-	if tablesBuilder.Len() > 0 {
-		columnName := fmt.Sprintf("'\"'||%v||'\".\"'||%v||'\"'", schemaColumnName, tableColumnName)
-		filter, err := getInCondition(columnName, tablesBuilder.String(), in)
-		if err != nil {
-			//nolint:descriptiveerrors
-			return "", err
+	if len(tables[0]) > 0 {
+		for _, part := range tables {
+			columnName := fmt.Sprintf("'\"'||%v||'\".\"'||%v||'\"'", schemaColumnName, tableColumnName)
+			filter, err := getInCondition(columnName, part, in)
+			if err != nil {
+				//nolint:descriptiveerrors
+				return "", err
+			}
+			filters = append(filters, filter)
 		}
-		filters = append(filters, filter)
 	}
 
-	if len(filters) == 1 {
-		return filters[0], nil
-	}
+	var splitter string
 	if in {
-		return fmt.Sprintf("(%v or %v)", filters[0], filters[1]), nil
+		splitter = " or "
+	} else {
+		splitter = " and "
 	}
-	return fmt.Sprintf("(%v and %v)", filters[0], filters[1]), nil
+
+	finalConditionBuilder := strings.Builder{}
+	finalConditionBuilder.WriteString("(")
+	for _, filter := range filters {
+		if finalConditionBuilder.Len() > 1 {
+			finalConditionBuilder.WriteString(splitter)
+		}
+		finalConditionBuilder.WriteString(filter)
+	}
+	finalConditionBuilder.WriteString(")")
+	return finalConditionBuilder.String(), nil
 }
 
 func PDBQuery(sqlxDB *sqlx.DB, ctx context.Context, cdb bool, container string, query QueryFunc) error {
