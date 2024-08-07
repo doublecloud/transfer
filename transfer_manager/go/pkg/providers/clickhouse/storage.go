@@ -679,7 +679,6 @@ func (s *Storage) LoadTablesDDL(tables []abstract.TableID) ([]schema.TableDDL, e
 				abstract.TableID{Namespace: database, Name: name},
 				createDDL,
 				engine,
-				"",
 			)
 		}
 		if err := tablesRes.Err(); err != nil {

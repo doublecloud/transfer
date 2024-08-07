@@ -148,7 +148,6 @@ func (r mapper) generateDDL(result *abstract.TableSchema) abstract.ChangeItem {
 		r.table.RenamedTable,
 		bb.String(),
 		r.table.DDL.Engine,
-		"",
 	).ToChangeItem()
 }
 
