@@ -3,12 +3,12 @@ package test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/nop"
-	"github.com/doublecloud/tross/library/go/core/log/zap"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	uzap "go.uber.org/zap"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/nop"
+	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
 var (

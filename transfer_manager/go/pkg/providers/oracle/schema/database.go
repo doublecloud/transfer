@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -12,6 +11,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/common"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jmoiron/sqlx"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Database struct {

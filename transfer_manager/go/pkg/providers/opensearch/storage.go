@@ -3,11 +3,11 @@ package opensearch
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/elastic"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Storage struct {

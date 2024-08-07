@@ -4,11 +4,11 @@ import (
 	"container/list"
 	"encoding/json"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	yts "go.ytsaurus.tech/yt/go/schema"
 	"golang.org/x/xerrors"
 )

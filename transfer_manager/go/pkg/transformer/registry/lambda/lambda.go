@@ -3,13 +3,13 @@ package lambda
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/functions"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const TransformerType = abstract.TransformerType("lambda")

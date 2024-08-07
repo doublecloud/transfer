@@ -5,7 +5,6 @@ import (
 	"encoding/gob"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -15,6 +14,7 @@ import (
 	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {

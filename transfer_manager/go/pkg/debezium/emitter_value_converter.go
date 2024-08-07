@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	debeziumcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/common"
@@ -18,6 +17,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/ydb"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/format"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 

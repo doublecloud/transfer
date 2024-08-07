@@ -6,7 +6,6 @@ import (
 	"runtime/pprof"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type SyncTask struct {

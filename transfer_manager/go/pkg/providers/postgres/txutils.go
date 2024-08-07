@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgx/v4"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // BeginTx starts a transaction for the given pool with the given options and automatically composes sufficient rollback object.

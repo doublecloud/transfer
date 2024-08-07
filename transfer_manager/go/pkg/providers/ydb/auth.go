@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/credentials"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var JWTCredentials = func(content string, tokenServiceURL string) (ydb.Credentials, error) {

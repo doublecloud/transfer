@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -13,6 +12,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/schema"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type DataProvider struct {

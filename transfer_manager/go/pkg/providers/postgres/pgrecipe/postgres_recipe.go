@@ -13,7 +13,6 @@ import (
 	"time"
 
 	tc_postgres "github.com/doublecloud/tross/cloud/dataplatform/testcontainer/postgres"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
@@ -23,6 +22,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const (

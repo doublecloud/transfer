@@ -3,7 +3,6 @@ package provider
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -16,6 +15,7 @@ import (
 	s3_sink "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3/sink"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3/source"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3/storage"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {

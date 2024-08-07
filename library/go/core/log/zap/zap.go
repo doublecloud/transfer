@@ -3,10 +3,10 @@ package zap
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
-	"github.com/doublecloud/tross/library/go/core/log/zap/encoders"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.ytsaurus.tech/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log/zap/encoders"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // how to generate mock from 'client' and 'writer' interfaces:

@@ -6,13 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/async/model/db"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
 	chsink "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/schema"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type DDLClient interface {

@@ -12,7 +12,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -23,6 +22,7 @@ import (
 	"github.com/go-mysql-org/go-mysql/schema"
 	mysql_driver "github.com/go-sql-driver/mysql"
 	"github.com/pingcap/parser"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var globalExclude = []*regexp.Regexp{

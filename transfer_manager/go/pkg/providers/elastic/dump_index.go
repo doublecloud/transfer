@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -18,6 +17,7 @@ import (
 	sink_factory "github.com/doublecloud/tross/transfer_manager/go/pkg/sink"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/elastic/go-elasticsearch/v7"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type IsElasticLikeSource interface {

@@ -4,7 +4,6 @@ import (
 	"io"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -13,6 +12,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // ChangeItemsFetcher consolidates multiple objects (of which most important is pgx.Rows) into a single one, providing bufferized fetching and parsing of rows from a postgres source

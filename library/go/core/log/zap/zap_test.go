@@ -3,12 +3,12 @@ package zap
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.uber.org/zap/zaptest/observer"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func TestNewQloudLogger(t *testing.T) {

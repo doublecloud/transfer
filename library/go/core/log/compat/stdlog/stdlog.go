@@ -5,7 +5,7 @@ import (
 	"fmt"
 	stdlog "log"
 
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func levelToFunc(logger log.Logger, lvl log.Level) (func(msg string, fields ...log.Field), error) {

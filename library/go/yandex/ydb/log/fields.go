@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	ydbLog "github.com/ydb-platform/ydb-go-sdk/v3/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func fieldToField(field ydbLog.Field) log.Field {

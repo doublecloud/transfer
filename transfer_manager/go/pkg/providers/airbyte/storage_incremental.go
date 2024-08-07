@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/slices"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var _ abstract.IncrementalStorage = (*Storage)(nil)

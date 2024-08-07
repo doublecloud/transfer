@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse"
@@ -18,6 +17,7 @@ import (
 	tostring "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/to_string"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cast"
+	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 

@@ -1,10 +1,10 @@
 package cloudevents
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
 	cloudeventsengine "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/cloudevents/engine"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func NewParserCloudEvents(inWrapped interface{}, _ bool, logger log.Logger, _ *stats.SourceStats) (parsers.Parser, error) {

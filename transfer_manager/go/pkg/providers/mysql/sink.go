@@ -10,7 +10,6 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -21,6 +20,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
 	"github.com/go-sql-driver/mysql"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var ddlTemplate, _ = template.New("query").Parse(`

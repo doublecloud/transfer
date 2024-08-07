@@ -6,8 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/sirupsen/logrus"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 /* Call frame calculations are copied from logrus package */

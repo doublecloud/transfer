@@ -13,7 +13,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/library/go/test/canon"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
@@ -31,6 +30,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // ConductSequenceWithAllSubsequencesTest is the method which MUST be called by concrete sequence checking tests.

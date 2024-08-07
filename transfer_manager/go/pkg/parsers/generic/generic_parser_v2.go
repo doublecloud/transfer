@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/library/go/maxprocs"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
@@ -19,6 +18,7 @@ import (
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/events"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/valyala/fastjson"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/yson"
 	"golang.org/x/sync/semaphore"

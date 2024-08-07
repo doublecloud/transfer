@@ -3,9 +3,9 @@ package dbt
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	transformerregistry "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Config struct {

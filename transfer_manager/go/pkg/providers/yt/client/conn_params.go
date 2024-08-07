@@ -1,7 +1,7 @@
 package ytclient
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/yt"
 )
 

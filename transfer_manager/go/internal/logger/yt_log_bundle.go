@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"github.com/doublecloud/tross/library/go/core/log"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // YtLogBundle is a logger that holds reference to YT Logger in order to hook all "with's" modification and apply

@@ -8,12 +8,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/log"
 	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/config"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 const (
