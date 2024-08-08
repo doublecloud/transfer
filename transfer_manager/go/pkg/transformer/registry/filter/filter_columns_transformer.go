@@ -166,7 +166,7 @@ func (f *FilterColumnsTransformer) getColumnIndexes(item abstract.ChangeItem, fi
 
 func (f *FilterColumnsTransformer) trimChangeItem(original abstract.ChangeItem, filteredColsIndexes []int, filteredSchema *filteredTableSchema) (abstract.ChangeItem, error) {
 	filteredColumnsCount := len(filteredColsIndexes)
-	if len(original.ColumnNames) == filteredColumnsCount {
+	if len(original.ColumnNames) == filteredColumnsCount && len(filteredSchema.Columns) == len(original.TableSchema.Columns()) {
 		return original, nil
 	}
 
