@@ -23,6 +23,8 @@ var (
 	FileNameSystemCol = "__file_name"
 	RowIndexSystemCol = "__row_index"
 
+	EstimateFilesLimit = 10
+
 	systemColumnNames = map[string]bool{FileNameSystemCol: true, RowIndexSystemCol: true}
 )
 

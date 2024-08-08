@@ -38,6 +38,7 @@ type LineReader struct {
 	logger         log.Logger
 	metrics        *stats.SourceStats
 	tableSchema    *abstract.TableSchema
+	fastCols       abstract.FastTableSchema
 	batchSize      int
 	blockSize      int64
 	pathPrefix     string
@@ -70,19 +71,10 @@ func (r *LineReader) RowCount(ctx context.Context, obj *aws_s3.Object) (uint64, 
 
 func (r *LineReader) estimateRows(ctx context.Context, files []*aws_s3.Object) (uint64, error) {
 	res := uint64(0)
-	var totalSize int64
-	var sampleReader *S3Reader
 
-	for _, file := range files {
-		reader, err := r.openReader(ctx, *file.Key)
-		if err != nil {
-			return 0, xerrors.Errorf("unable to open reader for file: %s: %w", *file.Key, err)
-		}
-		size := reader.Size()
-		if size > 0 {
-			sampleReader = reader
-		}
-		totalSize += reader.Size()
+	totalSize, sampleReader, err := estimateTotalSize(ctx, r.logger, files, r.openReader)
+	if err != nil {
+		return 0, xerrors.Errorf("unable to estimate rows: %w", err)
 	}
 
 	if totalSize > 0 && sampleReader != nil {
@@ -210,7 +202,7 @@ func (r *LineReader) doParse(line string, filePath string, lastModified time.Tim
 		return nil, xerrors.Errorf("unable to construct change item: %w", err)
 	}
 
-	if err := strictify.Strictify(ci, r.tableSchema.FastColumns()); err != nil {
+	if err := strictify.Strictify(ci, r.fastCols); err != nil {
 		return nil, xerrors.Errorf("failed to convert value to the expected data type: %w", err)
 	}
 
@@ -302,6 +294,7 @@ func NewLineReader(src *s3.S3Source, lgr log.Logger, sess *session.Session, metr
 		logger:         lgr,
 		metrics:        metrics,
 		tableSchema:    abstract.NewTableSchema(src.OutputSchema),
+		fastCols:       abstract.NewTableSchema(src.OutputSchema).FastColumns(),
 		batchSize:      0,
 		blockSize:      1 * 1024 * 1024, // 1mb,
 		pathPrefix:     src.PathPrefix,

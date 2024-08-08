@@ -80,14 +80,13 @@ func (f *s3Fetcher) headObjectInfo(input *s3.HeadObjectInput) error {
 	}
 
 	f.objectSize = *resp.ContentLength
-	logger.Log.Infof("S3 object s3://%s/%s has size %d", f.bucket, f.key, f.objectSize)
 
 	if resp.LastModified == nil || (*resp.LastModified).IsZero() {
 		return xerrors.Errorf("S3 object lastModified is invalid: %v", resp.LastModified)
 	}
 
 	f.lastModifiedTimestamp = *resp.LastModified
-	logger.Log.Infof("S3 object s3://%s/%s lastModified timestamp is %v", f.bucket, f.key, f.lastModifiedTimestamp)
+	logger.Log.Infof("S3 object s3://%s/%s has size %d lastModified timestamp is %v", f.bucket, f.key, f.objectSize, f.lastModifiedTimestamp)
 
 	return nil
 }

@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"math"
@@ -24,6 +23,7 @@ import (
 	chunk_pusher "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3/pusher"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/goccy/go-json"
 	"github.com/spf13/cast"
 	"github.com/valyala/fastjson"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -43,6 +43,7 @@ type JSONLineReader struct {
 	downloader              *s3manager.Downloader
 	logger                  log.Logger
 	tableSchema             *abstract.TableSchema
+	fastCols                abstract.FastTableSchema
 	colNames                []string
 	hideSystemCols          bool
 	batchSize               int
@@ -65,18 +66,10 @@ func (r *JSONLineReader) openReader(ctx context.Context, filePath string) (*S3Re
 
 func (r *JSONLineReader) estimateRows(ctx context.Context, files []*aws_s3.Object) (uint64, error) {
 	res := uint64(0)
-	var totalSize int64
-	var sampleReader *S3Reader
-	for _, file := range files {
-		reader, err := r.openReader(ctx, *file.Key)
-		if err != nil {
-			return 0, xerrors.Errorf("unable to open reader for file: %s: %w", *file.Key, err)
-		}
-		size := reader.Size()
-		if size > 0 {
-			sampleReader = reader
-		}
-		totalSize += reader.Size()
+
+	totalSize, sampleReader, err := estimateTotalSize(ctx, r.logger, files, r.openReader)
+	if err != nil {
+		return 0, xerrors.Errorf("unable to estimate rows: %w", err)
 	}
 
 	if totalSize > 0 && sampleReader != nil {
@@ -214,7 +207,7 @@ func (r *JSONLineReader) doParse(line string, filePath string, lastModified time
 		return nil, xerrors.Errorf("unable to construct change item: %w", err)
 	}
 
-	if err := strictify.Strictify(ci, r.tableSchema.FastColumns()); err != nil {
+	if err := strictify.Strictify(ci, r.fastCols); err != nil {
 		return nil, xerrors.Errorf("failed to convert value to the expected data type: %w", err)
 	}
 	return ci, nil
@@ -515,6 +508,7 @@ func NewJSONLineReader(src *s3.S3Source, lgr log.Logger, sess *session.Session, 
 			Name:      src.TableName,
 		},
 		tableSchema:    abstract.NewTableSchema(src.OutputSchema),
+		fastCols:       abstract.NewTableSchema(src.OutputSchema).FastColumns(),
 		colNames:       nil,
 		metrics:        metrics,
 		unparsedPolicy: src.UnparsedPolicy,
@@ -535,5 +529,6 @@ func NewJSONLineReader(src *s3.S3Source, lgr log.Logger, sess *session.Session, 
 	}
 
 	reader.colNames = slices.Map(reader.tableSchema.Columns(), func(t abstract.ColSchema) string { return t.ColumnName })
+	reader.fastCols = reader.tableSchema.FastColumns() // need to cache it, so we will not construct it for every line
 	return reader, nil
 }
