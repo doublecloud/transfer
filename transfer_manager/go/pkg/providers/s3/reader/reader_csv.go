@@ -42,6 +42,7 @@ type CSVReader struct {
 	downloader              *s3manager.Downloader
 	logger                  log.Logger
 	tableSchema             *abstract.TableSchema
+	fastCols                abstract.FastTableSchema
 	colNames                []string
 	hideSystemCols          bool
 	batchSize               int
@@ -81,18 +82,10 @@ func (r *CSVReader) ResolveSchema(ctx context.Context) (*abstract.TableSchema, e
 
 func (r *CSVReader) estimateRows(ctx context.Context, files []*aws_s3.Object) (uint64, error) {
 	totalRows := float64(0)
-	var totalSize int64
-	var sampleReader *S3Reader
-	for _, file := range files {
-		reader, err := r.openReader(ctx, *file.Key)
-		if err != nil {
-			return 0, xerrors.Errorf("unable to open reader for file: %s: %w", *file.Key, err)
-		}
-		size := reader.Size()
-		if size > 0 {
-			sampleReader = reader
-		}
-		totalSize += reader.Size()
+
+	totalSize, sampleReader, err := estimateTotalSize(ctx, r.logger, files, r.openReader)
+	if err != nil {
+		return 0, xerrors.Errorf("unable to estimate rows: %w", err)
 	}
 
 	if totalSize > 0 && sampleReader != nil {
@@ -212,7 +205,7 @@ func (r *CSVReader) readFromS3(s3Reader *S3Reader, offset int64) (*csv.Reader, b
 		}
 	}
 
-	csvReader := r.newCSVReaderFromReader(bufio.NewReader(bytes.NewReader(data)))
+	csvReader := r.newCSVReaderFromReader(bufio.NewReaderSize(bytes.NewReader(data), 1024))
 	if offset == 0 {
 		if err := r.skipUnnecessaryLines(csvReader); err != nil {
 			return nil, endOfFile, xerrors.Errorf("failed to skip unnecessary rows: %w", err)
@@ -265,7 +258,7 @@ func (r *CSVReader) doParse(line []string, filePath string, lastModified time.Ti
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct change item: %w", err)
 	}
-	if err := strictify.Strictify(ci, r.tableSchema.FastColumns()); err != nil {
+	if err := strictify.Strictify(ci, r.fastCols); err != nil {
 		return nil, xerrors.Errorf("failed to convert value to the expected data type: %w", err)
 	}
 	return ci, nil
@@ -594,6 +587,8 @@ func (r *CSVReader) newCSVReaderFromReader(reader io.Reader) *csv.Reader {
 	csvReader.Encoding = r.encoding
 	csvReader.Delimiter = r.delimiter
 	csvReader.DoubleQuote = r.doubleQuote
+	csvReader.DoubleQuoteStr = fmt.Sprintf("%s%s", string(r.quoteChar), string(r.quoteChar))
+
 	return csvReader
 }
 
@@ -632,6 +627,7 @@ func NewCSVReader(src *s3.S3Source, lgr log.Logger, sess *session.Session, metri
 		downloader:              s3manager.NewDownloader(sess),
 		logger:                  lgr,
 		tableSchema:             abstract.NewTableSchema(src.OutputSchema),
+		fastCols:                abstract.NewTableSchema(src.OutputSchema).FastColumns(),
 		colNames:                nil,
 		hideSystemCols:          src.HideSystemCols,
 		batchSize:               src.ReadBatchSize,
@@ -683,5 +679,6 @@ func NewCSVReader(src *s3.S3Source, lgr log.Logger, sess *session.Session, metri
 	}
 
 	reader.colNames = slices.Map(reader.tableSchema.Columns(), func(t abstract.ColSchema) string { return t.ColumnName })
+	reader.fastCols = reader.tableSchema.FastColumns() // need to cache it, so we will not construct it for every line
 	return reader, nil
 }

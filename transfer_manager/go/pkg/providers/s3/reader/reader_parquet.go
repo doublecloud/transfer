@@ -60,13 +60,21 @@ func (r *ReaderParquet) TotalRowCount(ctx context.Context) (uint64, error) {
 	if err != nil {
 		return 0, xerrors.Errorf("unable to load file list: %w", err)
 	}
-	for _, file := range files {
+	for i, file := range files {
 		meta, err := r.openReader(ctx, *file.Key)
 		if err != nil {
 			return 0, xerrors.Errorf("unable to read file meta: %s: %w", *file.Key, err)
 		}
 		res += uint64(meta.NumRows())
 		_ = meta.Close()
+		// once we reach limit of files to estimate - stop and approximate
+		if i > EstimateFilesLimit {
+			break
+		}
+	}
+	if len(files) > EstimateFilesLimit {
+		multiplier := float64(len(files)) / float64(EstimateFilesLimit)
+		return uint64(float64(res) * multiplier), nil
 	}
 	return res, nil
 }

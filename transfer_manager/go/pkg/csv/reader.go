@@ -24,6 +24,7 @@ type Reader struct {
 	Delimiter       rune
 	QuoteChar       rune
 	EscapeChar      rune
+	DoubleQuoteStr  string
 	Encoding        string
 	DoubleQuote     bool
 	NewlinesInValue bool
@@ -322,14 +323,14 @@ func (r *Reader) sanitizeElement(toSanitize string) (string, error) {
 // swapQuotesChar swaps the used quote char at start and end of value (if present) with quotes.
 func (r *Reader) swapQuotesChar(element string) (string, error) {
 	var quotes byte
-	if strings.Contains(element, "\n") || strings.Contains(element, fmt.Sprintf("%s%s", string(r.QuoteChar), string(r.QuoteChar))) {
+	if strings.Contains(element, "\n") || strings.Contains(element, r.DoubleQuoteStr) {
 		// element contains newlines or double quotes
 		quotes = '`'
 	} else {
 		quotes = '"'
 	}
 
-	var res []byte
+	res := make([]byte, 0, len(element)+2)
 	if len(element) == 1 && element[0] == byte(r.QuoteChar) {
 		return "", xerrors.Errorf("got element with value of only one quote. Check that data does not contain newlines")
 	}
@@ -349,7 +350,7 @@ func (r *Reader) swapQuotesChar(element string) (string, error) {
 // Throws errDoubleQuotesDisabled if double quotes are present in the field even though functionality is disabled.
 func (r *Reader) swapToSingleQuotes(element string) (string, error) {
 	if !r.DoubleQuote {
-		if strings.Contains(element, fmt.Sprintf("%s%s", string(r.QuoteChar), string(r.QuoteChar))) {
+		if strings.Contains(element, r.DoubleQuoteStr) {
 			// double quote disabled, throw error
 			return "", errDoubleQuotesDisabled
 		} else {
@@ -357,7 +358,7 @@ func (r *Reader) swapToSingleQuotes(element string) (string, error) {
 			return element, nil
 		}
 	} else {
-		res := strings.ReplaceAll(element, fmt.Sprintf("%s%s", string(r.QuoteChar), string(r.QuoteChar)), string('"'))
+		res := strings.ReplaceAll(element, r.DoubleQuoteStr, string('"'))
 		return res, nil
 	}
 }
@@ -383,6 +384,7 @@ func NewReader(r io.Reader) *Reader {
 	return &Reader{
 		Delimiter:       ',',
 		QuoteChar:       '"',
+		DoubleQuoteStr:  `""`,
 		EscapeChar:      '\\',
 		Encoding:        "utf_8",
 		DoubleQuote:     true,

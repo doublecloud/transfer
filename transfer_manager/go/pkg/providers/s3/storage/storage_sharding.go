@@ -22,7 +22,7 @@ const (
 	s3VersionCol  = "s3_file_version"
 )
 
-func (s *Storage) ShardTable(_ context.Context, tdsec abstract.TableDescription) ([]abstract.TableDescription, error) {
+func (s *Storage) ShardTable(ctx context.Context, tdsec abstract.TableDescription) ([]abstract.TableDescription, error) {
 	s.logger.Infof("try to shard: %v", tdsec.String())
 
 	files, err := reader.ListFiles(s.cfg.Bucket, s.cfg.PathPrefix, s.cfg.PathPattern, s.client, s.logger, nil, s.reader.IsObj)
@@ -39,15 +39,23 @@ func (s *Storage) ShardTable(_ context.Context, tdsec abstract.TableDescription)
 		return nil, xerrors.Errorf("unable to extract: %s: filter: %w", s3VersionCol, err)
 	}
 	var res []abstract.TableDescription
+	etaRows, err := rowCounter.TotalRowCount(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to estimate row count: %w", err)
+	}
 	for _, file := range files {
 		if !s.matchOperands(operands, file) {
 			continue
 		}
-		rows, err := rowCounter.RowCount(context.Background(), file)
-		if err != nil {
-			return nil, xerrors.Errorf("failed to fetch row count for file: %s : %w", *file.Key, err)
+		var rows uint64
+		if len(files) > reader.EstimateFilesLimit {
+			rows = uint64(float64(etaRows) / float64(len(files)))
+		} else {
+			rows, err = rowCounter.RowCount(context.Background(), file)
+			if err != nil {
+				return nil, xerrors.Errorf("failed to fetch row count for file: %s : %w", *file.Key, err)
+			}
 		}
-
 		// TODO: shard file on file byte ranges
 		res = append(res, abstract.TableDescription{
 			Name:   s.cfg.TableName,
