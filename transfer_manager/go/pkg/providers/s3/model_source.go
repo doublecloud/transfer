@@ -206,6 +206,10 @@ func (s *S3Source) WithDefaults() {
 	}
 }
 
+func (s *S3Source) IsAppendOnly() bool {
+	return true
+}
+
 func (s *S3Source) IsSource() {}
 
 func (s *S3Source) IsAbstract2(server.Destination) bool { return len(s.AirbyteFormat) > 0 } // for airbyte legacy format compatibility
