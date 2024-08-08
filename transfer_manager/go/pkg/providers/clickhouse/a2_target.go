@@ -48,6 +48,13 @@ type HTTPTarget struct {
 
 var syntaxErrorRegexp = regexp.MustCompile(`^.*\(at row ([0-9]+)\).*$`)
 
+func (c *HTTPTarget) toAltName(tableName string) string {
+	if altName, ok := c.altNames[tableName]; ok {
+		tableName = altName
+	}
+	return tableName
+}
+
 func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 	switch batch := input.(type) {
 	case *HTTPEventsBatch:
@@ -55,10 +62,6 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 		table, err := batch.Part.ToOldTableDescription()
 		if err != nil {
 			return util.MakeChanWithError(xerrors.Errorf("unable to construct table description: %w", err))
-		}
-		tableName := table.Name
-		if altName, ok := c.altNames[tableName]; ok {
-			tableName = altName
 		}
 		columnNames := batch.ColumnNames()
 		escapedColumnNames := make([]string, len(columnNames))
@@ -68,7 +71,7 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 
 		blob := []byte(fmt.Sprintf(
 			"INSERT INTO `%s` (%s) %s FORMAT %s\n",
-			tableName,
+			c.toAltName(table.Name),
 			strings.Join(escapedColumnNames, ","),
 			c.config.InsertSettings().AsQueryPart(),
 			batch.Format,
@@ -153,7 +156,7 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 				}
 
 				err := c.execDDL(func(distributed bool) error {
-					q := fmt.Sprintf(ddl, c.tableReferenceForDDL(event.Name, distributed))
+					q := fmt.Sprintf(ddl, c.tableReferenceForDDL(c.toAltName(event.Name), distributed))
 					return c.client.Exec(context.Background(), c.logger, c.HostByPart(nil), q)
 				})
 				if err != nil {
