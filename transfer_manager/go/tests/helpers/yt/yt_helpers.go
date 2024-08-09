@@ -20,7 +20,7 @@ import (
 	"go.ytsaurus.tech/yt/go/yttest"
 )
 
-func RecipeYTTarget(path string) yt2.YtDestinationModel {
+func RecipeYtTarget(path string) yt2.YtDestinationModel {
 	ytDestination := yt2.NewYtDestinationV1(yt2.YtDestination{
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
@@ -31,14 +31,14 @@ func RecipeYTTarget(path string) yt2.YtDestinationModel {
 	return ytDestination
 }
 
-func SetRecipeYT(dst *yt2.YtDestination) *yt2.YtDestination {
+func SetRecipeYt(dst *yt2.YtDestination) *yt2.YtDestination {
 	dst.Cluster = os.Getenv("YT_PROXY")
 	dst.CellBundle = "default"
 	dst.PrimaryMedium = "default"
 	return dst
 }
 
-func DumpDynamicYTTable(ytClient yt.Client, tablePath ypath.Path, writer io.Writer) error {
+func DumpDynamicYtTable(ytClient yt.Client, tablePath ypath.Path, writer io.Writer) error {
 	// Write schema
 	schema := new(yson.RawValue)
 	if err := ytClient.GetNode(context.Background(), ypath.Path(fmt.Sprintf("%s/@schema", tablePath)), schema, nil); err != nil {
@@ -77,12 +77,12 @@ func DumpDynamicYTTable(ytClient yt.Client, tablePath ypath.Path, writer io.Writ
 func CanonizeDynamicYtTable(t *testing.T, ytClient yt.Client, tablePath ypath.Path, fileName string) {
 	file, err := os.Create(fileName)
 	require.NoError(t, err)
-	require.NoError(t, DumpDynamicYTTable(ytClient, tablePath, file))
+	require.NoError(t, DumpDynamicYtTable(ytClient, tablePath, file))
 	require.NoError(t, file.Close())
 	canon.SaveFile(t, fileName, canon.WithLocal(true))
 }
 
-func YTTestDir(t *testing.T, testSuiteName string) ypath.Path {
+func YtTestDir(t *testing.T, testSuiteName string) ypath.Path {
 	return ypath.Path(fmt.Sprintf("//home/cdc/test/mysql2yt/%s/%s", testSuiteName, t.Name()))
 }
 
@@ -106,7 +106,7 @@ func readAllRows[OutRow any](t *testing.T, ytEnv *yttest.Env, path ypath.Path) [
 	return outRows
 }
 
-func YTReadAllRowsFromAllTables[OutRow any](t *testing.T, cluster string, path string, expectedResCount int) []OutRow {
+func YtReadAllRowsFromAllTables[OutRow any](t *testing.T, cluster string, path string, expectedResCount int) []OutRow {
 	ytEnv := yttest.New(t, yttest.WithConfig(yt.Config{Proxy: cluster}), yttest.WithLogger(logger.Log.Structured()))
 	ytPath, err := ypath.Parse(path)
 	require.NoError(t, err)
