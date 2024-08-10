@@ -2,7 +2,6 @@ package csv
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"strings"
 	"sync"
@@ -31,6 +30,7 @@ type Reader struct {
 	reader          *bufio.Reader
 	offset          int64
 	mu              sync.Mutex
+	ExpectedCols    []string
 }
 
 func (r *Reader) ReadAll() ([][]string, error) {
@@ -86,7 +86,7 @@ func (r *Reader) ReadLine() ([]string, error) {
 
 func (r *Reader) readMultiline() ([]string, error) {
 	// read until end of multiline entry
-	var fullLine string
+	var fullLine strings.Builder
 
 	for {
 		partialLine, err := r.readAndDecodeLine()
@@ -99,13 +99,14 @@ func (r *Reader) readMultiline() ([]string, error) {
 				continue
 			}
 		}
-		fullLine = fmt.Sprintf("%s%s", fullLine, partialLine)
-		if r.checkCompleteQuotes(fullLine) {
+
+		fullLine.WriteString(partialLine)
+		if r.checkCompleteQuotes(fullLine.String()) {
 			break
 		}
 	}
 
-	entries, err := r.splitString(fullLine)
+	entries, err := r.splitString(fullLine.String())
 	if err != nil {
 		return nil, xerrors.Errorf("failed to split csv line into entries: %w", err)
 	}
@@ -195,7 +196,7 @@ func (r *Reader) checkCompleteQuotes(element string) bool {
 }
 
 func (r *Reader) splitString(line string) ([]string, error) {
-	var result []string
+	result := make([]string, 0, len(r.ExpectedCols))
 	var prev rune
 
 	var lastDelimPosition int
@@ -322,6 +323,10 @@ func (r *Reader) sanitizeElement(toSanitize string) (string, error) {
 
 // swapQuotesChar swaps the used quote char at start and end of value (if present) with quotes.
 func (r *Reader) swapQuotesChar(element string) (string, error) {
+	if len(element) == 0 {
+		return element, nil
+	}
+
 	var quotes byte
 	if strings.Contains(element, "\n") || strings.Contains(element, r.DoubleQuoteStr) {
 		// element contains newlines or double quotes
@@ -330,12 +335,12 @@ func (r *Reader) swapQuotesChar(element string) (string, error) {
 		quotes = '"'
 	}
 
-	res := make([]byte, 0, len(element)+2)
 	if len(element) == 1 && element[0] == byte(r.QuoteChar) {
 		return "", xerrors.Errorf("got element with value of only one quote. Check that data does not contain newlines")
 	}
-	if len(element) > 0 {
+	if len(element) > 1 {
 		if element[0] == byte(r.QuoteChar) && element[len(element)-1] == byte(r.QuoteChar) {
+			res := make([]byte, 0, len(element)+2)
 			res = append(res, quotes)
 			res = append(res, []byte(element)[1:len(element)-1]...)
 			res = append(res, quotes)
@@ -343,7 +348,7 @@ func (r *Reader) swapQuotesChar(element string) (string, error) {
 		}
 		return element, nil
 	}
-	return string(res), nil
+	return element, nil
 }
 
 // swapToSingleQuotes swaps possible double quotes with single quote in a field.
@@ -384,13 +389,14 @@ func NewReader(r io.Reader) *Reader {
 	return &Reader{
 		Delimiter:       ',',
 		QuoteChar:       '"',
-		DoubleQuoteStr:  `""`,
 		EscapeChar:      '\\',
+		DoubleQuoteStr:  `""`,
 		Encoding:        "utf_8",
 		DoubleQuote:     true,
 		NewlinesInValue: false,
 		reader:          bufio.NewReader(r),
 		offset:          0,
 		mu:              sync.Mutex{},
+		ExpectedCols:    nil,
 	}
 }

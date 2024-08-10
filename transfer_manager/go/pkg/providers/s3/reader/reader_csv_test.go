@@ -1,7 +1,11 @@
 package reader
 
 import (
+	"bufio"
+	"bytes"
 	"context"
+	_ "embed"
+	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -13,10 +17,16 @@ import (
 	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/tross/transfer_manager/go/pkg/csv"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
+)
+
+var (
+	//go:embed gotest/dumb/small.csv
+	smallCSV []byte
 )
 
 func TestResolveCSVSchema(t *testing.T) {
@@ -164,4 +174,129 @@ func TestConstructCI(t *testing.T) {
 		require.Len(t, ci.ColumnValues, 4) // we expect 4 values 2 that we read and 32 from the sys cols
 		require.Equal(t, []interface{}{"test_file", uint64(1), true, "this is a test string"}, ci.ColumnValues)
 	})
+}
+
+func BenchmarkCSVRead(b *testing.B) {
+	r := CSVReader{
+		logger:          logger.Log,
+		metrics:         stats.NewSourceStats(solomon.NewRegistry(solomon.NewRegistryOpts())),
+		newlinesInValue: true,
+		quoteChar:       '"',
+		escapeChar:      '"',
+		doubleQuote:     true,
+		blockSize:       10000000,
+		delimiter:       ',',
+		headerPresent:   true,
+		batchSize:       100,
+		advancedOptions: s3.AdvancedOptions{
+			SkipRows:                1,
+			SkipRowsAfterNames:      1,
+			ColumnNames:             nil,
+			AutogenerateColumnNames: false,
+		},
+	}
+
+	csvReader := csv.NewReader(bufio.NewReaderSize(bytes.NewReader(smallCSV), 1024))
+	csvReader.NewlinesInValue = r.newlinesInValue
+	csvReader.QuoteChar = r.quoteChar
+	csvReader.EscapeChar = r.escapeChar
+	csvReader.Encoding = r.encoding
+	csvReader.Delimiter = r.delimiter
+	csvReader.DoubleQuote = r.doubleQuote
+	csvReader.DoubleQuoteStr = fmt.Sprintf("%s%s", string(r.quoteChar), string(r.quoteChar))
+	allColNames, err := r.getColumnNames(csvReader)
+	require.NoError(b, err)
+	filteredColNames, err := r.filterColNames(allColNames)
+	require.NoError(b, err)
+	s, err := r.getColumnTypes(filteredColNames, csvReader)
+	require.NoError(b, err)
+
+	r.tableSchema = abstract.NewTableSchema(s)
+	r.fastCols = r.tableSchema.FastColumns()
+	r.colNames = r.tableSchema.ColumnNames()
+
+	for n := 0; n < b.N; n++ {
+		csvReader = csv.NewReader(bytes.NewReader(smallCSV))
+		csvReader.NewlinesInValue = r.newlinesInValue
+		csvReader.QuoteChar = r.quoteChar
+		csvReader.EscapeChar = r.escapeChar
+		csvReader.Encoding = r.encoding
+		csvReader.Delimiter = r.delimiter
+		csvReader.DoubleQuote = r.doubleQuote
+		csvReader.DoubleQuoteStr = fmt.Sprintf("%s%s", string(r.quoteChar), string(r.quoteChar))
+		csvReader.ExpectedCols = r.colNames
+		l := uint64(0)
+		buf, err := r.ParseCSVRows(csvReader, "test", time.Now(), &l)
+		require.NoError(b, err)
+		require.NotEmpty(b, buf)
+		totalS := 0
+		totalC := 0
+		for _, r := range buf {
+			totalS += int(r.Size.Read)
+			totalC += len(r.ColumnValues)
+		}
+		b.SetBytes(int64(totalS))
+		require.True(b, totalC > 0)
+	}
+	b.ReportAllocs()
+}
+
+func TestReadLargeCSV(t *testing.T) {
+	r := CSVReader{
+		logger:          logger.Log,
+		metrics:         stats.NewSourceStats(solomon.NewRegistry(solomon.NewRegistryOpts())),
+		newlinesInValue: true,
+		quoteChar:       '"',
+		escapeChar:      '"',
+		doubleQuote:     true,
+		blockSize:       10000000,
+		delimiter:       ',',
+		headerPresent:   true,
+		batchSize:       1024,
+		advancedOptions: s3.AdvancedOptions{
+			SkipRows:                1,
+			SkipRowsAfterNames:      1,
+			ColumnNames:             nil,
+			AutogenerateColumnNames: false,
+		},
+	}
+
+	fileData, err := os.ReadFile("demo.csv")
+	require.NoError(t, err)
+	logger.Log.Infof("begin reader")
+	csvReader := csv.NewReader(bufio.NewReaderSize(bytes.NewReader(fileData), 1024))
+	csvReader.NewlinesInValue = r.newlinesInValue
+	csvReader.QuoteChar = r.quoteChar
+	csvReader.EscapeChar = r.escapeChar
+	csvReader.Encoding = r.encoding
+	csvReader.Delimiter = r.delimiter
+	csvReader.DoubleQuote = r.doubleQuote
+	csvReader.DoubleQuoteStr = fmt.Sprintf("%s%s", string(r.quoteChar), string(r.quoteChar))
+	allColNames, err := r.getColumnNames(csvReader)
+	require.NoError(t, err)
+	filteredColNames, err := r.filterColNames(allColNames)
+	require.NoError(t, err)
+	s, err := r.getColumnTypes(filteredColNames, csvReader)
+	require.NoError(t, err)
+	r.tableSchema = abstract.NewTableSchema(s)
+	r.fastCols = r.tableSchema.FastColumns()
+	r.colNames = r.tableSchema.ColumnNames()
+	l := uint64(0)
+	buf, err := r.ParseCSVRows(csvReader, "test", time.Now(), &l)
+	require.NoError(t, err)
+	require.NotEmpty(t, buf)
+	totalS := 0
+	totalC := 0
+	for _, r := range buf {
+		totalS += int(r.Size.Read)
+		totalC += len(r.ColumnValues)
+	}
+	for {
+		buff, err := r.ParseCSVRows(csvReader, "test", time.Now(), &l)
+		require.NoError(t, err)
+		if len(buff) == 0 {
+			break
+		}
+		logger.Log.Infof("readed: %v", len(buff))
+	}
 }

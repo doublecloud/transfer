@@ -205,7 +205,7 @@ func (r *CSVReader) readFromS3(s3Reader *S3Reader, offset int64) (*csv.Reader, b
 		}
 	}
 
-	csvReader := r.newCSVReaderFromReader(bufio.NewReaderSize(bytes.NewReader(data), 1024))
+	csvReader := r.newCSVReaderFromReader(bytes.NewReader(data))
 	if offset == 0 {
 		if err := r.skipUnnecessaryLines(csvReader); err != nil {
 			return nil, endOfFile, xerrors.Errorf("failed to skip unnecessary rows: %w", err)
@@ -218,7 +218,7 @@ func (r *CSVReader) readFromS3(s3Reader *S3Reader, offset int64) (*csv.Reader, b
 // ParseCSVRows reads and parses line by line the fetched data block from S3.
 // If EOF or batchSize limit is reached the extracted changeItems are returned.
 func (r *CSVReader) ParseCSVRows(csvReader *csv.Reader, filePath string, lastModified time.Time, lineCounter *uint64) ([]abstract.ChangeItem, error) {
-	var buff []abstract.ChangeItem
+	buff := make([]abstract.ChangeItem, 0, r.batchSize)
 	for {
 		line, err := csvReader.ReadLine()
 		if xerrors.Is(err, io.EOF) {
@@ -315,9 +315,7 @@ func (r *CSVReader) constructCI(row []string, fname string, lModified time.Time,
 						col.ColumnName, len(row), len(vals))
 				}
 			} else {
-				originalValue := row[index]
-				val := r.getCorrespondingValue(originalValue, col)
-				vals[i] = val
+				vals[i] = r.fillVals(vals, row, i, index, col)
 			}
 		}
 	}
@@ -588,6 +586,7 @@ func (r *CSVReader) newCSVReaderFromReader(reader io.Reader) *csv.Reader {
 	csvReader.Delimiter = r.delimiter
 	csvReader.DoubleQuote = r.doubleQuote
 	csvReader.DoubleQuoteStr = fmt.Sprintf("%s%s", string(r.quoteChar), string(r.quoteChar))
+	csvReader.ExpectedCols = r.colNames
 
 	return csvReader
 }

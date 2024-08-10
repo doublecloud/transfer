@@ -80,13 +80,25 @@ func MakeSynchronizeEvent() ChangeItem {
 	}
 }
 
-//---
-
 // DefaultValue returns a default instance of the type represented by this schema. This method only works safely in heterogenous transfers.
 func DefaultValue(c *changeitem.ColSchema) interface{} {
 	switch schema.Type(c.DataType) {
-	case schema.TypeInt64, schema.TypeInt32, schema.TypeInt16, schema.TypeInt8, schema.TypeUint64, schema.TypeUint32, schema.TypeUint16, schema.TypeUint8:
-		return Restore(*c, float64(0))
+	case schema.TypeInt64:
+		return int64(0)
+	case schema.TypeInt32:
+		return int32(0)
+	case schema.TypeInt16:
+		return int16(0)
+	case schema.TypeInt8:
+		return int8(0)
+	case schema.TypeUint64:
+		return uint64(0)
+	case schema.TypeUint32:
+		return uint32(0)
+	case schema.TypeUint16:
+		return uint16(0)
+	case schema.TypeUint8:
+		return uint8(0)
 	case schema.TypeFloat32:
 		return float32(0)
 	case schema.TypeFloat64:

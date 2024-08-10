@@ -1,6 +1,7 @@
 package reader
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -16,29 +17,31 @@ func TestParseFloatValue(t *testing.T) {
 
 	// Test case 1: Valid float value with DecimalPoint "," original value is changed
 	originalValue := "123,456"
-	expected := "123.456"
-	result := r.parseFloatValue(originalValue).(string)
+	expected := json.Number("123.456")
+	result, ok := r.parseFloatValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 1 failed")
 
 	// Test case 2: Valid float value with DecimalPoint "." nothing to change
 	r.additionalReaderOptions.DecimalPoint = "."
 	originalValue = "123.456"
 	expected = "123.456"
-	result = r.parseFloatValue(originalValue).(string)
+	result, ok = r.parseFloatValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 2 failed")
 
 	// Test case 3: Invalid float value, original value is kept
 	originalValue = "abc"
-	expected = "abc"
-	result = r.parseFloatValue(originalValue).(string)
-	require.Equal(expected, result, "Test case 3 failed")
+	_, ok = r.parseFloatValue(originalValue)
+	require.False(ok)
 
 	// Test case 4: No DecimalPoint set original value is kept
 	r.additionalReaderOptions.DecimalPoint = ""
 	originalValue = "123.456"
 	expected = "123.456"
-	result = r.parseFloatValue(originalValue).(string)
+	result, ok = r.parseFloatValue(originalValue)
 	require.Equal(expected, result, "Test case 4 failed")
+	require.True(ok)
 }
 
 func TestParseNullValues(t *testing.T) {
@@ -110,25 +113,28 @@ func TestParseDateValue(t *testing.T) {
 	// Test case 1: Original value can be parsed with the first timestamp parser
 	originalValue := "2024-03-22"
 	expected, _ := time.Parse("2006-01-02", originalValue)
-	result := r.parseDateValue(originalValue).(time.Time)
+	result, ok := r.parseDateValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 1 failed")
 
 	// Test case 2: Original value can be parsed with the second timestamp parser
 	originalValue = "22-Mar-2024"
 	expected, _ = time.Parse("02-Jan-2006", originalValue)
-	result = r.parseDateValue(originalValue).(time.Time)
+	result, ok = r.parseDateValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 2 failed")
 
 	// Test case 3: Original value can be parsed with the third timestamp parser
 	originalValue = "March 22, 2024"
 	expected, _ = time.Parse("January 2, 2006", originalValue)
-	result = r.parseDateValue(originalValue).(time.Time)
+	result, ok = r.parseDateValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 3 failed")
 
 	// Test case 4: Original value cannot be parsed with any timestamp parser
 	originalValue = "2024/03/22"
-	res := r.parseDateValue(originalValue)
-	require.Equal(originalValue, res, "Test case 4 failed")
+	_, ok = r.parseDateValue(originalValue)
+	require.False(ok)
 }
 
 func TestParseBooleanValue(t *testing.T) {
@@ -146,29 +152,33 @@ func TestParseBooleanValue(t *testing.T) {
 	// Test case 1: Original value is a null value
 	originalValue := "NULL"
 	expected := false
-	result := r.parseBooleanValue(originalValue).(bool)
+	result, ok := r.parseBooleanValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 1 failed")
 
 	// Test case 2: Original value is a true value
 	originalValue = "true"
 	expected = true
-	result = r.parseBooleanValue(originalValue).(bool)
+	result, ok = r.parseBooleanValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 2 failed")
 
 	// Test case 3: Original value is a false value
 	originalValue = "false"
 	expected = false
-	result = r.parseBooleanValue(originalValue).(bool)
+	result, ok = r.parseBooleanValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 3 failed")
 
 	// Test case 4: Original value is not in any of the true/false/null values lists, but can be parsed as boolean
 	originalValue = "TRUE"
 	expected = true
-	result = r.parseBooleanValue(originalValue).(bool)
+	result, ok = r.parseBooleanValue(originalValue)
+	require.True(ok)
 	require.Equal(expected, result, "Test case 4 failed")
 
 	// Test case 5: Original value is not in any of the true/false/null values lists and cannot be parsed as boolean
 	originalValue = "random"
-	res := r.parseBooleanValue(originalValue)
-	require.Equal(originalValue, res, "Test case 5 failed")
+	_, ok = r.parseBooleanValue(originalValue)
+	require.False(ok)
 }

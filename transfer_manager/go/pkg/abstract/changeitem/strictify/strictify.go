@@ -1,6 +1,7 @@
 package strictify
 
 import (
+	"encoding/json"
 	"math"
 
 	"github.com/doublecloud/tross/library/go/core/xerrors"
@@ -20,24 +21,18 @@ func Strictify(c *changeitem.ChangeItem, tableSchema changeitem.FastTableSchema)
 		return xerrors.Errorf("cannot canonize an insane ChangeItem: %w", err)
 	}
 
-	strictColumnValues := make([]any, len(c.ColumnNames))
 	for i, columnName := range c.ColumnNames {
-		value := &c.ColumnValues[i]
 		columnSchema, ok := tableSchema[changeitem.ColumnName(columnName)]
 		if !ok {
-			strictColumnValues[i] = *value
 			continue
 		}
 		var err error
-		strictColumnValues[i], err = strictifyValue(value, &columnSchema)
+		c.ColumnValues[i], err = strictifyValue(&c.ColumnValues[i], &columnSchema)
 		if err != nil {
 			return xerrors.Errorf("failed to strictify the value of column [%d] %q: %w", i, columnName, err)
 		}
 	}
 
-	for i := range c.ColumnNames {
-		c.ColumnValues[i] = strictColumnValues[i]
-	}
 	return nil
 }
 
@@ -62,73 +57,121 @@ func strictifyValue(value *any, valueSchema *changeitem.ColSchema) (any, error) 
 		}
 		return v, nil
 	case schema.TypeInt8:
-		v, err := toSignedInt(*value, math.MinInt8, math.MaxInt8, cast.ToInt8E)
+		res := *value
+		if _, ok := res.(int8); ok {
+			return res, nil
+		}
+		v, err := toSignedInt(res, math.MinInt8, math.MaxInt8, cast.ToInt8E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeInt16:
-		v, err := toSignedInt(*value, math.MinInt16, math.MaxInt16, cast.ToInt16E)
+		res := *value
+		if _, ok := res.(int16); ok {
+			return res, nil
+		}
+		v, err := toSignedInt(res, math.MinInt16, math.MaxInt16, cast.ToInt16E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeInt32:
-		v, err := toSignedInt(*value, math.MinInt32, math.MaxInt32, cast.ToInt32E)
+		res := *value
+		if _, ok := res.(int32); ok {
+			return res, nil
+		}
+		v, err := toSignedInt(res, math.MinInt32, math.MaxInt32, cast.ToInt32E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeInt64:
-		v, err := toSignedInt(*value, math.MinInt64, math.MaxInt64, cast.ToInt64E)
+		res := *value
+		if _, ok := res.(int64); ok {
+			return res, nil
+		}
+		v, err := toSignedInt(res, math.MinInt64, math.MaxInt64, cast.ToInt64E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeUint8:
-		v, err := toUnsignedInt(*value, math.MaxUint8, cast.ToUint8E)
+		res := *value
+		if _, ok := res.(uint8); ok {
+			return res, nil
+		}
+		v, err := toUnsignedInt(res, math.MaxUint8, cast.ToUint8E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeUint16:
-		v, err := toUnsignedInt(*value, math.MaxUint16, cast.ToUint16E)
+		res := *value
+		if _, ok := res.(uint16); ok {
+			return res, nil
+		}
+		v, err := toUnsignedInt(res, math.MaxUint16, cast.ToUint16E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeUint32:
-		v, err := toUnsignedInt(*value, math.MaxUint32, cast.ToUint32E)
+		res := *value
+		if _, ok := res.(uint32); ok {
+			return res, nil
+		}
+		v, err := toUnsignedInt(res, math.MaxUint32, cast.ToUint32E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeUint64:
-		v, err := toUnsignedInt(*value, math.MaxUint64, cast.ToUint64E)
+		res := *value
+		if _, ok := res.(uint64); ok {
+			return res, nil
+		}
+		v, err := toUnsignedInt(res, math.MaxUint64, cast.ToUint64E)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeFloat32:
-		v, err := cast.ToFloat32E(*value)
+		res := *value
+		if _, ok := res.(float32); ok {
+			return res, nil
+		}
+		v, err := cast.ToFloat32E(res)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeFloat64:
-		v, err := castx.ToJSONNumberE(*value)
+		res := *value
+		if _, ok := res.(json.Number); ok {
+			return res, nil
+		}
+		v, err := castx.ToJSONNumberE(res)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeBytes:
+		res := *value
+		if _, ok := res.([]byte); ok {
+			return res, nil
+		}
 		v, err := castx.ToByteSliceE(*value)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
 		return v, nil
 	case schema.TypeString:
-		v, err := castx.ToStringE(*value)
+		res := *value
+		if _, ok := res.(string); ok {
+			return res, nil
+		}
+		v, err := castx.ToStringE(res)
 		if err != nil {
 			return nil, NewStrictifyError(valueSchema, targetType, err)
 		}
