@@ -30,7 +30,7 @@ func TestCanonParquet(t *testing.T) {
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)
 		logger.Log.Info("dir uploaded")
 	}
-	cfg.ReadBatchSize = 100_000
+	cfg.ReadBatchSize = 128
 	storage, err := New(cfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.NoError(t, err)
 	schema, err := storage.TableList(nil)

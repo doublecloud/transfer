@@ -3,6 +3,7 @@ package reader
 import (
 	"context"
 	"fmt"
+	"reflect"
 	"strings"
 	"time"
 
@@ -201,9 +202,11 @@ func (r *ReaderParquet) Read(ctx context.Context, filePath string, pusher chunk_
 	r.logger.Infof("part: %s extracted row count: %v", filePath, rowCount)
 	var buff []abstract.ChangeItem
 
+	rowIDx := map[string]int{}
 	rowFields := map[string]parquet.Field{}
-	for _, field := range pr.Schema().Fields() {
+	for idx, field := range pr.Schema().Fields() {
 		rowFields[field.Name()] = field
+		rowIDx[field.Name()] = idx
 	}
 	r.logger.Infof("schema: \n%s", pr.Schema())
 
@@ -216,29 +219,35 @@ func (r *ReaderParquet) Read(ctx context.Context, filePath string, pusher chunk_
 		default:
 		}
 		row := map[string]any{}
+		pqRows := make([]parquet.Row, r.batchSize)
+		n, err := pr.ReadRows(pqRows)
+		if err != nil {
+			return xerrors.Errorf("unable to read row: %w", err)
+		}
+		i += uint64(n)
 		if err := pr.Read(&row); err != nil {
 			return xerrors.Errorf("unable to read row: %w", err)
 		}
 		i += 1
-		ci, err := r.constructCI(rowFields, row, filePath, r.s3reader.LastModified(), i)
-		if err != nil {
-			return xerrors.Errorf("unable to construct change item: %w", err)
-		}
-		currentSize += int64(ci.Size.Values)
-		buff = append(buff, ci)
-		if len(buff) > r.batchSize {
-			if err := pusher.Push(ctx, chunk_pusher.Chunk{
-				Items:     buff,
-				FilePath:  filePath,
-				Offset:    i,
-				Completed: (i == rowCount-1), // last row of file
-				Size:      currentSize,
-			}); err != nil {
-				return xerrors.Errorf("unable to push: %w", err)
+		for _, row := range pqRows {
+			ci, err := r.constructCI(rowFields, rowIDx, row, filePath, r.s3reader.LastModified(), i)
+			if err != nil {
+				return xerrors.Errorf("unable to construct change item: %w", err)
 			}
-			currentSize = 0
-			buff = []abstract.ChangeItem{}
+			currentSize += int64(ci.Size.Values)
+			buff = append(buff, ci)
 		}
+		if err := pusher.Push(ctx, chunk_pusher.Chunk{
+			Items:     buff,
+			FilePath:  filePath,
+			Offset:    i,
+			Completed: (i == rowCount-1), // last row of file
+			Size:      currentSize,
+		}); err != nil {
+			return xerrors.Errorf("unable to push: %w", err)
+		}
+		currentSize = 0
+		buff = []abstract.ChangeItem{}
 	}
 	if len(buff) > 0 {
 		if err := pusher.Push(ctx, chunk_pusher.Chunk{
@@ -254,8 +263,13 @@ func (r *ReaderParquet) Read(ctx context.Context, filePath string, pusher chunk_
 	return nil
 }
 
-func (r *ReaderParquet) constructCI(parquetSchema map[string]parquet.Field, row map[string]any, fname string,
-	lModified time.Time, idx uint64,
+func (r *ReaderParquet) constructCI(
+	parquetSchema map[string]parquet.Field,
+	parquetIDx map[string]int,
+	row parquet.Row,
+	fname string,
+	lModified time.Time,
+	idx uint64,
 ) (abstract.ChangeItem, error) {
 	vals := make([]interface{}, len(r.tableSchema.Columns()))
 	for i, col := range r.tableSchema.Columns() {
@@ -273,11 +287,11 @@ func (r *ReaderParquet) constructCI(parquetSchema map[string]parquet.Field, row 
 			}
 			continue
 		}
-		val, ok := row[col.ColumnName]
+		cIDx, ok := parquetIDx[col.ColumnName]
 		if !ok {
 			vals[i] = nil
 		} else {
-			vals[i] = r.parseParquetField(parquetSchema[col.ColumnName], val, col)
+			vals[i] = r.parseParquetField(parquetSchema[col.ColumnName], row[cIDx], col)
 		}
 	}
 
@@ -314,26 +328,29 @@ func (r *ReaderParquet) parseLogicalDate(field parquet.Field, val any) any {
 	return val
 }
 
-func (r *ReaderParquet) parseParquetField(field parquet.Field, val interface{}, col abstract.ColSchema) interface{} {
+func (r *ReaderParquet) parseParquetField(field parquet.Field, val parquet.Value, col abstract.ColSchema) interface{} {
 	if field == nil || field.Type() == nil {
 		return val
 	}
-	if legacyInt96, ok := val.(deprecated.Int96); ok {
-		return legacyInt96.String()
-	}
-	if field.Type().LogicalType() != nil {
-		switch {
-		case field.Type().LogicalType().Date != nil:
-			return r.parseLogicalDate(field, val)
-		}
-	}
-	if field.Type().ConvertedType() != nil {
-		switch *field.Type().ConvertedType() {
-		case deprecated.Date:
-			return r.parseLogicalDate(field, val)
-		}
-	}
-	return abstract.Restore(col, val)
+	//if legacyInt96, ok := val.(deprecated.Int96); ok {
+	//	return legacyInt96.String()
+	//}
+	//if field.Type().LogicalType() != nil {
+	//	switch {
+	//	case field.Type().LogicalType().Date != nil:
+	//		return r.parseLogicalDate(field, val)
+	//	}
+	//}
+	//if field.Type().ConvertedType() != nil {
+	//	switch *field.Type().ConvertedType() {
+	//	case deprecated.Date:
+	//		return r.parseLogicalDate(field, val)
+	//	}
+	//}
+	baseTyp := field.GoType()
+	v := reflect.New(baseTyp)
+	cell := field.Type().AssignValue(v, val)
+	return abstract.Restore(col, cell)
 }
 
 func (r *ReaderParquet) ParsePassthrough(chunk chunk_pusher.Chunk) []abstract.ChangeItem {
