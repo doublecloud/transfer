@@ -1,0 +1,38 @@
+{
+    "gotest.gotest.TestCanonSource/array_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_array_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/array_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_array_types_canon_0#03/extracted"
+    },
+    "gotest.gotest.TestCanonSource/date_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_date_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/date_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_date_types_canon_0#03/extracted"
+    },
+    "gotest.gotest.TestCanonSource/geom_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_geom_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/geom_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_geom_types_canon_0#03/extracted"
+    },
+    "gotest.gotest.TestCanonSource/numeric_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_numeric_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/numeric_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_numeric_types_canon_0#03/extracted"
+    },
+    "gotest.gotest.TestCanonSource/text_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_text_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/text_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_text_types_canon_0#03/extracted"
+    },
+    "gotest.gotest.TestCanonSource/wtf_types/canon_0#01": {
+        "uri": "file://gotest.gotest.TestCanonSource_wtf_types_canon_0#01/extracted"
+    },
+    "gotest.gotest.TestCanonSource/wtf_types/canon_0#03": {
+        "uri": "file://gotest.gotest.TestCanonSource_wtf_types_canon_0#03/extracted"
+    }
+}
