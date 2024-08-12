@@ -16,7 +16,7 @@ import (
 
 const (
 	idColumn             = "_id"
-	fieldFormatSchemaKey = "elasticsearch:fieldFormatSchemaKey"
+	fieldFormatSchemaKey = abstract.PropertyKey("elasticsearch:fieldFormatSchemaKey")
 )
 
 type SchemaDescription struct {

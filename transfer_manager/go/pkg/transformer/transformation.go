@@ -267,12 +267,7 @@ func (u *transformation) do(tid abstract.TableID, tablePlans map[string][]abstra
 		Errors:      make([]abstract.TransformerError, 0),
 	}
 	input := items
-	u.logger.Debugf(
-		"plan %s %v do for %v",
-		tid.String(),
-		len(tablePlans),
-		len(input),
-	)
+	u.logger.Debugf("for '%s' are '%v' plans to transform '%v' changeitems", tid.String(), len(tablePlans), len(input))
 	currentSchemaHash, _ := input[0].TableSchema.Hash()
 
 	for i, lastIndex := 0, 0; i <= len(input); i++ {
@@ -292,13 +287,14 @@ func (u *transformation) do(tid abstract.TableID, tablePlans map[string][]abstra
 			toApply = iResult.Transformed
 			u.logIfErrors(
 				iResult.Errors,
-				"plan applied %s: \n%s\ninput: %d transformed %d errors %d in %v",
+				"transformation plan applied for table '%s':\n%s\n"+
+					"got %d items, transformed %d items with %d errors in %v milliseconds",
 				tid.String(),
 				tr.Description(),
-				i-lastIndex,
+				len(toApply),
 				len(iResult.Transformed),
 				len(iResult.Errors),
-				time.Since(st),
+				time.Since(st).Milliseconds(),
 			)
 		}
 		result.Transformed = append(result.Transformed, toApply...)
