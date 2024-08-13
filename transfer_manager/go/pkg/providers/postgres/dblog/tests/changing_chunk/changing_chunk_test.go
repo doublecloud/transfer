@@ -1,10 +1,9 @@
-package mvp
+package changingchunk
 
 import (
 	"context"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
@@ -23,15 +22,8 @@ var (
 	Source        = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
 	testTableName = "__test_num_table"
 
-	rowsAfterInserts = uint64(14)
-
 	incrementalLimit = uint64(10)
-	numberOfInserts  = 16
-
-	sleepBetweenInserts = 100 * time.Millisecond
-
-	minOutputItems = 15
-	maxOutputItems = 30
+	numberOfInserts  = 10
 )
 
 func init() {
@@ -55,11 +47,16 @@ func TestIncrementalSnapshot(t *testing.T) {
 	})
 	changeItemBuilder := helpers.NewChangeItemsBuilder("public", testTableName, arrColSchema)
 
-	require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": 11, "num": 11}, {"id": 12, "num": 12}, {"id": 13, "num": 13}, {"id": 14, "num": 14}})))
+	cnt := 0
 
-	helpers.CheckRowsCount(t, Source, "public", testTableName, rowsAfterInserts)
+	opt := func() {
+		for i := 1; cnt == 0 && i <= numberOfInserts; i++ {
+			require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": i, "num": i}})))
+		}
+		cnt++
+	}
 
-	storage, err := dblog.NewStorage(&Source, incrementalLimit, stats.NewSourceStats(metrics.NewRegistry()), coordinator.NewFakeClient())
+	storage, err := dblog.NewStorage(&Source, incrementalLimit, stats.NewSourceStats(metrics.NewRegistry()), coordinator.NewFakeClient(), opt)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)
@@ -79,21 +76,19 @@ func TestIncrementalSnapshot(t *testing.T) {
 	var output []abstract.ChangeItem
 
 	pusher := func(items []abstract.ChangeItem) error {
-		output = append(output, items...)
+		for _, item := range items {
+			if item.Table == "__consumer_keeper" {
+				continue
+			}
+
+			output = append(output, item)
+		}
 
 		return nil
 	}
 
-	go func() {
-		for i := 0; i < numberOfInserts; i++ {
-			require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": i, "num": i}})))
-			time.Sleep(sleepBetweenInserts)
-		}
-	}()
-
 	err = storage.LoadTable(context.Background(), *numTable, pusher)
 	require.NoError(t, err)
 
-	require.GreaterOrEqual(t, len(output), minOutputItems)
-	require.LessOrEqual(t, len(output), maxOutputItems)
+	require.Equal(t, numberOfInserts, len(output))
 }

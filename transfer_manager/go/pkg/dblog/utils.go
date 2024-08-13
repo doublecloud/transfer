@@ -2,6 +2,7 @@ package dblog
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -70,15 +71,32 @@ func makeSQLTuple(stringArray []string) string {
 	return fmt.Sprintf("(%s)", strings.Join(stringArray, ","))
 }
 
-func pKeysToStringArr(item abstract.ChangeItem, primaryKey []string, converter changeItemConverter) ([]string, error) {
+func pKeysToStringArr(item *abstract.ChangeItem, primaryKey []string, converter changeItemConverter) ([]string, error) {
 	keyValue := make([]string, len(primaryKey))
 
 	fastTableSchema := changeitem.MakeFastTableSchema(item.TableSchema.Columns())
-	columnNamesIndices := item.ColumnNameIndices()
+	var columnNamesIndices map[string]int
+
+	keysChanged := item.KeysChanged()
+	if keysChanged {
+		columnNamesIndices = make(map[string]int, len(item.OldKeys.KeyNames))
+
+		for i, columnName := range item.OldKeys.KeyNames {
+			columnNamesIndices[columnName] = i
+		}
+	} else {
+		columnNamesIndices = item.ColumnNameIndices()
+	}
 
 	for i, key := range primaryKey {
 
-		itemVal := item.ColumnValues[columnNamesIndices[key]]
+		var itemVal interface{}
+		if keysChanged {
+			itemVal = item.OldKeys.KeyValues[columnNamesIndices[key]]
+		} else {
+			itemVal = item.ColumnValues[columnNamesIndices[key]]
+		}
+
 		itemColSchema := fastTableSchema[changeitem.ColumnName(key)]
 
 		strVal, err := converter(itemVal, itemColSchema)
@@ -141,7 +159,7 @@ func ResolveChunkMapFromArr(items []abstract.ChangeItem, primaryKey []string, co
 	chunk := make(map[string]abstract.ChangeItem)
 
 	for _, item := range items {
-		keyValue, err := pKeysToStringArr(item, primaryKey, converter)
+		keyValue, err := pKeysToStringArr(&item, primaryKey, converter)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to resolve key value: %w", err)
 		}
@@ -152,4 +170,23 @@ func ResolveChunkMapFromArr(items []abstract.ChangeItem, primaryKey []string, co
 	}
 
 	return chunk, nil
+}
+
+func ConvertArrayToString(array []string) (string, error) {
+	jsonData, err := json.Marshal(array)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonData), nil
+}
+
+func ConvertStringToArray(jsonString string) ([]string, error) {
+	var array []string
+	err := json.Unmarshal([]byte(jsonString), &array)
+	if err != nil {
+		return nil, err
+	}
+
+	return array, nil
 }

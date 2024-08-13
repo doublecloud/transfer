@@ -4,27 +4,28 @@ import (
 	"context"
 
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/google/uuid"
 )
 
 type MockSignalTable struct {
-	CreateWatermarkF func(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType) error
-	IsWatermarkF     func(item *abstract.ChangeItem, tableID abstract.TableID) (bool, WatermarkType)
+	CreateWatermarkF func(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType, lowBound []string) (uuid.UUID, error)
+	IsWatermarkF     func(item *abstract.ChangeItem, tableID abstract.TableID, mark uuid.UUID) (bool, WatermarkType)
 }
 
-func (m *MockSignalTable) CreateWatermark(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType) error {
-	return m.CreateWatermarkF(ctx, tableID, watermarkType)
+func (m *MockSignalTable) CreateWatermark(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType, lowBound []string) (uuid.UUID, error) {
+	return m.CreateWatermarkF(ctx, tableID, watermarkType, lowBound)
 }
 
-func (m *MockSignalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.TableID) (bool, WatermarkType) {
-	return m.IsWatermarkF(item, tableID)
+func (m *MockSignalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.TableID, mark uuid.UUID) (bool, WatermarkType) {
+	return m.IsWatermarkF(item, tableID, mark)
 }
 
 func NewMockSignalTable() *MockSignalTable {
 	return &MockSignalTable{
-		CreateWatermarkF: func(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType) error {
-			return nil
+		CreateWatermarkF: func(ctx context.Context, tableID abstract.TableID, watermarkType WatermarkType, lowBound []string) (uuid.UUID, error) {
+			return uuid.UUID{}, nil
 		},
-		IsWatermarkF: func(item *abstract.ChangeItem, tableID abstract.TableID) (bool, WatermarkType) {
+		IsWatermarkF: func(item *abstract.ChangeItem, tableID abstract.TableID, mark uuid.UUID) (bool, WatermarkType) {
 			return true, LowWatermarkType
 		},
 	}

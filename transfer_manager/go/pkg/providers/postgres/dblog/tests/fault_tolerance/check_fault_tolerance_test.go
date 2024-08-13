@@ -1,10 +1,9 @@
-package mvp
+package faulttolerance
 
 import (
 	"context"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/metrics"
@@ -23,15 +22,10 @@ var (
 	Source        = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
 	testTableName = "__test_num_table"
 
-	rowsAfterInserts = uint64(14)
-
-	incrementalLimit = uint64(10)
-	numberOfInserts  = 16
-
-	sleepBetweenInserts = 100 * time.Millisecond
-
-	minOutputItems = 15
-	maxOutputItems = 30
+	incrementalLimit         = uint64(10)
+	initialRowsNumber        = uint64(10)
+	numberRowsAfterInserts   = uint64(14)
+	lenOutputAfterSecondLoad = 18
 )
 
 func init() {
@@ -39,7 +33,7 @@ func init() {
 	Source.WithDefaults()
 }
 
-func TestIncrementalSnapshot(t *testing.T) {
+func TestIncrementalSnapshotFaultTolerance(t *testing.T) {
 	defer func() {
 		require.NoError(t, helpers.CheckConnections(
 			helpers.LabeledPort{Label: "PG source", Port: Source.Port},
@@ -55,9 +49,7 @@ func TestIncrementalSnapshot(t *testing.T) {
 	})
 	changeItemBuilder := helpers.NewChangeItemsBuilder("public", testTableName, arrColSchema)
 
-	require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": 11, "num": 11}, {"id": 12, "num": 12}, {"id": 13, "num": 13}, {"id": 14, "num": 14}})))
-
-	helpers.CheckRowsCount(t, Source, "public", testTableName, rowsAfterInserts)
+	helpers.CheckRowsCount(t, Source, "public", testTableName, uint64(initialRowsNumber))
 
 	storage, err := dblog.NewStorage(&Source, incrementalLimit, stats.NewSourceStats(metrics.NewRegistry()), coordinator.NewFakeClient())
 	require.NoError(t, err)
@@ -84,16 +76,16 @@ func TestIncrementalSnapshot(t *testing.T) {
 		return nil
 	}
 
-	go func() {
-		for i := 0; i < numberOfInserts; i++ {
-			require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": i, "num": i}})))
-			time.Sleep(sleepBetweenInserts)
-		}
-	}()
+	err = storage.LoadTable(context.Background(), *numTable, pusher)
+	require.NoError(t, err)
+
+	require.Equal(t, int(initialRowsNumber), len(output))
+
+	require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"id": 11, "num": 11}, {"id": 12, "num": 12}, {"id": 13, "num": 13}, {"id": 14, "num": 14}})))
+	helpers.CheckRowsCount(t, Source, "public", testTableName, numberRowsAfterInserts)
 
 	err = storage.LoadTable(context.Background(), *numTable, pusher)
 	require.NoError(t, err)
 
-	require.GreaterOrEqual(t, len(output), minOutputItems)
-	require.LessOrEqual(t, len(output), maxOutputItems)
+	require.Equal(t, lenOutputAfterSecondLoad, len(output))
 }

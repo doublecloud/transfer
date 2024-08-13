@@ -200,6 +200,7 @@ func TestIncrementalSnapshot(t *testing.T) {
 			signalTable,
 			postgres.Represent,
 			primaryKey,
+			nil,
 			defaultLimit)
 
 		require.NoError(t, err)

@@ -3,9 +3,11 @@ package dblog
 import (
 	"context"
 
+	"github.com/doublecloud/tross/library/go/core/xerrors"
 	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/google/uuid"
 	"golang.org/x/exp/maps"
 )
 
@@ -68,6 +70,14 @@ func (s *IncrementalAsyncSink) isExpectedWatermarkOfType(watermarkType Watermark
 	}
 }
 
+func (s *IncrementalAsyncSink) expectedUUID() uuid.UUID {
+	if s.inWindow {
+		return s.tableIterator.HighWatermarkUUID
+	} else {
+		return s.tableIterator.LowWatermarkUUID
+	}
+}
+
 func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error {
 	lastUnfilledItemIdx := 0
 
@@ -76,7 +86,7 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 			continue
 		}
 
-		if ok, watermarkType := s.signalTable.IsWatermark(&item, s.tableID); ok {
+		if ok, watermarkType := s.signalTable.IsWatermark(&item, s.tableID, s.expectedUUID()); ok {
 			logger.Log.Info("watermark found")
 
 			if !s.isExpectedWatermarkOfType(watermarkType) {
@@ -125,7 +135,7 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 				continue
 			}
 
-			keyValue, err := pKeysToStringArr(item, s.primaryKey, s.itemConverter)
+			keyValue, err := pKeysToStringArr(&item, s.primaryKey, s.itemConverter)
 			if err != nil {
 				return util.MakeChanWithError(err)
 			}
@@ -148,14 +158,20 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 
 func (s *IncrementalAsyncSink) pushChunk() error {
 	if err := s.outputPusher(maps.Values(s.chunk)); err != nil {
-		return err
+		return xerrors.Errorf("failed to push chunk: %w", err)
 	}
+
+	if _, err := s.signalTable.CreateWatermark(s.ctx, s.tableID, SuccessWatermarkType, s.tableIterator.lowBound); err != nil {
+		return xerrors.Errorf("failed to create success watermark: %w", err)
+	}
+
 	return nil
 }
 
 func (s *IncrementalAsyncSink) shiftRemainingItems(items []abstract.ChangeItem, lastFilledIdx, curIdx int) error {
 	for ; curIdx < len(items); curIdx++ {
-		if items[curIdx].Table == "__consumer_keeper" {
+		curTableName := items[curIdx].Table
+		if curTableName == "__consumer_keeper" || curTableName == "__data_transfer_signal_table" {
 			continue
 		}
 

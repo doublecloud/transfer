@@ -19,8 +19,9 @@ type Storage struct {
 
 	chunkSize uint64
 
-	registry *stats.SourceStats
-	cp       coordinator.Coordinator
+	registry         *stats.SourceStats
+	cp               coordinator.Coordinator
+	betweenMarksOpts []func()
 }
 
 func NewStorage(
@@ -28,6 +29,7 @@ func NewStorage(
 	chunkSize uint64,
 	registry *stats.SourceStats,
 	cp coordinator.Coordinator,
+	betweenMarksOpts ...func(),
 ) (*Storage, error) {
 	pgStorage, err := postgres.NewStorage(pgSource.ToStorageParams(nil))
 	if err != nil {
@@ -35,11 +37,12 @@ func NewStorage(
 	}
 
 	return &Storage{
-		pgSource:  pgSource,
-		pgStorage: pgStorage,
-		chunkSize: chunkSize,
-		registry:  registry,
-		cp:        cp,
+		pgSource:         pgSource,
+		pgStorage:        pgStorage,
+		chunkSize:        chunkSize,
+		registry:         registry,
+		cp:               cp,
+		betweenMarksOpts: betweenMarksOpts,
 	}, nil
 }
 
@@ -84,14 +87,16 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 	}
 
 	tableQuery := tablequery.NewTableQuery(tableDescr.ID(), true, "", 0, chunkSize)
-
+	lowBound := pgSignalTable.resolveLowBound(ctx, tableDescr.ID())
 	iterator, err := dblog.NewIncrementalIterator(
 		s.pgStorage,
 		tableQuery,
 		pgSignalTable,
 		postgres.Represent,
 		pkColNames,
+		lowBound,
 		chunkSize,
+		s.betweenMarksOpts...,
 	)
 	if err != nil {
 		return xerrors.Errorf("unable to build iterator, err: %w", err)

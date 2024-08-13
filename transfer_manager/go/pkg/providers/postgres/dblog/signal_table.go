@@ -23,6 +23,7 @@ const (
 	tableSchemaColumnIndex = 0
 	tableNameColumnIndex   = 1
 	tableTransferIDIndex   = 2
+	markColumnIndex        = 3
 	markTypeColumnIndex    = 4
 )
 
@@ -39,8 +40,9 @@ func buildSignalTableDDL() string {
 				  table_name TEXT,
 				  transfer_id TEXT,
 				  mark UUID,
-				  markType CHAR,
-				  PRIMARY KEY (table_schema, table_name, transfer_id)
+				  mark_type CHAR,
+				  low_bound TEXT,
+				  PRIMARY KEY (table_schema, table_name, transfer_id, mark_type)
 			  );`
 
 	return fmt.Sprintf(query, signalTableName)
@@ -95,8 +97,14 @@ func (s *signalTable) tx(ctx context.Context, operation txOp) error {
 	return nil
 }
 
-func (s *signalTable) CreateWatermark(ctx context.Context, tableID abstract.TableID, watermarkType dblog.WatermarkType) error {
-	return s.tx(ctx, func(conn pgx.Tx) error {
+func (s *signalTable) CreateWatermark(
+	ctx context.Context,
+	tableID abstract.TableID,
+	watermarkType dblog.WatermarkType,
+	lowBoundArr []string,
+) (uuid.UUID, error) {
+	var newUUID uuid.UUID
+	err := s.tx(ctx, func(conn pgx.Tx) error {
 		tx, err := s.conn.Begin(ctx)
 		if err != nil {
 			return xerrors.Errorf("unable to begin transaction: %w", err)
@@ -110,7 +118,12 @@ func (s *signalTable) CreateWatermark(ctx context.Context, tableID abstract.Tabl
 			}
 		})
 
-		newUUID := uuid.New()
+		newUUID = uuid.New()
+
+		lowBoundStr, err := dblog.ConvertArrayToString(lowBoundArr)
+		if err != nil {
+			return xerrors.Errorf("unable to convert low bound array to string")
+		}
 
 		_, err = tx.Exec(
 			ctx,
@@ -120,6 +133,7 @@ func (s *signalTable) CreateWatermark(ctx context.Context, tableID abstract.Tabl
 			s.transferID,
 			newUUID,
 			string(watermarkType),
+			lowBoundStr,
 		)
 		if err != nil {
 			return xerrors.Errorf("failed to create watermark for %s: %w", tableID.Fqtn(), err)
@@ -132,38 +146,85 @@ func (s *signalTable) CreateWatermark(ctx context.Context, tableID abstract.Tabl
 		rollback.Cancel()
 		return nil
 	})
+
+	return newUUID, err
 }
 
-func (s *signalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.TableID) (bool, dblog.WatermarkType) {
+func (s *signalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.TableID, markUUID uuid.UUID) (bool, dblog.WatermarkType) {
 	isWatermark := item.Table == signalTableName
 	if !isWatermark {
-		return false, dblog.LowWatermarkType
+		return false, dblog.BadWatermarkType
 	}
 
 	if item.ColumnValues[tableSchemaColumnIndex].(string) != tableID.Namespace ||
 		item.ColumnValues[tableNameColumnIndex].(string) != tableID.Name ||
 		item.ColumnValues[tableTransferIDIndex].(string) != s.transferID {
-		return false, dblog.LowWatermarkType
+		return false, dblog.BadWatermarkType
+	}
+
+	parsedUUID, err := uuid.Parse(item.ColumnValues[markColumnIndex].(string))
+	if err != nil {
+		return true, dblog.BadWatermarkType
+	}
+
+	if parsedUUID != markUUID {
+		return true, dblog.BadWatermarkType
 	}
 
 	if _, ok := item.ColumnValues[markTypeColumnIndex].(string); !ok {
-		return false, dblog.LowWatermarkType
+		return false, dblog.BadWatermarkType
 	}
 	strVal := item.ColumnValues[markTypeColumnIndex].(string)
 	if len(strVal) != 1 {
-		return false, dblog.LowWatermarkType
+		return false, dblog.BadWatermarkType
 	}
 
 	return true, dblog.WatermarkType(strVal)
 }
 
 func (s *signalTable) makeWatermarkQuery() string {
-	query := `INSERT INTO %s (table_schema, table_name, transfer_id, mark, markType)
-			  VALUES (($1), ($2), ($3), ($4), ($5))
-			  ON CONFLICT (table_schema, table_name, transfer_id)
+	query := `INSERT INTO %s (table_schema, table_name, transfer_id, mark, mark_type, low_bound)
+			  VALUES (($1), ($2), ($3), ($4), ($5), ($6))
+			  ON CONFLICT (table_schema, table_name, transfer_id, mark_type)
 			  DO UPDATE
 			  SET mark = EXCLUDED.mark,
-				  markType = EXCLUDED.markType;`
+				  low_bound = EXCLUDED.low_bound;`
+
+	return fmt.Sprintf(query, signalTableName)
+}
+
+func (s *signalTable) resolveLowBound(ctx context.Context, tableID abstract.TableID) []string {
+	var lowBoundStr string
+
+	err := s.tx(ctx, func(conn pgx.Tx) error {
+		query := s.resolveLowBoundQuery()
+
+		err := conn.QueryRow(ctx, query, tableID.Namespace, tableID.Name, s.transferID, dblog.SuccessWatermarkType).Scan(&lowBoundStr)
+		if err != nil {
+			return xerrors.Errorf("failed to retrieve low_bound for Namespace: %s, Table: %s, transferID: %s, err : %w", tableID.Namespace, tableID.Name, s.transferID, err)
+		}
+
+		return nil
+	})
+
+	if err != nil {
+		return nil
+	}
+
+	lowBoundArray, err := dblog.ConvertStringToArray(lowBoundStr)
+	if err != nil {
+		return nil
+	}
+
+	return lowBoundArray
+}
+
+func (s *signalTable) resolveLowBoundQuery() string {
+	query := `SELECT low_bound FROM %s
+              WHERE table_schema = ($1)
+              	AND table_name = ($2)
+                AND transfer_id = ($3)
+              	AND mark_type = ($4);`
 
 	return fmt.Sprintf(query, signalTableName)
 }
