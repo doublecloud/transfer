@@ -18,6 +18,13 @@ func InitializeWithTags(transfer *server.Transfer, task *server.TransferOperatio
 	return
 }
 
+func WithAgent(agent MeteringAgent) MeteringAgent {
+	commonAgentMu.Lock()
+	defer commonAgentMu.Unlock()
+	commonAgent = agent
+	return commonAgent
+}
+
 func Initialize(transfer *server.Transfer, task *server.TransferOperation) {
 	InitializeWithTags(transfer, task, map[string]interface{}{})
 }
