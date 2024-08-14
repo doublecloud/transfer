@@ -38,6 +38,11 @@ func (r *MarshallingRules) SetColType(name string, description *columntypes.Type
 func NewRules(names []string, colSchema []abstract.ColSchema, colNameToIndex map[string]int, colTypes columntypes.TypeMapping, anyAsString bool) *MarshallingRules {
 	optTypes := make([]*columntypes.TypeDescription, len(colNameToIndex))
 	for k, v := range colNameToIndex {
+		if v >= len(optTypes) {
+			// if clickhouse have more columns than source - we need to emit them aswell
+			optTypes = append(optTypes, colTypes[k])
+			continue
+		}
 		optTypes[v] = colTypes[k]
 	}
 
