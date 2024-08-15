@@ -38,6 +38,7 @@ type PgDestination struct {
 	BufferTriggingInterval time.Duration
 	QueryTimeout           time.Duration
 	DisableSQLFallback     bool
+	ConnectionID           string
 }
 
 var _ server.Destination = (*PgDestination)(nil)

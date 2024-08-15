@@ -56,6 +56,10 @@ type Clusterable interface {
 	MDBClusterID() string
 }
 
+type ConnectionManageable interface {
+	GetConnectionID() string
+}
+
 // Abstract2Source if implemented we must try to create abstract2 source for them
 // to be deleted in favor of `MakeDataProvider` method
 type Abstract2Source interface {

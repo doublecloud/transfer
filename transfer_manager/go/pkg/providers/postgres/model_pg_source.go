@@ -73,6 +73,7 @@ type PgSource struct {
 	SnapshotSerializationFormat PgSerializationFormat
 	ShardingKeyFields           map[string][]string
 	PgDumpCommand               []string
+	ConnectionID                string
 }
 
 var _ server.Source = (*PgSource)(nil)
