@@ -13,7 +13,7 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 
-	Ydb_PersQueue_ClusterDiscovery "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
+	Ydb_PersQueue_ClusterDiscovery "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
 )
 
 // This is a compile-time assertion to ensure that this generated file

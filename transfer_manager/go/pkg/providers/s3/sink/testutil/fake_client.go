@@ -1,7 +1,7 @@
 package testutil
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 )
 
 // FakeClientWithTransferState is a fake controlplane client which stores sharded object transfer state

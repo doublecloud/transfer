@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	aws_s3 "github.com/aws/aws-sdk-go/service/s3"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	creds "github.com/doublecloud/tross/transfer_manager/go/pkg/credentials"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	creds "github.com/doublecloud/transfer/transfer_manager/go/pkg/credentials"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

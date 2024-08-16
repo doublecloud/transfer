@@ -7,9 +7,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/concurrent"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/topic"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/concurrent"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/topic"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 // Broker is concurrent container for all fake logbroker's stateful discoverable entities:

@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/conn"
-	chrecipe "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/recipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/conn"
+	chrecipe "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/recipe"
 	"github.com/stretchr/testify/require"
 )
 

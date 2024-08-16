@@ -1,8 +1,8 @@
 package delta
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/types"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/typesystem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/types"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

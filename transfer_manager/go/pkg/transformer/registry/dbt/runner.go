@@ -6,10 +6,10 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/runtime/shared/pod"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/runtime/shared/pod"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
 )

@@ -1,11 +1,11 @@
 package middlewares
 
 import (
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 )
 
 // ErrorTracker do nothing except tracking error / success pushes into metrics

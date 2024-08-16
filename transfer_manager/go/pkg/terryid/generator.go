@@ -1,7 +1,7 @@
 package terryid
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/randutil"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/randutil"
 )
 
 const (

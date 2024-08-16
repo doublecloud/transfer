@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/stretchr/testify/require"
 )
 

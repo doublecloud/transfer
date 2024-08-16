@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/test/canon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	pgcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/library/go/test/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 	"github.com/stretchr/testify/require"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )

@@ -9,10 +9,10 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/topic"
-	logbroker "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/topic"
+	logbroker "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 const (

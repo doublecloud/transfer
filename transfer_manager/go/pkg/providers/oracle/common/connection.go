@@ -4,7 +4,7 @@
 package common
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/oracle"
 	_ "github.com/godror/godror"
 	"github.com/jmoiron/sqlx"
 )

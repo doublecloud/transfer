@@ -5,10 +5,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type RowsMetric struct {

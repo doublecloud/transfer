@@ -6,8 +6,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stringutil"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stringutil"
 	"github.com/stretchr/testify/require"
 )
 

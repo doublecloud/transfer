@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/session"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/session"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Issue"
 	"google.golang.org/grpc/status"

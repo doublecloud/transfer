@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/events"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/types"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/common"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/events"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/types"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/oracle/common"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/oracle/schema"
 )
 
 //nolint:descriptiveerrors

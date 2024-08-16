@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
 	"github.com/montanaflynn/stats"
 	"github.com/olekukonko/tablewriter"
 	"github.com/shirou/gopsutil/v3/cpu"

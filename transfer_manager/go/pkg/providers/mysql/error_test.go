@@ -3,7 +3,7 @@ package mysql
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/require"
 )

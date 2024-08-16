@@ -3,7 +3,7 @@ package types
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	yt_schema "go.ytsaurus.tech/yt/go/schema"
 )
 

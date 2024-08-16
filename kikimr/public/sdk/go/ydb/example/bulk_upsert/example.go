@@ -8,11 +8,11 @@ import (
 	"path"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/connect"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/example/internal/cli"
-	table "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/table"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/ydbsql"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/connect"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/example/internal/cli"
+	table "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/table"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/ydbsql"
 )
 
 const BatchSize = 1000

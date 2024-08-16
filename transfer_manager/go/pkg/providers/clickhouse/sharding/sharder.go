@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 )

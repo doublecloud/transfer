@@ -3,8 +3,8 @@ package stats
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 )
 
 type RepositoryStat struct {

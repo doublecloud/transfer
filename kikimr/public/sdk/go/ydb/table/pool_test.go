@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/testutil"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil/timetest"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/testutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil/timetest"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Table"
 )
 

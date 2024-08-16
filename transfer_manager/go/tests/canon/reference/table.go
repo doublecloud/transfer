@@ -4,11 +4,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/slices"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/canon/validator"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/library/go/slices"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/canon/validator"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

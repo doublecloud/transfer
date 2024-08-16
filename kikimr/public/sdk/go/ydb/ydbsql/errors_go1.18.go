@@ -7,7 +7,7 @@ import (
 	"database/sql/driver"
 	"errors"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 )
 
 type badConnError struct {

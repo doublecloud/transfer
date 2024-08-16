@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/scram"
 	zp "go.uber.org/zap"

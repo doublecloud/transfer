@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/slices"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/ydb"
+	"github.com/doublecloud/transfer/library/go/slices"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 )
@@ -418,7 +418,7 @@ var (
 		time.Date(2024, 4, 8, 18, 38, 0, 0, time.UTC),
 		time.Date(2024, 4, 8, 18, 38, 22, 0, time.UTC),
 		time.Date(2024, 4, 8, 18, 38, 44, 0, time.UTC),
-		time.Duration(4291747200000000 - 1), // this is the largest possible: https://github.com/doublecloud/tross/arcadia/contrib/ydb/core/ydb_convert/ydb_convert.cpp?rev=r13809522#L445
+		time.Duration(4291747200000000 - 1), // this is the largest possible: https://github.com/doublecloud/transfer/arcadia/contrib/ydb/core/ydb_convert/ydb_convert.cpp?rev=r13809522#L445
 	}
 
 	YDBTestMultikeyValues2 = []interface{}{
@@ -443,7 +443,7 @@ var (
 		time.Date(1970, 1, 1, 1, 1, 1, 1, time.UTC),
 		time.Date(1970, 1, 1, 1, 1, 1, 2, time.UTC),
 		time.Date(1970, 1, 1, 1, 1, 1, 3, time.UTC),
-		time.Duration(-4291747200000000 + 1), // this is the largest possible: https://github.com/doublecloud/tross/arcadia/contrib/ydb/core/ydb_convert/ydb_convert.cpp?rev=r13809522#L445
+		time.Duration(-4291747200000000 + 1), // this is the largest possible: https://github.com/doublecloud/transfer/arcadia/contrib/ydb/core/ydb_convert/ydb_convert.cpp?rev=r13809522#L445
 	}
 
 	YDBTestMultikeyValues3 = []interface{}{

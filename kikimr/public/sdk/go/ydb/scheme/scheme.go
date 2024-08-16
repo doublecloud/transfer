@@ -3,8 +3,8 @@ package scheme
 import (
 	"context"
 
-	ydb "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	ydb "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Scheme"
 )
 

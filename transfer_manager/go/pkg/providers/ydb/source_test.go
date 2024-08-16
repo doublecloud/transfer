@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	mockstorage "github.com/doublecloud/tross/transfer_manager/go/tests/helpers/mock_storage"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	mockstorage "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/mock_storage"
 	"github.com/stretchr/testify/require"
 )
 

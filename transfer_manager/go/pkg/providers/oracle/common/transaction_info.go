@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
 )
 
 type TransactionInfo struct {

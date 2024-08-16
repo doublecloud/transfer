@@ -5,8 +5,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/blockcodecs"
-	_ "github.com/doublecloud/tross/library/go/blockcodecs/all"
+	"github.com/doublecloud/transfer/library/go/blockcodecs"
+	_ "github.com/doublecloud/transfer/library/go/blockcodecs/all"
 	"github.com/stretchr/testify/require"
 )
 

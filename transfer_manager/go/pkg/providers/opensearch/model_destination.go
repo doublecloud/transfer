@@ -1,10 +1,10 @@
 package opensearch
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/elastic"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/elastic"
 )
 
 type OpenSearchHostPort struct {

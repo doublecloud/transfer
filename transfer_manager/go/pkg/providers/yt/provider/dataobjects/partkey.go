@@ -1,7 +1,7 @@
 package dataobjects
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yson"
 	"go.ytsaurus.tech/yt/go/yt"

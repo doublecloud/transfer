@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/traceutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/traceutil"
 )
 
 // TestCompose is a generic function for testing trace composing.

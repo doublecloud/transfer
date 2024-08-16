@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/canon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/library/go/test/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"golang.org/x/exp/slices"
 )
 

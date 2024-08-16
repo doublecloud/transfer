@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/blockcodecs"
+	"github.com/doublecloud/transfer/library/go/blockcodecs"
 	"github.com/klauspost/compress/zstd"
 )
 

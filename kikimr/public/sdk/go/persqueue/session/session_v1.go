@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 	"github.com/golang/protobuf/proto"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Discovery"

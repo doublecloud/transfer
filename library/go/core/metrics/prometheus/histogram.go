@@ -3,7 +3,7 @@ package prometheus
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

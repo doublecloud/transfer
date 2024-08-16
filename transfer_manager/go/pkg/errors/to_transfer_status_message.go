@@ -3,11 +3,11 @@ package errors
 import (
 	"sort"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/terryid"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/terryid"
 )
 
 var (

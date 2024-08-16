@@ -1,10 +1,10 @@
 package opensearch
 
 import (
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/elastic"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/elastic"
 	"github.com/elastic/go-elasticsearch/v7"
 	"go.ytsaurus.tech/library/go/core/log"
 )

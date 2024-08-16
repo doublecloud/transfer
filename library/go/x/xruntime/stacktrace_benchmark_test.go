@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/testhelpers"
+	"github.com/doublecloud/transfer/library/go/test/testhelpers"
 )
 
 func BenchmarkNew(b *testing.B) {

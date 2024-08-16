@@ -6,9 +6,9 @@ package topic
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/queue"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/queue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 const (

@@ -3,13 +3,13 @@ package tasks
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/storage"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/storage"
 )
 
 const TablesFilterStateKey = "tables_filter"

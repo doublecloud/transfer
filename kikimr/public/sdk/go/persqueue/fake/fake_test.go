@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log/corelogadapter"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/session"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log/corelogadapter"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/session"
 	"github.com/gofrs/uuid"
 	"github.com/stretchr/testify/require"
 )

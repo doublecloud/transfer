@@ -3,11 +3,11 @@ package strictify
 import (
 	"math"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/dterrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/generics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/dterrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/castx"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/generics"
 	"github.com/spf13/cast"
 	"go.ytsaurus.tech/yt/go/schema"
 )

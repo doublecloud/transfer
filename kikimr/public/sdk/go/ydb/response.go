@@ -1,6 +1,6 @@
 package ydb
 
-import "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+import "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 
 type Response = internal.Response
 

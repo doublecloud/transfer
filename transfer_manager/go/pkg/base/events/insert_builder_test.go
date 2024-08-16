@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/adapter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/adapter"
 	"github.com/stretchr/testify/require"
 	yt_schema "go.ytsaurus.tech/yt/go/schema"
 )

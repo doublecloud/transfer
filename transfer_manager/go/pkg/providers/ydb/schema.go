@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 	"go.ytsaurus.tech/yt/go/schema"
 )

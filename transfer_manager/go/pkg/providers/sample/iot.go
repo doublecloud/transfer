@@ -3,8 +3,8 @@ package sample
 import (
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

@@ -1,7 +1,7 @@
 package events
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 // TODO: Remove after new cleanup design based on TableLoadEvents

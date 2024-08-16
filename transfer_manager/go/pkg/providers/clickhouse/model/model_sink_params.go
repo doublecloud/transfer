@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/dustin/go-humanize"
 )
 

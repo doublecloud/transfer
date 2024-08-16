@@ -3,8 +3,8 @@ package xerrors
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/internal/modes"
-	"github.com/doublecloud/tross/library/go/x/xruntime"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/internal/modes"
+	"github.com/doublecloud/transfer/library/go/x/xruntime"
 )
 
 func DefaultStackTraceMode() {

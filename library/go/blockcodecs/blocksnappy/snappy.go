@@ -1,7 +1,7 @@
 package blocksnappy
 
 import (
-	"github.com/doublecloud/tross/library/go/blockcodecs"
+	"github.com/doublecloud/transfer/library/go/blockcodecs"
 	"github.com/golang/snappy"
 )
 

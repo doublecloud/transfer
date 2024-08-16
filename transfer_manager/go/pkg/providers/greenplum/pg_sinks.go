@@ -5,11 +5,11 @@ import (
 	"io"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	pgsink "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	pgsink "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

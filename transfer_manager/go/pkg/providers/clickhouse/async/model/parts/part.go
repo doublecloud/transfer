@@ -1,7 +1,7 @@
 package parts
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 // Parts is a collection of table parts

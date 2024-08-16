@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 )
 
 func TestDeclaration(t *testing.T) {

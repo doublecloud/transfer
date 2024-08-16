@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"io"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
 // common line splitter, based on csv-specific line splitter from pkg/csv

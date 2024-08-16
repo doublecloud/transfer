@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	pgcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/pgrecipe"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers/serde"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/serde"
 	"github.com/stretchr/testify/require"
 )
 

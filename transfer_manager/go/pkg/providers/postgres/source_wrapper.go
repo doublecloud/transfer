@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.ytsaurus.tech/library/go/core/log"
 )

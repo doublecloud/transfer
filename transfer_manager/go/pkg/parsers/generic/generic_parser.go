@@ -13,14 +13,14 @@ import (
 	"time"
 
 	"github.com/araddon/dateparse"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/library/go/maxprocs"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/castx"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/maxprocs"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/castx"
 	"github.com/goccy/go-json"
 	"github.com/valyala/fastjson"
 	"github.com/valyala/fastjson/fastfloat"
@@ -272,7 +272,7 @@ func IsGenericUnparsedSchema(schema *abstract.TableSchema) bool {
 	}
 	for i := 0; i < len(originalColumns); i++ {
 		if originalColumns[i].ColumnName != unparsedColumns[i].ColumnName ||
-			// type check contradicts timestamp hacks: https://github.com/doublecloud/tross/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=r13620609#L1018
+			// type check contradicts timestamp hacks: https://github.com/doublecloud/transfer/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=r13620609#L1018
 			// originalColumns[i].DataType != unparsedColumns[i].DataType ||
 			originalColumns[i].PrimaryKey != unparsedColumns[i].PrimaryKey ||
 			originalColumns[i].Required != unparsedColumns[i].Required {

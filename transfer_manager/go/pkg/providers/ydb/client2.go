@@ -3,11 +3,11 @@ package ydb
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	ydbLog "github.com/doublecloud/tross/library/go/yandex/ydb/log"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/credentials"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	ydbLog "github.com/doublecloud/transfer/library/go/yandex/ydb/log"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/credentials"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
 	"github.com/ydb-platform/ydb-go-sdk/v3/trace"

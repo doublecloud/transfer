@@ -3,9 +3,9 @@ package dbt
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
 )
 
 type RegisterFunc = func(destination server.Destination) (SupportedDestination, error)

@@ -14,11 +14,11 @@ import (
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/conn"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/conn"
 	"github.com/klauspost/compress/zstd"
 	"go.ytsaurus.tech/library/go/core/log"
 )

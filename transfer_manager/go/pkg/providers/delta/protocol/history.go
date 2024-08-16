@@ -3,10 +3,10 @@ package protocol
 import (
 	"math"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/action"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/store"
-	util_math "github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/action"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/store"
+	util_math "github.com/doublecloud/transfer/transfer_manager/go/pkg/util/math"
 )
 
 type history struct {

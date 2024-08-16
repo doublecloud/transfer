@@ -1,8 +1,8 @@
 // Deprecated: file was moved to ydb package
-// To use it, rename the import to github.com/doublecloud/tross/kikimr/public/sdk/go/ydb
+// To use it, rename the import to github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb
 package internalapi
 
-import "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+import "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 
 type Response = internal.Response
 

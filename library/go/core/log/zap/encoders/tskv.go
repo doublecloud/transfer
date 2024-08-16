@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"go.uber.org/zap/buffer"
 	"go.uber.org/zap/zapcore"
 )

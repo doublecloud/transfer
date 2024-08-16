@@ -1,8 +1,8 @@
 package provider
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/provider/table"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/provider/table"
 )
 
 type lazyYSON struct {

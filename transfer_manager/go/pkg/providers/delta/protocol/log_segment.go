@@ -3,7 +3,7 @@ package protocol
 import (
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/store"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/store"
 )
 
 type LogSegment struct {

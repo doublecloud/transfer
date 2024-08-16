@@ -3,7 +3,7 @@ package xerrors
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors"
 )
 
 func TestSentinelWithStackTraceFormattingWithColon(t *testing.T) {
@@ -16,16 +16,16 @@ func TestSentinelWithStackTraceFormattingWithColon(t *testing.T) {
 		ExpectedV: "sentinel:",
 		Frames: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
         library/go/core/xerrors/sentinel_with_stack_formatting_with_colon_test.go:12
 `,
 		),
 		Stacks: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
         library/go/core/xerrors/sentinel_with_stack_formatting_with_colon_test.go:12
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,
@@ -33,10 +33,10 @@ sentinel:
 		),
 		StackThenFrames: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
         library/go/core/xerrors/sentinel_with_stack_formatting_with_colon_test.go:12
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,
@@ -44,10 +44,10 @@ sentinel:
 		),
 		StackThenNothing: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWithStackTraceFormattingWithColon.func1
         library/go/core/xerrors/sentinel_with_stack_formatting_with_colon_test.go:12
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,

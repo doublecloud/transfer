@@ -5,7 +5,7 @@ import (
 	"os"
 	"sort"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/olekukonko/tablewriter"
 	"go.ytsaurus.tech/yt/go/schema"
 )

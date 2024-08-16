@@ -3,7 +3,7 @@ package postgres
 import (
 	"context"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -16,7 +16,7 @@ func (p pgxLogger) Log(_ context.Context, level pgx.LogLevel, msg string, data m
 	var params []log.Field
 	for k, v := range data {
 		if k == "sql" {
-			// https://github.com/doublecloud/tross/arcadia/vendor/github.com/jackc/pgx/v4/conn.go?rev=r9171541#L413
+			// https://github.com/doublecloud/transfer/arcadia/vendor/github.com/jackc/pgx/v4/conn.go?rev=r9171541#L413
 			query, ok := v.(string)
 			if ok {
 				v = util.DefaultSample(query)

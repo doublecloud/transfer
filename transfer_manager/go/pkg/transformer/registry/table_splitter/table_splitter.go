@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
-	tostring "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/to_string"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
+	tostring "github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/to_string"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

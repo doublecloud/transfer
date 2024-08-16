@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	v1 "github.com/doublecloud/tross/cloud/bitbucket/public-api/yandex/cloud/iam/v1"
+	v1 "github.com/doublecloud/transfer/cloud/bitbucket/public-api/yandex/cloud/iam/v1"
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/grpc"
 )

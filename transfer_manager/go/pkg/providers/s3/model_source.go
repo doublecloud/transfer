@@ -3,9 +3,9 @@ package s3
 import (
 	"encoding/gob"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/protobuf/protoparser"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/protobuf/protoparser"
 )
 
 func init() {

@@ -7,11 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
-	jsonparser "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/json"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	jsonparser "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/json"
 	"github.com/stretchr/testify/require"
 	"github.com/twmb/franz-go/pkg/kgo"
 )

@@ -6,8 +6,8 @@ package topic
 import (
 	"sync/atomic"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/queue"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/queue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 // Topic is model for logbroker's topic with partitions

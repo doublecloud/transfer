@@ -3,7 +3,7 @@ package xerrors
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors"
 )
 
 func TestSentinelWrapNewFormatting(t *testing.T) {
@@ -17,26 +17,26 @@ func TestSentinelWrapNewFormatting(t *testing.T) {
 		ExpectedV: "sentinel: new",
 		Frames: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:13
 new
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:11
 `,
 		),
 		Stacks: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:13
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 new
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:11
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,
@@ -44,13 +44,13 @@ new
 		),
 		StackThenFrames: assertxerrors.NewStackTraceModeExpectation(`
 sentinel:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:13
 new
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:11
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,
@@ -58,10 +58,10 @@ new
 		),
 		StackThenNothing: assertxerrors.NewStackTraceModeExpectation(`
 sentinel: new
-    github.com/doublecloud/tross/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestSentinelWrapNewFormatting.func1
         library/go/core/xerrors/sentinel_wrap_new_formatting_test.go:11
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 `,

@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/library/go/slices"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/filter"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/slices"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/filter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

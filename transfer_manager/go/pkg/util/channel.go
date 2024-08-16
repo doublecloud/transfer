@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/semaphore"
 )

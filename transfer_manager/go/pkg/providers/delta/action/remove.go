@@ -3,7 +3,7 @@ package action
 import (
 	"net/url"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type RemoveFile struct {

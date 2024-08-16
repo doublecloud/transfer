@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/stats"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/stats"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil"
 )
 
 type connRuntime struct {

@@ -1,9 +1,9 @@
 package audittrailsv1
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
-	audittrailsv1engine "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	audittrailsv1engine "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

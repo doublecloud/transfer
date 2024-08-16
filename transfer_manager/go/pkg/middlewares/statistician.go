@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

@@ -1,7 +1,7 @@
 package airbyte
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/typesystem"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

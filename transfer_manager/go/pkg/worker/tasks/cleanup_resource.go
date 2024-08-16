@@ -3,12 +3,12 @@ package tasks
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/cleanup"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/cleanup"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

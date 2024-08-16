@@ -1,6 +1,6 @@
 package stats
 
-import "github.com/doublecloud/tross/library/go/core/metrics"
+import "github.com/doublecloud/transfer/library/go/core/metrics"
 
 type MiddlewareFilterStats struct {
 	registry metrics.Registry

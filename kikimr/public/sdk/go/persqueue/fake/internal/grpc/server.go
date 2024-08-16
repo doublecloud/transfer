@@ -6,10 +6,10 @@ package grpc
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/broker"
-	logbroker "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/broker"
+	logbroker "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 // Server is grpc handler supporting lb's read/write session and choose proxy methods

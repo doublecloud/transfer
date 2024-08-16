@@ -1,10 +1,10 @@
 package middlewares
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/metering"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/middlewares"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/metering"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/middlewares"
 )
 
 func InputDataMetering() func(abstract.Sinker) abstract.Sinker {

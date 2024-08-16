@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 const EnumAllValues = abstract.PropertyKey("pg:enum_all_values")

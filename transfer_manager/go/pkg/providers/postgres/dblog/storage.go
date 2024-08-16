@@ -3,14 +3,14 @@ package dblog
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/dblog"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/dblog/tablequery"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dblog"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dblog/tablequery"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 )
 
 type Storage struct {

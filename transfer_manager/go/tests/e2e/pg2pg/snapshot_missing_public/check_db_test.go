@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/pgrecipe"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/require"
 )

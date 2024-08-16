@@ -4,8 +4,8 @@ import (
 	"encoding/gob"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 )
 
 func init() {

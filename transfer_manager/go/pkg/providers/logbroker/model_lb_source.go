@@ -3,9 +3,9 @@ package logbroker
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 )
 
 type LbSource struct {

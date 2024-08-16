@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/yatest"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	debeziumcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/common"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/testutil"
+	"github.com/doublecloud/transfer/library/go/test/yatest"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	debeziumcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/common"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/testutil"
 	"github.com/stretchr/testify/require"
 )
 

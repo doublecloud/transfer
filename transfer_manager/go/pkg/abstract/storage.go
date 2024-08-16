@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type LoadProgress func(current, progress, total uint64)
@@ -244,7 +244,7 @@ func (t *TableDescription) ID() TableID {
 
 func (t *TableDescription) PartID() string {
 	if t.Offset == 0 && t.Filter == "" {
-		// This needed for s3, see: https://github.com/doublecloud/tross/review/3538625
+		// This needed for s3, see: https://github.com/doublecloud/transfer/review/3538625
 		return ""
 	}
 

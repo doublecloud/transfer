@@ -3,7 +3,7 @@ package ydb
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 	"github.com/golang/protobuf/proto"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 	"google.golang.org/grpc"

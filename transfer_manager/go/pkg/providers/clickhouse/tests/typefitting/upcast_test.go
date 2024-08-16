@@ -3,12 +3,12 @@ package typefitting
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 )

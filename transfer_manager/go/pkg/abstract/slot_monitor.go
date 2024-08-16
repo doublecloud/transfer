@@ -3,7 +3,7 @@ package abstract
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 )
 
 type SlotKiller interface {

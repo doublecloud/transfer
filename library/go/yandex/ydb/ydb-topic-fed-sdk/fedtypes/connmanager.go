@@ -1,6 +1,6 @@
 package fedtypes
 
-import "github.com/doublecloud/tross/library/go/yandex/ydb/internal/broadcast"
+import "github.com/doublecloud/transfer/library/go/yandex/ydb/internal/broadcast"
 
 type ConnectionManager interface {
 	GetState() (FederationState, error)

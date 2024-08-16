@@ -12,7 +12,7 @@ import (
 	grpc "google.golang.org/grpc"
 	metadata "google.golang.org/grpc/metadata"
 
-	Ydb_PersQueue_V0 "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	Ydb_PersQueue_V0 "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
 )
 
 // MockisCredentials_Credentials is a mock of isCredentials_Credentials interface.

@@ -5,7 +5,7 @@ import (
 	"context"
 	"runtime"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 )

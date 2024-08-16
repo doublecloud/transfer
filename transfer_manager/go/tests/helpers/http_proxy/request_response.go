@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/google/uuid"
 	"github.com/klauspost/compress/zstd"
 )

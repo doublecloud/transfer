@@ -1,8 +1,8 @@
 package resources
 
 import (
-	"github.com/doublecloud/tross/library/go/core/resource"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/resource"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
 type EmbeddedResources struct {

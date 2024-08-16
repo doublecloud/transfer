@@ -7,9 +7,9 @@ import (
 	_ "net/http/pprof"
 	"os"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log/corelogadapter"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log/corelogadapter"
 	"github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 )
 

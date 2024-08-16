@@ -8,7 +8,7 @@ import (
 	"go/types"
 	"strings"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 )
 
 func PrimitiveTypeFromString(s string) (t internal.PrimitiveType, err error) {

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/yandex/cloud/filter"
+	"github.com/doublecloud/transfer/library/go/yandex/cloud/filter"
 	"github.com/stretchr/testify/require"
 )
 

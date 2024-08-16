@@ -4,8 +4,8 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/auth"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/auth"
 )
 
 // New connects to database and return database connection

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/doublecloud/tross/library/go/x/xruntime"
+	"github.com/doublecloud/transfer/library/go/x/xruntime"
 )
 
 func writeStackTrace(w io.Writer, stacktrace *xruntime.StackTrace) {

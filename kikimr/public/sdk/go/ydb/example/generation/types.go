@@ -4,7 +4,7 @@ import (
 	_ "strconv"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/opt"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/opt"
 )
 
 //go:generate ydbgen

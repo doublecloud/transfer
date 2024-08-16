@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/example/internal/cli"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/example/internal/cli"
 )
 
 type Command struct {

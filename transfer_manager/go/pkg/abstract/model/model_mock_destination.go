@@ -3,7 +3,7 @@ package model
 import (
 	"encoding/json"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 type MockDestination struct {

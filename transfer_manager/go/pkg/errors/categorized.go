@@ -1,8 +1,8 @@
 package errors
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
 )
 
 // Categorized is an error with an attached category

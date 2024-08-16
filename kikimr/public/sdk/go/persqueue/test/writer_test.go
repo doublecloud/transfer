@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/session"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/test/Ydb_PersQueue_V0_Mock"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/session"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/test/Ydb_PersQueue_V0_Mock"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 )

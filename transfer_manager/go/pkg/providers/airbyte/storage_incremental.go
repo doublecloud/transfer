@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/doublecloud/tross/library/go/slices"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/library/go/slices"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

@@ -4,8 +4,8 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/xtls"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/xtls"
 )
 
 func NewTLS(config ConnParams) (*tls.Config, error) {

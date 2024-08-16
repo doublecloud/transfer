@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	yt_schema "go.ytsaurus.tech/yt/go/schema"
 )
 

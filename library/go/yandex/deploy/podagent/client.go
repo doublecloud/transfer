@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/library/go/httputil/headers"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/httputil/headers"
 	"github.com/go-resty/resty/v2"
 )
 

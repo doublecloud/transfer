@@ -1,6 +1,6 @@
 package ydb
 
-import "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+import "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 
 func (s *Storage) TableSizeInBytes(table abstract.TableID) (uint64, error) {
 	// we force full load for checksum

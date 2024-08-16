@@ -1,4 +1,4 @@
-module github.com/doublecloud/tross
+module github.com/doublecloud/transfer
 
 go 1.22.0
 

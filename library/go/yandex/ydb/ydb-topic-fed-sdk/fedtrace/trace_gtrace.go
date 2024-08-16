@@ -5,7 +5,7 @@ package fedtrace
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/yandex/ydb/ydb-topic-fed-sdk/fedtypes"
+	"github.com/doublecloud/transfer/library/go/yandex/ydb/ydb-topic-fed-sdk/fedtypes"
 )
 
 // fedDriverComposeOptions is a holder of options

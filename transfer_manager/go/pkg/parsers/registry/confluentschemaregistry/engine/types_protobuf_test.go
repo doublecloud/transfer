@@ -4,9 +4,9 @@ import (
 	_ "embed"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/canon"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/types_protobuf_test_data"
+	"github.com/doublecloud/transfer/library/go/test/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/types_protobuf_test_data"
 	"github.com/jhump/protoreflect/desc/protoparse"
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/stretchr/testify/require"

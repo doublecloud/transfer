@@ -3,7 +3,7 @@ package prometheus
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/stretchr/testify/assert"
 )
 

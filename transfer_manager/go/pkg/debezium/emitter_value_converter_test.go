@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/stretchr/testify/require"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )

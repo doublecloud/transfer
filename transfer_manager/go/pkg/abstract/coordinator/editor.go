@@ -1,6 +1,6 @@
 package coordinator
 
-import server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+import server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 
 // Editor is obsolete interface to update entities on coordinator
 //

@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	debeziumcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/common"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/unpacker"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/format"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	debeziumcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/common"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/unpacker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/confluent"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type Receiver struct {

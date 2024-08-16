@@ -4,6 +4,7 @@
   ".gitignore":"cloud/doublecloud/transfer/github_os/.gitignore",
   "CONTRIBUTING.md":"transfer_manager/go/CONTRIBUTING.md",
   "GLOSSARY.md":"transfer_manager/go/GLOSSARY.md",
+  "LICENSE":"cloud/doublecloud/transfer/github_os/LICENSE",
   "Makefile":"cloud/doublecloud/transfer/github_os/Makefile",
   "README.md":"cloud/doublecloud/transfer/github_os/README.md",
   "assets/bench_s3_vs_airbyte.png":"cloud/doublecloud/transfer/github_os/assets/bench_s3_vs_airbyte.png",

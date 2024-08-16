@@ -1388,7 +1388,7 @@ func (x *FileInput) GetIgnoreText() bool {
 }
 
 // Monaco extra params
-// see: https://github.com/doublecloud/tross/arcadia/data-ui/dynamic-forms/src/ui/pages/Home/FormTest/consts.tsx?rev=r10260069#L690
+// see: https://github.com/doublecloud/transfer/arcadia/data-ui/dynamic-forms/src/ui/pages/Home/FormTest/consts.tsx?rev=r10260069#L690
 type MonacoParams struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

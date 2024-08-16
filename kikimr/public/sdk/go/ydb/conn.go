@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/stats"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/stats"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/connectivity"
 )

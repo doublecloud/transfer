@@ -1,14 +1,14 @@
 package logbroker
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	debezium_prod_status "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/prodstatus"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/airbyte"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/mysql"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	debezium_prod_status "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/prodstatus"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/airbyte"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mysql"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 )
 
 func InferFormatSettings(src server.Source, formatSettings server.SerializationFormat) server.SerializationFormat {

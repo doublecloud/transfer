@@ -3,7 +3,7 @@ package xreflect_test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/x/xreflect"
+	"github.com/doublecloud/transfer/library/go/x/xreflect"
 	"github.com/stretchr/testify/require"
 )
 

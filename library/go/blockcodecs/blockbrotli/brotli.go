@@ -7,7 +7,7 @@ import (
 	"io"
 
 	"github.com/andybalholm/brotli"
-	"github.com/doublecloud/tross/library/go/blockcodecs"
+	"github.com/doublecloud/transfer/library/go/blockcodecs"
 )
 
 type brotliCodec int

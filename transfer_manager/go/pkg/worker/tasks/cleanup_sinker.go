@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/sink"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks/cleanup"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/sink"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks/cleanup"
 )
 
 // CleanupSinker cleans up the sinker when non-incremental transfer is

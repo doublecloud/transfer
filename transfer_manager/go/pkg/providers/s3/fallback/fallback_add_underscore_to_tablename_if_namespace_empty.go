@@ -1,9 +1,9 @@
 package fallback
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/typesystem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/s3"
 )
 
 func init() {

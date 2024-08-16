@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/stretchr/testify/require"
 )
 

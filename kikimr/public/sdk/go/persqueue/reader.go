@@ -5,8 +5,8 @@ import (
 	"crypto/tls"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/credentials"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/credentials"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 // ReaderInit is data describing current read session

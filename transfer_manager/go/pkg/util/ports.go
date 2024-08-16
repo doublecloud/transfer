@@ -3,7 +3,7 @@ package util
 import (
 	"net"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
 // GetFreePort returns free port in operating system that

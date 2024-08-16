@@ -1,6 +1,6 @@
 package debezium
 
-import debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
+import debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 
 func buildSourceSchemaDescr(sourceType string) map[string]interface{} {
 	result := map[string]interface{}{

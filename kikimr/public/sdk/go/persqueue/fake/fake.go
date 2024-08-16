@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	lbgrpc "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/grpc"
-	logbroker "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	lbgrpc "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/grpc"
+	logbroker "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 	"google.golang.org/grpc"
 )
 

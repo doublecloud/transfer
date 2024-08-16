@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/yatest"
+	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )

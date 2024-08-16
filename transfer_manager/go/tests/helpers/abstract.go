@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 func UnmarshalChangeItems(t *testing.T, changeItemBuf []byte) []abstract.ChangeItem {

@@ -1,7 +1,7 @@
 package util
 
 import (
-	cloud "github.com/doublecloud/tross/cloud/bitbucket/private-api/yandex/cloud/priv"
+	cloud "github.com/doublecloud/transfer/cloud/bitbucket/private-api/yandex/cloud/priv"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 )

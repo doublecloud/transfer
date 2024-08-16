@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil"
 )
 
 func TestOperationParams(t *testing.T) {

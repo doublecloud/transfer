@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/slices"
+	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/stretchr/testify/assert"
 )
 

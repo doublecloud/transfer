@@ -6,9 +6,9 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/sqltimestamp"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/sqltimestamp"
 )
 
 // Temporal enables to scan any temporal value with a date from []byte

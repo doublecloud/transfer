@@ -17,7 +17,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	Ydb_PersQueue_ClusterDiscovery "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
+	Ydb_PersQueue_ClusterDiscovery "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_ClusterDiscovery"
 )
 
 const (

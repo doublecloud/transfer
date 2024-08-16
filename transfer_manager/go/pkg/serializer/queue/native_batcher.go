@@ -3,8 +3,8 @@ package queue
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 )
 
 func isNativeExtraElementViolatesConstraint(batchingSettings server.Batching, startIndex, currIndex int, lenElements []uint64, prevBodiesSize uint64) bool {

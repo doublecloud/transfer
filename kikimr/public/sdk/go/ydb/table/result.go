@@ -3,8 +3,8 @@ package table
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/result"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/result"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_TableStats"
 )

@@ -10,13 +10,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/mysql"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/ydb"
-	ytprovider "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mysql"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
+	ytprovider "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt"
 	"golang.org/x/exp/slices"
 )
 

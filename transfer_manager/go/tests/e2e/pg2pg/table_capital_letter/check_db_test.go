@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	cpclient "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/pgrecipe"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	cpclient "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,8 +7,8 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 // Queue is fake logbroker topic message queue implementation. Queue stores all written messages, and never gets cleaned up

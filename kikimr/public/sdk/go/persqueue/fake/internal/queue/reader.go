@@ -3,7 +3,7 @@
 
 package queue
 
-import "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
+import "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
 
 type Reader struct {
 	q      *Queue

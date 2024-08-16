@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/test/canon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem/strictify"
-	confluentsrmock "github.com/doublecloud/tross/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/library/go/test/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem/strictify"
+	confluentsrmock "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
 	"github.com/stretchr/testify/require"
 )
 

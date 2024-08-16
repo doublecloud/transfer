@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/test/canon"
+	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/ohler55/ojg/jp"
 	"github.com/ohler55/ojg/oj"
 	"github.com/stretchr/testify/require"

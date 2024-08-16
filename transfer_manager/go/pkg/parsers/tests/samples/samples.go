@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 )
 
 var (

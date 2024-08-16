@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/benchxerrors"
-	"github.com/doublecloud/tross/library/go/test/testhelpers"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/benchxerrors"
+	"github.com/doublecloud/transfer/library/go/test/testhelpers"
 	pkgerrors "github.com/pkg/errors"
 	"golang.org/x/xerrors"
 )

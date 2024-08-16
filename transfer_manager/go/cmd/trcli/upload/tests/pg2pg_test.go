@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/config"
-	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/upload"
-	chrecipe "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/recipe"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/pgrecipe"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/helpers"
+	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/config"
+	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/upload"
+	chrecipe "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/recipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/stretchr/testify/require"
 )
 

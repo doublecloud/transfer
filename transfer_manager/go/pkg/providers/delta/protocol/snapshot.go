@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/action"
-	store2 "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/store"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/iter"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/action"
+	store2 "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/store"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/iter"
 )
 
 // Snapshot provides APIs to access the Delta table state (such as table metadata, active files) at some version.

@@ -12,7 +12,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 
-	Ydb_Experimental "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
+	Ydb_Experimental "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
 )
 
 const (

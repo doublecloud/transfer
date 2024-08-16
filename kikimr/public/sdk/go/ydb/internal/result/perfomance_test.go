@@ -3,7 +3,7 @@ package result
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 )
 
 var (

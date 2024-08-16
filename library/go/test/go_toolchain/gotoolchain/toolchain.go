@@ -8,7 +8,7 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/doublecloud/tross/library/go/test/yatest"
+	"github.com/doublecloud/transfer/library/go/test/yatest"
 )
 
 func Setup(setEnv func(k, v string) error) error {

@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
-	ytcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/config/env"
+	ytcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt"
 )
 
 func TestMain(m *testing.M) {

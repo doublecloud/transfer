@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/httputil/headers"
-	"github.com/doublecloud/tross/library/go/yandex/deploy/podagent"
+	"github.com/doublecloud/transfer/library/go/httputil/headers"
+	"github.com/doublecloud/transfer/library/go/yandex/deploy/podagent"
 	"github.com/stretchr/testify/require"
 )
 

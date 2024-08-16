@@ -3,12 +3,12 @@ package upload
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/config"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/config"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks"
 	"github.com/spf13/cobra"
 )
 

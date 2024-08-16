@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 // Code define provider defined stable code. Each provider has own code-registry, but we have global registry to dedup them

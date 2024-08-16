@@ -5,7 +5,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/x/xruntime"
+	"github.com/doublecloud/transfer/library/go/x/xruntime"
 )
 
 type wrappedErrorf struct {

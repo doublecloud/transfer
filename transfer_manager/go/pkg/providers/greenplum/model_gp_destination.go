@@ -3,12 +3,12 @@ package greenplum
 import (
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares/async/bufferer"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares/async/bufferer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 )
 
 type GpDestination struct {

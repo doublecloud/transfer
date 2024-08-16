@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/sqltimestamp"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/sqltimestamp"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgtype"
 )
 

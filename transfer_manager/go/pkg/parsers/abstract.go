@@ -1,8 +1,8 @@
 package parsers
 
 import (
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 type Parser interface {

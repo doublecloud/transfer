@@ -6,16 +6,16 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/gofrs/uuid"
 	"github.com/jackc/pgio"
 	"github.com/jackc/pgtype"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// GenericArray is based on ArrayType https://github.com/doublecloud/tross/arc_vcs/vendor/github.com/jackc/pgtype/array_type.go?rev=r8263453#L15
+// GenericArray is based on ArrayType https://github.com/doublecloud/transfer/arc_vcs/vendor/github.com/jackc/pgtype/array_type.go?rev=r8263453#L15
 type GenericArray struct {
 	elements   []pgtype.Value
 	dimensions []pgtype.ArrayDimension

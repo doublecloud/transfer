@@ -5,10 +5,10 @@ import (
 	"bytes"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/format"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 )
 
 type HTTPEventsBatch struct {

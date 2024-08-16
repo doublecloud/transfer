@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/stretchr/testify/require"
 )
 

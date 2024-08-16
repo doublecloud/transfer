@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V0"
 	"google.golang.org/grpc/codes"
 )
 

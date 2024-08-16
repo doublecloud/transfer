@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/resource"
+	"github.com/doublecloud/transfer/library/go/core/resource"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,7 +3,7 @@ package util
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/gotest/test_data"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/gotest/test_data"
 	"github.com/stretchr/testify/require"
 )
 

@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
 )
 
 func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task *server.TransferOperation) error {

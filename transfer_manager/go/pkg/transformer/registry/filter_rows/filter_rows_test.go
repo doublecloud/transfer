@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
 	"github.com/stretchr/testify/require"
 	yts "go.ytsaurus.tech/yt/go/schema"
 )

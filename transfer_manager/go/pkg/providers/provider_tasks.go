@@ -3,10 +3,10 @@ package providers
 import (
 	"context"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/cleanup"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/cleanup"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type TablesOperationFunc = func(table abstract.TableMap) error

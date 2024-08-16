@@ -1,6 +1,6 @@
 package maxprocs_test
 
-import "github.com/doublecloud/tross/library/go/maxprocs"
+import "github.com/doublecloud/transfer/library/go/maxprocs"
 
 func Example() {
 	// Если ты в Qloud

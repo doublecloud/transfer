@@ -6,8 +6,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/yandex/deploy/podagent"
-	"github.com/doublecloud/tross/library/go/yandex/yplite"
+	"github.com/doublecloud/transfer/library/go/yandex/deploy/podagent"
+	"github.com/doublecloud/transfer/library/go/yandex/yplite"
 )
 
 const (

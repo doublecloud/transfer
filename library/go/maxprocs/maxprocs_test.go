@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/maxprocs"
+	"github.com/doublecloud/transfer/library/go/maxprocs"
 	"github.com/stretchr/testify/assert"
 )
 

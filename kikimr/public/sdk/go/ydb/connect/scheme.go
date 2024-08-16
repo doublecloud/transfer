@@ -3,7 +3,7 @@ package connect
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/scheme"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/scheme"
 )
 
 type schemeWrapper struct {

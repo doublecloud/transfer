@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 )
 

@@ -3,7 +3,7 @@ package clickhouse
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 	"github.com/stretchr/testify/require"
 )
 

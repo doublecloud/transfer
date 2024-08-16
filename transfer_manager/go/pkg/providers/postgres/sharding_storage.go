@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/format"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/splitter"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stringutil"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/splitter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stringutil"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 func (s *Storage) checkMinMax(ctx context.Context, table abstract.TableID, col abstract.ColSchema) (min, max int64, err error) {

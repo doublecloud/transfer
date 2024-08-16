@@ -13,9 +13,9 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/connect"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/table"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/connect"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/table"
 )
 
 func render(t *template.Template, data interface{}) string {

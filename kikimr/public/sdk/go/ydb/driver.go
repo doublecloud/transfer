@@ -6,8 +6,8 @@ import (
 	"path"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Operations"
 	"google.golang.org/grpc"

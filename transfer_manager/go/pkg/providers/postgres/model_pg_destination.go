@@ -3,11 +3,11 @@ package postgres
 import (
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares/async/bufferer"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/utils"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares/async/bufferer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/utils"
 )
 
 type PgDestination struct {

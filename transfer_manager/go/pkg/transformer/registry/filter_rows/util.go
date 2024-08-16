@@ -5,9 +5,9 @@ import (
 	"math"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/library/go/yandex/cloud/filter"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/yandex/cloud/filter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 var (

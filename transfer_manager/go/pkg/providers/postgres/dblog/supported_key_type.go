@@ -3,7 +3,7 @@ package dblog
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 var supportedTypesArr = []string{

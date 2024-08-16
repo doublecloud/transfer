@@ -3,8 +3,8 @@ package queues
 import (
 	"fmt"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

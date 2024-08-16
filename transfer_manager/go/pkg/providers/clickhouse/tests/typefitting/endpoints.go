@@ -1,8 +1,8 @@
 package typefitting
 
 import (
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	chrecipe "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/recipe"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	chrecipe "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/recipe"
 )
 
 var (

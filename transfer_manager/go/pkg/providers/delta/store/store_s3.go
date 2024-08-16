@@ -8,9 +8,9 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/library/go/slices"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/iter"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/slices"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/iter"
 )
 
 var (

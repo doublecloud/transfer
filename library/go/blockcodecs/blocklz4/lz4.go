@@ -3,7 +3,7 @@ package blocklz4
 import (
 	"encoding/binary"
 
-	"github.com/doublecloud/tross/library/go/blockcodecs"
+	"github.com/doublecloud/transfer/library/go/blockcodecs"
 	"github.com/pierrec/lz4"
 )
 

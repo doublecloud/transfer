@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	confluentsrmock "github.com/doublecloud/tross/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	confluentsrmock "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
 	"github.com/stretchr/testify/require"
 )
 

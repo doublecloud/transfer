@@ -3,9 +3,9 @@ package engine
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/typesystem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/typesystem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 

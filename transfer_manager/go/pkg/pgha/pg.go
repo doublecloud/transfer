@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	dbaas "github.com/doublecloud/tross/transfer_manager/go/pkg/dbaas"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	dbaas "github.com/doublecloud/transfer/transfer_manager/go/pkg/dbaas"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/jackc/pgx/v4/stdlib"

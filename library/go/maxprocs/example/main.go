@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"runtime"
 
-	"github.com/doublecloud/tross/library/go/maxprocs"
+	"github.com/doublecloud/transfer/library/go/maxprocs"
 )
 
 func main() {

@@ -1,8 +1,8 @@
 package consumer
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 )
 
 func NewCoordinatorStore(cp coordinator.TransferState, transferID string) *CoordinatorStore {

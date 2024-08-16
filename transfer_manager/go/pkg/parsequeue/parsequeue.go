@@ -5,9 +5,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -144,7 +144,7 @@ func New[TData any](
 		//
 		// This is a bit of a messy situation, indeed.
 		pushCh: make(chan parseTask[TData], parallelism-2),
-		ackCh:  make(chan pushTask[TData], 1_000_000), // see: https://github.com/doublecloud/tross/review/4480529/details#comment-6575167
+		ackCh:  make(chan pushTask[TData], 1_000_000), // see: https://github.com/doublecloud/transfer/review/4480529/details#comment-6575167
 
 		logger: lgr,
 

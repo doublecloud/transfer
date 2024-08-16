@@ -1,7 +1,7 @@
 package experimental
 
 import (
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
 )
 
 type StreamQueryProfile uint

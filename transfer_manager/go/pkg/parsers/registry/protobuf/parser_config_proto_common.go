@@ -1,9 +1,9 @@
 package protobuf
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/protobuf/protoparser"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/resources"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/protobuf/protoparser"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/resources"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

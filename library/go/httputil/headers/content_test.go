@@ -3,7 +3,7 @@ package headers_test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/httputil/headers"
+	"github.com/doublecloud/transfer/library/go/httputil/headers"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,7 +3,7 @@ package greenplum
 import (
 	"time"
 
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 )
 
 type PgSinkParamsRegulated struct {

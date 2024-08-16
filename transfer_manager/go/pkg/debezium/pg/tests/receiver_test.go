@@ -6,13 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium"
-	debeziumcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/common"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/typeutil"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium"
+	debeziumcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/common"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/typeutil"
 	"github.com/stretchr/testify/require"
 )
 

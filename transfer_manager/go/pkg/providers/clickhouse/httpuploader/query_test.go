@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/columntypes"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 )

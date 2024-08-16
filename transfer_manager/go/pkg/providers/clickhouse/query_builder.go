@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 func buildSelectQuery(table *abstract.TableDescription, tableColumns abstract.TableColumns, isHomo, deletable bool, additionalCond string) string {

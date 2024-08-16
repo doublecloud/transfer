@@ -5,10 +5,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/doublecloud/tross/cloud/dataplatform/testcontainer/kafka"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/cloud/dataplatform/testcontainer/kafka"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 )
 
 func ContainerNeeded() bool {

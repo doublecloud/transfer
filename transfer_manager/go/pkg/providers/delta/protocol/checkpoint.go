@@ -5,10 +5,10 @@ import (
 	"sort"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/store"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/store"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/math"
 )
 
 const LastCheckpointPath string = "_last_checkpoint"

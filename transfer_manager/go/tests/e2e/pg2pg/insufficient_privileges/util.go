@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	pgcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/pgrecipe"
+	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
 	"github.com/jackc/pgx/v4"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"

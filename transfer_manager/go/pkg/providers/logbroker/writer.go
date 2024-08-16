@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicwriter"
 )
 

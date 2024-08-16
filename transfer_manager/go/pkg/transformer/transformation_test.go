@@ -3,16 +3,16 @@ package transformer_test
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/sink"
-	transformers_registry "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/filter"
-	replaceprimarykey "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/replace_primary_key"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/sink"
+	transformers_registry "github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
+	replaceprimarykey "github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/replace_primary_key"
 	"github.com/stretchr/testify/require"
 )
 

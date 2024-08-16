@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/timeutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/timeutil"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_Operations"

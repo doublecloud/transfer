@@ -12,7 +12,7 @@ import (
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 
-	Ydb_Experimental "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
+	Ydb_Experimental "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/pb/protos/Ydb_Experimental"
 )
 
 // This is a compile-time assertion to ensure that this generated file

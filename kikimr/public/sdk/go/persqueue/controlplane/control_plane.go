@@ -3,8 +3,8 @@ package controlplane
 import (
 	"context"
 
-	Ydb_Persqueue_Protos_V1 "github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/session"
+	Ydb_Persqueue_Protos_V1 "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/genproto/Ydb_PersQueue_V1"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/session"
 )
 
 type ControlPlane interface {

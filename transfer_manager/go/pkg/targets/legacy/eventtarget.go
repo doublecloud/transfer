@@ -3,13 +3,13 @@ package legacy
 import (
 	"runtime"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/events"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/pool"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks/cleanup"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/events"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/pool"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks/cleanup"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

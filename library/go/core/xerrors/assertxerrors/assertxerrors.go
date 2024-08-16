@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/internal/modes"
-	"github.com/doublecloud/tross/library/go/test/testhelpers"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/internal/modes"
+	"github.com/doublecloud/transfer/library/go/test/testhelpers"
 	"github.com/stretchr/testify/assert"
 )
 

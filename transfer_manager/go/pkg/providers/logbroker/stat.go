@@ -3,7 +3,7 @@ package logbroker
 import (
 	"encoding/binary"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 )
 
 func BatchStatistics(batches []persqueue.MessageBatch) (size int64, count int64) {

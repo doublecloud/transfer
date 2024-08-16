@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/resource"
+	"github.com/doublecloud/transfer/library/go/core/resource"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

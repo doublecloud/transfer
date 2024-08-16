@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/auth/iam"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/auth/iam"
 )
 
 // FromEnviron returns default credentials from environ

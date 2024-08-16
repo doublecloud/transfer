@@ -3,7 +3,7 @@ package fedtrace
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/yandex/ydb/ydb-topic-fed-sdk/fedtypes"
+	"github.com/doublecloud/transfer/library/go/yandex/ydb/ydb-topic-fed-sdk/fedtypes"
 	"github.com/ydb-platform/ydb-go-sdk/v3/log"
 	"github.com/ydb-platform/ydb-go-sdk/v3/trace"
 )

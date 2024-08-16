@@ -1,6 +1,6 @@
 package abstract
 
-import "github.com/doublecloud/tross/library/go/core/xerrors/multierr"
+import "github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 
 // CheckType test check type
 type CheckType string

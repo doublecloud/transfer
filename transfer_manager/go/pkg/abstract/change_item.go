@@ -1,7 +1,7 @@
 package abstract
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
 )
 
 type ChangeItem = changeitem.ChangeItem

@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -537,7 +537,7 @@ func (e *SchemaExtractor) FindDependentViews(ctx context.Context, conn *pgx.Conn
 	return views, nil
 }
 
-// TODO: implement Set for GenericArray https://github.com/doublecloud/tross/arc/trunk/arcadia/transfer_manager/go/pkg/dataagent/pg/generic_array.go?rev=r9238739#L132
+// TODO: implement Set for GenericArray https://github.com/doublecloud/transfer/arc/trunk/arcadia/transfer_manager/go/pkg/dataagent/pg/generic_array.go?rev=r9238739#L132
 func (e *SchemaExtractor) getDependentViewsQuery(tables abstract.TableMap) string {
 	schemas, names := prepareSchemasAndNamesParams(tables)
 	return fmt.Sprintf(`

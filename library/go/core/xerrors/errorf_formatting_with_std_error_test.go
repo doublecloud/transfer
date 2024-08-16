@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors"
 )
 
 func TestErrorfFormattingWithStdError(t *testing.T) {
@@ -17,16 +17,16 @@ func TestErrorfFormattingWithStdError(t *testing.T) {
 		ExpectedV: "errorf: new",
 		Frames: assertxerrors.NewStackTraceModeExpectation(`
 errorf:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
         library/go/core/xerrors/errorf_formatting_with_std_error_test.go:13
 new`,
 		),
 		Stacks: assertxerrors.NewStackTraceModeExpectation(`
 errorf:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
         library/go/core/xerrors/errorf_formatting_with_std_error_test.go:13
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 new`,
@@ -34,10 +34,10 @@ new`,
 		),
 		StackThenFrames: assertxerrors.NewStackTraceModeExpectation(`
 errorf:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
         library/go/core/xerrors/errorf_formatting_with_std_error_test.go:13
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 new`,
@@ -45,10 +45,10 @@ new`,
 		),
 		StackThenNothing: assertxerrors.NewStackTraceModeExpectation(`
 errorf:
-    github.com/doublecloud/tross/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
+    github.com/doublecloud/transfer/library/go/core/xerrors.TestErrorfFormattingWithStdError.func1
         library/go/core/xerrors/errorf_formatting_with_std_error_test.go:13
-    github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
-        /home/sidh/devel/go/src/github.com/doublecloud/tross/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
+    github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors.RunTestsPerMode.func1
+        /home/sidh/devel/go/src/github.com/doublecloud/transfer/library/go/core/xerrors/assertxerrors/assertxerrors.go:18
     testing.tRunner
         /home/sidh/.ya/tools/v4/774223543/src/testing/testing.go:1127
 new`,

@@ -7,7 +7,7 @@ import (
 	"container/list"
 	"sync"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
 )
 
 type cookieID = int

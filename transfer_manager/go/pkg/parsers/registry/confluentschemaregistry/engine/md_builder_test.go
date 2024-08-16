@@ -3,8 +3,8 @@ package engine
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/confluent"
 	"github.com/golang/protobuf/proto"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/dynamic"

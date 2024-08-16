@@ -3,7 +3,7 @@ package validators
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/stretchr/testify/require"
 )
 

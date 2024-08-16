@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,7 +37,7 @@ func (b *spinBarrier) wait() {
 }
 
 func TestRaceDurationHistogramVecVersusStreamJson(t *testing.T) {
-	// Regression test: https://github.com/doublecloud/tross/review/2690822/details
+	// Regression test: https://github.com/doublecloud/transfer/review/2690822/details
 	registry := NewRegistry(NewRegistryOpts())
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -98,7 +98,7 @@ func TestRaceDurationHistogramVecVersusStreamJson(t *testing.T) {
 }
 
 func TestRaceDurationHistogramRecordDurationVersusStreamJson(t *testing.T) {
-	// Regression test: https://github.com/doublecloud/tross/review/2690822/details
+	// Regression test: https://github.com/doublecloud/transfer/review/2690822/details
 
 	registry := NewRegistry(NewRegistryOpts())
 

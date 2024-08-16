@@ -3,8 +3,8 @@ package solomon
 import (
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/metrics/internal/pkg/registryutil"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics/internal/pkg/registryutil"
 )
 
 // metricsVector is a base implementation of vector of metrics of any supported type.

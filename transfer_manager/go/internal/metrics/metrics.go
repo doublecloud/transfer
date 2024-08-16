@@ -4,9 +4,9 @@ package metrics
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/metrics/prometheus"
-	"github.com/doublecloud/tross/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics/prometheus"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 )
 
 const (

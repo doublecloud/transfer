@@ -9,11 +9,11 @@ import (
 	"path"
 	"text/template"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/connect"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/decimal"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/example/internal/cli"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/table"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/connect"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/decimal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/example/internal/cli"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/table"
 )
 
 type templateConfig struct {

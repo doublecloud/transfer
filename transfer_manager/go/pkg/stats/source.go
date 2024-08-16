@@ -4,8 +4,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 type SourceStats struct {

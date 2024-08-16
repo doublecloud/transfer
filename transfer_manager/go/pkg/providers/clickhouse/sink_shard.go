@@ -8,14 +8,14 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/topology"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/topology"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

@@ -7,17 +7,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/categories"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres/utils"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/storage"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/rename"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/utils"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/storage"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/rename"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 const pgDesiredTableSize = 1024 * 1024 * 1024
@@ -460,7 +460,7 @@ func (s *PgSource) ToSinkParams() PgSourceWrapper {
 func (s *PgSource) isPreferReplica(transfer *server.Transfer) bool {
 	// PreferReplica auto-derives into 'true', if ALL next properties fulfilled:
 	// - It can be used only on 'managed' installation - bcs we are searching replicas via mdb api
-	// - It can be used only on heterogeneous transfers - bcs "for homo there are some technical restrictions" (https://github.com/doublecloud/tross/review/4059241/details#comment-5973004)
+	// - It can be used only on heterogeneous transfers - bcs "for homo there are some technical restrictions" (https://github.com/doublecloud/transfer/review/4059241/details#comment-5973004)
 	//     There are some issues with reading sequence values from replica
 	// - It can be used only on SNAPSHOT_ONLY transfer - bcs we can't take consistent slot on master & snapshot on replica
 	//

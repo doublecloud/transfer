@@ -3,13 +3,13 @@ package async
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/core/metrics/nop"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers"
-	chrecipe "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/recipe"
+	"github.com/doublecloud/transfer/library/go/core/metrics/nop"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers"
+	chrecipe "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/recipe"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 )

@@ -1,9 +1,9 @@
 package delta
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	s3_provider "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/s3"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	s3_provider "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/s3"
 )
 
 // To verify providers contract implementation

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/stretchr/testify/require"
 )
 

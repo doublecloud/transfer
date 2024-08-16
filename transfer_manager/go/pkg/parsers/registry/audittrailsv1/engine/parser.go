@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
-	jsonparser "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/json"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
+	jsonparser "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/json"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

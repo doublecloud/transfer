@@ -11,13 +11,13 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 )
 
 const GeneratedFileSuffix = "_ydbgen"
 
 var (
-	sdkImportPath = "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
+	sdkImportPath = "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 
 	deps = []dep{
 		{

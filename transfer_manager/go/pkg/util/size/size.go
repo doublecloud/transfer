@@ -1,6 +1,6 @@
 package size
 
-import "github.com/doublecloud/tross/library/go/core/metrics"
+import "github.com/doublecloud/transfer/library/go/core/metrics"
 
 const (
 	KiB = 1024

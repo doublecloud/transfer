@@ -3,7 +3,7 @@ package dblog
 import (
 	"context"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/google/uuid"
 )
 

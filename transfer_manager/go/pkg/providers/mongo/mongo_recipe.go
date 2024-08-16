@@ -8,9 +8,9 @@ import (
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/docker/go-connections/nat"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/tcrecipes"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/tcrecipes"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"go.mongodb.org/mongo-driver/bson"

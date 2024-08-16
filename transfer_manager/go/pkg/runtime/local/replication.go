@@ -6,17 +6,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/dataplane/provideradapter"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/metering"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/runtime/shared"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dataplane/provideradapter"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/metering"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/runtime/shared"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -132,7 +132,7 @@ waitingForReplicationErr:
 		// status message will be set to error by the error processing code, so the status message is only set below for non-fatal errors
 		return xerrors.Errorf("a fatal error occurred in replication: %w", attemptErr), false
 	}
-	// https://st.yandex-team.ru/TM-2719 hack. Introduced in https://github.com/doublecloud/tross/review/2122992/details
+	// https://st.yandex-team.ru/TM-2719 hack. Introduced in https://github.com/doublecloud/transfer/review/2122992/details
 	if strings.Contains(attemptErr.Error(), "SQLSTATE 53300") {
 		logger.Log.Error("replication failed, will restart the whole dataplane", log.Error(attemptErr))
 		return xerrors.Errorf("replication failed, dataplane must be restarted: %w", attemptErr), false

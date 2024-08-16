@@ -3,7 +3,7 @@ package ratelimiter
 import (
 	"context"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/ydb-platform/ydb-go-genproto/protos/Ydb_RateLimiter"
 )
 

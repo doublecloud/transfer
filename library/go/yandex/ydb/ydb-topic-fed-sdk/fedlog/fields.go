@@ -5,7 +5,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/buildinfo"
+	"github.com/doublecloud/transfer/library/go/core/buildinfo"
 	"github.com/ydb-platform/ydb-go-sdk/v3/log"
 )
 

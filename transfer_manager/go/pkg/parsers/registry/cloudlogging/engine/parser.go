@@ -1,11 +1,11 @@
 package engine
 
 import (
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/generic"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/stats"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

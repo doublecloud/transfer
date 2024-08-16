@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/test/canon"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/serializer"
-	e2e "github.com/doublecloud/tross/transfer_manager/go/tests/canon"
+	"github.com/doublecloud/transfer/library/go/test/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/serializer"
+	e2e "github.com/doublecloud/transfer/transfer_manager/go/tests/canon"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/exp/slices"
 )

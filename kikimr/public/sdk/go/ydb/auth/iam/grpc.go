@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"time"
 
-	v1 "github.com/doublecloud/tross/cloud/bitbucket/public-api/yandex/cloud/iam/v1"
+	v1 "github.com/doublecloud/transfer/cloud/bitbucket/public-api/yandex/cloud/iam/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )

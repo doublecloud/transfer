@@ -3,8 +3,8 @@ package changeitem
 import (
 	"encoding/json"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
 type DBSchema map[TableID]*TableSchema

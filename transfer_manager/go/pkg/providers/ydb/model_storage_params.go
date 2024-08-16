@@ -1,6 +1,6 @@
 package ydb
 
-import server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+import server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 
 type YdbStorageParams struct {
 	Database           string

@@ -3,8 +3,8 @@ package queue
 import (
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	util "github.com/doublecloud/tross/transfer_manager/go/pkg/util/queues"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	util "github.com/doublecloud/transfer/transfer_manager/go/pkg/util/queues"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

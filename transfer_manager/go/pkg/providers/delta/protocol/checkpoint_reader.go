@@ -3,10 +3,10 @@ package protocol
 import (
 	"strings"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/action"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/delta/store"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/iter"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/action"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/delta/store"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/iter"
 	"github.com/xitongsys/parquet-go-source/buffer"
 	"github.com/xitongsys/parquet-go/reader"
 )

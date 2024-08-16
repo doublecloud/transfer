@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 )
 
 func makeSubjectName(

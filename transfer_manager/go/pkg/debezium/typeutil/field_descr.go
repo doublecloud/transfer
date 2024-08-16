@@ -1,7 +1,7 @@
 package typeutil
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 func TimestampPgParamsTypeToKafkaType(colSchema *abstract.ColSchema, intoArr, _ bool, _ map[string]string) (string, string, map[string]interface{}) {

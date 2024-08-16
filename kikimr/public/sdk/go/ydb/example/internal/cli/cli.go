@@ -12,10 +12,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/connect"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/traceutil"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/table"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/connect"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/traceutil"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/table"
 )
 
 var ErrPrintUsage = fmt.Errorf("")

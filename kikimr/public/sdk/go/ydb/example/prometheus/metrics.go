@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/table"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/table"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

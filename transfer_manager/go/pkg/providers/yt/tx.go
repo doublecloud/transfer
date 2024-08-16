@@ -3,7 +3,7 @@ package yt
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"go.ytsaurus.tech/yt/go/yt"
 )
 

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/jackc/pgtype"
 	"github.com/stretchr/testify/require"
 )

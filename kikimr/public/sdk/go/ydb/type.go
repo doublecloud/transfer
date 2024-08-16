@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
 )
 
 // Type describes YDB data type.

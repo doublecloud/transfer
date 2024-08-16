@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/errors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/columntypes"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/errors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

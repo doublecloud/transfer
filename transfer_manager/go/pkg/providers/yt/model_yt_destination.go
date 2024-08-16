@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares/async/bufferer"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/config/env"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares/async/bufferer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	ytclient "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/client"
 	"go.ytsaurus.tech/yt/go/yson"
 	"go.ytsaurus.tech/yt/go/yt"
 	"golang.org/x/exp/maps"
@@ -106,8 +106,8 @@ type YtDestination struct {
 
 	// If true, some errors on data insertion to YT will be skipped, and a warning will be written to the log.
 	// Among such errors are:
-	// * we were unable to find table schema in cache for some reason: https://github.com/doublecloud/tross/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L482-484
-	// * a table is banned AND NoBan option is false (which is the default): https://github.com/doublecloud/tross/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L489-492
+	// * we were unable to find table schema in cache for some reason: https://github.com/doublecloud/transfer/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L482-484
+	// * a table is banned AND NoBan option is false (which is the default): https://github.com/doublecloud/transfer/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L489-492
 	// * a row (or a value inside a row) being inserted into the YT table has exceeded YT limits (16 MB by default).
 	LoseDataOnError bool
 

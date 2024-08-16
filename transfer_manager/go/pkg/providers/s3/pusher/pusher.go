@@ -3,8 +3,8 @@ package pusher
 import (
 	"context"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/parsequeue"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsequeue"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

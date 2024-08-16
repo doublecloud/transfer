@@ -1,6 +1,6 @@
 package abstract
 
-import "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/dterrors"
+import "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/dterrors"
 
 type RetriablePartUploadError = dterrors.RetriablePartUploadError
 type TableUploadError = dterrors.TableUploadError

@@ -1,6 +1,6 @@
 package mysql
 
-import "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+import "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 
 type MysqlStorageParams struct {
 	ClusterID   string

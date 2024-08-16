@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 )
 
 // SessionProvider is the interface that holds session lifecycle logic.

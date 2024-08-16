@@ -1,6 +1,6 @@
 package coordinator
 
-import "github.com/doublecloud/tross/transfer_manager/go/pkg/errors/coded"
+import "github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
 
 type StatusMessageType string
 

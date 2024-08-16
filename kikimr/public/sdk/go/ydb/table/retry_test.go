@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	ydb "github.com/doublecloud/tross/kikimr/public/sdk/go/ydb"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/testutil"
+	ydb "github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/testutil"
 )
 
 func TestRetryerBackoffRetryCancelation(t *testing.T) {

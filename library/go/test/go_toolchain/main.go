@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/doublecloud/tross/library/go/test/go_toolchain/gotoolchain"
-	"github.com/doublecloud/tross/library/go/test/recipe"
+	"github.com/doublecloud/transfer/library/go/test/go_toolchain/gotoolchain"
+	"github.com/doublecloud/transfer/library/go/test/recipe"
 )
 
 type goToolchain struct{}

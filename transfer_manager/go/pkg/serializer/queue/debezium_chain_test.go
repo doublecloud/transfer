@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	debeziumparameters "github.com/doublecloud/tross/transfer_manager/go/pkg/debezium/parameters"
-	debeziumengine "github.com/doublecloud/tross/transfer_manager/go/pkg/parsers/registry/debezium/engine"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
-	confluentsrmock "github.com/doublecloud/tross/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
+	debeziumengine "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/debezium/engine"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/confluent"
+	confluentsrmock "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
 	"github.com/stretchr/testify/require"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )

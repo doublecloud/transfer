@@ -3,9 +3,9 @@ package helpers
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	_ "github.com/doublecloud/tross/transfer_manager/go/pkg/dataplane"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/dataplane"
 	"github.com/stretchr/testify/require"
 )
 

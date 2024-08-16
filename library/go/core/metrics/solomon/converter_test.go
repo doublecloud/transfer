@@ -3,7 +3,7 @@ package solomon
 import (
 	"testing"
 
-	"github.com/doublecloud/tross/library/go/ptr"
+	"github.com/doublecloud/transfer/library/go/ptr"
 	dto "github.com/prometheus/client_model/go"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/atomic"

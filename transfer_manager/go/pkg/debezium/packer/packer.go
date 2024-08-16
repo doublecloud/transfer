@@ -1,7 +1,7 @@
 package packer
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 )
 
 type BuilderFunc = func(changeItem *abstract.ChangeItem) ([]byte, error)

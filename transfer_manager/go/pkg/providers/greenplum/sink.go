@@ -4,14 +4,14 @@ import (
 	"context"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/metrics"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/middlewares"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
-	mathutil "github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
+	mathutil "github.com/doublecloud/transfer/transfer_manager/go/pkg/util/math"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 

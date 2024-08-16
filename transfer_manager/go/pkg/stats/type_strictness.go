@@ -1,7 +1,7 @@
 package stats
 
 import (
-	"github.com/doublecloud/tross/library/go/core/metrics"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 )
 
 type TypeStrictnessStats struct {

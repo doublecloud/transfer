@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	mathutil "github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	mathutil "github.com/doublecloud/transfer/transfer_manager/go/pkg/util/math"
 )
 
 const MaxRetry = 100000

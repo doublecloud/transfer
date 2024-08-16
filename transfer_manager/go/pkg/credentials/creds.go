@@ -3,7 +3,7 @@ package credentials
 import (
 	"context"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"go.ytsaurus.tech/library/go/core/log"
 )

@@ -1,7 +1,7 @@
 package unpacker
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/schemaregistry/confluent"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/confluent"
 )
 
 type Unpacker interface {

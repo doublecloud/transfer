@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/data"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/broker"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/model"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/fake/internal/topic"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/persqueue/log"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/data"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/broker"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/model"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/fake/internal/topic"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log"
 )
 
 const (

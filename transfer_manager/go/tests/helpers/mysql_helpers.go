@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	mysql "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/mysql"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	mysql "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mysql"
 	mysqldriver "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"

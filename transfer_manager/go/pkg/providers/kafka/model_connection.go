@@ -5,9 +5,9 @@ import (
 	"crypto/x509"
 	"net"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/logbroker"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/validators"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/validators"
 	"github.com/segmentio/kafka-go/sasl"
 	"github.com/segmentio/kafka-go/sasl/scram"
 	franzsasl "github.com/twmb/franz-go/pkg/sasl"

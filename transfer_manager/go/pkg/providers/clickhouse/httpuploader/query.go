@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/multibuf"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/util/pool"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/multibuf"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/pool"
 )
 
 type query = *multibuf.PooledMultiBuffer

@@ -1,8 +1,8 @@
 package validate
 
 import (
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/cmd/trcli/config"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/config"
 	"github.com/spf13/cobra"
 )
 

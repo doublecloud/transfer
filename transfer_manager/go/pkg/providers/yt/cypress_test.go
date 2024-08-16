@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
+	ytclient "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/client"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	commonyt "go.ytsaurus.tech/yt/go/yt"

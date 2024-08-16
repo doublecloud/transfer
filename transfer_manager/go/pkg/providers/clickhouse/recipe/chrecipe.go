@@ -6,11 +6,11 @@ import (
 	"os"
 	"strconv"
 
-	tc_clickhouse "github.com/doublecloud/tross/cloud/dataplatform/testcontainer/clickhouse"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/model"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/tcrecipes"
+	tc_clickhouse "github.com/doublecloud/transfer/cloud/dataplatform/testcontainer/clickhouse"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/tcrecipes"
 )
 
 type ContainerParams struct {

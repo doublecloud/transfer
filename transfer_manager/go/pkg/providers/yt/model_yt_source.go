@@ -1,10 +1,10 @@
 package yt
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/config/env"
-	ytclient "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/client"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/config/env"
+	ytclient "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/client"
 	"github.com/dustin/go-humanize"
 	"go.ytsaurus.tech/yt/go/yt"
 )

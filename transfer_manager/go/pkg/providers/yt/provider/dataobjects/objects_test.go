@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/tablemeta"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/tablemeta"
 	"github.com/stretchr/testify/require"
 )
 

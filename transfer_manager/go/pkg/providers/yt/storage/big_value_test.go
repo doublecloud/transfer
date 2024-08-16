@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/coordinator"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/cleanup"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/yt/sink"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/cleanup"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/sink"
 	"github.com/stretchr/testify/require"
 )
 

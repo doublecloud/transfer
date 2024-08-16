@@ -1,7 +1,7 @@
 package common
 
 import (
-	pgcommon "github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
+	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 )
 
 type OriginalTypeInfo struct {

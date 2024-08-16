@@ -3,8 +3,8 @@ package provideradapter
 import (
 	"reflect"
 
-	"github.com/doublecloud/tross/transfer_manager/go/internal/logger"
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"golang.org/x/xerrors"
 )
 

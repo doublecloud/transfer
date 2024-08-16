@@ -3,7 +3,7 @@ package util
 import (
 	"io"
 
-	mathutil "github.com/doublecloud/tross/transfer_manager/go/pkg/util/math"
+	mathutil "github.com/doublecloud/transfer/transfer_manager/go/pkg/util/math"
 )
 
 type ChannelReader struct {

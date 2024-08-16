@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	server "github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/worker/tasks"
+	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks"
 	"github.com/stretchr/testify/require"
 )
 

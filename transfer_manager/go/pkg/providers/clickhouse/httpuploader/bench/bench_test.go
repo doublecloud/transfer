@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/abstract/changeitem"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/columntypes"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/clickhouse/httpuploader"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/mysql"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/tross/transfer_manager/go/tests/canon"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/columntypes"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/httpuploader"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mysql"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/transfer_manager/go/tests/canon"
 	"github.com/stretchr/testify/require"
 )
 

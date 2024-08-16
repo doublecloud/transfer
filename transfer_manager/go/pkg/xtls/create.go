@@ -5,7 +5,7 @@ import (
 	"crypto/x509"
 	"io/ioutil"
 
-	"github.com/doublecloud/tross/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
 func Pool(rootCACertPaths []string) (*x509.CertPool, error) {

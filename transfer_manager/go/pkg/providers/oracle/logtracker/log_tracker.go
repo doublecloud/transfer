@@ -1,7 +1,7 @@
 package logtracker
 
 import (
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/common"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/oracle/common"
 )
 
 type LogTracker interface {

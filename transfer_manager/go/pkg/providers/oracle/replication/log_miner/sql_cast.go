@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/araddon/dateparse"
-	"github.com/doublecloud/tross/library/go/core/xerrors"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/base/types"
-	"github.com/doublecloud/tross/transfer_manager/go/pkg/providers/oracle/schema"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/types"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/oracle/schema"
 )
 
 func castToInt(column *schema.Column, valueStr *string, size int) (base.Value, error) {

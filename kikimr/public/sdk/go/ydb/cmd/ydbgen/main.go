@@ -22,8 +22,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal"
-	"github.com/doublecloud/tross/kikimr/public/sdk/go/ydb/internal/ydbtypes"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal"
+	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb/internal/ydbtypes"
 )
 
 func generate(pairs []pair, cfg cfg) error {
