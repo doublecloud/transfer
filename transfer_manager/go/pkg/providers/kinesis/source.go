@@ -59,7 +59,7 @@ func (s *Source) Fetch() ([]abstract.ChangeItem, error) {
 			return nil
 		}
 		res = append(res, parsed...)
-		if len(res) > 3 {
+		if len(res) >= 3 {
 			return stapErr
 		}
 		return nil
@@ -203,7 +203,7 @@ func (s *Source) makeRawChangeItem(msg *consumer.Record) abstract.ChangeItem {
 		*msg.ApproximateArrivalTimestamp,
 		s.config.Stream,
 		splitShard(msg.ShardID),
-		parseSeqNo(*msg.SequenceNumber),
+		hash(*msg.SequenceNumber),
 		msg.Record.Data,
 	)
 }
