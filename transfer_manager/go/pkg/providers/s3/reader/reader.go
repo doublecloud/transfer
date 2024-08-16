@@ -105,12 +105,23 @@ func appendSystemColsTableSchema(cols []abstract.ColSchema) *abstract.TableSchem
 	return abstract.NewTableSchema(cols)
 }
 
-func New(src *s3.S3Source, lgr log.Logger, sess *session.Session, metrics *stats.SourceStats) (Reader, error) {
+func New(
+	src *s3.S3Source,
+	lgr log.Logger,
+	sess *session.Session,
+	metrics *stats.SourceStats,
+) (Reader, error) {
 	switch src.InputFormat {
 	case server.ParsingFormatPARQUET:
 		reader, err := NewParquet(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new parquet reader: %w", err)
+		}
+		return reader, nil
+	case server.ParsingFormatJSON:
+		reader, err := NewJSONParserReader(src, lgr, sess, metrics)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to initialize new json reader: %w", err)
 		}
 		return reader, nil
 	case server.ParsingFormatJSONLine:
