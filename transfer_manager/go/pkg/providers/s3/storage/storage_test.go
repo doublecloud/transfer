@@ -89,7 +89,7 @@ func TestCanonParquet(t *testing.T) {
 
 func TestCanonJsonline(t *testing.T) {
 	testCasePath := "test_jsonline_files"
-	cfg := s3.PrepareCfg(t, "jsonlinecanon", server.ParsingFormatJSONLine)
+	cfg := s3.PrepareCfg(t, "jsonline_canon", server.ParsingFormatJSONLine)
 	cfg.PathPrefix = testCasePath
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)
