@@ -71,7 +71,7 @@ func (t *YtDictTransformer) Apply(input []abstract.ChangeItem) abstract.Transfor
 
 		transformedItem, err := t.processChangeItem(item)
 		if err != nil {
-			errors = append(errors, abstract.TransformerError{Input: item, Error: err})
+			errors = append(errors, abstract.TransformerError{Input: item, Error: abstract.NewFatalError(err)})
 			continue
 		}
 		transformed = append(transformed, transformedItem)
