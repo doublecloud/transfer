@@ -6,6 +6,10 @@ import (
 	"go.ytsaurus.tech/yt/go/schema"
 )
 
+const (
+	YtOriginalTypePropertyKey = abstract.PropertyKey("yt:originalType")
+)
+
 type YtColumn interface {
 	base.Column
 	setTable(base.Table)
@@ -62,11 +66,13 @@ func (c *column) ToOldColumn() (*abstract.ColSchema, error) {
 	s.Required = !c.isOptional
 	s.PrimaryKey = c.Key()
 
-	// TOD: TM-3226
-	// Add saving of OriginalType with all nested types to make it available to restore types transformer.
-	// if _, isPrimitive := c.ytType.(schema.Type); !isPrimitive {
-	// 	s.OriginalType = - // Save composite YT type to OriginalType.
-	// }
+	if _, isPrimitive := c.ytType.(schema.Type); !isPrimitive {
+		// It is much harder to restore nested original complex types by using s.OriginalType. Problem is that
+		// c.ytType is schema.ComplexType interface what makes it unrecoverable just from json.Marshal(c.ytType),
+		// we also need to store exact type of c.ytType and all nested types (e.g. schema.List).
+		// So, ytType is stored as interface{} in Properties map.
+		s.AddProperty(YtOriginalTypePropertyKey, c.ytType)
+	}
 
 	return &s, nil
 }

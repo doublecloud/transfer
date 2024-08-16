@@ -13,4 +13,5 @@ import (
 	_ "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/sharder"
 	_ "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/table_splitter"
 	_ "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/to_string"
+	_ "github.com/doublecloud/tross/transfer_manager/go/pkg/transformer/registry/yt_dict"
 )

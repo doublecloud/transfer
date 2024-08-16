@@ -486,7 +486,12 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Item": "double"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -498,7 +503,25 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -510,7 +533,22 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -522,7 +560,26 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ],
+                            "Elements": null
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -534,7 +591,23 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": null,
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -546,7 +619,13 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Key": "utf8",
+                            "Value": "int64"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -558,7 +637,29 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Tag": "mytag",
+                            "Item": {
+                                "Members": [
+                                    {
+                                        "Name": "fieldInt16",
+                                        "Type": "int16"
+                                    },
+                                    {
+                                        "Name": "fieldFloat32",
+                                        "Type": "float"
+                                    },
+                                    {
+                                        "Name": "fieldString",
+                                        "Type": "utf8"
+                                    }
+                                ],
+                                "Elements": null
+                            }
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1098,7 +1199,12 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Item": "double"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1110,7 +1216,25 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1122,7 +1246,22 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1134,7 +1273,26 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ],
+                            "Elements": null
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1146,7 +1304,23 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": null,
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1158,7 +1332,13 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Key": "utf8",
+                            "Value": "int64"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1170,7 +1350,29 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Tag": "mytag",
+                            "Item": {
+                                "Members": [
+                                    {
+                                        "Name": "fieldInt16",
+                                        "Type": "int16"
+                                    },
+                                    {
+                                        "Name": "fieldFloat32",
+                                        "Type": "float"
+                                    },
+                                    {
+                                        "Name": "fieldString",
+                                        "Type": "utf8"
+                                    }
+                                ],
+                                "Elements": null
+                            }
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1731,7 +1933,12 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Item": "double"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1743,7 +1950,25 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1755,7 +1980,22 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1767,7 +2007,26 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": [
+                                {
+                                    "Name": "fieldInt16",
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Name": "fieldFloat32",
+                                    "Type": "float"
+                                },
+                                {
+                                    "Name": "fieldString",
+                                    "Type": "utf8"
+                                }
+                            ],
+                            "Elements": null
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1779,7 +2038,23 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Members": null,
+                            "Elements": [
+                                {
+                                    "Type": "int16"
+                                },
+                                {
+                                    "Type": "float"
+                                },
+                                {
+                                    "Type": "utf8"
+                                }
+                            ]
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1791,7 +2066,13 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Key": "utf8",
+                            "Value": "int64"
+                        }
+                    }
                 },
                 {
                     "table_schema": "",
@@ -1803,7 +2084,29 @@
                     "fake_key": false,
                     "required": true,
                     "expression": "",
-                    "original_type": ""
+                    "original_type": "",
+                    "properties": {
+                        "yt:originalType": {
+                            "Tag": "mytag",
+                            "Item": {
+                                "Members": [
+                                    {
+                                        "Name": "fieldInt16",
+                                        "Type": "int16"
+                                    },
+                                    {
+                                        "Name": "fieldFloat32",
+                                        "Type": "float"
+                                    },
+                                    {
+                                        "Name": "fieldString",
+                                        "Type": "utf8"
+                                    }
+                                ],
+                                "Elements": null
+                            }
+                        }
+                    }
                 },
                 {
                     "table_schema": "",

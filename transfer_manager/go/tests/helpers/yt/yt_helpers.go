@@ -174,7 +174,7 @@ func YtTypesTestData() ([]schema.Column, []map[string]any) {
 		{Name: "dict", ComplexType: dictSchema},
 		{Name: "tagged", ComplexType: schema.Tagged{Tag: "mytag", Item: schema.Variant{Members: members}}},
 
-		// That test mostly here for CompositeTypesTransformer.
+		// That test mostly here for YtDictTransformer.
 		// Iteration and transformation over all fields/elements/members of all complex types is tested by it.
 		{Name: "nested1", ComplexType: schema.Struct{Members: []schema.StructMember{
 			{Name: "list", Type: schema.List{

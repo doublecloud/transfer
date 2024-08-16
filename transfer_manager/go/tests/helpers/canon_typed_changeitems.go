@@ -24,3 +24,11 @@ func ToCanonTypedChangeItem(item abstract.ChangeItem) CanonTypedChangeItem {
 	}
 	return res
 }
+
+func ToCanonTypedChangeItems(items []abstract.ChangeItem) []CanonTypedChangeItem {
+	res := make([]CanonTypedChangeItem, len(items))
+	for i, item := range items {
+		res[i] = ToCanonTypedChangeItem(item)
+	}
+	return res
+}

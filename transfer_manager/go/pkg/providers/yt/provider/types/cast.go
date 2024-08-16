@@ -202,3 +202,13 @@ func Cast(raw interface{}, colRaw base.Column) (base.Value, error) {
 		return nil, xerrors.Errorf("unsupported type %T", col.YtType())
 	}
 }
+
+func CastPrimitiveToOldValue(raw interface{}, ytType schema.ComplexType) (interface{}, error) {
+	//nolint:exhaustivestruct
+	col := table.NewColumn("", nil, ytType, schema.Column{}, false)
+	casted, err := castPrimitive(raw, col) // castPrimitive needs only ytType when casting primitive types.
+	if err != nil {
+		return nil, xerrors.Errorf("unable to cast primitive: %w", err)
+	}
+	return casted.ToOldValue()
+}
