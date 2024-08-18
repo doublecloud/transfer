@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/transfer_manager/ci/go/pkg/log"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
 )
@@ -36,12 +36,12 @@ func InferChunkSize(storage abstract.SampleableStorage, tableID abstract.TableID
 	}
 
 	if rowsCount == 0 {
-		log.Infof("EstimateTableRowsCount returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
+		logger.Log.Infof("EstimateTableRowsCount returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
 		return fallbackChunkSize, nil
 	}
 
 	if tableSize == 0 {
-		log.Infof("TableSizeInBytes returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
+		logger.Log.Infof("TableSizeInBytes returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
 		return fallbackChunkSize, nil
 	}
 
