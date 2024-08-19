@@ -28,8 +28,10 @@ var supportedTypesArr = []string{
 	"character varying",
 	"timestamptz",
 	"timestamp with time zone",
+	"timestamp without time zone",
 	"timetz",
 	"time with time zone",
+	"time without time zone",
 	"interval",
 
 	"bytea",
@@ -65,5 +67,6 @@ var supportedTypesArr = []string{
 var supportedTypes = util.NewSet(supportedTypesArr...)
 
 func IsSupportedKeyType(keyType string) bool {
-	return supportedTypes.Contains(strings.TrimPrefix(keyType, "pg:"))
+	normalKeyType := strings.Split(keyType, "(")[0]
+	return supportedTypes.Contains(strings.TrimPrefix(normalKeyType, "pg:"))
 }

@@ -56,7 +56,22 @@ func TestIncrementalSnapshot(t *testing.T) {
 		cnt++
 	}
 
-	storage, err := dblog.NewStorage(&Source, incrementalLimit, stats.NewSourceStats(metrics.NewRegistry()), coordinator.NewFakeClient(), opt)
+	pgStorage, err := pgsink.NewStorage(Source.ToStorageParams(nil))
+	require.NoError(t, err)
+
+	err = pgsink.CreateReplicationSlot(&Source)
+	require.NoError(t, err)
+
+	src, err := pgsink.NewSourceWrapper(
+		&Source,
+		Source.SlotID,
+		nil,
+		logger.Log,
+		stats.NewSourceStats(metrics.NewRegistry()),
+		coordinator.NewFakeClient())
+	require.NoError(t, err)
+
+	storage, err := dblog.NewStorage(src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, pgsink.Represent, opt)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)

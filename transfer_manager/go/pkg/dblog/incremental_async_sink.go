@@ -25,7 +25,7 @@ type IncrementalAsyncSink struct {
 	primaryKey []string
 
 	chunk         map[string]abstract.ChangeItem
-	itemConverter changeItemConverter
+	itemConverter ChangeItemConverter
 	stopCallback  func()
 	outputPusher  abstract.Pusher
 }
@@ -37,7 +37,7 @@ func NewIncrementalAsyncSink(
 	tableIterator *IncrementalIterator,
 	primaryKey []string,
 	chunk map[string]abstract.ChangeItem,
-	itemConverter changeItemConverter,
+	itemConverter ChangeItemConverter,
 	stopCallback func(),
 	outputPusher abstract.Pusher,
 ) *IncrementalAsyncSink {
@@ -135,7 +135,7 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 				continue
 			}
 
-			keyValue, err := pKeysToStringArr(&item, s.primaryKey, s.itemConverter)
+			keyValue, err := PKeysToStringArr(&item, s.primaryKey, s.itemConverter)
 			if err != nil {
 				return util.MakeChanWithError(err)
 			}

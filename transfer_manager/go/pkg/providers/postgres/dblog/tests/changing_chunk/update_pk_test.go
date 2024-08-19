@@ -17,7 +17,10 @@ import (
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 
-var numberOfUpdates = 10
+var (
+	numberOfUpdates = 10
+	slotIDSuffix    = "updatepk"
+)
 
 func init() {
 	_ = os.Setenv("YC", "1") // to not go to vanga
@@ -30,6 +33,9 @@ func TestUpdateKey(t *testing.T) {
 			helpers.LabeledPort{Label: "PG source", Port: Source.Port},
 		))
 	}()
+
+	Source.SlotID += slotIDSuffix
+
 	sinkParams := Source.ToSinkParams()
 	sink, err := pgsink.NewSink(logger.Log, helpers.TransferID, sinkParams, helpers.EmptyRegistry())
 	require.NoError(t, err)
@@ -49,7 +55,22 @@ func TestUpdateKey(t *testing.T) {
 		cnt++
 	}
 
-	storage, err := dblog.NewStorage(&Source, incrementalLimit, stats.NewSourceStats(metrics.NewRegistry()), coordinator.NewFakeClient(), opt)
+	pgStorage, err := pgsink.NewStorage(Source.ToStorageParams(nil))
+	require.NoError(t, err)
+
+	err = pgsink.CreateReplicationSlot(&Source)
+	require.NoError(t, err)
+
+	src, err := pgsink.NewSourceWrapper(
+		&Source,
+		Source.SlotID,
+		nil,
+		logger.Log,
+		stats.NewSourceStats(metrics.NewRegistry()),
+		coordinator.NewFakeClient())
+	require.NoError(t, err)
+
+	storage, err := dblog.NewStorage(src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, pgsink.Represent, opt)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)

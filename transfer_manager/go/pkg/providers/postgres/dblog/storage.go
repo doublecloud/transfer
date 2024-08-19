@@ -6,42 +6,39 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dblog"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dblog/tablequery"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Storage struct {
-	pgSource  *postgres.PgSource
-	pgStorage *postgres.Storage
+	src       abstract.Source
+	pgStorage tablequery.StorageTableQueryable
+	conn      *pgxpool.Pool
 
 	chunkSize uint64
 
-	registry         *stats.SourceStats
-	cp               coordinator.Coordinator
+	transferID       string
+	represent        dblog.ChangeItemConverter
 	betweenMarksOpts []func()
 }
 
 func NewStorage(
-	pgSource *postgres.PgSource,
+	src abstract.Source,
+	pgStorage tablequery.StorageTableQueryable,
+	conn *pgxpool.Pool,
 	chunkSize uint64,
-	registry *stats.SourceStats,
-	cp coordinator.Coordinator,
+	transferID string,
+	represent dblog.ChangeItemConverter,
 	betweenMarksOpts ...func(),
-) (*Storage, error) {
-	pgStorage, err := postgres.NewStorage(pgSource.ToStorageParams(nil))
-	if err != nil {
-		return nil, xerrors.Errorf("unable to get storage")
-	}
-
+) (abstract.Storage, error) {
 	return &Storage{
-		pgSource:         pgSource,
+		src:              src,
 		pgStorage:        pgStorage,
+		conn:             conn,
 		chunkSize:        chunkSize,
-		registry:         registry,
-		cp:               cp,
+		transferID:       transferID,
+		represent:        represent,
 		betweenMarksOpts: betweenMarksOpts,
 	}, nil
 }
@@ -69,19 +66,7 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		}
 	}
 
-	slotExist, err := s.slotExist()
-	if err != nil {
-		return xerrors.Errorf("failed to check existence of a replication slot: %w", err)
-	}
-
-	if !slotExist {
-		err = postgres.CreateReplicationSlot(s.pgSource)
-		if err != nil {
-			return xerrors.Errorf("failed to create replication slot: %w", err)
-		}
-	}
-
-	pgSignalTable, err := newPgSignalTable(ctx, s.pgStorage.Conn, logger.Log, s.pgSource.SlotID)
+	pgSignalTable, err := newPgSignalTable(ctx, s.conn, logger.Log, s.transferID)
 	if err != nil {
 		return xerrors.Errorf("unable to create signal table: %w", err)
 	}
@@ -92,7 +77,7 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		s.pgStorage,
 		tableQuery,
 		pgSignalTable,
-		postgres.Represent,
+		s.represent,
 		pkColNames,
 		lowBound,
 		chunkSize,
@@ -102,23 +87,12 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		return xerrors.Errorf("unable to build iterator, err: %w", err)
 	}
 
-	src, err := postgres.NewSourceWrapper(
-		s.pgSource,
-		s.pgSource.SlotID,
-		nil,
-		logger.Log,
-		s.registry,
-		s.cp)
-	if err != nil {
-		return xerrors.Errorf("unable to create source: %w", err)
-	}
-
 	items, err := iterator.Next(ctx)
 	if err != nil {
 		return xerrors.Errorf("failed to do initial iteration: %w", err)
 	}
 
-	chunk, err := dblog.ResolveChunkMapFromArr(items, pkColNames, postgres.Represent)
+	chunk, err := dblog.ResolveChunkMapFromArr(items, pkColNames, s.represent)
 	if err != nil {
 		return xerrors.Errorf("failed to resolve chunk: %w", err)
 	}
@@ -130,12 +104,12 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		iterator,
 		pkColNames,
 		chunk,
-		postgres.Represent,
-		func() { src.Stop() },
+		s.represent,
+		func() { s.src.Stop() },
 		pusher,
 	)
 
-	err = src.Run(asyncSink)
+	err = s.src.Run(asyncSink)
 	if err != nil {
 		return xerrors.Errorf("unable to run worker: %w", err)
 	}
@@ -161,18 +135,4 @@ func (s *Storage) EstimateTableRowsCount(table abstract.TableID) (uint64, error)
 
 func (s *Storage) TableExists(table abstract.TableID) (bool, error) {
 	return s.pgStorage.TableExists(table)
-}
-
-func (s *Storage) slotExist() (bool, error) {
-	conn, err := postgres.MakeConnPoolFromSrc(s.pgSource, logger.Log)
-	if err != nil {
-		return false, xerrors.Errorf("failed to create a connection pool: %w", err)
-	}
-	defer conn.Close()
-	slot, err := postgres.NewSlot(conn, logger.Log, s.pgSource)
-	if err != nil {
-		return false, xerrors.Errorf("failed to create a replication slot object: %w", err)
-	}
-
-	return slot.Exist()
 }

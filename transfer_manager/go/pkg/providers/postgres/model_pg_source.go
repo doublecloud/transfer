@@ -62,6 +62,9 @@ type PgSource struct {
 	SnapshotDegreeOfParallelism int              // desired table parts count for snapshot sharding
 	EmitTimeTypes               bool             // Deprecated: is not used anymore
 
+	DBLogEnabled bool   // force DBLog snapshot instead of common
+	ChunkSize    uint64 // number of rows in chunk, this field needed for DBLog snapshot, if it is 0, it will be calculated automatically
+
 	// Whether text or binary serialization format should be used when readeing
 	// snapshot from PostgreSQL storage snapshot (see
 	// https://www.postgresql.org/docs/current/protocol-overview.html#PROTOCOL-FORMAT-CODES).

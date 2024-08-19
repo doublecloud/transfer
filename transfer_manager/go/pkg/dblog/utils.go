@@ -15,14 +15,14 @@ import (
 
 const (
 	defaultSeparator        = "#"
-	fallbackChunkSize       = uint64(100_000)
+	FallbackChunkSize       = uint64(100_000)
 	DefaultChunkSizeInBytes = uint64(10_000_000)
 
-	alwaysTrueWhereStatement = abstract.WhereStatement("1 = 1")
+	AlwaysTrueWhereStatement = abstract.WhereStatement("1 = 1")
 	emptySQLTuple            = "()"
 )
 
-type changeItemConverter func(val interface{}, colSchema abstract.ColSchema) (string, error)
+type ChangeItemConverter func(val interface{}, colSchema abstract.ColSchema) (string, error)
 
 func InferChunkSize(storage abstract.SampleableStorage, tableID abstract.TableID, chunkSizeInBytes uint64) (uint64, error) {
 	tableSize, err := storage.TableSizeInBytes(tableID)
@@ -36,13 +36,13 @@ func InferChunkSize(storage abstract.SampleableStorage, tableID abstract.TableID
 	}
 
 	if rowsCount == 0 {
-		logger.Log.Infof("EstimateTableRowsCount returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
-		return fallbackChunkSize, nil
+		logger.Log.Infof("EstimateTableRowsCount returned 0, choosing fallbackChunkSize: %d", FallbackChunkSize)
+		return FallbackChunkSize, nil
 	}
 
 	if tableSize == 0 {
-		logger.Log.Infof("TableSizeInBytes returned 0, choosing fallbackChunkSize: %d", fallbackChunkSize)
-		return fallbackChunkSize, nil
+		logger.Log.Infof("TableSizeInBytes returned 0, choosing fallbackChunkSize: %d", FallbackChunkSize)
+		return FallbackChunkSize, nil
 	}
 
 	avgRowSizeInBytes := tableSize / rowsCount
@@ -50,20 +50,20 @@ func InferChunkSize(storage abstract.SampleableStorage, tableID abstract.TableID
 	return chunkSizeInBytes / avgRowSizeInBytes, nil
 }
 
-func makeNextWhereStatement(primaryKey, lowBound []string) abstract.WhereStatement {
+func MakeNextWhereStatement(primaryKey, lowBound []string) abstract.WhereStatement {
 	if len(primaryKey) == 0 || len(lowBound) == 0 {
-		return alwaysTrueWhereStatement
+		return AlwaysTrueWhereStatement
 	}
 
-	sqlPrimaryKeyTuple := makeSQLTuple(primaryKey)
-	sqlLowBoundTuple := makeSQLTuple(lowBound)
+	sqlPrimaryKeyTuple := MakeSQLTuple(primaryKey)
+	sqlLowBoundTuple := MakeSQLTuple(lowBound)
 
 	whereStatement := abstract.WhereStatement(fmt.Sprintf("%s > %s", sqlPrimaryKeyTuple, sqlLowBoundTuple))
 
 	return whereStatement
 }
 
-func makeSQLTuple(stringArray []string) string {
+func MakeSQLTuple(stringArray []string) string {
 	if len(stringArray) == 0 {
 		return emptySQLTuple
 	}
@@ -71,7 +71,7 @@ func makeSQLTuple(stringArray []string) string {
 	return fmt.Sprintf("(%s)", strings.Join(stringArray, ","))
 }
 
-func pKeysToStringArr(item *abstract.ChangeItem, primaryKey []string, converter changeItemConverter) ([]string, error) {
+func PKeysToStringArr(item *abstract.ChangeItem, primaryKey []string, converter ChangeItemConverter) ([]string, error) {
 	keyValue := make([]string, len(primaryKey))
 
 	fastTableSchema := changeitem.MakeFastTableSchema(item.TableSchema.Columns())
@@ -155,11 +155,11 @@ func stringArrToString(stringArray []string, separator string) string {
 	return builder.String()
 }
 
-func ResolveChunkMapFromArr(items []abstract.ChangeItem, primaryKey []string, converter changeItemConverter) (map[string]abstract.ChangeItem, error) {
+func ResolveChunkMapFromArr(items []abstract.ChangeItem, primaryKey []string, converter ChangeItemConverter) (map[string]abstract.ChangeItem, error) {
 	chunk := make(map[string]abstract.ChangeItem)
 
 	for _, item := range items {
-		keyValue, err := pKeysToStringArr(&item, primaryKey, converter)
+		keyValue, err := PKeysToStringArr(&item, primaryKey, converter)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to resolve key value: %w", err)
 		}

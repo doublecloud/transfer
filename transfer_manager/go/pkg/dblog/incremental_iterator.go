@@ -14,7 +14,7 @@ type IncrementalIterator struct {
 	tableQuery  *tablequery.TableQuery
 	signalTable SignalTable
 
-	itemConverter changeItemConverter
+	itemConverter ChangeItemConverter
 	pkColNames    []string
 	lowBound      []string
 	limit         uint64
@@ -29,7 +29,7 @@ func NewIncrementalIterator(
 	storage tablequery.StorageTableQueryable,
 	tableQuery *tablequery.TableQuery,
 	signalTable SignalTable,
-	itemConverter changeItemConverter,
+	itemConverter ChangeItemConverter,
 	pkColNames []string,
 	lowBound []string,
 	limit uint64,
@@ -52,7 +52,7 @@ func NewIncrementalIterator(
 }
 
 func (i *IncrementalIterator) Next(ctx context.Context) ([]abstract.ChangeItem, error) {
-	i.tableQuery.Filter = makeNextWhereStatement(i.pkColNames, i.lowBound)
+	i.tableQuery.Filter = MakeNextWhereStatement(i.pkColNames, i.lowBound)
 
 	return i.loadTablePart(ctx)
 }
@@ -65,12 +65,12 @@ func (i *IncrementalIterator) loadTablePart(ctx context.Context) ([]abstract.Cha
 
 	i.LowWatermarkUUID = lowWatermarkUUID
 
-	var chunk []abstract.ChangeItem
+	chunk := make([]abstract.ChangeItem, 0, i.limit)
 
 	chunkPusher := func(items []abstract.ChangeItem) error {
 		if len(items) > 0 {
 			lastItem := items[len(items)-1]
-			lastKeyValue, err := pKeysToStringArr(&lastItem, i.pkColNames, i.itemConverter)
+			lastKeyValue, err := PKeysToStringArr(&lastItem, i.pkColNames, i.itemConverter)
 			if err != nil {
 				return xerrors.Errorf("unable to get key value: %w", err)
 			}
@@ -78,7 +78,7 @@ func (i *IncrementalIterator) loadTablePart(ctx context.Context) ([]abstract.Cha
 			i.lowBound = lastKeyValue
 		}
 
-		chunk = items
+		chunk = append(chunk, items...)
 
 		return nil
 	}

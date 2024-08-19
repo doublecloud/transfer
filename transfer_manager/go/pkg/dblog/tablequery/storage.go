@@ -8,7 +8,7 @@ import (
 
 // StorageTableQueryable is storage with table query loading
 type StorageTableQueryable interface {
-	abstract.Storage
+	abstract.SampleableStorage
 
 	LoadQueryTable(ctx context.Context, table TableQuery, pusher abstract.Pusher) error
 }

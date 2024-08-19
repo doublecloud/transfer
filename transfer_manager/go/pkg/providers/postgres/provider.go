@@ -16,6 +16,8 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/dblog"
+	abstract_sink "github.com/doublecloud/transfer/transfer_manager/go/pkg/sink"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -172,8 +174,15 @@ func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation,
 		if err := callbacks.CheckIncludes(tables); err != nil {
 			return xerrors.Errorf("Failed in accordance with configuration: %w", err)
 		}
-		if err := callbacks.Upload(tables); err != nil {
-			return xerrors.Errorf("Snapshot loading failed: %w", err)
+
+		if src.DBLogEnabled {
+			if err := p.DBLogUpload(src, tables); err != nil {
+				return xerrors.Errorf("DBLog snapshot loading failed: %w", err)
+			}
+		} else {
+			if err := callbacks.Upload(tables); err != nil {
+				return xerrors.Errorf("Snapshot loading failed: %w", err)
+			}
 		}
 	}
 	if p.transfer.SnapshotOnly() && src.PostSteps.AnyStepIsTrue() {
@@ -358,6 +367,50 @@ func (p *Provider) DestinationSampleableStorage() (abstract.SampleableStorage, e
 
 func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
+}
+
+func (p *Provider) DBLogUpload(src *PgSource, tables abstract.TableMap) error {
+
+	pgStorage, err := NewStorage(src.ToStorageParams(p.transfer))
+	if err != nil {
+		return xerrors.Errorf("failed to create postgres storage: %w", err)
+	}
+
+	sourceWrapper, err := NewSourceWrapper(src, src.SlotID, nil, p.logger, stats.NewSourceStats(p.registry), p.cp)
+	if err != nil {
+		return xerrors.Errorf("failed to create source wrapper: %w", err)
+	}
+
+	dblogStorage, err := dblog.NewStorage(sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, src.SlotID, Represent)
+	if err != nil {
+		return xerrors.Errorf("failed to create DBLog storage: %w", err)
+	}
+
+	tableDescs := tables.ConvertToTableDescriptions()
+	for _, table := range tableDescs {
+
+		asyncSink, err := abstract_sink.MakeAsyncSink(
+			p.transfer,
+			logger.Log,
+			p.registry,
+			p.cp,
+			middlewares.MakeConfig(middlewares.WithEnableRetries),
+		)
+
+		pusher := abstract.PusherFromAsyncSink(asyncSink)
+
+		if err != nil {
+			return xerrors.Errorf("failed to make async sink: %w", err)
+		}
+
+		if err = backoff.Retry(func() error {
+			return dblogStorage.LoadTable(context.Background(), table, pusher)
+		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10)); err != nil {
+			return xerrors.Errorf("failed to load table: %w", err)
+		}
+	}
+
+	return nil
 }
 
 func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
