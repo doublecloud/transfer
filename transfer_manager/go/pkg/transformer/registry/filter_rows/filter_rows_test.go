@@ -8,7 +8,6 @@ import (
 
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
 	"github.com/stretchr/testify/require"
 	yts "go.ytsaurus.tech/yt/go/schema"
@@ -25,6 +24,24 @@ func makeChangeItems(schema *abstract.TableSchema, kind abstract.Kind, values []
 		}
 	}
 	return items
+}
+
+func prepareInputExpected(t *testing.T, tr *FilterRowsTransformer, table abstract.TableID, columnType string, input, expected [][]interface{}) (items, expectedItems []abstract.ChangeItem) {
+	tableSchema := abstract.NewTableSchema(abstract.TableColumns{
+		abstract.MakeTypedColSchema("column", columnType, true),
+	})
+	checkSuitable(t, tr, table, tableSchema)
+
+	items = makeChangeItems(tableSchema, abstract.InsertKind, input)
+	expectedItems = makeChangeItems(tableSchema, abstract.InsertKind, expected)
+	return
+}
+
+func checkSuitable(t *testing.T, tr *FilterRowsTransformer, table abstract.TableID, tableSchema *abstract.TableSchema) {
+	require.True(t, tr.Suitable(table, tableSchema))
+	res, err := tr.ResultSchema(tableSchema)
+	require.NoError(t, err)
+	require.Equal(t, tableSchema, res)
 }
 
 func TestIntFiltering(t *testing.T) {
@@ -710,20 +727,34 @@ func TestCoupleInFilters(t *testing.T) {
 	require.Equal(t, expectedResult, tr.Apply(items))
 }
 
-func prepareInputExpected(t *testing.T, tr *FilterRowsTransformer, table abstract.TableID, columnType string, input, expected [][]interface{}) (items, expectedItems []abstract.ChangeItem) {
-	tableSchema := abstract.NewTableSchema(abstract.TableColumns{
-		abstract.MakeTypedColSchema("column", columnType, true),
-	})
-	checkSuitable(t, tr, table, tableSchema)
-
-	items = makeChangeItems(tableSchema, abstract.InsertKind, input)
-	expectedItems = makeChangeItems(tableSchema, abstract.InsertKind, expected)
-	return
-}
-
-func checkSuitable(t *testing.T, tr *FilterRowsTransformer, table abstract.TableID, tableSchema *changeitem.TableSchema) {
-	require.True(t, tr.Suitable(table, tableSchema))
-	res, err := tr.ResultSchema(tableSchema)
+func TestManyFilters(t *testing.T) {
+	filters := []string{
+		"column1 > 10",
+		`column2 = "str"`,
+	}
+	tr, err := NewFilterRowsTransformer(Config{Filters: filters}, logger.Log)
 	require.NoError(t, err)
-	require.Equal(t, tableSchema, res)
+
+	schema := abstract.NewTableSchema(abstract.TableColumns{
+		abstract.MakeTypedColSchema("column1", yts.TypeInt8.String(), true),
+		abstract.MakeTypedColSchema("column2", yts.TypeString.String(), true),
+	})
+	checkSuitable(t, tr, abstract.TableID{}, schema)
+
+	columnValues := [][]any{
+		{15, "str"}, // Matches both filters.
+		{15, "aaa"}, // Matches filter (column1 > 10).
+		{5, "str"},  // Matches filter (column2 = "str").
+		{5, "aaa"},  // Doesn't match any of the filters.
+	}
+	items := make([]abstract.ChangeItem, len(columnValues))
+	for i := range items {
+		items[i] = abstract.ChangeItem{
+			Kind: abstract.InsertKind, ColumnNames: schema.ColumnNames(),
+			ColumnValues: columnValues[i], TableSchema: schema,
+		}
+	}
+	expected := []abstract.ChangeItem{items[0], items[1], items[2]}
+	expectedResult := abstract.TransformerResult{Transformed: expected, Errors: []abstract.TransformerError{}}
+	require.Equal(t, expectedResult, tr.Apply(items))
 }

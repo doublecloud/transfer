@@ -37,40 +37,61 @@ type termWithValues struct {
 	ByteValue []byte                 // not nil, when Term.Value.IsString()
 }
 
+type filteringExpression []termWithValues
+
 type Config struct {
-	Tables filter.Tables `json:"tables"`
-	Filter string        `json:"filter"`
+	Tables  filter.Tables `json:"tables"`
+	Filter  string        `json:"filter"` // Deprecated: Use Filters instead.
+	Filters []string      `json:"filters"`
+}
+
+func (c *Config) expressions() ([]filteringExpression, error) {
+	if c.Filter != "" && len(c.Filters) > 0 {
+		return nil, xerrors.New("Settings 'filters' and 'filter' cannot be enabled at the same time")
+	}
+
+	filters := []string{c.Filter}
+	if len(c.Filters) > 0 {
+		filters = c.Filters
+	}
+	result := make([]filteringExpression, len(filters))
+
+	for i, filter := range filters {
+		terms, err := parser.Parse(filter)
+		if err != nil {
+			return nil, xerrors.Errorf("Unable to parse filter '%s': %w", filter, err)
+		}
+		termsWithValues, err := prepareTermValues(terms)
+		if err != nil {
+			return nil, xerrors.Errorf("Unable to prepare term values: %w", err)
+		}
+		result[i] = termsWithValues
+	}
+	return result, nil
 }
 
 type FilterRowsTransformer struct {
-	Tables filter.Filter
-	Logger log.Logger
-	Terms  []termWithValues
+	Tables      filter.Filter
+	Logger      log.Logger
+	Expressions []filteringExpression // ChangeItem transfers if it matches at least one of filters (expressions).
 
 	impossibleKinds  *util.Set[abstract.Kind] // Apply() will create a fatal error when receiving such kind.
 	appropriateKinds *util.Set[abstract.Kind] // Only appropriate kinds are filtered.
 }
 
 func NewFilterRowsTransformer(cfg Config, lgr log.Logger) (*FilterRowsTransformer, error) {
-	terms, err := parser.Parse(cfg.Filter)
-	if err != nil {
-		return nil, xerrors.Errorf("Unable to parse filter '%s': %w", cfg.Filter, err)
-	}
-
 	tables, err := filter.NewFilter(cfg.Tables.IncludeTables, cfg.Tables.ExcludeTables)
 	if err != nil {
 		return nil, xerrors.Errorf("Unable to init table filter: %w", err)
 	}
-
-	termsWithValues, err := prepareTermValues(terms)
+	expressions, err := cfg.expressions()
 	if err != nil {
-		return nil, xerrors.Errorf("Unable to prepare term values: %w", err)
+		return nil, xerrors.Errorf("Unable to init filtering expressions: %w", err)
 	}
-
 	return &FilterRowsTransformer{
 		Tables:           tables,
 		Logger:           lgr,
-		Terms:            termsWithValues,
+		Expressions:      expressions,
 		impossibleKinds:  util.NewSet(abstract.UpdateKind, "Update", abstract.DeleteKind, "Delete"),
 		appropriateKinds: util.NewSet(abstract.InsertKind, "Insert"),
 	}, nil
@@ -108,9 +129,22 @@ func (r *FilterRowsTransformer) Type() abstract.TransformerType {
 	return Type
 }
 
-// matchItem returns true if item matches filter.
+// matchItem returns true if item matches at least one of filters and should be transferred.
 func (r *FilterRowsTransformer) matchItem(item *abstract.ChangeItem) (bool, error) {
-	for _, term := range r.Terms {
+	for i, expression := range r.Expressions {
+		isMatch, err := r.matchExpression(item, expression)
+		if err != nil {
+			return false, xerrors.Errorf("Unable to check expression %d: %w", i, err)
+		}
+		if isMatch {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func (r *FilterRowsTransformer) matchExpression(item *abstract.ChangeItem, terms filteringExpression) (bool, error) {
+	for _, term := range terms {
 		for i, columnName := range item.ColumnNames {
 			// term.Attribute is a name of column which we are filtering by.
 			if columnName != term.Term.Attribute {
@@ -325,10 +359,10 @@ func matchValue(val1 interface{}, term termWithValues) (bool, error) {
 		}
 
 	default:
-		return false, xerrors.Errorf("Unknown filter's value type")
+		return false, xerrors.New("Unknown filter's value type")
 	}
 
-	return false, xerrors.Errorf("Unsupported type pair")
+	return false, xerrors.New("Unsupported type pair")
 }
 
 func matchOrderedValue[T constraints.Ordered](val1, val2 T, op parser.OperatorType) (bool, error) {
@@ -418,7 +452,17 @@ func (r *FilterRowsTransformer) Suitable(table abstract.TableID, schema *abstrac
 		return false
 	}
 	cols := schema.Columns()
-	for _, term := range r.Terms {
+	for _, expression := range r.Expressions {
+		isSuitable := r.checkExpressionSuitable(cols, expression)
+		if !isSuitable {
+			return false
+		}
+	}
+	return true
+}
+
+func (r *FilterRowsTransformer) checkExpressionSuitable(cols []abstract.ColSchema, terms []termWithValues) bool {
+	for _, term := range terms {
 		for i, column := range cols {
 			if term.Term.Attribute != column.ColumnName {
 				if i < len(cols)-1 {
