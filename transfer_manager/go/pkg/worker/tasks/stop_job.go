@@ -7,6 +7,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/config/env"
 )
 
 var ErrNoActiveOperation = xerrors.NewSentinel("TM: missed operation id")
@@ -22,6 +23,9 @@ func StopJob(cp coordinator.Coordinator, transfer server.Transfer) error {
 }
 
 var stopRuntime = func(cp coordinator.Coordinator, transfer server.Transfer) error {
+	if env.IsTest() {
+		return nil
+	}
 	logger.Log.Infof("Wait to change apply")
 	time.Sleep(10 * time.Second)
 	return nil

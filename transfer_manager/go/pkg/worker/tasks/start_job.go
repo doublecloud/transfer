@@ -8,6 +8,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/config/env"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/categories"
 )
@@ -29,6 +30,9 @@ func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer server.T
 
 	if err := startRuntime(ctx, cp, transfer, task); err != nil {
 		return xerrors.Errorf("unable to prepare runtime hook: %w", err)
+	}
+	if env.IsTest() {
+		return nil
 	}
 
 	logger.Log.Info("Wait for transfer status change to apply")
