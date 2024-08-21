@@ -1,0 +1,55 @@
+
+"public"."topic1"
+{
+	"meta":
+	[
+		{
+			"name": "id",
+			"type": "Nullable(Int32)"
+		},
+		{
+			"name": "level",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "caller",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "msg",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "_timestamp",
+			"type": "DateTime64(6)"
+		},
+		{
+			"name": "_partition",
+			"type": "String"
+		},
+		{
+			"name": "_offset",
+			"type": "UInt64"
+		},
+		{
+			"name": "_idx",
+			"type": "UInt32"
+		}
+	],
+
+	"data":
+	[
+		{
+			"id": 1,
+			"level": "my_level",
+			"caller": "my_caller",
+			"msg": "my_msg",
+			"_timestamp": "2024-03-19 00:00:00.000000",
+			"_partition": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"topic1\"}",
+			"_offset": "0",
+			"_idx": 1
+		}
+	],
+
+	"rows": 1
+}

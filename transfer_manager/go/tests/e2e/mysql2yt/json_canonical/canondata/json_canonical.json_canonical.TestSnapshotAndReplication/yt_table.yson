@@ -1,0 +1,45 @@
+<
+    strict=%true;
+    "unique_keys"=%true;
+>
+[
+    {
+        name=id;
+        required=%false;
+        "sort_order"=ascending;
+        type=int32;
+        "type_v3"={
+            "type_name"=optional;
+            item=int32;
+        };
+    };
+    {
+        name=jsoncol;
+        required=%false;
+        type=any;
+        "type_v3"={
+            "type_name"=optional;
+            item=yson;
+        };
+    };
+]
+{"id":0,"jsoncol":{"hello":"world"}}
+{"id":1,"jsoncol":"123"}
+{"id":2,"jsoncol":"123"}
+{"id":3,"jsoncol":[]}
+{"id":4,"jsoncol":["abyr"]}
+{"id":5,"jsoncol":["123","abyr",["valg"],{"kek":"999999999999999999999999999999.000000000000000000000000000000000000000000001","lel":"777"}]}
+{"id":6,"jsoncol":"1234567890123456789012345678901234567890.123456789012345678901234567890123456"}
+{"id":7,"jsoncol":null}
+{"id":8,"jsoncol":{"kek":null}}
+{"id":9,"jsoncol":"\"string in quotes\""}
+{"id":10,"jsoncol":{"hello":"world"}}
+{"id":11,"jsoncol":"123"}
+{"id":12,"jsoncol":"123"}
+{"id":13,"jsoncol":[]}
+{"id":14,"jsoncol":["abyr"]}
+{"id":15,"jsoncol":["123","abyr",["valg"],{"kek":"999999999999999999999999999999.000000000000000000000000000000000000000000001","lel":"777"}]}
+{"id":16,"jsoncol":"1234567890123456789012345678901234567890.123456789012345678901234567890123456"}
+{"id":17,"jsoncol":null}
+{"id":18,"jsoncol":{"kek":null}}
+{"id":19,"jsoncol":"\"string in quotes\""}

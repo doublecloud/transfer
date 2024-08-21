@@ -1,0 +1,1 @@
+{"schema":{"type":"struct","fields":[{"type":"int32","optional":false,"field":"pk"}],"optional":false,"name":"dbserver1.source.customers3.Key"},"payload":{"pk":1}}

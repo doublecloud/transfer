@@ -1,0 +1,11 @@
+{
+    "sequences.sequences.TestCanonizeSequences/insert_update_delete/canon_0": {
+        "uri": "file://sequences.sequences.TestCanonizeSequences_insert_update_delete_canon_0/extracted"
+    },
+    "sequences.sequences.TestCanonizeSequences/insert_update_insert/canon_0": {
+        "uri": "file://sequences.sequences.TestCanonizeSequences_insert_update_insert_canon_0/extracted"
+    },
+    "sequences.sequences.TestCanonizeSequences/updatepk/canon_0": {
+        "uri": "file://sequences.sequences.TestCanonizeSequences_updatepk_canon_0/extracted"
+    }
+}

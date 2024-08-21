@@ -1,0 +1,21 @@
+create table test_table (
+    t_int8 smallint,
+    row_idx bigint,
+    t_int16 smallint,
+    t_int32 integer,
+    t_int64 bigint,
+    t_uint8 smallint,
+    t_uint16 integer,
+    t_uint32 bigint,
+    t_uint64 bigint,
+    t_float double precision,
+    t_double double precision,
+    t_bool bool,
+    t_string text,
+    t_utf8 text,
+    t_date date,
+    t_datetime timestamp,
+    t_timestamp timestamp,
+    t_yson jsonb,
+    primary key (t_int8, row_idx)
+);

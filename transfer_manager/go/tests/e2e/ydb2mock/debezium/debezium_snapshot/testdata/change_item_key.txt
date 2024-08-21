@@ -1,0 +1,17 @@
+{
+    "payload": {
+        "id": 1
+    },
+    "schema": {
+        "fields": [
+            {
+                "field": "id",
+                "optional": false,
+                "type": "int64"
+            }
+        ],
+        "name": "fullfillment..dectest/timmyb32r-test.Key",
+        "optional": false,
+        "type": "struct"
+    }
+}

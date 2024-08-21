@@ -1,0 +1,4 @@
+Mar 10 21:39:35 lbk-sas-1082 KIKIMR[463976]: 2020-03-10T18:39:35.194229Z :PQ_READ_PROXY INFO: session cookie 10960 client rtmr@rtmr-dev-sas-1 session rtmr@rtmr-dev-sas-1_555_10960_4548552247166245006 commit request from client for 7944668
+Mar 10 21:39:35 lbk-sas-1082 KIKIMR[463976]: 2020-03-10T18:39:35.196254Z :PQ_READ_PROXY INFO: session cookie 10960 client rtmr@rtmr-dev-sas-1 session rtmr@rtmr-dev-sas-1_555_10960_4548552247166245006 commit request from client for 7944675
+Mar 10 21:39:35 lbk-sas-1082 KIKIMR[463976]: 2020-03-10T18:39:35.228368Z :PQ_WRITE_PROXY INFO: CheckACL ticket 3:ser***CLAkg got result from TICKET_PARSER response: error:  user: 2001309@tvm
+Mar 10 21:39:35 lbk-sas-1082 KIKIMR[463976]: 2020-03-10T18:39:35.228416Z :PQ_WRITE_PROXY INFO: session cookie: 1332024 sessionId: WRITE_rthub--favicon:14_1583842639258|26d60892-c7a0506b-781747db-d672bab_0 describe result for acl check

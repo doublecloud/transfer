@@ -1,0 +1,70 @@
+{
+    "mysql.mysql.TestCanonSource/date_types/canon_0#01": {
+        "checksum": "63cdaf6fea8ae94d655a6725b6884f06",
+        "size": 375880,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1937027/556f28ba793a36122a21906b5be32fd3b7c556e9/resource.tar.gz#mysql.mysql.TestCanonSource_date_types_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/date_types/canon_0#03": {
+        "checksum": "553cf9cb21651376814c8a54af60c25a",
+        "size": 375654,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1937027/556f28ba793a36122a21906b5be32fd3b7c556e9/resource.tar.gz#mysql.mysql.TestCanonSource_date_types_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/initial/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_initial_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/initial/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_initial_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/json_types/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_json_types_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/json_types/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_json_types_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_bit/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_bit_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_bit/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_bit_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_boolean/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_boolean_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_boolean/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_boolean_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_decimal/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_decimal_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_decimal/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_decimal_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_float/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_float_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_float/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_float_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_int/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_int_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/numeric_types_int/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_numeric_types_int_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/string_types/canon_0#01": {
+        "checksum": "9625a825a89c306a345dd363347a79ba",
+        "size": 411782,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1937027/556f28ba793a36122a21906b5be32fd3b7c556e9/resource.tar.gz#mysql.mysql.TestCanonSource_string_types_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/string_types/canon_0#03": {
+        "checksum": "13148de832c344a4760d8afdb07ee0db",
+        "size": 411702,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1937027/556f28ba793a36122a21906b5be32fd3b7c556e9/resource.tar.gz#mysql.mysql.TestCanonSource_string_types_canon_0#03/extracted"
+    },
+    "mysql.mysql.TestCanonSource/string_types_emoji/canon_0#01": {
+        "uri": "file://mysql.mysql.TestCanonSource_string_types_emoji_canon_0#01/extracted"
+    },
+    "mysql.mysql.TestCanonSource/string_types_emoji/canon_0#03": {
+        "uri": "file://mysql.mysql.TestCanonSource_string_types_emoji_canon_0#03/extracted"
+    }
+}

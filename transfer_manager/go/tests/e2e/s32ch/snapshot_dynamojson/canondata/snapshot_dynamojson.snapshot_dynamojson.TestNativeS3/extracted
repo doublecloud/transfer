@@ -1,0 +1,53 @@
+
+"example"."data"
+{
+	"meta":
+	[
+		{
+			"name": "__file_name",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "__row_index",
+			"type": "Nullable(UInt64)"
+		},
+		{
+			"name": "OrderID",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "OrderDate",
+			"type": "Nullable(DateTime)"
+		},
+		{
+			"name": "CustomerName",
+			"type": "Nullable(String)"
+		},
+		{
+			"name": "CustomerAmount",
+			"type": "Nullable(Int32)"
+		}
+	],
+
+	"data":
+	[
+		{
+			"__file_name": "dynamo.jsonl",
+			"__row_index": "1",
+			"OrderID": "1",
+			"OrderDate": "2023-07-01 12:00:00",
+			"CustomerName": "John Doe",
+			"CustomerAmount": 3540
+		},
+		{
+			"__file_name": "dynamo.jsonl",
+			"__row_index": "2",
+			"OrderID": "2",
+			"OrderDate": "2023-07-02 12:00:00",
+			"CustomerName": "John Smith",
+			"CustomerAmount": 1200
+		}
+	],
+
+	"rows": 2
+}

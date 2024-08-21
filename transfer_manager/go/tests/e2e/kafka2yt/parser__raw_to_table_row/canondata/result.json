@@ -1,0 +1,472 @@
+{
+    "parser__raw_to_table_row.parser__raw_to_table_row.TestSchemaRegistryJSONtoYT": [
+        {
+            "columnnames": [
+                "topic",
+                "partition",
+                "offset",
+                "timestamp",
+                "headers",
+                "key",
+                "value"
+            ],
+            "columnvalues": [
+                "testTopic",
+                0,
+                0,
+                0,
+                {},
+                "",
+                "\u0000\u0000\u0000\u0000\u0001{\"id\":\"1\",\"name\":\"HELLO\",\"description\":\"this suit is black\",\"age\":111}"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my_table",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "topic",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "partition",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "offset",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "headers",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "key",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "value",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "topic",
+                "partition",
+                "offset",
+                "timestamp",
+                "headers",
+                "key",
+                "value"
+            ],
+            "columnvalues": [
+                "testTopic",
+                0,
+                1,
+                0,
+                {},
+                "",
+                "\u0000\u0000\u0000\u0000\u0001{\"id\":\"1\", \"description\":\"this suit is black, NOT\"}"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my_table",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "topic",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "partition",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "offset",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "headers",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "key",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "value",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "topic",
+                "partition",
+                "offset",
+                "timestamp",
+                "headers",
+                "key",
+                "value"
+            ],
+            "columnvalues": [
+                "testTopic",
+                0,
+                2,
+                0,
+                {},
+                "",
+                "\u0000\u0000\u0000\u0000\u0001{\"id\":\"1\", \"age\": null}"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my_table",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "topic",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "partition",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "offset",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "headers",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "key",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "value",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": [
+                "topic",
+                "partition",
+                "offset",
+                "timestamp",
+                "headers",
+                "key",
+                "value"
+            ],
+            "columnvalues": [
+                "testTopic",
+                0,
+                3,
+                0,
+                {},
+                "",
+                "\u0000\u0000\u0000\u0000\u0001{\"id\":\"2\",\"age\":123}"
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "my_table",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "topic",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "utf8"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "partition",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "offset",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "timestamp",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "timestamp"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "headers",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "any"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "key",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "value",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

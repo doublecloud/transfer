@@ -1,0 +1,1718 @@
+{
+    "number_to_float_transformer.number_to_float_transformer.TestSnapshotAndReplication/Canon": {
+        "floats": [
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    1,
+                    {
+                        "key": 123.45
+                    },
+                    {
+                        "key": 123.45
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    2,
+                    [
+                        234.56,
+                        [
+                            123.45
+                        ],
+                        {
+                            "123.45": 234.56,
+                            "key": "123.321"
+                        },
+                        "123.123"
+                    ],
+                    [
+                        234.56,
+                        [
+                            123.45
+                        ],
+                        {
+                            "123.45": 234.56,
+                            "key": "123.321"
+                        },
+                        "123.123"
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    3,
+                    [
+                        432.85,
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        }
+                    ],
+                    [
+                        432.85,
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        }
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    4,
+                    [
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        123.45
+                    ],
+                    [
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        123.45
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    5,
+                    {
+                        "key1": 854.213,
+                        "key2": [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        "key3": {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "key4": {
+                            "key1": 854.213,
+                            "key2": [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        },
+                        "key5": [
+                            423.124,
+                            "2353.2345",
+                            234.234,
+                            [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ]
+                    },
+                    {
+                        "key1": 854.213,
+                        "key2": [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        "key3": {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "key4": {
+                            "key1": 854.213,
+                            "key2": [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        },
+                        "key5": [
+                            423.124,
+                            "2353.2345",
+                            234.234,
+                            [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ]
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    6,
+                    [
+                        999.111,
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        [
+                            423.124,
+                            "2353.2345",
+                            234.234,
+                            [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ],
+                        {
+                            "key1": 854.213,
+                            "key2": [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        }
+                    ],
+                    [
+                        999.111,
+                        {
+                            "k1": 234.56,
+                            "k2": [
+                                123.45
+                            ],
+                            "k3": {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        [
+                            234.56,
+                            [
+                                123.45
+                            ],
+                            {
+                                "123.45": 234.56,
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        [
+                            423.124,
+                            "2353.2345",
+                            234.234,
+                            [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ],
+                        {
+                            "key1": 854.213,
+                            "key2": [
+                                234.56,
+                                [
+                                    123.45
+                                ],
+                                {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": 234.56,
+                                "k2": [
+                                    123.45
+                                ],
+                                "k3": {
+                                    "123.45": 234.56,
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        }
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    100,
+                    {
+                        "key": 999.99
+                    },
+                    {
+                        "key": 999.99
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            }
+        ],
+        "numbers": [
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    1,
+                    {
+                        "key": "123.45"
+                    },
+                    {
+                        "key": "123.45"
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    2,
+                    [
+                        "234.56",
+                        [
+                            "123.45"
+                        ],
+                        {
+                            "123.45": "234.56",
+                            "key": "123.321"
+                        },
+                        "123.123"
+                    ],
+                    [
+                        "234.56",
+                        [
+                            "123.45"
+                        ],
+                        {
+                            "123.45": "234.56",
+                            "key": "123.321"
+                        },
+                        "123.123"
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    3,
+                    [
+                        "432.85",
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        }
+                    ],
+                    [
+                        "432.85",
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        }
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    4,
+                    [
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "123.45"
+                    ],
+                    [
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "123.45"
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    5,
+                    {
+                        "key1": "854.213",
+                        "key2": [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        "key3": {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "key4": {
+                            "key1": "854.213",
+                            "key2": [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        },
+                        "key5": [
+                            "423.124",
+                            "2353.2345",
+                            "234.234",
+                            [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ]
+                    },
+                    {
+                        "key1": "854.213",
+                        "key2": [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        "key3": {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        "key4": {
+                            "key1": "854.213",
+                            "key2": [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        },
+                        "key5": [
+                            "423.124",
+                            "2353.2345",
+                            "234.234",
+                            [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ]
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    6,
+                    [
+                        "999.111",
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        [
+                            "423.124",
+                            "2353.2345",
+                            "234.234",
+                            [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ],
+                        {
+                            "key1": "854.213",
+                            "key2": [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        }
+                    ],
+                    [
+                        "999.111",
+                        {
+                            "k1": "234.56",
+                            "k2": [
+                                "123.45"
+                            ],
+                            "k3": {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "k4": "123.123"
+                        },
+                        [
+                            "234.56",
+                            [
+                                "123.45"
+                            ],
+                            {
+                                "123.45": "234.56",
+                                "key": "123.321"
+                            },
+                            "123.123"
+                        ],
+                        [
+                            "423.124",
+                            "2353.2345",
+                            "234.234",
+                            [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        ],
+                        {
+                            "key1": "854.213",
+                            "key2": [
+                                "234.56",
+                                [
+                                    "123.45"
+                                ],
+                                {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "123.123"
+                            ],
+                            "key3": {
+                                "k1": "234.56",
+                                "k2": [
+                                    "123.45"
+                                ],
+                                "k3": {
+                                    "123.45": "234.56",
+                                    "key": "123.321"
+                                },
+                                "k4": "123.123"
+                            }
+                        }
+                    ]
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            },
+            {
+                "columnnames": [
+                    "i",
+                    "j",
+                    "jb"
+                ],
+                "columnvalues": [
+                    100,
+                    {
+                        "key": "999.99"
+                    },
+                    {
+                        "key": "999.99"
+                    }
+                ],
+                "commitTime": 0,
+                "id": 0,
+                "kind": "insert",
+                "nextlsn": 0,
+                "oldkeys": {},
+                "part": "",
+                "query": "",
+                "schema": "",
+                "table": "test_not_transformed",
+                "table_schema": [
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": true,
+                        "name": "i",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "int64"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "j",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    },
+                    {
+                        "expression": "",
+                        "fake_key": false,
+                        "key": false,
+                        "name": "jb",
+                        "original_type": "",
+                        "path": "",
+                        "required": false,
+                        "table_name": "",
+                        "table_schema": "",
+                        "type": "any"
+                    }
+                ],
+                "txPosition": 0,
+                "tx_id": ""
+            }
+        ]
+    }
+}

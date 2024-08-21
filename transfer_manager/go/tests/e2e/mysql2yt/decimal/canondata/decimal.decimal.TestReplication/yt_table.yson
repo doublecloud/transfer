@@ -1,0 +1,44 @@
+<
+    strict=%true;
+    "unique_keys"=%true;
+>
+[
+    {
+        name=id;
+        required=%false;
+        "sort_order"=ascending;
+        type=int32;
+        "type_v3"={
+            "type_name"=optional;
+            item=int32;
+        };
+    };
+    {
+        name=value;
+        required=%false;
+        type=double;
+        "type_v3"={
+            "type_name"=optional;
+            item=double;
+        };
+    };
+    {
+        name="value_10";
+        required=%false;
+        type=double;
+        "type_v3"={
+            "type_name"=optional;
+            item=double;
+        };
+    };
+]
+{"id":10,"value":0,"value_10":0}
+{"id":11,"value":1e+34,"value_10":99999}
+{"id":12,"value":1e+35,"value_10":9999999}
+{"id":13,"value":1e+35,"value_10":9999999999}
+{"id":14,"value":1e+35,"value_10":9999999999}
+{"id":15,"value":1e+35,"value_10":9999999999}
+{"id":16,"value":1e+35,"value_10":9999999999}
+{"id":17,"value":1,"value_10":1}
+{"id":18,"value":null,"value_10":9999999999}
+{"id":19,"value":1e+35,"value_10":null}

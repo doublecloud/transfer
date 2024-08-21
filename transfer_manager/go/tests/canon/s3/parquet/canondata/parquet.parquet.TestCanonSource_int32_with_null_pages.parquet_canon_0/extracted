@@ -1,0 +1,2858 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 1
+                },
+                {
+                    "type": "int32",
+                    "value": -654807448
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 2
+                },
+                {
+                    "type": "int32",
+                    "value": -465559769
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 2
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 3
+                },
+                {
+                    "type": "int32",
+                    "value": -34563097
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 3
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 130
+                },
+                {
+                    "type": "int32",
+                    "value": -1689290271
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 130
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 131
+                },
+                {
+                    "type": "int32",
+                    "value": 1745329571
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 131
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 132
+                },
+                {
+                    "type": "int32",
+                    "value": -1717925870
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 132
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 259
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 259
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 130,
+                "Values": 130
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 260
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 260
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 130,
+                "Values": 130
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 261
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 261
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 130,
+                "Values": 130
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 388
+                },
+                {
+                    "type": "int32",
+                    "value": -187025414
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 388
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 389
+                },
+                {
+                    "type": "int32",
+                    "value": -1241385771
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 389
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 390
+                },
+                {
+                    "type": "int32",
+                    "value": 177814932
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 390
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 517
+                },
+                {
+                    "type": "int32",
+                    "value": -1268231836
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 517
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 518
+                },
+                {
+                    "type": "int32",
+                    "value": 1075344848
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 518
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 519
+                },
+                {
+                    "type": "int32",
+                    "value": -1499712974
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 519
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 646
+                },
+                {
+                    "type": "int32",
+                    "value": 216351686
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 646
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 647
+                },
+                {
+                    "type": "int32",
+                    "value": -1093266191
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 647
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 648
+                },
+                {
+                    "type": "int32",
+                    "value": 2125689411
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 648
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 775
+                },
+                {
+                    "type": "int32",
+                    "value": -1391713441
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 775
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 776
+                },
+                {
+                    "type": "int32",
+                    "value": 168600889
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 776
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 777
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 777
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 130,
+                "Values": 130
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 904
+                },
+                {
+                    "type": "int32",
+                    "value": 1586125964
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 904
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 905
+                },
+                {
+                    "type": "int32",
+                    "value": 624223890
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 905
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int32_field"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/int32_with_null_pages.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 906
+                },
+                {
+                    "type": "int32",
+                    "value": 1298187183
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 906
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/int32_with_null_pages.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 134,
+                "Values": 134
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "int32_with_null_pages.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32_field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

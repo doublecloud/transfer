@@ -1,0 +1,465 @@
+{
+    "transfer_manager_pg2yt_replication_canon.transfer_manager_pg2yt_replication_canon.TestGroup/Load": [
+        {
+            "aid": 0,
+            "b": "10101111",
+            "ba": "����",
+            "bi": 2147483642,
+            "bid": 9223372036854775807,
+            "biu": 9223372036854775804,
+            "bl": false,
+            "bx": "(1.41421356237309,1.41421356237309),(-1.41421356237309,-1.41421356237309)",
+            "c": "1",
+            "char_arr": null,
+            "cl": "<(0.5,0.5),0.707106781186548>",
+            "cr": "192.168.100.128/25",
+            "d": 3.14e-100,
+            "da": 12846,
+            "de": 2.5,
+            "dt": 1098167034000000,
+            "empty_arr": null,
+            "enum_arr": null,
+            "enum_v": "ok",
+            "f": 1.45e-10,
+            "i": -8388605,
+            "id": 1,
+            "int4_arr": [
+                [
+                    [
+                        1,
+                        2,
+                        3
+                    ],
+                    [
+                        4,
+                        5,
+                        6
+                    ]
+                ]
+            ],
+            "it": "192.168.100.128/25",
+            "iv": "1 day 01:00:00.000000",
+            "j": {
+                "yandex is the best place to work at": [
+                    "wish i",
+                    "would stay",
+                    "4.15",
+                    {
+                        "here after": "the  "
+                    },
+                    [
+                        "i",
+                        [
+                            "n",
+                            [
+                                "t",
+                                "e r n s h i"
+                            ],
+                            "p"
+                        ]
+                    ]
+                ]
+            },
+            "jb": {
+                "yandex is the best place to work at": [
+                    "wish i",
+                    "would stay",
+                    "4.15",
+                    {
+                        "here after": "the  "
+                    },
+                    [
+                        "i",
+                        [
+                            "n",
+                            [
+                                "t",
+                                "e r n s h i"
+                            ],
+                            "p"
+                        ]
+                    ]
+                ]
+            },
+            "json_arr": null,
+            "ln": "{0,-1,0}",
+            "ls": "(1,0),(-1,0)",
+            "ma": "08:00:2b:01:02:03",
+            "pg": "((0,0),(0,1),(1,1),(1,0))",
+            "ph": "((0,0),(1,1),(2,0))",
+            "pt": "(23.4,-44.5)",
+            "si": -32768,
+            "ss": 1,
+            "str": "hello, friend of mine",
+            "t": "okay, now bye-bye",
+            "text_arr": null,
+            "tm": "04:05:06.789",
+            "ts": 1098167034000000,
+            "tst": 1098174234000000,
+            "udt_arr": null,
+            "uid": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+            "vb": "10101111",
+            "x": "<foo>bar</foo>"
+        },
+        {
+            "aid": 1,
+            "b": "10000001",
+            "ba": "well, I got stuck with time and it took a huge amount of time XD",
+            "bi": 112412412421941041,
+            "bid": 9223372036854775806,
+            "biu": 129491244912401240,
+            "bl": true,
+            "bx": "(0,0),(0,0)",
+            "c": "2",
+            "char_arr": [
+                "f",
+                "o",
+                "o"
+            ],
+            "cl": "<(0,0),2>",
+            "cr": "192.168.0.0/24",
+            "d": null,
+            "da": 10654,
+            "de": null,
+            "dt": null,
+            "empty_arr": [],
+            "enum_arr": [
+                "sad",
+                "ok"
+            ],
+            "enum_v": "sad",
+            "f": 1.34e-10,
+            "i": -1294129412,
+            "id": 2,
+            "int4_arr": [
+                1,
+                2,
+                3
+            ],
+            "it": "192.168.0.0/24",
+            "iv": "-23:00:00.000000",
+            "j": {
+                "simpler": [
+                    "than",
+                    "13e-10",
+                    {
+                        "it": {
+                            "could": "be"
+                        }
+                    }
+                ]
+            },
+            "jb": {
+                "simpler": [
+                    "than",
+                    "0.0000000013",
+                    {
+                        "it": {
+                            "could": "be"
+                        }
+                    }
+                ]
+            },
+            "json_arr": [
+                {},
+                {
+                    "foo": "bar"
+                },
+                {
+                    "arr": [
+                        1,
+                        2,
+                        3
+                    ]
+                }
+            ],
+            "ln": "{0,-1,0}",
+            "ls": "(-1,0),(1,0)",
+            "ma": "08:00:2b:01:02:03",
+            "pg": {
+                "uri": "file://transfer_manager_pg2yt_replication_canon.transfer_manager_pg2yt_replication_canon.TestGroup_Load/extracted"
+            },
+            "ph": "((0,0),(1,0),(1,1),(0,1))",
+            "pt": "(0,0)",
+            "si": 32767,
+            "ss": 32767,
+            "str": "another hello",
+            "t": "okay, another bye",
+            "text_arr": [
+                "foo",
+                "bar"
+            ],
+            "tm": "16:05:00",
+            "ts": null,
+            "tst": null,
+            "udt_arr": [
+                "(Moscow,Lva Tolstogo 16)",
+                "(Saint-Petersburg,Piskarevskiy pr. 2)"
+            ],
+            "uid": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+            "vb": "10000001",
+            "x": {
+                "uri": "file://transfer_manager_pg2yt_replication_canon.transfer_manager_pg2yt_replication_canon.TestGroup_Load/extracted.0"
+            }
+        },
+        {
+            "aid": 1,
+            "b": null,
+            "ba": null,
+            "bi": null,
+            "bid": 1,
+            "biu": null,
+            "bl": null,
+            "bx": null,
+            "c": null,
+            "char_arr": [
+                "a",
+                "b",
+                "c"
+            ],
+            "cl": null,
+            "cr": null,
+            "d": null,
+            "da": 15228,
+            "de": null,
+            "dt": null,
+            "empty_arr": [],
+            "enum_arr": [
+                "sad",
+                "ok"
+            ],
+            "enum_v": "happy",
+            "f": null,
+            "i": null,
+            "id": 911,
+            "int4_arr": [
+                1,
+                2,
+                3
+            ],
+            "it": null,
+            "iv": null,
+            "j": null,
+            "jb": null,
+            "json_arr": [
+                {},
+                {
+                    "foo": "bar"
+                },
+                {
+                    "arr": [
+                        1,
+                        2,
+                        3
+                    ]
+                }
+            ],
+            "ln": null,
+            "ls": null,
+            "ma": null,
+            "pg": null,
+            "ph": null,
+            "pt": null,
+            "si": null,
+            "ss": 1,
+            "str": "badabums",
+            "t": null,
+            "text_arr": [
+                "foo",
+                "bar"
+            ],
+            "tm": null,
+            "ts": null,
+            "tst": null,
+            "udt_arr": [
+                "(city1,street1)",
+                "(city2,street2)"
+            ],
+            "uid": null,
+            "vb": null,
+            "x": null
+        },
+        {
+            "aid": 1,
+            "b": null,
+            "ba": null,
+            "bi": null,
+            "bid": 2,
+            "biu": null,
+            "bl": null,
+            "bx": null,
+            "c": null,
+            "char_arr": [
+                "x",
+                "y",
+                "z"
+            ],
+            "cl": null,
+            "cr": null,
+            "d": null,
+            "da": 15228,
+            "de": null,
+            "dt": null,
+            "empty_arr": null,
+            "enum_arr": null,
+            "enum_v": "sad",
+            "f": null,
+            "i": null,
+            "id": 911,
+            "int4_arr": [
+                [
+                    [
+                        1,
+                        2,
+                        3
+                    ],
+                    [
+                        4,
+                        5,
+                        6
+                    ]
+                ]
+            ],
+            "it": null,
+            "iv": null,
+            "j": null,
+            "jb": null,
+            "json_arr": null,
+            "ln": null,
+            "ls": null,
+            "ma": null,
+            "pg": null,
+            "ph": null,
+            "pt": null,
+            "si": null,
+            "ss": 2,
+            "str": "badabums",
+            "t": null,
+            "text_arr": [
+                [
+                    "foo",
+                    "bar"
+                ],
+                [
+                    "abc",
+                    "xyz"
+                ]
+            ],
+            "tm": null,
+            "ts": null,
+            "tst": null,
+            "udt_arr": null,
+            "uid": null,
+            "vb": null,
+            "x": null
+        },
+        {
+            "aid": 4,
+            "b": "10000010",
+            "ba": "john is gonna dance jaga-jaga",
+            "bi": -784124124219410491,
+            "bid": 9223372036854775805,
+            "biu": 129491098649360240,
+            "bl": false,
+            "bx": "(1,1),(0,0)",
+            "c": "c",
+            "char_arr": [
+                "b",
+                "a",
+                "r"
+            ],
+            "cl": "<(1,0.333333333333333),0.924950591148529>",
+            "cr": "2001:4f8:3:ba:2e0:81ff:fe22:d1f1/128",
+            "d": null,
+            "da": 10655,
+            "de": 123,
+            "dt": null,
+            "empty_arr": null,
+            "enum_arr": null,
+            "enum_v": "happy",
+            "f": 5.34e-10,
+            "i": 294129412,
+            "id": 3,
+            "int4_arr": [
+                [
+                    1,
+                    2,
+                    3
+                ],
+                [
+                    4,
+                    5,
+                    6
+                ]
+            ],
+            "it": "12.47.120.130/24",
+            "iv": "21 day 00:00:00.000000",
+            "j": {
+                "simpler": [
+                    "than",
+                    "13e-10",
+                    {
+                        "it": {
+                            "could": [
+                                "be",
+                                "no",
+                                "ideas    ",
+                                "   again"
+                            ],
+                            "sorry": null
+                        }
+                    }
+                ]
+            },
+            "jb": {
+                "simpler": [
+                    "than",
+                    "0.0000000013",
+                    {
+                        "it": {
+                            "could": [
+                                "be",
+                                "no",
+                                "ideas    ",
+                                "   again"
+                            ],
+                            "sorry": null
+                        }
+                    }
+                ]
+            },
+            "json_arr": null,
+            "ln": "{0,-1,0}",
+            "ls": "(2,0),(-2,0)",
+            "ma": "08:00:2b:01:02:03",
+            "pg": {
+                "uri": "file://transfer_manager_pg2yt_replication_canon.transfer_manager_pg2yt_replication_canon.TestGroup_Load/extracted.1"
+            },
+            "ph": "((0,0),(1,1),(2,3),(3,1),(4,0))",
+            "pt": "(0,0)",
+            "si": 13452,
+            "ss": -12345,
+            "str": "another another hello",
+            "t": "okay, another another bye",
+            "text_arr": [
+                [
+                    "foo",
+                    "bar"
+                ],
+                [
+                    "abc",
+                    "xyz"
+                ]
+            ],
+            "tm": "04:05:00",
+            "ts": null,
+            "tst": null,
+            "udt_arr": null,
+            "uid": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+            "vb": "10000010",
+            "x": {
+                "uri": "file://transfer_manager_pg2yt_replication_canon.transfer_manager_pg2yt_replication_canon.TestGroup_Load/extracted.2"
+            }
+        }
+    ]
+}

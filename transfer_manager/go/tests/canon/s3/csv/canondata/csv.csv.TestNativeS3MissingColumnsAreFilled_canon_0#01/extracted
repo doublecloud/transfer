@@ -1,0 +1,461 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "boolean",
+                "uint8",
+                "test_missing_column_string",
+                "test_missing_column_int",
+                "test_missing_column_bool"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                },
+                {
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "type": "int8",
+                    "value": 0
+                },
+                {
+                    "type": "bool",
+                    "value": false
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "test_csv_all_types/all_types.csv"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "test"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 140,
+                "Values": 124
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "types"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "0",
+                    "name": "boolean",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "1",
+                    "name": "uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:uint8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "20",
+                    "name": "test_missing_column_string",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:utf8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "21",
+                    "name": "test_missing_column_int",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:int8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "22",
+                    "name": "test_missing_column_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "boolean",
+                "uint8",
+                "test_missing_column_string",
+                "test_missing_column_int",
+                "test_missing_column_bool"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                },
+                {
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "type": "int8",
+                    "value": 0
+                },
+                {
+                    "type": "bool",
+                    "value": false
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "test_csv_all_types/all_types.csv"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "test"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 140,
+                "Values": 124
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "types"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "0",
+                    "name": "boolean",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "1",
+                    "name": "uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:uint8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "20",
+                    "name": "test_missing_column_string",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:utf8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "21",
+                    "name": "test_missing_column_int",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:int8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "22",
+                    "name": "test_missing_column_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "boolean",
+                "uint8",
+                "test_missing_column_string",
+                "test_missing_column_int",
+                "test_missing_column_bool"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "bool",
+                    "value": false
+                },
+                {
+                    "type": "uint8",
+                    "value": 0
+                },
+                {
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "type": "int8",
+                    "value": 0
+                },
+                {
+                    "type": "bool",
+                    "value": false
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "test_csv_all_types/all_types.csv"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "test"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 140,
+                "Values": 124
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "types"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "0",
+                    "name": "boolean",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "1",
+                    "name": "uint8",
+                    "type": "uint8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:uint8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "20",
+                    "name": "test_missing_column_string",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:utf8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "21",
+                    "name": "test_missing_column_int",
+                    "type": "int8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:int8"
+                },
+                {
+                    "table_schema": "test",
+                    "table_name": "types",
+                    "path": "22",
+                    "name": "test_missing_column_bool",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "csv:boolean"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

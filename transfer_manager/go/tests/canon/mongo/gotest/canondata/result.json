@@ -1,0 +1,1368 @@
+{
+    "gotest.gotest.TestCanonSource/strange_hetero_case/canondb.hetero_no_repack": {
+        "Rows": [
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "x": 4,
+                            "y": 7
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b8"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "incept": {
+                                    "y": "asdf"
+                                },
+                                "z": 2
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "[{\"Key\":\"x\",\"Value\":0},{\"Key\":\"y\",\"Value\":1}]"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "omg"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "8147"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "2499"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "100502"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "true"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1.86330561888540180873216E-6153\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"T\":1234526243,\"I\":1}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1970-01-10T19:48:40.004Z\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "68656c6c6f2c20776f726c6421"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"sex symbol\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"function(){ return \\\"omfg\\\" }\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "what": "is this?"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "null"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"DB\":\"dbdb\",\"Pointer\":\"62e98ebcb28dbd2fffdf12b7\"}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b9"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "string": "2354"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c0"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "int": 402
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c1"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "double": 1.27
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c3"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "timestamp": {
+                                "$timestamp": {
+                                    "i": 1188888811,
+                                    "t": 222
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c4"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "nil": null
+                        }
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "hetero_no_repack",
+            "Namespace": "canondb"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "_id",
+                "original_type": "mongo:bson_id",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "document",
+                "original_type": "mongo:bson",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            }
+        ]
+    },
+    "gotest.gotest.TestCanonSource/strange_hetero_case/canondb.hetero_no_repack#01": {
+        "Rows": [
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "x": 29,
+                            "y": 7
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "omg"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "omgval": 44
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cf"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "nil": null
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12ce"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "timestamp": {
+                                "$timestamp": {
+                                    "i": 333,
+                                    "t": 5555555
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cc"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "double": 2.56
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cb"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "int": 5
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12ca"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "string": "3"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c9"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "decimal": {
+                                "$numberDecimal": "4.500894873521601331003503E-6152"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c8"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "$code": "function(){}"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "$oid": "62e98ebcb28dbd2fffdf12ba"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c6"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": "x"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"DB\":\"ddbb\",\"Pointer\":\"62e98ebcb28dbd2fffdf12c4\"}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"no homo 🍆\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "d09fd180d0b8d0b2d0b5d1822c20d0bcd0b8d18021"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1972-05-09T14:50:40Z\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"T\":1234526243,\"I\":2}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1.86330561888540180873217E-6153\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "false"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "100503"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "8440"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "123"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "woof"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "[{\"Key\":\"u\",\"Value\":8},{\"Key\":\"v\",\"Value\":9}]"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c5"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "s": 1,
+                            "t": 2
+                        }
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "hetero_no_repack",
+            "Namespace": "canondb"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "_id",
+                "original_type": "mongo:bson_id",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "document",
+                "original_type": "mongo:bson",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            }
+        ]
+    },
+    "gotest.gotest.TestCanonSource/vanilla_hetero_case/canondb.hetero_repack": {
+        "Rows": [
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "x": 4,
+                            "y": 7
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b8"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "incept": {
+                                    "y": "asdf"
+                                },
+                                "z": 2
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "[{\"Key\":\"x\",\"Value\":0},{\"Key\":\"y\",\"Value\":1}]"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "omg"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "8147"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "2499"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "100502"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "true"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1.86330561888540180873216E-6153\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"T\":1234526243,\"I\":1}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1970-01-10T19:48:40.004Z\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "68656c6c6f2c20776f726c6421"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"sex symbol\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"function(){ return \\\"omfg\\\" }\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "what": "is this?"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "null"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"DB\":\"dbdb\",\"Pointer\":\"62e98ebcb28dbd2fffdf12b7\"}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b9"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "string": "2354"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c0"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "int": 402
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c1"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "double": 1.27
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c3"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "timestamp": {
+                                "$timestamp": {
+                                    "i": 1188888811,
+                                    "t": 222
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c4"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "nil": null
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b4"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "inf+": {
+                                "$numberDouble": "Infinity"
+                            },
+                            "inf-": {
+                                "$numberDouble": "-Infinity"
+                            },
+                            "nan": {
+                                "$numberDouble": "NaN"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "hetero_repack",
+            "Namespace": "canondb"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "_id",
+                "original_type": "mongo:bson_id",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "document",
+                "original_type": "mongo:bson",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            }
+        ]
+    },
+    "gotest.gotest.TestCanonSource/vanilla_hetero_case/canondb.hetero_repack#01": {
+        "Rows": [
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12b7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "x": 29,
+                            "y": 7
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "omg"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "omgval": 44
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cf"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "nil": null
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12ce"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "timestamp": {
+                                "$timestamp": {
+                                    "i": 333,
+                                    "t": 5555555
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cc"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "double": 2.56
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12cb"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "int": 5
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12ca"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "string": "3"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c9"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "decimal": {
+                                "$numberDecimal": "4.500894873521601331003503E-6152"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c8"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "$code": "function(){}"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c7"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": {
+                                "$oid": "62e98ebcb28dbd2fffdf12ba"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c6"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "id": "x"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"DB\":\"ddbb\",\"Pointer\":\"62e98ebcb28dbd2fffdf12c4\"}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"no homo 🍆\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "d09fd180d0b8d0b2d0b5d1822c20d0bcd0b8d18021"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1972-05-09T14:50:40Z\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "{\"T\":1234526243,\"I\":2}"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "\"1.86330561888540180873217E-6153\""
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "false"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "100503"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "8440"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "123"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "woof"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "[{\"Key\":\"u\",\"Value\":8},{\"Key\":\"v\",\"Value\":9}]"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {}
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "_id": {
+                        "GoType": "string",
+                        "Val": "62e98ebcb28dbd2fffdf12c5"
+                    },
+                    "document": {
+                        "GoType": "mongo.DValue",
+                        "Val": {
+                            "s": 1,
+                            "t": 2
+                        }
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "hetero_repack",
+            "Namespace": "canondb"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "_id",
+                "original_type": "mongo:bson_id",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "document",
+                "original_type": "mongo:bson",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            }
+        ]
+    }
+}

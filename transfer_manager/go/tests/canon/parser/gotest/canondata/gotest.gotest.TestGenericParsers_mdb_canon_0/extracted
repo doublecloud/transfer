@@ -1,0 +1,563 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "collect_time",
+                "cluster_id",
+                "cluster_name",
+                "host",
+                "database",
+                "pid",
+                "user",
+                "application_name",
+                "client_addr",
+                "client_hostname",
+                "client_port",
+                "backend_start",
+                "xact_start",
+                "query_start",
+                "state_change",
+                "wait_event_type",
+                "wait_event",
+                "state",
+                "backend_xid",
+                "backend_xmin",
+                "query",
+                "backend_type",
+                "blocking_pids",
+                "queryid",
+                "_rest",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "time.Time",
+                    "value": "2020-08-10T09:46:22Z"
+                },
+                {
+                    "type": "string",
+                    "value": "mdbkbeut80vtiba04gid"
+                },
+                {
+                    "type": "string",
+                    "value": "efimkins"
+                },
+                {
+                    "type": "string",
+                    "value": "sas-au0cwt9wu98m6t18.db.yandex.net"
+                },
+                {
+                    "type": "string",
+                    "value": "postgres"
+                },
+                {
+                    "type": "uint32",
+                    "value": 25167
+                },
+                {
+                    "type": "string",
+                    "value": "postgres"
+                },
+                {
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "uint32",
+                    "value": 0
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-08-10T03:46:22.330498Z"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-08-10T03:46:22.333591Z"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-08-10T03:46:22.333623Z"
+                },
+                {
+                    "type": "string",
+                    "value": "Client"
+                },
+                {
+                    "type": "string",
+                    "value": "ClientRead"
+                },
+                {
+                    "type": "string",
+                    "value": "idle"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "SELECT 42;"
+                },
+                {
+                    "type": "string",
+                    "value": "client backend"
+                },
+                {
+                    "type": "string",
+                    "value": "[]"
+                },
+                {
+                    "type": "string",
+                    "value": "651361249"
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {}
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-02-02T10:02:20Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"mdb/porto/test/perf_diag/pg_stat_activity\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"mdb/porto/test/perf_diag/pg_stat_activity\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 682,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "mdb_porto_test_perf_diag_pg_stat_activity"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "collect_time",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "cluster_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "cluster_name",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "host",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "database",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "pid",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "user",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "application_name",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "client_addr",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "client_hostname",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "client_port",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "backend_start",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "xact_start",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "query_start",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "state_change",
+                    "type": "datetime",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "wait_event_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "wait_event",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "state",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "backend_xid",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "backend_xmin",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "query",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "backend_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "blocking_pids",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "queryid",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_rest",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

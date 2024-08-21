@@ -1,0 +1,1175 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "c_customer_sk:",
+                "c_current_cdemo_sk:",
+                "c_current_hdemo_sk:",
+                "c_current_addr_sk:",
+                "c_first_shipto_date_sk:",
+                "c_first_sales_date_sk:",
+                "c_birth_day:",
+                "c_birth_month:",
+                "c_birth_year:",
+                "c_customer_id:",
+                "c_salutation:",
+                "c_first_name:",
+                "c_last_name:",
+                "c_preferred_cust_flag:",
+                "c_birth_country:",
+                "c_email_address:",
+                "c_last_review_date:"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/delta_encoding_required_column.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 1
+                },
+                {
+                    "type": "int32",
+                    "value": 105
+                },
+                {
+                    "type": "int32",
+                    "value": 949850
+                },
+                {
+                    "type": "int32",
+                    "value": 383
+                },
+                {
+                    "type": "int32",
+                    "value": 46916
+                },
+                {
+                    "type": "int32",
+                    "value": 2452463
+                },
+                {
+                    "type": "int32",
+                    "value": 2452433
+                },
+                {
+                    "type": "int32",
+                    "value": 14
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                },
+                {
+                    "type": "int32",
+                    "value": 1945
+                },
+                {
+                    "type": "string",
+                    "value": "AAAAAAAAJGAAAAAA"
+                },
+                {
+                    "type": "string",
+                    "value": "Dr."
+                },
+                {
+                    "type": "string",
+                    "value": "Frank"
+                },
+                {
+                    "type": "string",
+                    "value": "Strain"
+                },
+                {
+                    "type": "string",
+                    "value": "Y"
+                },
+                {
+                    "type": "string",
+                    "value": "VIRGIN ISLANDS, U.S."
+                },
+                {
+                    "type": "string",
+                    "value": "Frank.Strain@MbOHByB.edu"
+                },
+                {
+                    "type": "string",
+                    "value": "2452378"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/delta_encoding_required_column.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 641,
+                "Values": 641
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "delta_encoding_required_column.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_cdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_hdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_addr_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_shipto_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_sales_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_day:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_month:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_year:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_id:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_salutation:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_preferred_cust_flag:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_country:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_email_address:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_review_date:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "c_customer_sk:",
+                "c_current_cdemo_sk:",
+                "c_current_hdemo_sk:",
+                "c_current_addr_sk:",
+                "c_first_shipto_date_sk:",
+                "c_first_sales_date_sk:",
+                "c_birth_day:",
+                "c_birth_month:",
+                "c_birth_year:",
+                "c_customer_id:",
+                "c_salutation:",
+                "c_first_name:",
+                "c_last_name:",
+                "c_preferred_cust_flag:",
+                "c_birth_country:",
+                "c_email_address:",
+                "c_last_review_date:"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/delta_encoding_required_column.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 2
+                },
+                {
+                    "type": "int32",
+                    "value": 104
+                },
+                {
+                    "type": "int32",
+                    "value": 1090695
+                },
+                {
+                    "type": "int32",
+                    "value": 3116
+                },
+                {
+                    "type": "int32",
+                    "value": 25490
+                },
+                {
+                    "type": "int32",
+                    "value": 2450355
+                },
+                {
+                    "type": "int32",
+                    "value": 2450325
+                },
+                {
+                    "type": "int32",
+                    "value": 29
+                },
+                {
+                    "type": "int32",
+                    "value": 11
+                },
+                {
+                    "type": "int32",
+                    "value": 1936
+                },
+                {
+                    "type": "string",
+                    "value": "AAAAAAAAIGAAAAAA"
+                },
+                {
+                    "type": "string",
+                    "value": "Dr."
+                },
+                {
+                    "type": "string",
+                    "value": "Benjamin"
+                },
+                {
+                    "type": "string",
+                    "value": "Johnson"
+                },
+                {
+                    "type": "string",
+                    "value": "Y"
+                },
+                {
+                    "type": "string",
+                    "value": "BAHRAIN"
+                },
+                {
+                    "type": "string",
+                    "value": "Benjamin.Johnson@HL2ugJBTO.com"
+                },
+                {
+                    "type": "string",
+                    "value": "2452499"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 2
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/delta_encoding_required_column.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 638,
+                "Values": 638
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "delta_encoding_required_column.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_cdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_hdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_addr_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_shipto_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_sales_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_day:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_month:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_year:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_id:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_salutation:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_preferred_cust_flag:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_country:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_email_address:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_review_date:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "c_customer_sk:",
+                "c_current_cdemo_sk:",
+                "c_current_hdemo_sk:",
+                "c_current_addr_sk:",
+                "c_first_shipto_date_sk:",
+                "c_first_sales_date_sk:",
+                "c_birth_day:",
+                "c_birth_month:",
+                "c_birth_year:",
+                "c_customer_id:",
+                "c_salutation:",
+                "c_first_name:",
+                "c_last_name:",
+                "c_preferred_cust_flag:",
+                "c_birth_country:",
+                "c_email_address:",
+                "c_last_review_date:"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/delta_encoding_required_column.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 3
+                },
+                {
+                    "type": "int32",
+                    "value": 103
+                },
+                {
+                    "type": "int32",
+                    "value": 1659630
+                },
+                {
+                    "type": "int32",
+                    "value": 5909
+                },
+                {
+                    "type": "int32",
+                    "value": 33035
+                },
+                {
+                    "type": "int32",
+                    "value": 2451586
+                },
+                {
+                    "type": "int32",
+                    "value": 2451556
+                },
+                {
+                    "type": "int32",
+                    "value": 3
+                },
+                {
+                    "type": "int32",
+                    "value": 5
+                },
+                {
+                    "type": "int32",
+                    "value": 1947
+                },
+                {
+                    "type": "string",
+                    "value": "AAAAAAAAHGAAAAAA"
+                },
+                {
+                    "type": "string",
+                    "value": "Dr."
+                },
+                {
+                    "type": "string",
+                    "value": "James"
+                },
+                {
+                    "type": "string",
+                    "value": "Porter"
+                },
+                {
+                    "type": "string",
+                    "value": "N"
+                },
+                {
+                    "type": "string",
+                    "value": "AFGHANISTAN"
+                },
+                {
+                    "type": "string",
+                    "value": "James.Porter@3C1oBhj.com"
+                },
+                {
+                    "type": "string",
+                    "value": "2452359"
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 3
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/delta_encoding_required_column.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 632,
+                "Values": 632
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "delta_encoding_required_column.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_cdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_hdemo_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_current_addr_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_shipto_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_sales_date_sk:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_day:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_month:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_year:",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_customer_id:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_salutation:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_first_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_name:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_preferred_cust_flag:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_birth_country:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_email_address:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "c_last_review_date:",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:STRING"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

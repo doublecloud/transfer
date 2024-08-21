@@ -1,0 +1,439 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "doubleField",
+                "floatField",
+                "int32Field",
+                "int64Field",
+                "uint32Field",
+                "uint64Field",
+                "sint32Field",
+                "sint64Field",
+                "fixed32Field",
+                "fixed64Field",
+                "sfixed32Field",
+                "sfixed64Field",
+                "boolField",
+                "stringField",
+                "bytesField",
+                "mapField",
+                "repeatedField",
+                "msgField"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "float64",
+                    "value": 3.14
+                },
+                {
+                    "type": "float32",
+                    "value": 1.46
+                },
+                {
+                    "type": "int32",
+                    "value": -228
+                },
+                {
+                    "type": "int64",
+                    "value": -1337
+                },
+                {
+                    "type": "uint32",
+                    "value": 42
+                },
+                {
+                    "type": "uint64",
+                    "value": 300000000000
+                },
+                {
+                    "type": "int32",
+                    "value": -1
+                },
+                {
+                    "type": "int64",
+                    "value": -1488
+                },
+                {
+                    "type": "uint32",
+                    "value": 9001
+                },
+                {
+                    "type": "uint64",
+                    "value": 127
+                },
+                {
+                    "type": "int32",
+                    "value": -5
+                },
+                {
+                    "type": "int64",
+                    "value": -273
+                },
+                {
+                    "type": "bool",
+                    "value": true
+                },
+                {
+                    "type": "string",
+                    "value": "Я знаю, что ты знаешь этот трек, готовься подпевать"
+                },
+                {
+                    "type": "[]uint8",
+                    "value": "0KDQsNC3LCDQtNCy0LAsINGC0YDQuCwg0YfQtdGC0YvRgNC1"
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "БУДУ С ТОБОЮ, САМОЙ ПРИМЕРНОЮ": {
+                            "type": "int32",
+                            "value": 2
+                        },
+                        "ДЕЛАЙ ЧТО ХОЧЕШЬ, Я ЗАБЫВАЮСЬ": {
+                            "type": "int32",
+                            "value": 1
+                        },
+                        "МУЗЫКА ГРОМЧЕ, ГЛАЗА ЗАКРЫТЫ": {
+                            "type": "int32",
+                            "value": 1
+                        },
+                        "МУЗЫКА ГРОМЧЕ, ГЛАЗА ЗАКРЫТЫ (хэй)": {
+                            "type": "int32",
+                            "value": 2
+                        },
+                        "УТРО В ОКНЕ И МЫ БУДЕМ ПЕРВЫМИ": {
+                            "type": "int32",
+                            "value": 2
+                        },
+                        "ЭТО НОНСТОООП, НОЧЬЮ ОТКРЫТИЙ": {
+                            "type": "int32",
+                            "value": 2
+                        },
+                        "ЭТО НОНСТОП, НЕ ПРЕКРАЩАЯСЬ": {
+                            "type": "int32",
+                            "value": 1
+                        },
+                        "ЭТО НОНСТОП, НОЧЬЮ ОТКРЫТИЙ": {
+                            "type": "int32",
+                            "value": 1
+                        }
+                    }
+                },
+                {
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "Этот трек делает тебя сильней"
+                        },
+                        {
+                            "type": "string",
+                            "value": "Он прикольней, чем колёса, и роднее, чем портвейн"
+                        },
+                        {
+                            "type": "string",
+                            "value": "Раза в три круче, чем самый первый секс-партнёр"
+                        },
+                        {
+                            "type": "string",
+                            "value": "Все девчата в таком трипе, что аж «мама не горюй», йоп"
+                        }
+                    ]
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "enumField": {
+                            "type": "int32",
+                            "value": 1
+                        },
+                        "int32Field": {
+                            "type": "int32",
+                            "value": 256
+                        },
+                        "stringField": {
+                            "type": "string",
+                            "value": "Прыгай в такт, прыгай в такт, будто ты совсем дурак"
+                        }
+                    }
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": ""
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 1131,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": ""
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "doubleField",
+                    "type": "double",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "floatField",
+                    "type": "float",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int32Field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int64Field",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uint32Field",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uint64Field",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "sint32Field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "sint64Field",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "fixed32Field",
+                    "type": "uint32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "fixed64Field",
+                    "type": "uint64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "sfixed32Field",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "sfixed64Field",
+                    "type": "int64",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "boolField",
+                    "type": "boolean",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "stringField",
+                    "type": "utf8",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "bytesField",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "mapField",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "repeatedField",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "msgField",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

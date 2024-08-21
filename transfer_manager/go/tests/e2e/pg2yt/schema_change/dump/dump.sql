@@ -1,0 +1,10 @@
+BEGIN;
+CREATE TABLE test1 (
+  id INTEGER PRIMARY KEY,
+  value TEXT
+);
+CREATE TABLE test2 (
+  id INTEGER PRIMARY KEY,
+  value TEXT
+);
+COMMIT;

@@ -1,0 +1,10 @@
+{
+    "float.float.TestFloat": {
+        "dst": {
+            "uri": "file://float.float.TestFloat/extracted"
+        },
+        "src": {
+            "uri": "file://float.float.TestFloat/extracted.0"
+        }
+    }
+}

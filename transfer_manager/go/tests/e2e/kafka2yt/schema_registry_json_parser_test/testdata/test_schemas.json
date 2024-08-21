@@ -1,0 +1,6 @@
+{
+    "1": {
+        "schema": "{\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"string\"\n                },\n                \"name\": {\n                    \"oneOf\": [\n                        {\n                            \"type\": \"null\"\n                        },\n                        {\n                            \"type\": \"string\"\n                        }\n                    ]\n                },\n                \"description\": {\n                    \"oneOf\": [\n                        {\n                            \"type\": \"null\"\n                        },\n                        {\n                            \"type\": \"string\"\n                        }\n                    ]\n                },\n                \"age\": {\n                    \"oneOf\": [\n                        {\n                            \"type\": \"null\"\n                        },\n                        {\n                            \"type\": \"integer\"\n                        }\n                    ]\n                }\n            },\n            \"title\": \"schema.table\"\n        }",
+        "schemaType": "JSON"
+    }
+}

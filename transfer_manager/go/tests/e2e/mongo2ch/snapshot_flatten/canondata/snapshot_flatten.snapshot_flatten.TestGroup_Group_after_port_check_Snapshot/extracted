@@ -1,0 +1,40 @@
+
+"db"."test_data"
+{
+	"meta":
+	[
+		{
+			"name": "_id",
+			"type": "String"
+		},
+		{
+			"name": "floors_as_string_array",
+			"type": "Array(String)"
+		},
+		{
+			"name": "value_from_floors",
+			"type": "Array(Float64)"
+		},
+		{
+			"name": "currency_from_floors",
+			"type": "Array(String)"
+		},
+		{
+			"name": "floors_as_string",
+			"type": "String"
+		}
+	],
+
+	"data":
+	[
+		{
+			"_id": "D1AAD9AB",
+			"floors_as_string_array": ["{\"currency\":\"EUR\",\"value\":0.2,\"countryIds\":[\"IT\"]}","{\"currency\":\"EUR\",\"value\":0.3,\"countryIds\":[\"FR\",\"GB\"]}"],
+			"value_from_floors": [0.2,0.3],
+			"currency_from_floors": ["EUR","EUR"],
+			"floors_as_string": "[{\"currency\":\"EUR\",\"value\":0.2,\"countryIds\":[\"IT\"]},{\"currency\":\"EUR\",\"value\":0.3,\"countryIds\":[\"FR\",\"GB\"]}]"
+		}
+	],
+
+	"rows": 1
+}

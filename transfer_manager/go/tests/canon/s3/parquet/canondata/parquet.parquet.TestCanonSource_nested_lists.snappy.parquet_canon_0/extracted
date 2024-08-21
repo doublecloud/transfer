@@ -1,0 +1,830 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "a",
+                "b"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/nested_lists.snappy.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 1
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "a"
+                                                                                        }
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "b"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "c"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "nil",
+                                                                    "value": null
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "d"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/nested_lists.snappy.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 1254,
+                "Values": 1254
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_lists.snappy.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "a",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "b",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "a",
+                "b"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/nested_lists.snappy.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 2
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "a"
+                                                                                        }
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "b"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "c"
+                                                                                        }
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "d"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "nil",
+                                                                    "value": null
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "e"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 2
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/nested_lists.snappy.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 1334,
+                "Values": 1334
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_lists.snappy.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "a",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "b",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "a",
+                "b"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/nested_lists.snappy.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 3
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "a"
+                                                                                        }
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "b"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "c"
+                                                                                        }
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "d"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "e"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "element": {
+                                            "type": "map[string]interface {}",
+                                            "value": {
+                                                "list": {
+                                                    "type": "[]interface {}",
+                                                    "value": [
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "nil",
+                                                                    "value": null
+                                                                }
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "map[string]interface {}",
+                                                            "value": {
+                                                                "element": {
+                                                                    "type": "map[string]interface {}",
+                                                                    "value": {
+                                                                        "list": {
+                                                                            "type": "[]interface {}",
+                                                                            "value": [
+                                                                                {
+                                                                                    "type": "map[string]interface {}",
+                                                                                    "value": {
+                                                                                        "element": {
+                                                                                            "type": "string",
+                                                                                            "value": "f"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "int32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 3
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/nested_lists.snappy.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 1545,
+                "Values": 1545
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_lists.snappy.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "a",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "b",
+                    "type": "int32",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:INT32"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

@@ -1,0 +1,1616 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "roll_num",
+                "PC_CUR",
+                "CVA_2012",
+                "CVA_2016",
+                "BIA_3",
+                "BIA_4",
+                "ACTUAL_FRONTAGE",
+                "ACTUAL_DEPTH",
+                "ACTUAL_LOT_SIZE",
+                "GLA",
+                "SOURCE_GLA",
+                "IPS_GLA",
+                "GLA_ALL",
+                "bia",
+                "EFFECTIVE_LOT_SIZE",
+                "effective_lot_area",
+                "EFFECTIVE_FRONTAGE",
+                "EFFECTIVE_DEPTH",
+                "rw_area_tot",
+                "effective_lot_sqft",
+                "dup",
+                "nonCTXT",
+                "vacantland",
+                "parkingbillboard",
+                "cvalte10",
+                "condootherhotel",
+                "calculated_lot_size",
+                "calculated_efflot_size",
+                "missingsite",
+                "missinggla",
+                "missingsitegla",
+                "actual_lot_size_sqft",
+                "lotsize_sqft",
+                "count",
+                "ul_observation_date",
+                "ul_tz_offset_minutes_ul_observation_date"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/nested_structs.rust.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 1
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 190407175004000
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 190406671229999
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 190406409000602
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 94251302258849568
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 742
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 416
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 115
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 206195
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 10374
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 32150509
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 2401239
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 737
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 1188613496
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 12977533288261
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 35195000
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 3519838
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 1000
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 1742320297
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 24581100553044
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 351
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 658.63
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 57.76452991452993
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 20275.350000000006
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 6310.500499135526
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 336
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 312.16
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 49.40901785714286
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 16601.43
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 3214.842695450431
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 366
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 74136
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 6162.133196721318
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 2255340.7500000023
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 104255249.59826614
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 334
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 523800
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 19484.146706586827
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 6507705
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 3563198650.906335
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 10
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 16085
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 6698.8
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 2628
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 66988
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 28540252.400000002
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 4
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 1985
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 1285
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 288
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 5140
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 509875.3333333333
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 348
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 523800
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 18907.566091954024
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 6579833
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 3428378496.7881336
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 452
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 352
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 64749.63000000001
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 4951.024888352274
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 1742760.7607000005
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 81195383.98823886
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 352
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 2.8000000000000003
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 0.14237550619122732
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 50.11617817931202
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 0.07516922114035923
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 339
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 658063
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 1991.3067846607655
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 675052.9999999995
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 1277234044.0126908
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 337
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 300.7
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 65.32364985163204
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 22014.069999999996
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 3904.805190507992
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 441
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 18169
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 1528.077097505669
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 673882
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 6122348.621315204
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 352
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 121968
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 6201.877049689864
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 2183060.721490832
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 142631612.6463931
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 81
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 100
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 1.2345679012345678
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 100
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 123.45679012345684
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 101
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 4172.084000000002
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 42.29786138613863
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 4272.084000000002
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 172355.84886194076
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 208
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 44
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 366
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 121968
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 8685.222814207653
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 3178791.550000001
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 243347757.98270744
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 364
+                        },
+                        "max": {
+                            "type": "float64",
+                            "value": 121968
+                        },
+                        "mean": {
+                            "type": "float64",
+                            "value": 8841.174394454862
+                        },
+                        "min": {
+                            "type": "float64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "float64",
+                            "value": 3218187.4795815693
+                        },
+                        "variance": {
+                            "type": "float64",
+                            "value": 244563632.41811454
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 1608822900000000000
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 1608822900000000000
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "count": {
+                            "type": "int64",
+                            "value": 495
+                        },
+                        "max": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "mean": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "min": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "sum": {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        "variance": {
+                            "type": "int64",
+                            "value": 0
+                        }
+                    }
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/nested_structs.rust.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 10552,
+                "Values": 10552
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "nested_structs.rust.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "roll_num",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "PC_CUR",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "CVA_2012",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "CVA_2016",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "BIA_3",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "BIA_4",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "ACTUAL_FRONTAGE",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "ACTUAL_DEPTH",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "ACTUAL_LOT_SIZE",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "GLA",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "SOURCE_GLA",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "IPS_GLA",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "GLA_ALL",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "bia",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "EFFECTIVE_LOT_SIZE",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "effective_lot_area",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "EFFECTIVE_FRONTAGE",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "EFFECTIVE_DEPTH",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "rw_area_tot",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "effective_lot_sqft",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "dup",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "nonCTXT",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "vacantland",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parkingbillboard",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "cvalte10",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "condootherhotel",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "calculated_lot_size",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "calculated_efflot_size",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "missingsite",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "missinggla",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "missingsitegla",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "actual_lot_size_sqft",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "lotsize_sqft",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "count",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "ul_observation_date",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "ul_tz_offset_minutes_ul_observation_date",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

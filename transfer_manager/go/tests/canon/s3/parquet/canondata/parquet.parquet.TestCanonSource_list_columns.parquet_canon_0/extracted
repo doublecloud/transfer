@@ -1,0 +1,557 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int64_list",
+                "utf8_list"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/list_columns.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 1
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "int64",
+                                            "value": 1
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "int64",
+                                            "value": 2
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "int64",
+                                            "value": 3
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "abc"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "efg"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "hij"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 1
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/list_columns.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 714,
+                "Values": 714
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "list_columns.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int64_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "utf8_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int64_list",
+                "utf8_list"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/list_columns.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 2
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "nil",
+                                            "value": null
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "int64",
+                                            "value": 1
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 2
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/list_columns.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 333,
+                "Values": 333
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "list_columns.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int64_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "utf8_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "__file_name",
+                "__row_index",
+                "int64_list",
+                "utf8_list"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "data/list_columns.parquet"
+                },
+                {
+                    "type": "uint64",
+                    "value": 3
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "int64",
+                                            "value": 4
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "list": {
+                            "type": "[]interface {}",
+                            "value": [
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "efg"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "nil",
+                                            "value": null
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "hij"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "map[string]interface {}",
+                                    "value": {
+                                        "item": {
+                                            "type": "string",
+                                            "value": "xyz"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 3
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "data/list_columns.parquet"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": "s3_source_parquet"
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 638,
+                "Values": 638
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "list_columns.parquet"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__file_name",
+                    "type": "utf8",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "__row_index",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "int64_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "utf8_list",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": "parquet:group"
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

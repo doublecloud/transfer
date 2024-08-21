@@ -1,0 +1,5 @@
+{
+    "snapshot_flatten.snapshot_flatten.TestGroup/Group_after_port_check/Snapshot": {
+        "uri": "file://snapshot_flatten.snapshot_flatten.TestGroup_Group_after_port_check_Snapshot/extracted"
+    }
+}

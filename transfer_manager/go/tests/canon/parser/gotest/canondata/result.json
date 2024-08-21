@@ -1,0 +1,35 @@
+{
+    "gotest.gotest.TestDynamicParsers/sample_parser/canon_0": {
+        "uri": "file://gotest.gotest.TestDynamicParsers_sample_parser_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/json/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_json_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/mdb/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_mdb_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/metrika/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_metrika_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/metrika_complex/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_metrika_complex_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/taxi/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_taxi_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/tm-5249/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_tm-5249_canon_0/extracted"
+    },
+    "gotest.gotest.TestGenericParsers/tskv/canon_0": {
+        "uri": "file://gotest.gotest.TestGenericParsers_tskv_canon_0/extracted"
+    },
+    "gotest.gotest.TestLogfellerParsers/kikimr/canon_0": {
+        "uri": "file://gotest.gotest.TestLogfellerParsers_kikimr_canon_0/extracted"
+    },
+    "gotest.gotest.TestLogfellerParsers/kikimr_new/canon_0": {
+        "uri": "file://gotest.gotest.TestLogfellerParsers_kikimr_new_canon_0/extracted"
+    },
+    "gotest.gotest.TestLogfellerParsers/sensitive/canon_0": {
+        "uri": "file://gotest.gotest.TestLogfellerParsers_sensitive_canon_0/extracted"
+    }
+}

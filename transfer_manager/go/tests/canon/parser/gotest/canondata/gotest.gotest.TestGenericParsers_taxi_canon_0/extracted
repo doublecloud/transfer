@@ -1,0 +1,2266 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "timestamp",
+                "span_id",
+                "trace_id",
+                "parent_id",
+                "total_time",
+                "text",
+                "module",
+                "subkey",
+                "type",
+                "method",
+                "body",
+                "source_uri",
+                "host",
+                "link",
+                "parent_link",
+                "meta_user_id",
+                "iso_eventtime",
+                "acceptlang",
+                "level",
+                "uri",
+                "meta_type",
+                "meta_code",
+                "useragent",
+                "remote_ip",
+                "_rest",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "2019-08-14 23:14:49,517"
+                },
+                {
+                    "type": "string",
+                    "value": "ff2d7cf70d34449a9f71a60de9b740e2"
+                },
+                {
+                    "type": "string",
+                    "value": "7524cd862e5c4f1b975dffbeabab06f0"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "0.03538799285888672"
+                },
+                {
+                    "type": "string",
+                    "value": "Span finished"
+                },
+                {
+                    "type": "string",
+                    "value": "taxi.opentracing.reporter"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "{\"operation_name\": \"/configs/values\", \"trace_id\": \"7524cd862e5c4f1b975dffbeabab06f0\", \"span_id\": \"ff2d7cf70d34449a9f71a60de9b740e2\", \"start_time\": 1565813689.481596, \"stop_time\": 1565813689.516984, \"tags\": {\"service\": \"chatterbox\", \"http.method\": \"POST\", \"http.url\": \"http://configs.taxi.yandex.net/configs/values\", \"span.kind\": \"client\", \"http.status_code\": 200, \"error\": false}, \"baggage\": \"{\\\\\"report\\\\\": \\\\\"true\\\\\"}\"}"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "chatterbox-iva-01.taxi.yandex.net"
+                },
+                {
+                    "type": "string",
+                    "value": "5e2746256dbf44e3a561c5b2c3c07500"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "INFO"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "_type": {
+                            "type": "string",
+                            "value": "span"
+                        }
+                    }
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2019-08-14T23:14:49.517Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 730,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "taxi_taxi-chatterbox-yandex-taxi-chatterbox-log"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timestamp",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "span_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "trace_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "total_time",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "text",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "module",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "subkey",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "method",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "body",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "source_uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "host",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_user_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "iso_eventtime",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "acceptlang",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "level",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_code",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "useragent",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "remote_ip",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_rest",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "timestamp",
+                "span_id",
+                "trace_id",
+                "parent_id",
+                "total_time",
+                "text",
+                "module",
+                "subkey",
+                "type",
+                "method",
+                "body",
+                "source_uri",
+                "host",
+                "link",
+                "parent_link",
+                "meta_user_id",
+                "iso_eventtime",
+                "acceptlang",
+                "level",
+                "uri",
+                "meta_type",
+                "meta_code",
+                "useragent",
+                "remote_ip",
+                "_rest",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "2019-08-14 23:14:49,569"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "config cache updated"
+                },
+                {
+                    "type": "string",
+                    "value": "taxi.util.aiohttp_kit.context"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "chatterbox-iva-01.taxi.yandex.net"
+                },
+                {
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "INFO"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "_type": {
+                            "type": "string",
+                            "value": "log"
+                        }
+                    }
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2019-08-14T23:14:49.569Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 2
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 171,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "taxi_taxi-chatterbox-yandex-taxi-chatterbox-log"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timestamp",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "span_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "trace_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "total_time",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "text",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "module",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "subkey",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "method",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "body",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "source_uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "host",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_user_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "iso_eventtime",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "acceptlang",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "level",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_code",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "useragent",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "remote_ip",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_rest",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "timestamp",
+                "span_id",
+                "trace_id",
+                "parent_id",
+                "total_time",
+                "text",
+                "module",
+                "subkey",
+                "type",
+                "method",
+                "body",
+                "source_uri",
+                "host",
+                "link",
+                "parent_link",
+                "meta_user_id",
+                "iso_eventtime",
+                "acceptlang",
+                "level",
+                "uri",
+                "meta_type",
+                "meta_code",
+                "useragent",
+                "remote_ip",
+                "_rest",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "2019-08-14 23:14:49,577"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "config cache updated"
+                },
+                {
+                    "type": "string",
+                    "value": "taxi.util.aiohttp_kit.context"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "chatterbox-iva-01.taxi.yandex.net"
+                },
+                {
+                    "type": "string",
+                    "value": "None"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "INFO"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "_type": {
+                            "type": "string",
+                            "value": "log"
+                        }
+                    }
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2019-08-14T23:14:49.577Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 3
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 171,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "taxi_taxi-chatterbox-yandex-taxi-chatterbox-log"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timestamp",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "span_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "trace_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "total_time",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "text",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "module",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "subkey",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "method",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "body",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "source_uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "host",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_user_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "iso_eventtime",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "acceptlang",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "level",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_code",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "useragent",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "remote_ip",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_rest",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    },
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "timestamp",
+                "span_id",
+                "trace_id",
+                "parent_id",
+                "total_time",
+                "text",
+                "module",
+                "subkey",
+                "type",
+                "method",
+                "body",
+                "source_uri",
+                "host",
+                "link",
+                "parent_link",
+                "meta_user_id",
+                "iso_eventtime",
+                "acceptlang",
+                "level",
+                "uri",
+                "meta_type",
+                "meta_code",
+                "useragent",
+                "remote_ip",
+                "_rest",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "2019-08-14 23:14:50,240"
+                },
+                {
+                    "type": "string",
+                    "value": "0d7618080583400fb485fc5ceaea5eb2"
+                },
+                {
+                    "type": "string",
+                    "value": "3a5a49a299294f35b74ff8297b4a98fa"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "0.02343916893005371"
+                },
+                {
+                    "type": "string",
+                    "value": "Span finished"
+                },
+                {
+                    "type": "string",
+                    "value": "taxi.opentracing.reporter"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "{\"operation_name\": \"/configs/values\", \"trace_id\": \"3a5a49a299294f35b74ff8297b4a98fa\", \"span_id\": \"0d7618080583400fb485fc5ceaea5eb2\", \"start_time\": 1565813690.21677, \"stop_time\": 1565813690.240209, \"tags\": {\"service\": \"chatterbox\", \"http.method\": \"POST\", \"http.url\": \"http://configs.taxi.yandex.net/configs/values\", \"span.kind\": \"client\", \"http.status_code\": 200, \"error\": false}, \"baggage\": \"{\\\\\"report\\\\\": \\\\\"true\\\\\"}\"}"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "chatterbox-iva-01.taxi.yandex.net"
+                },
+                {
+                    "type": "string",
+                    "value": "c6d771e23e7e4a9495c13f696033d8bf"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "string",
+                    "value": "INFO"
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "nil",
+                    "value": null
+                },
+                {
+                    "type": "map[string]interface {}",
+                    "value": {
+                        "_type": {
+                            "type": "string",
+                            "value": "span"
+                        }
+                    }
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2019-08-14T23:14:50.24Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 4
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"taxi/taxi-chatterbox-yandex-taxi-chatterbox-log\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 729,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": "taxi_taxi-chatterbox-yandex-taxi-chatterbox-log"
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timestamp",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "span_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "trace_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "total_time",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "text",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "module",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "subkey",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "method",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "body",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "source_uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "host",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "parent_link",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_user_id",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "iso_eventtime",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "acceptlang",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "level",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "uri",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_type",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "meta_code",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "useragent",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "remote_ip",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_rest",
+                    "type": "any",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

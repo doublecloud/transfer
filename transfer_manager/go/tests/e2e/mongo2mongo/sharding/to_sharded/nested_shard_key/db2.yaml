@@ -1,0 +1,12 @@
+envPrefix: "DB2_"
+configReplicaSet:
+  amount: 2
+shards:
+  amount: 3
+  shardReplicaSet:
+    amount: 2
+postSteps:
+  createAdminUser:
+    user: user2
+    password: P@ssw0rd2
+    authSource: db2

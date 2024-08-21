@@ -1,0 +1,8 @@
+{
+    "json_canonical.json_canonical.TestReplication": {
+        "uri": "file://json_canonical.json_canonical.TestReplication/yt_table.yson"
+    },
+    "json_canonical.json_canonical.TestSnapshotAndReplication": {
+        "uri": "file://json_canonical.json_canonical.TestSnapshotAndReplication/yt_table.yson"
+    }
+}

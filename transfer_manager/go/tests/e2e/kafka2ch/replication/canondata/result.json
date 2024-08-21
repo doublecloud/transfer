@@ -1,0 +1,5 @@
+{
+    "replication.replication.TestReplication": {
+        "uri": "file://replication.replication.TestReplication/extracted"
+    }
+}
