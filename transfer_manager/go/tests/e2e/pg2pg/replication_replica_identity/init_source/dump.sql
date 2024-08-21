@@ -48,6 +48,7 @@ COMMIT;
 BEGIN;
 UPDATE public.__replica_id_full_3 SET t = '11' where i = 1;
 UPDATE public.__replica_id_full_3 SET t = '22', i = 22 where i = 2;
+UPDATE public.__replica_id_full_3 SET t = '3' where i = 3;
 COMMIT;
 
 BEGIN;
