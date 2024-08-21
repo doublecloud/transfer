@@ -2,7 +2,7 @@
   ".":"cloud/doublecloud/transfer/github_os",
   ".github/workflows/build_and_test.yml":"cloud/doublecloud/transfer/github_os/.github/workflows/build_and_test.yml",
   ".gitignore":"cloud/doublecloud/transfer/github_os/.gitignore",
-  "CONTRIBUTING.md":"transfer_manager/go/CONTRIBUTING.md",
+  "CONTRIBUTING.md":"cloud/doublecloud/transfer/github_os/CONTRIBUTING.md",
   "GLOSSARY.md":"transfer_manager/go/GLOSSARY.md",
   "LICENSE":"cloud/doublecloud/transfer/github_os/LICENSE",
   "Makefile":"cloud/doublecloud/transfer/github_os/Makefile",
