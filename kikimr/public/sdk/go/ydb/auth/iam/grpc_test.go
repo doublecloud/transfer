@@ -57,6 +57,7 @@ func TestGRPCCreateToken(t *testing.T) {
 }
 
 type StubTokenService struct {
+	v1.UnimplementedIamTokenServiceServer
 	OnCreate                  func(context.Context, *v1.CreateIamTokenRequest) (*v1.CreateIamTokenResponse, error)
 	OnCreateForServiceAccount func(ctx context.Context, req *v1.CreateIamTokenForServiceAccountRequest) (*v1.CreateIamTokenResponse, error)
 }
