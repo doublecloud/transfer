@@ -1,7 +1,6 @@
 package elastic
 
 import (
-	"github.com/doublecloud/transfer/cloud/bitbucket/private-api/yandex/cloud/priv/dynamicform/v1"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
@@ -38,24 +37,6 @@ func (d *ElasticSearchDestination) Hosts() []string {
 		result = append(result, el.Host)
 	}
 	return result
-}
-
-func (d *ElasticSearchDestination) GetLink(linkID string, folderID string) (*dynamicform.Link, error) {
-	if linkID == "elasticsearch_mdb" {
-		if d.ClusterID != "" {
-			return &dynamicform.Link{
-				Type: dynamicform.LinkType_ELASTICSEARCH,
-				Link: &dynamicform.Link_Cloud{
-					Cloud: &dynamicform.CloudLink{
-						ClusterId: d.ClusterID,
-						FolderId:  folderID,
-					},
-				},
-			}, nil
-		}
-		return nil, nil
-	}
-	return nil, xerrors.Errorf("unknown link id :'%s'", linkID)
 }
 
 func (d *ElasticSearchDestination) GetProviderType() abstract.ProviderType {
