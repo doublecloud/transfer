@@ -1,0 +1,17 @@
+version: 4.4
+configReplicaSet:
+  amount: 1
+  config:
+shards:
+  amount: 1
+  shardReplicaSet:
+    amount: 1
+    config:
+mongos:
+  security:
+    authorization: enabled
+postSteps:
+  createAdminUser:
+    user: user
+    password: P@ssw0rd
+    authSource: db

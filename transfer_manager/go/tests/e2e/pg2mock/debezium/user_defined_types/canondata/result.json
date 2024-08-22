@@ -1,0 +1,22 @@
+{
+    "user_defined_types.user_defined_types.TestSnapshotAndReplication": [
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted"
+        },
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted.0"
+        },
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted.1"
+        },
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted.2"
+        },
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted.3"
+        },
+        {
+            "uri": "file://user_defined_types.user_defined_types.TestSnapshotAndReplication/extracted.4"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+configReplicaSet:
+  amount: 3
+  config:
+shards:
+  amount: 2
+  shardReplicaSet:
+    amount: 4
+    config:
+mongos:
+  security:
+    authorization: enabled
+postSteps:
+  createAdminUser:
+    user: user
+    password: P@ssw0rd
+    authSource: db

@@ -1,0 +1,11 @@
+{
+    "yt.yt.TestCanonSource/canon_0": {
+        "uri": "file://yt.yt.TestCanonSource_canon_0/extracted"
+    },
+    "yt.yt.TestCanonSourceWithDataObjects/canon_0": {
+        "uri": "file://yt.yt.TestCanonSourceWithDataObjects_canon_0/extracted"
+    },
+    "yt.yt.TestCanonSourceWithDirInDataObjects/canon_0": {
+        "uri": "file://yt.yt.TestCanonSourceWithDirInDataObjects_canon_0/extracted"
+    }
+}

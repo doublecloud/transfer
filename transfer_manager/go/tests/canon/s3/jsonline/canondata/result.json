@@ -1,0 +1,355 @@
+{
+    "jsonline.jsonline.TestCanonSource/test.types": {
+        "Rows": [
+            {
+                "Data": {
+                    "__file_name": {
+                        "GoType": "string",
+                        "Val": "test_jsonline_all_types/test_jsonline_all_types.jsonl"
+                    },
+                    "__row_index": {
+                        "GoType": "uint64",
+                        "Val": 1
+                    },
+                    "array": {
+                        "GoType": "[]interface {}",
+                        "Val": [
+                            "a",
+                            "b"
+                        ]
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "date": {
+                        "GoType": "string",
+                        "Val": "2023-07-06 10:27:42.023151056 +0200 CEST m=+0.001546549"
+                    },
+                    "id": {
+                        "GoType": "json.Number",
+                        "Val": 0
+                    },
+                    "name": {
+                        "GoType": "string",
+                        "Val": "test0"
+                    },
+                    "object": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "a": "b"
+                        }
+                    },
+                    "rest": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "unknown": "unknown_0"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "__file_name": {
+                        "GoType": "string",
+                        "Val": "test_jsonline_all_types/test_jsonline_all_types.jsonl"
+                    },
+                    "__row_index": {
+                        "GoType": "uint64",
+                        "Val": 2
+                    },
+                    "array": {
+                        "GoType": "[]interface {}",
+                        "Val": [
+                            "a",
+                            "b"
+                        ]
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "date": {
+                        "GoType": "string",
+                        "Val": "2023-07-06 10:27:42.023151056 +0200 CEST m=+0.001546549"
+                    },
+                    "id": {
+                        "GoType": "json.Number",
+                        "Val": 1
+                    },
+                    "name": {
+                        "GoType": "string",
+                        "Val": "test1"
+                    },
+                    "object": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "a": "b"
+                        }
+                    },
+                    "rest": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "unknown": "unknown_1"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "__file_name": {
+                        "GoType": "string",
+                        "Val": "test_jsonline_all_types/test_jsonline_all_types.jsonl"
+                    },
+                    "__row_index": {
+                        "GoType": "uint64",
+                        "Val": 3
+                    },
+                    "array": {
+                        "GoType": "[]interface {}",
+                        "Val": [
+                            "a",
+                            "b"
+                        ]
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "date": {
+                        "GoType": "string",
+                        "Val": "2023-07-06 10:27:42.023151056 +0200 CEST m=+0.001546549"
+                    },
+                    "id": {
+                        "GoType": "json.Number",
+                        "Val": 2
+                    },
+                    "name": {
+                        "GoType": "string",
+                        "Val": "test2"
+                    },
+                    "object": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "a": "b"
+                        }
+                    },
+                    "rest": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "unknown": "unknown_2"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "__file_name": {
+                        "GoType": "string",
+                        "Val": "test_jsonline_all_types/test_jsonline_all_types.jsonl"
+                    },
+                    "__row_index": {
+                        "GoType": "uint64",
+                        "Val": 4
+                    },
+                    "array": {
+                        "GoType": "[]interface {}",
+                        "Val": [
+                            "a",
+                            "b"
+                        ]
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "date": {
+                        "GoType": "string",
+                        "Val": "2023-07-06 10:27:42.023151056 +0200 CEST m=+0.001546549"
+                    },
+                    "id": {
+                        "GoType": "json.Number",
+                        "Val": 3
+                    },
+                    "name": {
+                        "GoType": "string",
+                        "Val": "test3"
+                    },
+                    "object": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "a": "b"
+                        }
+                    },
+                    "rest": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "unknown": "unknown_3"
+                        }
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "__file_name": {
+                        "GoType": "string",
+                        "Val": "test_jsonline_all_types/test_jsonline_all_types.jsonl"
+                    },
+                    "__row_index": {
+                        "GoType": "uint64",
+                        "Val": 5
+                    },
+                    "array": {
+                        "GoType": "[]interface {}",
+                        "Val": [
+                            "a",
+                            "b"
+                        ]
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "date": {
+                        "GoType": "string",
+                        "Val": "2023-07-06 10:27:42.023151056 +0200 CEST m=+0.001546549"
+                    },
+                    "id": {
+                        "GoType": "json.Number",
+                        "Val": 4
+                    },
+                    "name": {
+                        "GoType": "string",
+                        "Val": "test4"
+                    },
+                    "object": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "a": "b"
+                        }
+                    },
+                    "rest": {
+                        "GoType": "map[string]interface {}",
+                        "Val": {
+                            "unknown": "unknown_4"
+                        }
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "types",
+            "Namespace": "test"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "__file_name",
+                "original_type": "",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": true,
+                "name": "__row_index",
+                "original_type": "",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "uint64"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "array",
+                "original_type": "jsonl:array",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "boolean",
+                "original_type": "jsonl:boolean",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "boolean"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "date",
+                "original_type": "jsonl:string",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "id",
+                "original_type": "jsonl:number",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "double"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "name",
+                "original_type": "jsonl:string",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "object",
+                "original_type": "jsonl:object",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "rest",
+                "original_type": "jsonl:object",
+                "path": "",
+                "required": false,
+                "table_name": "",
+                "table_schema": "",
+                "type": "any"
+            }
+        ]
+    }
+}

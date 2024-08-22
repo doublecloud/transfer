@@ -1,0 +1,117 @@
+{
+    "parquet.parquet.TestCanonSource/alltypes_dictionary.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_alltypes_dictionary.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/alltypes_plain.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_alltypes_plain.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/alltypes_plain.snappy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_alltypes_plain.snappy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/binary.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_binary.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/byte_array_decimal.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_byte_array_decimal.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/data_index_bloom_encoding_stats.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_data_index_bloom_encoding_stats.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/datapage_v1-snappy-compressed-checksum.parquet/canon_0": {
+        "checksum": "c216612ff65f2f9d2def605d7e3884be",
+        "size": 462391,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1814674/808a21807fab5f4b33c6fbdc9b8ccffc617a7470/resource.tar.gz#parquet.parquet.TestCanonSource_datapage_v1-snappy-compressed-checksum.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/datapage_v1-uncompressed-checksum.parquet/canon_0": {
+        "checksum": "9ef34eaca71eee6c58a01078616eeb40",
+        "size": 460591,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1814674/808a21807fab5f4b33c6fbdc9b8ccffc617a7470/resource.tar.gz#parquet.parquet.TestCanonSource_datapage_v1-uncompressed-checksum.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/datapage_v2.snappy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_datapage_v2.snappy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/delta_binary_packed.parquet/canon_0": {
+        "checksum": "0784938776e8d84a1f839799b2ff2436",
+        "size": 242681,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1814674/808a21807fab5f4b33c6fbdc9b8ccffc617a7470/resource.tar.gz#parquet.parquet.TestCanonSource_delta_binary_packed.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/delta_byte_array.parquet/canon_0": {
+        "checksum": "9ea6e34f163b60af967a4ff868f9eac6",
+        "size": 189869,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1814674/808a21807fab5f4b33c6fbdc9b8ccffc617a7470/resource.tar.gz#parquet.parquet.TestCanonSource_delta_byte_array.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/delta_encoding_optional_column.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_delta_encoding_optional_column.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/delta_encoding_required_column.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_delta_encoding_required_column.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/delta_length_byte_array.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_delta_length_byte_array.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/dict-page-offset-zero.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_dict-page-offset-zero.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/fixed_length_byte_array.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_fixed_length_byte_array.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/fixed_length_decimal.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_fixed_length_decimal.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/fixed_length_decimal_legacy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_fixed_length_decimal_legacy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/int32_decimal.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_int32_decimal.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/int32_with_null_pages.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_int32_with_null_pages.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/int64_decimal.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_int64_decimal.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/list_columns.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_list_columns.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/lz4_raw_compressed.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_lz4_raw_compressed.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/lz4_raw_compressed_larger.parquet/canon_0": {
+        "checksum": "683c4e161e08eb6fab784ca383d40560",
+        "size": 769568,
+        "uri": "https://storage.yandex-team.ru/get-devtools/1814674/808a21807fab5f4b33c6fbdc9b8ccffc617a7470/resource.tar.gz#parquet.parquet.TestCanonSource_lz4_raw_compressed_larger.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nested_lists.snappy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nested_lists.snappy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nested_maps.snappy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nested_maps.snappy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nested_structs.rust.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nested_structs.rust.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nonnullable.impala.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nonnullable.impala.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/null_list.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_null_list.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nullable.impala.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nullable.impala.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/nulls.snappy.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_nulls.snappy.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/plain-dict-uncompressed-checksum.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_plain-dict-uncompressed-checksum.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/repeated_no_annotation.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_repeated_no_annotation.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/rle_boolean_encoding.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_rle_boolean_encoding.parquet_canon_0/extracted"
+    },
+    "parquet.parquet.TestCanonSource/single_nan.parquet/canon_0": {
+        "uri": "file://parquet.parquet.TestCanonSource_single_nan.parquet_canon_0/extracted"
+    }
+}

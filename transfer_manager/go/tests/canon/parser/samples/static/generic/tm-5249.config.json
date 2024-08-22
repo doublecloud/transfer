@@ -1,0 +1,55 @@
+{
+    "AllowTTLRewind": false,
+    "Cluster": "",
+    "Consumer": "",
+    "Credentials": null,
+    "Database": "",
+    "EnrichTopic": false,
+    "Extra": {},
+    "HashColumn": "",
+    "InferSchema": false,
+    "InferTimezone": false,
+    "Instance": "",
+    "IsLbSink": false,
+    "LfParser": false,
+    "MaxConcurrentPartitions": 0,
+    "MaxIdleTime": 0,
+    "MaxMemory": 52428800,
+    "MaxReadMessagesCount": 0,
+    "MaxReadSize": 1048576,
+    "MaxTimeLag": 0,
+    "OnlyLocal": false,
+    "ParserConfig": {
+        "tskv.lb": {
+            "AddRest": false,
+            "AddSystemCols": false,
+            "DropUnparsed": false,
+            "Fields": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "message",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "system_key": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                }
+            ],
+            "IgnoreColumnPaths": false,
+            "MaskSecrets": false,
+            "NullKeysAllowed": false,
+            "SchemaResourceName": "",
+            "SkipSystemKeys": false,
+            "TableSplitter": null,
+            "TimeField": null
+        }
+    },
+    "Port": 0,
+    "Sniff": false,
+    "Token": "",
+    "Topics": ["tm-5249"]
+}

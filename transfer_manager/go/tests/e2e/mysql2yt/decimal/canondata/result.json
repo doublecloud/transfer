@@ -1,0 +1,8 @@
+{
+    "decimal.decimal.TestReplication": {
+        "uri": "file://decimal.decimal.TestReplication/yt_table.yson"
+    },
+    "decimal.decimal.TestSnapshotAndReplication": {
+        "uri": "file://decimal.decimal.TestSnapshotAndReplication/yt_table.yson"
+    }
+}

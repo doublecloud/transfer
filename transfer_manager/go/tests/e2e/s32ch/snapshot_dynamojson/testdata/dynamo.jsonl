@@ -1,0 +1,3 @@
+{"Item":{"OrderID":{"S":"1"},"OrderDate":{"S":"2023-07-01T12:00:00Z"},"CustomerName":{"S":"John Doe"},"OrderAmount":{"N":"3540"}}}
+{"Item":{"OrderID":{"S":"2"},"OrderDate":{"S":"2023-07-02T12:00:00Z"},"CustomerName":{"S":"John Smith"},"OrderAmount":{"N":"1200"}}}
+

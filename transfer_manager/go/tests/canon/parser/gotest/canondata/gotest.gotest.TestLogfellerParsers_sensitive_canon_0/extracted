@@ -1,0 +1,223 @@
+[
+    {
+        "ColumnNames": {
+            "type": "[]string",
+            "value": [
+                "timestamp",
+                "timezone",
+                "data1",
+                "data2",
+                "data3",
+                "_timestamp",
+                "_partition",
+                "_offset",
+                "_idx"
+            ]
+        },
+        "ColumnValues": {
+            "type": "[]interface {}",
+            "value": [
+                {
+                    "type": "string",
+                    "value": "2021-07-28 10:11:45"
+                },
+                {
+                    "type": "string",
+                    "value": "+0000"
+                },
+                {
+                    "type": "string",
+                    "value": "AQAD-sOme38sekReTS78sh0udnot38beknowUn9"
+                },
+                {
+                    "type": "string",
+                    "value": "Lorem Ipsum Secret YOLO-l00kAtMyPrIvAtEda7aSIRthAnkSaALOTT"
+                },
+                {
+                    "type": "string",
+                    "value": "compromized token AQAD-qJSKE2GAAAOymXXXXXXXXXXXXXXXXXXXXX"
+                },
+                {
+                    "type": "time.Time",
+                    "value": "2020-02-02T10:02:20Z"
+                },
+                {
+                    "type": "string",
+                    "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}"
+                },
+                {
+                    "type": "uint64",
+                    "value": 123
+                },
+                {
+                    "type": "uint32",
+                    "value": 1
+                }
+            ]
+        },
+        "CommitTime": {
+            "type": "uint64",
+            "value": 0
+        },
+        "Counter": {
+            "type": "int",
+            "value": 0
+        },
+        "ID": {
+            "type": "uint32",
+            "value": 0
+        },
+        "Kind": {
+            "type": "changeitem.Kind",
+            "value": "insert"
+        },
+        "LSN": {
+            "type": "uint64",
+            "value": 0
+        },
+        "OldKeys": {
+            "type": "changeitem.OldKeysType",
+            "value": {}
+        },
+        "PartID": {
+            "type": "string",
+            "value": "{\"cluster\":\"\",\"partition\":0,\"topic\":\"\"}"
+        },
+        "Query": {
+            "type": "string",
+            "value": ""
+        },
+        "Schema": {
+            "type": "string",
+            "value": ""
+        },
+        "Size": {
+            "type": "changeitem.EventSize",
+            "value": {
+                "Read": 224,
+                "Values": 0
+            }
+        },
+        "Table": {
+            "type": "string",
+            "value": ""
+        },
+        "TableSchema": {
+            "type": "[]changeitem.ColSchema",
+            "value": [
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timestamp",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "timezone",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "data1",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "data2",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "data3",
+                    "type": "string",
+                    "key": false,
+                    "fake_key": false,
+                    "required": false,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_timestamp",
+                    "type": "timestamp",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_partition",
+                    "type": "string",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_offset",
+                    "type": "uint64",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                },
+                {
+                    "table_schema": "",
+                    "table_name": "",
+                    "path": "",
+                    "name": "_idx",
+                    "type": "uint32",
+                    "key": true,
+                    "fake_key": false,
+                    "required": true,
+                    "expression": "",
+                    "original_type": ""
+                }
+            ]
+        },
+        "TxID": {
+            "type": "string",
+            "value": ""
+        }
+    }
+]

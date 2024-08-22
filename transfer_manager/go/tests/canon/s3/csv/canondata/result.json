@@ -1,0 +1,462 @@
+{
+    "csv.csv.TestCanonSource/test.types": {
+        "Rows": [
+            {
+                "Data": {
+                    "any": {
+                        "GoType": "string",
+                        "Val": "\"{\\\"A2\\\": {\\\"a\\\": \\\"321\\\"}, \\\"B2\\\": {\\\"b1\\\": \\\"654\\\", \\\"b2\\\": \\\"987\\\"}}\""
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": false
+                    },
+                    "bytes": {
+                        "GoType": "[]uint8",
+                        "Val": "WzcyIDEwMSAxMDggMTA4IDExMV0="
+                    },
+                    "date": {
+                        "GoType": "time.Time",
+                        "Val": "2016-02-01T00:00:00Z"
+                    },
+                    "dateTime": {
+                        "GoType": "time.Time",
+                        "Val": "2001-01-01T05:30:00Z"
+                    },
+                    "float32": {
+                        "GoType": "float32",
+                        "Val": 1.1920929e-07
+                    },
+                    "float64": {
+                        "GoType": "json.Number",
+                        "Val": 0.3333333333333333
+                    },
+                    "int16": {
+                        "GoType": "int16",
+                        "Val": -2
+                    },
+                    "int32": {
+                        "GoType": "int32",
+                        "Val": -3
+                    },
+                    "int64": {
+                        "GoType": "int64",
+                        "Val": -4
+                    },
+                    "int8": {
+                        "GoType": "int8",
+                        "Val": -1
+                    },
+                    "interval": {
+                        "GoType": "time.Duration",
+                        "Val": 5000000000
+                    },
+                    "string": {
+                        "GoType": "string",
+                        "Val": "\"This is a test\""
+                    },
+                    "timestamp": {
+                        "GoType": "time.Time",
+                        "Val": "2023-07-04T09:30:40Z"
+                    },
+                    "uint16": {
+                        "GoType": "uint16",
+                        "Val": 0
+                    },
+                    "uint32": {
+                        "GoType": "uint32",
+                        "Val": 0
+                    },
+                    "uint64": {
+                        "GoType": "uint64",
+                        "Val": 0
+                    },
+                    "uint8": {
+                        "GoType": "uint8",
+                        "Val": 0
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "any": {
+                        "GoType": "string",
+                        "Val": "\"{\\\"A2\\\": {\\\"a\\\": \\\"321\\\"}, \\\"B2\\\": {\\\"b1\\\": \\\"654\\\", \\\"b2\\\": \\\"987\\\"}}\""
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": true
+                    },
+                    "bytes": {
+                        "GoType": "[]uint8",
+                        "Val": "WzcyIDEwMSAxMDggMTA4IDExMV0="
+                    },
+                    "date": {
+                        "GoType": "time.Time",
+                        "Val": "2015-02-01T00:00:00Z"
+                    },
+                    "dateTime": {
+                        "GoType": "time.Time",
+                        "Val": "2005-01-01T15:30:00Z"
+                    },
+                    "float32": {
+                        "GoType": "float32",
+                        "Val": 1.1920929e-07
+                    },
+                    "float64": {
+                        "GoType": "json.Number",
+                        "Val": 0.3333333333333333
+                    },
+                    "int16": {
+                        "GoType": "int16",
+                        "Val": -2
+                    },
+                    "int32": {
+                        "GoType": "int32",
+                        "Val": -3
+                    },
+                    "int64": {
+                        "GoType": "int64",
+                        "Val": -4
+                    },
+                    "int8": {
+                        "GoType": "int8",
+                        "Val": -1
+                    },
+                    "interval": {
+                        "GoType": "time.Duration",
+                        "Val": 18000000000000
+                    },
+                    "string": {
+                        "GoType": "string",
+                        "Val": "\"This is a test 2\""
+                    },
+                    "timestamp": {
+                        "GoType": "time.Time",
+                        "Val": "2023-07-04T09:30:40Z"
+                    },
+                    "uint16": {
+                        "GoType": "uint16",
+                        "Val": 0
+                    },
+                    "uint32": {
+                        "GoType": "uint32",
+                        "Val": 0
+                    },
+                    "uint64": {
+                        "GoType": "uint64",
+                        "Val": 0
+                    },
+                    "uint8": {
+                        "GoType": "uint8",
+                        "Val": 0
+                    }
+                }
+            },
+            {
+                "Data": {
+                    "any": {
+                        "GoType": "string",
+                        "Val": "\"[\\\"a\\\", \\\"b\\\"]\""
+                    },
+                    "boolean": {
+                        "GoType": "bool",
+                        "Val": false
+                    },
+                    "bytes": {
+                        "GoType": "[]uint8",
+                        "Val": "WzcyIDEwMSAxMDggMTA4IDExMV0="
+                    },
+                    "date": {
+                        "GoType": "time.Time",
+                        "Val": "2017-02-01T00:00:00Z"
+                    },
+                    "dateTime": {
+                        "GoType": "time.Time",
+                        "Val": "2000-01-01T23:30:00Z"
+                    },
+                    "float32": {
+                        "GoType": "float32",
+                        "Val": 1.1920929e-07
+                    },
+                    "float64": {
+                        "GoType": "json.Number",
+                        "Val": 0.3333333333333333
+                    },
+                    "int16": {
+                        "GoType": "int16",
+                        "Val": -2
+                    },
+                    "int32": {
+                        "GoType": "int32",
+                        "Val": -3
+                    },
+                    "int64": {
+                        "GoType": "int64",
+                        "Val": -4
+                    },
+                    "int8": {
+                        "GoType": "int8",
+                        "Val": -1
+                    },
+                    "interval": {
+                        "GoType": "time.Duration",
+                        "Val": 300000000000
+                    },
+                    "string": {
+                        "GoType": "string",
+                        "Val": "\"This is a test 3\""
+                    },
+                    "timestamp": {
+                        "GoType": "time.Time",
+                        "Val": "2023-07-04T09:30:40Z"
+                    },
+                    "uint16": {
+                        "GoType": "uint16",
+                        "Val": 0
+                    },
+                    "uint32": {
+                        "GoType": "uint32",
+                        "Val": 0
+                    },
+                    "uint64": {
+                        "GoType": "uint64",
+                        "Val": 0
+                    },
+                    "uint8": {
+                        "GoType": "uint8",
+                        "Val": 0
+                    }
+                }
+            }
+        ],
+        "TableID": {
+            "Name": "types",
+            "Namespace": "test"
+        },
+        "TableSchema": [
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "boolean",
+                "original_type": "csv:boolean",
+                "path": "0",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "boolean"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "uint8",
+                "original_type": "csv:uint8",
+                "path": "1",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "uint8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "uint16",
+                "original_type": "csv:uint16",
+                "path": "2",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "uint16"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "uint32",
+                "original_type": "csv:uint32",
+                "path": "3",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "uint32"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "uint64",
+                "original_type": "csv:uint64",
+                "path": "4",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "uint64"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "int8",
+                "original_type": "csv:int8",
+                "path": "5",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "int8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "int16",
+                "original_type": "csv:int16",
+                "path": "6",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "int16"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "int32",
+                "original_type": "csv:int32",
+                "path": "7",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "int32"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "int64",
+                "original_type": "csv:int64",
+                "path": "8",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "int64"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "float32",
+                "original_type": "csv:float",
+                "path": "9",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "float"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "float64",
+                "original_type": "csv:double",
+                "path": "10",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "double"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "bytes",
+                "original_type": "csv:string",
+                "path": "11",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "string"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "string",
+                "original_type": "csv:utf8",
+                "path": "12",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "utf8"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "date",
+                "original_type": "csv:date",
+                "path": "13",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "date"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "dateTime",
+                "original_type": "csv:datetime",
+                "path": "14",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "datetime"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "timestamp",
+                "original_type": "csv:timestamp",
+                "path": "15",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "timestamp"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "interval",
+                "original_type": "csv:interval",
+                "path": "16",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "interval"
+            },
+            {
+                "expression": "",
+                "fake_key": false,
+                "key": false,
+                "name": "any",
+                "original_type": "csv:any",
+                "path": "17",
+                "required": false,
+                "table_name": "types",
+                "table_schema": "test",
+                "type": "any"
+            }
+        ]
+    },
+    "csv.csv.TestNativeS3MissingColumnsAreFilled/canon_0#01": {
+        "uri": "file://csv.csv.TestNativeS3MissingColumnsAreFilled_canon_0#01/extracted"
+    },
+    "csv.csv.TestNativeS3WithProvidedSchemaAndSystemCols/canon_0#01": {
+        "uri": "file://csv.csv.TestNativeS3WithProvidedSchemaAndSystemCols_canon_0#01/extracted"
+    }
+}

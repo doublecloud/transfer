@@ -1,0 +1,12 @@
+{
+    "multi_topic.multi_topic.TestReplication": {
+        "\"topic1\"": {
+            "data": "blablabla",
+            "key": "my_key"
+        },
+        "\"topic2\"": {
+            "data": "blablabla",
+            "key": "my_key"
+        }
+    }
+}
