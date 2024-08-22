@@ -1,0 +1,81 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.3 (Debian 13.3-1.pgdg100+1)
+-- Dumped by pg_dump version 14.7 (Ubuntu 14.7-201-yandex.52755.2620e1a714)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: basic_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.basic_types (
+    "int" integer NOT NULL,
+    bl boolean,
+    b boolean,
+    b8 bytea,
+    vb bytea,
+    si smallint,
+    ss smallint,
+    aid integer,
+    id bigint,
+    bid bigint,
+    oid_ bigint,
+    real_ double precision,
+    d double precision,
+    c text,
+    str text,
+    character_ text,
+    character_varying_ text,
+    timestamptz_ text,
+    tst text,
+    timetz_ text,
+    time_with_time_zone_ text,
+    iv bigint,
+    ba bytea,
+    j text,
+    jb text,
+    x text,
+    uid text,
+    pt text,
+    it text,
+    int4range_ text,
+    int8range_ text,
+    numrange_ text,
+    tsrange_ text,
+    tstzrange_ text,
+    daterange_ text
+);
+
+
+--
+-- Name: basic_types basic_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.basic_types
+    ADD CONSTRAINT basic_types_pkey PRIMARY KEY ("int");
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+copy (select * from basic_types order by int) to STDOUT;
+-8388605	t	t	\\xaf	\\xae	-32768	1	0	1	3372036854775807	2	1.45e-10	3.14e-100	1	varchar_example	abcd	varc	2004-10-19T08:23:54Z	2004-10-19T09:23:54Z	08:51:02.746572Z	08:51:02.746572Z	90000000000	\\xcafebabe	{"k1":"v1"}	{"k2":"v2"}	<foo>bar</foo>	a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11	(23.4,-44.5)	192.168.100.128/25	[3,7)	[3,7)	[1.9,1.91)	["2010-01-02 10:00:00","2010-01-02 11:00:00")	["2010-01-01 06:00:00+00","2010-01-01 10:00:00+00")	[2000-01-10,2000-01-21)
+
+

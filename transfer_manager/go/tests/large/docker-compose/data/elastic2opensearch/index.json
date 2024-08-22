@@ -1,0 +1,156 @@
+{
+    "settings": {
+        "number_of_shards": 1
+    },
+    "aliases": {
+        "my-alias": { }
+    },
+    "mappings": {
+        "properties": {
+            "integer_field": {
+                "type": "integer"
+            },
+            "long_field": {
+                "type": "long"
+            },
+            "short_field": {
+                "type": "short"
+            },
+            "byte_field": {
+                "type": "byte"
+            },
+            "float_field": {
+                "type": "float"
+            },
+            "half_float_field": {
+                "type": "half_float"
+            },
+            "double_field": {
+                "type": "double"
+            },
+            "scaled_float_field": {
+                "type": "scaled_float",
+                "scaling_factor": 100
+            },
+            "rank_feature_field": {
+                "type": "rank_feature"
+            },
+            "binary_field": {
+                "type": "binary"
+            },
+            "text_field": {
+                "type": "text"
+            },
+            "ip_field": {
+                "type": "ip"
+            },
+            "search_as_you_type_field": {
+                "type": "search_as_you_type"
+            },
+            "boolean_field": {
+                "type": "boolean"
+            },
+            "object_field": {
+                "type": "object",
+                "properties": {
+                    "age": { "type": "integer" },
+                    "name": {
+                        "properties": {
+                            "first": { "type": "text" },
+                            "last": { "type": "text" }
+                        }
+                    }
+                }
+            },
+            "nested_field": {
+                "type": "nested"
+            },
+            "join_field": {
+                "type": "join",
+                "relations": {
+                    "question": "answer"
+                }
+            },
+            "integer_range_field": {
+                "type": "integer_range"
+            },
+            "float_range_field": {
+                "type": "float_range"
+            },
+            "long_range_field": {
+                "type": "long_range"
+            },
+            "double_range_field": {
+                "type": "double_range"
+            },
+            "date_str_range_field": {
+                "type": "date_range"
+            },
+            "date_milliseconds_range_field": {
+                "type": "date_range"
+            },
+            "date_seconds_range_field": {
+                "type": "date_range",
+                "format": "strict_date_optional_time||epoch_second"
+            },
+            "ip_range_field": {
+                "type": "ip_range"
+            },
+            "keyword_field": {
+                "type": "keyword"
+            },
+            "completion_field": {
+                "type": "completion"
+            },
+            "geo_point_str_field": {
+                "type": "geo_point"
+            },
+            "geo_point_object_field": {
+                "type": "geo_point"
+            },
+            "geo_point_array_field": {
+                "type": "geo_point"
+            },
+            "geo_point_string_field": {
+                "type": "geo_point"
+            },
+            "geo_point_geohash_field": {
+                "type": "geo_point"
+            },
+            "rank_features_field": {
+                "type": "rank_features"
+            },
+            "geo_shape_point_field": {
+                "type": "geo_shape"
+            },
+            "geo_shape_point_str_field": {
+                "type": "geo_shape"
+            },
+            "geo_shape_geometrycollection_field": {
+                "type": "geo_shape"
+            },
+            "geo_shape_geometrycollection_str_field": {
+                "type": "geo_shape"
+            },
+            "percolator_field": {
+                "type": "percolator"
+            },
+            "date_str_field": {
+                "type": "date"
+            },
+            "date_milliseconds_field": {
+                "type": "date"
+            },
+            "date_seconds_field": {
+                "type": "date",
+                "format": "strict_date_optional_time||epoch_second"
+            },
+            "date_nanos_field": {
+                "type": "date_nanos"
+            },
+            "date_nanos_str_field": {
+                "type": "date_nanos"
+            }
+        }
+    }
+}

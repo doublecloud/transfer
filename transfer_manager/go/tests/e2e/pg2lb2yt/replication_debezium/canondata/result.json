@@ -1,0 +1,51 @@
+{
+    "replication_debezium.replication_debezium.TestGroup/Load": [
+        {
+            "columnnames": [
+                "a_id",
+                "max_weight"
+            ],
+            "columnvalues": [
+                7,
+                30
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "insert",
+            "nextlsn": 0,
+            "oldkeys": {},
+            "part": "",
+            "query": "",
+            "schema": "",
+            "table": "__test",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "a_id",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int32"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "max_weight",
+                    "original_type": "",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "double"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

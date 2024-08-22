@@ -1,0 +1,126 @@
+{
+    "type_conversion.type_conversion.TestSnapshot": [
+        [
+            {
+                "DataType": "uint8",
+                "GoType": "uint8",
+                "Name": "id",
+                "Value": "1"
+            },
+            {
+                "DataType": "date",
+                "GoType": "time.Time",
+                "Name": "date_str",
+                "Value": "2022-03-10 00:00:00 +0000 UTC"
+            },
+            {
+                "DataType": "datetime",
+                "GoType": "time.Time",
+                "Name": "datetime_str",
+                "Value": "2022-03-10 01:02:03 +0000 UTC"
+            },
+            {
+                "DataType": "datetime",
+                "GoType": "time.Time",
+                "Name": "datetime_str2",
+                "Value": "2022-03-10 01:02:03 +0000 UTC"
+            },
+            {
+                "DataType": "datetime",
+                "GoType": "time.Time",
+                "Name": "datetime_ts",
+                "Value": "1970-01-01 00:00:00 +0000 UTC"
+            },
+            {
+                "DataType": "datetime",
+                "GoType": "time.Time",
+                "Name": "datetime_ts2",
+                "Value": "2022-03-10 19:29:19 +0000 UTC"
+            },
+            {
+                "DataType": "any",
+                "GoType": "string",
+                "Name": "decimal_as_bytes",
+                "Value": "67.8900000"
+            },
+            {
+                "DataType": "any",
+                "GoType": "string",
+                "Name": "decimal_as_float",
+                "Value": "2.3456000"
+            },
+            {
+                "DataType": "any",
+                "GoType": "string",
+                "Name": "decimal_as_string",
+                "Value": "23.4500000"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "dict",
+                "Value": "[[\"k1\",1],[\"k2\",2],[\"k3\",3]]"
+            },
+            {
+                "DataType": "any",
+                "GoType": "[]int64",
+                "Name": "intlist",
+                "Value": "[1 2 3]"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "list",
+                "Value": "[-1.01,2,1294.21]"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "nested1",
+                "Value": "{\"list\":[[[[\"k1\",1],[\"k2\",2],[\"k3\",3]],[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]],\"named\":[\"d2\",[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]}"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "nested2",
+                "Value": "{\"dict\":[[10,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]],[11,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]],\"unnamed\":[1,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]}"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "num_to_str",
+                "Value": "100"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "struct",
+                "Value": "{\"fieldFloat32\":100.01,\"fieldInt16\":100,\"fieldString\":\"abc\"}"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "tagged",
+                "Value": "[\"fieldInt16\",100]"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "tuple",
+                "Value": "[-5,300.03,\"my data\"]"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "variant_named",
+                "Value": "[\"fieldString\",\"magotan\"]"
+            },
+            {
+                "DataType": "string",
+                "GoType": "string",
+                "Name": "variant_unnamed",
+                "Value": "[1,300.03]"
+            }
+        ]
+    ]
+}
