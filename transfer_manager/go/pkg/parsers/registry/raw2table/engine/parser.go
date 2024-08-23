@@ -63,7 +63,7 @@ func (p *RawToTableImpl) buildColumnValues(msg persqueue.ReadMessage, partition 
 }
 
 func (p *RawToTableImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
-	if p.isSendToDLQ(msg) {
+	if p.dlq != nil && p.isSendToDLQ(msg) {
 		return p.dlq.Do(msg, partition)
 	}
 
