@@ -3,6 +3,7 @@ package kinesis
 import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 )
 
 var (
@@ -34,3 +35,15 @@ func (k *KinesisSource) WithDefaults() {
 }
 
 func (k *KinesisSource) IsSource() {}
+
+func (k *KinesisSource) IsAppendOnly() bool {
+	if k.ParserConfig == nil {
+		return true
+	} else {
+		parserConfigStruct, _ := parsers.ParserConfigMapToStruct(k.ParserConfig)
+		if parserConfigStruct == nil {
+			return true
+		}
+		return parserConfigStruct.IsAppendOnly()
+	}
+}
