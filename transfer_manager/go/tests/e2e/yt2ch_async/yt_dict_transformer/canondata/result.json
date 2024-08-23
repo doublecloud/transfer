@@ -1,0 +1,252 @@
+{
+    "yt_dict_transformer.yt_dict_transformer.TestSnapshot/Canon": {
+        "not_transformed": [
+            [
+                {
+                    "DataType": "uint8",
+                    "GoType": "uint8",
+                    "Name": "id",
+                    "Value": "1"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "date_str",
+                    "Value": "2022-03-10"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "datetime_str",
+                    "Value": "2022-03-10T01:02:03"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "datetime_str2",
+                    "Value": "2022-03-10 01:02:03"
+                },
+                {
+                    "DataType": "int64",
+                    "GoType": "int64",
+                    "Name": "datetime_ts",
+                    "Value": "0"
+                },
+                {
+                    "DataType": "int64",
+                    "GoType": "int64",
+                    "Name": "datetime_ts2",
+                    "Value": "1646940559"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "decimal_as_bytes",
+                    "Value": "67.89"
+                },
+                {
+                    "DataType": "double",
+                    "GoType": "float64",
+                    "Name": "decimal_as_float",
+                    "Value": "2.3456"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "decimal_as_string",
+                    "Value": "23.45"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "dict",
+                    "Value": "[[\"k1\",1],[\"k2\",2],[\"k3\",3]]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "intlist",
+                    "Value": "[1,2,3]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "list",
+                    "Value": "[-1.01,2,1294.21]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "nested1",
+                    "Value": "{\"list\":[[[[\"k1\",1],[\"k2\",2],[\"k3\",3]],[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]],\"named\":[\"d2\",[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]}"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "nested2",
+                    "Value": "{\"dict\":[[10,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]],[11,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]],\"unnamed\":[1,[[\"k1\",1],[\"k2\",2],[\"k3\",3]]]}"
+                },
+                {
+                    "DataType": "int32",
+                    "GoType": "int32",
+                    "Name": "num_to_str",
+                    "Value": "100"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "struct",
+                    "Value": "{\"fieldFloat32\":100.01,\"fieldInt16\":100,\"fieldString\":\"abc\"}"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "tagged",
+                    "Value": "[\"fieldInt16\",100]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "tuple",
+                    "Value": "[-5,300.03,\"my data\"]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "variant_named",
+                    "Value": "[\"fieldString\",\"magotan\"]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "variant_unnamed",
+                    "Value": "[1,300.03]"
+                }
+            ]
+        ],
+        "transformed": [
+            [
+                {
+                    "DataType": "uint8",
+                    "GoType": "uint8",
+                    "Name": "id",
+                    "Value": "1"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "date_str",
+                    "Value": "2022-03-10"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "datetime_str",
+                    "Value": "2022-03-10T01:02:03"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "datetime_str2",
+                    "Value": "2022-03-10 01:02:03"
+                },
+                {
+                    "DataType": "int64",
+                    "GoType": "int64",
+                    "Name": "datetime_ts",
+                    "Value": "0"
+                },
+                {
+                    "DataType": "int64",
+                    "GoType": "int64",
+                    "Name": "datetime_ts2",
+                    "Value": "1646940559"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "decimal_as_bytes",
+                    "Value": "67.89"
+                },
+                {
+                    "DataType": "double",
+                    "GoType": "float64",
+                    "Name": "decimal_as_float",
+                    "Value": "2.3456"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "decimal_as_string",
+                    "Value": "23.45"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "dict",
+                    "Value": "{\"k1\":1,\"k2\":2,\"k3\":3}"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "intlist",
+                    "Value": "[1,2,3]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "list",
+                    "Value": "[-1.01,2,1294.21]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "nested1",
+                    "Value": "{\"list\":[[{\"k1\":1,\"k2\":2,\"k3\":3},{\"k1\":1,\"k2\":2,\"k3\":3}]],\"named\":[\"d2\",{\"k1\":1,\"k2\":2,\"k3\":3}]}"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "nested2",
+                    "Value": "{\"dict\":{\"10\":{\"k1\":1,\"k2\":2,\"k3\":3},\"11\":{\"k1\":1,\"k2\":2,\"k3\":3}},\"unnamed\":[1,{\"k1\":1,\"k2\":2,\"k3\":3}]}"
+                },
+                {
+                    "DataType": "int32",
+                    "GoType": "int32",
+                    "Name": "num_to_str",
+                    "Value": "100"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "struct",
+                    "Value": "{\"fieldFloat32\":100.01,\"fieldInt16\":100,\"fieldString\":\"abc\"}"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "tagged",
+                    "Value": "[\"fieldInt16\",100]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "tuple",
+                    "Value": "[-5,300.03,\"my data\"]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "variant_named",
+                    "Value": "[\"fieldString\",\"magotan\"]"
+                },
+                {
+                    "DataType": "string",
+                    "GoType": "string",
+                    "Name": "variant_unnamed",
+                    "Value": "[1,300.03]"
+                }
+            ]
+        ]
+    }
+}

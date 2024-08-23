@@ -1,0 +1,28 @@
+{
+    "replication.replication.TestReplication": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        {
+            "uri": "file://replication.replication.TestReplication/extracted"
+        },
+        {
+            "uri": "file://replication.replication.TestReplication/extracted.0"
+        },
+        {
+            "uri": "file://replication.replication.TestReplication/extracted.1"
+        },
+        {
+            "uri": "file://replication.replication.TestReplication/extracted.2"
+        },
+        {
+            "uri": "file://replication.replication.TestReplication/extracted.3"
+        },
+        {
+            "uri": "file://replication.replication.TestReplication/extracted.4"
+        }
+    ]
+}

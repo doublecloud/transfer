@@ -1,0 +1,182 @@
+{
+    "integer_field": 123,
+    "long_field": 9223372036854775807,
+    "short_field": 32767,
+    "byte_field": -127,
+    "unsigned_long_field": 18446744073709551615,
+    "float_field": -123.321,
+    "half_float_field": 321.123,
+    "double_field": 111.999,
+    "scaled_float_field": -1.23445,
+    "rank_feature_field": 2,
+    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+    "text_field": "i like that",
+    "ip_field": "::1",
+    "constant_keyword_field": [ "lol" ],
+    "match_only_text_field": "some text",
+    "search_as_you_type_field": "idk what is it",
+    "boolean_field": true,
+
+    "object_field": {
+        "age": 123,
+        "name": {
+            "first": "firstName",
+            "last": "last Name"
+        }
+    },
+
+    "nested_field": [
+        {
+            "first": "John",
+            "last": "Smith"
+        },
+        {
+            "first": "Alice",
+            "last": "White"
+        }
+    ],
+
+    "join_field": {
+        "name": "question"
+    },
+
+    "flattened_field": {
+        "priority": "urgent",
+        "release": [ "v1.2.5", "v1.3.0" ],
+        "timestamp": {
+            "created": 1541458026,
+            "closed": 1541457010
+        }
+    },
+
+    "integer_range_field": {
+        "gte": -5675,
+        "lte": 14343
+    },
+
+    "float_range_field": {
+        "gte": 0,
+        "lte": 11
+    },
+
+    "long_range_field": {
+        "gte": "-123.123",
+        "lte": "345.345"
+    },
+
+    "double_range_field": {
+        "gte": "54335.321",
+        "lte": 123123123.1312
+    },
+
+    "date_str_range_field": {
+        "gte": "2019-05-01",
+        "lte": "2019-05-15"
+    },
+
+    "date_milliseconds_range_field": {
+        "gte": 250000000000000,
+        "lte": 253000000000000
+    },
+
+    "date_seconds_range_field": {
+        "gte": 250000000000,
+        "lte": 253000000000
+    },
+
+    "ip_range_field": {
+        "gte": "127.0.0.1",
+        "lte": "127.0.0.5"
+    },
+
+    "keyword_field": [ "foo", "foo", "bar", "baz" ],
+    "wildcard_field": "term",
+    "version_field": [ "8.0.0-beta1", "8.5.0", "0.90.12", "2.6.1", "1.3.4", "1.3.4" ],
+
+    "aggregate_metric_double_field": {
+        "min": -93.00,
+        "max": 1702.30,
+        "sum": 300.00,
+        "value_count": 25
+    },
+
+    "histogram_field": {
+        "values": [
+            0.1,
+            0.2,
+            0.3,
+            0.4,
+            0.5
+        ],
+        "counts": [
+            3,
+            7,
+            23,
+            12,
+            6
+        ]
+    },
+
+    "completion_field": { },
+    "dense_vector_field": [ 0.5, 10, 6 ],
+
+    "geo_point_point_field": "POINT (-71.34 41.12)",
+    "geo_point_object_field": {
+        "lat": 41.12,
+        "lon": -71.34
+    },
+    "geo_point_array_field": [ -71.34, 41.12 ],
+    "geo_point_string_field": "41.12,-71.34",
+    "geo_point_geohash_field": "drm3btev3e86",
+
+    "rank_features_field": {
+        "1star": 10,
+        "2star": 100
+    },
+
+    "geo_shape_point_field": {
+        "type": "Point",
+        "coordinates": [ -77.03653, 38.897676 ]
+    },
+    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+
+    "geo_shape_geometrycollection_field": {
+        "type": "GeometryCollection",
+        "geometries": [
+            {
+                "type": "Point",
+                "coordinates": [ 100.0, 0.0 ]
+            },
+            {
+                "type": "LineString",
+                "coordinates": [ [ 101.0, 0.0 ], [ 102.0, 1.0 ] ]
+            }
+        ]
+    },
+    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+
+    "shape_field": {
+        "type": "linestring",
+        "coordinates": [ [ -377.03653, 389.897676 ], [ -377.009051, 389.889939 ] ]
+    },
+    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+
+    "point_str_field": "POINT (-71.34 41.12)",
+    "point_str2_field": "-71.34,41.12",
+    "point_xy_field": {
+        "x": -71.34,
+        "y": 41.12
+    },
+    "point_array_field": [ -71.34, 41.12 ],
+
+    "percolator_field": {
+        "match": {
+            "text_field": "quick brown fox"
+        }
+    },
+    "date_str_field": "2015-01-01T12:10:30Z",
+    "date_milliseconds_field": 253000000000000,
+    "date_seconds_field": 253000000000,
+    "date_nanos_field": 1420070400000,
+    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z"
+}

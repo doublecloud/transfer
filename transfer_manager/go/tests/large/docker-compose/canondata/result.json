@@ -1,0 +1,3091 @@
+{
+    "docker-compose.docker-compose.TestElasticToElasticSnapshot": {
+        "Data": [
+            {
+                "_id": "9",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "9",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": null,
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "flattened_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_point_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "histogram_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "match_only_text_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "point_array_field": null,
+                    "point_str2_field": null,
+                    "point_str_field": null,
+                    "point_xy_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "shape_field": null,
+                    "shape_str_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "unsigned_long_field": null,
+                    "version_field": null,
+                    "wildcard_field": null
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "8",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "8",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": null,
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "flattened_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_point_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "histogram_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "match_only_text_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "point_array_field": null,
+                    "point_str2_field": null,
+                    "point_str_field": null,
+                    "point_xy_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "shape_field": null,
+                    "shape_str_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "unsigned_long_field": null,
+                    "version_field": null,
+                    "wildcard_field": null
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "7",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "7",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": null,
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "flattened_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_point_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "histogram_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "match_only_text_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "point_array_field": null,
+                    "point_str2_field": null,
+                    "point_str_field": null,
+                    "point_xy_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "shape_field": null,
+                    "shape_str_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "unsigned_long_field": null,
+                    "version_field": null,
+                    "wildcard_field": null
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "6",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "6",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": null,
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "flattened_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_point_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "histogram_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "match_only_text_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "point_array_field": null,
+                    "point_str2_field": null,
+                    "point_str_field": null,
+                    "point_xy_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "shape_field": null,
+                    "shape_str_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "unsigned_long_field": null,
+                    "version_field": null,
+                    "wildcard_field": null
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "5",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "5",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": null,
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "flattened_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_point_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "histogram_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "match_only_text_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "point_array_field": null,
+                    "point_str2_field": null,
+                    "point_str_field": null,
+                    "point_xy_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "shape_field": null,
+                    "shape_str_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "unsigned_long_field": null,
+                    "version_field": null,
+                    "wildcard_field": null
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "4",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "4",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": {
+                        "max": 1702.3,
+                        "min": -93.0,
+                        "sum": 300.0,
+                        "value_count": 25
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "constant_keyword_field": [
+                        "lol"
+                    ],
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "dense_vector_field": [
+                        0.5,
+                        10,
+                        6
+                    ],
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "flattened_field": {
+                        "priority": "urgent",
+                        "release": [
+                            "v1.2.5",
+                            "v1.3.0"
+                        ],
+                        "timestamp": {
+                            "closed": 1541457010,
+                            "created": 1541458026
+                        }
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_point_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "histogram_field": {
+                        "counts": [
+                            3,
+                            7,
+                            23,
+                            12,
+                            6
+                        ],
+                        "values": [
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5
+                        ]
+                    },
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "match_only_text_field": "some text",
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "point_str2_field": "-71.34,41.12",
+                    "point_str_field": "POINT (-71.34 41.12)",
+                    "point_xy_field": {
+                        "x": -71.34,
+                        "y": 41.12
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "shape_field": {
+                        "coordinates": [
+                            [
+                                -377.03653,
+                                389.897676
+                            ],
+                            [
+                                -377.009051,
+                                389.889939
+                            ]
+                        ],
+                        "type": "linestring"
+                    },
+                    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "unsigned_long_field": 18446744073709551615,
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ],
+                    "wildcard_field": "term"
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "3",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "3",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": {
+                        "max": 1702.3,
+                        "min": -93.0,
+                        "sum": 300.0,
+                        "value_count": 25
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "constant_keyword_field": [
+                        "lol"
+                    ],
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "dense_vector_field": [
+                        0.5,
+                        10,
+                        6
+                    ],
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "flattened_field": {
+                        "priority": "urgent",
+                        "release": [
+                            "v1.2.5",
+                            "v1.3.0"
+                        ],
+                        "timestamp": {
+                            "closed": 1541457010,
+                            "created": 1541458026
+                        }
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_point_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "histogram_field": {
+                        "counts": [
+                            3,
+                            7,
+                            23,
+                            12,
+                            6
+                        ],
+                        "values": [
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5
+                        ]
+                    },
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "match_only_text_field": "some text",
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "point_str2_field": "-71.34,41.12",
+                    "point_str_field": "POINT (-71.34 41.12)",
+                    "point_xy_field": {
+                        "x": -71.34,
+                        "y": 41.12
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "shape_field": {
+                        "coordinates": [
+                            [
+                                -377.03653,
+                                389.897676
+                            ],
+                            [
+                                -377.009051,
+                                389.889939
+                            ]
+                        ],
+                        "type": "linestring"
+                    },
+                    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "unsigned_long_field": 18446744073709551615,
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ],
+                    "wildcard_field": "term"
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "2",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "2",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": {
+                        "max": 1702.3,
+                        "min": -93.0,
+                        "sum": 300.0,
+                        "value_count": 25
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "constant_keyword_field": [
+                        "lol"
+                    ],
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "dense_vector_field": [
+                        0.5,
+                        10,
+                        6
+                    ],
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "flattened_field": {
+                        "priority": "urgent",
+                        "release": [
+                            "v1.2.5",
+                            "v1.3.0"
+                        ],
+                        "timestamp": {
+                            "closed": 1541457010,
+                            "created": 1541458026
+                        }
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_point_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "histogram_field": {
+                        "counts": [
+                            3,
+                            7,
+                            23,
+                            12,
+                            6
+                        ],
+                        "values": [
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5
+                        ]
+                    },
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "match_only_text_field": "some text",
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "point_str2_field": "-71.34,41.12",
+                    "point_str_field": "POINT (-71.34 41.12)",
+                    "point_xy_field": {
+                        "x": -71.34,
+                        "y": 41.12
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "shape_field": {
+                        "coordinates": [
+                            [
+                                -377.03653,
+                                389.897676
+                            ],
+                            [
+                                -377.009051,
+                                389.889939
+                            ]
+                        ],
+                        "type": "linestring"
+                    },
+                    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "unsigned_long_field": 18446744073709551615,
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ],
+                    "wildcard_field": "term"
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "1",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "1",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": {
+                        "max": 1702.3,
+                        "min": -93.0,
+                        "sum": 300.0,
+                        "value_count": 25
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "constant_keyword_field": [
+                        "lol"
+                    ],
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "dense_vector_field": [
+                        0.5,
+                        10,
+                        6
+                    ],
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "flattened_field": {
+                        "priority": "urgent",
+                        "release": [
+                            "v1.2.5",
+                            "v1.3.0"
+                        ],
+                        "timestamp": {
+                            "closed": 1541457010,
+                            "created": 1541458026
+                        }
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_point_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "histogram_field": {
+                        "counts": [
+                            3,
+                            7,
+                            23,
+                            12,
+                            6
+                        ],
+                        "values": [
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5
+                        ]
+                    },
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "match_only_text_field": "some text",
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "point_str2_field": "-71.34,41.12",
+                    "point_str_field": "POINT (-71.34 41.12)",
+                    "point_xy_field": {
+                        "x": -71.34,
+                        "y": 41.12
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "shape_field": {
+                        "coordinates": [
+                            [
+                                -377.03653,
+                                389.897676
+                            ],
+                            [
+                                -377.009051,
+                                389.889939
+                            ]
+                        ],
+                        "type": "linestring"
+                    },
+                    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "unsigned_long_field": 18446744073709551615,
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ],
+                    "wildcard_field": "term"
+                },
+                "_type": "_doc"
+            },
+            {
+                "_id": "0",
+                "_index": "test_index_all_elastic_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "0",
+                        "schema": "",
+                        "table": "test_index_all_elastic_types"
+                    },
+                    "aggregate_metric_double_field": {
+                        "max": 1702.3,
+                        "min": -93.0,
+                        "sum": 300.0,
+                        "value_count": 25
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "constant_keyword_field": [
+                        "lol"
+                    ],
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "dense_vector_field": [
+                        0.5,
+                        10,
+                        6
+                    ],
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "flattened_field": {
+                        "priority": "urgent",
+                        "release": [
+                            "v1.2.5",
+                            "v1.3.0"
+                        ],
+                        "timestamp": {
+                            "closed": 1541457010,
+                            "created": 1541458026
+                        }
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_point_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "histogram_field": {
+                        "counts": [
+                            3,
+                            7,
+                            23,
+                            12,
+                            6
+                        ],
+                        "values": [
+                            0.1,
+                            0.2,
+                            0.3,
+                            0.4,
+                            0.5
+                        ]
+                    },
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "match_only_text_field": "some text",
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "point_str2_field": "-71.34,41.12",
+                    "point_str_field": "POINT (-71.34 41.12)",
+                    "point_xy_field": {
+                        "x": -71.34,
+                        "y": 41.12
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "shape_field": {
+                        "coordinates": [
+                            [
+                                -377.03653,
+                                389.897676
+                            ],
+                            [
+                                -377.009051,
+                                389.889939
+                            ]
+                        ],
+                        "type": "linestring"
+                    },
+                    "shape_str_field": "GEOMETRYCOLLECTION (POINT (1000.0 100.0), LINESTRING (1001.0 100.0, 1002.0 100.0))",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "unsigned_long_field": 18446744073709551615,
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ],
+                    "wildcard_field": "term"
+                },
+                "_type": "_doc"
+            }
+        ],
+        "IndexParams": {
+            "aliases": {
+                "my-alias": {}
+            },
+            "mappings": {
+                "properties": {
+                    "__data_transfer": {
+                        "properties": {
+                            "id": {
+                                "type": "long"
+                            },
+                            "original_id": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "schema": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "table": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            }
+                        }
+                    },
+                    "aggregate_metric_double_field": {
+                        "default_metric": "max",
+                        "metrics": [
+                            "min",
+                            "max",
+                            "sum",
+                            "value_count"
+                        ],
+                        "type": "aggregate_metric_double"
+                    },
+                    "binary_field": {
+                        "type": "binary"
+                    },
+                    "boolean_field": {
+                        "type": "boolean"
+                    },
+                    "byte_field": {
+                        "type": "byte"
+                    },
+                    "completion_field": {
+                        "analyzer": "simple",
+                        "max_input_length": 50,
+                        "preserve_position_increments": true,
+                        "preserve_separators": true,
+                        "type": "completion"
+                    },
+                    "constant_keyword_field": {
+                        "type": "constant_keyword",
+                        "value": "lol"
+                    },
+                    "date_milliseconds_field": {
+                        "type": "date"
+                    },
+                    "date_milliseconds_range_field": {
+                        "type": "date_range"
+                    },
+                    "date_nanos_field": {
+                        "type": "date_nanos"
+                    },
+                    "date_nanos_str_field": {
+                        "type": "date_nanos"
+                    },
+                    "date_seconds_field": {
+                        "format": "strict_date_optional_time||epoch_second",
+                        "type": "date"
+                    },
+                    "date_seconds_range_field": {
+                        "format": "strict_date_optional_time||epoch_second",
+                        "type": "date_range"
+                    },
+                    "date_str_field": {
+                        "type": "date"
+                    },
+                    "date_str_range_field": {
+                        "type": "date_range"
+                    },
+                    "dense_vector_field": {
+                        "dims": 3,
+                        "type": "dense_vector"
+                    },
+                    "double_field": {
+                        "type": "double"
+                    },
+                    "double_range_field": {
+                        "type": "double_range"
+                    },
+                    "flattened_field": {
+                        "type": "flattened"
+                    },
+                    "float_field": {
+                        "type": "float"
+                    },
+                    "float_range_field": {
+                        "type": "float_range"
+                    },
+                    "geo_point_array_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_geohash_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_object_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_point_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_string_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_shape_geometrycollection_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_geometrycollection_str_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_point_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_point_str_field": {
+                        "type": "geo_shape"
+                    },
+                    "half_float_field": {
+                        "type": "half_float"
+                    },
+                    "histogram_field": {
+                        "type": "histogram"
+                    },
+                    "integer_field": {
+                        "type": "integer"
+                    },
+                    "integer_range_field": {
+                        "type": "integer_range"
+                    },
+                    "ip_field": {
+                        "type": "ip"
+                    },
+                    "ip_range_field": {
+                        "type": "ip_range"
+                    },
+                    "join_field": {
+                        "eager_global_ordinals": true,
+                        "relations": {
+                            "question": "answer"
+                        },
+                        "type": "join"
+                    },
+                    "keyword_field": {
+                        "type": "keyword"
+                    },
+                    "long_field": {
+                        "type": "long"
+                    },
+                    "long_range_field": {
+                        "type": "long_range"
+                    },
+                    "match_only_text_field": {
+                        "type": "match_only_text"
+                    },
+                    "nested_field": {
+                        "properties": {
+                            "first": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "last": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            }
+                        },
+                        "type": "nested"
+                    },
+                    "object_field": {
+                        "properties": {
+                            "age": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "properties": {
+                                    "first": {
+                                        "type": "text"
+                                    },
+                                    "last": {
+                                        "type": "text"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "percolator_field": {
+                        "type": "percolator"
+                    },
+                    "point_array_field": {
+                        "type": "point"
+                    },
+                    "point_str2_field": {
+                        "type": "point"
+                    },
+                    "point_str_field": {
+                        "type": "point"
+                    },
+                    "point_xy_field": {
+                        "type": "point"
+                    },
+                    "rank_feature_field": {
+                        "type": "rank_feature"
+                    },
+                    "rank_features_field": {
+                        "type": "rank_features"
+                    },
+                    "scaled_float_field": {
+                        "scaling_factor": 100,
+                        "type": "scaled_float"
+                    },
+                    "search_as_you_type_field": {
+                        "doc_values": false,
+                        "max_shingle_size": 3,
+                        "type": "search_as_you_type"
+                    },
+                    "shape_field": {
+                        "type": "shape"
+                    },
+                    "shape_str_field": {
+                        "type": "shape"
+                    },
+                    "short_field": {
+                        "type": "short"
+                    },
+                    "text_field": {
+                        "type": "text"
+                    },
+                    "unsigned_long_field": {
+                        "type": "unsigned_long"
+                    },
+                    "version_field": {
+                        "type": "version"
+                    },
+                    "wildcard_field": {
+                        "type": "wildcard"
+                    }
+                }
+            },
+            "settings": {
+                "index": {
+                    "number_of_shards": "1",
+                    "routing": {
+                        "allocation": {
+                            "include": {
+                                "_tier_preference": "data_content"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "docker-compose.docker-compose.TestElasticToOpenSearchSnapshot": {
+        "Data": [
+            {
+                "_id": "9",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "9",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_str_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "version_field": null
+                },
+                "_type": ""
+            },
+            {
+                "_id": "8",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "8",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_str_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "version_field": null
+                },
+                "_type": ""
+            },
+            {
+                "_id": "7",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "7",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_str_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "version_field": null
+                },
+                "_type": ""
+            },
+            {
+                "_id": "6",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "6",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_str_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "version_field": null
+                },
+                "_type": ""
+            },
+            {
+                "_id": "5",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "5",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": null,
+                    "boolean_field": null,
+                    "byte_field": null,
+                    "completion_field": null,
+                    "date_milliseconds_field": null,
+                    "date_milliseconds_range_field": null,
+                    "date_nanos_field": null,
+                    "date_nanos_str_field": null,
+                    "date_seconds_field": null,
+                    "date_seconds_range_field": null,
+                    "date_str_field": null,
+                    "date_str_range_field": null,
+                    "double_field": null,
+                    "double_range_field": null,
+                    "float_field": null,
+                    "float_range_field": null,
+                    "geo_point_array_field": null,
+                    "geo_point_geohash_field": null,
+                    "geo_point_object_field": null,
+                    "geo_point_str_field": null,
+                    "geo_point_string_field": null,
+                    "geo_shape_geometrycollection_field": null,
+                    "geo_shape_geometrycollection_str_field": null,
+                    "geo_shape_point_field": null,
+                    "geo_shape_point_str_field": null,
+                    "half_float_field": null,
+                    "integer_field": null,
+                    "integer_range_field": null,
+                    "ip_field": null,
+                    "ip_range_field": null,
+                    "keyword_field": null,
+                    "long_field": null,
+                    "long_range_field": null,
+                    "nested_field": null,
+                    "object_field": null,
+                    "rank_feature_field": null,
+                    "scaled_float_field": null,
+                    "search_as_you_type_field": null,
+                    "short_field": null,
+                    "text_field": null,
+                    "version_field": null
+                },
+                "_type": ""
+            },
+            {
+                "_id": "4",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "4",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_str_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ]
+                },
+                "_type": ""
+            },
+            {
+                "_id": "3",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "3",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_str_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ]
+                },
+                "_type": ""
+            },
+            {
+                "_id": "2",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "2",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_str_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ]
+                },
+                "_type": ""
+            },
+            {
+                "_id": "1",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "1",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_str_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ]
+                },
+                "_type": ""
+            },
+            {
+                "_id": "0",
+                "_index": "test_index_all_opensearch_types",
+                "_source": {
+                    "__data_transfer": {
+                        "id": 0,
+                        "original_id": "0",
+                        "schema": "",
+                        "table": "test_index_all_opensearch_types"
+                    },
+                    "binary_field": "QmlsbGkgSGFyaW5ndG9uDQo=",
+                    "boolean_field": true,
+                    "byte_field": -127,
+                    "completion_field": {},
+                    "date_milliseconds_field": 253000000000000,
+                    "date_milliseconds_range_field": {
+                        "gte": 250000000000000,
+                        "lte": 253000000000000
+                    },
+                    "date_nanos_field": 1420070400000,
+                    "date_nanos_str_field": "2015-01-01T12:10:30.123456789Z",
+                    "date_seconds_field": 253000000000,
+                    "date_seconds_range_field": {
+                        "gte": 250000000000,
+                        "lte": 253000000000
+                    },
+                    "date_str_field": "2015-01-01T12:10:30Z",
+                    "date_str_range_field": {
+                        "gte": "2019-05-01",
+                        "lte": "2019-05-15"
+                    },
+                    "double_field": 111.999,
+                    "double_range_field": {
+                        "gte": "54335.321",
+                        "lte": 123123123.1312
+                    },
+                    "float_field": -123.321,
+                    "float_range_field": {
+                        "gte": 0,
+                        "lte": 11
+                    },
+                    "geo_point_array_field": [
+                        -71.34,
+                        41.12
+                    ],
+                    "geo_point_geohash_field": "drm3btev3e86",
+                    "geo_point_object_field": {
+                        "lat": 41.12,
+                        "lon": -71.34
+                    },
+                    "geo_point_str_field": "POINT (-71.34 41.12)",
+                    "geo_point_string_field": "41.12,-71.34",
+                    "geo_shape_geometrycollection_field": {
+                        "geometries": [
+                            {
+                                "coordinates": [
+                                    100.0,
+                                    0.0
+                                ],
+                                "type": "Point"
+                            },
+                            {
+                                "coordinates": [
+                                    [
+                                        101.0,
+                                        0.0
+                                    ],
+                                    [
+                                        102.0,
+                                        1.0
+                                    ]
+                                ],
+                                "type": "LineString"
+                            }
+                        ],
+                        "type": "GeometryCollection"
+                    },
+                    "geo_shape_geometrycollection_str_field": "GEOMETRYCOLLECTION (POINT (100.0 0.0), LINESTRING (101.0 0.0, 102.0 1.0))",
+                    "geo_shape_point_field": {
+                        "coordinates": [
+                            -77.03653,
+                            38.897676
+                        ],
+                        "type": "Point"
+                    },
+                    "geo_shape_point_str_field": "POINT (-77.03653 38.897676)",
+                    "half_float_field": 321.123,
+                    "integer_field": 123,
+                    "integer_range_field": {
+                        "gte": -5675,
+                        "lte": 14343
+                    },
+                    "ip_field": "::1",
+                    "ip_range_field": {
+                        "gte": "127.0.0.1",
+                        "lte": "127.0.0.5"
+                    },
+                    "join_field": {
+                        "name": "question"
+                    },
+                    "keyword_field": [
+                        "foo",
+                        "foo",
+                        "bar",
+                        "baz"
+                    ],
+                    "long_field": 9223372036854775807,
+                    "long_range_field": {
+                        "gte": "-123.123",
+                        "lte": "345.345"
+                    },
+                    "nested_field": [
+                        {
+                            "first": "John",
+                            "last": "Smith"
+                        },
+                        {
+                            "first": "Alice",
+                            "last": "White"
+                        }
+                    ],
+                    "object_field": {
+                        "age": 123,
+                        "name": {
+                            "first": "firstName",
+                            "last": "last Name"
+                        }
+                    },
+                    "percolator_field": {
+                        "match": {
+                            "text_field": "quick brown fox"
+                        }
+                    },
+                    "rank_feature_field": 2,
+                    "rank_features_field": {
+                        "1star": 10,
+                        "2star": 100
+                    },
+                    "scaled_float_field": -1.23445,
+                    "search_as_you_type_field": "idk what is it",
+                    "short_field": 32767,
+                    "text_field": "i like that",
+                    "version_field": [
+                        "8.0.0-beta1",
+                        "8.5.0",
+                        "0.90.12",
+                        "2.6.1",
+                        "1.3.4",
+                        "1.3.4"
+                    ]
+                },
+                "_type": ""
+            }
+        ],
+        "IndexParams": {
+            "aliases": {
+                "my-alias": {}
+            },
+            "mappings": {
+                "properties": {
+                    "__data_transfer": {
+                        "properties": {
+                            "id": {
+                                "type": "long"
+                            },
+                            "original_id": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "schema": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "table": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            }
+                        }
+                    },
+                    "binary_field": {
+                        "type": "binary"
+                    },
+                    "boolean_field": {
+                        "type": "boolean"
+                    },
+                    "byte_field": {
+                        "type": "byte"
+                    },
+                    "completion_field": {
+                        "analyzer": "simple",
+                        "max_input_length": 50,
+                        "preserve_position_increments": true,
+                        "preserve_separators": true,
+                        "type": "completion"
+                    },
+                    "date_milliseconds_field": {
+                        "type": "date"
+                    },
+                    "date_milliseconds_range_field": {
+                        "type": "date_range"
+                    },
+                    "date_nanos_field": {
+                        "type": "date_nanos"
+                    },
+                    "date_nanos_str_field": {
+                        "type": "date_nanos"
+                    },
+                    "date_seconds_field": {
+                        "format": "strict_date_optional_time||epoch_second",
+                        "type": "date"
+                    },
+                    "date_seconds_range_field": {
+                        "format": "strict_date_optional_time||epoch_second",
+                        "type": "date_range"
+                    },
+                    "date_str_field": {
+                        "type": "date"
+                    },
+                    "date_str_range_field": {
+                        "type": "date_range"
+                    },
+                    "double_field": {
+                        "type": "double"
+                    },
+                    "double_range_field": {
+                        "type": "double_range"
+                    },
+                    "float_field": {
+                        "type": "float"
+                    },
+                    "float_range_field": {
+                        "type": "float_range"
+                    },
+                    "geo_point_array_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_geohash_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_object_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_str_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_point_string_field": {
+                        "type": "geo_point"
+                    },
+                    "geo_shape_geometrycollection_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_geometrycollection_str_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_point_field": {
+                        "type": "geo_shape"
+                    },
+                    "geo_shape_point_str_field": {
+                        "type": "geo_shape"
+                    },
+                    "half_float_field": {
+                        "type": "half_float"
+                    },
+                    "integer_field": {
+                        "type": "integer"
+                    },
+                    "integer_range_field": {
+                        "type": "integer_range"
+                    },
+                    "ip_field": {
+                        "type": "ip"
+                    },
+                    "ip_range_field": {
+                        "type": "ip_range"
+                    },
+                    "join_field": {
+                        "eager_global_ordinals": true,
+                        "relations": {
+                            "question": "answer"
+                        },
+                        "type": "join"
+                    },
+                    "keyword_field": {
+                        "type": "keyword"
+                    },
+                    "long_field": {
+                        "type": "long"
+                    },
+                    "long_range_field": {
+                        "type": "long_range"
+                    },
+                    "nested_field": {
+                        "properties": {
+                            "first": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            },
+                            "last": {
+                                "fields": {
+                                    "keyword": {
+                                        "ignore_above": 256,
+                                        "type": "keyword"
+                                    }
+                                },
+                                "type": "text"
+                            }
+                        },
+                        "type": "nested"
+                    },
+                    "object_field": {
+                        "properties": {
+                            "age": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "properties": {
+                                    "first": {
+                                        "type": "text"
+                                    },
+                                    "last": {
+                                        "type": "text"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "percolator_field": {
+                        "type": "percolator"
+                    },
+                    "rank_feature_field": {
+                        "type": "rank_feature"
+                    },
+                    "rank_features_field": {
+                        "type": "rank_features"
+                    },
+                    "scaled_float_field": {
+                        "scaling_factor": 100,
+                        "type": "scaled_float"
+                    },
+                    "search_as_you_type_field": {
+                        "doc_values": false,
+                        "max_shingle_size": 3,
+                        "type": "search_as_you_type"
+                    },
+                    "short_field": {
+                        "type": "short"
+                    },
+                    "text_field": {
+                        "type": "text"
+                    },
+                    "version_field": {
+                        "fields": {
+                            "keyword": {
+                                "ignore_above": 256,
+                                "type": "keyword"
+                            }
+                        },
+                        "type": "text"
+                    }
+                }
+            },
+            "settings": {
+                "index": {
+                    "number_of_shards": "1",
+                    "routing": {
+                        "allocation": {
+                            "include": {
+                                "_tier_preference": "data_content"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "docker-compose.docker-compose.TestElasticToPgSnapshot": {
+        "after_increment": "",
+        "after_snapshot": {
+            "uri": "file://docker-compose.docker-compose.TestElasticToPgSnapshot/extracted"
+        }
+    },
+    "docker-compose.docker-compose.TestOldPostgresPg2Pg": {
+        "after_increment": "",
+        "after_snapshot": {
+            "uri": "file://docker-compose.docker-compose.TestOldPostgresPg2Pg/extracted"
+        }
+    },
+    "docker-compose.docker-compose.TestPg2Kafka2PgSchemaRegistry/srRecordNameStrategy": {
+        "uri": "file://docker-compose.docker-compose.TestPg2Kafka2PgSchemaRegistry_srRecordNameStrategy/extracted"
+    },
+    "docker-compose.docker-compose.TestPg2Kafka2PgSchemaRegistry/srTopicRecordNameStrategy": {
+        "uri": "file://docker-compose.docker-compose.TestPg2Kafka2PgSchemaRegistry_srTopicRecordNameStrategy/extracted"
+    },
+    "docker-compose.docker-compose.TestPgToElasticSnapshot": [
+        {
+            "_id": "3",
+            "_index": "public.test_table",
+            "_source": {
+                "__data_transfer": {
+                    "id": 0,
+                    "schema": "public",
+                    "table": "test_table"
+                },
+                "id": 3,
+                "value": "3"
+            },
+            "_type": "_doc"
+        },
+        {
+            "_id": "2",
+            "_index": "public.test_table",
+            "_source": {
+                "__data_transfer": {
+                    "id": 0,
+                    "schema": "public",
+                    "table": "test_table"
+                },
+                "id": 2,
+                "value": "2"
+            },
+            "_type": "_doc"
+        },
+        {
+            "_id": "1",
+            "_index": "public.test_table",
+            "_source": {
+                "__data_transfer": {
+                    "id": 0,
+                    "schema": "public",
+                    "table": "test_table"
+                },
+                "id": 1,
+                "value": "1"
+            },
+            "_type": "_doc"
+        }
+    ],
+    "docker-compose.docker-compose.TestTrickyTypesPg2PgSupportedTypes": {
+        "after_increment": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2PgSupportedTypes/extracted"
+        },
+        "after_snapshot": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2PgSupportedTypes/extracted.0"
+        }
+    },
+    "docker-compose.docker-compose.TestTrickyTypesPg2PgTemporals": {
+        "after_increment": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2PgTemporals/extracted"
+        },
+        "after_snapshot": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2PgTemporals/extracted.0"
+        }
+    },
+    "docker-compose.docker-compose.TestTrickyTypesPg2YTSupportedTypes": {
+        "after_increment": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2YTSupportedTypes/extracted"
+        },
+        "after_snapshot": {
+            "uri": "file://docker-compose.docker-compose.TestTrickyTypesPg2YTSupportedTypes/extracted.0"
+        }
+    }
+}
