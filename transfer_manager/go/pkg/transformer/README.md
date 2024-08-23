@@ -3,11 +3,11 @@
 We can apply stateless transformation on our `inflight` data.
 This is based on our data model
 
-![data-model](https://jing.yandex-team.ru/files/tserakhau/Screen%20Shot%202023-02-20%20at%2023.04.47)
+![data-model](./assets/data_model_transformer.png)
 
 Each batch of changes can be transformed into new batch of changes:
 
-![transformation](https://jing.yandex-team.ru/files/tserakhau/Screen%20Shot%202023-02-20%20at%2023.04.19)
+![transformation](./assets/transformer_data_flow.png)
 
 ### How to add new transformer
 
