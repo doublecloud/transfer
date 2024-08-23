@@ -40,6 +40,23 @@ func (c *Aggregator) Push(items []abstract.ChangeItem) error {
 	return abstract.NewFatalError(xerrors.Errorf("sink failed to push: %w", errs))
 }
 
+func (c *Aggregator) Commit() error {
+	var errs util.Errors
+	for _, sink := range c.sinks {
+		committable, ok := sink.(abstract.Committable)
+		if ok {
+			if err := committable.Commit(); err != nil {
+				logger.Log.Error("unable to commit", log.Error(err))
+				errs = append(errs, err)
+			}
+		}
+	}
+	if len(errs) == 0 {
+		return nil
+	}
+	return abstract.NewFatalError(xerrors.Errorf("sink failed to commit: %w", errs))
+}
+
 func New(isStrictSource bool, factories ...func() abstract.Sinker) func() abstract.Sinker {
 	return func() abstract.Sinker {
 		var childSinks []abstract.Sinker

@@ -14,6 +14,7 @@ import (
 type CanonizatorSink struct {
 	rows                  []abstract.ChangeItem
 	t                     *testing.T
+	commited              bool
 	cntr                  int
 	changeItemMiddlewares []func(items []abstract.ChangeItem) []abstract.ChangeItem
 }
@@ -29,6 +30,14 @@ func RemoveVariableFieldsRowMiddleware(items []abstract.ChangeItem) []abstract.C
 }
 
 func (c *CanonizatorSink) Close() error {
+	if c.commited {
+		if len(c.rows) > 0 {
+			logger.Log.Error("pushed rows list is not empty for commited sink")
+		}
+		c.commited = false
+		return nil
+	}
+
 	c.t.Run(fmt.Sprintf("canon %v", c.cntr), func(t *testing.T) {
 		for _, mw := range c.changeItemMiddlewares {
 			c.rows = mw(c.rows)
@@ -56,6 +65,11 @@ func (c *CanonizatorSink) Push(items []abstract.ChangeItem) error {
 		}
 		c.rows = append(c.rows, row)
 	}
+	return nil
+}
+
+func (c *CanonizatorSink) Commit() error {
+	c.commited = true
 	return nil
 }
 

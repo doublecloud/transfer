@@ -299,6 +299,26 @@ func (l *SnapshotLoader) endSnapshot(
 	return nil
 }
 
+func (l *SnapshotLoader) endDestination() error {
+	cfg := middlewares.MakeConfig(middlewares.WithNoData)
+	baseSink, err := sink.ConstructBaseSink(l.transfer, logger.Log, l.registry, l.cp, cfg)
+	if err != nil {
+		return xerrors.Errorf("unable to create sink to complete snapshot: %w", err)
+	}
+	defer func() {
+		if err := baseSink.Close(); err != nil {
+			logger.Log.Warn("failed sink Close", log.Error(err))
+		}
+	}()
+
+	completableSink, ok := baseSink.(abstract.Committable)
+	if !ok {
+		return nil
+	}
+
+	return completableSink.Commit()
+}
+
 func (l *SnapshotLoader) UploadTables(ctx context.Context, tables []abstract.TableDescription, updateIncrementalState bool) error {
 	if updateIncrementalState {
 		logger.Log.Info("Checking if we need to update incremental state for this transfer, applicable only for SnapshotOnly type")
@@ -476,6 +496,10 @@ func (l *SnapshotLoader) uploadMain(ctx context.Context, tables []abstract.Table
 
 	if err := l.sendTableControlEvent(ctx, sourceStorage, abstract.DoneShardedTableLoad, parts...); err != nil {
 		return errors.CategorizedErrorf(categories.Target, "unable to finish tables loading: %w", err)
+	}
+
+	if err := l.endDestination(); err != nil {
+		return errors.CategorizedErrorf(categories.Target, "unable to end snapshot on sink: %v", err)
 	}
 
 	if err := l.updateIncrementalState(updateIncrementalState, nextIncrementalState); err != nil {
@@ -684,6 +708,10 @@ func (l *SnapshotLoader) uploadSingle(ctx context.Context, tables []abstract.Tab
 
 	if err := l.sendTableControlEvent(ctx, sourceStorage, abstract.DoneShardedTableLoad, parts...); err != nil {
 		return errors.CategorizedErrorf(categories.Target, "unable to finish tables loading: %w", err)
+	}
+
+	if err := l.endDestination(); err != nil {
+		return errors.CategorizedErrorf(categories.Target, "unable to end snapshot on sink: %v", err)
 	}
 
 	logger.Log.Infof("Will update next incremental state for transfer: %v", nextIncrementalState)
@@ -948,6 +976,11 @@ func (l *SnapshotLoader) DoUploadTables(ctx context.Context, source abstract.Sto
 					return errors.CategorizedErrorf(categories.Source, "failed to load table '%s': %w", nextPart, err)
 				}
 
+				doneTableLoad := abstract.MakeDoneTableLoad(logPosition, *nextPart.ToTableDescription(), timestampTz, schema)
+				if err := l.sendTablePartControlEvent(doneTableLoad, pusher, nextPart); err != nil {
+					return errors.CategorizedErrorf(categories.Target, "unable to finish table loading: %w", err)
+				}
+
 				if err := state.Close(); err != nil {
 					logger.Log.Error(
 						fmt.Sprintf("Failed to deliver items to destination while loading table '%v' on worker %v", nextPart, l.workerIndex),
@@ -956,11 +989,6 @@ func (l *SnapshotLoader) DoUploadTables(ctx context.Context, source abstract.Sto
 						err = backoff.Permanent(err)
 					}
 					return errors.CategorizedErrorf(categories.Target, "failed to deliver items to destination while loading table '%v': %w", nextPart, err)
-				}
-
-				doneTableLoad := abstract.MakeDoneTableLoad(logPosition, *nextPart.ToTableDescription(), timestampTz, schema)
-				if err := l.sendTablePartControlEvent(doneTableLoad, pusher, nextPart); err != nil {
-					return errors.CategorizedErrorf(categories.Target, "unable to finish table loading: %w", err)
 				}
 
 				l.progressUpdateMutex.Lock()

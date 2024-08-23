@@ -178,7 +178,7 @@ func (t *SingleStaticTable) write(input []abstract.ChangeItem) error {
 			row := map[string]interface{}{}
 			for idx, col := range item.ColumnNames {
 				schemeID := colNameToIndex[col]
-				row[col] = restore(item.TableSchema.Columns()[schemeID], item.ColumnValues[idx])
+				row[col] = Restore(item.TableSchema.Columns()[schemeID], item.ColumnValues[idx])
 			}
 			if err := t.tableWriter.Write(row); err != nil {
 				s, _ := json.MarshalIndent(item, "", "    ")

@@ -75,7 +75,7 @@ func Existence(t *testing.T) {
 
 func Snapshot(t *testing.T) {
 	transfer := helpers.MakeTransfer(helpers.TransferID, &source, target, abstract.TransferTypeSnapshotOnly)
-	snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(client2.NewStatefulFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	require.NoError(t, snapshotLoader.LoadSnapshot(context.Background()))
 	require.NoError(t, helpers.WaitEqualRowsCount(t, source.Database, "__test_view", helpers.GetSampleableStorageByModel(t, source), helpers.GetSampleableStorageByModel(t, target.LegacyModel()), 10*time.Second))
 	require.NoError(t, helpers.WaitEqualRowsCount(t, source.Database, "__test", helpers.GetSampleableStorageByModel(t, source), helpers.GetSampleableStorageByModel(t, target.LegacyModel()), 10*time.Second))

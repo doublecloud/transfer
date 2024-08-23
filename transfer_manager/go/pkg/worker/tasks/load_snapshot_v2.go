@@ -287,6 +287,11 @@ func (l *SnapshotLoader) uploadV2Single(ctx context.Context, snapshotProvider ba
 		return xerrors.Errorf("unable to end snapshot: %w", err)
 	}
 
+	if err := l.endDestinationV2(); err != nil {
+		logger.Log.Error("Failed to end snapshot on sink", log.Error(err))
+		return xerrors.Errorf("failed to end snapshot on sink: %v", err)
+	}
+
 	if err := snapshotProvider.Close(); err != nil {
 		return xerrors.Errorf("unable to close data provider: %w", err)
 	}
@@ -434,6 +439,11 @@ func (l *SnapshotLoader) uploadV2Main(ctx context.Context, snapshotProvider base
 
 	if err := snapshotProvider.EndSnapshot(); err != nil {
 		return xerrors.Errorf("unable to end snapshot: %w", err)
+	}
+
+	if err := l.endDestinationV2(); err != nil {
+		logger.Log.Error("Failed to end snapshot on sink", log.Error(err))
+		return xerrors.Errorf("failed to end snapshot on sink: %v", err)
 	}
 
 	if err := snapshotProvider.Close(); err != nil {
@@ -638,6 +648,21 @@ func (l *SnapshotLoader) doUploadTablesV2(ctx context.Context, snapshotProvider 
 
 	if tableUploadErr != nil {
 		return tableUploadErr
+	}
+
+	return nil
+}
+
+func (l *SnapshotLoader) endDestinationV2() error {
+	target, err := targets.NewTarget(l.transfer, logger.Log, l.registry, l.cp)
+	if xerrors.Is(err, targets.UnknownTargetError) {
+		return l.endDestination()
+	}
+	if err != nil {
+		return xerrors.Errorf("unable to create target to try to end destination: %w", err)
+	}
+	if err := target.Close(); err != nil {
+		return xerrors.Errorf("unable to close target on ending destination: %w", err)
 	}
 
 	return nil

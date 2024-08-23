@@ -160,9 +160,9 @@ ROWS:
 					if !t.keys[col] {
 						hasOnlyPKey = false
 					} else {
-						keys[col] = restore(typeMap[col], item.ColumnValues[idx])
+						keys[col] = Restore(typeMap[col], item.ColumnValues[idx])
 					}
-					row[col] = restore(typeMap[col], item.ColumnValues[idx])
+					row[col] = Restore(typeMap[col], item.ColumnValues[idx])
 				}
 			}
 			if hasOnlyPKey {

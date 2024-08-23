@@ -39,7 +39,7 @@ func MakeAsyncSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Regi
 		if !xerrors.Is(err, NoAsyncSinkErr) {
 			return nil, errors.CategorizedErrorf(categories.Target, "failed to construct async sink: %w", err)
 		}
-		sink, err := constructBaseSink(transfer, lgr, mtrcs, cp, config)
+		sink, err := ConstructBaseSink(transfer, lgr, mtrcs, cp, config)
 		if err != nil {
 			return nil, errors.CategorizedErrorf(categories.Target, "failed to construct sink: %w", err)
 		}
@@ -87,8 +87,8 @@ func syncMiddleware(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Reg
 	}, nil
 }
 
-// constructBaseSink creates a sink of proper type
-func constructBaseSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config) (abstract.Sinker, error) {
+// ConstructBaseSink creates a sink of proper type
+func ConstructBaseSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config) (abstract.Sinker, error) {
 	switch dst := transfer.Dst.(type) {
 	case *server.MockDestination:
 		return dst.SinkerFactory(), nil

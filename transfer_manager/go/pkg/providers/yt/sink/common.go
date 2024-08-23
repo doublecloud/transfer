@@ -314,7 +314,7 @@ func beginTabletTransaction(ctx context.Context, ytClient yt.Client, fullAtomici
 	return tx, rollbacks, nil
 }
 
-func restore(colSchema abstract.ColSchema, val interface{}) interface{} {
+func Restore(colSchema abstract.ColSchema, val interface{}) interface{} {
 	if colSchema.PrimaryKey {
 		// TM-2118 TM-1893 DTSUPPORT-594 if primary key, should be marshalled independently to prevent "122" == "\"122\""
 		if strings.Contains(colSchema.OriginalType, "json") {
@@ -372,7 +372,7 @@ func restore(colSchema abstract.ColSchema, val interface{}) interface{} {
 			if v == nil {
 				return nil
 			}
-			return restore(colSchema, *v)
+			return Restore(colSchema, *v)
 		case "int64":
 			if v == nil {
 				return nil

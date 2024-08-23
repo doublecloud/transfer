@@ -18,6 +18,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/lfstaging"
 	yt_abstract2 "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/provider"
 	ytsink "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/sink"
+	staticsink "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/sink/v2"
 	ytstorage "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/storage"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/targets"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -123,8 +124,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 		if !p.transfer.SnapshotOnly() {
 			return nil, xerrors.Errorf("failed to create YT (static) sinker: can't make '%s' transfer while sinker is static", p.transfer.Type)
 		}
-
-		s, err = ytsink.NewStaticSink(dst, p.registry, p.logger, p.cp, p.transfer.ID)
+		s, err = staticsink.NewStaticSink(dst, p.cp, p.transfer.ID, p.registry, p.logger)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
 		}

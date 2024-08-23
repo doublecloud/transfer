@@ -119,6 +119,50 @@ func (c *ChangeItemsBuilder) Deletes(t *testing.T, oldKeys []map[string]interfac
 	return result
 }
 
+func (c *ChangeItemsBuilder) InitShardedTableLoad() []abstract.ChangeItem {
+	return []abstract.ChangeItem{
+		{
+			Kind:        abstract.InitShardedTableLoad,
+			Schema:      c.Schema,
+			Table:       c.Table,
+			TableSchema: c.TableSchema,
+		},
+	}
+}
+
+func (c *ChangeItemsBuilder) InitTableLoad() []abstract.ChangeItem {
+	return []abstract.ChangeItem{
+		{
+			Kind:        abstract.InitTableLoad,
+			Schema:      c.Schema,
+			Table:       c.Table,
+			TableSchema: c.TableSchema,
+		},
+	}
+}
+
+func (c *ChangeItemsBuilder) DoneTableLoad() []abstract.ChangeItem {
+	return []abstract.ChangeItem{
+		{
+			Kind:        abstract.DoneTableLoad,
+			Schema:      c.Schema,
+			Table:       c.Table,
+			TableSchema: c.TableSchema,
+		},
+	}
+}
+
+func (c *ChangeItemsBuilder) DoneShardedTableLoad() []abstract.ChangeItem {
+	return []abstract.ChangeItem{
+		{
+			Kind:        abstract.DoneShardedTableLoad,
+			Schema:      c.Schema,
+			Table:       c.Table,
+			TableSchema: c.TableSchema,
+		},
+	}
+}
+
 func NewChangeItemsBuilder(
 	schema string,
 	table string,

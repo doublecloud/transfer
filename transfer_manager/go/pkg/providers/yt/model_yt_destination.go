@@ -16,6 +16,12 @@ import (
 	"golang.org/x/exp/maps"
 )
 
+const (
+	dynamicDefaultChunkSize uint32 = 90_000            // items
+	staticDefaultChunkSize         = 100 * 1024 * 1024 // bytes
+	poolDefault                    = "transfer_manager"
+)
+
 type YtDestinationModel interface {
 	server.TmpPolicyProvider
 	ytclient.ConnParams
@@ -35,6 +41,7 @@ type YtDestinationModel interface {
 	Index() []string
 	HashColumn() string
 	PrimaryMedium() string
+	Pool() string
 	Atomicity() yt.Atomicity
 	LoseDataOnError() bool
 	DiscardBigValues() bool
@@ -43,7 +50,6 @@ type YtDestinationModel interface {
 	VersionColumn() string
 	AutoFlushPeriod() int
 	Ordered() bool
-	Static() bool
 	UseStaticTableOnSnapshot() bool
 	AltNames() map[string]string
 	NoBan() bool
@@ -70,14 +76,16 @@ type YtDestinationModel interface {
 	SetOrdered()
 	CompressionCodec() yt.ClientCompressionCodec
 
+	Static() bool
+	SortedStatic() bool
+	StaticChunkSize() int
+
 	DisableDatetimeHack() bool // TODO(@kry127) when remove hack?
 
 	GetConnectionData() ConnectionData
 	DisableProxyDiscovery() bool
 
 	BuffererConfig() bufferer.BuffererConfig
-
-	SupportSharding() bool
 
 	CustomAttributes() map[string]any
 	// MergeAttributes should be used to merge user-defined custom table attributes
@@ -101,6 +109,7 @@ type YtDestination struct {
 	Index          []string
 	HashColumn     string
 	PrimaryMedium  string
+	Pool           string       // pool for running merge and sort operations for static tables
 	Strict         bool         // DEPRECATED, UNUSED IN NEW DATA PLANE - use LoseDataOnError and Atomicity
 	Atomicity      yt.Atomicity // Atomicity for the dynamic tables being created in YT. See https://yt.yandex-team.ru/docs/description/dynamic_tables/sorted_dynamic_tables#atomarnost
 
@@ -118,7 +127,6 @@ type YtDestination struct {
 	AutoFlushPeriod          int
 	Ordered                  bool
 	TransformerConfig        map[string]string
-	Static                   bool
 	UseStaticTableOnSnapshot bool // optional.Optional[bool] breaks compatibility
 	AltNames                 map[string]string
 	NoBan                    bool
@@ -128,13 +136,17 @@ type YtDestination struct {
 	InitialTabletCount       uint32
 	WriteTimeoutSec          uint32
 	AllowReupload            bool
-	ChunkSize                uint32 // ChunkSize defines the number of items in a single request to YT
+	ChunkSize                uint32 // ChunkSize defines the number of items in a single request to YT for dynamic sink and chunk size in bytes for static sink
 	BufferTriggingSize       uint64
 	BufferTriggingInterval   time.Duration
 	CompressionCodec         yt.ClientCompressionCodec
 	DisableDatetimeHack      bool // This disable old hack for inverting time.Time columns as int64 timestamp for LF>YT
 	Connection               ConnectionData
 	CustomAttributes         map[string]string
+
+	Static          bool
+	SortedStatic    bool // true, if we need to sort static tables
+	StaticChunkSize int  // desired size of static table chunk in bytes
 }
 
 func (d *YtDestination) GetUseStaticTableOnSnapshot() bool {
@@ -286,6 +298,13 @@ func (d *YtDestinationWrapper) PrimaryMedium() string {
 	return d.Model.PrimaryMedium
 }
 
+func (d *YtDestinationWrapper) Pool() string {
+	if d.Model.Pool == "" {
+		return poolDefault
+	}
+	return d.Model.Pool
+}
+
 func (d *YtDestinationWrapper) Atomicity() yt.Atomicity {
 	return d.Model.Atomicity
 }
@@ -320,6 +339,17 @@ func (d *YtDestinationWrapper) Ordered() bool {
 
 func (d *YtDestinationWrapper) Static() bool {
 	return d.Model.Static
+}
+
+func (d *YtDestinationWrapper) SortedStatic() bool {
+	return d.Model.SortedStatic
+}
+
+func (d *YtDestinationWrapper) StaticChunkSize() int {
+	if d.Model.StaticChunkSize <= 0 {
+		return staticDefaultChunkSize
+	}
+	return d.Model.StaticChunkSize
 }
 
 func (d *YtDestinationWrapper) UseStaticTableOnSnapshot() bool {
@@ -403,6 +433,9 @@ func (d *YtDestinationWrapper) WithDefaults() {
 	if d.Model.Cluster == "" && env.In(env.EnvironmentInternal) {
 		d.Model.Cluster = "hahn"
 	}
+	if d.Model.Pool == "" {
+		d.Model.Pool = poolDefault
+	}
 	if d.Model.Cleanup == "" {
 		d.Model.Cleanup = server.Drop
 	}
@@ -410,7 +443,10 @@ func (d *YtDestinationWrapper) WithDefaults() {
 		d.Model.WriteTimeoutSec = 60
 	}
 	if d.Model.ChunkSize == 0 {
-		d.Model.ChunkSize = 90_000
+		d.Model.ChunkSize = dynamicDefaultChunkSize
+	}
+	if d.Model.StaticChunkSize == 0 {
+		d.Model.StaticChunkSize = staticDefaultChunkSize
 	}
 	if d.Model.BufferTriggingSize == 0 {
 		d.Model.BufferTriggingSize = model.BufferTriggingSizeDefault
@@ -471,10 +507,6 @@ func (d *YtDestinationWrapper) DisableProxyDiscovery() bool {
 
 func (d *YtDestinationWrapper) Proxy() string {
 	return d.Cluster()
-}
-
-func (d *YtDestinationWrapper) SupportSharding() bool {
-	return !d.Model.Static
 }
 
 // this is kusok govna, it here for purpose - backward compatibility and no reuse without backward compatibility

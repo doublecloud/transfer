@@ -32,7 +32,7 @@ func (di *dataItemView) makeOldKeys() (ytRow, error) {
 			return nil, xerrors.Errorf("Cannot find column %s in schema %v", colName, di.columns.columns)
 		}
 		if tableColumn.PrimaryKey {
-			row[colName] = restore(tableColumn, di.change.OldKeys.KeyValues[i])
+			row[colName] = Restore(tableColumn, di.change.OldKeys.KeyValues[i])
 		}
 	}
 	if len(row) == 0 {
@@ -49,7 +49,7 @@ func (di *dataItemView) makeRow() (ytRow, error) {
 		if !ok {
 			return nil, xerrors.Errorf("Cannot find column %s in schema %v", colName, di.columns.columns)
 		}
-		row[colName] = restore(tableColumn, di.change.ColumnValues[i])
+		row[colName] = Restore(tableColumn, di.change.ColumnValues[i])
 		if !di.columns.hasKey(colName) {
 			hasOnlyPKey = false
 		}
@@ -87,7 +87,7 @@ func (ii *indexItemView) indexColumnChanged() bool {
 	if ii.indexColumnPos < 0 {
 		return false
 	}
-	newIndexValue := restore(indexTableColumn, ii.change.ColumnValues[ii.indexColumnPos])
+	newIndexValue := Restore(indexTableColumn, ii.change.ColumnValues[ii.indexColumnPos])
 
 	oldIndexValue, ok := ii.oldRow[ii.indexColumnName]
 	if !ok {
@@ -120,7 +120,7 @@ func (ii *indexItemView) makeRow() (ytRow, error) {
 	}
 
 	row := ytRow{
-		ii.indexColumnName: restore(tableColumn, ii.change.ColumnValues[ii.indexColumnPos]),
+		ii.indexColumnName: Restore(tableColumn, ii.change.ColumnValues[ii.indexColumnPos]),
 		"_dummy":           nil,
 	}
 
@@ -133,7 +133,7 @@ func (ii *indexItemView) makeRow() (ytRow, error) {
 			continue
 		}
 
-		row[colName] = restore(tableColumn, ii.change.ColumnValues[i])
+		row[colName] = Restore(tableColumn, ii.change.ColumnValues[i])
 	}
 	return row, nil
 }

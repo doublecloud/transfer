@@ -23,7 +23,7 @@ func (l *legacyTableAdapter) Database() string {
 }
 
 func (l *legacyTableAdapter) Schema() string {
-	return "no schema"
+	return l.table.Namespace
 }
 
 func (l *legacyTableAdapter) Name() string {

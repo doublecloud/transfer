@@ -38,7 +38,7 @@ func RunActivate(transfer *model.Transfer) error {
 	return tasks.ActivateDelivery(
 		context.Background(),
 		nil,
-		coordinator.NewFakeClient(),
+		coordinator.NewStatefulFakeClient(),
 		*transfer,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
 	)
