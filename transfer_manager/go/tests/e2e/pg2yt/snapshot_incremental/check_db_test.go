@@ -81,7 +81,6 @@ func Snapshot(t *testing.T) {
 	Source.PreSteps.Constraint = true
 	transfer := helpers.MakeTransferForIncrementalSnapshot(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotOnly,
 		"public", "__test", cursorField, cursorValue, 15)
-	transfer.Runtime = new(abstract.YtRuntime)
 
 	fakeClient := coordinator.NewStatefulFakeClient()
 
