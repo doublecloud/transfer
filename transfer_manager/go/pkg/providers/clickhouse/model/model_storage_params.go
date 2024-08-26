@@ -97,6 +97,9 @@ func (w connConfigWrapper) ResolvePassword() (string, error) {
 }
 
 func (w connConfigWrapper) Database() string {
+	if w.p.Database == "*" {
+		return ""
+	}
 	return w.p.Database
 }
 

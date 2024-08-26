@@ -85,7 +85,9 @@ func (s *ChSource) fulfilledIncludesImpl(tID abstract.TableID, firstIncludeOnly 
 		strings.Join([]string{tID.Namespace, ".", "*"}, ""),
 	}
 	tIDNameVariant := strings.Join([]string{"\"", tID.Name, "\""}, tID.Name)
-
+	if s.Database == "*" {
+		return []string{tID.Fqtn()}
+	}
 	for _, table := range s.ExcludeTables {
 		for _, variant := range tIDVariants {
 			if table == variant {
