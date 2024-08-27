@@ -2,6 +2,7 @@ package ydb
 
 import (
 	"context"
+	"io"
 	"sync"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -51,6 +52,10 @@ func newReader(feedName string, tables []string, ydbClient *ydb.Driver, logger l
 		topicoptions.WithReaderBatchMaxCount(batchSize),
 		topicoptions.WithReaderTrace(trace.Topic{
 			OnReaderError: func(info trace.TopicReaderErrorInfo) {
+				if xerrors.Is(info.Error, io.EOF) {
+					logger.Warnf("topic reader received %s and will reconnect", info.Error)
+					return
+				}
 				logger.Errorf("topic reader error: %s", info.Error)
 			},
 		}),
