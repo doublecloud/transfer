@@ -48,11 +48,15 @@ type HTTPTarget struct {
 
 var syntaxErrorRegexp = regexp.MustCompile(`^.*\(at row ([0-9]+)\).*$`)
 
-func (c *HTTPTarget) toAltName(tableName string) string {
+func (c *HTTPTarget) toAltName(dbName string, tableName string) string {
+	targetDB := c.config.Database()
+	if targetDB == "" {
+		targetDB = dbName
+	}
 	if altName, ok := c.altNames[tableName]; ok {
 		tableName = altName
 	}
-	return tableName
+	return fmt.Sprintf("`%s`.`%s`", targetDB, tableName)
 }
 
 func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
@@ -70,8 +74,8 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 		}
 
 		blob := []byte(fmt.Sprintf(
-			"INSERT INTO `%s` (%s) %s FORMAT %s\n",
-			c.toAltName(table.Name),
+			"INSERT INTO %s (%s) %s FORMAT %s\n",
+			c.toAltName(table.Schema, table.Name),
 			strings.Join(escapedColumnNames, ","),
 			c.config.InsertSettings().AsQueryPart(),
 			batch.Format,
@@ -156,7 +160,7 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 				}
 
 				err := c.execDDL(func(distributed bool) error {
-					q := fmt.Sprintf(ddl, c.tableReferenceForDDL(c.toAltName(event.Name), distributed))
+					q := fmt.Sprintf(ddl, c.tableReferenceForDDL(c.toAltName(event.Namespace, event.Name), distributed))
 					return c.client.Exec(context.Background(), c.logger, c.HostByPart(nil), q)
 				})
 				if err != nil {
@@ -262,7 +266,7 @@ func (c *HTTPTarget) tableReferenceForDDL(name string, distributed bool) string 
 	if distributed {
 		cluster = fmt.Sprintf(" ON CLUSTER `%s`", c.cluster.Name())
 	}
-	return fmt.Sprintf("`%s`.`%s`%s", c.config.Database(), name, cluster)
+	return fmt.Sprintf("%s%s", name, cluster)
 }
 
 func (c *HTTPTarget) resolveCluster() error {

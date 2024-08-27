@@ -32,6 +32,7 @@ import (
 )
 
 var (
+	systemDBs            = util.NewSet("INFORMATION_SCHEMA", "information_schema", "system")
 	nonTransferableTypes = []string{
 		// For now we do not support next types:
 		//   Array(Date)
@@ -503,6 +504,10 @@ func (s *Storage) listTables(schema, name string) ([]table, error) {
 
 		if err := tablesRes.Scan(&database, &name, &totalRows, &pkeys, &engine); err != nil {
 			return nil, xerrors.Errorf("unable to parse table list query result: %w", err)
+		}
+
+		if systemDBs.Contains(database) {
+			continue
 		}
 		if totalRows != nil {
 			rows = *totalRows

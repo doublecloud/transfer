@@ -93,6 +93,9 @@ func MakeDistributedDDL(sql, cluster string) string {
 }
 
 func SetTargetDatabase(ddl string, sourceDB, targetDB string) string {
+	if targetDB == "" {
+		return ddl
+	}
 	switch {
 	case strings.Contains(ddl, fmt.Sprintf("CREATE TABLE %v.", sourceDB)):
 		ddl = strings.Replace(ddl, fmt.Sprintf("CREATE TABLE %v.", sourceDB), fmt.Sprintf("CREATE TABLE `%v`.", targetDB), 1)
