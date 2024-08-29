@@ -14,7 +14,7 @@ func init() {
 			Function: func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error) {
 				if !ci.IsRowEvent() {
 					switch ci.Kind {
-					case abstract.InitTableLoad, abstract.DoneTableLoad:
+					case abstract.InitShardedTableLoad, abstract.InitTableLoad, abstract.DoneTableLoad, abstract.DoneShardedTableLoad:
 						// perform fallback
 					default:
 						return ci, typesystem.FallbackDoesNotApplyErr
