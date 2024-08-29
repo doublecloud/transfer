@@ -24,6 +24,16 @@ type MysqlBinlogPositionState struct {
 	Position int64
 }
 
+type YtStaticPartState struct {
+	SchemaName            string
+	TableName             string
+	PartID                string
+	RotatedShardedTableID string
+	YtTargetPath          string
+	YtShardTargetPath     string
+	YtShardTmpPath        string
+}
+
 // TransferStateData contain transfer state, shared across retries / restarts
 // can contain any generic information about transfer progress
 type TransferStateData struct {
@@ -36,6 +46,7 @@ type TransferStateData struct {
 	OraclePosition      *OraclePositionState
 	MysqlGtid           *MysqlGtidState
 	MysqlBinlogPosition *MysqlBinlogPositionState
+	YtStaticPart        *YtStaticPartState
 }
 
 func (s *TransferStateData) GetMysqlBinlogPosition() *MysqlBinlogPositionState {
