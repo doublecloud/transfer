@@ -28,7 +28,7 @@ require (
 	github.com/go-mysql-org/go-mysql v1.8.0
 	github.com/go-resty/resty/v2 v2.12.0
 	github.com/go-sql-driver/mysql v1.7.1
-	github.com/goccy/go-json v0.10.2
+	github.com/goccy/go-json v0.10.3
 	github.com/godror/godror v0.29.0
 	github.com/gofrs/uuid v4.2.0+incompatible
 	github.com/golang-jwt/jwt/v4 v4.5.0
@@ -45,7 +45,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.0
 	github.com/jhump/protoreflect v1.15.6
 	github.com/jmoiron/sqlx v1.3.5
-	github.com/klauspost/compress v1.17.8
+	github.com/klauspost/compress v1.17.9
 	github.com/mattn/go-isatty v0.0.20
 	github.com/montanaflynn/stats v0.7.0
 	github.com/ohler55/ojg v1.15.0
@@ -83,12 +83,12 @@ require (
 	go.uber.org/zap v1.27.0
 	go.ytsaurus.tech/library/go/core/log v0.0.4
 	go.ytsaurus.tech/yt/go v0.0.21
-	golang.org/x/crypto v0.25.0
+	golang.org/x/crypto v0.26.0
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
 	golang.org/x/mod v0.18.0
-	golang.org/x/net v0.27.0
-	golang.org/x/sync v0.7.0
-	golang.org/x/text v0.16.0
+	golang.org/x/net v0.28.0
+	golang.org/x/sync v0.8.0
+	golang.org/x/text v0.17.0
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
 	golang.yandex/hasql v1.1.1
 	google.golang.org/api v0.171.0
@@ -165,7 +165,7 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.5 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/lufia/plan9stats v0.0.0-20220913051719-115f729f3c8c // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
@@ -223,8 +223,8 @@ require (
 	go.ytsaurus.tech/library/go/x/xreflect v0.0.3 // indirect
 	go.ytsaurus.tech/library/go/x/xruntime v0.0.4 // indirect
 	golang.org/x/oauth2 v0.20.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
-	golang.org/x/term v0.22.0 // indirect
+	golang.org/x/sys v0.24.0 // indirect
+	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	golang.org/x/tools v0.22.1-0.20240628205440-9c895dd76b34 // indirect
 	gonum.org/v1/gonum v0.14.0 // indirect
