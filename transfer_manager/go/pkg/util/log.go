@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/doublecloud/transfer/cloud/dataplatform/ycloud/protoutil"
 	"go.ytsaurus.tech/library/go/core/log"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -34,7 +35,7 @@ func AppendRequestDataField(
 	fieldNames FieldNames,
 	lgr log.Logger,
 ) []log.Field {
-	logSafeMessage := CopyWithoutSensitiveFields(protoMessage)
+	logSafeMessage := protoutil.CopyWithoutSensitiveFields(protoMessage)
 	logSafeJSON, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(logSafeMessage)
 	if err != nil {
 		lgr.Warn(fmt.Sprintf("Cannot marshal %s message into JSON", fieldNames.MainName), log.Error(err))

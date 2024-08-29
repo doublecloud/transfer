@@ -1,4 +1,4 @@
-package util
+package protoutil
 
 import (
 	cloud "github.com/doublecloud/transfer/cloud/bitbucket/private-api/yandex/cloud/priv"
