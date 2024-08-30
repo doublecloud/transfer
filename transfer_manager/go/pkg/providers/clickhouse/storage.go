@@ -32,7 +32,7 @@ import (
 )
 
 var (
-	systemDBs            = util.NewSet("INFORMATION_SCHEMA", "information_schema", "system")
+	systemDBs            = util.NewSet("INFORMATION_SCHEMA", "information_schema", "system", "_system")
 	nonTransferableTypes = []string{
 		// For now we do not support next types:
 		//   Array(Date)
