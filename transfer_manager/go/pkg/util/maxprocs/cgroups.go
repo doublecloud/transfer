@@ -2,13 +2,13 @@ package maxprocs
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
 
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/prometheus/procfs"
 	"golang.org/x/exp/slices"
 )
@@ -69,24 +69,27 @@ func parseCgroupMounts() (map[string]*procfs.MountInfo, error) {
 func currentCFSQuota() (float64, error) {
 	self, err := procfs.Self()
 	if err != nil {
+		//nolint:descriptiveerrors
 		return 0, err
 	}
 
 	cgroups, err := self.Cgroups()
 	if err != nil {
-		return 0, fmt.Errorf("parse current process cgroups: %w", err)
+		return 0, xerrors.Errorf("parse current process cgroups: %w", err)
 	}
 
 	mounts, err := parseCgroupMounts()
 	if err != nil {
-		return 0, fmt.Errorf("parse cgroups hierarchy: %w", err)
+		return 0, xerrors.Errorf("parse cgroups hierarchy: %w", err)
 	}
 
+	//nolint:descriptiveerrors
 	return parseCFSQuota(cgroups, mounts)
 }
 
 func parseCFSQuota(cgroups []procfs.Cgroup, mounts map[string]*procfs.MountInfo) (float64, error) {
 	if len(cgroups) == 0 || len(mounts) == 0 {
+		//nolint:descriptiveerrors
 		return 0, ErrNoCgroups
 	}
 
@@ -111,13 +114,13 @@ func parseCFSQuota(cgroups []procfs.Cgroup, mounts map[string]*procfs.MountInfo)
 
 		cgroupRoot, err := translateMountPath(mountPoint, cgroup.Path)
 		if err != nil {
-			errs = append(errs, fmt.Errorf("invalid cgroup %q path: %w", cgroup.Path, err))
+			errs = append(errs, xerrors.Errorf("invalid cgroup %q path: %w", cgroup.Path, err))
 			continue
 		}
 
 		quota, err := parser(cgroupRoot)
 		if err != nil {
-			errs = append(errs, fmt.Errorf("parse cgroup %q CPU quote: %w", cgroup.Path, err))
+			errs = append(errs, xerrors.Errorf("parse cgroup %q CPU quote: %w", cgroup.Path, err))
 			continue
 		}
 
@@ -126,18 +129,20 @@ func parseCFSQuota(cgroups []procfs.Cgroup, mounts map[string]*procfs.MountInfo)
 		}
 	}
 
+	//nolint:descriptiveerrors
 	return 0, errors.Join(errs...)
 }
 
 func parseV1CPUQuota(cgroupRoot string) (float64, error) {
 	quotaPath := filepath.Join(cgroupRoot, "cpu.cfs_quota_us")
 	if err := checkCgroupPath(quotaPath); err != nil {
+		//nolint:descriptiveerrors
 		return 0, err
 	}
 
 	cfsQuota, err := readFileInt(quotaPath)
 	if err != nil {
-		return -1, fmt.Errorf("parse cpu.cfs_quota_us: %w", err)
+		return -1, xerrors.Errorf("parse cpu.cfs_quota_us: %w", err)
 	}
 
 	// A value of -1 for cpu.cfs_quota_us indicates that the group does not have any
@@ -149,12 +154,13 @@ func parseV1CPUQuota(cgroupRoot string) (float64, error) {
 
 	periodPath := filepath.Join(cgroupRoot, "cpu.cfs_period_us")
 	if err := checkCgroupPath(periodPath); err != nil {
+		//nolint:descriptiveerrors
 		return 0, err
 	}
 
 	cfsPeriod, err := readFileInt(periodPath)
 	if err != nil {
-		return -1, fmt.Errorf("parse cpu.cfs_period_us: %w", err)
+		return -1, xerrors.Errorf("parse cpu.cfs_period_us: %w", err)
 	}
 
 	return float64(cfsQuota) / float64(cfsPeriod), nil
@@ -168,7 +174,7 @@ func parseV2CPUQuota(cgroupRoot string) (float64, error) {
 
 	rawCPUMax, err := os.ReadFile(cpuMaxPath)
 	if err != nil {
-		return -1, fmt.Errorf("read cpu.max: %w", err)
+		return -1, xerrors.Errorf("read cpu.max: %w", err)
 	}
 
 	/*
@@ -187,7 +193,7 @@ func parseV2CPUQuota(cgroupRoot string) (float64, error) {
 	*/
 	parts := strings.Fields(string(rawCPUMax))
 	if len(parts) != 2 {
-		return -1, fmt.Errorf("invalid cpu.max format: %s", string(rawCPUMax))
+		return -1, xerrors.Errorf("invalid cpu.max format: %s", string(rawCPUMax))
 	}
 
 	// "max" for $MAX indicates no limit
@@ -197,12 +203,12 @@ func parseV2CPUQuota(cgroupRoot string) (float64, error) {
 
 	cpuMax, err := strconv.Atoi(parts[0])
 	if err != nil {
-		return -1, fmt.Errorf("parse cpu.max[max] (%q): %w", parts[0], err)
+		return -1, xerrors.Errorf("parse cpu.max[max] (%q): %w", parts[0], err)
 	}
 
 	cpuPeriod, err := strconv.Atoi(parts[1])
 	if err != nil {
-		return -1, fmt.Errorf("parse cpu.max[period] (%q): %w", parts[1], err)
+		return -1, xerrors.Errorf("parse cpu.max[period] (%q): %w", parts[1], err)
 	}
 
 	return float64(cpuMax) / float64(cpuPeriod), nil
@@ -223,11 +229,11 @@ func checkCgroupPath(p string) error {
 func translateMountPath(mount *procfs.MountInfo, target string) (string, error) {
 	localPath, err := filepath.Rel(mount.Root, target)
 	if err != nil {
-		return "", fmt.Errorf("relative from root %q: %w", mount.Root, err)
+		return "", xerrors.Errorf("relative from root %q: %w", mount.Root, err)
 	}
 
 	if localPath == ".." || strings.HasPrefix(localPath, "../") {
-		return "", fmt.Errorf("target path %q is outside root %q", localPath, mount.Root)
+		return "", xerrors.Errorf("target path %q is outside root %q", localPath, mount.Root)
 	}
 
 	return filepath.Join(mount.MountPoint, localPath), nil

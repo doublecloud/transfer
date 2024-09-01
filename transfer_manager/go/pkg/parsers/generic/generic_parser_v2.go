@@ -11,12 +11,12 @@ import (
 
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/library/go/maxprocs"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/adapter"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/events"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/maxprocs"
 	"github.com/valyala/fastjson"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
