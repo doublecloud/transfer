@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	ydbLog "github.com/doublecloud/transfer/library/go/yandex/ydb/log"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/credentials"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb/logadapter"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
 	"github.com/ydb-platform/ydb-go-sdk/v3/trace"
@@ -60,7 +60,7 @@ func newClient2(ctx context.Context, cfg *YdbSource) (*ydb.Driver, error) {
 	options := make([]ydb.Option, len(creds.opts), len(creds.opts)+1)
 	copy(options, creds.opts)
 	if cfg.VerboseSDKLogs {
-		options = append(options, ydbLog.WithTraces(logger.Log, trace.DetailsAll))
+		options = append(options, logadapter.WithTraces(logger.Log, trace.DetailsAll))
 	}
 
 	db, err := ydb.Open(ctx, sugar.DSN(creds.instance, creds.database, creds.isSecure), options...)

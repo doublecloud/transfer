@@ -1,4 +1,4 @@
-package log
+package logadapter
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var _ ydbLog.Logger = adapter{}
+var _ ydbLog.Logger = *new(adapter)
 
 type adapter struct {
 	l log.Logger
