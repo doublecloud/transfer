@@ -124,9 +124,15 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 		if !p.transfer.SnapshotOnly() {
 			return nil, xerrors.Errorf("failed to create YT (static) sinker: can't make '%s' transfer while sinker is static", p.transfer.Type)
 		}
-		s, err = staticsink.NewStaticSink(dst, p.cp, p.transfer.ID, p.registry, p.logger)
-		if err != nil {
-			return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
+
+		if dst.Rotation() != nil {
+			if s, err = ytsink.NewRotatedStaticSink(dst, p.registry, p.logger, p.cp, p.transfer.ID); err != nil {
+				return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
+			}
+		} else {
+			if s, err = staticsink.NewStaticSink(dst, p.cp, p.transfer.ID, p.registry, p.logger); err != nil {
+				return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
+			}
 		}
 	} else {
 		jobIndex := getJobIndex(p.transfer)

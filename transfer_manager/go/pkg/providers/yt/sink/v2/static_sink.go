@@ -199,13 +199,7 @@ func (s *sink) getTablePath(item abstract.ChangeItem) ypath.Path {
 	if s.config == nil {
 		return yt2.SafeChild(s.dir, tableName)
 	}
-
-	path := yt2.SafeChild(s.dir, s.config.GetTableAltName(tableName))
-	if s.config.Rotation() != nil {
-		path = yt2.SafeChild(s.dir, s.config.Rotation().AnnotateWithTimeFromColumn(s.config.GetTableAltName(tableName), item))
-	}
-
-	return path
+	return yt2.SafeChild(s.dir, s.config.GetTableAltName(tableName))
 }
 
 func getNameFromTableID(id abstract.TableID) string {

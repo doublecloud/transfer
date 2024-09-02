@@ -87,6 +87,8 @@ type YtDestinationModel interface {
 
 	BuffererConfig() bufferer.BuffererConfig
 
+	SupportSharding() bool
+
 	CustomAttributes() map[string]any
 	// MergeAttributes should be used to merge user-defined custom table attributes
 	// with arbitrary attribute set (usually table settings like medium, ttl, ...)
@@ -507,6 +509,10 @@ func (d *YtDestinationWrapper) DisableProxyDiscovery() bool {
 
 func (d *YtDestinationWrapper) Proxy() string {
 	return d.Cluster()
+}
+
+func (d *YtDestinationWrapper) SupportSharding() bool {
+	return !(d.Model.Static && d.Rotation() != nil)
 }
 
 // this is kusok govna, it here for purpose - backward compatibility and no reuse without backward compatibility

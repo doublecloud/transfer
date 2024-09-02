@@ -1030,7 +1030,7 @@ func hackTimestamps(cols []abstract.ColSchema) []abstract.ColSchema {
 	return res
 }
 
-func NewStaticSink(cfg yt2.YtDestinationModel, registry metrics.Registry, logger log.Logger, cp coordinator.Coordinator, transferID string) (abstract.Sinker, error) {
+func NewRotatedStaticSink(cfg yt2.YtDestinationModel, registry metrics.Registry, logger log.Logger, cp coordinator.Coordinator, transferID string) (abstract.Sinker, error) {
 	ytClient, err := ytclient.FromConnParams(cfg, logger)
 	if err != nil {
 		return nil, err

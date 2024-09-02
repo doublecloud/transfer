@@ -248,7 +248,7 @@ func TestCustomAttributesStaticTable(t *testing.T) {
 		Namespace: "ns",
 		Name:      "weird_table_2",
 	}
-	statTable, err := NewStaticSink(cfg, metrics.NewRegistry(), logger.Log, coordinator.NewFakeClient(), "test_transfer")
+	statTable, err := NewRotatedStaticSink(cfg, metrics.NewRegistry(), logger.Log, coordinator.NewFakeClient(), "test_transfer")
 	require.NoError(t, err)
 	// generate some amount of random change items
 	var items []abstract.ChangeItem
