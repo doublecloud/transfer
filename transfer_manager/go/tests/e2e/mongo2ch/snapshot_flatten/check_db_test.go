@@ -6,9 +6,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/recipe"
 	mongocommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mongo"

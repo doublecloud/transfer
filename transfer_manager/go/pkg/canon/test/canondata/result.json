@@ -1,0 +1,22 @@
+{
+    "test.test.TestCanonWithNesting": {
+        "Name": "Something",
+        "New": {
+            "Test": "abc"
+        }
+    },
+    "test.test.TestFileNested": {
+        "Name": "Something",
+        "New": "{ \"Test\": \"abc\" }"
+    },
+    "test.test.TestIgnoreExternal/a": {
+        "Name": "Something",
+        "New": null
+    },
+    "test.test.TestIgnoreExternal/b": {
+        "Name": "Something else",
+        "New": null
+    },
+    "test.test.TestIgnoreExternal/c": "this test is skipped in general since externally saved result",
+    "test.test.TestWithFile": "abc"
+}

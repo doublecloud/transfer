@@ -252,5 +252,6 @@ func Prepare(params ContainerParams) error {
 	if err := os.Setenv(params.prefix+"RECIPE_CLICKHOUSE_HTTP_PORT", httpPort.Port()); err != nil {
 		return xerrors.Errorf("unable to set RECIPE_CLICKHOUSE_HTTP_PORT: %w", err)
 	}
+	_ = os.Setenv("RECIPE_CLICKHOUSE_BIN", "clickhouse")
 	return nil
 }
