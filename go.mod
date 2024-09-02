@@ -94,7 +94,7 @@ require (
 	google.golang.org/api v0.171.0
 	google.golang.org/genproto v0.0.0-20240221002015-b0ce06bbee7c
 	google.golang.org/genproto/googleapis/api v0.0.0-20240701130421-f6361c86f094
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240822170219-fc7c04adadcd
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/yaml.v2 v2.4.0
@@ -211,11 +211,11 @@ require (
 	github.com/zeebo/assert v1.3.1 // indirect
 	github.com/zeebo/xxh3 v1.0.2 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.53.0 // indirect
-	go.opentelemetry.io/otel v1.28.0 // indirect
-	go.opentelemetry.io/otel/metric v1.28.0 // indirect
-	go.opentelemetry.io/otel/trace v1.28.0 // indirect
+	go.opentelemetry.io/otel v1.29.0 // indirect
+	go.opentelemetry.io/otel/metric v1.29.0 // indirect
+	go.opentelemetry.io/otel/trace v1.29.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.ytsaurus.tech/library/go/blockcodecs v0.0.3 // indirect
 	go.ytsaurus.tech/library/go/core/xerrors v0.0.4 // indirect
