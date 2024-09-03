@@ -38,7 +38,11 @@ func checkLimits(row ytRow) error {
 }
 
 func (b *ytDataBatch) addUpdate(item changeItemView) error {
-	if !item.keysChanged() {
+	isKeysChanged, err := item.keysChanged()
+	if err != nil {
+		return xerrors.Errorf("Cannot check if keys were changed: %w", err)
+	}
+	if !isKeysChanged {
 		//nolint:descriptiveerrors
 		return b.addInsert(item)
 	}

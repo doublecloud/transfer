@@ -156,13 +156,20 @@ ROWS:
 						continue ROWS
 					}
 				}
-				if len(item.ColumnValues) > idx && t.props[col] {
-					if !t.keys[col] {
-						hasOnlyPKey = false
-					} else {
-						keys[col] = Restore(typeMap[col], item.ColumnValues[idx])
+				if len(item.ColumnValues) <= idx || !t.props[col] {
+					continue
+				}
+				if !t.keys[col] {
+					hasOnlyPKey = false
+				} else {
+					keys[col], err = Restore(typeMap[col], item.ColumnValues[idx])
+					if err != nil {
+						return xerrors.Errorf("unable to restore value for key column '%s': %w", col, err)
 					}
-					row[col] = Restore(typeMap[col], item.ColumnValues[idx])
+				}
+				row[col], err = Restore(typeMap[col], item.ColumnValues[idx])
+				if err != nil {
+					return xerrors.Errorf("unable to restore value for column '%s': %w", col, err)
 				}
 			}
 			if hasOnlyPKey {

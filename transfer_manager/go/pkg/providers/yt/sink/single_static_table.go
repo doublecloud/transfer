@@ -178,7 +178,11 @@ func (t *SingleStaticTable) write(input []abstract.ChangeItem) error {
 			row := map[string]interface{}{}
 			for idx, col := range item.ColumnNames {
 				schemeID := colNameToIndex[col]
-				row[col] = Restore(item.TableSchema.Columns()[schemeID], item.ColumnValues[idx])
+				var err error
+				row[col], err = Restore(item.TableSchema.Columns()[schemeID], item.ColumnValues[idx])
+				if err != nil {
+					return xerrors.Errorf("cannot restore value for column '%s': %w", col, err)
+				}
 			}
 			if err := t.tableWriter.Write(row); err != nil {
 				s, _ := json.MarshalIndent(item, "", "    ")

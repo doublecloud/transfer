@@ -269,7 +269,11 @@ func (t *StaticTable) Push(items []abstract.ChangeItem) error {
 						log.Any("current_item_schema", columnSchemaByName(item.TableSchema.Columns())))
 					return xerrors.Errorf("unknown column to get schema: %s", columnName)
 				}
-				row[columnName] = Restore(colSchema, item.ColumnValues[i])
+				var err error
+				row[columnName], err = Restore(colSchema, item.ColumnValues[i])
+				if err != nil {
+					return xerrors.Errorf("failed to restore value for column '%s': %w", columnName, err)
+				}
 			}
 			if err := writer.wr.Write(row); err != nil {
 				t.metrics.Table(tableID.Fqtn(), "error", 1)

@@ -45,7 +45,11 @@ func (w *Writer) Write(items []changeitem.ChangeItem) error {
 			if !ok {
 				return abstract.NewFatalError(xerrors.Errorf("unknown column name: %s", col))
 			}
-			row[col] = sink.Restore(colScheme, item.ColumnValues[idx])
+			var err error
+			row[col], err = sink.Restore(colScheme, item.ColumnValues[idx])
+			if err != nil {
+				return xerrors.Errorf("cannot restore value for column '%s': %w", col, err)
+			}
 		}
 		if err := w.writer.Write(row); err != nil {
 			w.logger.Error("cannot write changeItem to static table", log.Any("table", item.Table), log.Error(err))

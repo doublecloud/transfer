@@ -10,7 +10,7 @@ import (
 )
 
 type changeItemView interface {
-	keysChanged() bool
+	keysChanged() (bool, error)
 	makeOldKeys() (ytRow, error)
 	makeRow() (ytRow, error)
 }
@@ -20,8 +20,8 @@ type dataItemView struct {
 	columns *tableColumns
 }
 
-func (di *dataItemView) keysChanged() bool {
-	return di.change.KeysChanged()
+func (di *dataItemView) keysChanged() (bool, error) {
+	return di.change.KeysChanged(), nil
 }
 
 func (di *dataItemView) makeOldKeys() (ytRow, error) {
@@ -32,7 +32,11 @@ func (di *dataItemView) makeOldKeys() (ytRow, error) {
 			return nil, xerrors.Errorf("Cannot find column %s in schema %v", colName, di.columns.columns)
 		}
 		if tableColumn.PrimaryKey {
-			row[colName] = Restore(tableColumn, di.change.OldKeys.KeyValues[i])
+			var err error
+			row[colName], err = Restore(tableColumn, di.change.OldKeys.KeyValues[i])
+			if err != nil {
+				return nil, xerrors.Errorf("Cannot restore value for column '%s': %w", colName, err)
+			}
 		}
 	}
 	if len(row) == 0 {
@@ -49,7 +53,11 @@ func (di *dataItemView) makeRow() (ytRow, error) {
 		if !ok {
 			return nil, xerrors.Errorf("Cannot find column %s in schema %v", colName, di.columns.columns)
 		}
-		row[colName] = Restore(tableColumn, di.change.ColumnValues[i])
+		var err error
+		row[colName], err = Restore(tableColumn, di.change.ColumnValues[i])
+		if err != nil {
+			return nil, xerrors.Errorf("Cannot restore value for column '%s': %w", colName, err)
+		}
 		if !di.columns.hasKey(colName) {
 			hasOnlyPKey = false
 		}
@@ -73,32 +81,37 @@ type indexItemView struct {
 	indexColumnName string
 }
 
-func (ii *indexItemView) indexColumnChanged() bool {
-	if ii.change.Kind != "update" {
-		return false
-	}
-	if ii.oldRow == nil {
-		return false
+func (ii *indexItemView) indexColumnChanged() (bool, error) {
+	if ii.change.Kind != "update" || ii.oldRow == nil {
+		return false, nil
 	}
 	indexTableColumn, ok := ii.columns.getByName(ii.indexColumnName)
-	if !ok {
-		return false
+	if !ok || ii.indexColumnPos < 0 {
+		return false, nil
 	}
-	if ii.indexColumnPos < 0 {
-		return false
+	newIndexValue, err := Restore(indexTableColumn, ii.change.ColumnValues[ii.indexColumnPos])
+	if err != nil {
+		return false, xerrors.Errorf("Cannot restore value for index column '%s': %w", ii.indexColumnName, err)
 	}
-	newIndexValue := Restore(indexTableColumn, ii.change.ColumnValues[ii.indexColumnPos])
 
 	oldIndexValue, ok := ii.oldRow[ii.indexColumnName]
 	if !ok {
-		return false
+		return false, nil
 	}
 
-	return !reflect.DeepEqual(oldIndexValue, newIndexValue)
+	return !reflect.DeepEqual(oldIndexValue, newIndexValue), nil
 }
 
-func (ii *indexItemView) keysChanged() bool {
-	return ii.indexColumnChanged() || ii.dataView.keysChanged()
+func (ii *indexItemView) keysChanged() (bool, error) {
+	isIndexColumnChanged, err := ii.indexColumnChanged()
+	if err != nil {
+		return false, xerrors.Errorf("Cannot check if index column changed: %w", err)
+	}
+	isKeysChanged, err := ii.dataView.keysChanged()
+	if err != nil {
+		return false, xerrors.Errorf("Cannot check if keys changed: %w", err)
+	}
+	return isIndexColumnChanged || isKeysChanged, nil
 }
 
 func (ii *indexItemView) makeOldKeys() (ytRow, error) {
@@ -119,8 +132,12 @@ func (ii *indexItemView) makeRow() (ytRow, error) {
 		return nil, xerrors.Errorf("Cannot find column %s in schema %v", ii.indexColumnName, ii.columns.columns)
 	}
 
+	value, err := Restore(tableColumn, ii.change.ColumnValues[ii.indexColumnPos])
+	if err != nil {
+		return nil, xerrors.Errorf("Cannot restore value for index column '%s': %w", tableColumn.ColumnName, err)
+	}
 	row := ytRow{
-		ii.indexColumnName: Restore(tableColumn, ii.change.ColumnValues[ii.indexColumnPos]),
+		ii.indexColumnName: value,
 		"_dummy":           nil,
 	}
 
@@ -133,7 +150,10 @@ func (ii *indexItemView) makeRow() (ytRow, error) {
 			continue
 		}
 
-		row[colName] = Restore(tableColumn, ii.change.ColumnValues[i])
+		row[colName], err = Restore(tableColumn, ii.change.ColumnValues[i])
+		if err != nil {
+			return nil, xerrors.Errorf("Cannot restore value for column '%s': %w", colName, err)
+		}
 	}
 	return row, nil
 }

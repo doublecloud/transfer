@@ -2,6 +2,7 @@ package sink
 
 import (
 	"testing"
+	"time"
 
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/stretchr/testify/require"
@@ -609,5 +610,70 @@ func TestSchemasAreEqual(t *testing.T) {
 		}
 
 		require.False(t, schemasAreEqual(currentSchema, receivedSchema))
+	})
+}
+
+func TestFitTimeToYT(t *testing.T) {
+	ytMinTime, _ := time.Parse(time.RFC3339Nano, "1970-01-01T00:00:00.000000Z")
+	ytMaxTime, _ := time.Parse(time.RFC3339Nano, "2105-12-31T23:59:59.999999Z")
+	beforeMinTime := ytMinTime.Add(-time.Hour * 240)
+	afterMaxTime := ytMaxTime.Add(time.Hour * 240)
+	now := time.Now()
+
+	t.Run("Timestamp", func(t *testing.T) {
+		minTimestamp, err1 := schema.NewTimestamp(ytMinTime)
+		maxTimestamp, err2 := schema.NewTimestamp(ytMaxTime)
+		nowTimestamp, err3 := schema.NewTimestamp(now)
+		require.Equal(t, []error{nil, nil, nil}, []error{err1, err2, err3})
+
+		res, err := castTimeWithDataLoss(beforeMinTime, schema.NewTimestamp)
+		require.NoError(t, err)
+		require.Equal(t, minTimestamp, res) // Before min time is rounded to min time.
+
+		res, err = castTimeWithDataLoss(afterMaxTime, schema.NewTimestamp)
+		require.NoError(t, err)
+		require.Equal(t, maxTimestamp, res) // After max time is rounded to max time.
+
+		res, err = castTimeWithDataLoss(now, schema.NewTimestamp)
+		require.NoError(t, err)
+		require.Equal(t, nowTimestamp, res) // Now time is not changed.
+	})
+
+	t.Run("Date", func(t *testing.T) {
+		minDate, err1 := schema.NewDate(ytMinTime)
+		maxDate, err2 := schema.NewDate(ytMaxTime)
+		nowDate, err3 := schema.NewDate(now)
+		require.Equal(t, []error{nil, nil, nil}, []error{err1, err2, err3})
+
+		res, err := castTimeWithDataLoss(beforeMinTime, schema.NewDate)
+		require.NoError(t, err)
+		require.Equal(t, minDate, res) // Before min time is rounded to min time.
+
+		res, err = castTimeWithDataLoss(afterMaxTime, schema.NewDate)
+		require.NoError(t, err)
+		require.Equal(t, maxDate, res) // After max time is rounded to max time.
+
+		res, err = castTimeWithDataLoss(now, schema.NewDate)
+		require.NoError(t, err)
+		require.Equal(t, nowDate, res) // Now time is not changed.
+	})
+
+	t.Run("Datetime", func(t *testing.T) {
+		minDatetime, err1 := schema.NewDatetime(ytMinTime)
+		maxDatetime, err2 := schema.NewDatetime(ytMaxTime)
+		nowDatetime, err3 := schema.NewDatetime(now)
+		require.Equal(t, []error{nil, nil, nil}, []error{err1, err2, err3})
+
+		res, err := castTimeWithDataLoss(beforeMinTime, schema.NewDatetime)
+		require.NoError(t, err)
+		require.Equal(t, minDatetime, res) // Before min time is rounded to min time.
+
+		res, err = castTimeWithDataLoss(afterMaxTime, schema.NewDatetime)
+		require.NoError(t, err)
+		require.Equal(t, maxDatetime, res) // After max time is rounded to max time.
+
+		res, err = castTimeWithDataLoss(now, schema.NewDatetime)
+		require.NoError(t, err)
+		require.Equal(t, nowDatetime, res) // Now time is not changed.
 	})
 }

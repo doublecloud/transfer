@@ -118,7 +118,7 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 
 func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, table abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.IncrementOnly() {
-		return xerrors.New("Only allowed mode for Kafka source is replication")
+		return xerrors.New("Only allowed mode for YDS source is replication")
 	}
 	src, ok := p.transfer.Src.(*YDSSource)
 	if !ok {

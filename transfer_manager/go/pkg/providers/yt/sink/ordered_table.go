@@ -306,7 +306,11 @@ func (i *InsertChangeItem) MarshalYSON(w *yson.Writer) error {
 	w.BeginMap()
 	for idx, colName := range i.ChangeItem.ColumnNames {
 		w.MapKeyString(colName)
-		w.Any(Restore(i.ChangeItem.TableSchema.Columns()[idx], i.ChangeItem.ColumnValues[idx]))
+		value, err := Restore(i.ChangeItem.TableSchema.Columns()[idx], i.ChangeItem.ColumnValues[idx])
+		if err != nil {
+			return xerrors.Errorf("Unable to restore value for column '%s': %w", colName, err)
+		}
+		w.Any(value)
 	}
 	w.MapKeyString("$tablet_index")
 	w.Any(i.TabletIndex)

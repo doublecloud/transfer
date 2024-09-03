@@ -1,0 +1,88 @@
+{
+    "interval.interval.TestGroup/canon": [
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "1"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "int64",
+                "Name": "value",
+                "Value": "1"
+            }
+        ],
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "2"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "<nil>",
+                "Name": "value",
+                "Value": "<nil>"
+            }
+        ],
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "3"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "int64",
+                "Name": "value",
+                "Value": "123000"
+            }
+        ],
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "4"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "int64",
+                "Name": "value",
+                "Value": "4291660800000000"
+            }
+        ],
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "5"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "int64",
+                "Name": "value",
+                "Value": "31536000000000"
+            }
+        ],
+        [
+            {
+                "DataType": "int64",
+                "GoType": "int64",
+                "Name": "id",
+                "Value": "6"
+            },
+            {
+                "DataType": "interval",
+                "GoType": "int64",
+                "Name": "value",
+                "Value": "7862400000000"
+            }
+        ]
+    ]
+}

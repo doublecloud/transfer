@@ -8,7 +8,6 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/types"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/migrate"
@@ -314,77 +313,89 @@ func beginTabletTransaction(ctx context.Context, ytClient yt.Client, fullAtomici
 	return tx, rollbacks, nil
 }
 
-func Restore(colSchema abstract.ColSchema, val interface{}) interface{} {
-	if colSchema.PrimaryKey {
+func Restore(colSchema abstract.ColSchema, val interface{}) (interface{}, error) {
+	if colSchema.PrimaryKey && strings.Contains(colSchema.OriginalType, "json") {
 		// TM-2118 TM-1893 DTSUPPORT-594 if primary key, should be marshalled independently to prevent "122" == "\"122\""
-		if strings.Contains(colSchema.OriginalType, "json") {
-			stringifiedJSON, _ := json.Marshal(val)
-			return stringifiedJSON
+		stringifiedJSON, err := json.Marshal(val)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to marshal pkey json: %w", err)
 		}
+		return stringifiedJSON, nil
 	}
 
 	switch v := val.(type) {
 	case time.Time:
 		switch strings.ToLower(colSchema.DataType) {
 		case string(schema.TypeTimestamp):
-			ytv, timeErr := schema.NewTimestamp(v)
-			if timeErr == nil {
-				return ytv
+			casted, err := castTimeWithDataLoss(v, schema.NewTimestamp)
+			if err != nil {
+				return nil, xerrors.Errorf("unable to create Timestamp: %w", err)
 			}
+			return casted, nil
 
-			newTimeValue, fitErr := types.FitTimeToYT(v, timeErr)
-			if fitErr != nil {
-				return v
-			}
-			ytv, _ = schema.NewTimestamp(newTimeValue)
-			return ytv
 		case string(schema.TypeDate):
-			ytv, timeErr := schema.NewDate(v)
-			if timeErr == nil {
-				return ytv
+			casted, err := castTimeWithDataLoss(v, schema.NewDate)
+			if err != nil {
+				return nil, xerrors.Errorf("unable to create Date: %w", err)
 			}
+			return casted, nil
 
-			newTimeValue, fitErr := types.FitTimeToYT(v, timeErr)
-			if fitErr != nil {
-				return v
-			}
-			ytv, _ = schema.NewDate(newTimeValue)
-			return ytv
 		case string(schema.TypeDatetime):
-			ytv, timeErr := schema.NewDatetime(v)
-			if timeErr == nil {
-				return ytv
+			casted, err := castTimeWithDataLoss(v, schema.NewDatetime)
+			if err != nil {
+				return nil, xerrors.Errorf("unable to create Datetime: %w", err)
 			}
+			return casted, nil
 
-			newTimeValue, fitErr := types.FitTimeToYT(v, timeErr)
-			if fitErr != nil {
-				return v
-			}
-
-			ytv, _ = schema.NewDatetime(newTimeValue)
-			return ytv
-		case "int64":
-			return -v.UnixNano()
+		case string(schema.TypeInt64):
+			return -v.UnixNano(), nil
 		}
+
 	case *time.Time:
-		switch colSchema.DataType {
-		case "DateTime", "datetime":
+		switch strings.ToLower(colSchema.DataType) {
+		case string(schema.TypeDatetime):
 			if v == nil {
-				return nil
+				return nil, nil
 			}
-			return Restore(colSchema, *v)
-		case "int64":
+			restored, err := Restore(colSchema, *v)
+			if err != nil {
+				return nil, xerrors.Errorf("unable to restore datetime from ptr: %w", err)
+			}
+			return restored, nil
+		case string(schema.TypeInt64):
 			if v == nil {
-				return nil
+				return nil, nil
 			}
-			return -v.UnixNano()
+			return -v.UnixNano(), nil
 		}
+
 	case json.Number:
 		if colSchema.OriginalType == "mysql:json" {
-			return v
+			return v, nil
 		}
-		result, _ := v.Float64()
-		return result
+		result, err := v.Float64()
+		if err != nil {
+			return nil, xerrors.Errorf("unable to parse float64 from json number: %w", err)
+		}
+		return result, nil
+
+	case time.Duration:
+		asInterval, err := schema.NewInterval(v)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to create interval: %w", err)
+		}
+		return asInterval, nil
+
+	case *time.Duration:
+		if v == nil {
+			return nil, nil
+		}
+		restored, err := Restore(colSchema, *v)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to restore interval from ptr: %w", err)
+		}
+		return restored, nil
+
 	default:
 		if colSchema.Numeric() {
 			// TODO: remove this kostyl
@@ -393,7 +404,7 @@ func Restore(colSchema abstract.ColSchema, val interface{}) interface{} {
 			// and it would return meaningfull error later
 			switch val.(type) {
 			case bool, map[string]interface{}, interface{}:
-				return val
+				return val, nil
 			}
 		}
 	}
@@ -401,14 +412,17 @@ func Restore(colSchema abstract.ColSchema, val interface{}) interface{} {
 	if colSchema.PrimaryKey && colSchema.DataType == "any" { // YT not support yson as primary key
 		switch v := val.(type) {
 		case string:
-			return v
+			return v, nil
 		default:
-			d, _ := json.Marshal(val)
-			return string(d)
+			bytes, err := json.Marshal(val)
+			if err != nil {
+				return nil, xerrors.Errorf("unable to marshal item's value of type '%T': %w", val, err)
+			}
+			return string(bytes), nil
 		}
 	}
 
-	return abstract.Restore(colSchema, val)
+	return abstract.Restore(colSchema, val), nil
 }
 
 // TODO: Completely remove this legacy hack
@@ -435,4 +449,36 @@ func schemasAreEqual(current, received []abstract.ColSchema) bool {
 	}
 
 	return true
+}
+
+// castTimeWithDataLoss tries to cast value and trims time if it not fits into YT's range. TODO: Remove in TM-7874.
+func castTimeWithDataLoss[T any](value time.Time, caster func(time.Time) (T, error)) (T, error) {
+	var rangeErr *schema.RangeError
+	var nilT T // Used as return value if unexpected error occures.
+
+	casted, err := caster(value)
+	if err == nil || !xerrors.As(err, &rangeErr) {
+		// If error is nil, or it is not RangeError – castTimeWithDataLoss behaves just like caster.
+		return casted, err
+	}
+
+	// Unsuccessful cast because of RangeError, extract available range from error and trim value.
+	minTime, minOk := rangeErr.MinValue.(time.Time)
+	maxTime, maxOk := rangeErr.MaxValue.(time.Time)
+	if !minOk || !maxOk {
+		msg := "unable to extract range bounds, got (%T, %T) instead of (time.Time, time.Time) from RangeError = '%w'"
+		return nilT, xerrors.Errorf(msg, value, minTime, maxTime, err)
+	}
+
+	if value.Before(minTime) {
+		value = minTime
+	} else if value.After(maxTime) {
+		value = maxTime
+	}
+
+	casted, err = caster(value)
+	if err != nil {
+		return nilT, xerrors.Errorf("unable to cast time '%v': %w", value, err)
+	}
+	return casted, nil
 }
