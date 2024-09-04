@@ -8,7 +8,6 @@ import (
 
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log/corelogadapter"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -18,7 +17,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	gp "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker/queues"
-	ydbcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/xtls"
@@ -436,10 +435,10 @@ func NewSourceWithOpts(transferID string, cfg *YDSSource, logger log.Logger, reg
 func NewSource(transferID string, cfg *YDSSource, logger log.Logger, registry metrics.Registry) (*Source, error) {
 	if cfg.Credentials == nil {
 		var err error
-		cfg.Credentials, err = ydbcommon.ResolveCredentials(
+		cfg.Credentials, err = ydb.ResolveCredentials(
 			cfg.UserdataAuth,
 			string(cfg.Token),
-			ydbcommon.JWTAuthParams{
+			ydb.JWTAuthParams{
 				KeyContent:      cfg.SAKeyContent,
 				TokenServiceURL: cfg.TokenServiceURL,
 			},
@@ -454,13 +453,13 @@ func NewSource(transferID string, cfg *YDSSource, logger log.Logger, registry me
 }
 
 type sourceOpts struct {
-	creds  ydb.Credentials
+	creds  ydb.TokenCredentials
 	parser parsers.Parser
 }
 
 type SourceOpt = func(*sourceOpts) *sourceOpts
 
-func WithCreds(creds ydb.Credentials) SourceOpt {
+func WithCreds(creds ydb.TokenCredentials) SourceOpt {
 	return func(o *sourceOpts) *sourceOpts {
 		o.creds = creds
 		return o

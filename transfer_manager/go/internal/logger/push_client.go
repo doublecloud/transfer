@@ -11,8 +11,8 @@ import (
 
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log/corelogadapter"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/staticcreds"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/size"
 	"go.uber.org/zap/zapcore"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -29,7 +29,7 @@ type LogbrokerConfig struct {
 	Token       string
 	Topic       string
 	SourceID    string
-	Credentials ydb.Credentials
+	Credentials staticcreds.TokenCredentials
 	Port        int
 }
 
@@ -60,7 +60,7 @@ func (p *unbufferedPusher) Close() error {
 
 func NewLogbrokerLoggerFromConfig(cfg *LogbrokerConfig, registry metrics.Registry) (log.Logger, error) {
 	if cfg.Credentials == nil && cfg.Token != "" {
-		cfg.Credentials = ydb.AuthTokenCredentials{AuthToken: cfg.Token}
+		cfg.Credentials = staticcreds.New(cfg.Token)
 	}
 
 	lgr, _, err := NewLogbrokerLoggerDeprecated(&persqueue.WriterOptions{
@@ -194,7 +194,7 @@ func NewJobLogger(cfg LogbrokerConfig, registry metrics.Registry) (log.Logger, i
 			persqueue.WriterOptions{
 				Logger:         corelogadapter.New(inr),
 				Endpoint:       instance,
-				Credentials:    ydb.AuthTokenCredentials{AuthToken: token},
+				Credentials:    staticcreds.New(token),
 				Topic:          topic,
 				SourceID:       []byte(jobID),
 				RetryOnFailure: true,

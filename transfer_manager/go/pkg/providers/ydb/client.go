@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb/logadapter"
@@ -13,29 +12,6 @@ import (
 	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
 	"github.com/ydb-platform/ydb-go-sdk/v3/trace"
 )
-
-type YDBClient struct {
-	Driver   ydb.Driver
-	Database string
-	Instance string
-}
-
-func NewYDBClient(ctx context.Context, database, instance string, credentials ydb.Credentials, tlsConfig *tls.Config) (*YDBClient, error) {
-	trace := NewLogTrace(logger.Log)
-	dialer := &ydb.Dialer{
-		DriverConfig: &ydb.DriverConfig{
-			Database:    database,
-			Credentials: credentials,
-			Trace:       trace.YDBTrace(),
-		},
-	}
-	dialer.TLSConfig = tlsConfig
-	driver, err := dialer.Dial(ctx, instance)
-	if err != nil {
-		return nil, xerrors.Errorf("YDB dial error: %w", err)
-	}
-	return &YDBClient{Driver: driver, Database: database, Instance: instance}, nil
-}
 
 func NewYDBDriver(ctx context.Context, database, instance string, credentials credentials.Credentials, tlsConfig *tls.Config) (*ydb3.Driver, error) {
 	secure := tlsConfig != nil

@@ -3,9 +3,9 @@ package logbroker
 import (
 	"strings"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 )
 
 type LbSource struct {
@@ -15,7 +15,7 @@ type LbSource struct {
 	Consumer       string
 	Database       string
 	AllowTTLRewind bool
-	Credentials    ydb.Credentials
+	Credentials    ydb.TokenCredentials
 	Port           int
 
 	IsLbSink bool // it's like IsHomo

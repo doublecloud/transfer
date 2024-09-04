@@ -3,12 +3,12 @@ package logbroker
 import (
 	"fmt"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares/async/bufferer"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 )
 
 type LbDestination struct {
@@ -22,7 +22,7 @@ type LbDestination struct {
 	Cleanup           server.CleanupType
 	MaxChunkSize      uint // Deprecated, can be deleted, but I'm scared by the GOB
 	WriteTimeoutSec   int
-	Credentials       ydb.Credentials
+	Credentials       ydb.TokenCredentials
 	Port              int
 
 	Topic       string // full-name version

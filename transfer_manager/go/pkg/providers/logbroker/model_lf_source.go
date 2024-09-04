@@ -3,11 +3,11 @@ package logbroker
 import (
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 )
 
 type LfSource struct {
@@ -29,7 +29,7 @@ type LfSource struct {
 	MaxReadMessagesCount    uint32
 	OnlyLocal               bool
 	LfParser                bool
-	Credentials             ydb.Credentials
+	Credentials             ydb.TokenCredentials
 	Port                    int
 	AllowTTLRewind          bool
 
