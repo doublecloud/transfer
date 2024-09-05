@@ -1,11 +1,11 @@
 package yds
 
 import (
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 )
 
 type YDSSource struct {
@@ -31,7 +31,7 @@ type YDSSource struct {
 	Underlay     bool
 
 	// Auth properties
-	Credentials      ydb.Credentials
+	Credentials      ydb.TokenCredentials
 	ServiceAccountID string `model:"ServiceAccountId"`
 	SAKeyContent     string
 	TokenServiceURL  string

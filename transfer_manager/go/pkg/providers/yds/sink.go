@@ -7,7 +7,6 @@ import (
 
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue/log/corelogadapter"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
@@ -18,7 +17,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, credentials ydb.Credentials) logbroker.WriterConfigFactory {
+func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, credentials ydbcommon.TokenCredentials) logbroker.WriterConfigFactory {
 	return func(config *logbroker.LbDestination, shard, groupID, topic string, extras map[string]string, logger log.Logger) (*persqueue.WriterOptions, error) {
 		sourceID := fmt.Sprintf("%v_%v", shard, groupID)
 		fullTopicName := path.Join(config.Database, topic)

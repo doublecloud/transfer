@@ -3,13 +3,18 @@ package ydb
 import (
 	"context"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/ydb"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/credentials"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var JWTCredentials = func(content string, tokenServiceURL string) (ydb.Credentials, error) {
+// TokenCredentials is an interface that contains options used to authorize a
+// client.
+type TokenCredentials interface {
+	Token(context.Context) (string, error)
+}
+
+var JWTCredentials = func(content string, tokenServiceURL string) (TokenCredentials, error) {
 	return nil, xerrors.Errorf("not implemented")
 }
 
@@ -22,7 +27,7 @@ type Credentials interface {
 	YandexCloudAPICredentials()
 }
 
-var NewYDBCredsFromYCCreds = func(ycCreds Credentials, tokenService string) ydb.Credentials {
+var NewYDBCredsFromYCCreds = func(ycCreds Credentials, tokenService string) TokenCredentials {
 	return nil
 }
 
@@ -37,7 +42,7 @@ func ResolveCredentials(
 	jwt JWTAuthParams,
 	serviceAccountID string,
 	logger log.Logger,
-) (ydb.Credentials, error) {
+) (TokenCredentials, error) {
 	if serviceAccountID != "" {
 		cc, err := credentials.NewServiceAccountCreds(logger, serviceAccountID)
 		if err != nil {
