@@ -64,6 +64,7 @@ func TestYTStaticTableSink(t *testing.T) {
 	t.Run("SingleSnapshotOneTable", singleSnapshotOneTable)
 	t.Run("ShardedSnapshotManyTables", shardedSnapshotManyTables)
 	t.Run("RetryingPartsOnError", retryingParts)
+	t.Run("PushTwoTablesInOne", twoTablesInOne)
 	t.Run("WithShuffledColumns", withShuffledColumns)
 }
 
@@ -255,6 +256,61 @@ func retryingParts(t *testing.T) {
 	}, true)
 }
 
+func twoTablesInOne(t *testing.T) {
+	ytEnv, cancel := yttest.NewEnv(t)
+	defer cancel()
+
+	cp := coordinator.NewStatefulFakeClient()
+
+	transferID := "test_two_in_one"
+	firstTableName := "first_table"
+	secondTableName := "second_table"
+
+	dstCfg := dstSample
+	dstCfg.AltNames = map[string]string{
+		secondTableName: firstTableName,
+	}
+	dst := newYTDstModel(dstCfg, false)
+
+	ok, err := ytEnv.YT.NodeExists(context.Background(), ypath.Path(fmt.Sprintf("%s/%s", dst.Path(), firstTableName)), nil)
+	require.NoError(t, err)
+	require.False(t, ok)
+
+	itemsBuilderFirstTable := helpers.NewChangeItemsBuilder("public", firstTableName, testDstSchema)
+	itemsBuilderSecondTable := helpers.NewChangeItemsBuilder("public", secondTableName, testDstSchema)
+
+	pushItemsWithoutCommit(t, cp, transferID, dst, [][]abstract.ChangeItem{
+		itemsBuilderFirstTable.InitShardedTableLoad(),
+		itemsBuilderSecondTable.InitShardedTableLoad(),
+	})
+
+	pushItemsWithoutCommit(t, cp, transferID, dst, [][]abstract.ChangeItem{
+		itemsBuilderFirstTable.InitTableLoad(),
+		itemsBuilderFirstTable.Inserts(t, []map[string]interface{}{{"id": 0, "author_id": "a", "is_deleted": true}}),
+		itemsBuilderFirstTable.Inserts(t, []map[string]interface{}{{"id": 3, "author_id": "", "is_deleted": nil}}),
+		itemsBuilderFirstTable.DoneTableLoad(),
+	})
+
+	pushItemsWithoutCommit(t, cp, transferID, dst, [][]abstract.ChangeItem{
+		itemsBuilderFirstTable.InitTableLoad(),
+		itemsBuilderFirstTable.Inserts(t, []map[string]interface{}{{"id": 1, "author_id": "b", "is_deleted": false}}),
+		itemsBuilderFirstTable.DoneTableLoad(),
+	})
+
+	pushItemsWithoutCommit(t, cp, transferID, dst, [][]abstract.ChangeItem{
+		itemsBuilderFirstTable.DoneShardedTableLoad(),
+		itemsBuilderSecondTable.DoneShardedTableLoad(),
+	})
+
+	commit(t, cp, transferID, dst)
+
+	checkData(t, dst, firstTableName, []row{
+		{AuthorID: "a", ID: 0, IsDeleted: &trueConst},
+		{AuthorID: "b", ID: 1, IsDeleted: &falseConst},
+		{AuthorID: "", ID: 3, IsDeleted: nil},
+	}, true)
+}
+
 func withShuffledColumns(t *testing.T) {
 	ytEnv, cancel := yttest.NewEnv(t)
 	defer cancel()
@@ -295,6 +351,24 @@ func withShuffledColumns(t *testing.T) {
 		{AuthorID: "001", ID: 1, IsDeleted: nil},
 		{AuthorID: "002", ID: 2, IsDeleted: &falseConst},
 	}, false)
+}
+
+func pushItemsWithoutCommit(t *testing.T, cp coordinator.Coordinator, transferID string, dst yt.YtDestinationModel, input [][]abstract.ChangeItem) {
+	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log)
+	require.NoError(t, err)
+
+	for _, items := range input {
+		require.NoError(t, currentSink.Push(items))
+	}
+}
+
+func commit(t *testing.T, cp coordinator.Coordinator, transferID string, dst yt.YtDestinationModel) {
+	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log)
+	require.NoError(t, err)
+
+	completable, ok := currentSink.(abstract.Committable)
+	require.True(t, ok)
+	require.NoError(t, completable.Commit())
 }
 
 func pushItems(t *testing.T, cp coordinator.Coordinator, dst yt.YtDestinationModel, input [][]abstract.ChangeItem) {

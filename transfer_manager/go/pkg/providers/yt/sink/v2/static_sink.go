@@ -53,6 +53,8 @@ type sink struct {
 	partTx yt.Tx
 	writer staticTableWriter
 
+	handledSystemItems map[abstract.Kind]*util.Set[string]
+
 	metrics *stats.SinkerStats
 	logger  log.Logger
 }
@@ -65,6 +67,13 @@ func (s *sink) Push(items []abstract.ChangeItem) error {
 	tablePath := s.getTablePath(items[0])
 	schema := items[0].TableSchema
 
+	// deduplicate system items
+	if handledPaths, ok := s.handledSystemItems[itemsKind]; ok {
+		if handledPaths.Contains(tablePath.String()) {
+			return nil
+		}
+	}
+
 	if itemsKind == abstract.InitShardedTableLoad {
 		if err := s.mainTx.BeginTx(); err != nil {
 			return xerrors.Errorf("preparing main tx error: %w", err)
@@ -72,6 +81,7 @@ func (s *sink) Push(items []abstract.ChangeItem) error {
 		if err := s.initTableLoad(tablePath, schema.Columns()); err != nil {
 			return xerrors.Errorf("unable push InitShTableLoad item to %s: %w", tablePath, err)
 		}
+		s.handledSystemItems[abstract.InitShardedTableLoad].Add(tablePath.String())
 		return nil
 	}
 
@@ -99,6 +109,7 @@ func (s *sink) Push(items []abstract.ChangeItem) error {
 		if err := s.commitTable(tablePath, schema.Columns()); err != nil {
 			return xerrors.Errorf("unable to push DoneShTableLoad item to %s: %w", tablePath, err)
 		}
+		s.handledSystemItems[abstract.DoneShardedTableLoad].Add(tablePath.String())
 	}
 
 	return nil
@@ -223,7 +234,11 @@ func NewStaticSink(cfg yt2.YtDestinationModel, cp coordinator.Coordinator, trans
 		mainTx:     transactions.NewMainTxClient(transferID, cp, ytClient, logger),
 		partTx:     nil,
 		writer:     nil,
-		metrics:    stats.NewSinkerStats(registry),
-		logger:     logger,
+		handledSystemItems: map[abstract.Kind]*util.Set[string]{
+			abstract.InitShardedTableLoad: util.NewSet[string](),
+			abstract.DoneShardedTableLoad: util.NewSet[string](),
+		},
+		metrics: stats.NewSinkerStats(registry),
+		logger:  logger,
 	}, nil
 }
