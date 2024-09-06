@@ -21,12 +21,16 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 )
 
+type EndpointParam struct {
+	Type  abstract.ProviderType
+	Param string
+}
+
 type TestEndpointParams struct {
 	Transfer             *model.Transfer
 	TransformationConfig []byte
-	Type                 abstract.ProviderType
-	Params               string
-	IsSource             bool
+	ParamsSrc            *EndpointParam
+	ParamsDst            *EndpointParam
 }
 
 const (
@@ -208,24 +212,55 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 }
 
 func TestEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
-	if !param.IsSource {
-		tr.Add(ConfigCheckType, WriteableCheckType)
-		dst, err := model.NewDestination(param.Type, param.Params)
-		if err != nil {
-			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Target, "unable to construct target: %w", err))
-		}
-		tr.Ok(ConfigCheckType)
-		param.Transfer.Dst = dst
-		param.Transfer.Src = new(model.MockSource)
-		if err := TestTargetEndpoint(param.Transfer); err != nil {
-			return tr.NotOk(WriteableCheckType, errors.CategorizedErrorf(categories.Target, "unable to test target endpoint: %w", err))
-		}
-		tr.Ok(WriteableCheckType)
-		return tr
+	if param.ParamsDst != nil {
+		tr = TestDestinationEndpoint(ctx, param, tr)
 	}
+	if param.ParamsSrc != nil {
+		tr = TestSourceEndpoint(ctx, param, tr)
+	}
+	return tr
+}
+
+func TestTargetEndpoint(transfer *model.Transfer) error {
+	switch dst := transfer.Dst.(type) {
+	case *postgres.PgDestination:
+		// _ping and other tables created if MaintainTables is set to true
+		dstMaintainTables := dst.MaintainTables
+		dst.MaintainTables = true
+
+		// restoring destination's MaintainTables value
+		defer func() {
+			dst.MaintainTables = dstMaintainTables
+		}()
+	}
+	sink, err := sink.MakeAsyncSink(transfer, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
+	if err != nil {
+		return xerrors.Errorf("unable to make sinker: %w", err)
+	}
+	defer sink.Close()
+	return pingSinker(sink)
+}
+
+func TestDestinationEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
+	tr.Add(ConfigCheckType, WriteableCheckType)
+	dst, err := model.NewDestination(param.ParamsDst.Type, param.ParamsDst.Param)
+	if err != nil {
+		return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Target, "unable to construct target: %w", err))
+	}
+	tr.Ok(ConfigCheckType)
+	param.Transfer.Dst = dst
+	param.Transfer.Src = new(model.MockSource)
+	if err := TestTargetEndpoint(param.Transfer); err != nil {
+		return tr.NotOk(WriteableCheckType, errors.CategorizedErrorf(categories.Target, "unable to test target endpoint: %w", err))
+	}
+	tr.Ok(WriteableCheckType)
+	return tr
+}
+
+func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
 	tr.Add(ConfigCheckType)
 	param.Transfer.Dst = new(model.MockDestination)
-	endpointSource, err := model.NewSource(param.Type, param.Params)
+	endpointSource, err := model.NewSource(param.ParamsSrc.Type, param.ParamsSrc.Param)
 	if err != nil {
 		return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Source, "unable to get endpoint endpointSource: %w", err))
 	}
@@ -246,7 +281,6 @@ func TestEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.T
 			return tr
 		}
 	}
-
 	if _, ok := providers.Source[providers.Snapshot](
 		logger.Log,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
@@ -273,24 +307,4 @@ func TestEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.T
 		return SniffReplicationData(ctx, sniffer, tr, param.Transfer)
 	}
 	return tr
-}
-
-func TestTargetEndpoint(transfer *model.Transfer) error {
-	switch dst := transfer.Dst.(type) {
-	case *postgres.PgDestination:
-		// _ping and other tables created if MaintainTables is set to true
-		dstMaintainTables := dst.MaintainTables
-		dst.MaintainTables = true
-
-		// restoring destination's MaintainTables value
-		defer func() {
-			dst.MaintainTables = dstMaintainTables
-		}()
-	}
-	sink, err := sink.MakeAsyncSink(transfer, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
-	if err != nil {
-		return xerrors.Errorf("unable to make sinker: %w", err)
-	}
-	defer sink.Close()
-	return pingSinker(sink)
 }

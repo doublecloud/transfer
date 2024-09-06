@@ -42,10 +42,12 @@ func testSource(transfer model.Transfer) error {
 	}
 	res := tasks.TestEndpoint(context.Background(), &tasks.TestEndpointParams{
 		Transfer:             &transfer,
-		Type:                 transfer.SrcType(),
-		Params:               transfer.SrcJSON(),
-		IsSource:             true,
 		TransformationConfig: transformationJSON,
+		ParamsSrc: &tasks.EndpointParam{
+			Type:  transfer.SrcType(),
+			Param: transfer.SrcJSON(),
+		},
+		ParamsDst: nil,
 	}, abstract.NewTestResult())
 
 	prettyRes, err := yaml.Marshal(res)
@@ -60,10 +62,12 @@ func testSource(transfer model.Transfer) error {
 func testTarget(transfer model.Transfer) error {
 	if res := tasks.TestEndpoint(context.Background(), &tasks.TestEndpointParams{
 		Transfer:             &transfer,
-		Type:                 transfer.DstType(),
-		Params:               transfer.DstJSON(),
-		IsSource:             false,
 		TransformationConfig: nil,
+		ParamsSrc:            nil,
+		ParamsDst: &tasks.EndpointParam{
+			Type:  transfer.DstType(),
+			Param: transfer.DstJSON(),
+		},
 	}, abstract.NewTestResult()); res.Err() != nil {
 		return xerrors.Errorf("unable to check target: %w", res.Err())
 	}
