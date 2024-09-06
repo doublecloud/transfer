@@ -71,7 +71,7 @@ require (
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
 	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.77.0
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.79.0
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.11.7
 	go.uber.org/atomic v1.11.0
