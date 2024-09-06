@@ -37,7 +37,6 @@ type Metric interface {
 }
 
 type MetricState interface {
-	isMetricState()
 	Serialize(baseOpts *MeteringOpts) (map[MetricSchema][]string, error)
 }
 
