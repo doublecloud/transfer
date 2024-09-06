@@ -8,6 +8,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"math"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -15,7 +16,6 @@ import (
 	"github.com/araddon/dateparse"
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/library/go/maxprocs"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
@@ -406,7 +406,7 @@ func (p *GenericParser) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeI
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 	parsed := make([]abstract.ChangeItem, 0)
 	wCh := make([]chan []abstract.ChangeItem, len(batch.Messages))
-	sem := semaphore.NewWeighted(int64(maxprocs.AdjustAuto()))
+	sem := semaphore.NewWeighted(int64(runtime.GOMAXPROCS(0)))
 	for i, m := range batch.Messages {
 		rChan := make(chan []abstract.ChangeItem, 1)
 		wCh[i] = rChan

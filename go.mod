@@ -26,7 +26,6 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/elastic/go-elasticsearch/v7 v7.17.1
 	github.com/go-mysql-org/go-mysql v1.8.0
-	github.com/go-resty/resty/v2 v2.12.0
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/goccy/go-json v0.10.3
 	github.com/godror/godror v0.29.0
@@ -56,7 +55,6 @@ require (
 	github.com/prometheus/client_golang v1.19.1
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.48.0
-	github.com/prometheus/procfs v0.12.0
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/segmentio/parquet-go v0.0.0-20230427215636-d483faba23a5
 	github.com/shirou/gopsutil/v3 v3.24.2
@@ -191,6 +189,7 @@ require (
 	github.com/pingcap/tidb/pkg/parser v0.0.0-20231103042308-035ad5ccbe67 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
+	github.com/prometheus/procfs v0.12.0 // indirect
 	github.com/protocolbuffers/txtpbfmt v0.0.0-20240116145035-ef3ab179eed6 // indirect
 	github.com/rekby/fixenv v0.7.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect

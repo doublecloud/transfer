@@ -6,12 +6,12 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"runtime"
 	"strings"
 	"time"
 
 	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/library/go/maxprocs"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/adapter"
@@ -54,7 +54,7 @@ func (p *GenericParser) baseUnparsedTable(partition abstract.Partition) base.Tab
 func (p *GenericParser) ParseBatch(batch persqueue.MessageBatch) base.EventBatch {
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 	wCh := make([]chan base.EventBatch, len(batch.Messages))
-	sem := semaphore.NewWeighted(int64(maxprocs.AdjustAuto()))
+	sem := semaphore.NewWeighted(int64(runtime.GOMAXPROCS(0)))
 	for i, m := range batch.Messages {
 		rChan := make(chan base.EventBatch, 1)
 		wCh[i] = rChan
