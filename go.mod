@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	cloud.google.com/go v0.112.1
 	cloud.google.com/go/bigquery v1.59.1
+	cloud.google.com/go/pubsub v1.36.1
 	cuelang.org/go v0.4.3
 	github.com/Azure/azure-amqp-common-go/v3 v3.2.3
 	github.com/Azure/azure-event-hubs-go/v3 v3.3.20
