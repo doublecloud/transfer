@@ -22,7 +22,6 @@ const (
 )
 
 type Runtime interface {
-	isRuntime()
 	NeedRestart(runtime Runtime) bool
 	WithDefaults()
 	Validate() error
@@ -47,6 +46,10 @@ func NewRuntime(runtime RuntimeType, runtimeSpec string) (Runtime, error) {
 	}
 }
 
+func RegisterRuntime(r RuntimeType, f func(spec string) (Runtime, error)) {
+	knownRuntimes[r] = f
+}
+
 // Parallelism params
 type ShardUploadParams struct {
 	JobCount     int //Workers count
@@ -65,7 +68,6 @@ func DefaultShardUploadParams() *ShardUploadParams {
 }
 
 type ShardingTaskRuntime interface {
-	isShardingEnabled()
 	WorkersNum() int
 	ThreadsNumPerWorker() int
 	CurrentJobIndex() int
