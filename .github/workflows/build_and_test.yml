@@ -10,12 +10,61 @@ on:
 
 jobs:
   build:
-    name: Build and push image
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Go 1.22.0
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+      - shell: bash
+        run: |
+          make build
+
+  run-tests:
+    needs: build
+    name: Run Test Suite ${{ matrix.suite.group }} - ${{ matrix.suite.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [
+          # CLI test suites
+          { group: "cmd", name: "cmd", path: "" },
+          # e2e test suites
+          { group: "tests/e2e", name: "kafka2ch", path: "kafka2ch" },
+          { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
+          # canon test suites
+          { group: "tests/canon", name: "parser", path: "parser" },
+          # internal test suites
+          { group: "internal", name: "providers-mongo", path: "..." },
+          # provider test suites
+          { group: "pkg/providers", name: "providers-mongo", path: "mongo" },
+          { group: "pkg/providers", name: "providers-mysql", path: "mysql" },
+          { group: "pkg/providers", name: "providers-sample", path: "sample" },
+          { group: "pkg/providers", name: "providers-kafka", path: "kafka" },
+          { group: "pkg/providers", name: "providers-kinesis", path: "kinesis" },
+          # pkg test suites
+          { group: "pkg", name: "transformer", path: "transformer" },
+          { group: "pkg", name: "predicate", path: "predicate" },
+          { group: "pkg", name: "dblog", path: "dblog" },
+          { group: "pkg", name: "functions", path: "functions" },
+          { group: "pkg", name: "maplock", path: "maplock" },
+          { group: "pkg", name: "middlewares", path: "middlewares" },
+          { group: "pkg", name: "parsequeue", path: "parsequeue" },
+          { group: "pkg", name: "util", path: "util" },
+          { group: "pkg", name: "stringutil", path: "stringutil" },
+          { group: "pkg", name: "serializer", path: "serializer" },
+          { group: "pkg", name: "schemaregistry", path: "schemaregistry" },
+          { group: "pkg", name: "parsers/generic", path: "parsers/generic" },
+          { group: "pkg", name: "parsers/scanner", path: "parsers/scanner" }
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: "1.22.0"
@@ -24,7 +73,47 @@ jobs:
           go install gotest.tools/gotestsum@latest
       - shell: bash
         run: |
-          make build
+          curl https://clickhouse.com/ | sh
+          sudo ./clickhouse install
       - shell: bash
         run: |
-          make test
+          echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
+          export RECIPE_CLICKHOUSE_BIN=clickhouse
+          export USE_TESTCONTAINERS=1
+          gotestsum \
+            --junitfile="reports/${{ matrix.suite.name }}.xml" \
+            --junitfile-project-name="${{ matrix.suite.group }}" \
+            --junitfile-testsuite-name="short" \
+            --rerun-fails \
+            --format github-actions \
+            --packages="./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }}/..." \
+            -- -timeout=15m
+        continue-on-error: true
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-reports
+          path: reports/${{ matrix.suite.name }}.xml
+      - name: Fail if tests failed
+        if: failure()
+        run: exit 1
+
+  test-report:
+    needs: run-tests
+    name: test-report
+    if: always() && !contains(needs.*.result, 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download All Test Reports
+        uses: actions/download-artifact@v3
+        with:
+          name: test-reports
+          path: reports/
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "reports/*.xml"
+        if: always()
