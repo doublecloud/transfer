@@ -319,7 +319,7 @@ Here are some resources to help you get started:
 For guidance on using Transfer, we recommend starting with the official documentation. If you need further assistance, explore the following community channels:
 
 - [Slack](https://todo.com) (For live discussion with the Community)
-- [GitHub](https://github.com/doublecloud/tross) (Feature/Bug reports, Contributions)
+- [GitHub](https://github.com/doublecloud/transfer) (Feature/Bug reports, Contributions)
 - [Twitter](https://twitter.com/tross/) (Get the news fast)
 
 <div align="center">
@@ -338,8 +338,6 @@ Stay updated with Transfer's development journey. Here are our roadmap milestone
 
 </div>
 
-Transfer is released under a combination of two licenses: the [Apache License 2.0](licenses/Apache-2.0.txt) and the [Elastic License 2.0](licenses/Elastic.txt).
-
-When contributing to Transfer, you can find the relevant license header in each file.
+Transfer is released under the [Apache License 2.0](licenses/Apache-2.0.txt).
 
 For more information, see the [LICENSE](LICENSE) file and [Licensing FAQs](https://todo.com).
