@@ -81,7 +81,7 @@ jobs:
           export RECIPE_CLICKHOUSE_BIN=clickhouse
           export USE_TESTCONTAINERS=1
           gotestsum \
-            --junitfile="report-${{ matrix.suite.name }}/report.xml" \
+            --junitfile="reports/${{ matrix.suite.name }}.xml" \
             --junitfile-project-name="${{ matrix.suite.group }}" \
             --junitfile-testsuite-name="short" \
             --rerun-fails \
@@ -93,7 +93,7 @@ jobs:
         if: always()
         with:
           name: test-reports-${{ matrix.suite.name }}
-          path: report-${{ matrix.suite.name }}/report.xml
+          path: reports/${{ matrix.suite.name }}.xml
       - name: Fail if tests failed
         if: failure()
         run: exit 1
@@ -109,7 +109,7 @@ jobs:
       - name: Download All Test Reports
         uses: actions/download-artifact@v4
         with:
-          name: test-reports
+          name: test-reports-*
           path: reports/
       - name: Test Summary
         uses: test-summary/action@v2
