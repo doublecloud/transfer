@@ -92,8 +92,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports
-          path: reports/${{ matrix.suite.name }}.xml
+          name: test-reports-${{ matrix.suite.name }}
+          path: report-${{ matrix.suite.name }}/report.xml
       - name: Fail if tests failed
         if: failure()
         run: exit 1
@@ -113,6 +113,6 @@ jobs:
           path: reports/
       - name: Test Summary
         uses: test-summary/action@v2
-        with:
-          paths: "reports/*.xml"
         if: always()
+        with:
+          paths: "report-*/report.xml"
