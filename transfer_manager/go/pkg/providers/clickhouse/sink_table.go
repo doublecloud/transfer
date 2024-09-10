@@ -65,7 +65,7 @@ func (t *sinkTable) Init(cols *abstract.TableSchema) error {
 			}
 		}
 		if err := t.fillColNameToType(); err != nil {
-			t.logger.Warn("Unable to infer columns", log.Error(err))
+			return xerrors.Errorf("failed to infer columns of existing table: %w", err)
 		}
 		t.logger.Infof("do not create table %v, infer schema: %v, exist: %v", t.tableName, t.config.InferSchema(), exist)
 		return nil
@@ -82,7 +82,7 @@ func (t *sinkTable) Init(cols *abstract.TableSchema) error {
 	}
 
 	if err := t.fillColNameToType(); err != nil {
-		t.logger.Warn("Unable to infer columns", log.Error(err))
+		return xerrors.Errorf("failed to infer columns: %w", err)
 	}
 
 	return nil
@@ -90,18 +90,25 @@ func (t *sinkTable) Init(cols *abstract.TableSchema) error {
 
 func (t *sinkTable) fillColNameToType() error {
 	t.colTypes = make(columntypes.TypeMapping)
-	q, err := t.server.db.Query(`select name, type from system.columns where table = ? and database = ?;`, t.tableName, t.config.Database())
+	tableID := abstract.NewTableID(t.config.Database(), t.tableName)
+	t.logger.Infof("Loading columns for table %s", tableID.String())
+	q, err := t.server.db.Query(`select name, type from system.columns where database = ? and table = ?;`, tableID.Namespace, tableID.Name)
 	if err != nil {
-		//nolint:descriptiveerrors
-		return err
+		return xerrors.Errorf("failed to discover schema of '%s': %w", tableID.String(), err)
 	}
 	for q.Next() {
 		var name, typ string
 		if err := q.Scan(&name, &typ); err != nil {
-			//nolint:descriptiveerrors
-			return err
+			return xerrors.Errorf("failed to scan column of '%s': %w", tableID.String(), err)
 		}
 		t.colTypes[name] = columntypes.NewTypeDescription(typ)
+	}
+	if err := q.Err(); err != nil {
+		return xerrors.Errorf("failed to read columns of '%s': %w", tableID.String(), err)
+	}
+	if len(t.colTypes) == 0 {
+		// I.e., empty schema could be obtained if table detached or not exists on specific host.
+		return xerrors.Errorf("got empty schema for table '%s'", tableID.String())
 	}
 	return nil
 }
@@ -565,17 +572,16 @@ func getSchema(t *sinkTable, changeItems []abstract.ChangeItem) ([]abstract.ColS
 
 	if masterChangeItem == nil {
 		return t.cols.Columns(), nil
-	} else {
-		if err := allSchemasEqualTableSchema(t, changeItems); err != nil {
-			//nolint:descriptiveerrors
-			return nil, err
-		}
-		if err := columnNamesAllowedSubset(t, *masterChangeItem); err != nil {
-			//nolint:descriptiveerrors
-			return nil, err
-		}
-		return buildSchemaFromChangeItem(t, *masterChangeItem), nil
 	}
+	if err := allSchemasEqualTableSchema(t, changeItems); err != nil {
+		//nolint:descriptiveerrors
+		return nil, err
+	}
+	if err := columnNamesAllowedSubset(t, *masterChangeItem); err != nil {
+		//nolint:descriptiveerrors
+		return nil, err
+	}
+	return buildSchemaFromChangeItem(t, *masterChangeItem), nil
 }
 
 func doOperation(t *sinkTable, tx *sql.Tx, items []abstract.ChangeItem) (err error) {
@@ -596,9 +602,8 @@ func doOperation(t *sinkTable, tx *sql.Tx, items []abstract.ChangeItem) (err err
 		normalItems, err := convertToastedToNormal(t, items)
 		if err != nil {
 			return xerrors.Errorf("failed to convert toasted items to normal ones: %w", err)
-		} else {
-			items = normalItems
 		}
+		items = normalItems
 	}
 
 	items, err = normalizeColumnNamesOrder(items)
@@ -630,19 +635,18 @@ func doOperation(t *sinkTable, tx *sql.Tx, items []abstract.ChangeItem) (err err
 		t.tableName,
 		strings.Join(colNames, ","),
 		t.config.InsertSettings().AsQueryPart(),
-		strings.Join(colVals, ","))
+		strings.Join(colVals, ","),
+	)
 	insertQuery, err := tx.Prepare(q)
-
-	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
-	defer cancel()
 	if err != nil {
 		if err.Error() == "Decimal128 is not supported" {
 			return abstract.NewFatalError(xerrors.New("Decimal128 is not supported by native clickhouse-go driver. try to switch on HTTP/JSON protocol in dst endpoint settings"))
-		} else {
-			return xerrors.Errorf("unable to prepare change item for table %q: %s: %w", t.tableName, q, err)
 		}
+		return xerrors.Errorf("unable to prepare change item for table %q: %s: %w", t.tableName, q, err)
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
+	defer cancel()
 	for i := range items {
 		// TODO - handle AlterTable
 		argsArr := buildChangeItemArgs(&items[i], currSchema, t.config.IsUpdateable())
@@ -813,7 +817,7 @@ func (t *sinkTable) alterTable(addCols, dropCols []abstract.ColSchema, distribut
 		return err
 	}
 	if err := t.fillColNameToType(); err != nil {
-		t.logger.Warn("Fail to infer types", log.Error(err))
+		return xerrors.Errorf("failed to infer columns: %w", err)
 	}
 	return nil
 }

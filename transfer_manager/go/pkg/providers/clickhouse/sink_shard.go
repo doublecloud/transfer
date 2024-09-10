@@ -127,7 +127,7 @@ func (s *sinkShard) Push(input []abstract.ChangeItem) error {
 			}
 
 			if abstract.IsFatal(err) {
-				return xerrors.Errorf("ClickHouse Push failed: %w", err)
+				return xerrors.Errorf("ClickHouse Push failed (got fatal error): %w", err)
 			}
 
 			var ddlTaskErr errors.DDLTaskError

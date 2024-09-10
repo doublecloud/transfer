@@ -224,14 +224,13 @@ func (s *SinkServer) QuerySingleValue(query string, target interface{}) error {
 func (s *SinkServer) Insert(spec *TableSpec, rows []abstract.ChangeItem) error {
 	t, err := s.GetTable(spec.Name, spec.Schema)
 	if err != nil {
-		//nolint:descriptiveerrors
-		return err
+		s.lastFail = time.Now()
+		return xerrors.Errorf("unable to get table '%s': %w", spec.Name, err)
 	}
 
 	if err := t.ApplyChangeItems(rows); err != nil {
 		s.lastFail = time.Now()
-		//nolint:descriptiveerrors
-		return err
+		return xerrors.Errorf("unable to apply changes for table '%s': %w", spec.Name, err)
 	}
 	return nil
 }
