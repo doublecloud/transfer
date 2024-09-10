@@ -23,9 +23,9 @@ jobs:
         run: |
           make build
 
-  run-tests:
+  e2e-tests:
     needs: build
-    name: ${{ matrix.suite.group }} - ${{ matrix.suite.name }}
+    name: e2e / ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -35,11 +35,70 @@ jobs:
           { group: "cmd", name: "cmd", path: "" },
           # e2e test suites
           { group: "tests/e2e", name: "kafka2ch", path: "kafka2ch" },
+          { group: "tests/e2e", name: "pg2pg", path: "pg2pg" },
+          { group: "tests/e2e", name: "pg2ch", path: "pg2ch" },
           { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+      - shell: bash
+        run: |
+          go install gotest.tools/gotestsum@latest
+      - shell: bash
+        run: |
+          curl https://clickhouse.com/ | sh
+          sudo ./clickhouse install
+      - shell: bash
+        run: |
+          echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
+          export RECIPE_CLICKHOUSE_BIN=clickhouse
+          export USE_TESTCONTAINERS=1
+          for dir in $(find ./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }} -type d); do
+
+            if ls "$dir"/*_test.go >/dev/null 2>&1; then
+              echo "::group::$dir"
+              echo "Running tests for directory: $dir"
+              gotestsum \
+                --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
+                --junitfile-project-name="${{ matrix.suite.group }}" \
+                --junitfile-testsuite-name="short" \
+                --rerun-fails \
+                --format github-actions \
+                --packages="$dir" \
+                -- -timeout=15m
+              echo "::endgroup::"
+            else
+              echo "No Go test files found in $dir, skipping tests."
+            fi
+
+          done
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports-${{ matrix.suite.name }}
+          path: reports/*.xml
+      - name: Fail if tests failed
+        if: failure()
+        run: exit 1
+
+  generic-tests:
+    needs: build
+    name: tests - ${{ matrix.suite.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [
           # canon test suites
           { group: "tests/canon", name: "parser", path: "parser" },
           # internal test suites
-          { group: "internal", name: "providers-mongo", path: "..." },
+          { group: "internal", name: "internal", path: "..." },
           # provider test suites
           { group: "pkg/providers", name: "providers-mongo", path: "mongo" },
           { group: "pkg/providers", name: "providers-mysql", path: "mysql" },
@@ -58,8 +117,8 @@ jobs:
           { group: "pkg", name: "stringutil", path: "stringutil" },
           { group: "pkg", name: "serializer", path: "serializer" },
           { group: "pkg", name: "schemaregistry", path: "schemaregistry" },
-          { group: "pkg", name: "parsers/generic", path: "parsers/generic" },
-          { group: "pkg", name: "parsers/scanner", path: "parsers/scanner" }
+          { group: "pkg", name: "parsers-generic", path: "parsers/generic" },
+          { group: "pkg", name: "parsers-scanner", path: "parsers/scanner" }
         ]
     steps:
       - name: Checkout
@@ -88,19 +147,18 @@ jobs:
             --format github-actions \
             --packages="./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }}/..." \
             -- -timeout=15m
-        continue-on-error: true
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.suite.name }}
           path: reports/${{ matrix.suite.name }}.xml
       - name: Fail if tests failed
         if: failure()
         run: exit 1
 
   test-report:
-    needs: run-tests
+    needs: [generic-tests, e2e-tests]
     name: test-report
     if: always() && !contains(needs.*.result, 'skipped')
     runs-on: ubuntu-latest
@@ -110,10 +168,11 @@ jobs:
       - name: Download All Test Reports
         uses: actions/download-artifact@v4
         with:
-          name: test-reports
+          pattern: test-reports-*
+          merge-multiple: true
           path: reports/
       - name: Test Summary
         uses: test-summary/action@v2
+        if: always()
         with:
           paths: "reports/*.xml"
-        if: always()
