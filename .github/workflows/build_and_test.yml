@@ -39,7 +39,7 @@ jobs:
           # canon test suites
           { group: "tests/canon", name: "parser", path: "parser" },
           # internal test suites
-          { group: "internal", name: "providers-mongo", path: "..." },
+          { group: "internal", name: "internal", path: "..." },
           # provider test suites
           { group: "pkg/providers", name: "providers-mongo", path: "mongo" },
           { group: "pkg/providers", name: "providers-mysql", path: "mysql" },
