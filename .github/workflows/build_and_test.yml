@@ -61,14 +61,19 @@ jobs:
           for dir in $(find ./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }} -type d); do
             echo "::group::$dir"
 
-            gotestsum \
-              --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
-              --junitfile-project-name="${{ matrix.suite.group }}" \
-              --junitfile-testsuite-name="short" \
-              --rerun-fails \
-              --format github-actions \
-              --packages="$dir/..." \
-              -- -timeout=15m
+            if ls "$dir"/*.go >/dev/null 2>&1; then
+              echo "Running tests for directory: $dir"
+              gotestsum \
+                --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
+                --junitfile-project-name="${{ matrix.suite.group }}" \
+                --junitfile-testsuite-name="short" \
+                --rerun-fails \
+                --format github-actions \
+                --packages="$dir/..." \
+                -- -timeout=15m
+            else
+              echo "No Go files found in $dir, skipping tests."
+            fi
 
             echo "::endgroup::"
           done
@@ -134,23 +139,14 @@ jobs:
           echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
           export RECIPE_CLICKHOUSE_BIN=clickhouse
           export USE_TESTCONTAINERS=1
-
-          # Find all directories, excluding the current directory, and check for Go files
-          for dir in $(find ./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }} -mindepth 1 -type d); do
-            if ls "$dir"/*.go >/dev/null 2>&1; then
-              echo "Running tests for directory: $dir"
-              gotestsum \
-                --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
-                --junitfile-project-name="${{ matrix.suite.group }}" \
-                --junitfile-testsuite-name="short" \
-                --rerun-fails \
-                --format github-actions \
-                --packages="$dir/..." \
-                -- -timeout=15m
-            else
-              echo "No Go files found in $dir, skipping tests."
-            fi
-          done
+          gotestsum \
+            --junitfile="reports/${{ matrix.suite.name }}.xml" \
+            --junitfile-project-name="${{ matrix.suite.group }}" \
+            --junitfile-testsuite-name="short" \
+            --rerun-fails \
+            --format github-actions \
+            --packages="./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }}/..." \
+            -- -timeout=15m
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
