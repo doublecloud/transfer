@@ -81,7 +81,7 @@ jobs:
           export RECIPE_CLICKHOUSE_BIN=clickhouse
           export USE_TESTCONTAINERS=1
           gotestsum \
-            --junitfile="reports/${{ matrix.suite.name }}.xml" \
+            --junitfile="report-${{ matrix.suite.name }}/report.xml" \
             --junitfile-project-name="${{ matrix.suite.group }}" \
             --junitfile-testsuite-name="short" \
             --rerun-fails \
