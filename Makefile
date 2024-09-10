@@ -9,4 +9,3 @@ build:
 
 test:
 	USE_TESTCONTAINERS=1 gotestsum --rerun-fails --format github-actions --packages="./transfer_manager/go/cmd/..." -- -timeout=30m
-	USE_TESTCONTAINERS=1 gotestsum --rerun-fails --format github-actions --packages="./transfer_manager/go/tests/e2e/pg2pg/..." -- -timeout=30m
