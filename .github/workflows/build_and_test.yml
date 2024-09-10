@@ -88,7 +88,6 @@ jobs:
             --format github-actions \
             --packages="./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }}/..." \
             -- -timeout=15m
-        continue-on-error: true
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
