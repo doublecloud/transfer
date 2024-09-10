@@ -116,4 +116,4 @@ jobs:
         uses: test-summary/action@v2
         if: always()
         with:
-          paths: "report-*/report.xml"
+          paths: "reports/*.xml"
