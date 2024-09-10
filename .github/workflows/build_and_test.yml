@@ -69,7 +69,7 @@ jobs:
                 --junitfile-testsuite-name="short" \
                 --rerun-fails \
                 --format github-actions \
-                --packages="$dir/..." \
+                --packages="$dir" \
                 -- -timeout=15m
             else
               echo "No Go files found in $dir, skipping tests."
