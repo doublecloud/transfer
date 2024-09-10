@@ -61,7 +61,7 @@ jobs:
           for dir in $(find ./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }} -type d); do
             echo "::group::$dir"
 
-            if ls "$dir"/*.go >/dev/null 2>&1; then
+            if ls "$dir"/*_test.go >/dev/null 2>&1; then
               echo "Running tests for directory: $dir"
               gotestsum \
                 --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
