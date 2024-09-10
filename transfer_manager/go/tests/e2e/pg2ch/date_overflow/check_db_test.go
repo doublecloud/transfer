@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/clickhouse/model"
@@ -20,7 +19,7 @@ import (
 var (
 	databaseName = "public"
 	TransferType = abstract.TransferTypeSnapshotAndIncrement
-	Source       = pgrecipe.RecipeSource(pgrecipe.WithFiles(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2ch/date_overflow/dump/pg/dump.sql")))
+	Source       = pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump/pg"))
 	Target       = *chrecipe.MustTarget(chrecipe.WithInitDir("dump/ch"), chrecipe.WithDatabase(databaseName))
 )
 

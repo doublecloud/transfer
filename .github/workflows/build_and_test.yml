@@ -59,9 +59,9 @@ jobs:
           export RECIPE_CLICKHOUSE_BIN=clickhouse
           export USE_TESTCONTAINERS=1
           for dir in $(find ./transfer_manager/go/${{ matrix.suite.group }}/${{ matrix.suite.path }} -type d); do
-            echo "::group::$dir"
 
             if ls "$dir"/*_test.go >/dev/null 2>&1; then
+              echo "::group::$dir"
               echo "Running tests for directory: $dir"
               gotestsum \
                 --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
@@ -71,11 +71,11 @@ jobs:
                 --format github-actions \
                 --packages="$dir" \
                 -- -timeout=15m
+              echo "::endgroup::"
             else
-              echo "No Go files found in $dir, skipping tests."
+              echo "No Go test files found in $dir, skipping tests."
             fi
 
-            echo "::endgroup::"
           done
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
