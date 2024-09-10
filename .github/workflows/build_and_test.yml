@@ -82,7 +82,7 @@ jobs:
         if: always()
         with:
           name: test-reports-${{ matrix.suite.name }}
-          path: reports/${{ matrix.suite.name }}.xml
+          path: reports/*.xml
       - name: Fail if tests failed
         if: failure()
         run: exit 1
