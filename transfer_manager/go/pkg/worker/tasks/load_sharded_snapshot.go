@@ -106,21 +106,24 @@ func (l *SnapshotLoader) SplitTables(
 
 	shardingStorage, isShardingStorage := source.(abstract.ShardingStorage)
 	isShardeableDestination := server.IsShardeableDestination(l.transfer.Dst)
+	isTmpPolicyEnabled := l.transfer.TmpPolicy != nil
 
 	reasonWhyNotSharded := ""
 	if !isShardingStorage && !isShardeableDestination {
 		reasonWhyNotSharded = "Source storage is not supported sharding table, and destination is not supported shardable snapshots - that's why tables won't be sharded here"
-		logger.Info(reasonWhyNotSharded)
 	} else if !isShardingStorage {
 		reasonWhyNotSharded = "Source storage is not supported sharding table - that's why tables won't be sharded here"
-		logger.Info(reasonWhyNotSharded)
 	} else if !isShardeableDestination {
 		reasonWhyNotSharded = "Destination is not supported shardable snapshots - that's why tables won't be sharded here"
+	} else if isTmpPolicyEnabled {
+		reasonWhyNotSharded = "Sharding is not supported by tmp policy, disabling it"
+	}
+	if reasonWhyNotSharded != "" {
 		logger.Info(reasonWhyNotSharded)
 	}
 
 	for _, table := range tables {
-		if isShardeableDestination && isShardingStorage {
+		if isShardeableDestination && isShardingStorage && !isTmpPolicyEnabled {
 			tableParts, err := shardingStorage.ShardTable(ctx, table)
 			if err != nil {
 				if abstract.IsNonShardableError(err) {
