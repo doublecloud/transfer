@@ -12,8 +12,6 @@
 
 </div>
 
-<img src="./assets/logo.png" alt="transfer" />
-
 <div align="center">
 
 ## 🦫 Introduction
@@ -24,8 +22,6 @@
 
 Transfer provides a convenient way to transfer data between DBMSes, object stores, message brokers or anything that stores data.
 Our ultimate mission is to help you move data from any source to any destination with fast, effective and easy-to-use tool.
-
-![Made with VHS](https://vhs.charm.sh/vhs-5GqCgOH11HSXALOB5YaTUQ.gif)
 
 <div align="center">
 
@@ -39,9 +35,16 @@ Our ultimate mission is to help you move data from any source to any destination
 
 The fastest way to try Transfer, [Double Cloud](https://double.cloud/services/doublecloud-transfer/)
 
-### 2. Install Transfer from Docker
+### 2. Using CLI
 
-Prepare the image (once) from Docker Hub (this will download about 170 MB data):
+Build from souces:
+
+```shell
+make build
+```
+
+![Made with VHS](https://vhs.charm.sh/vhs-3ETIytnxDtBmrgkcOX3ZBf.gif)
+
 
 ```shell
 docker pull transfer/transfer
@@ -179,9 +182,12 @@ docker run transfer/transfer activate
 
 ## 📐 Architecture
 
+
+<img src="./assets/logo.png" alt="transfer" />
+
 </div>
 
-Data Plane is a golang pluggable package that include into data-plane binary and register itself into it. Our data-plane plugins can be one of:
+Transfer is a golang pluggable package that include into transfer binary and register itself into it. Our transfer plugins can be one of:
 
 1. [Storage](./transfer_manager/go/pkg/abstract/storage.go) - one-time data reader
 2. [Sink](./transfer_manager/go/pkg/abstract/async_sink.go) - data writer

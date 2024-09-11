@@ -24,9 +24,16 @@ Sleep 5s
 
 Type "trcli activate --transfer transfer.yaml --log-config=minimal" Sleep 500ms  Enter
 
-Sleep 2s
+Sleep 5s
 
 Type "clickhouse-client --host localhost --port 9000 --user default --password 'ch_password'" Enter
+
+Sleep 1s
+
 Type "select * from personas;" Sleep 500ms Enter
+
+Sleep 10s
+
+Type "echo 'all my favorite dudes in clickhouse now! <3'"
 
 Sleep 10s
