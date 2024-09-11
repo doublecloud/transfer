@@ -46,6 +46,8 @@ make build
 ![Made with VHS](https://vhs.charm.sh/vhs-3ETIytnxDtBmrgkcOX3ZBf.gif)
 
 
+### 3. Using docker container
+
 ```shell
 docker pull transfer/transfer
 ```
