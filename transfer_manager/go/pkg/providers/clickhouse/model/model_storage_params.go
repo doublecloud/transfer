@@ -13,7 +13,6 @@ type ChStorageParams struct {
 	Database       string
 	User           string
 	Password       string
-	Token          string
 	BufferSize     uint64
 	HTTPPort       int
 	Shards         map[string][]string
@@ -41,7 +40,6 @@ func (s *ChSource) ToStorageParams() *ChStorageParams {
 		Database:       s.Database,
 		User:           s.User,
 		Password:       string(s.Password),
-		Token:          s.Token,
 		BufferSize:     s.BufferSize,
 		HTTPPort:       s.HTTPPort,
 		Shards:         shards,
@@ -66,7 +64,6 @@ func (d *ChDestination) ToStorageParams() *ChStorageParams {
 		Database:       d.Database,
 		User:           d.User,
 		Password:       string(d.Password),
-		Token:          d.Token,
 		BufferSize:     20 * 1024 * 1024,
 		HTTPPort:       d.HTTPPort,
 		Shards:         shards,

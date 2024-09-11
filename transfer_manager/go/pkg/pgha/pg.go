@@ -261,7 +261,7 @@ func NewFromHosts(name, user, password string, hosts []string, port int, ssl boo
 	}, nil
 }
 
-func NewFromDBAAS(name, user, password, cluster, token string) (*PgHA, error) {
+func NewFromDBAAS(name, user, password, cluster string) (*PgHA, error) {
 	instc, err := dbaas.Current()
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init dbaas: %w", err)

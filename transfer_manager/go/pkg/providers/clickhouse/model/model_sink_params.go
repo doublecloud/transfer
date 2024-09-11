@@ -121,9 +121,6 @@ type ChSinkShardParams interface {
 	// UseSchemaInTableName
 	// add schema to tableName. TODO - replace it by universal transformer
 	UseSchemaInTableName() bool
-	// Token
-	// to go to mdb resolve AltHosts (if user didn't supply) & shards info (if user didn't supply)
-	Token() string
 	// ShardCol
 	// column_name, which is used for sharding
 	// Meaningful only for queue-sources! bcs there are one 'column' and big amount of data.

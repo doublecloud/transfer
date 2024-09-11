@@ -26,7 +26,6 @@ type MysqlSource struct {
 	ServerID          uint32
 	IncludeTableRegex []string
 	ExcludeTableRegex []string
-	Token             string
 	IsPublic          bool
 	Database          string
 	TLSFile           string
@@ -188,7 +187,6 @@ func (s *MysqlSource) ToStorageParams() *MysqlStorageParams {
 
 		UseFakePrimaryKey:   s.UseFakePrimaryKey,
 		DegreeOfParallelism: s.SnapshotDegreeOfParallelism,
-		Token:               s.Token,
 		Timezone:            s.Timezone,
 		ConsistentSnapshot:  s.ConsistentSnapshot,
 		RootCAFiles:         s.RootCAFiles,

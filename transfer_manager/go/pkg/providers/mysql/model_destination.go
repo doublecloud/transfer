@@ -30,7 +30,6 @@ type MysqlDestination struct {
 	SubNetworkID         string
 	Timezone             string
 	TLSFile              string
-	Token                string
 	TransformerConfig    map[string]string
 	User                 string
 
@@ -136,7 +135,6 @@ func (d *MysqlDestination) ToStorageParams() *MysqlStorageParams {
 		CertPEMFile:         d.TLSFile,
 		UseFakePrimaryKey:   false,
 		DegreeOfParallelism: 1,
-		Token:               d.Token,
 		Timezone:            d.Timezone,
 		TableFilter:         nil,
 		PreSteps:            DefaultMysqlDumpPreSteps(),

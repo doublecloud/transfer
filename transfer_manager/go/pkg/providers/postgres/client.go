@@ -153,8 +153,8 @@ func isReplicaUpToDate(src *PgStorageParams, replicaHost string, lsn string) boo
 
 // ResolveMasterHostPortFrom*
 
-func resolveMasterHostImplWithLog(lgr log.Logger, hosts []string, port int, hasTLS bool, database, user, password, clusterID, token string) (string, uint16, error) {
-	masterHost, masterPort, err := resolveMasterHostImpl(hosts, port, hasTLS, database, user, password, clusterID, token)
+func resolveMasterHostImplWithLog(lgr log.Logger, hosts []string, port int, hasTLS bool, database, user, password, clusterID string) (string, uint16, error) {
+	masterHost, masterPort, err := resolveMasterHostImpl(hosts, port, hasTLS, database, user, password, clusterID)
 	if err != nil {
 		return "", 0, err
 	}
@@ -162,7 +162,7 @@ func resolveMasterHostImplWithLog(lgr log.Logger, hosts []string, port int, hasT
 	return masterHost, masterPort, nil
 }
 
-func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user, password, clusterID, token string) (string, uint16, error) {
+func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user, password, clusterID string) (string, uint16, error) {
 	var pg *pgha.PgHA
 	var err error
 
@@ -183,7 +183,7 @@ func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user
 		defer pg.Close()
 	} else {
 		// cluster
-		pg, err = pgha.NewFromDBAAS(database, user, password, clusterID, token)
+		pg, err = pgha.NewFromDBAAS(database, user, password, clusterID)
 		if err != nil {
 			return "", 0, xerrors.Errorf("unable to create postgres service client from clusterID: %w", err)
 		}
@@ -206,19 +206,19 @@ func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user
 }
 
 func ResolveMasterHostPortFromSrc(lgr log.Logger, src *PgSource) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, src.AllHosts(), src.Port, src.HasTLS(), src.Database, src.User, string(src.Password), src.ClusterID, src.Token)
+	return resolveMasterHostImplWithLog(lgr, src.AllHosts(), src.Port, src.HasTLS(), src.Database, src.User, string(src.Password), src.ClusterID)
 }
 
 func ResolveMasterHostPortFromDst(lgr log.Logger, cfg *PgDestination) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port, cfg.HasTLS(), cfg.Database, cfg.User, string(cfg.Password), cfg.ClusterID, cfg.Token)
+	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port, cfg.HasTLS(), cfg.Database, cfg.User, string(cfg.Password), cfg.ClusterID)
 }
 
 func ResolveMasterHostPortFromStorage(lgr log.Logger, params *PgStorageParams) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, params.AllHosts, params.Port, params.HasTLS(), params.Database, params.User, params.Password, params.ClusterID, params.Token)
+	return resolveMasterHostImplWithLog(lgr, params.AllHosts, params.Port, params.HasTLS(), params.Database, params.User, params.Password, params.ClusterID)
 }
 
 func ResolveMasterHostPortFromSink(lgr log.Logger, cfg PgSinkParams) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port(), cfg.HasTLS(), cfg.Database(), cfg.User(), cfg.Password(), cfg.ClusterID(), cfg.Token())
+	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port(), cfg.HasTLS(), cfg.Database(), cfg.User(), cfg.Password(), cfg.ClusterID())
 }
 
 // MakeConnConfigFrom*

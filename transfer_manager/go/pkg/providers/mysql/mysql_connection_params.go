@@ -34,7 +34,7 @@ func NewConnectionParams(config *MysqlStorageParams) (*ConnectionParams, error) 
 	if err := params.ResolveLocation(config.Timezone); err != nil {
 		return nil, xerrors.Errorf("Can't resolve location from value '%v': %w", config.Timezone, err)
 	}
-	if err := params.ResolveHost(config.ClusterID, config.Token); err != nil {
+	if err := params.ResolveHost(config.ClusterID); err != nil {
 		return nil, xerrors.Errorf("Can't resolve host: %w", err)
 	}
 	return &params, nil
@@ -49,7 +49,7 @@ func (params *ConnectionParams) ResolveLocation(locationStr string) error {
 	return nil
 }
 
-func (params *ConnectionParams) ResolveHost(clusterID string, token string) error {
+func (params *ConnectionParams) ResolveHost(clusterID string) error {
 	if params.Host != "" {
 		return nil
 	}

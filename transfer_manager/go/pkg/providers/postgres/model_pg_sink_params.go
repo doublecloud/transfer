@@ -15,7 +15,6 @@ type PgSinkParams interface {
 	Password() string
 	HasTLS() bool
 	TLSFile() string
-	Token() string
 
 	// MaintainTables
 	// If true - on every batchInsert calls 'create schema...' + 'create table ...'

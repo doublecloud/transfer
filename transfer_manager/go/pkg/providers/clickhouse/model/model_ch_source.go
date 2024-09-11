@@ -29,7 +29,6 @@ type ChSource struct {
 	NativePort       int
 	User             string
 	Password         server.SecretString
-	Token            string
 	SSLEnabled       bool
 	PemFileContent   string
 	Database         string
@@ -258,10 +257,6 @@ func (s ChSourceWrapper) RetryCount() int {
 
 func (s ChSourceWrapper) UseSchemaInTableName() bool {
 	return false
-}
-
-func (s ChSourceWrapper) Token() string {
-	return s.Model.Token
 }
 
 func (s ChSourceWrapper) ShardCol() string {

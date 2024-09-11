@@ -20,7 +20,6 @@ func makeStubSinker() sinker {
 			Host:      "",
 			User:      "",
 			ClusterID: "",
-			Token:     "",
 		},
 		logger: logger.Log,
 	}

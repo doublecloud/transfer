@@ -16,7 +16,6 @@ type PgStorageParams struct {
 	Password                    string
 	Database                    string
 	ClusterID                   string // should be non-empty only one field: Hosts/ClusterID
-	Token                       string
 	TLSFile                     string
 	UseFakePrimaryKey           bool
 	DBFilter                    []string

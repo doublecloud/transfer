@@ -21,7 +21,6 @@ type PgDestination struct {
 	Password               server.SecretString
 	Port                   int
 	TLSFile                string
-	Token                  string
 	MaintainTables         bool
 	AllowDuplicates        bool
 	LoozeMode              bool
@@ -150,10 +149,6 @@ func (d PgDestinationWrapper) HasTLS() bool {
 	return d.Model.HasTLS()
 }
 
-func (d PgDestinationWrapper) Token() string {
-	return d.Model.Token
-}
-
 func (d PgDestinationWrapper) TLSFile() string {
 	return d.Model.TLSFile
 }
@@ -212,7 +207,6 @@ func (d *PgDestination) ToStorageParams() *PgStorageParams {
 		Password:                    string(d.Password),
 		Database:                    d.Database,
 		ClusterID:                   d.ClusterID,
-		Token:                       d.Token,
 		TLSFile:                     d.TLSFile,
 		UseFakePrimaryKey:           false,
 		DBFilter:                    nil,

@@ -13,7 +13,6 @@ type PgSinkParamsRegulated struct {
 	FDatabase               string
 	FUser                   string
 	FPassword               string
-	FToken                  string
 	FTLSFile                string
 	FMaintainTables         bool
 	FPerTransactionPush     bool
@@ -52,10 +51,6 @@ func (p PgSinkParamsRegulated) Password() string {
 
 func (p PgSinkParamsRegulated) HasTLS() bool {
 	return len(p.TLSFile()) > 0
-}
-
-func (p PgSinkParamsRegulated) Token() string {
-	return p.FToken
 }
 
 func (p PgSinkParamsRegulated) TLSFile() string {

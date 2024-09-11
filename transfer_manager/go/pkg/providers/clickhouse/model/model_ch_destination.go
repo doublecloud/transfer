@@ -59,7 +59,6 @@ type ChDestination struct {
 	// ChSinkShardParams
 	RetryCount           int
 	UseSchemaInTableName bool
-	Token                string
 	ShardCol             string
 	Interval             time.Duration
 	AltNamesList         []server.AltName
@@ -334,10 +333,6 @@ func (d ChDestinationWrapper) RetryCount() int {
 
 func (d ChDestinationWrapper) UseSchemaInTableName() bool {
 	return d.Model.UseSchemaInTableName
-}
-
-func (d ChDestinationWrapper) Token() string {
-	return d.Model.Token
 }
 
 func (d ChDestinationWrapper) ShardCol() string {

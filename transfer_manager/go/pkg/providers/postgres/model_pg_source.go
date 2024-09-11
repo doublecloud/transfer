@@ -36,7 +36,6 @@ type PgSource struct {
 	User                        string
 	Password                    server.SecretString
 	Port                        int
-	Token                       string
 	DBTables                    []string
 	BatchSize                   uint32 // BatchSize is a limit on the number of rows in the replication (not snapshot) source internal buffer
 	SlotID                      string
@@ -412,10 +411,6 @@ func (d PgSourceWrapper) TLSFile() string {
 	return d.Model.TLSFile
 }
 
-func (d PgSourceWrapper) Token() string {
-	return d.Model.Token
-}
-
 func (d PgSourceWrapper) MaintainTables() bool {
 	return d.maintainTables
 }
@@ -489,7 +484,6 @@ func (s *PgSource) ToStorageParams(transfer *server.Transfer) *PgStorageParams {
 		Password:                    string(s.Password),
 		Database:                    s.Database,
 		ClusterID:                   s.ClusterID,
-		Token:                       s.Token,
 		TLSFile:                     s.TLSFile,
 		UseFakePrimaryKey:           s.UseFakePrimaryKey,
 		DBFilter:                    nil,

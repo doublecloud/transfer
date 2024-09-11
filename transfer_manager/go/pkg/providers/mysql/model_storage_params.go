@@ -14,7 +14,6 @@ type MysqlStorageParams struct {
 
 	UseFakePrimaryKey   bool
 	DegreeOfParallelism int
-	Token               string
 	Timezone            string
 
 	TableFilter        abstract.Includeable

@@ -371,7 +371,6 @@ func BenchmarkSinker_buildQuery(b *testing.B) {
 			Host:      "",
 			User:      "",
 			ClusterID: "",
-			Token:     "",
 		},
 		logger: logger.Log,
 	}
