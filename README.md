@@ -25,40 +25,10 @@
 Transfer provides a convenient way to transfer data between DBMSes, object stores, message brokers or anything that stores data.
 Our ultimate mission is to help you move data from any source to any destination with fast, effective and easy-to-use tool.
 
-<div align="center">
-
-## ⚡ Performance
-
-
-[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
-
-</div>
-
-![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
+![Made with VHS](https://vhs.charm.sh/vhs-5GqCgOH11HSXALOB5YaTUQ.gif)
 
 <div align="center">
 
-## 🚀 Why Transfer
-
-</div>
-
-- **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
-
-- **High Performance**: Go-built, with cutting-edge, high-speed vectorized execution. 👉 [Bench](./docs/benchmarks.md).
-
-- **Data Simplification**: Streamlines data ingestion, no code needed needed. 👉 [Data Loading](./docs/ingestion.md).
-
-- **Schema infering**: Automatically sync not just data but also data schemas.
-
-- **Format Flexibility**: Supports multiple data formats and types, including JSON, CSV, Parquet, Proto, and more.
-
-- **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
-
-- **Schemafull**: [Type system](./docs/typesystem.md) enabling schema-full data storage with flexible data modeling.
-
-- **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
-
-<div align="center">
 
 ## 🚀 Try Transfer
 
@@ -171,6 +141,39 @@ docker run transfer/transfer activate
 - [Ingestion from Clickbench](./docs/clickbench.md)
 
 </details>
+
+<div align="center">
+
+## 🚀 Why Transfer
+
+</div>
+
+- **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
+
+- **High Performance**: Go-built, with cutting-edge, high-speed vectorized execution. 👉 [Bench](./docs/benchmarks.md).
+
+- **Data Simplification**: Streamlines data ingestion, no code needed needed. 👉 [Data Loading](./docs/ingestion.md).
+
+- **Schema infering**: Automatically sync not just data but also data schemas.
+
+- **Format Flexibility**: Supports multiple data formats and types, including JSON, CSV, Parquet, Proto, and more.
+
+- **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
+
+- **Schemafull**: [Type system](./docs/typesystem.md) enabling schema-full data storage with flexible data modeling.
+
+- **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
+
+<div align="center">
+
+## ⚡ Performance
+
+
+[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
+
+</div>
+
+![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
 
 <div align="center">
 

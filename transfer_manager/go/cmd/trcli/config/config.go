@@ -92,7 +92,7 @@ func target(tr *TransferYamlView) (model.Destination, error) {
 }
 
 func transfer(source model.Source, target model.Destination, tr *TransferYamlView) *model.Transfer {
-	rt, _ := abstract.NewRuntime("local", "{}")
+	rt, _ := abstract.NewRuntime(abstract.LocalRuntimeType, "{}")
 	transfer := new(model.Transfer)
 	transfer.ID = tr.ID
 	transfer.TransferName = tr.TransferName

@@ -3,6 +3,7 @@ package validate
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/config"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -28,14 +29,19 @@ func validate(transferYaml *string) func(cmd *cobra.Command, args []string) erro
 			return xerrors.Errorf("source validation failed: %w", err)
 		}
 
+		logger.Log.Infof("%s 👌source config", transfer.Src.GetProviderType())
+
 		if err := transfer.Dst.Validate(); err != nil {
 			return xerrors.Errorf("target validation failed: %w", err)
 		}
+
+		logger.Log.Infof("%s 👌destination config", transfer.Dst.GetProviderType())
 
 		if err := transfer.Validate(); err != nil {
 			return xerrors.Errorf("transfer validation failed: %w", err)
 		}
 
+		logger.Log.Infof("%s 👌transfer config", transfer.Type)
 		return nil
 	}
 }
