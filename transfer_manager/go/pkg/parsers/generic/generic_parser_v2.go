@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/adapter"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/base/events"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/valyala/fastjson"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -34,7 +34,7 @@ type ysonEventBatch struct {
 	parsedTable   base.Table
 	unparsedTable base.Table
 	parseErr      error
-	msg           persqueue.ReadMessage
+	msg           parsers.Message
 }
 
 func (p *GenericParser) baseTable(partition abstract.Partition) base.Table {
@@ -51,7 +51,7 @@ func (p *GenericParser) baseUnparsedTable(partition abstract.Partition) base.Tab
 	})
 }
 
-func (p *GenericParser) ParseBatch(batch persqueue.MessageBatch) base.EventBatch {
+func (p *GenericParser) ParseBatch(batch parsers.MessageBatch) base.EventBatch {
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 	wCh := make([]chan base.EventBatch, len(batch.Messages))
 	sem := semaphore.NewWeighted(int64(runtime.GOMAXPROCS(0)))
@@ -59,7 +59,7 @@ func (p *GenericParser) ParseBatch(batch persqueue.MessageBatch) base.EventBatch
 		rChan := make(chan base.EventBatch, 1)
 		wCh[i] = rChan
 		_ = sem.Acquire(context.Background(), 1)
-		go func(i int, m persqueue.ReadMessage) {
+		go func(i int, m parsers.Message) {
 			defer sem.Release(1)
 			batch := p.Parse(m, partition)
 			wCh[i] <- batch
@@ -72,7 +72,7 @@ func (p *GenericParser) ParseBatch(batch persqueue.MessageBatch) base.EventBatch
 	return base.NewBatchFromBatches(eventBatches)
 }
 
-func (p *GenericParser) Parse(msg persqueue.ReadMessage, partition abstract.Partition) base.EventBatch {
+func (p *GenericParser) Parse(msg parsers.Message, partition abstract.Partition) base.EventBatch {
 	if p.lfParser {
 		return p.logfellerParse(msg, partition)
 	}
@@ -80,7 +80,7 @@ func (p *GenericParser) Parse(msg persqueue.ReadMessage, partition abstract.Part
 	return p.genericParse(msg, partition)
 }
 
-func (p *GenericParser) genericParse(msg persqueue.ReadMessage, partition abstract.Partition) base.EventBatch {
+func (p *GenericParser) genericParse(msg parsers.Message, partition abstract.Partition) base.EventBatch {
 	table := adapter.NewTableFromLegacy(p.schema, abstract.TableID{
 		Name:      partition.Topic,
 		Namespace: "",
@@ -91,8 +91,8 @@ func (p *GenericParser) genericParse(msg persqueue.ReadMessage, partition abstra
 	})
 	partStr := partition.String()
 	var items []base.Event
-	scanner := bufio.NewScanner(bytes.NewReader(msg.Data))
-	bufSize := len(msg.Data) + 2
+	scanner := bufio.NewScanner(bytes.NewReader(msg.Value))
+	bufSize := len(msg.Value) + 2
 	buf := make([]byte, 0, bufSize)
 	scanner.Buffer(buf, bufSize)
 	idx := 0
@@ -364,7 +364,7 @@ func (l *ysonEventBatch) Next() bool {
 					if l.parser.auxOpts.AddSystemColumns {
 						item.ParsedRecord["_lb_ctime"] = l.msg.CreateTime
 						item.ParsedRecord["_lb_wtime"] = l.msg.WriteTime
-						for k, v := range l.msg.ExtraFields {
+						for k, v := range l.msg.Headers {
 							item.ParsedRecord[fmt.Sprintf("_lb_extra_%v", k)] = v
 						}
 					}
@@ -413,12 +413,12 @@ func (l *ysonEventBatch) MarshalYSON(w *yson.Writer) error {
 	return w.Finish()
 }
 
-func (p *GenericParser) logfellerParse(msg persqueue.ReadMessage, partition abstract.Partition) base.EventBatch {
+func (p *GenericParser) logfellerParse(msg parsers.Message, partition abstract.Partition) base.EventBatch {
 	transportMeta := fmt.Sprintf(
 		"%v@@%v@@%v@@%v@@%v@@%v@@%v@@%v@@",
 		partition.LegacyShittyString(),
 		msg.Offset,
-		string(msg.SourceID),
+		string(msg.Key),
 		msg.CreateTime.UnixNano()/int64(time.Millisecond),
 		time.Now().Second(),
 		p.auxOpts.Topic,

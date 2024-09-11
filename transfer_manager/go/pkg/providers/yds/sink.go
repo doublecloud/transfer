@@ -41,7 +41,7 @@ func MakeWriterConfigFactory(tlsConfig *tls.Config, serviceAccountID string, cre
 			log.Int("Port", opts.Port),
 			log.String("Database", opts.Database),
 			log.String("Topic", fullTopicName),
-			log.String("SourceID", sourceID),
+			log.String("Key", sourceID),
 		)
 
 		return &opts, nil

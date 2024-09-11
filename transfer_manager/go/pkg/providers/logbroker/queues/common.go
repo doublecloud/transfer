@@ -12,7 +12,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func ChangeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMessage, abstract.Partition) {
+func ChangeItemAsMessage(ci abstract.ChangeItem) (parsers.Message, abstract.Partition) {
 	partition := ci.ColumnValues[1].(int)
 	seqNo := ci.ColumnValues[2].(uint64)
 	wTime := ci.ColumnValues[3].(time.Time)
@@ -23,12 +23,14 @@ func ChangeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMessage, abstrac
 	case string:
 		data = []byte(v)
 	}
-	return persqueue.ReadMessage{
+	return parsers.Message{
 			Offset:     ci.LSN,
 			SeqNo:      seqNo,
+			Key:        nil,
 			CreateTime: time.Unix(0, int64(ci.CommitTime)),
 			WriteTime:  wTime,
-			Data:       data,
+			Value:      data,
+			Headers:    nil,
 		}, abstract.Partition{
 			Cluster:   "", // v1 protocol does not contains such entity
 			Partition: uint32(partition),
@@ -36,7 +38,7 @@ func ChangeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMessage, abstrac
 		}
 }
 
-func MessageAsChangeItem(m persqueue.ReadMessage, b persqueue.MessageBatch) abstract.ChangeItem {
+func MessageAsChangeItem(m parsers.Message, b parsers.MessageBatch) abstract.ChangeItem {
 	topicID := path.Base(b.Topic)
 	if len(topicID) == 0 {
 		topicID = b.Topic
@@ -47,7 +49,7 @@ func MessageAsChangeItem(m persqueue.ReadMessage, b persqueue.MessageBatch) abst
 		b.Topic,
 		int(b.Partition),
 		int64(m.Offset),
-		m.Data,
+		m.Value,
 	)
 }
 
@@ -60,7 +62,19 @@ func Parse(buffer []*persqueue.Data, parser parsers.Parser, metrics *stats.Sourc
 	for _, item := range buffer {
 		for _, b := range item.Batches() {
 			for _, m := range b.Messages {
-				data = append(data, MessageAsChangeItem(m, b))
+				data = append(data, MessageAsChangeItem(parsers.Message{
+					Offset:     m.Offset,
+					SeqNo:      m.SeqNo,
+					Key:        m.SourceID,
+					CreateTime: m.CreateTime,
+					WriteTime:  m.WriteTime,
+					Value:      m.Data,
+					Headers:    m.ExtraFields,
+				}, parsers.MessageBatch{
+					Topic:     b.Topic,
+					Partition: b.Partition,
+					Messages:  nil, // not used here
+				}))
 				totalSize += len(m.Data)
 			}
 		}
@@ -92,7 +106,7 @@ func Parse(buffer []*persqueue.Data, parser parsers.Parser, metrics *stats.Sourc
 }
 
 // BuildMapPartitionToLbOffsetsRange - is used only in logging
-func BuildMapPartitionToLbOffsetsRange(v []persqueue.MessageBatch) map[string][]uint64 {
+func BuildMapPartitionToLbOffsetsRange(v []parsers.MessageBatch) map[string][]uint64 {
 	partitionToLbOffsetsRange := make(map[string][]uint64)
 	for _, b := range v {
 		partition := fmt.Sprintf("%v@%v", b.Topic, b.Partition)

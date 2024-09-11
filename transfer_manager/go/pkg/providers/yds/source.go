@@ -130,7 +130,8 @@ func (p *Source) run(parseQ *parsequeue.WaitableParseQueue[[]*persqueue.Data]) e
 					return xerrors.Errorf("unable to send synchronize event, err: %w", err)
 				}
 			case *persqueue.Data:
-				err := p.offsetsValidator.CheckLbOffsets(v.Batches())
+				batches := queues.ConvertBatches(v.Batches())
+				err := p.offsetsValidator.CheckLbOffsets(batches)
 				if err != nil {
 					if p.config.AllowTTLRewind {
 						p.logger.Warn("ttl rewind", log.Error(err))
@@ -139,7 +140,7 @@ func (p *Source) run(parseQ *parsequeue.WaitableParseQueue[[]*persqueue.Data]) e
 						return abstract.NewFatalError(err)
 					}
 				}
-				ranges := queues.BuildMapPartitionToLbOffsetsRange(v.Batches())
+				ranges := queues.BuildMapPartitionToLbOffsetsRange(batches)
 				p.logger.Debug("got lb_offsets", log.Any("range", ranges))
 
 				p.metrics.Master.Set(1)
@@ -252,14 +253,14 @@ func (p *Source) Fetch() ([]abstract.ChangeItem, error) {
 			batchSize := 0
 			var res []abstract.ChangeItem
 			var data []abstract.ChangeItem
-			for _, b := range v.Batches()[:1] {
+			for _, b := range queues.ConvertBatches(v.Batches()[:1]) {
 				total := len(b.Messages)
 				if len(b.Messages) > 3 {
 					total = 3
 				}
 				for _, m := range b.Messages[:total] {
 					data = append(data, queues.MessageAsChangeItem(m, b))
-					batchSize += len(m.Data)
+					batchSize += len(m.Value)
 				}
 				res = append(res, data...)
 				dataBatches = append(dataBatches, data)

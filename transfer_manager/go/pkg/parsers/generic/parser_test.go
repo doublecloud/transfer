@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -28,17 +28,16 @@ var parserTestTSKVUnescape []byte
 //go:embed test_data/parse_base64_packed.jsonl
 var parserBase64Encoded []byte
 
-func makePersqueueReadMessage(i int, rawLine string) persqueue.ReadMessage {
+func makePersqueueReadMessage(i int, rawLine string) parsers.Message {
 
-	return persqueue.ReadMessage{
-		Offset:      uint64(i),
-		SeqNo:       0,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Now(),
-		WriteTime:   time.Now(),
-		IP:          "192.168.1.1",
-		Data:        []byte(rawLine),
-		ExtraFields: nil,
+	return parsers.Message{
+		Offset:     uint64(i),
+		SeqNo:      0,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Now(),
+		WriteTime:  time.Now(),
+		Value:      []byte(rawLine),
+		Headers:    nil,
 	}
 }
 

@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/changeitem/strictify"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	confluentsrmock "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
 	"github.com/stretchr/testify/require"
 )
@@ -49,16 +49,15 @@ func init() {
 	messagesData = append(messagesData, protobuf1Data)
 }
 
-func makePersqueueReadMessage(i int, rawLine []byte) persqueue.ReadMessage {
-	return persqueue.ReadMessage{
-		Offset:      uint64(i),
-		SeqNo:       0,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Time{},
-		WriteTime:   time.Time{},
-		IP:          "192.168.1.1",
-		Data:        rawLine,
-		ExtraFields: map[string]string{"some_field": "test"},
+func makePersqueueReadMessage(i int, rawLine []byte) parsers.Message {
+	return parsers.Message{
+		Offset:     uint64(i),
+		SeqNo:      0,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Time{},
+		WriteTime:  time.Time{},
+		Value:      rawLine,
+		Headers:    map[string]string{"some_field": "test"},
 	}
 }
 

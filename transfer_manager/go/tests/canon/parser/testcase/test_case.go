@@ -10,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry"
@@ -22,7 +21,7 @@ import (
 type TestCase struct {
 	TopicName    string
 	ParserConfig parsers.AbstractParserConfig
-	Data         persqueue.ReadMessage
+	Data         parsers.Message
 }
 
 func LoadStaticTestCases(t *testing.T, samples embed.FS) map[string]TestCase {
@@ -71,15 +70,14 @@ func LoadStaticTestCases(t *testing.T, samples embed.FS) map[string]TestCase {
 	return cases
 }
 
-func MakeDefaultPersqueueReadMessage(data []byte) persqueue.ReadMessage {
-	return persqueue.ReadMessage{
-		Offset:      123,
-		SeqNo:       32,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Date(2020, 2, 2, 10, 2, 21, 0, time.UTC),
-		WriteTime:   time.Date(2020, 2, 2, 10, 2, 20, 0, time.UTC),
-		IP:          "192.168.1.1",
-		Data:        data,
-		ExtraFields: map[string]string{"some_field": "test"},
+func MakeDefaultPersqueueReadMessage(data []byte) parsers.Message {
+	return parsers.Message{
+		Offset:     123,
+		SeqNo:      32,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Date(2020, 2, 2, 10, 2, 21, 0, time.UTC),
+		WriteTime:  time.Date(2020, 2, 2, 10, 2, 20, 0, time.UTC),
+		Value:      data,
+		Headers:    map[string]string{"some_field": "test"},
 	}
 }

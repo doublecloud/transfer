@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,16 +23,15 @@ func init() {
 	rawLines = strings.Split(string(parserTest), "\n")
 }
 
-func makePersqueueReadMessage(i int, rawLine string) persqueue.ReadMessage {
-	return persqueue.ReadMessage{
-		Offset:      uint64(i),
-		SeqNo:       0,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Now(),
-		WriteTime:   time.Now(),
-		IP:          "192.168.1.1",
-		Data:        []byte(rawLine),
-		ExtraFields: map[string]string{"some_field": "test"},
+func makePersqueueReadMessage(i int, rawLine string) parsers.Message {
+	return parsers.Message{
+		Offset:     uint64(i),
+		SeqNo:      0,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Now(),
+		WriteTime:  time.Now(),
+		Value:      []byte(rawLine),
+		Headers:    map[string]string{"some_field": "test"},
 	}
 }
 
@@ -63,22 +62,21 @@ func TestUnparsed(t *testing.T) {
 }
 
 func TestMultiThreading(t *testing.T) {
-	messages := make([]persqueue.ReadMessage, 0)
+	messages := make([]parsers.Message, 0)
 	for i := 0; i < 100; i++ {
 		for _, line := range rawLines {
-			messages = append(messages, persqueue.ReadMessage{
-				Offset:      uint64(i),
-				SeqNo:       0,
-				SourceID:    []byte("test_source_id"),
-				CreateTime:  time.Now(),
-				WriteTime:   time.Now(),
-				IP:          "192.168.1.1",
-				Data:        []byte(line),
-				ExtraFields: nil,
+			messages = append(messages, parsers.Message{
+				Offset:     uint64(i),
+				SeqNo:      0,
+				Key:        []byte("test_source_id"),
+				CreateTime: time.Now(),
+				WriteTime:  time.Now(),
+				Value:      []byte(line),
+				Headers:    nil,
 			})
 		}
 	}
-	batch := persqueue.MessageBatch{
+	batch := parsers.MessageBatch{
 		Topic:     "topicName",
 		Partition: 0,
 		Messages:  messages,

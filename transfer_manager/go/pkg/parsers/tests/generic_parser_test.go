@@ -476,8 +476,8 @@ func BenchmarkGenericParser(b *testing.B) {
 		for _, size := range []int{1, 5, 10} {
 			d := samples.Data[testCase]
 			for i := 1; i < size; i++ {
-				d.Data = append(d.Data, []byte("\n")...)
-				d.Data = append(d.Data, d.Data...)
+				d.Value = append(d.Value, []byte("\n")...)
+				d.Value = append(d.Value, d.Value...)
 			}
 			b.Run(fmt.Sprintf("Abstract2 %v %v", testCase, size), func(b *testing.B) {
 				b.ResetTimer()
@@ -489,15 +489,15 @@ func BenchmarkGenericParser(b *testing.B) {
 					}
 					require.True(b, cntr > 0)
 				}
-				b.SetBytes(int64(len(d.Data) * b.N))
+				b.SetBytes(int64(len(d.Value) * b.N))
 				b.ReportAllocs()
 			})
 		}
 		for _, size := range []int{1, 5, 10} {
 			d := samples.Data[testCase]
 			for i := 1; i < size; i++ {
-				d.Data = append(d.Data, []byte("\n")...)
-				d.Data = append(d.Data, d.Data...)
+				d.Value = append(d.Value, []byte("\n")...)
+				d.Value = append(d.Value, d.Value...)
 			}
 			b.Run(fmt.Sprintf("Abstract1 %v %v", testCase, size), func(b *testing.B) {
 				b.ResetTimer()
@@ -505,7 +505,7 @@ func BenchmarkGenericParser(b *testing.B) {
 					r := parser.Do(d, abstract.Partition{})
 					require.True(b, len(r) > 0)
 				}
-				b.SetBytes(int64(len(d.Data) * b.N))
+				b.SetBytes(int64(len(d.Value) * b.N))
 				b.ReportAllocs()
 			})
 		}
@@ -526,16 +526,16 @@ func BenchmarkGenericParser_Do(b *testing.B) {
 				require.NoError(b, err)
 				d := samples.Data[testCase]
 				for i := 1; i < size; i++ {
-					d.Data = append(d.Data, []byte("\n")...)
-					d.Data = append(d.Data, d.Data...)
+					d.Value = append(d.Value, []byte("\n")...)
+					d.Value = append(d.Value, d.Value...)
 				}
-				logger.Log.Debugf("input size: %v", format.SizeInt(len(d.Data)))
+				logger.Log.Debugf("input size: %v", format.SizeInt(len(d.Value)))
 				b.ResetTimer()
 				for n := 0; n < b.N; n++ {
 					r := parser.Do(d, abstract.Partition{})
 					require.True(b, len(r) > 0)
 				}
-				b.SetBytes(int64(len(d.Data)))
+				b.SetBytes(int64(len(d.Value)))
 				b.ReportAllocs()
 			})
 		}

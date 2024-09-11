@@ -12,7 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -107,7 +106,15 @@ func main() {
 	}
 
 	if *command == "parse" {
-		d := lib.Parse(*logFormat, *chunkSplitter, *command, false, persqueue.ReadMessage{Data: raw})
+		d := lib.Parse(*logFormat, *chunkSplitter, *command, false, parsers.Message{
+			Offset:     0,
+			SeqNo:      0,
+			Key:        nil,
+			CreateTime: time.Time{},
+			WriteTime:  time.Time{},
+			Value:      raw,
+			Headers:    nil,
+		})
 		reader := yson.NewReaderKindFromBytes([]byte(d), yson.StreamListFragment)
 		for {
 			ok, err := reader.NextListItem()
@@ -143,9 +150,14 @@ func main() {
 			logger.Log.Errorf("unable to create parser, err: %s", err.Error())
 			return
 		}
-		r := parser.Do(persqueue.ReadMessage{
-			WriteTime: time.Now(),
-			Data:      raw,
+		r := parser.Do(parsers.Message{
+			Offset:     0,
+			SeqNo:      0,
+			Key:        nil,
+			CreateTime: time.Time{},
+			WriteTime:  time.Now(),
+			Value:      raw,
+			Headers:    nil,
 		}, abstract.Partition{Cluster: "", Partition: 0, Topic: ""})
 		if len(r) == 0 {
 			logger.Log.Error("Parse nothing")
@@ -155,9 +167,14 @@ func main() {
 		logger.Log.Info(fmt.Sprintf("Start parse %v", format.SizeInt(len(raw))))
 		start := time.Now()
 		for i := 0; i < *repeats; i++ {
-			r := parser.Do(persqueue.ReadMessage{
-				WriteTime: time.Now(),
-				Data:      raw,
+			r := parser.Do(parsers.Message{
+				Offset:     0,
+				SeqNo:      0,
+				Key:        nil,
+				CreateTime: time.Time{},
+				WriteTime:  time.Now(),
+				Value:      raw,
+				Headers:    nil,
 			}, abstract.Partition{Cluster: "", Partition: 0, Topic: ""})
 			logger.Log.Infof("row count %v", len(r))
 			time.Sleep(time.Millisecond)

@@ -3,8 +3,8 @@ package queues
 import (
 	"fmt"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -13,7 +13,7 @@ type LbOffsetsSourceValidator struct {
 	partitionToLastOffset map[string]uint64
 }
 
-func (v *LbOffsetsSourceValidator) CheckLbOffsets(batches []persqueue.MessageBatch) error {
+func (v *LbOffsetsSourceValidator) CheckLbOffsets(batches []parsers.MessageBatch) error {
 	for _, b := range batches {
 		partition := fmt.Sprintf("%v@%v", b.Topic, b.Partition)
 		if len(b.Messages) == 0 {

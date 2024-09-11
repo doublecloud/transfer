@@ -16,7 +16,7 @@ type ParserConfigTSKVLb struct {
 	// special parameters for logbroker-source:
 	SkipSystemKeys    bool                   // aka skip_dedupe_keys/SkipDedupeKeys (title: "Пользовательские ключевые столбцы", usage: "При парсинге ключи дедубликации Logbroker не будут добавлены к списку пользовательских ключевых столбцов")
 	TimeField         *abstract.TimestampCol // (title: "Столбец, содержащий дату-время")
-	AddSystemCols     bool                   // (title: "Добавление системных столбцов Logbroker", usage: "CreateTime (_lb_ctime) WriteTime (_lb_wtime) и все ExtraFields с префиксом _lb_extra_")
+	AddSystemCols     bool                   // (title: "Добавление системных столбцов Logbroker", usage: "CreateTime (_lb_ctime) WriteTime (_lb_wtime) и все Headers с префиксом _lb_extra_")
 	TableSplitter     *abstract.TableSplitter
 	IgnoreColumnPaths bool
 	DropUnparsed      bool

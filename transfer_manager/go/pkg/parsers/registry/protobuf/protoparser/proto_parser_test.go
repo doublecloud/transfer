@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/metrics/mock"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
@@ -329,16 +328,14 @@ func getCloudExportHitsTestCases(t *testing.T) []struct {
 
 func TestDoCloudExportHits(t *testing.T) {
 	testCases := getCloudExportHitsTestCases(t)
-	pMsg := persqueue.ReadMessage{
-		Offset:      1,
-		SeqNo:       1,
-		SourceID:    nil,
-		CreateTime:  time.Time{},
-		WriteTime:   time.Time{},
-		IP:          "",
-		Data:        protoSampleContent(t, "metrika_cloud_export_hit_log_data.bin"),
-		Codec:       persqueue.Codec(0),
-		ExtraFields: nil,
+	pMsg := parsers.Message{
+		Offset:     1,
+		SeqNo:      1,
+		Key:        nil,
+		CreateTime: time.Time{},
+		WriteTime:  time.Time{},
+		Value:      protoSampleContent(t, "metrika_cloud_export_hit_log_data.bin"),
+		Headers:    nil,
 	}
 
 	for i, tc := range testCases {
@@ -366,16 +363,14 @@ func TestDoStdDataTypesEqualValues(t *testing.T) {
 	data, err := proto.Marshal(stdDataTypesFilled)
 	require.NoError(t, err)
 
-	pMsg := persqueue.ReadMessage{
-		Offset:      1,
-		SeqNo:       1,
-		SourceID:    nil,
-		CreateTime:  time.Time{},
-		WriteTime:   time.Time{},
-		IP:          "",
-		Data:        data,
-		Codec:       persqueue.Codec(0),
-		ExtraFields: nil,
+	pMsg := parsers.Message{
+		Offset:     1,
+		SeqNo:      1,
+		Key:        nil,
+		CreateTime: time.Time{},
+		WriteTime:  time.Time{},
+		Value:      data,
+		Headers:    nil,
 	}
 
 	desc := stdDataTypesFilled.ProtoReflect().Descriptor()
@@ -644,16 +639,14 @@ func TestDoStdDataTypesRequiredAndPKSet(t *testing.T) {
 	data, err := proto.Marshal(stdDataTypesFilled)
 	require.NoError(t, err)
 
-	pMsg := persqueue.ReadMessage{
-		Offset:      1,
-		SeqNo:       1,
-		SourceID:    nil,
-		CreateTime:  time.Time{},
-		WriteTime:   time.Time{},
-		IP:          "",
-		Data:        data,
-		Codec:       persqueue.Codec(0),
-		ExtraFields: nil,
+	pMsg := parsers.Message{
+		Offset:     1,
+		SeqNo:      1,
+		Key:        nil,
+		CreateTime: time.Time{},
+		WriteTime:  time.Time{},
+		Value:      data,
+		Headers:    nil,
 	}
 
 	cases := makeRequiredSetTestCases()
@@ -723,16 +716,14 @@ func TestDoRequiredNotSet(t *testing.T) {
 	data, err := proto.Marshal(stdDataTypesEmpty)
 	require.NoError(t, err)
 
-	pMsg := persqueue.ReadMessage{
-		Offset:      1,
-		SeqNo:       1,
-		SourceID:    nil,
-		CreateTime:  time.Time{},
-		WriteTime:   time.Time{},
-		IP:          "",
-		Data:        data,
-		Codec:       persqueue.Codec(0),
-		ExtraFields: nil,
+	pMsg := parsers.Message{
+		Offset:     1,
+		SeqNo:      1,
+		Key:        nil,
+		CreateTime: time.Time{},
+		WriteTime:  time.Time{},
+		Value:      data,
+		Headers:    nil,
 	}
 
 	cases := makeRequiredNotSetTestCases()

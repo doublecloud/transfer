@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/exp/maps"
@@ -27,16 +27,15 @@ func init() {
 	rawLines = strings.Split(string(parserTest), "\n")
 }
 
-func makePersqueueReadMessage(i int, rawLine string) persqueue.ReadMessage {
-	return persqueue.ReadMessage{
-		Offset:      uint64(i),
-		SeqNo:       0,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Now(),
-		WriteTime:   time.Now(),
-		IP:          "192.168.1.1",
-		Data:        []byte(rawLine),
-		ExtraFields: map[string]string{"some_field": "test"},
+func makePersqueueReadMessage(i int, rawLine string) parsers.Message {
+	return parsers.Message{
+		Offset:     uint64(i),
+		SeqNo:      0,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Now(),
+		WriteTime:  time.Now(),
+		Value:      []byte(rawLine),
+		Headers:    map[string]string{"some_field": "test"},
 	}
 }
 

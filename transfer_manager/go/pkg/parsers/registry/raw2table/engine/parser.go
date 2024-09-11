@@ -3,8 +3,8 @@ package engine
 import (
 	"unicode/utf8"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -26,17 +26,17 @@ type RawToTableImpl struct {
 	columnNames []string
 }
 
-func (p *RawToTableImpl) isSendToDLQ(msg persqueue.ReadMessage) bool {
-	if p.cfg.isAddKey && p.cfg.isKeyString && !utf8.Valid(msg.SourceID) {
+func (p *RawToTableImpl) isSendToDLQ(msg parsers.Message) bool {
+	if p.cfg.isAddKey && p.cfg.isKeyString && !utf8.Valid(msg.Key) {
 		return true
 	}
-	if p.cfg.isValueString && !utf8.Valid(msg.Data) {
+	if p.cfg.isValueString && !utf8.Valid(msg.Value) {
 		return true
 	}
 	return false
 }
 
-func (p *RawToTableImpl) buildColumnValues(msg persqueue.ReadMessage, partition abstract.Partition) []interface{} {
+func (p *RawToTableImpl) buildColumnValues(msg parsers.Message, partition abstract.Partition) []interface{} {
 	columnValues := make([]interface{}, 0, len(p.columnNames))
 	columnValues = append(columnValues, partition.Topic)
 	columnValues = append(columnValues, partition.Partition)
@@ -45,24 +45,24 @@ func (p *RawToTableImpl) buildColumnValues(msg persqueue.ReadMessage, partition 
 		columnValues = append(columnValues, msg.WriteTime)
 	}
 	if p.cfg.isAddHeaders {
-		columnValues = append(columnValues, msg.ExtraFields)
+		columnValues = append(columnValues, msg.Headers)
 	}
 	if p.cfg.isAddKey {
 		if p.cfg.isKeyString {
-			columnValues = append(columnValues, string(msg.SourceID))
+			columnValues = append(columnValues, string(msg.Key))
 		} else {
-			columnValues = append(columnValues, msg.SourceID)
+			columnValues = append(columnValues, msg.Key)
 		}
 	}
 	if p.cfg.isValueString {
-		columnValues = append(columnValues, string(msg.Data))
+		columnValues = append(columnValues, string(msg.Value))
 	} else {
-		columnValues = append(columnValues, msg.Data)
+		columnValues = append(columnValues, msg.Value)
 	}
 	return columnValues
 }
 
-func (p *RawToTableImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *RawToTableImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	if p.dlq != nil && p.isSendToDLQ(msg) {
 		return p.dlq.Do(msg, partition)
 	}
@@ -92,11 +92,11 @@ func (p *RawToTableImpl) Do(msg persqueue.ReadMessage, partition abstract.Partit
 		},
 		TxID:  "",
 		Query: "",
-		Size:  abstract.RawEventSize(uint64(len(msg.Data))),
+		Size:  abstract.RawEventSize(uint64(len(msg.Value))),
 	}}
 }
 
-func (p *RawToTableImpl) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *RawToTableImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0, 1000)
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)

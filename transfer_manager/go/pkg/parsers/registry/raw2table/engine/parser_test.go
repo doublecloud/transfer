@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	parsequeue "github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	logger "github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/stretchr/testify/require"
 )
 
@@ -150,16 +150,14 @@ func TestDo(t *testing.T) {
 				tc.kafkaConfig.isTopicAsName,
 				"test",
 			)
-			result := ptr.Do(parsequeue.ReadMessage{
-				Offset:      200,
-				SeqNo:       4965502264652803543,
-				SourceID:    tc.srcID,
-				CreateTime:  tu,
-				WriteTime:   tu,
-				IP:          "",
-				Data:        tc.inputData,
-				Codec:       0,
-				ExtraFields: nil,
+			result := ptr.Do(parsers.Message{
+				Offset:     200,
+				SeqNo:      4965502264652803543,
+				Key:        tc.srcID,
+				CreateTime: tu,
+				WriteTime:  tu,
+				Value:      tc.inputData,
+				Headers:    nil,
 			}, abstract.Partition{
 				Cluster:   "",
 				Partition: 1,

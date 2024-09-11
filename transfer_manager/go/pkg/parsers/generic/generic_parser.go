@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"github.com/araddon/dateparse"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/format"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/logfeller/lib"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/castx"
@@ -52,7 +52,7 @@ type AuxParserOpts struct {
 	// if true - add into values: _lb_ctime, _lb_wtime, _lb_extra_%v
 	AddSystemColumns bool
 
-	// if true - fill value from 'msg.ExtraFields["logtype"]'
+	// if true - fill value from 'msg.Headers["logtype"]'
 	AddTopicColumn bool
 
 	// if true - add into schema (and add value) field '_rest'
@@ -294,7 +294,7 @@ func newLfResult(raw []byte) ([]lfResult, error) {
 	return result, nil
 }
 
-func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, line string, partition abstract.Partition, msg persqueue.ReadMessage) abstract.ChangeItem {
+func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, line string, partition abstract.Partition, msg parsers.Message) abstract.ChangeItem {
 	changeItem := abstract.ChangeItem{
 		ID:           0,
 		LSN:          msg.Offset,
@@ -315,7 +315,7 @@ func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, lin
 	if p.auxOpts.AddSystemColumns {
 		item["_lb_ctime"] = msg.CreateTime
 		item["_lb_wtime"] = msg.WriteTime
-		for k, v := range msg.ExtraFields {
+		for k, v := range msg.Headers {
 			item[fmt.Sprintf("_lb_extra_%v", k)] = v
 		}
 	}
@@ -353,7 +353,7 @@ func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, lin
 					rawV = msg.CreateTime
 				} else if key.ColPath() == "_lb_wtime" {
 					rawV = msg.WriteTime
-				} else if eV, ok := msg.ExtraFields[fmt.Sprintf("_lb_extra_%v", key.ColPath())]; ok {
+				} else if eV, ok := msg.Headers[fmt.Sprintf("_lb_extra_%v", key.ColPath())]; ok {
 					rawV = eV
 				}
 			}
@@ -384,7 +384,7 @@ func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, lin
 		changeItem.ColumnValues[p.restIDX()] = rest
 	}
 	if p.auxOpts.AddTopicColumn {
-		changeItem.ColumnValues[p.topicIDX()] = msg.ExtraFields["logtype"]
+		changeItem.ColumnValues[p.topicIDX()] = msg.Headers["logtype"]
 	}
 
 	tsCol, err := p.extractTimestamp(item, msg.WriteTime)
@@ -402,7 +402,7 @@ func (p *GenericParser) makeChangeItem(item map[string]interface{}, idx int, lin
 	return changeItem
 }
 
-func (p *GenericParser) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *GenericParser) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 	parsed := make([]abstract.ChangeItem, 0)
 	wCh := make([]chan []abstract.ChangeItem, len(batch.Messages))
@@ -411,7 +411,7 @@ func (p *GenericParser) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeI
 		rChan := make(chan []abstract.ChangeItem, 1)
 		wCh[i] = rChan
 		_ = sem.Acquire(context.Background(), 1)
-		go func(i int, m persqueue.ReadMessage) {
+		go func(i int, m parsers.Message) {
 			defer sem.Release(1)
 			changeItems := p.Do(
 				m,
@@ -436,7 +436,7 @@ func (p *GenericParser) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeI
 	return parsed
 }
 
-func (p *GenericParser) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *GenericParser) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	start := time.Now()
 	var res []abstract.ChangeItem
 	if p.lfParser {
@@ -448,12 +448,12 @@ func (p *GenericParser) Do(msg persqueue.ReadMessage, partition abstract.Partiti
 	p.logger.Debug(
 		"Done generic parse",
 		log.Any("elapsed", time.Since(start)),
-		log.Any("size", format.Size(binary.Size(msg.Data)).String()),
+		log.Any("size", format.Size(binary.Size(msg.Value)).String()),
 	)
 	return res
 }
 
-func (p *GenericParser) doLfParser(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *GenericParser) doLfParser(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	res := make([]abstract.ChangeItem, 0)
 	idx := 0
 	st := time.Now()
@@ -461,7 +461,7 @@ func (p *GenericParser) doLfParser(msg persqueue.ReadMessage, partition abstract
 		"%v@@%v@@%v@@%v@@%v@@%v@@%v@@%v@@",
 		partition.LegacyShittyString(),
 		msg.Offset,
-		string(msg.SourceID),
+		string(msg.Key),
 		msg.CreateTime.UnixNano()/int64(time.Millisecond),
 		time.Now().Second(),
 		p.auxOpts.Topic,
@@ -469,7 +469,7 @@ func (p *GenericParser) doLfParser(msg persqueue.ReadMessage, partition abstract
 		msg.WriteTime.UnixNano()/int64(time.Millisecond),
 	)
 	parsedYson := lib.Parse(p.lfCfg.ParserName, p.lfCfg.SplitterName, transportMeta, p.auxOpts.MaskSecrets, msg)
-	p.logger.Debugf("lib.Parse(%v, %v, %v) %v -> %v in %v", p.lfCfg.ParserName, p.lfCfg.SplitterName, p.auxOpts.MaskSecrets, len(msg.Data), len(parsedYson), time.Since(st))
+	p.logger.Debugf("lib.Parse(%v, %v, %v) %v -> %v in %v", p.lfCfg.ParserName, p.lfCfg.SplitterName, p.auxOpts.MaskSecrets, len(msg.Value), len(parsedYson), time.Since(st))
 	st = time.Now()
 	reader := yson.NewReaderKindFromBytes([]byte(parsedYson), yson.StreamListFragment)
 	for {
@@ -517,12 +517,12 @@ func (p *GenericParser) doLfParser(msg persqueue.ReadMessage, partition abstract
 	return res
 }
 
-func (p *GenericParser) doGenericParser(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *GenericParser) doGenericParser(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	res := make([]abstract.ChangeItem, 0)
 	idx := 0
 	// TODO(@kry127) implement secrets processing in generic parser
-	scanner := bufio.NewScanner(bytes.NewReader(msg.Data))
-	bufSize := len(msg.Data) + 2
+	scanner := bufio.NewScanner(bytes.NewReader(msg.Value))
+	bufSize := len(msg.Value) + 2
 	buf := make([]byte, 0, bufSize)
 	scanner.Buffer(buf, bufSize)
 	for scanner.Scan() {
@@ -555,7 +555,7 @@ func (p *GenericParser) doGenericParser(msg persqueue.ReadMessage, partition abs
 	return res
 }
 
-func (p *GenericParser) newUnparsed(partition abstract.Partition, line, reason string, idx int, msg persqueue.ReadMessage) abstract.ChangeItem {
+func (p *GenericParser) newUnparsed(partition abstract.Partition, line, reason string, idx int, msg parsers.Message) abstract.ChangeItem {
 	return NewUnparsed(partition, p.name, line, reason, idx, msg.Offset, msg.WriteTime)
 }
 

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
@@ -18,9 +17,9 @@ type AuditTrailsV1ParserImpl struct {
 	parser           parsers.Parser
 }
 
-func (p *AuditTrailsV1ParserImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *AuditTrailsV1ParserImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	if p.useElasticSchema {
-		lines := strings.Split(string(msg.Data), "\n")
+		lines := strings.Split(string(msg.Value), "\n")
 		result := make([]abstract.ChangeItem, 0)
 		for i, line := range lines {
 			finalLine, err := ExecProgram(line)
@@ -62,7 +61,7 @@ func (p *AuditTrailsV1ParserImpl) Do(msg persqueue.ReadMessage, partition abstra
 	}
 }
 
-func (p *AuditTrailsV1ParserImpl) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *AuditTrailsV1ParserImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0, 1000)
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)

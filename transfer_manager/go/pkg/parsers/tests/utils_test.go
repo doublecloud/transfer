@@ -5,7 +5,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -78,7 +77,7 @@ func TestUnparsed(t *testing.T) {
 		Partition: 1,
 	}
 
-	checkEx := func(t *testing.T, parser parsers.Parser, msg persqueue.ReadMessage) {
+	checkEx := func(t *testing.T, parser parsers.Parser, msg parsers.Message) {
 		changeItems := parser.Do(msg, abstractPartition)
 		require.Equal(t, 1, len(changeItems))
 		require.Equal(t, "a_b_c_unparsed", changeItems[0].Table)
@@ -88,28 +87,28 @@ func TestUnparsed(t *testing.T) {
 
 	t.Run("audittrailsv1", func(t *testing.T) {
 		parser := audittrailsv1engine.NewAuditTrailsV1ParserImpl(true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	// 'blank' parser can't generate 'unparsed'
 	t.Run("cloudevents", func(t *testing.T) {
 		schemaRegistryMock := confluentsrmock.NewConfluentSRMock(nil, nil)
 		defer schemaRegistryMock.Close()
 		parser := cloudeventsengine.NewCloudEventsImpl("", "uname", "pass", "", false, logger.Log, func(in string) string { return schemaRegistryMock.URL() })
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	t.Run("cloudlogging", func(t *testing.T) {
 		parser := cloudloggingengine.NewCloudLoggingImpl(false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	t.Run("confluentschemaregistry", func(t *testing.T) {
 		schemaRegistryMock := confluentsrmock.NewConfluentSRMock(nil, nil)
 		defer schemaRegistryMock.Close()
 		parser := confluentschemaregistryengine.NewConfluentSchemaRegistryImpl(schemaRegistryMock.URL(), "", "uname", "pass", false, logger.Log)
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	t.Run("debezium", func(t *testing.T) {
 		parser := debeziumengine.NewDebeziumImpl(logger.Log, nil, 1)
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	t.Run("json", func(t *testing.T) {
 		parserConfigJSONCommon := &jsonparser.ParserConfigJSONCommon{
@@ -123,23 +122,21 @@ func TestUnparsed(t *testing.T) {
 		}
 		parser, err := jsonparser.NewParserJSON(parserConfigJSONCommon, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
 		require.NoError(t, err)
-		checkEx(t, parser, persqueue.ReadMessage{Data: []byte("{]")})
+		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
 	// 'logfeller' parser - is able to generate 'unparsed', but it's CGO - so, I will skip this check here
 	// 'native' parser can't generate 'unparsed'
 	t.Run("protobuf", func(t *testing.T) {
 		var stdDataTypesFilled = &prototest.StdDataTypesMsg{}
 
-		pMsg := persqueue.ReadMessage{
-			Offset:      1,
-			SeqNo:       1,
-			SourceID:    nil,
-			CreateTime:  time.Time{},
-			WriteTime:   time.Time{},
-			IP:          "",
-			Data:        []byte("im-invalid-proto-message"),
-			Codec:       persqueue.Codec(0),
-			ExtraFields: nil,
+		pMsg := parsers.Message{
+			Offset:     1,
+			SeqNo:      1,
+			Key:        nil,
+			CreateTime: time.Time{},
+			WriteTime:  time.Time{},
+			Value:      []byte("im-invalid-proto-message"),
+			Headers:    nil,
 		}
 
 		desc := stdDataTypesFilled.ProtoReflect().Descriptor()

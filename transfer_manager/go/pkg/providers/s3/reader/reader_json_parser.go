@@ -13,7 +13,6 @@ import (
 	aws_s3 "github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
@@ -147,17 +146,15 @@ func (r *JSONParserReader) Read(ctx context.Context, filePath string, pusher chu
 		offset += readBytes
 		var buff []abstract.ChangeItem
 		var currentSize int64
-		for _, line := range lines {
-			cis := r.parser.Do(persqueue.ReadMessage{
-				Offset:      0,
-				SeqNo:       0,
-				SourceID:    nil,
-				CreateTime:  s3Reader.LastModified(),
-				WriteTime:   s3Reader.LastModified(),
-				IP:          "",
-				Data:        []byte(line),
-				Codec:       0,
-				ExtraFields: nil,
+		for i, line := range lines {
+			cis := r.parser.Do(parsers.Message{
+				Offset:     uint64(i),
+				SeqNo:      0,
+				Key:        []byte(filePath),
+				CreateTime: s3Reader.LastModified(),
+				WriteTime:  s3Reader.LastModified(),
+				Value:      []byte(line),
+				Headers:    nil,
 			}, abstract.NewPartition(filePath, 0))
 			for i := range cis {
 				if parsers.IsUnparsed(cis[i]) {
