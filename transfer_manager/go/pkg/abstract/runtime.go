@@ -50,6 +50,11 @@ func RegisterRuntime(r RuntimeType, f func(spec string) (Runtime, error)) {
 	knownRuntimes[r] = f
 }
 
+func KnownRuntime(r RuntimeType) bool {
+	_, ok := knownRuntimes[r]
+	return ok
+}
+
 // Parallelism params
 type ShardUploadParams struct {
 	JobCount     int //Workers count
