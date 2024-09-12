@@ -154,6 +154,8 @@ type StatefulFakeClient struct {
 
 	mu    sync.Mutex
 	state map[string]map[string]*TransferStateData
+
+	progress []*server.OperationTablePart
 }
 
 func NewStatefulFakeClient() *StatefulFakeClient {
@@ -162,7 +164,20 @@ func NewStatefulFakeClient() *StatefulFakeClient {
 
 		mu:    sync.Mutex{},
 		state: map[string]map[string]*TransferStateData{},
+
+		progress: nil,
 	}
+}
+
+func (f *StatefulFakeClient) Progres() []*server.OperationTablePart {
+	return f.progress
+}
+
+func (f *StatefulFakeClient) UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.progress = tables
+	return nil
 }
 
 func (f *StatefulFakeClient) GetTransferState(id string) (map[string]*TransferStateData, error) {

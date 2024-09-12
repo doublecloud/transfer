@@ -2,10 +2,12 @@ package activate
 
 import (
 	"context"
+	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/config"
+	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/worker/tasks"
@@ -35,11 +37,23 @@ func activate(transferYaml *string) func(cmd *cobra.Command, args []string) erro
 }
 
 func RunActivate(transfer *model.Transfer) error {
-	return tasks.ActivateDelivery(
+	cp := coordinator.NewStatefulFakeClient()
+	st := time.Now()
+	err := tasks.ActivateDelivery(
 		context.Background(),
 		nil,
-		coordinator.NewStatefulFakeClient(),
+		cp,
 		*transfer,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
 	)
+
+	if err != nil {
+		return xerrors.Errorf("activation failed with: %w", err)
+	}
+
+	logger.Log.Infof("Activation completed, upload: %v parts", len(cp.Progres()))
+	for _, p := range cp.Progres() {
+		logger.Log.Infof("	part: %s 👌 %v rows in %v", p.String(), p.CompletedRows, time.Since(st))
+	}
+	return nil
 }

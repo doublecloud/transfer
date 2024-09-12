@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "embed"
 	"os"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -12,18 +11,23 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/cmd/trcli/validate"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/cobraaux"
+	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/dataplane"
 	"github.com/spf13/cobra"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"go.ytsaurus.tech/library/go/core/log/zap"
 )
 
-var defaultLogLevel = "debug"
+var (
+	defaultLogLevel  = "debug"
+	defaultLogConfig = "console"
+)
 
 func main() {
 	loggerConfig := newLoggerConfig()
 	logger.Log = zap.Must(loggerConfig)
 	logLevel := defaultLogLevel
+	logConfig := defaultLogConfig
 
 	rootCommand := &cobra.Command{
 		Use:          "trcli",
@@ -31,6 +35,25 @@ func main() {
 		Example:      "./trcli help",
 		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			switch logConfig {
+			case "json":
+				loggerConfig = zp.NewProductionConfig()
+			case "minimal":
+				loggerConfig.EncoderConfig = zapcore.EncoderConfig{
+					MessageKey: "message",
+					LevelKey:   "level",
+					// Disable the rest of the fields
+					TimeKey:        "",
+					NameKey:        "",
+					CallerKey:      "",
+					FunctionKey:    "",
+					StacktraceKey:  "",
+					LineEnding:     zapcore.DefaultLineEnding,
+					EncodeLevel:    zapcore.CapitalColorLevelEncoder,
+					EncodeName:     nil,
+					EncodeDuration: nil,
+				}
+			}
 			switch logLevel {
 			case "panic":
 				loggerConfig.Level.SetLevel(zapcore.PanicLevel)
@@ -47,6 +70,8 @@ func main() {
 			default:
 				return xerrors.Errorf("unsupported value \"%s\" for --log-level", logLevel)
 			}
+
+			logger.Log = zap.Must(loggerConfig)
 			return nil
 		},
 	}
@@ -57,6 +82,7 @@ func main() {
 	cobraaux.RegisterCommand(rootCommand, validate.ValidateCommand())
 
 	rootCommand.PersistentFlags().StringVar(&logLevel, "log-level", defaultLogLevel, "Specifies logging level for output logs (\"panic\", \"fatal\", \"error\", \"warning\", \"info\", \"debug\")")
+	rootCommand.PersistentFlags().StringVar(&logConfig, "log-config", defaultLogConfig, "Specifies logging config for output logs (\"console\", \"json\", \"minimal\")")
 
 	err := rootCommand.Execute()
 	if err != nil {

@@ -12,8 +12,6 @@
 
 </div>
 
-<img src="./assets/logo.png" alt="transfer" />
-
 <div align="center">
 
 ## 🦫 Introduction
@@ -27,38 +25,6 @@ Our ultimate mission is to help you move data from any source to any destination
 
 <div align="center">
 
-## ⚡ Performance
-
-
-[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
-
-</div>
-
-![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
-
-<div align="center">
-
-## 🚀 Why Transfer
-
-</div>
-
-- **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
-
-- **High Performance**: Go-built, with cutting-edge, high-speed vectorized execution. 👉 [Bench](./docs/benchmarks.md).
-
-- **Data Simplification**: Streamlines data ingestion, no code needed needed. 👉 [Data Loading](./docs/ingestion.md).
-
-- **Schema infering**: Automatically sync not just data but also data schemas.
-
-- **Format Flexibility**: Supports multiple data formats and types, including JSON, CSV, Parquet, Proto, and more.
-
-- **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
-
-- **Schemafull**: [Type system](./docs/typesystem.md) enabling schema-full data storage with flexible data modeling.
-
-- **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
-
-<div align="center">
 
 ## 🚀 Try Transfer
 
@@ -69,9 +35,18 @@ Our ultimate mission is to help you move data from any source to any destination
 
 The fastest way to try Transfer, [Double Cloud](https://double.cloud/services/doublecloud-transfer/)
 
-### 2. Install Transfer from Docker
+### 2. Using CLI
 
-Prepare the image (once) from Docker Hub (this will download about 170 MB data):
+Build from souces:
+
+```shell
+make build
+```
+
+![Made with VHS](https://vhs.charm.sh/vhs-3ETIytnxDtBmrgkcOX3ZBf.gif)
+
+
+### 3. Using docker container
 
 ```shell
 docker pull transfer/transfer
@@ -174,11 +149,47 @@ docker run transfer/transfer activate
 
 <div align="center">
 
-## 📐 Architecture
+## 🚀 Why Transfer
 
 </div>
 
-Data Plane is a golang pluggable package that include into data-plane binary and register itself into it. Our data-plane plugins can be one of:
+- **Cloud-Native**: Single binary and cloud-native as heck, just drop it into your k8s cluster and be happy.
+
+- **High Performance**: Go-built, with cutting-edge, high-speed vectorized execution. 👉 [Bench](./docs/benchmarks.md).
+
+- **Data Simplification**: Streamlines data ingestion, no code needed needed. 👉 [Data Loading](./docs/ingestion.md).
+
+- **Schema infering**: Automatically sync not just data but also data schemas.
+
+- **Format Flexibility**: Supports multiple data formats and types, including JSON, CSV, Parquet, Proto, and more.
+
+- **ACID Transactions**: Ensures data integrity with atomic, consistent, isolated, and durable operations.
+
+- **Schemafull**: [Type system](./docs/typesystem.md) enabling schema-full data storage with flexible data modeling.
+
+- **Community-Driven**: Join a welcoming community for a user-friendly cloud analytics experience.
+
+<div align="center">
+
+## ⚡ Performance
+
+
+[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
+
+</div>
+
+![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
+
+<div align="center">
+
+## 📐 Architecture
+
+
+<img src="./assets/logo.png" alt="transfer" />
+
+</div>
+
+Transfer is a golang pluggable package that include into transfer binary and register itself into it. Our transfer plugins can be one of:
 
 1. [Storage](./transfer_manager/go/pkg/abstract/storage.go) - one-time data reader
 2. [Sink](./transfer_manager/go/pkg/abstract/async_sink.go) - data writer
