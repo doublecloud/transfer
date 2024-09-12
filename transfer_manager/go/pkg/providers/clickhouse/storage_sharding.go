@@ -328,7 +328,7 @@ func NewShardedFromUrls(shardUrls map[string][]string, config *model.ChStoragePa
 	allShardsAreSingleHost := slices.IndexFunc(maps.Values(shardUrls),
 		func(hosts []string) bool { return len(hosts) > 1 }) == -1
 	for name := range shardUrls {
-		db, err := makeShardConnection(config, name, transfer)
+		db, err := makeShardConnection(config, name)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to init connection for shard %v: %w", name, err)
 		}

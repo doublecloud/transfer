@@ -147,7 +147,7 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 	}
 
 	// Native connect
-	db, err := MakeConnection(src.ToStorageParams(), p.transfer)
+	db, err := MakeConnection(src.ToStorageParams())
 	if err != nil {
 		return tr.NotOk(ConnectivityNative, xerrors.Errorf("unable to init a CH storage: %w", err))
 	}

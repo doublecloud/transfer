@@ -716,11 +716,11 @@ func (s *Storage) LoadTablesDDL(tables []abstract.TableID) ([]schema.TableDDL, e
 	return ddls, nil
 }
 
-func MakeConnection(cfg *model.ChStorageParams, transfer *server.Transfer) (*sql.DB, error) {
-	return makeShardConnection(cfg, "", transfer)
+func MakeConnection(cfg *model.ChStorageParams) (*sql.DB, error) {
+	return makeShardConnection(cfg, "")
 }
 
-func makeShardConnection(cfg *model.ChStorageParams, shardName string, _ *server.Transfer) (*sql.DB, error) {
+func makeShardConnection(cfg *model.ChStorageParams, shardName string) (*sql.DB, error) {
 	hosts, err := model.ConnectionHosts(cfg, shardName)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to resolve ClickHouse configuration to a list of hosts: %w", err)
@@ -891,7 +891,7 @@ func NewStorage(config *model.ChStorageParams, transfer *server.Transfer, opts .
 
 	singleHost = singleHost || topology.IsSingleNode(config.Shards) || len(config.Hosts) > 1
 
-	db, err := MakeConnection(config, transfer)
+	db, err := MakeConnection(config)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init CH storage: %w", err)
 	}

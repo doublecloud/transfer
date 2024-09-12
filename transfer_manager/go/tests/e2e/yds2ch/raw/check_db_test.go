@@ -89,7 +89,7 @@ func TestReplication(t *testing.T) {
 	localWorker.Start()
 	defer localWorker.Stop()
 	time.Sleep(5 * time.Second)
-	db, err := clickhouse.MakeConnection(dst.ToStorageParams(), transfer)
+	db, err := clickhouse.MakeConnection(dst.ToStorageParams())
 	require.NoError(t, err)
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(
 		"raw",

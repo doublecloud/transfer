@@ -54,7 +54,7 @@ func TestIncrementalSnapshot(t *testing.T) {
 
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(databaseName, tableName, helpers.GetSampleableStorageByModel(t, Target), 60*time.Second, 5))
 
-	conn, err := clickhouse.MakeConnection(Source.ToStorageParams(), transfer)
+	conn, err := clickhouse.MakeConnection(Source.ToStorageParams())
 	require.NoError(t, err)
 
 	addData(t, conn)
