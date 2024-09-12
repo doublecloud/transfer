@@ -46,6 +46,7 @@ type Deactivator interface {
 // Tester check that it's possible to execute provider with provided transfer params. Will return structured test result for that specific provider.
 type Tester interface {
 	Provider
+	TestChecks() []abstract.CheckType // list of provider specific checks
 	Test(ctx context.Context) *abstract.TestResult
 }
 

@@ -41,7 +41,7 @@ const (
 	PingCheckType          = abstract.CheckType("ping-check")
 	WriteableCheckType     = abstract.CheckType("writeable")
 	LoadTablesCheckType    = abstract.CheckType("load-all-tables")
-	EstimateTalbeCheckType = abstract.CheckType("estimate-table")
+	EstimateTableCheckType = abstract.CheckType("estimate-table")
 	LoadSampleCheckType    = abstract.CheckType("load-sample")
 )
 
@@ -116,7 +116,6 @@ func (s *sampleCollector) Push(items []abstract.ChangeItem) error {
 }
 
 func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *model.Transfer) *abstract.TestResult {
-	tr.Add(LoadTablesCheckType, EstimateTalbeCheckType)
 	metrics := solomon.NewRegistry(solomon.NewRegistryOpts())
 	tables, err := ObtainAllSrcTables(transfer, metrics)
 	if err != nil {
@@ -160,7 +159,7 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 		if err != nil {
 			exactCnt, exactErr := sourceStorage.ExactTableRowsCount(table)
 			if exactErr != nil {
-				return tr.NotOk(EstimateTalbeCheckType, xerrors.Errorf("unable to extract table rows count: estimate count: %w\nexact count: %w", err, exactErr))
+				return tr.NotOk(EstimateTableCheckType, xerrors.Errorf("unable to extract table rows count: estimate count: %w\nexact count: %w", err, exactErr))
 			}
 			cnt = exactCnt
 		}
@@ -206,16 +205,25 @@ func SniffSnapshotData(ctx context.Context, tr *abstract.TestResult, transfer *m
 		return tr.NotOk(LoadSampleCheckType, xerrors.Errorf("found failures %v: %w", len(errs), errs))
 	}
 
-	tr.Ok(EstimateTalbeCheckType)
+	tr.Ok(EstimateTableCheckType)
 	tr.Ok(LoadSampleCheckType)
 	return tr
 }
 
 func TestEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
+	var err error
 	if param.ParamsDst != nil {
+		tr, err = PrepareTargetChecks(param, tr)
+		if err != nil {
+			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Internal, "unable to prepare target checks: %w", err))
+		}
 		tr = TestDestinationEndpoint(ctx, param, tr)
 	}
 	if param.ParamsSrc != nil {
+		tr, err = PrepareSourceChecks(param, tr)
+		if err != nil {
+			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Internal, "unable to prepare source checks: %w", err))
+		}
 		tr = TestSourceEndpoint(ctx, param, tr)
 	}
 	return tr
@@ -242,7 +250,6 @@ func TestTargetEndpoint(transfer *model.Transfer) error {
 }
 
 func TestDestinationEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
-	tr.Add(ConfigCheckType, WriteableCheckType)
 	dst, err := model.NewDestination(param.ParamsDst.Type, param.ParamsDst.Param)
 	if err != nil {
 		return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Target, "unable to construct target: %w", err))
@@ -258,7 +265,6 @@ func TestDestinationEndpoint(ctx context.Context, param *TestEndpointParams, tr 
 }
 
 func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abstract.TestResult) *abstract.TestResult {
-	tr.Add(ConfigCheckType)
 	param.Transfer.Dst = new(model.MockDestination)
 	endpointSource, err := model.NewSource(param.ParamsSrc.Type, param.ParamsSrc.Param)
 	if err != nil {
@@ -298,7 +304,6 @@ func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abst
 		coordinator.NewFakeClient(),
 		param.Transfer,
 	); ok {
-		tr.Add(CredentialsCheckType, DataSampleCheckType, ConfigCheckType)
 		sniffer, err := snifferP.Sniffer(ctx)
 		if err != nil {
 			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Source, "unable to construct sniffer: %w", err))
@@ -307,4 +312,53 @@ func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abst
 		return SniffReplicationData(ctx, sniffer, tr, param.Transfer)
 	}
 	return tr
+}
+
+// PrepareSourceChecks registers all source specific check.
+// These checks also contain the providers specific checks returned by the ToTest method.
+func PrepareSourceChecks(param *TestEndpointParams, tr *abstract.TestResult) (*abstract.TestResult, error) {
+	tr.Add(ConfigCheckType)
+
+	param.Transfer.Dst = new(model.MockDestination)
+
+	endpointSource, err := model.NewSource(param.ParamsSrc.Type, param.ParamsSrc.Param)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to get endpoint endpointSource: %w", err)
+	}
+	param.Transfer.Src = endpointSource
+
+	if tester, ok := providers.Source[providers.Tester](
+		logger.Log,
+		solomon.NewRegistry(solomon.NewRegistryOpts()),
+		coordinator.NewFakeClient(),
+		param.Transfer,
+	); ok {
+		tr.Add(tester.TestChecks()...)
+	}
+	if _, ok := providers.Source[providers.Snapshot](
+		logger.Log,
+		solomon.NewRegistry(solomon.NewRegistryOpts()),
+		coordinator.NewFakeClient(),
+		param.Transfer,
+	); ok {
+		tr.Add(LoadTablesCheckType, EstimateTableCheckType, LoadSampleCheckType)
+		return tr, nil
+	}
+
+	if _, ok := providers.Source[providers.Sniffer](
+		logger.Log,
+		solomon.NewRegistry(solomon.NewRegistryOpts()),
+		coordinator.NewFakeClient(),
+		param.Transfer,
+	); ok {
+		tr.Add(CredentialsCheckType, DataSampleCheckType, ConfigCheckType)
+	}
+
+	return tr, nil
+}
+
+// PrepareTargetChecks registers all target specific check.
+func PrepareTargetChecks(param *TestEndpointParams, tr *abstract.TestResult) (*abstract.TestResult, error) {
+	tr.Add(ConfigCheckType, WriteableCheckType)
+	return tr, nil
 }

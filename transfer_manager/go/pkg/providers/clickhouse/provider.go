@@ -45,8 +45,8 @@ var (
 	_ providers.AsyncSinker       = (*Provider)(nil)
 	_ providers.Sinker            = (*Provider)(nil)
 	_ providers.Abstract2Sinker   = (*Provider)(nil)
-
-	_ providers.Activator = (*Provider)(nil)
+	_ providers.Tester            = (*Provider)(nil)
+	_ providers.Activator         = (*Provider)(nil)
 )
 
 type Provider struct {
@@ -128,6 +128,7 @@ func (p *Provider) Activate(_ context.Context, _ *server.TransferOperation, tabl
 	}
 	return nil
 }
+
 func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
@@ -138,8 +139,12 @@ const (
 	ConnectivityHTTP     = abstract.CheckType("connection-http")
 )
 
+func (p *Provider) TestChecks() []abstract.CheckType {
+	return []abstract.CheckType{ConnectivityHTTP, ConnectivityNative, CredentialsCheckType}
+}
+
 func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
-	tr := abstract.NewTestResult(ConnectivityHTTP, CredentialsCheckType)
+	tr := abstract.NewTestResult(p.TestChecks()...)
 
 	src, ok := p.transfer.Src.(*model.ChSource)
 	if !ok {

@@ -79,8 +79,12 @@ const (
 	DiscoveryCheck = abstract.CheckType("discover")
 )
 
+func (p *Provider) TestChecks() []abstract.CheckType {
+	return []abstract.CheckType{DiscoveryCheck}
+}
+
 func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
-	tr := abstract.NewTestResult(DiscoveryCheck)
+	tr := abstract.NewTestResult(p.TestChecks()...)
 	src, ok := p.transfer.Src.(*AirbyteSource)
 	if !ok {
 		return nil

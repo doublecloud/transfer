@@ -86,11 +86,15 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 
 const (
 	ReadRuleCheck = abstract.CheckType("read-rule-check")
-	ConfiigCheck  = abstract.CheckType("source-config-check")
+	ConfigCheck   = abstract.CheckType("source-config-check")
 )
 
+func (p *Provider) TestChecks() []abstract.CheckType {
+	return []abstract.CheckType{ReadRuleCheck, ConfigCheck}
+}
+
 func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
-	tr := abstract.NewTestResult(ReadRuleCheck)
+	tr := abstract.NewTestResult(p.TestChecks()...)
 	src, ok := p.transfer.Src.(*YDSSource)
 	if !ok {
 		return nil
@@ -111,7 +115,7 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 	tr.Ok(ReadRuleCheck)
 	source, err := p.Source()
 	if err != nil {
-		return tr.NotOk(ConfiigCheck, xerrors.Errorf("unable to construct reader: %w", err))
+		return tr.NotOk(ConfigCheck, xerrors.Errorf("unable to construct reader: %w", err))
 	}
 	return tasks.SniffReplicationData(ctx, source.(abstract.Fetchable), tr, p.transfer)
 }
