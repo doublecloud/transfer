@@ -90,7 +90,7 @@ require (
 	golang.yandex/hasql v1.1.1
 	google.golang.org/api v0.171.0
 	google.golang.org/genproto v0.0.0-20240227224415-6ceb2ff114de
-	google.golang.org/genproto/googleapis/api v0.0.0-20240701130421-f6361c86f094
+	google.golang.org/genproto/googleapis/api v0.0.0-20240822170219-fc7c04adadcd
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240822170219-fc7c04adadcd
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
@@ -212,6 +212,7 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.54.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.53.0 // indirect
 	go.opentelemetry.io/otel v1.29.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.29.0 // indirect
 	go.opentelemetry.io/otel/metric v1.29.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.29.0 // indirect
 	go.opentelemetry.io/otel/trace v1.29.0 // indirect
