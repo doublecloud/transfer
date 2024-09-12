@@ -4,7 +4,7 @@ import (
 	_ "embed"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 )
 
 var (
@@ -98,101 +98,98 @@ const (
 	YQLComplexPrimaryKey    = "yql_complex_primary_key"
 )
 
-var Data = map[string]persqueue.ReadMessage{
+var Data = map[string]parsers.Message{
 	NelSample: {
-		Offset:      123,
-		SeqNo:       32,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Now(),
-		WriteTime:   time.Now(),
-		IP:          "192.168.1.1",
-		Data:        NelSampleData,
-		ExtraFields: map[string]string{"some_field": "test"},
+		Offset:     123,
+		SeqNo:      32,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Now(),
+		WriteTime:  time.Now(),
+		Value:      NelSampleData,
+		Headers:    map[string]string{"some_field": "test"},
 	},
 	TM280Sample: {
 		Offset:     123,
 		SeqNo:      32,
-		SourceID:   []byte("test_source_id"),
+		Key:        []byte("test_source_id"),
 		CreateTime: time.Now(),
 		WriteTime:  time.Now(),
-		IP:         "192.168.1.1",
-		Data: []byte(`{"request_id":960372025831085293}
+		Value: []byte(`{"request_id":960372025831085293}
 {"request_id": 18446744073709551615}`),
-		ExtraFields: map[string]string{"some_field": "test"},
+		Headers: map[string]string{"some_field": "test"},
 	},
 	MetrikaSample: {
 		CreateTime: time.Now(),
-		Data:       MetrikaSampleData,
+		Value:      MetrikaSampleData,
 	},
 	MetrikaBigSample: {
 		CreateTime: time.Now(),
-		Data:       MetrikaSampleData,
+		Value:      MetrikaSampleData,
 	},
 	MetikaComplexSample: {
 		CreateTime: time.Now(),
-		Data:       MetrikaComplexSampleData,
+		Value:      MetrikaComplexSampleData,
 	},
 	TaxiSample: {
 		CreateTime: time.Now(),
-		Data:       TaxiData,
+		Value:      TaxiData,
 	},
 	TaxiYqlSample: {
 		CreateTime: time.Now(),
-		Data:       TaxiData,
+		Value:      TaxiData,
 	},
 	SensitiveSample: {
 		CreateTime: time.Now(),
-		Data:       SensitiveSampleData,
+		Value:      SensitiveSampleData,
 	},
 	SensitiveDisabledSample: {
 		CreateTime: time.Now(),
-		Data:       SensitiveSampleData,
+		Value:      SensitiveSampleData,
 	},
 	KikimrSample: {
 		CreateTime: time.Now(),
-		Data:       KikimrSampleData,
+		Value:      KikimrSampleData,
 	},
 	KikimrNew: {
 		CreateTime: time.Now(),
-		Data:       KikimrSampleNewData,
+		Value:      KikimrSampleNewData,
 	},
 	MdbSample: {
 		CreateTime: time.Now(),
-		Data:       MDBData,
+		Value:      MDBData,
 	},
 	JSONSample: {
 		CreateTime: time.Now(),
-		Data:       JSONSampleData,
+		Value:      JSONSampleData,
 	},
 	JSONYqlSample: {
 		CreateTime: time.Now(),
-		Data:       JSONSampleData,
+		Value:      JSONSampleData,
 	},
 	TskvSample: {
 		CreateTime: time.Now(),
-		Data:       TskvSampleData,
+		Value:      TskvSampleData,
 	},
 	TskvYqlSample: {
 		CreateTime: time.Now(),
-		Data:       TskvSampleData,
+		Value:      TskvSampleData,
 	},
 	LogfellerTimestamps: {
-		Offset:      123,
-		SeqNo:       32,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Now(),
-		WriteTime:   time.Now(),
-		IP:          "192.168.1.1",
-		Data:        LogfellerTimestampsData,
-		ExtraFields: map[string]string{"some_field": "test"},
+		Offset:     123,
+		SeqNo:      32,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Now(),
+		WriteTime:  time.Now(),
+		Value:      LogfellerTimestampsData,
+		Headers:    map[string]string{"some_field": "test"},
 	},
 	YQLComplexPrimaryKey: {
 		CreateTime: time.Now(),
-		Data:       JSONSampleData,
+		Value:      JSONSampleData,
 	},
 	TM5249: {
 		CreateTime: time.Now(),
-		Data:       TM5249Data,
+		Value:      TM5249Data,
 	},
 }
 

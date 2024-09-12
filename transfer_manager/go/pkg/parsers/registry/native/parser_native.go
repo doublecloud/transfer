@@ -1,7 +1,6 @@
 package native
 
 import (
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
@@ -13,20 +12,20 @@ type ParserNative struct {
 	logger log.Logger
 }
 
-func (p *ParserNative) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
-	changeItems, err := abstract.UnmarshalChangeItems(msg.Data)
+func (p *ParserNative) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
+	changeItems, err := abstract.UnmarshalChangeItems(msg.Value)
 	if err != nil {
-		p.logger.Debug("Unable to convert body to changeItems", log.Error(err), log.Any("body", util.Sample(string(msg.Data), 1*1024)))
+		p.logger.Debug("Unable to convert body to changeItems", log.Error(err), log.Any("body", util.Sample(string(msg.Value), 1*1024)))
 	}
 	return changeItems
 }
 
-func (p *ParserNative) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *ParserNative) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0)
 	for _, msg := range batch.Messages {
-		changeItems, err := abstract.UnmarshalChangeItems(msg.Data)
+		changeItems, err := abstract.UnmarshalChangeItems(msg.Value)
 		if err != nil {
-			p.logger.Debug("Unable to convert body to changeItems", log.Error(err), log.Any("body", util.Sample(string(msg.Data), 1*1024)))
+			p.logger.Debug("Unable to convert body to changeItems", log.Error(err), log.Any("body", util.Sample(string(msg.Value), 1*1024)))
 		}
 		result = append(result, changeItems...)
 	}

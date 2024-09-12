@@ -3,10 +3,10 @@ package engine
 import (
 	"testing"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
@@ -62,7 +62,7 @@ func TestFallbackConsistentWithGenericParser(t *testing.T) {
 			require.Equal(t, changeItem.TableSchema.Columns()[4].ColumnName, generic.ColNameIdx)
 		}
 
-		changeItems := parser.Do(persqueue.ReadMessage{Data: []byte(`{"id":1}`)}, abstract.Partition{})
+		changeItems := parser.Do(parsers.Message{Value: []byte(`{"id":1}`)}, abstract.Partition{})
 		require.Len(t, changeItems, 1)
 		require.True(t, isParsedItem(&changeItems[0]))
 		require.False(t, isUnparsedItem(&changeItems[0]))
@@ -87,7 +87,7 @@ func TestFallbackConsistentWithGenericParser(t *testing.T) {
 			require.Equal(t, changeItem.TableSchema.Columns()[3].ColumnName, generic.ColNameIdx)
 		}
 
-		changeItems := parser.Do(persqueue.ReadMessage{Data: []byte(`{"id":1`)}, abstract.Partition{})
+		changeItems := parser.Do(parsers.Message{Value: []byte(`{"id":1`)}, abstract.Partition{})
 		require.Len(t, changeItems, 1)
 		require.False(t, isParsedItem(&changeItems[0]))
 		require.True(t, isUnparsedItem(&changeItems[0]))

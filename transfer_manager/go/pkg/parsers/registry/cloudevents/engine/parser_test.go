@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/cloudevents/sdk-go/binding/format/protobuf/v2/pb"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -50,16 +49,15 @@ func init() {
 	messagesData = append(messagesData, messageNameFromAny)
 }
 
-func makePersqueueReadMessage(i int, rawLine []byte) persqueue.ReadMessage {
-	return persqueue.ReadMessage{
-		Offset:      uint64(i),
-		SeqNo:       0,
-		SourceID:    []byte("test_source_id"),
-		CreateTime:  time.Date(2010, time.October, 10, 10, 10, 10, 10, time.UTC),
-		WriteTime:   time.Date(2020, time.February, 2, 20, 20, 20, 20, time.UTC),
-		IP:          "192.168.1.1",
-		Data:        rawLine,
-		ExtraFields: map[string]string{"some_field": "test"},
+func makePersqueueReadMessage(i int, rawLine []byte) parsers.Message {
+	return parsers.Message{
+		Offset:     uint64(i),
+		SeqNo:      0,
+		Key:        []byte("test_source_id"),
+		CreateTime: time.Date(2010, time.October, 10, 10, 10, 10, 10, time.UTC),
+		WriteTime:  time.Date(2020, time.February, 2, 20, 20, 20, 20, time.UTC),
+		Value:      rawLine,
+		Headers:    map[string]string{"some_field": "test"},
 	}
 }
 

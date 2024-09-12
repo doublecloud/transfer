@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/debezium/engine"
 )
 
@@ -38,21 +38,20 @@ func BenchmarkParsingViaMultithreading(b *testing.B) {
 	}
 }
 
-func makeBenchBatch(size int) persqueue.MessageBatch {
-	messages := make([]persqueue.ReadMessage, 0)
+func makeBenchBatch(size int) parsers.MessageBatch {
+	messages := make([]parsers.Message, 0)
 	for len(messages) < size {
-		messages = append(messages, persqueue.ReadMessage{
-			Offset:      uint64(len(messages)),
-			SeqNo:       0,
-			SourceID:    []byte("test_source_id"),
-			CreateTime:  time.Now(),
-			WriteTime:   time.Now(),
-			IP:          "192.168.1.1",
-			Data:        benchTest,
-			ExtraFields: nil,
+		messages = append(messages, parsers.Message{
+			Offset:     uint64(len(messages)),
+			SeqNo:      0,
+			Key:        []byte("test_source_id"),
+			CreateTime: time.Now(),
+			WriteTime:  time.Now(),
+			Value:      benchTest,
+			Headers:    nil,
 		})
 	}
-	return persqueue.MessageBatch{
+	return parsers.MessageBatch{
 		Topic:     "topicName",
 		Partition: 0,
 		Messages:  messages,

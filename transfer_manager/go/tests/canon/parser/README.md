@@ -2,7 +2,7 @@
 
 For each *TEST_CASE* we will create a single message parse with followed config:
 ```golang
-	msg := persqueue.ReadMessage{
+	msg := parsers.ReadMessage{
 		Offset:      123,
 		SeqNo:       32,
 		SourceID:    []byte("test_source_id"),

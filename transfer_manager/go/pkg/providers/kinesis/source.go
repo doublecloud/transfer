@@ -15,7 +15,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -167,7 +166,7 @@ func (s *Source) parse(record []*consumer.Record) []abstract.ChangeItem {
 	return data
 }
 
-func (s *Source) changeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMessage, abstract.Partition) {
+func (s *Source) changeItemAsMessage(ci abstract.ChangeItem) (parsers.Message, abstract.Partition) {
 	partition := uint32(ci.ColumnValues[1].(int))
 	seqNo := ci.ColumnValues[2].(uint64)
 	wTime := ci.ColumnValues[3].(time.Time)
@@ -180,16 +179,14 @@ func (s *Source) changeItemAsMessage(ci abstract.ChangeItem) (persqueue.ReadMess
 	default:
 		panic(fmt.Sprintf("should never happen, expect string or bytes, recieve: %T", ci.ColumnValues[4]))
 	}
-	return persqueue.ReadMessage{
-			Offset:      ci.LSN,
-			SeqNo:       seqNo,
-			SourceID:    nil,
-			CreateTime:  time.Unix(0, int64(ci.CommitTime)),
-			WriteTime:   wTime,
-			IP:          "",
-			Data:        data,
-			Codec:       0,
-			ExtraFields: nil,
+	return parsers.Message{
+			Offset:     ci.LSN,
+			SeqNo:      seqNo,
+			Key:        nil,
+			CreateTime: time.Unix(0, int64(ci.CommitTime)),
+			WriteTime:  wTime,
+			Value:      data,
+			Headers:    nil,
 		}, abstract.Partition{
 			Cluster:   "", // v1 protocol does not contains such entity
 			Partition: partition,

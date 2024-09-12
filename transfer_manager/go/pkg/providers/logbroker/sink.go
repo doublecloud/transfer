@@ -34,12 +34,12 @@ type sink struct {
 	metrics    *stats.SinkerStats
 	serializer serializer.Serializer
 
-	// shard string - became part of SourceID
+	// shard string - became part of Key
 	//
-	// Logbroker has 'writer session' entity, it's identified by SourceID.
+	// Logbroker has 'writer session' entity, it's identified by Key.
 	// At every moment of time, exists not more than one unique writer session.
-	// Every SourceID corresponds one concrete partition number.
-	// Map [hash(SourceID)->partition_number] is stored on lb-side forever.
+	// Every Key corresponds one concrete partition number.
+	// Map [hash(Key)->partition_number] is stored on lb-side forever.
 	// So, it doesn't matter which string is in the 'shard' parameter - it needed only for hash generation.
 	//
 	// Q: Why default 'shard' value is transferID?
@@ -90,7 +90,7 @@ func DefaultWriterConfigFactory(config *LbDestination, shard, groupID, topic str
 		log.String("Database", opts.Database),
 		log.String("Topic", opts.Topic),
 		log.Any("TLS mode", config.TLS),
-		log.String("SourceID", sourceID),
+		log.String("Key", sourceID),
 	)
 
 	if config.TLS == EnabledTLS {

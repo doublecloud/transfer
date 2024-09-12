@@ -13,7 +13,6 @@ import (
 	aws_s3 "github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
@@ -161,16 +160,14 @@ func (r *GenericParserReader) ParseFile(ctx context.Context, filePath string, s3
 			break
 		}
 	}
-	return r.parser.Do(persqueue.ReadMessage{
-		Offset:      0,
-		SeqNo:       0,
-		SourceID:    nil,
-		CreateTime:  s3Reader.LastModified(),
-		WriteTime:   s3Reader.LastModified(),
-		IP:          "",
-		Data:        fullFile,
-		Codec:       0,
-		ExtraFields: nil,
+	return r.parser.Do(parsers.Message{
+		Offset:     0,
+		SeqNo:      0,
+		Key:        nil,
+		CreateTime: s3Reader.LastModified(),
+		WriteTime:  s3Reader.LastModified(),
+		Value:      fullFile,
+		Headers:    nil,
 	}, abstract.NewPartition(filePath, 0)), nil
 }
 
@@ -219,7 +216,15 @@ func (r *GenericParserReader) resolveSchema(ctx context.Context, key string) (*a
 	if err != nil {
 		return nil, xerrors.Errorf("failed to read sample content for schema deduction: %w", err)
 	}
-	changes := r.parser.Do(persqueue.ReadMessage{Data: content}, abstract.NewPartition(key, 0))
+	changes := r.parser.Do(parsers.Message{
+		Offset:     0,
+		SeqNo:      0,
+		Key:        []byte(key),
+		CreateTime: s3Reader.LastModified(),
+		WriteTime:  s3Reader.LastModified(),
+		Value:      content,
+		Headers:    nil,
+	}, abstract.NewPartition(key, 0))
 
 	if len(changes) == 0 {
 		return nil, xerrors.Errorf("unable to parse sample data: %v", util.Sample(string(content), 1024))

@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
@@ -37,7 +36,7 @@ func (st *iterState) Counter() int {
 	return st.counter
 }
 
-func NewIterState(msg persqueue.ReadMessage, partition abstract.Partition) *iterState {
+func NewIterState(msg parsers.Message, partition abstract.Partition) *iterState {
 	return &iterState{
 		counter:    0,
 		Partition:  partition,
@@ -68,7 +67,7 @@ func (p *ProtoParser) ColumnNames() []string {
 	return p.columns
 }
 
-func (p *ProtoParser) DoBatch(batch persqueue.MessageBatch) (res []abstract.ChangeItem) {
+func (p *ProtoParser) DoBatch(batch parsers.MessageBatch) (res []abstract.ChangeItem) {
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 
 	for _, msg := range batch.Messages {
@@ -78,21 +77,21 @@ func (p *ProtoParser) DoBatch(batch persqueue.MessageBatch) (res []abstract.Chan
 	return res
 }
 
-func (p *ProtoParser) Do(msg persqueue.ReadMessage, partition abstract.Partition) (res []abstract.ChangeItem) {
+func (p *ProtoParser) Do(msg parsers.Message, partition abstract.Partition) (res []abstract.ChangeItem) {
 	iterSt := NewIterState(msg, partition)
 
 	defer func() {
 		if err := recover(); err != nil {
 			res = []abstract.ChangeItem{
-				unparsedChangeItem(iterSt, msg.Data, xerrors.Errorf("Do: panic recovered: %v", err)),
+				unparsedChangeItem(iterSt, msg.Value, xerrors.Errorf("Do: panic recovered: %v", err)),
 			}
 		}
 	}()
 
-	sc, err := protoscanner.NewProtoScanner(p.cfg.ProtoScannerType, p.cfg.LineSplitter, msg.Data, p.cfg.ScannerMessageDesc)
+	sc, err := protoscanner.NewProtoScanner(p.cfg.ProtoScannerType, p.cfg.LineSplitter, msg.Value, p.cfg.ScannerMessageDesc)
 	if err != nil {
 		iterSt.IncrementCounter()
-		res = append(res, unparsedChangeItem(iterSt, msg.Data, xerrors.Errorf("error creating scanner: %v", err)))
+		res = append(res, unparsedChangeItem(iterSt, msg.Value, xerrors.Errorf("error creating scanner: %v", err)))
 		return res
 	}
 
@@ -136,7 +135,7 @@ func (p *ProtoParser) Do(msg persqueue.ReadMessage, partition abstract.Partition
 
 	if err := sc.Err(); err != nil {
 		iterSt.IncrementCounter()
-		res = append(res, unparsedChangeItem(iterSt, msg.Data, err))
+		res = append(res, unparsedChangeItem(iterSt, msg.Value, err))
 	}
 
 	return res

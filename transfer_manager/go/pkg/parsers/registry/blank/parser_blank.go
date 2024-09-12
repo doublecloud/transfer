@@ -1,7 +1,6 @@
 package blank
 
 import (
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
@@ -66,7 +65,7 @@ var (
 	})
 )
 
-func NewRawMessage(msg persqueue.ReadMessage, partition abstract.Partition) abstract.ChangeItem {
+func NewRawMessage(msg parsers.Message, partition abstract.Partition) abstract.ChangeItem {
 	return abstract.ChangeItem{
 		ID:          0,
 		LSN:         msg.SeqNo,
@@ -81,18 +80,18 @@ func NewRawMessage(msg persqueue.ReadMessage, partition abstract.Partition) abst
 			partition.String(),
 			msg.Offset,
 			msg.SeqNo,
-			string(msg.SourceID),
+			string(msg.Key),
 			msg.CreateTime,
 			msg.WriteTime,
-			msg.IP,
-			msg.Data,
-			msg.ExtraFields,
+			"", // IP not replicated anymore
+			msg.Value,
+			msg.Headers,
 		},
 		TableSchema: BlankSchema,
 		OldKeys:     abstract.OldKeysType{KeyNames: nil, KeyTypes: nil, KeyValues: nil},
 		TxID:        "",
 		Query:       "",
-		Size:        abstract.RawEventSize(uint64(len(msg.Data))),
+		Size:        abstract.RawEventSize(uint64(len(msg.Value))),
 	}
 }
 
@@ -101,7 +100,7 @@ func NewRawMessage(msg persqueue.ReadMessage, partition abstract.Partition) abst
 type ParserBlank struct {
 }
 
-func (p *ParserBlank) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *ParserBlank) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	var res []abstract.ChangeItem
 	partition := abstract.NewPartition(batch.Topic, batch.Partition)
 	for _, msg := range batch.Messages {
@@ -110,7 +109,7 @@ func (p *ParserBlank) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeIte
 	return res
 }
 
-func (p *ParserBlank) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *ParserBlank) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	return []abstract.ChangeItem{NewRawMessage(msg, partition)}
 }
 

@@ -70,7 +70,19 @@ func (s *oneDCSource) Fetch() ([]abstract.ChangeItem, error) {
 				for _, item := range buffer {
 					for _, b := range item.Batches() {
 						for _, m := range b.Messages {
-							raw = append(raw, queues.MessageAsChangeItem(m, b))
+							raw = append(raw, queues.MessageAsChangeItem(parsers.Message{
+								Offset:     m.Offset,
+								SeqNo:      m.SeqNo,
+								Key:        m.SourceID,
+								CreateTime: m.CreateTime,
+								WriteTime:  m.WriteTime,
+								Value:      m.Data,
+								Headers:    m.ExtraFields,
+							}, parsers.MessageBatch{
+								Topic:     b.Topic,
+								Partition: b.Partition,
+								Messages:  nil, // not used here
+							}))
 						}
 					}
 				}
@@ -231,7 +243,8 @@ func (s *oneDCSource) run(parseQ *parsequeue.WaitableParseQueue[[]*persqueue.Dat
 					return xerrors.Errorf("unable to send synchronize event, err: %w", err)
 				}
 			case *persqueue.Data:
-				err := s.offsetsValidator.CheckLbOffsets(v.Batches())
+				batches := queues.ConvertBatches(v.Batches())
+				err := s.offsetsValidator.CheckLbOffsets(batches)
 				if err != nil {
 					if s.config.AllowTTLRewind {
 						s.logger.Warn("ttl rewind", log.Error(err))
@@ -240,10 +253,10 @@ func (s *oneDCSource) run(parseQ *parsequeue.WaitableParseQueue[[]*persqueue.Dat
 						return abstract.NewFatalError(err)
 					}
 				}
-				s.logger.Debug("got lb_offsets", log.Any("range", queues.BuildMapPartitionToLbOffsetsRange(v.Batches())))
+				s.logger.Debug("got lb_offsets", log.Any("range", queues.BuildMapPartitionToLbOffsetsRange(batches)))
 
 				s.lastRead = time.Now()
-				messagesSize, messagesCount := BatchStatistics(v.Batches())
+				messagesSize, messagesCount := BatchStatistics(batches)
 				s.metrics.Size.Add(messagesSize)
 				s.metrics.Count.Add(messagesCount)
 				s.logger.Debugf("Incoming data: %d messages of total size %d", messagesCount, messagesSize)
@@ -317,14 +330,14 @@ func (s *oneDCSource) ack(data []*persqueue.Data, st time.Time, err error) {
 func (s *oneDCSource) parse(buffer []*persqueue.Data) []abstract.ChangeItem {
 	var res []abstract.ChangeItem
 	for _, data := range buffer {
-		for _, batch := range data.Batches() {
+		for _, batch := range queues.ConvertBatches(data.Batches()) {
 			res = append(res, s.oldParseBatch(batch)...)
 		}
 	}
 	return res
 }
 
-func (s *oneDCSource) oldParseBatch(b persqueue.MessageBatch) []abstract.ChangeItem {
+func (s *oneDCSource) oldParseBatch(b parsers.MessageBatch) []abstract.ChangeItem {
 	firstLbOffset := b.Messages[0].Offset
 	lastLbOffset := b.Messages[len(b.Messages)-1].Offset
 	var ts time.Time
@@ -333,7 +346,7 @@ func (s *oneDCSource) oldParseBatch(b persqueue.MessageBatch) []abstract.ChangeI
 		if firstLbOffset+uint64(i) != m.Offset {
 			s.logger.Warn("Inconsistency")
 		}
-		totalSize += len(m.Data)
+		totalSize += len(m.Value)
 		if ts.IsZero() || m.CreateTime.Before(ts) {
 			ts = m.CreateTime
 		}

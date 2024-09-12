@@ -6,16 +6,16 @@ package lib
 import (
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 )
 
 func SetConfigsStorage(useEmbeddedConfigs bool) {
 	logger.Log.Warn("Parser is not supported on current OS")
 }
 
-func Parse(parser, splitter, transportMeta string, maskSecrets bool, msg persqueue.ReadMessage) string {
+func Parse(parser, splitter, transportMeta string, maskSecrets bool, msg parsers.Message) string {
 	logger.Log.Warn("Parser is not supported on current OS")
 	time.Sleep(time.Second * 1)
 	return ""

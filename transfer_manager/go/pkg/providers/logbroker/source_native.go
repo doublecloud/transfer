@@ -160,10 +160,11 @@ func (p *publisher) Run(sink abstract.AsyncSink) error {
 					return xerrors.Errorf("unable to send synchronize event, err: %w", err)
 				}
 			case *persqueue.Data:
-				messagesSize, messagesCount := BatchStatistics(v.Batches())
+				batches := queues.ConvertBatches(v.Batches())
+				messagesSize, messagesCount := BatchStatistics(batches)
 				p.metrics.Size.Add(messagesSize)
 				p.metrics.Count.Add(messagesCount)
-				err := p.offsetsValidator.CheckLbOffsets(v.Batches())
+				err := p.offsetsValidator.CheckLbOffsets(batches)
 				if err != nil {
 					if p.config.AllowTTLRewind {
 						p.logger.Warn("ttl rewind", log.Error(err))
@@ -172,11 +173,11 @@ func (p *publisher) Run(sink abstract.AsyncSink) error {
 						return abstract.NewFatalError(err)
 					}
 				}
-				p.logger.Debug("got lb_offsets", log.Any("range", queues.BuildMapPartitionToLbOffsetsRange(v.Batches())))
+				p.logger.Debug("got lb_offsets", log.Any("range", queues.BuildMapPartitionToLbOffsetsRange(batches)))
 
 				p.metrics.Master.Set(1)
 				parseQ := []chan changesOrError{}
-				mapPartitionToLbOffsetsRange := queues.BuildMapPartitionToLbOffsetsRange(v.Batches())
+				mapPartitionToLbOffsetsRange := queues.BuildMapPartitionToLbOffsetsRange(batches)
 				for _, b := range v.Batches() {
 					for _, m := range b.Messages {
 						resCh := make(chan changesOrError, 1)

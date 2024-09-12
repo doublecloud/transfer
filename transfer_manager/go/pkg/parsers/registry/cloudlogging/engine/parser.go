@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
@@ -13,11 +12,11 @@ type CloudLoggingImpl struct {
 	parser parsers.Parser
 }
 
-func (p *CloudLoggingImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *CloudLoggingImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
 	return p.parser.Do(msg, partition)
 }
 
-func (p *CloudLoggingImpl) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *CloudLoggingImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0, 1000)
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)

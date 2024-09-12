@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/blank"
 	"github.com/stretchr/testify/require"
 )
@@ -42,7 +42,7 @@ func TestSerializeLB(t *testing.T) {
 	changeItemsCount := 10
 	changeItems := make([]abstract.ChangeItem, 0)
 	for i := 0; i < changeItemsCount; i++ {
-		changeItems = append(changeItems, blank.NewRawMessage(persqueue.ReadMessage{}, abstract.Partition{Cluster: "", Partition: 0, Topic: ""}))
+		changeItems = append(changeItems, blank.NewRawMessage(parsers.Message{}, abstract.Partition{Cluster: "", Partition: 0, Topic: ""}))
 		sourceIDIndex := blank.BlankColsIDX[blank.SourceIDColumn]
 		changeItems[len(changeItems)-1].ColumnValues[sourceIDIndex] = fmt.Sprintf("%d", i)
 	}

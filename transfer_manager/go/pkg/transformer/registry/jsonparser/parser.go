@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
@@ -43,13 +42,11 @@ type parser struct {
 	parser *generic.GenericParser
 }
 
-func changeItemAsMessage(ci *abstract.ChangeItem) (msg persqueue.ReadMessage, part abstract.Partition, err error) {
+func changeItemAsMessage(ci *abstract.ChangeItem) (msg parsers.Message, part abstract.Partition, err error) {
 	if ci.TableSchema != blank.BlankSchema {
-		return persqueue.ReadMessage{}, abstract.Partition{}, xerrors.Errorf("unexpected schema: %v", ci.TableSchema.Columns())
+		return parsers.Message{}, abstract.Partition{}, xerrors.Errorf("unexpected schema: %v", ci.TableSchema.Columns())
 	}
 	var errs util.Errors
-	ip, err := blank.ExtractValue[string](ci, blank.IPColumn)
-	errs = util.AppendErr(errs, err)
 	xtras, err := blank.ExtractValue[map[string]string](ci, blank.ExtrasColumn)
 	errs = util.AppendErr(errs, err)
 	partition, err := blank.ExtractValue[string](ci, blank.PartitionColum)
@@ -71,16 +68,14 @@ func changeItemAsMessage(ci *abstract.ChangeItem) (msg persqueue.ReadMessage, pa
 		return msg, part, xerrors.Errorf("unable to parse partition: %w", err)
 	}
 
-	return persqueue.ReadMessage{
-		Offset:      ci.LSN,
-		SeqNo:       seqNo,
-		SourceID:    []byte(sourceID),
-		CreateTime:  cTime,
-		WriteTime:   wTime,
-		IP:          ip,
-		Data:        rawData,
-		Codec:       0,
-		ExtraFields: xtras,
+	return parsers.Message{
+		Offset:     ci.LSN,
+		SeqNo:      seqNo,
+		Key:        []byte(sourceID),
+		CreateTime: cTime,
+		WriteTime:  wTime,
+		Value:      rawData,
+		Headers:    xtras,
 	}, part, nil
 }
 
@@ -93,7 +88,7 @@ func (r parser) Apply(input []abstract.ChangeItem) abstract.TransformerResult {
 	}
 	var parsed []abstract.ChangeItem
 	var errs []abstract.TransformerError
-	batches := map[abstract.Partition][]persqueue.ReadMessage{}
+	batches := map[abstract.Partition][]parsers.Message{}
 	for _, row := range input {
 		msg, part, err := changeItemAsMessage(&row)
 		if err != nil {
@@ -107,7 +102,7 @@ func (r parser) Apply(input []abstract.ChangeItem) abstract.TransformerResult {
 	}
 
 	for part, msgs := range batches {
-		parsed = append(parsed, r.parser.DoBatch(persqueue.MessageBatch{
+		parsed = append(parsed, r.parser.DoBatch(parsers.MessageBatch{
 			Topic:     fmt.Sprintf("rt3.na--%s", part.Topic), // lol
 			Partition: part.Partition,
 			Messages:  msgs,

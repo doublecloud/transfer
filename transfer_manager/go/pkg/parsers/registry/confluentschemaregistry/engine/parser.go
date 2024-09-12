@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	genericparser "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/schemaregistry/confluent"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
@@ -110,11 +110,11 @@ func (p *ConfluentSrImpl) DoBuf(partition abstract.Partition, buf []byte, offset
 	return result
 }
 
-func (p *ConfluentSrImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
-	return p.DoBuf(partition, msg.Data, msg.Offset, msg.WriteTime)
+func (p *ConfluentSrImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
+	return p.DoBuf(partition, msg.Value, msg.Offset, msg.WriteTime)
 }
 
-func (p *ConfluentSrImpl) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *ConfluentSrImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0, len(batch.Messages))
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)

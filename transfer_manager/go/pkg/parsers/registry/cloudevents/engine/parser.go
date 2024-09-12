@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	genericparser "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/generic"
 	confluentschemaregistryengine "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
@@ -56,7 +56,7 @@ func newColSchema(columnName string, dataType ytschema.Type, isPkey bool) abstra
 func buildChangeItem(
 	changeItem *abstract.ChangeItem,
 	fields *cloudEventsProtoFields,
-	msg persqueue.ReadMessage,
+	msg parsers.Message,
 	partition abstract.Partition,
 ) abstract.ChangeItem {
 	subject := fields.subject
@@ -86,7 +86,7 @@ func buildChangeItem(
 		OldKeys:     abstract.OldKeysType{KeyNames: nil, KeyTypes: nil, KeyValues: nil},
 		TxID:        "",
 		Query:       "",
-		Size:        abstract.RawEventSize(uint64(len(msg.Data))),
+		Size:        abstract.RawEventSize(uint64(len(msg.Value))),
 	}
 }
 
@@ -138,18 +138,18 @@ func (p *CloudEventsImpl) getConfluentSRParser(hostPort string) *confluentschema
 	return confluentSRParser
 }
 
-func (p *CloudEventsImpl) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
-	cloudEventsFields, body, protoPath, err := unpackCloudEventsProtoMessage(msg.Data)
+func (p *CloudEventsImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
+	cloudEventsFields, body, protoPath, err := unpackCloudEventsProtoMessage(msg.Value)
 	if err != nil {
 		err := xerrors.Errorf("unable to unpack cloudEvents proto message, err: %w", err)
-		changeItems := []abstract.ChangeItem{genericparser.NewUnparsed(partition, partition.Topic, string(msg.Data), err.Error(), 0, msg.Offset, msg.WriteTime)}
+		changeItems := []abstract.ChangeItem{genericparser.NewUnparsed(partition, partition.Topic, string(msg.Value), err.Error(), 0, msg.Offset, msg.WriteTime)}
 		return changeItems
 	}
 
 	hostPort, schemaID, err := extractSchemaIDAndURL(cloudEventsFields.dataschema)
 	if err != nil {
 		err := xerrors.Errorf("unable to break URL into subject&version, err: %w", err)
-		changeItems := []abstract.ChangeItem{genericparser.NewUnparsed(partition, partition.Topic, string(msg.Data), err.Error(), 0, msg.Offset, msg.WriteTime)}
+		changeItems := []abstract.ChangeItem{genericparser.NewUnparsed(partition, partition.Topic, string(msg.Value), err.Error(), 0, msg.Offset, msg.WriteTime)}
 		return changeItems
 	}
 
@@ -176,7 +176,7 @@ func (p *CloudEventsImpl) Do(msg persqueue.ReadMessage, partition abstract.Parti
 	return result
 }
 
-func (p *CloudEventsImpl) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *CloudEventsImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
 	result := make([]abstract.ChangeItem, 0, len(batch.Messages))
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)

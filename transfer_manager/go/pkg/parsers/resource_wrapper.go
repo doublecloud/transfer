@@ -1,7 +1,6 @@
 package parsers
 
 import (
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/resources"
 )
@@ -19,11 +18,11 @@ func (p *ResourceableParser) ResourcesObj() resources.AbstractResources {
 	return p.res
 }
 
-func (p *ResourceableParser) Do(msg persqueue.ReadMessage, partition abstract.Partition) []abstract.ChangeItem {
+func (p *ResourceableParser) Do(msg Message, partition abstract.Partition) []abstract.ChangeItem {
 	return p.parser.Do(msg, partition)
 }
 
-func (p *ResourceableParser) DoBatch(batch persqueue.MessageBatch) []abstract.ChangeItem {
+func (p *ResourceableParser) DoBatch(batch MessageBatch) []abstract.ChangeItem {
 	return p.parser.DoBatch(batch)
 }
 
