@@ -7,10 +7,13 @@ import (
 	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 	debezium_prod_status "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/prodstatus"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/airbyte"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 )
+
+type Mirrareable interface {
+	ForceMirror()
+}
 
 func InferFormatSettings(src server.Source, formatSettings server.SerializationFormat) server.SerializationFormat {
 	result := formatSettings.Copy()
@@ -26,7 +29,7 @@ func InferFormatSettings(src server.Source, formatSettings server.SerializationF
 		}
 
 		switch src.(type) {
-		case *logbroker.LfSource:
+		case Mirrareable:
 			result.Name = server.SerializationFormatLbMirror
 		case *airbyte.AirbyteSource:
 			result.Name = server.SerializationFormatJSON
@@ -74,7 +77,7 @@ func sourceCompatible(src server.Source, transferType abstract.TransferType, ser
 		}
 		return xerrors.New("in Mirror serialized supported only default mirror source types")
 	case server.SerializationFormatLbMirror:
-		if src.GetProviderType().Name() == logbroker.ProviderType.Name() {
+		if src.GetProviderType().Name() == "lb" { // sorry again
 			return nil
 		}
 		return xerrors.New("in LbMirror serialized supported only lb source type")

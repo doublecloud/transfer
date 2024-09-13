@@ -18,7 +18,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/raw2table"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	ytStorage "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/storage"
 	replaceprimarykey "github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/replace_primary_key"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
@@ -30,7 +29,7 @@ import (
 var (
 	currSource = &kafka.KafkaSource{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     logbroker.DisabledTLS,
+			TLS:     server.DisabledTLS,
 			Brokers: []string{os.Getenv("KAFKA_RECIPE_BROKER_LIST")},
 		},
 		Auth:             &kafka.KafkaAuth{Enabled: false},

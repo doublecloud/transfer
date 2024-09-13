@@ -13,7 +13,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	jsonparser "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/json"
 	kafkasink "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -37,7 +36,7 @@ func TestReplication(t *testing.T) {
 
 	source := &kafkasink.KafkaSource{
 		Connection: &kafkasink.KafkaConnectionOptions{
-			TLS:     logbroker.DisabledTLS,
+			TLS:     server.DisabledTLS,
 			Brokers: []string{os.Getenv("KAFKA_RECIPE_BROKER_LIST")},
 		},
 		Auth:             &kafkasink.KafkaAuth{Enabled: false},

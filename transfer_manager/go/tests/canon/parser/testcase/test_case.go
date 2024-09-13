@@ -3,7 +3,6 @@ package testcase
 import (
 	"embed"
 	"encoding/json"
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"strings"
@@ -13,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -40,9 +39,6 @@ func LoadStaticTestCases(t *testing.T, samples embed.FS) map[string]TestCase {
 			return nil
 		}
 		caseName := strings.ReplaceAll(filepath.Base(path), ".config.json", "")
-		// DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
-		fmt.Printf("timmyb32rQQQ:caseName=%s\n", caseName)
-		// DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG
 		configData, err := fs.ReadFile(samples, path)
 		if err != nil {
 			return err
@@ -51,7 +47,7 @@ func LoadStaticTestCases(t *testing.T, samples embed.FS) map[string]TestCase {
 		if err != nil {
 			return err
 		}
-		var source logbroker.LfSource
+		var source kafka.KafkaSource
 		if err := json.Unmarshal(configData, &source); err != nil {
 			logger.Log.Warn("unable to unmarshal", log.Error(err))
 			return nil
@@ -61,7 +57,7 @@ func LoadStaticTestCases(t *testing.T, samples embed.FS) map[string]TestCase {
 		require.NoError(t, err)
 
 		cases[caseName] = TestCase{
-			TopicName:    source.Topics[0],
+			TopicName:    source.GroupTopics[0],
 			ParserConfig: parserConfig,
 			Data:         MakeDefaultPersqueueReadMessage(sampleData),
 		}

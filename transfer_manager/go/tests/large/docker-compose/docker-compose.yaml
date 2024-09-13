@@ -117,29 +117,6 @@ services:
       test: ['CMD', 'psql', 'host=localhost port=8433 user=postgres password=123 dbname=postgres', '-c', 'select 1;']
       interval: 1s
       retries: 30
-  yds2elasticsearch-elastic-target-1:
-    image: registry.yandex.net/data-transfer/tests/elasticsearch:7.17.9@sha256:4a601b6ca6bddcfed375752832c5ad23f423d02ee50fbf0c5428ecaaee05e168
-    container_name: yds2elasticsearch-elastic-target-1
-    network_mode: host
-    environment:
-      - node.name=es01
-      - http.port=9201
-      - transport.port=9301
-      - cluster.name=es-docker-cluster-1
-      - cluster.initial_master_nodes=es01
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
-      - ingest.geoip.downloader.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    healthcheck:
-      test: curl -s localhost:9201 >/dev/null || exit 1
-      interval: 30s
-      timeout: 20s
-      retries: 50
   pg2elasticsearch-source-1:
     container_name: pg2elasticsearch-source-1
     build:

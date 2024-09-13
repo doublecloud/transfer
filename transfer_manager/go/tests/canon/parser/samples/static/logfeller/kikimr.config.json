@@ -116,5 +116,5 @@
     "Port": 0,
     "Sniff": false,
     "Token": "",
-    "Topics": ["/kikimr/unified-agent/kikimr-debug-log"]
+    "GroupTopics": ["/kikimr/unified-agent/kikimr-debug-log"]
 }

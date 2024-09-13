@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/json"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/tests/samples"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/transformer/registry/filter"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/canon"
@@ -213,7 +213,7 @@ from table`,
 }
 
 func parserConfigMap(name string) map[string]interface{} {
-	var source logbroker.LfSource
+	var source kafka.KafkaSource
 	_ = json.Unmarshal([]byte(samples.Configs[name]), &source)
 	source.WithDefaults()
 	return source.ParserConfig

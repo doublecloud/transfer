@@ -15,7 +15,6 @@ import (
 	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/testutil"
 	kafka2 "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	"github.com/golang/mock/gomock"
@@ -286,7 +285,7 @@ func TestReplication(t *testing.T) {
 
 	dst := &kafka2.KafkaDestination{
 		Connection: &kafka2.KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &kafka2.KafkaAuth{

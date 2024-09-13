@@ -103,5 +103,5 @@
     "Port": 0,
     "Sniff": false,
     "Token": "",
-    "Topics": [""]
+    "GroupTopics": [""]
 }

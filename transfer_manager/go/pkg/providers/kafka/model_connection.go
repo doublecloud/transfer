@@ -6,7 +6,7 @@ import (
 	"net"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util/validators"
 	"github.com/segmentio/kafka-go/sasl"
 	"github.com/segmentio/kafka-go/sasl/scram"
@@ -55,14 +55,14 @@ func (a *KafkaAuth) GetFranzAuthMechanism() franzsasl.Mechanism {
 
 type KafkaConnectionOptions struct {
 	ClusterID    string
-	TLS          logbroker.TLSMode
+	TLS          model.TLSMode
 	TLSFile      string `model:"PemFileContent"`
 	Brokers      []string
 	SubNetworkID string
 }
 
 func (o *KafkaConnectionOptions) TLSConfig() (*tls.Config, error) {
-	if o.TLS == logbroker.DisabledTLS {
+	if o.TLS == model.DisabledTLS {
 		return nil, nil
 	}
 	if o.TLSFile != "" {

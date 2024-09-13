@@ -46,6 +46,14 @@ const (
 	ParsingFormatRaw      = ParsingFormat("RAW")
 )
 
+type TLSMode string
+
+const (
+	DefaultTLS  TLSMode = "Default"
+	EnabledTLS  TLSMode = "Enabled"
+	DisabledTLS TLSMode = "Disabled"
+)
+
 type DataTransformOptions struct {
 	CloudFunction         string
 	ServiceAccountID      string
