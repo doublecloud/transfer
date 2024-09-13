@@ -207,5 +207,5 @@
     "Port": 0,
     "Sniff": false,
     "Token": "",
-    "Topics": ["maps-adv-statistics/raw_metrika_log"]
+    "GroupTopics": ["maps-adv-statistics/raw_metrika_log"]
 }

@@ -19,7 +19,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/cloudevents"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/cloudevents/engine/testutils"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	yt_storage "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt/storage"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
 	confluentsrmock "github.com/doublecloud/transfer/transfer_manager/go/tests/helpers/confluent_schema_registry_mock"
@@ -30,7 +29,7 @@ import (
 var (
 	currSource = kafka.KafkaSource{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     logbroker.DisabledTLS,
+			TLS:     server.DisabledTLS,
 			Brokers: []string{os.Getenv("KAFKA_RECIPE_BROKER_LIST")},
 		},
 		Auth:             &kafka.KafkaAuth{Enabled: false},

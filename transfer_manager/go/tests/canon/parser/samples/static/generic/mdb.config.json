@@ -350,5 +350,5 @@
     "Port": 0,
     "Sniff": false,
     "Token": "",
-    "Topics": ["mdb/porto/test/perf_diag/pg_stat_activity"]
+    "GroupTopics": ["mdb/porto/test/perf_diag/pg_stat_activity"]
 }

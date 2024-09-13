@@ -11,7 +11,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/transfer_manager/go/pkg/debezium/parameters"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	gomock "github.com/golang/mock/gomock"
 	"github.com/segmentio/kafka-go"
 	"github.com/stretchr/testify/require"
@@ -33,7 +32,7 @@ func TestNative(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -77,7 +76,7 @@ func TestJSON(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -121,7 +120,7 @@ func TestDebezium(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -169,7 +168,7 @@ func TestMirror(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -212,7 +211,7 @@ func TestMirrorKafka(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -256,7 +255,7 @@ func TestAddDTSystemTables(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -334,7 +333,7 @@ func TestPassConfigEntries(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{

@@ -8,7 +8,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/stretchr/testify/require"
 )
 
@@ -26,7 +25,7 @@ func TestKafka(t *testing.T) {
 	}
 	sinker, _ := NewReplicationSink(&KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     logbroker.DefaultTLS,
+			TLS:     server.DefaultTLS,
 			Brokers: []string{os.Getenv("KAFKA_BROKER")},
 		},
 		Auth: &KafkaAuth{

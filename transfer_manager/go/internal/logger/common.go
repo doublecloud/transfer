@@ -1,11 +1,8 @@
 package logger
 
 import (
-	"io"
 	"os"
 
-	"github.com/doublecloud/transfer/kikimr/public/sdk/go/persqueue"
-	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/instanceutil"
 	zp "go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -72,12 +69,4 @@ func newConsoleLogger() log.Logger {
 	writeSyncer := zapcore.AddSync(os.Stdout)
 
 	return newLogger(zapcore.NewCore(encoder, writeSyncer, levelEnabler))
-}
-
-func NewLogbrokerLogger(cfg *persqueue.WriterOptions, registry metrics.Registry, useTopicAPI bool) (log.Logger, io.Closer, error) {
-	if useTopicAPI {
-		return NewTopicWriterLogger(cfg, registry)
-	} else {
-		return NewLogbrokerLoggerDeprecated(cfg, registry)
-	}
 }

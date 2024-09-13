@@ -13,7 +13,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/debezium"
 	kafkasink "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
@@ -112,7 +111,7 @@ func TestPg2Kafka2PgSchemaRegistry(t *testing.T) {
 				}
 				kafkaTarget := kafkasink.KafkaDestination{
 					Connection: &kafkasink.KafkaConnectionOptions{
-						TLS:     logbroker.DisabledTLS,
+						TLS:     server.DisabledTLS,
 						Brokers: []string{kafkaBrokerAddress},
 					},
 					Auth:  &kafkasink.KafkaAuth{Enabled: false},
@@ -136,7 +135,7 @@ func TestPg2Kafka2PgSchemaRegistry(t *testing.T) {
 				require.NoError(t, err)
 				kafkaSource := kafkasink.KafkaSource{
 					Connection: &kafkasink.KafkaConnectionOptions{
-						TLS:     logbroker.DisabledTLS,
+						TLS:     server.DisabledTLS,
 						Brokers: []string{kafkaBrokerAddress},
 					},
 					Auth:             &kafkasink.KafkaAuth{Enabled: false},

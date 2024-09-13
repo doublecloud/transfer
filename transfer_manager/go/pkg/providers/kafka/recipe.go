@@ -8,7 +8,6 @@ import (
 	"github.com/doublecloud/transfer/cloud/dataplatform/testcontainer/kafka"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 )
 
 func ContainerNeeded() bool {
@@ -25,7 +24,7 @@ func SourceRecipe() (*KafkaSource, error) {
 	src := new(KafkaSource)
 	src.Connection = &KafkaConnectionOptions{
 		ClusterID:    "",
-		TLS:          logbroker.DisabledTLS,
+		TLS:          server.DisabledTLS,
 		TLSFile:      "",
 		Brokers:      []string{brokers},
 		SubNetworkID: "",
@@ -74,7 +73,7 @@ func DestinationRecipe() (*KafkaDestination, error) {
 	dst := new(KafkaDestination)
 	dst.Connection = &KafkaConnectionOptions{
 		ClusterID:    "",
-		TLS:          logbroker.DisabledTLS,
+		TLS:          server.DisabledTLS,
 		TLSFile:      "",
 		Brokers:      []string{brokers},
 		SubNetworkID: "",

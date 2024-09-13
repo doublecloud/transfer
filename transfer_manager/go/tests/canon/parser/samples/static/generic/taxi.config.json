@@ -353,5 +353,5 @@
     "Port": 0,
     "Sniff": false,
     "Token": "",
-    "Topics": ["taxi/taxi-chatterbox-yandex-taxi-chatterbox-log"]
+    "GroupTopics": ["taxi/taxi-chatterbox-yandex-taxi-chatterbox-log"]
 }

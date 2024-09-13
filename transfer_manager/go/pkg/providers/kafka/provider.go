@@ -12,7 +12,6 @@ import (
 	server "github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/middlewares"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -116,7 +115,7 @@ func (p *Provider) Source() (abstract.Source, error) {
 		src.IsHomo = p.transfer.DstType() == ProviderType && src.IsDefaultMirror()
 	}
 	if !src.SynchronizeIsNeeded {
-		src.SynchronizeIsNeeded = p.transfer.DstType() == logbroker.ProviderType
+		src.SynchronizeIsNeeded = p.transfer.DstType() == "lb" // sorry for that
 	}
 	if len(p.transfer.DataObjects.GetIncludeObjects()) > 0 && len(src.GroupTopics) == 0 { // infer topics from transfer
 		src.GroupTopics = p.transfer.DataObjects.GetIncludeObjects()

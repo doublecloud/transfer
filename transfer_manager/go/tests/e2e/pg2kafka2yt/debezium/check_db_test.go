@@ -12,7 +12,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/debezium"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
 	pgcommon "github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/yt"
 	"github.com/doublecloud/transfer/transfer_manager/go/tests/helpers"
@@ -65,7 +64,7 @@ func TestReplication(t *testing.T) {
 
 	kafkaDst := &kafka.KafkaDestination{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     logbroker.DisabledTLS,
+			TLS:     server.DisabledTLS,
 			Brokers: []string{brokers},
 		},
 		Auth:  &kafka.KafkaAuth{Enabled: false},
@@ -89,7 +88,7 @@ func TestReplication(t *testing.T) {
 
 	kafkaSrc := &kafka.KafkaSource{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     logbroker.DisabledTLS,
+			TLS:     server.DisabledTLS,
 			Brokers: []string{brokers},
 		},
 		Auth:             &kafka.KafkaAuth{Enabled: false},

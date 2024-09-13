@@ -11,7 +11,6 @@ require (
 	github.com/ClickHouse/clickhouse-go/v2 v2.18.0
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/DataDog/datadog-api-client-go/v2 v2.17.0
-	github.com/DataDog/zstd v1.5.2
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/participle v0.4.1
 	github.com/andybalholm/brotli v1.1.0
@@ -70,12 +69,10 @@ require (
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
-	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7
 	github.com/ydb-platform/ydb-go-sdk/v3 v3.79.0
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.11.7
 	go.uber.org/atomic v1.11.0
-	go.uber.org/goleak v1.3.0
 	go.uber.org/mock v0.4.0
 	go.uber.org/zap v1.27.0
 	go.ytsaurus.tech/library/go/core/log v0.0.4
@@ -117,6 +114,7 @@ require (
 	github.com/Azure/go-autorest/logger v0.2.1 // indirect
 	github.com/Azure/go-autorest/tracing v0.6.0 // indirect
 	github.com/ClickHouse/ch-go v0.58.2 // indirect
+	github.com/DataDog/zstd v1.5.2 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
@@ -204,6 +202,7 @@ require (
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
+	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	github.com/zeebo/assert v1.3.1 // indirect

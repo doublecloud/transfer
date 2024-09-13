@@ -19,7 +19,7 @@ import (
 	_ "github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/registry/tskv"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/parsers/tests/samples"
-	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/logbroker"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zapcore"
@@ -40,7 +40,7 @@ func parserConfigMapToStruct(t *testing.T, parserConfigMap map[string]interface{
 }
 
 func ParserConfigMap(name string) map[string]interface{} {
-	var source logbroker.LfSource
+	var source kafka.KafkaSource
 	_ = json.Unmarshal([]byte(samples.Configs[name]), &source)
 	source.WithDefaults()
 	return source.ParserConfig
@@ -426,7 +426,7 @@ func TestLogfellerTimestampParse(t *testing.T) {
 func TestGenericParser_Parse_vs_Do(t *testing.T) {
 	for k := range samples.Configs {
 		t.Run(k, func(t *testing.T) {
-			var source logbroker.LfSource
+			var source kafka.KafkaSource
 			_ = json.Unmarshal([]byte(samples.Configs[k]), &source)
 			if parsers.GetParserNameByMap(source.ParserConfig) == "yql.lb" { // skip YQL-parser, test only generic & logfeller parsers
 				return
