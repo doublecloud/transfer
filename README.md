@@ -49,13 +49,13 @@ make build
 ### 3. Using docker container
 
 ```shell
-docker pull transfer/transfer
+docker pull ghcr.io/doublecloud/transfer:dev
 ```
 
 To run Transfer quickly:
 
 ```shell
-docker run transfer/transfer activate
+docker run ghcr.io/doublecloud/transfer:dev activate --help
 ```
 
 <div align="center">
