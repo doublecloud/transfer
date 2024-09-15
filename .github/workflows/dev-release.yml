@@ -13,9 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Publish docker image
-        uses: benc-uk/workflow-dispatch@v1
+        uses: ./.github/release.yml
         with:
-          workflow: Manual build and publish of Transfer image
           ref: ${{ github.ref }}  # The branch name
-          inputs: '{"version": "${{ github.ref_name }}"}'
+          version: ${{ github.ref_name }}
 
