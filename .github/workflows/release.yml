@@ -18,6 +18,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Update build version
+        run: |
+          VER_PATH=versions/${{ github.event.inputs.version }}/VERSION
+          if [[ ! -e $VER_PATH ]]; then
+            echo 0 > $VER_PATH
+          fi
+          VER=$(($(cat $VER_PATH)+1))
+          echo "BUILD_VERSION=$VER" >> $GITHUB_ENV
+          echo $VER > $VER_PATH
       - name: Login to GitHub Container Registry
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # @v3
         with:
