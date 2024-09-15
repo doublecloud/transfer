@@ -9,14 +9,9 @@ on:
       - '*'
 
 jobs:
-  trigger-manual-build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Publish docker image
-        uses: ./.github/release.yml
-        with:
-          ref: ${{ github.ref }}  # The branch name
-          version: ${{ github.ref_name }}
+  trigger-build:
+    uses: ./.github/release.yml
+    with:
+      ref: ${{ github.ref }}  # The branch name
+      version: ${{ github.ref_name }}
 

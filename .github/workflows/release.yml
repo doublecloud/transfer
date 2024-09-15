@@ -1,7 +1,5 @@
-name: Manual build and publish of Transfer image
-run-name: Build and publish of Transfer image by @${{ github.actor }}
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       version:
         description: Version of base Transfer image
