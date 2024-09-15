@@ -1,0 +1,45 @@
+name: Manual build and publish of Transfer image
+run-name: Build and publish of Transfer image by @${{ github.actor }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version of base Transfer image
+        required: true
+        type: string
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: doublecloud/transfer
+permissions: {}
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # @v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Configure image metadata
+        id: meta
+        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # @v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}},value=v${{ github.event.inputs.version }}
+            type=semver,pattern={{version}},value=v${{ github.event.inputs.version }}-${{ env.BUILD_VERSION }}
+      - name: Build and push image
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # @v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILD_LABEL=${{ github.event.inputs.version }}-${{ env.BUILD_VERSION }}
