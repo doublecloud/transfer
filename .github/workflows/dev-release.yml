@@ -12,7 +12,7 @@ jobs:
   trigger-manual-build:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger manual build workflow
+      - name: Publish docker image
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: Manual build and publish of Transfer image
