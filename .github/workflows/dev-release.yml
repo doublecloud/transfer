@@ -1,9 +1,12 @@
 name: Auto build and publish of Transfer image
 
 on:
+  push:
+    branches:
+      - 'main'
   pull_request:
     branches:
-      - 'release-*'
+      - '*'
 
 jobs:
   trigger-build:
