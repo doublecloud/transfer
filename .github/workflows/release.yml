@@ -33,7 +33,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/doublecloud/transfer:${{ inputs.version }},ghcr.io/doublecloud/transfer:latest
+          tags: ghcr.io/doublecloud/transfer:${{ inputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             BUILD_LABEL=${{ inputs.version }}
