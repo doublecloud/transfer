@@ -10,7 +10,7 @@ on:
 
 jobs:
   trigger-build:
-    uses: ./.github/release.yml
+    uses: ./.github/workflows/release.yml
     with:
       ref: ${{ github.ref }}  # The branch name
       version: ${{ github.ref_name }}
