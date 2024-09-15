@@ -17,5 +17,5 @@ jobs:
         with:
           workflow: Manual build and publish of Transfer image
           ref: ${{ github.ref }}  # The branch name
-          version: '{"version": "${{ github.ref_name }}"}'
+          inputs: '{"version": "${{ github.ref_name }}"}'
 
