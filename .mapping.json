@@ -1,8 +1,11 @@
 {
   ".":"cloud/doublecloud/transfer/github_os",
   ".github/workflows/build_and_test.yml":"cloud/doublecloud/transfer/github_os/.github/workflows/build_and_test.yml",
+  ".github/workflows/dev-release.yml":"cloud/doublecloud/transfer/github_os/.github/workflows/dev-release.yml",
+  ".github/workflows/release.yml":"cloud/doublecloud/transfer/github_os/.github/workflows/release.yml",
   ".gitignore":"cloud/doublecloud/transfer/github_os/.gitignore",
   "CONTRIBUTING.md":"cloud/doublecloud/transfer/github_os/CONTRIBUTING.md",
+  "Dockerfile":"cloud/doublecloud/transfer/github_os/Dockerfile",
   "GLOSSARY.md":"transfer_manager/go/GLOSSARY.md",
   "LICENSE":"cloud/doublecloud/transfer/github_os/LICENSE",
   "Makefile":"cloud/doublecloud/transfer/github_os/Makefile",

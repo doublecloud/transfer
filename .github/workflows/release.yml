@@ -1,0 +1,39 @@
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Version of base Transfer image
+        required: true
+        type: string
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: doublecloud/transfer
+permissions: {}
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Dump version
+        run: |
+          echo "${{ inputs }}"
+          echo "${{ inputs.version }}"
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # @v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # @v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/doublecloud/transfer:${{ inputs.version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILD_LABEL=${{ inputs.version }}
