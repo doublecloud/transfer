@@ -84,6 +84,9 @@ func Load(t *testing.T) {
 	worker := helpers.Activate(t, transfer)
 	defer worker.Close(t)
 
+	require.NoError(t, helpers.WaitEqualRowsCount(t, "public", "__test", helpers.GetSampleableStorageByModel(t, Source), helpers.GetSampleableStorageByModel(t, Target), 60*time.Second))
+	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams()))
+
 	//-----------------------------------------------------------------------------------------------------------------
 
 	sink, err := pgsink.NewSink(logger.Log, helpers.TransferID, Source.ToSinkParams(), helpers.EmptyRegistry())
@@ -98,7 +101,7 @@ func Load(t *testing.T) {
 	changeItemBuilder := helpers.NewChangeItemsBuilder("public", "__test", arrColSchema)
 
 	require.NoError(t, sink.Push(changeItemBuilder.Inserts(t, []map[string]interface{}{{"aid": 11, "str": "a", "id": 11, "jb": "{}"}, {"aid": 22, "str": "b", "id": 22, "jb": `{"x": 1, "y": -2}`}, {"aid": 33, "str": "c", "id": 33}})))
-	require.NoError(t, sink.Push(changeItemBuilder.Updates(t, []map[string]interface{}{{"id": 34, "jb": `{"test": "test"}`}}, []map[string]interface{}{{"aid": 33, "str": "c", "id": 33}})))
+	require.NoError(t, sink.Push(changeItemBuilder.Updates(t, []map[string]interface{}{{"aid": 33, "str": "c", "id": 34, "jb": `{"test": "test"}`}}, []map[string]interface{}{{"aid": 33, "str": "c", "id": 33}})))
 	require.NoError(t, sink.Push(changeItemBuilder.Deletes(t, []map[string]interface{}{{"aid": 22, "str": "b", "id": 22}})))
 	require.NoError(t, sink.Push(changeItemBuilder.Deletes(t, []map[string]interface{}{{"aid": 33, "str": "c", "id": 34}})))
 

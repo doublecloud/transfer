@@ -298,22 +298,39 @@ func (c *ChangeItem) IsToasted() bool {
 
 // OldOrCurrentKeys returns a string representing the values of the columns from the given set of columns, extracted from OldKeys or ColumnValues, if OldKeys are absent
 func (c *ChangeItem) OldOrCurrentKeysString(keyColumns map[string]bool) string {
-	keys := make(map[string]interface{})
-	for k := range keyColumns {
-		keys[k] = nil
-	}
-
 	if (c.Kind == UpdateKind || c.Kind == DeleteKind) && len(c.OldKeys.KeyValues) > 0 {
+		keys := make(map[string]interface{})
+		for k := range keyColumns {
+			keys[k] = nil
+		}
+
 		for i, keyName := range c.OldKeys.KeyNames {
 			if keyColumns[keyName] {
 				keys[keyName] = c.OldKeys.KeyValues[i]
 			}
 		}
-	} else {
-		for i, colName := range c.ColumnNames {
-			if keyColumns[colName] {
-				keys[colName] = c.ColumnValues[i]
-			}
+
+		toMarshal := make([]interface{}, len(keys))
+		for i, colName := range util.MapKeysInOrder(keys) {
+			toMarshal[i] = keys[colName]
+		}
+
+		d, _ := json.Marshal(toMarshal)
+		return string(d)
+	}
+
+	return c.CurrentKeysString(keyColumns)
+}
+
+func (c *ChangeItem) CurrentKeysString(keyColumns map[string]bool) string {
+	keys := make(map[string]interface{})
+	for k := range keyColumns {
+		keys[k] = nil
+	}
+
+	for i, colName := range c.ColumnNames {
+		if keyColumns[colName] {
+			keys[colName] = c.ColumnValues[i]
 		}
 	}
 

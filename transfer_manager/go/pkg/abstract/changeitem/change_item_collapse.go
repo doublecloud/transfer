@@ -1,5 +1,7 @@
 package changeitem
 
+import "sort"
+
 func compareColumns(old, new []string) (bool, map[string]int, map[string]int, []string) {
 	if len(old) == len(new) {
 		diff := false
@@ -30,12 +32,16 @@ func compareColumns(old, new []string) (bool, map[string]int, map[string]int, []
 }
 
 // Collapse collapses (possible) multiple items in the input into a single (or none) items in the output.
-// Currently, it DOES NOT preserve the order of items in the result.
+// Currently, it preserves the order of items in the result.
 // It should only be applied by sinks which support PRIMARY KEYs. For them the order of items is considered to be of no importance.
 func Collapse(input []ChangeItem) []ChangeItem {
 	if len(input) < 2 {
 		return input
 	}
+
+	// to preserve the order
+	idxToHashK := map[int]string{}
+	hashKToIdx := map[string]int{}
 
 	res := make([]ChangeItem, 0)
 	toDelete := map[string]ChangeItem{}
@@ -44,16 +50,21 @@ func Collapse(input []ChangeItem) []ChangeItem {
 	if len(keyCols) == 0 {
 		return input
 	}
-	for _, c := range input {
+	for i, c := range input {
 		hashK := c.OldOrCurrentKeysString(keyCols)
 		switch c.Kind {
 		case InsertKind:
 			delete(toDelete, hashK)
 			rows[hashK] = c
+			hashKToIdx[hashK] = i
+			idxToHashK[i] = hashK
 		case UpdateKind:
 			current, ok := rows[hashK]
 			if !ok {
-				rows[hashK] = c
+				newHashK := c.CurrentKeysString(keyCols)
+				rows[newHashK] = c
+				hashKToIdx[newHashK] = i
+				idxToHashK[i] = newHashK
 				continue
 			}
 
@@ -78,6 +89,8 @@ func Collapse(input []ChangeItem) []ChangeItem {
 				delete(rows, hashK)
 			}
 			rows[newHashK] = current
+			idxToHashK[i] = newHashK
+			hashKToIdx[newHashK] = i
 
 		case DeleteKind:
 			toDelete[hashK] = c
@@ -86,8 +99,13 @@ func Collapse(input []ChangeItem) []ChangeItem {
 			res = append(res, c)
 		}
 	}
-	for _, c := range rows {
-		res = append(res, c)
+	rowsIdxs := make([]int, 0, len(rows))
+	for hashK := range rows {
+		rowsIdxs = append(rowsIdxs, hashKToIdx[hashK])
+	}
+	sort.Ints(rowsIdxs)
+	for _, idx := range rowsIdxs {
+		res = append(res, rows[idxToHashK[idx]])
 	}
 	for _, c := range toDelete {
 		res = append(res, c)

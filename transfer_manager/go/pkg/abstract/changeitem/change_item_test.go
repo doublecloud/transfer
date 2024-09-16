@@ -854,6 +854,31 @@ func TestCollapse(t *testing.T) {
 
 		require.True(t, reflect.DeepEqual(arrIn[1], arrOut[0]))
 	})
+	t.Run("update insert", func(t *testing.T) {
+		tableSchema := NewTableSchema([]ColSchema{{ColumnName: "id", PrimaryKey: true}})
+		changes := []ChangeItem{
+			{
+				Kind:         UpdateKind,
+				TableSchema:  tableSchema,
+				ColumnNames:  []string{"id"},
+				ColumnValues: []interface{}{2},
+				OldKeys: OldKeysType{
+					KeyNames:  []string{"id"},
+					KeyValues: []interface{}{1},
+				},
+			},
+			{
+				Kind:         InsertKind,
+				TableSchema:  tableSchema,
+				ColumnNames:  []string{"id"},
+				ColumnValues: []interface{}{1},
+			},
+		}
+		Dump(changes)
+		res := Collapse(changes)
+		Dump(res)
+		require.True(t, reflect.DeepEqual(changes, res))
+	})
 }
 
 type ByID []ChangeItem
