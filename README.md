@@ -4,9 +4,9 @@
 
 <h4 align="center">
   <a href="https://double.cloud/services/doublecloud-transfer/">Double Cloud Transfer</a>  |
-  <a href="https://todo.com/">Documentation</a>  |
-  <a href="https://todo.com/benchmarks">Benchmarking</a>  |
-  <a href="https://todo.com/roadmap">Roadmap</a>
+  <a href="./docs/getting_started.md">Documentation</a>  |
+  <a href="./docs/benchmarking.md">Benchmarking</a>  |
+  <a href="./roadmap/roadmap_2024.md">Roadmap</a>
 </h4>
 
 
@@ -68,59 +68,60 @@ docker run transfer/transfer activate
 <details>
 <summary>Ingestion from OLTP</summary>
 
-- [How to Sync Full and Incremental MySQL Changes into Clickhouse](./docs/mysql-to-clickhouse.md)
-- [How to Sync Full and Incremental PostgreSQL Changes into Clickhouse](./docs/postgre-to-clickhouse.md)
-- [How to Sync Full and Incremental MongoDB into Clickhouse](./docs/mongodb-to-clickhouse.md)
+- [Replication MySQL Changes into Clickhouse](./examples/mysql2ch)
+- [Snapshot PostgreSQL Changes into Clickhouse](./examples/pg2ch)
+- [Replication MongoDB into Clickhouse with transformation](./docs/mongodb2ch)
 
 </details>
 
 <details>
 <summary>Streaming Ingestion</summary>
 
-- [How to Sync Incremental MySQL Changes into Kafka](./docs/mysql-to-kafka.md)
-- [How to Sync Re-Map Kafka source to other Kafka Target](./docs/kafka-to-kafka-with-transformer.md)
+- [Kafka to Clickhouse](./examples/kafka2ch)
+- [Re-Map Kafka source to other Kafka Target](./examples/kafka2kafka)
 
 </details>
 
 <details>
 <summary>CDC Streaming into Kafka</summary>
 
-- [How to Sync Incremental MySQL Changes into Kafka](./docs/mysql-to-kafka.md)
-- [How to Sync Re-Map Kafka source to other Kafka Target](./docs/kafka-to-kafka-with-transformer.md)
+- [MySQL CDC into Kafka](./examples/mysql2kafka)
 
 </details>
 
 <details>
 <summary>Semi-structured Ingestion</summary>
 
-- [How to ingest on Parquet file to Clickhouse](./docs/s3-parquet-to-ch.md)
-- [How to ingest on CSV file to Clickhouse](./docs/s3-csv-to-ch.md)
-- [How to ingest on NDJSON file to Clickhouse](./docs/s3-ndjson-to-ch.md)
+- [Parquet file to Clickhouse](./examples/s32ch/parquet.md)
+- [CSV file to Clickhouse](./examples/s32ch/csv.md)
+- [NDJSON file to Clickhouse](./examples/s32ch/json.md)
 
 </details>
 
 <details>
 <summary>Airbyte compatibility</summary>
 
-- [How to read Airbyte source](./docs/airbyte_compatibility.md)
+- [Airbyte source](./examples/airbyte_adapter)
 
 </details>
 
 <details>
 <summary>Transformers</summary>
 
-- [How to rename table](./docs/transformer_rename.md)
-- [How to transform table with SQL](./docs/transformer_sql.md)
-- more
+- [Rename table](./docs/transformers/rename.md)
+- [Hide column](./docs/transformers/hide.md)
+- [Mask column](./docs/transformers/mask.md)
+- [SQL Transformer](./docs/transformers/sql.md)
+- [Lambda Transformer](./docs/transformers/lambda.md)
 
 </details>
 
 <details>
 <summary>Data parsers</summary>
 
-- [How to Parse JSON](./docs/parser_json.md)
-- [How to Parse With Confluent SR](./docs/parser_confluent_sr.md)
-- [How to Parse Proto](./docs/parser_proto.md)
+- [How to Parse JSON](./docs/parser/json.md)
+- [How to Parse With Confluent SR](./docs/parser/confluent_sr.md)
+- [How to Parse Proto](./docs/parser/proto.md)
 
 </details>
 

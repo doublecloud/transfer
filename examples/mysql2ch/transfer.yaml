@@ -1,0 +1,22 @@
+type: SNAPSHOT_ONLY
+src:
+  type: mysql
+  params: |
+    {
+      "Hosts": ["localhost"],
+      "User": "postgres",
+      "Password": "password",
+      "Database": "mydb",
+      "Port": 5432
+    }
+dst:
+  type: ch
+  params: |
+    {
+      "ShardsList": [{"Hosts": ["localhost"]}],
+      "HTTPPort": 8123,
+      "NativePort": 9000,
+      "Database": "default",
+      "User": "default",
+      "Password": "ch_password"
+    }
