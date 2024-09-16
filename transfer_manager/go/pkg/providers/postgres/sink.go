@@ -702,6 +702,10 @@ func isToastedRow(row *abstract.ChangeItem, schema []abstract.ColSchema) bool {
 	return len(row.ColumnNames) != len(schema)
 }
 
+func (s *sink) isTableWithKeys(table string) bool {
+	return len(s.keys[table]) > 0
+}
+
 // tryGetUnchangedCols get unchanged columns if applicable, look into OldKeys and compare them with Values
 // this applicable only if table has primary key and Replica Identity Full enabled.
 func (s *sink) tryGetUnchangedCols(
@@ -797,7 +801,7 @@ func (s *sink) buildInsertQuery(
 		iEC += 1
 	}
 
-	if row.Kind == abstract.UpdateKind && (row.KeysChanged() || isToastedRow(&row, schema) || s.config.PerTransactionPush()) {
+	if row.Kind == abstract.UpdateKind && (row.KeysChanged() || isToastedRow(&row, schema) || s.config.PerTransactionPush() || !s.isTableWithKeys(table)) {
 		setters := make([]string, 0)
 		for iEC := range colNames {
 			setters = append(setters, fmt.Sprintf("%v = %v", colNames[iEC], values[iEC]))
