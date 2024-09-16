@@ -1,0 +1,47 @@
+{
+    "eventTypes": [
+        "temperature", "humidity", "battery_low", "motion", "error", "power_on", "power_off", "water_leak", "door_open",
+        "door_close", "window_open", "window_close", "light_on", "light_off", "sound_detected", "vibration", "smoke_detected",
+        "gas_detected", "fire_alarm", "panic_button", "system_restart", "system_update", "low_signal", "high_signal", "device_added",
+        "device_removed", "calibration", "malfunction", "software_upgrade", "hardware_error", "overheating", "cooling", "air_quality",
+        "humidity_warning", "temperature_warning", "device_shutdown", "sensor_disconnected", "sensor_connected", "battery_full",
+        "movement_detected", "security_breach", "alarm_triggered", "maintenance_required", "network_down", "network_restored", "remote_access_started",
+        "remote_access_ended", "service_start", "service_stop", "user_login", "user_logout", "data_backup", "data_restore", "firmware_install",
+        "firmware_update_failed", "device_firmware_check", "external_power_lost", "external_power_restored", "low_battery_alert", "high_battery_alert",
+        "proximity_detected", "proximity_lost", "camera_activated", "camera_deactivated", "volume_up", "volume_down", "mute_on", "mute_off"
+    ],
+    "deviceTypes": [
+        "temperature_sensor", "humidity_sensor", "motion_sensor", "door_sensor", "window_sensor", "smoke_detector", "gas_detector",
+        "water_leak_detector", "light_sensor", "sound_sensor", "vibration_sensor", "camera", "thermostat", "smart_lock", "smart_light",
+        "smart_plug", "smart_outlet", "air_quality_monitor", "fire_alarm", "control_panel", "smart_hub", "environmental_sensor",
+        "proximity_sensor", "security_camera", "smart_thermostat", "energy_meter", "power_controller", "voice_assistant", "robot_vacuum",
+        "dimmer_switch", "smart_blinds", "garage_door_opener", "smart_kettle", "smart_microwave", "smart_fridge", "robotic_arm", "fitness_tracker",
+        "smart_mirror", "smart_ring", "smart_doorbell", "elevator_sensor", "escalator_sensor", "HVAC_controller", "smart_curtain", "smart_toilet",
+        "washing_machine", "dryer", "coffee_machine", "oven_sensor", "cooker_sensor", "dishwasher_sensor", "faucet_sensor", "garden_sensor",
+        "pool_sensor", "pet_tracker", "baby_monitor", "treadmill_sensor", "bike_sensor", "router", "modem", "satellite_receiver", "home_theater_system",
+        "bluetooth_tracker", "wireless_router", "voice_control_hub", "network_switch", "firewall", "infrared_sensor", "heartbeat_sensor", "fall_detection_sensor"
+    ],
+    "metricTypes": [
+        "temperature", "humidity", "pressure", "speed", "altitude", "acceleration", "frequency", "latency", "bandwidth", "power",
+        "voltage", "current", "signal_strength", "noise_level", "light_intensity", "magnetic_field", "gravity", "orientation", "heart_rate", "blood_pressure",
+        "calories", "steps", "distance", "sleep_duration", "battery_level", "disk_usage", "memory_usage", "cpu_usage", "gpu_usage", "network_traffic",
+        "error_rate", "packet_loss", "jitter", "frame_rate", "resolution", "color_depth", "contrast_ratio", "response_time", "brightness", "firmware_version"
+    ],
+    "deviceStatuses": [
+        "active", "inactive", "idle", "charging", "disconnected", "connected", "sleeping", "updating", "rebooting", "malfunctioning",
+        "offline", "online", "low_battery", "full_battery", "critical", "warning", "ok", "error", "maintenance", "overheating",
+        "cooling_down", "resetting", "locked", "unlocked", "paired", "unpaired", "in_use", "not_in_use", "standby", "busy",
+        "calibrating", "syncing", "searching", "detecting", "repairing", "upgrading", "downgrading", "testing", "initializing", "terminated"
+    ],
+    "eventSeverities": [
+        "low", "medium", "high", "critical", "informational", "debug", "warning", "fatal", "emergency", "notice",
+        "alert", "trace", "error", "major", "minor", "catastrophic", "urgent", "non_urgent", "severe", "moderate",
+        "mild", "unknown", "significant", "negligible", "intense", "slight", "major_issue", "minor_issue", "non_critical", "essential"
+    ],
+    "eventSources": [
+        "web", "mobile_app", "desktop_app", "API", "database", "sensor", "device", "user", "system", "admin",
+        "bot", "third_party", "partner", "internal_tool", "external_service", "email", "SMS", "push_notification", "webhook", "hardware",
+        "firmware", "operating_system", "cloud_service", "network", "server", "edge_device", "gateway", "proxy", "load_balancer", "firewall",
+        "router", "switch", "IDS", "IPS", "CDN", "DNS", "NTP", "DHCP", "WAF", "SIEM"
+    ]
+}

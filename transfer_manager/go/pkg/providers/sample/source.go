@@ -2,10 +2,9 @@ package sample
 
 import (
 	"context"
-	"strconv"
+	"sync"
 	"time"
 
-	"github.com/brianvoe/gofakeit/v6"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -16,13 +15,7 @@ import (
 )
 
 const (
-	userLoginsSampleType   = "user_logins"
-	devopsSampleType       = "devops"
-	maxNumberOfUsageUsers  = 100
-	maxNumberOfUsageSystem = 100
-	maxNumberOfHosts       = 3
-	maxNumberIot           = 100
-	maxNumberOfDevices     = 3
+	userActivitiesSampleType = "user_activities"
 )
 
 var (
@@ -36,6 +29,7 @@ type Source struct {
 	metrics    *stats.SourceStats
 	transferID string
 	logger     log.Logger
+	wg         sync.WaitGroup
 }
 
 func (s *Source) Run(sink abstract.AsyncSink) error {
@@ -51,6 +45,8 @@ func (s *Source) Run(sink abstract.AsyncSink) error {
 		select {
 		case <-s.ctx.Done():
 			s.logger.Info("Stopping run")
+			s.wg.Wait()
+			close(errCh)
 			return nil
 		case err := <-errCh:
 			if err != nil {
@@ -71,7 +67,9 @@ func (s *Source) Run(sink abstract.AsyncSink) error {
 		s.metrics.ChangeItems.Add(int64(len(data)))
 
 		pushStart := time.Now()
+		s.wg.Add(1)
 		go func(errChAsync chan error, pushStart time.Time) {
+			defer s.wg.Done()
 			err := <-errChAsync
 			if err != nil {
 				ok := util.Send(s.ctx, errCh, err)
@@ -84,29 +82,19 @@ func (s *Source) Run(sink abstract.AsyncSink) error {
 				s.metrics.PushTime.RecordDuration(time.Since(pushStart))
 			}
 		}(sink.AsyncPush(data), pushStart)
-
 	}
 }
-func generateRandomDataForSampleType(sampleType string, maxRowSampleData int, table string, metrics *stats.SourceStats) []abstract.ChangeItem {
+
+func generateRandomDataForSampleType(sampleType string, maxRowSampleData int64, table string, metrics *stats.SourceStats) []abstract.ChangeItem {
 	generatedData := make([]abstract.ChangeItem, maxRowSampleData)
 	var streamData StreamingData
 
-	for i := 0; i < maxRowSampleData; i++ {
+	for i := 0; i < int(maxRowSampleData); i++ {
 		switch sampleType {
-		case userLoginsSampleType:
-			user := gofakeit.Name()
-			city := gofakeit.City()
-			streamData = NewUserLogins(table, user, city, time.Now())
-		case devopsSampleType:
-			hostname := "hostname_" + strconv.Itoa(gofakeit.Number(0, maxNumberOfHosts))
-			region := gofakeit.TimeZoneRegion()
-			usageUser := gofakeit.Number(1, maxNumberOfUsageUsers)
-			usageSystem := gofakeit.Number(1, maxNumberOfUsageSystem)
-			streamData = NewDevops(table, hostname, region, int8(usageUser), int8(usageSystem), time.Now())
+		case userActivitiesSampleType:
+			streamData = NewUserActivities(table)
 		default:
-			device := "device_" + strconv.Itoa(gofakeit.Number(0, maxNumberOfDevices))
-			number := gofakeit.Number(0, maxNumberIot)
-			streamData = NewIot(table, device, int8(number), time.Now())
+			streamData = NewIot(table)
 		}
 
 		generatedData[i] = streamData.ToChangeItem(int64(i))
@@ -116,6 +104,7 @@ func generateRandomDataForSampleType(sampleType string, maxRowSampleData int, ta
 
 	return generatedData
 }
+
 func (s *Source) Stop() {
 	s.cancel()
 }
@@ -131,5 +120,6 @@ func NewSource(src *SampleSource, transferID string, logger log.Logger, registry
 		metrics:    metric,
 		transferID: transferID,
 		logger:     logger,
+		wg:         sync.WaitGroup{},
 	}, nil
 }

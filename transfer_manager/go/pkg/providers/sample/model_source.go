@@ -16,10 +16,11 @@ var (
 )
 
 type SampleSource struct {
-	SampleType    string
-	TableName     string
-	MaxSampleData int
-	MinSleepTime  time.Duration
+	SampleType         string
+	TableName          string
+	MaxSampleData      int64
+	MinSleepTime       time.Duration
+	SnapshotEventCount int64
 }
 
 func (s *SampleSource) GetProviderType() abstract.ProviderType {
@@ -38,10 +39,13 @@ func (s *SampleSource) WithDefaults() {
 		s.MaxSampleData = 10
 	}
 	if s.MinSleepTime == 0 {
-		s.MinSleepTime = 300 * time.Millisecond
+		s.MinSleepTime = 1 * time.Second
 	}
 	if s.TableName == "" {
 		s.TableName = s.SampleType
+	}
+	if s.SnapshotEventCount == 0 {
+		s.SnapshotEventCount = 300_000
 	}
 }
 

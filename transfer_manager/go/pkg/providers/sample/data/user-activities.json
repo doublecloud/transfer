@@ -1,0 +1,40 @@
+{
+    "eventTypes": [
+        "click", "download", "view", "signup", "purchase", "unsubscribe", "login", "logout", "add_to_cart", "remove_from_cart",
+        "search", "scroll", "hover", "pinch", "zoom", "swipe", "submit_form", "rate_product", "review_product", "wishlist_add",
+        "wishlist_remove", "share", "comment", "like", "dislike", "follow", "unfollow", "mention", "tag", "reply", "checkin",
+        "checkout", "add_friend", "remove_friend", "upload", "download_complete", "video_play", "video_pause", "audio_play",
+        "audio_pause", "page_load", "error", "crash", "connect", "disconnect", "timeout", "retry", "bookmark", "unbookmark",
+        "notification", "alert", "feedback", "survey", "confirm", "reject", "complete", "abort", "create", "update", "delete"
+    ],
+    "deviceTypes": [
+        "smartphone", "tablet", "laptop", "desktop", "smart_tv", "wearable", "smart_speaker", "game_console", "vehicle", "kiosk",
+        "e_reader", "drone", "smart_glasses", "fitness_tracker", "thermostat", "security_camera", "router", "printer", "projector", "server",
+        "virtual_assistant", "barcode_scanner", "POS_terminal", "smart_refrigerator", "smart_microwave", "washing_machine", "smart_oven", "smart_doorbell",
+        "remote_control", "key_fob", "set_top_box", "DVD_player", "blu_ray_player", "voice_assistant", "VR_headset", "AR_headset", "robot_vacuum", "electric_vehicle"
+    ],
+    "deviceOS": [
+        "embedded_linux", "RTOS", "FreeRTOS", "Android Things", "TinyOS", "Contiki", "RIOT OS", "Zephyr", "Windows IoT",
+        "Tizen RT", "mBed OS", "VxWorks", "Nucleus RTOS", "Integrity", "ThreadX", "uC/OS", "QNX", "Micrium", "Apache Mynewt", "Raspbian",
+        "Fedora IoT", "Ubuntu Core", "Snappy Ubuntu", "BalenaOS", "Home Assistant OS", "Yocto", "Buildroot", "Wind River Linux", "OpenWrt", "Alpine Linux",
+        "Debian for IoT", "CentOS for IoT", "Clear Linux OS", "NestOS", "AsusWRT", "Cisco IOS", "iPXE", "BusyBox", "LibreELEC", "CoreELEC", "Kodi",
+        "PostmarketOS", "AsteroidOS", "LineageOS", "CopperheadOS", "GrapheneOS", "Replicant", "PureOS", "Netrunner", "DietPi", "Raspberry Pi OS",
+        "Kali Linux", "RancherOS", "MenderOS", "Pantavisor", "Photon OS", "Solus", "OpenIndiana", "SmartOS", "OmniOS", "ClearOS", "Lakka", "Recalbox",
+        "SteamOS", "RetroPie", "Batocera", "Puppy Linux", "Arch Linux ARM", "Void Linux", "Gentoo Linux", "FreeDOS"
+    ],
+    "trafficSources": [
+        "sensor_data", "automated_report", "manual_override", "system_update", "scheduled_maintenance", "emergency_alert", "remote_access",
+        "cloud_sync", "local_backup", "firmware_update", "user_triggered", "third_party_service", "partner_api", "network_monitor", "data_analytics",
+        "predictive_maintenance", "health_check", "security_scan", "performance_report", "audit_log", "compliance_check", "real_time_monitoring",
+        "historical_analysis", "smart_grid", "drone_flight", "robot_patrol", "video_surveillance", "thermal_imaging", "inventory_check", "asset_tracking",
+        "weather_station", "earthquake_monitoring", "flood_detection", "fire_detection", "wildlife_monitoring", "traffic_management", "waste_management",
+        "water_quality_monitoring", "air_quality_monitoring", "noise_monitoring", "radiation_monitoring", "energy_consumption", "carbon_footprint",
+        "smart_building_management", "smart_city_management", "intelligent_transportation_system", "automated_tolling", "smart_parking", "street_lighting",
+        "public_safety", "emergency_services", "first_responder_network", "critical_infrastructure_protection", "data_center_management", "server_monitoring",
+        "network_security", "endpoint_protection", "mobile_device_management", "desktop_virtualization", "cloud_orchestration", "container_management",
+        "application_delivery", "load_balancing", "dns_management", "dhcp_management", "network_access_control", "zero_trust_network", "software_defined_networking",
+        "infrastructure_as_code", "automation", "orchestration", "devops", "cloud_management_platform", "hybrid_cloud_management", "multicloud_management",
+        "cloud_security", "cloud_compliance", "cloud_backup", "cloud_archive", "cloud_migration", "cloud_nas", "cloud_san", "cloud_storage", "cloud_computing",
+        "cloud_monitoring", "cloud_cost_management", "cloud_billing", "cloud_charging", "cloud_load_balancing", "cloud_dns", "cloud_dhcp", "cloud_networking"
+    ]
+}
