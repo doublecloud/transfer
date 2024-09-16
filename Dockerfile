@@ -55,9 +55,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-key adv --keyserver hkp://keyserver.ubunt
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create a non-root user and group
+RUN addgroup --system trcligroup && adduser --system --ingroup trcligroup trcliuser
+
 # Copy the Go binary from Stage 1 (builder)
 COPY --from=builder /app/trcli /usr/local/bin/trcli
 
 RUN chmod +x /usr/local/bin/trcli
+
+# Set ownership of the binary to the non-root user
+RUN chown trcliuser:trcligroup /usr/local/bin/trcli
+
+# Switch to the non-root user
+USER trcliuser
 
 ENTRYPOINT ["/usr/local/bin/trcli"]
