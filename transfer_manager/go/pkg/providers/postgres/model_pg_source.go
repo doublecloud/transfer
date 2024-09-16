@@ -84,6 +84,10 @@ func (s *PgSource) MDBClusterID() string {
 	return s.ClusterID
 }
 
+func (s *PgSource) GetConnectionID() string {
+	return s.ConnectionID
+}
+
 type PgSerializationFormat string
 
 const (
@@ -415,6 +419,9 @@ func (d PgSourceWrapper) MaintainTables() bool {
 	return d.maintainTables
 }
 
+func (d PgSourceWrapper) ConnectionID() string {
+	return d.Model.ConnectionID
+}
 func (d PgSourceWrapper) PerTransactionPush() bool {
 	return false
 }
@@ -463,10 +470,7 @@ func (s *PgSource) isPreferReplica(transfer *server.Transfer) bool {
 	// - It can be used only on SNAPSHOT_ONLY transfer - bcs we can't take consistent slot on master & snapshot on replica
 	//
 	// When 'PreferReplica' is true - reading happens from synchronous replica
-
-	return s.ClusterID != "" &&
-		!s.IsHomo &&
-		transfer != nil && (transfer.SnapshotOnly() || !transfer.IncrementOnly())
+	return !s.IsHomo && transfer != nil && (transfer.SnapshotOnly() || !transfer.IncrementOnly())
 }
 
 func (s *PgSource) ToStorageParams(transfer *server.Transfer) *PgStorageParams {
@@ -498,5 +502,6 @@ func (s *PgSource) ToStorageParams(transfer *server.Transfer) *PgStorageParams {
 		UseBinarySerialization:      useBinarySerialization,
 		SlotID:                      s.SlotID,
 		ShardingKeyFields:           s.ShardingKeyFields,
+		ConnectionID:                s.ConnectionID,
 	}
 }

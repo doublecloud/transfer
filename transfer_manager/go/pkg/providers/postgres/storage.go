@@ -1335,49 +1335,19 @@ func (s *Storage) loadTable(
 }
 
 func NewStorage(config *PgStorageParams, opts ...StorageOpt) (*Storage, error) {
-	pgHost := ""
-	pgPort := uint16(config.Port)
 	var err error
+	var connConfig *pgx.ConnConfig
+
 	if config.PreferReplica {
 		// 'PreferReplica' automatically auto-derived into 'true', when: managed installation & heterogeneous SNAPSHOT_ONLY transfer
 		logger.Log.Info("Prefer replica is on, will try to find alive and up-to-date replica")
-		pgHost, err = ResolveReplicaHost(config)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to get replica host: %w", err)
-		}
 	}
 
-	if pgHost == "" {
-		// When 'PreferReplica' is false OR 'ResolveReplicaHost' didn't find any replica - we
-		// - if on_prem one host - master is this host
-		// - if on_prem >1 hosts - pgHA determines master
-		// - if managed installation - master is determined via mdb api
-		pgHost, pgPort, err = ResolveMasterHostPortFromStorage(logger.Log, config)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to get master host: %w", err)
-		}
-	}
-
-	logger.Log.Info("Host chosen", log.String("pg_host", pgHost), log.UInt16("pg_port", pgPort))
-
-	tlsConfig, err := config.TLSConfigTemplate()
+	connConfig, err = MakeConnConfigFromStorage(logger.Log, config)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to build secure connection configuration: %w", err)
+		return nil, err
 	}
-	if tlsConfig != nil {
-		tlsConfig.ServerName = pgHost
-	} else {
-		logger.Log.Warn("insecure connection is used", log.String("pg_host", pgHost))
-	}
-
-	connConfig, _ := pgx.ParseConfig(config.ConnString)
-	connConfig.Host = pgHost
-	connConfig.Port = pgPort
-	connConfig.Database = config.Database
-	connConfig.User = config.User
-	connConfig.Password = config.Password
-	connConfig.TLSConfig = tlsConfig
-	connConfig.PreferSimpleProtocol = true
+	logger.Log.Info("Host chosen", log.String("pg_host", connConfig.Host), log.UInt16("pg_port", connConfig.Port))
 
 	poolConfig, _ := pgxpool.ParseConfig(config.ConnString)
 	poolConfig.ConnConfig = WithLogger(connConfig, log.With(logger.Log, log.Any("component", "pgx")))

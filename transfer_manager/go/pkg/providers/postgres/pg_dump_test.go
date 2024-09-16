@@ -310,7 +310,7 @@ func TestBuildArgs(t *testing.T) {
 	err := json.Unmarshal([]byte(buildArgsConfig00), &pgSrc)
 	require.NoError(t, err)
 
-	connString, err := PostgresDumpConnString(&pgSrc)
+	connString, _, err := PostgresDumpConnString(&pgSrc)
 	require.NoError(t, err)
 	require.Equal(t, `host=1.1.1.1 port=5432 dbname=db_creatio_uat user=dwh_replic`, connString)
 

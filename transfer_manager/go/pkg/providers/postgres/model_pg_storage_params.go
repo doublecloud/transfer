@@ -30,6 +30,7 @@ type PgStorageParams struct {
 	UseBinarySerialization      bool // Whether binary serialization format should be used. Defaults to true in homogeneous pg->pg transfers.
 	SlotID                      string
 	ShardingKeyFields           map[string][]string
+	ConnectionID                string
 }
 
 // TLSConfigTemplate returns a TLS configuration template without ServerName set.

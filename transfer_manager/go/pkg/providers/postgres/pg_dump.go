@@ -133,21 +133,22 @@ func formatFqtn(in string) (string, error) {
 	return tableID.Fqtn(), nil
 }
 
-func PostgresDumpConnString(src *PgSource) (string, error) {
-	masterHost, masterPort, err := ResolveMasterHostPortFromSrc(logger.Log, src)
-	if err != nil {
-		return "", xerrors.Errorf("failed to find PostgreSQL master: %w", err)
-	}
-	logger.Log.Infof("Getting dump conn string for master host '%s'", masterHost)
+func PostgresDumpConnString(src *PgSource) (string, server.SecretString, error) {
 
-	if src.HasTLS() {
+	config, err := GetConnParamsFromSrc(logger.Log, src)
+	if err != nil {
+		return "", "", err
+	}
+	logger.Log.Infof("Getting dump conn string for master host '%s'", config.Host)
+
+	if config.HasTLS {
 		customCaPath := "./customRootCA.crt"
-		if err := os.WriteFile(customCaPath, []byte(src.TLSFile), 0o664); err != nil {
-			return "", xerrors.Errorf("failed to write a custom SSL root certificate into a local file: %w", err)
+		if err := os.WriteFile(customCaPath, []byte(config.CACertificates), 0o664); err != nil {
+			return "", "", xerrors.Errorf("failed to write a custom SSL root certificate into a local file: %w", err)
 		}
-		return fmt.Sprintf("host=%v port=%v dbname=%v user=%v sslmode=verify-full sslrootcert=%v", masterHost, masterPort, src.Database, src.User, customCaPath), nil
+		return fmt.Sprintf("host=%v port=%v dbname=%v user=%v sslmode=verify-full sslrootcert=%v", config.Host, config.Port, config.Database, config.User, customCaPath), config.Password, nil
 	} else {
-		return fmt.Sprintf("host=%v port=%v dbname=%v user=%v", masterHost, masterPort, src.Database, src.User), nil
+		return fmt.Sprintf("host=%v port=%v dbname=%v user=%v", config.Host, config.Port, config.Database, config.User), config.Password, nil
 	}
 }
 
@@ -307,7 +308,7 @@ func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Trans
 		}
 	}()
 
-	connString, err := PostgresDumpConnString(src)
+	connString, secretPass, err := PostgresDumpConnString(src)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to build PostgreSQL connection string: %w", err)
 	}
@@ -318,7 +319,7 @@ func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Trans
 	}
 	seqsIncluded, seqsExcluded := filterSequences(seqs, abstract.NewIntersectionIncludeable(src, transfer))
 
-	result, err := dumpUserDefinedTypes(ctx, connString, src)
+	result, err := dumpUserDefinedTypes(ctx, connString, secretPass, src)
 	if err != nil {
 		return nil, err
 	}
@@ -327,7 +328,7 @@ func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Trans
 	if err != nil {
 		return nil, xerrors.Errorf("failed to compose arguments for pg_dump: %w", err)
 	}
-	dump, err := execPgDump(src.PgDumpCommand, connString, src.Password, pgDumpArgs)
+	dump, err := execPgDump(src.PgDumpCommand, connString, secretPass, pgDumpArgs)
 	result = append(result, dump...)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to execute pg_dump to get schema: %w", err)
@@ -379,7 +380,7 @@ func filterSequences(sequences SequenceMap, filter abstract.Includeable) (includ
 	return included, excluded
 }
 
-func dumpUserDefinedTypes(ctx context.Context, connString string, src *PgSource) ([]*pgDumpItem, error) {
+func dumpUserDefinedTypes(ctx context.Context, connString string, connPass server.SecretString, src *PgSource) ([]*pgDumpItem, error) {
 	if len(src.DBTables) == 0 || (!src.PreSteps.Type && !src.PostSteps.Type) {
 		return nil, nil
 	}
@@ -408,7 +409,7 @@ func dumpUserDefinedTypes(ctx context.Context, connString string, src *PgSource)
 	}
 
 	result := make([]*pgDumpItem, 0)
-	dump, err := execPgDump(src.PgDumpCommand, connString, src.Password, args)
+	dump, err := execPgDump(src.PgDumpCommand, connString, connPass, args)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to execute pg_dump to get user-defined types: %w", err)
 	}

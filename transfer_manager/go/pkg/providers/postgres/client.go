@@ -10,6 +10,8 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/abstract/model"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/connection"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dbaas"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/errors/coded"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/pgha"
@@ -21,82 +23,125 @@ import (
 
 const SelectCurrentLsnDelay = `select pg_wal_lsn_diff(pg_last_wal_replay_lsn(), $1);`
 
-func ResolveReplicaHost(src *PgStorageParams) (string, error) {
-	if src.ClusterID == "" {
-		return "", nil
-	}
-
-	clusterHosts, err := dbaas.ResolveClusterHosts(dbaas.ProviderTypePostgresql, src.ClusterID)
+// replica specific stuff
+func getHostPreferablyReplica(lgr log.Logger, conn *connection.ConnectionPG, slotID string) (*connection.Host, error) {
+	master, aliveAsyncReplicas, aliveSyncReplicas, err := detectHostsByRoles(lgr, conn)
 	if err != nil {
-		return "", xerrors.Errorf("unable to resolve postgres hosts: %w", err)
-	}
-
-	var masterHost string
-	var aliveAsyncReplicas = make([]string, 0)
-	var aliveSyncReplicas = make([]string, 0)
-	for _, clusterHost := range clusterHosts {
-		if clusterHost.Role == dbaas.MASTER {
-			masterHost = clusterHost.Name
-		} else if clusterHost.Health == dbaas.ALIVE {
-			if clusterHost.ReplicaType == dbaas.ReplicaTypeAsync {
-				aliveAsyncReplicas = append(aliveAsyncReplicas, clusterHost.Name)
-			} else {
-				aliveSyncReplicas = append(aliveSyncReplicas, clusterHost.Name)
-			}
-		}
+		return nil, xerrors.Errorf("Failed to resolve cluster hosts roles:  %w", err)
 	}
 
 	if len(aliveAsyncReplicas) == 0 && len(aliveSyncReplicas) == 0 {
-		logger.Log.Warn("No alive replicas found, will use master host instead")
-		return "", nil
+		lgr.Warn("No alive replicas found, will use master host instead")
+		return master, nil
 	}
 
 	// in case we need replica for making a snapshot for Copy-and-replicate (CDC) transfer,
 	// we need to make sure that replica host is up-to-date and has LSN not less than master's replication slot LSN
 	// if no up-to-date replica was found we should keep using master host
-	lsn, err := resolveSlotLSN(src, masterHost)
+	lsn, err := resolveSlotLSN(slotID, toConnParams(master, conn))
 	if err != nil {
-		return "", xerrors.Errorf("Failed to resolve lsn from master due to some error:  %w", err)
+		return nil, xerrors.Errorf("Failed to resolve lsn from master due to some error:  %w", err)
 	}
 	if lsn == "" {
-		logger.Log.Info("Do not need to check replica's LSN before using - no cdc replication slot was found")
+		lgr.Info("Do not need to check replica's LSN before using - no cdc replication slot was found")
 		return append(aliveAsyncReplicas, aliveSyncReplicas...)[0], nil
 	}
 
-	logger.Log.Info("Will check replica's LSN before using")
+	lgr.Info("Will check replica's LSN before using")
 	// using async replica if available
 	if len(aliveAsyncReplicas) > 0 {
 		logger.Log.Info("Will check async replicas state first")
-		host, err := findNonStaleReplica(src, lsn, aliveAsyncReplicas)
+		host, err := findNonStaleReplica(conn, lsn, aliveAsyncReplicas)
 		if err != nil {
-			logger.Log.Info("Error finding async replica host", log.Error(err))
+			lgr.Info("Error finding async replica host", log.Error(err))
 		}
-		if host != "" {
+		if host != nil {
 			return host, nil
 		}
 	}
 
 	if len(aliveSyncReplicas) > 0 {
-		logger.Log.Info("Checking sync replicas state")
-		return findNonStaleReplica(src, lsn, aliveSyncReplicas)
+		lgr.Info("Checking sync replicas state")
+		return findNonStaleReplica(conn, lsn, aliveSyncReplicas)
 	}
 
-	return "", xerrors.Errorf("Could not find replica with Lsn greater than %v", lsn)
+	return nil, xerrors.Errorf("Could not find replica with Lsn greater than %v", lsn)
+}
+
+func detectHostsByRoles(lgr log.Logger, conn *connection.ConnectionPG) (master *connection.Host, aliveAsyncReplicas []*connection.Host, aliveSyncReplicas []*connection.Host, err error) {
+	aliveAsyncReplicas = make([]*connection.Host, 0)
+	aliveSyncReplicas = make([]*connection.Host, 0)
+
+	if master = conn.MasterHost(); master != nil {
+		//roles are already detected in connection - this is managed connection for managed pg cluster
+		//however replica type is not always available - seems it is filled only when async is present
+		for _, host := range conn.Hosts {
+			if host.Role != connection.Replica {
+				continue
+			}
+			if host.ReplicaType == connection.ReplicaAsync {
+				aliveAsyncReplicas = append(aliveAsyncReplicas, host)
+			} else {
+				lgr.Infof("Found replica host %s with type %s", host.Name, host.ReplicaType)
+				aliveSyncReplicas = append(aliveSyncReplicas, host)
+			}
+		}
+	} else {
+		//roles are unknown - this is manual connection or on-premise pg installation
+		var clusterHosts []dbaas.ClusterHost
+		clusterHosts, err = dbaas.ResolveClusterHosts(dbaas.ProviderTypePostgresql, conn.ClusterID)
+		lgr.Info("Resolved cluster to hosts via dbaas", log.String("cluster", conn.ClusterID), log.Any("hosts", clusterHosts))
+		if err != nil {
+			return nil, nil, nil, xerrors.Errorf("unable to resolve postgres hosts: %w", err)
+		}
+		for _, clusterHost := range clusterHosts {
+			hostName, port, err := getHostPortFromMDBHostname(clusterHost.Name, conn)
+			if err != nil {
+				return nil, nil, nil, xerrors.Errorf("unable to resolve port: %w", err)
+			}
+			host := connection.SimpleHost(hostName, int(port))
+			if clusterHost.Role == dbaas.MASTER {
+				master = host
+			} else if clusterHost.Health == dbaas.ALIVE {
+				if clusterHost.ReplicaType == dbaas.ReplicaTypeAsync {
+					aliveAsyncReplicas = append(aliveAsyncReplicas, host)
+				} else {
+					aliveSyncReplicas = append(aliveSyncReplicas, host)
+				}
+			}
+		}
+	}
+	return master, aliveAsyncReplicas, aliveSyncReplicas, nil
+}
+
+func getHostPortFromMDBHostname(hostname string, connPG *connection.ConnectionPG) (string, uint16, error) {
+	//get from name if available, otherwise getting from connection param (user input)
+	portFromConfig := connPG.GetPort(hostname)
+	if portFromConfig == 0 {
+		logger.Log.Info("No port present in config, using default mdb port")
+		portFromConfig = 6432
+	}
+	resolvedHost, resolvedPort, err := dbaas.ResolveHostPortWithOverride(hostname, portFromConfig)
+	if err != nil {
+		return "", 0, err
+	}
+	logger.Log.Infof("Resolved mdb host %s to host: %s, port: %v", hostname, resolvedHost, resolvedPort)
+	return resolvedHost, resolvedPort, nil
 }
 
 // Resolve slot LSN on master for current transfer_id
 // see https://www.postgresql.org/docs/current/view-pg-replication-slots.html
-func resolveSlotLSN(src *PgStorageParams, masterHost string) (string, error) {
+func resolveSlotLSN(slotID string, connParams *ConnectionParams) (string, error) {
 	var lsn string
 
-	conn, err := MakeConnPoolFromHostPort(src, masterHost, src.Port, logger.Log)
+	conn, err := makeConnPoolFromParams(connParams, logger.Log)
 	if err != nil {
 		logger.Log.Warn("Failed to make connection to master", log.Error(err))
 		return "", xerrors.Errorf("Failed to make connection to master: %w", err)
 	}
 	defer conn.Close()
 
-	if err = conn.QueryRow(context.TODO(), SelectLsnForSlot, src.SlotID).Scan(&lsn); err != nil {
+	if err = conn.QueryRow(context.TODO(), SelectLsnForSlot, slotID).Scan(&lsn); err != nil {
 		if err == pgx.ErrNoRows {
 			logger.Log.Info("No replication slot found for transfer, will use any replica", log.Error(err))
 			return "", nil
@@ -112,11 +157,11 @@ func resolveSlotLSN(src *PgStorageParams, masterHost string) (string, error) {
 // Choose replica host with LSN after master's slot LSN in order to make sure that no data will be lost
 // between making snapshot and getting increments from WAL
 // see pg_last_wal_replay_lsn https://www.postgresql.org/docs/15/functions-admin.html
-func findNonStaleReplica(src *PgStorageParams, lsn string, aliveReplicas []string) (string, error) {
-	var replicaHost string
+func findNonStaleReplica(conn *connection.ConnectionPG, lsn string, aliveReplicas []*connection.Host) (*connection.Host, error) {
+	var replicaHost *connection.Host
 	err := backoff.Retry(func() error {
 		for _, replica := range aliveReplicas {
-			if isReplicaUpToDate(src, replica, lsn) {
+			if isReplicaUpToDate(toConnParams(replica, conn), lsn) {
 				replicaHost = replica
 				return nil
 			}
@@ -126,14 +171,14 @@ func findNonStaleReplica(src *PgStorageParams, lsn string, aliveReplicas []strin
 	}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	logger.Log.Info("Found the fresh replicaHost!", log.String("replicaHost", replicaHost))
+	logger.Log.Info("Found the fresh replicaHost!", log.String("replicaHost", replicaHost.Name))
 	return replicaHost, nil
 }
 
-func isReplicaUpToDate(src *PgStorageParams, replicaHost string, lsn string) bool {
-	conn, err := MakeConnPoolFromHostPort(src, replicaHost, src.Port, logger.Log)
+func isReplicaUpToDate(connParams *ConnectionParams, lsn string) bool {
+	conn, err := makeConnPoolFromParams(connParams, logger.Log)
 	if err != nil {
 		logger.Log.Warn("Failed to make connection to replica", log.Error(err))
 		return false
@@ -147,43 +192,56 @@ func isReplicaUpToDate(src *PgStorageParams, replicaHost string, lsn string) boo
 		return false
 	}
 
-	logger.Log.Info("Got lsn diff for replica", log.String("replicaHost", replicaHost), log.Int("diff", replicaLsnDiff))
+	logger.Log.Info("Got lsn diff for replica", log.String("replicaHost", connParams.Host), log.Int("diff", replicaLsnDiff))
 	return replicaLsnDiff >= 0
 }
 
-// ResolveMasterHostPortFrom*
-
-func resolveMasterHostImplWithLog(lgr log.Logger, hosts []string, port int, hasTLS bool, database, user, password, clusterID string) (string, uint16, error) {
-	masterHost, masterPort, err := resolveMasterHostImpl(hosts, port, hasTLS, database, user, password, clusterID)
+func getMasterConnectionParams(lgr log.Logger, connParams *connection.ConnectionPG) (*ConnectionParams, error) {
+	//master was resolved in connection
+	if connParams.MasterHost() != nil {
+		return toConnParams(connParams.MasterHost(), connParams), nil
+	}
+	//find suitable host manually
+	masterHost, masterPort, err := resolveMasterHostImpl(connParams)
 	if err != nil {
-		return "", 0, err
+		return nil, xerrors.Errorf("unable to resolve master host, err: %w", err)
 	}
 	lgr.Infof("postgres master host/port: %s:%d", masterHost, masterPort)
-	return masterHost, masterPort, nil
+	return &ConnectionParams{
+		Host:           masterHost,
+		Port:           masterPort,
+		Database:       connParams.Database,
+		User:           connParams.User,
+		Password:       connParams.Password,
+		HasTLS:         connParams.HasTLS,
+		CACertificates: connParams.CACertificates,
+		ClusterID:      connParams.ClusterID,
+	}, nil
 }
 
-func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user, password, clusterID string) (string, uint16, error) {
+func resolveMasterHostImpl(conn *connection.ConnectionPG) (string, uint16, error) {
+	if master := conn.MasterHost(); master != nil {
+		//it is resolved connection for cluster
+		return master.Name, uint16(master.Port), nil
+	}
+
+	if len(conn.Hosts) == 1 {
+		return conn.Hosts[0].Name, uint16(conn.Hosts[0].Port), nil
+	}
+
 	var pg *pgha.PgHA
 	var err error
 
-	if len(hosts) != 0 {
-		// hosts
-		if len(hosts) == 1 {
-			// this function here is just for consistency - to any case supported port overriding
-			resultHost, resultPort, err := dbaas.ResolveHostPortWithOverride(hosts[0], uint16(port))
-			if err != nil {
-				return "", 0, xerrors.Errorf("unable to parse host, err: %w", err)
-			}
-			return resultHost, resultPort, nil
-		}
-		pg, err = pgha.NewFromHosts(database, user, password, hosts, port, hasTLS)
+	if len(conn.Hosts) != 0 {
+		// it is on-prem installation - via plain conf or managed connection
+		pg, err = pgha.NewFromConnection(conn)
 		if err != nil {
 			return "", 0, xerrors.Errorf("unable to create postgres service client from hosts: %w", err)
 		}
 		defer pg.Close()
 	} else {
-		// cluster
-		pg, err = pgha.NewFromDBAAS(database, user, password, clusterID)
+		// it is mdb cluster NOT from managed connection, so hosts still need to be resolved
+		pg, err = pgha.NewFromDBAAS(conn.Database, conn.User, string(conn.Password), conn.ClusterID)
 		if err != nil {
 			return "", 0, xerrors.Errorf("unable to create postgres service client from clusterID: %w", err)
 		}
@@ -198,106 +256,165 @@ func resolveMasterHostImpl(hosts []string, port int, hasTLS bool, database, user
 		return "", 0, xerrors.New("MasterHost() returned nil")
 	}
 
-	resultHost, resultPort, err := dbaas.ResolveHostPortWithOverride(*masterNode, uint16(port))
+	resultHost, resultPort, err := getHostPortFromMDBHostname(*masterNode, conn)
 	if err != nil {
 		return "", 0, xerrors.Errorf("unable to parse master host, err: %w", err)
 	}
 	return resultHost, resultPort, nil
 }
-
-func ResolveMasterHostPortFromSrc(lgr log.Logger, src *PgSource) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, src.AllHosts(), src.Port, src.HasTLS(), src.Database, src.User, string(src.Password), src.ClusterID)
+func makeConnConfigFromParams(connParams *ConnectionParams) (*pgx.ConnConfig, error) {
+	return makeConnConfig(connParams, "", false)
 }
 
-func ResolveMasterHostPortFromDst(lgr log.Logger, cfg *PgDestination) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port, cfg.HasTLS(), cfg.Database, cfg.User, string(cfg.Password), cfg.ClusterID)
-}
-
-func ResolveMasterHostPortFromStorage(lgr log.Logger, params *PgStorageParams) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, params.AllHosts, params.Port, params.HasTLS(), params.Database, params.User, params.Password, params.ClusterID)
-}
-
-func ResolveMasterHostPortFromSink(lgr log.Logger, cfg PgSinkParams) (string, uint16, error) {
-	return resolveMasterHostImplWithLog(lgr, cfg.AllHosts(), cfg.Port(), cfg.HasTLS(), cfg.Database(), cfg.User(), cfg.Password(), cfg.ClusterID())
-}
-
-// MakeConnConfigFrom*
-
-func makeConnConfig(host string, port int, database, user, password, cluster string, hasTLS bool, tlsFile string) (*pgx.ConnConfig, error) {
-	var tlsConfig *tls.Config
-	if cluster != "" {
-		tlsConfig = &tls.Config{
-			ServerName: host,
-		}
-	} else if hasTLS {
-		rootCertPool := x509.NewCertPool()
-		if ok := rootCertPool.AppendCertsFromPEM([]byte(tlsFile)); !ok {
-			return nil, xerrors.New("unable to add TLS to cert pool")
-		}
-		tlsConfig = &tls.Config{
-			RootCAs:    rootCertPool,
-			ServerName: host,
-		}
+func makeConnConfig(connParams *ConnectionParams, connString string, tryHostCAcertificates bool) (*pgx.ConnConfig, error) {
+	tlsConfig, err := getTLSConfig(connParams.Host, connParams.HasTLS, connParams.CACertificates, connParams.ClusterID, tryHostCAcertificates)
+	if err != nil {
+		return nil, err
 	}
-
-	config, _ := pgx.ParseConfig("")
-	config.Host = host
-	config.Port = uint16(port)
-	config.Database = database
-	config.User = user
-	config.Password = password
+	config, _ := pgx.ParseConfig(connString)
+	config.Host = connParams.Host
+	config.Port = connParams.Port
+	config.Database = connParams.Database
+	config.User = connParams.User
+	config.Password = string(connParams.Password)
 	config.TLSConfig = tlsConfig
 	config.PreferSimpleProtocol = true
 	return config, nil
 }
 
+func getTLSConfig(host string, hasTLS bool, tlsFile string, cluster string, tryHostCAcertificates bool) (*tls.Config, error) {
+	//what changes for pg source/dst (but not storage!!) : use custom cert for mdb if present
+	if hasTLS {
+		rootCertPool := x509.NewCertPool()
+		if ok := rootCertPool.AppendCertsFromPEM([]byte(tlsFile)); !ok {
+			return nil, xerrors.New("unable to add TLS to cert pool")
+		}
+		return &tls.Config{
+			RootCAs:    rootCertPool,
+			ServerName: host,
+		}, nil
+	}
+
+	if cluster != "" || tryHostCAcertificates {
+		return &tls.Config{ServerName: host}, nil
+	}
+
+	logger.Log.Warn("insecure connection is used", log.String("pg_host", host))
+	return nil, nil
+}
+
+func GetConnParamsFromSrc(lgr log.Logger, src *PgSource) (*ConnectionParams, error) {
+	var conn *connection.ConnectionPG
+	var err error
+	if src.ConnectionID != "" {
+		conn, err = resolveConnection(src.ConnectionID, src.Database)
+	} else {
+		conn = makeConnectionFromSrc(src)
+	}
+
+	if err != nil {
+		return nil, xerrors.Errorf("Could not resolve connection %w", err)
+	}
+
+	return getMasterConnectionParams(lgr, conn)
+}
+
 func MakeConnConfigFromSrc(lgr log.Logger, pgSrc *PgSource) (*pgx.ConnConfig, error) {
-	masterHost, masterPort, err := ResolveMasterHostPortFromSrc(lgr, pgSrc)
+	connParams, err := GetConnParamsFromSrc(lgr, pgSrc)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to resolve master host: %w", err)
 	}
-	return makeConnConfig(masterHost, int(masterPort), pgSrc.Database, pgSrc.User, string(pgSrc.Password), pgSrc.ClusterID, pgSrc.HasTLS(), pgSrc.TLSFile)
+	return makeConnConfigFromParams(connParams)
 }
 
 func MakeConnConfigFromSink(lgr log.Logger, params PgSinkParams) (*pgx.ConnConfig, error) {
-	masterHost, masterPort, err := ResolveMasterHostPortFromSink(lgr, params)
+	var conn *connection.ConnectionPG
+	var err error
+	if params.ConnectionID() != "" {
+		conn, err = resolveConnection(params.ConnectionID(), params.Database())
+	} else {
+		conn = makeConnectionFromSink(params)
+	}
+
+	if err != nil {
+		return nil, xerrors.Errorf("Could not resolve connection %w", err)
+	}
+
+	connParams, err := getMasterConnectionParams(lgr, conn)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to resolve master host: %w", err)
 	}
-	return makeConnConfig(masterHost, int(masterPort), params.Database(), params.User(), params.Password(), params.ClusterID(), params.HasTLS(), params.TLSFile())
+	return makeConnConfigFromParams(connParams)
+}
+
+func MakeConnConfigFromStorage(lgr log.Logger, storage *PgStorageParams) (*pgx.ConnConfig, error) {
+	var conn *connection.ConnectionPG
+	var err error
+	if storage.ConnectionID != "" {
+		conn, err = resolveConnection(storage.ConnectionID, storage.Database)
+	} else {
+		conn = makeConnectionFromStorage(storage)
+	}
+
+	if err != nil {
+		return nil, xerrors.Errorf("Could not resolve connection %w", err)
+	}
+
+	var connParams *ConnectionParams
+	// When 'PreferReplica' is false OR 'ResolveReplicaHost' didn't find any replica - we try to get master:
+	// - if on_prem one host - master is this host
+	// - if on_prem >1 hosts - pgHA determines master
+	// - if managed installation - master is determined via mdb api
+	if storage.PreferReplica && conn.ClusterID != "" {
+		host, err := getHostPreferablyReplica(lgr, conn, storage.SlotID)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to resolve replica host: %w", err)
+		}
+		connParams = toConnParams(host, conn)
+	} else {
+		connParams, err = getMasterConnectionParams(lgr, conn)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to resolve master host: %w", err)
+		}
+	}
+	return makeConnConfig(connParams, storage.ConnString, storage.TryHostCACertificates)
 }
 
 // MakeConnPoolFrom*
 
 func MakeConnPoolFromSrc(pgSrc *PgSource, lgr log.Logger) (*pgxpool.Pool, error) {
-	masterHost, masterPort, err := ResolveMasterHostPortFromSrc(lgr, pgSrc)
+	connParams, err := GetConnParamsFromSrc(lgr, pgSrc)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to resolve master host from source: %w", err)
 	}
-	connConfig, err := makeConnConfig(masterHost, int(masterPort), pgSrc.Database, pgSrc.User, string(pgSrc.Password), pgSrc.ClusterID, pgSrc.HasTLS(), pgSrc.TLSFile)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to make source connection config: %w", err)
-	}
-	return NewPgConnPool(connConfig, lgr)
-}
-
-func MakeConnPoolFromHostPort(cfg *PgStorageParams, host string, port int, lgr log.Logger) (*pgxpool.Pool, error) {
-	logger.Log.Info("Using pg host to establish connection", log.String("pg_host", host))
-	connConfig, err := makeConnConfig(host, port, cfg.Database, cfg.User, string(cfg.Password), cfg.ClusterID, cfg.TLSFile != "", cfg.TLSFile)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to make source connection config: %w", err)
-	}
-	return NewPgConnPool(connConfig, lgr)
+	return makeConnPoolFromParams(connParams, lgr)
 }
 
 func MakeConnPoolFromDst(pgDst *PgDestination, lgr log.Logger) (*pgxpool.Pool, error) {
-	masterHost, masterPort, err := ResolveMasterHostPortFromDst(lgr, pgDst)
+	var conn *connection.ConnectionPG
+	var err error
+	if pgDst.ConnectionID != "" {
+		conn, err = resolveConnection(pgDst.ConnectionID, pgDst.Database)
+	} else {
+		conn = makeConnectionFromDst(pgDst)
+	}
+
+	if err != nil {
+		return nil, xerrors.Errorf("Could not resolve connection %w", err)
+	}
+
+	connParams, err := getMasterConnectionParams(lgr, conn)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to resolve master host from destination: %w", err)
 	}
-	connConfig, err := makeConnConfig(masterHost, int(masterPort), pgDst.Database, pgDst.User, string(pgDst.Password), pgDst.ClusterID, pgDst.HasTLS(), pgDst.TLSFile)
+	return makeConnPoolFromParams(connParams, lgr)
+}
+
+func makeConnPoolFromParams(connParams *ConnectionParams, lgr log.Logger) (*pgxpool.Pool, error) {
+	logger.Log.Info("Using pg host to establish connection", log.String("pg_host", connParams.Host), log.UInt16("pg_port", connParams.Port))
+	connConfig, err := makeConnConfigFromParams(connParams)
 	if err != nil {
-		return nil, xerrors.Errorf("unable to make destination connection config: %w", err)
+		return nil, xerrors.Errorf("unable to make connection config: %w", err)
 	}
 	return NewPgConnPool(connConfig, lgr)
 }
@@ -376,4 +493,101 @@ func NewPgConnPoolConfig(ctx context.Context, poolConfig *pgxpool.Config) (*pgxp
 	}
 
 	return result, nil
+}
+
+type ConnectionParams struct {
+	Host           string
+	Port           uint16
+	Database       string
+	User           string
+	Password       model.SecretString
+	HasTLS         bool
+	CACertificates string
+	ClusterID      string
+}
+
+func toConnParams(host *connection.Host, params *connection.ConnectionPG) *ConnectionParams {
+	return &ConnectionParams{
+		Host:           host.Name,
+		Port:           uint16(host.Port),
+		Database:       params.Database,
+		User:           params.User,
+		Password:       params.Password,
+		HasTLS:         params.HasTLS,
+		CACertificates: params.CACertificates,
+		ClusterID:      params.ClusterID,
+	}
+}
+
+func makeConnectionFromSrc(src *PgSource) *connection.ConnectionPG {
+	connParams := &connection.ConnectionPG{
+		Hosts:          []*connection.Host{},
+		User:           src.User,
+		Password:       src.Password,
+		ClusterID:      src.ClusterID,
+		Database:       src.Database,
+		HasTLS:         src.HasTLS(),
+		CACertificates: src.TLSFile,
+	}
+	connParams.SetHosts(src.AllHosts(), src.Port)
+	return connParams
+}
+
+func makeConnectionFromDst(dst *PgDestination) *connection.ConnectionPG {
+	connParams := &connection.ConnectionPG{
+		Hosts:          []*connection.Host{},
+		User:           dst.User,
+		Password:       dst.Password,
+		ClusterID:      dst.ClusterID,
+		Database:       dst.Database,
+		HasTLS:         dst.HasTLS(),
+		CACertificates: dst.TLSFile,
+	}
+	connParams.SetHosts(dst.AllHosts(), dst.Port)
+	return connParams
+}
+
+func makeConnectionFromStorage(dst *PgStorageParams) *connection.ConnectionPG {
+	connParams := &connection.ConnectionPG{
+		Hosts:          []*connection.Host{},
+		User:           dst.User,
+		Password:       model.SecretString(dst.Password),
+		ClusterID:      dst.ClusterID,
+		Database:       dst.Database,
+		HasTLS:         dst.HasTLS(),
+		CACertificates: dst.TLSFile,
+	}
+	connParams.SetHosts(dst.AllHosts, dst.Port)
+	return connParams
+}
+
+func makeConnectionFromSink(dst PgSinkParams) *connection.ConnectionPG {
+	connParams := &connection.ConnectionPG{
+		Hosts:          []*connection.Host{},
+		User:           dst.User(),
+		Password:       model.SecretString(dst.Password()),
+		ClusterID:      dst.ClusterID(),
+		Database:       dst.Database(),
+		HasTLS:         dst.HasTLS(),
+		CACertificates: dst.TLSFile(),
+	}
+	connParams.SetHosts(dst.AllHosts(), dst.Port())
+	return connParams
+}
+
+func resolveConnection(connectionID string, database string) (*connection.ConnectionPG, error) {
+	connCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	//DP agent token here
+	conn, err := connection.Resolver().ResolveConnection(connCtx, connectionID, ProviderType)
+	if err != nil {
+		return nil, err
+	}
+
+	if pgConn, ok := conn.(*connection.ConnectionPG); ok {
+		pgConn.Database = database
+		return pgConn, nil
+	}
+
+	return nil, xerrors.Errorf("Cannot cast connection %s to PG connection", connectionID)
 }

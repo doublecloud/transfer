@@ -60,7 +60,7 @@ func dumpToString(t *testing.T, source server.Source) string {
 	case *model.ChSource:
 		return FromClickhouse(t, src, false)
 	case *pgcommon.PgSource:
-		connString, err := pgcommon.PostgresDumpConnString(src)
+		connString, _, err := pgcommon.PostgresDumpConnString(src)
 		require.NoError(t, err)
 		args := make([]string, 0)
 		args = append(args,

@@ -46,4 +46,5 @@ type PgSinkParams interface {
 	QueryTimeout() time.Duration
 	// DisableSQLFallback returns true if the sink should never use SQL when copying snapshot and should always use "COPY FROM"
 	DisableSQLFallback() bool
+	ConnectionID() string
 }

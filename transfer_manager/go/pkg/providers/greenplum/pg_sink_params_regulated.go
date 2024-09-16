@@ -93,6 +93,10 @@ func (p PgSinkParamsRegulated) QueryTimeout() time.Duration {
 	return p.FQueryTimeout
 }
 
+func (p PgSinkParamsRegulated) ConnectionID() string {
+	return ""
+}
+
 func GpDestinationToPgSinkParamsRegulated(d *GpDestination) *PgSinkParamsRegulated {
 	result := new(PgSinkParamsRegulated)
 	result.FDatabase = d.Connection.Database

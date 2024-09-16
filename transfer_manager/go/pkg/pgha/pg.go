@@ -8,6 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/connection"
 	dbaas "github.com/doublecloud/transfer/transfer_manager/go/pkg/dbaas"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -21,7 +22,7 @@ import (
 type PgHA struct {
 	user      string
 	password  string
-	name      string
+	dbName    string
 	hosts     []string
 	cluster   *hasql.Cluster
 	port      int
@@ -89,7 +90,7 @@ func (pg *PgHA) ConnStringByHost(host string) string {
 		`host=%v port=%v dbname=%s user=%s password=%s`,
 		host,
 		pg.port,
-		pg.name,
+		pg.dbName,
 		pg.user,
 		pg.password)
 	if pg.ssl {
@@ -180,14 +181,23 @@ func (pg *PgHA) Conn(role dbaas.Role) (*pgx.Conn, error) {
 }
 
 func (pg *PgHA) Clone() (*PgHA, error) {
-	return NewFromHosts(pg.name, pg.user, pg.password, pg.hosts, pg.port, pg.ssl)
+	return NewFromHosts(pg.dbName, pg.user, pg.password, pg.hosts, pg.port, pg.ssl)
 }
 
 func (pg *PgHA) PoolSize() int64 {
 	return pg.poolSize
 }
 
-func NewFromHosts(name, user, password string, hosts []string, port int, ssl bool) (*PgHA, error) {
+func NewFromConnection(managedConnection *connection.ConnectionPG) (*PgHA, error) {
+	hosts := make([]string, 0, len(managedConnection.Hosts))
+	for _, host := range managedConnection.Hosts {
+		hosts = append(hosts, fmt.Sprintf("%s:%v", host.Name, host.Port))
+	}
+	return NewFromHosts(managedConnection.Database, managedConnection.User, string(managedConnection.Password),
+		hosts, 0, managedConnection.HasTLS)
+}
+
+func NewFromHosts(dbName, user, password string, hosts []string, port int, ssl bool) (*PgHA, error) {
 	if port == 0 {
 		port = 6432 // default port in MDB
 	}
@@ -206,7 +216,7 @@ func NewFromHosts(name, user, password string, hosts []string, port int, ssl boo
 			`host=%s port=%d dbname=%s user=%s password=%s`,
 			realHost,
 			realPort,
-			name,
+			dbName,
 			user,
 			password,
 		)
@@ -250,7 +260,7 @@ func NewFromHosts(name, user, password string, hosts []string, port int, ssl boo
 	return &PgHA{
 		user:      user,
 		password:  password,
-		name:      name,
+		dbName:    dbName,
 		hosts:     hosts,
 		cluster:   c,
 		port:      port,

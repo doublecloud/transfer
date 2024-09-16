@@ -48,6 +48,10 @@ func (d *PgDestination) MDBClusterID() string {
 	return d.ClusterID
 }
 
+func (d *PgDestination) GetConnectionID() string {
+	return d.ConnectionID
+}
+
 func (d *PgDestination) FillDependentFields(transfer *server.Transfer) {
 	_, isHomo := transfer.Src.(*PgSource)
 	if !isHomo && !d.MaintainTables {
@@ -192,6 +196,10 @@ func (d PgDestinationWrapper) QueryTimeout() time.Duration {
 	return d.Model.QueryTimeout
 }
 
+func (d PgDestinationWrapper) ConnectionID() string {
+	return d.Model.ConnectionID
+}
+
 func (d *PgDestination) ToSinkParams() PgDestinationWrapper {
 	copyPgDestination := *d
 	return PgDestinationWrapper{
@@ -221,5 +229,6 @@ func (d *PgDestination) ToStorageParams() *PgStorageParams {
 		UseBinarySerialization:      false,
 		SlotID:                      "",
 		ShardingKeyFields:           map[string][]string{},
+		ConnectionID:                d.ConnectionID,
 	}
 }

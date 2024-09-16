@@ -2,8 +2,6 @@ package postgres
 
 import (
 	"context"
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
 	"strings"
 	"time"
@@ -17,7 +15,6 @@ import (
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/util"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pglogrepl"
-	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -226,37 +223,11 @@ func newWalSource(config *PgSource, objects *server.DataObjects, transferID stri
 	rb := util.Rollbacks{}
 	defer rb.Do()
 
-	var tlsConfig *tls.Config
-	masterHost, masterPort, err := ResolveMasterHostPortFromSrc(lgr, config)
+	connConfig, err := MakeConnConfigFromSrc(lgr, config)
 	if err != nil {
 		return nil, xerrors.Errorf(": %w", err)
 	}
-	lgr.Infof("Trying to create WAL source for master host '%s'", masterHost)
-
-	if config.ClusterID != "" {
-		tlsConfig = &tls.Config{
-			ServerName: masterHost,
-		}
-	} else if config.HasTLS() {
-		rootCertPool := x509.NewCertPool()
-		if ok := rootCertPool.AppendCertsFromPEM([]byte(config.TLSFile)); !ok {
-			return nil, xerrors.New("unable to add TLS to cert pool")
-		}
-		tlsConfig = &tls.Config{
-			RootCAs:    rootCertPool,
-			ServerName: masterHost,
-		}
-	}
-
-	connConfig, _ := pgx.ParseConfig("")
-	connConfig.Host = masterHost
-	connConfig.Port = masterPort
-	connConfig.Database = config.Database
-	connConfig.User = config.User
-	connConfig.Password = string(config.Password)
-	connConfig.TLSConfig = tlsConfig
-	connConfig.PreferSimpleProtocol = true
-
+	lgr.Infof("Trying to create WAL source for master host '%s'", connConfig.Host)
 	connPool, err := NewPgConnPool(connConfig, lgr)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to create conn pool: %w", err)
@@ -348,6 +319,7 @@ WHERE slot_name = '%v' AND active_pid IS NOT NULL;`, config.SlotID)
 			rb.Cancel()
 			return res, nil
 		}
+		//todo this should be resolved too!!
 		if config.ClusterID != "" {
 			return nil, xerrors.Errorf("unable to init replication connection: %w", err)
 		}

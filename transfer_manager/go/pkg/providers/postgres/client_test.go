@@ -13,6 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/transfer_manager/go/internal/logger"
+	"github.com/doublecloud/transfer/transfer_manager/go/pkg/connection"
 	"github.com/doublecloud/transfer/transfer_manager/go/pkg/dbaas"
 	"github.com/stretchr/testify/require"
 )
@@ -27,8 +28,13 @@ func checkHostIsPrimary(cfg *PgStorageParams, host string) (bool, error) {
 	if err != nil {
 		return false, xerrors.Errorf("unable to extract host/port, host:%s, port:%d", host, cfg.Port)
 	}
-
-	conn, err := MakeConnPoolFromHostPort(cfg, resultHost, int(resultPort), logger.Log)
+	connConf, err := MakeConnConfigFromStorage(logger.Log, cfg)
+	connConf.Port = resultPort
+	connConf.Host = resultHost
+	if err != nil {
+		return false, xerrors.Errorf("unable to resolve connection, err: %w", err)
+	}
+	conn, err := NewPgConnPool(connConf, logger.Log)
 	if err != nil {
 		return false, xerrors.Errorf("unable to make conn pool, err: %w", err)
 	}
@@ -94,7 +100,7 @@ func waitMaster(cfg *PgStorageParams, hosts []string, duration time.Duration) (s
 // checkTwoPostgresIsRunning
 // returns 'true' if needed to check one more time
 func checkTwoPostgresIsRunning(t *testing.T) bool {
-	cmd := `docker ps | grep '\bUp\b.*\bpostgres_\d\b' | wc -l | awk '{print $1}'`
+	cmd := `sudo docker ps | grep '\bUp\b.*\bpostgres_\d\b' | wc -l | awk '{print $1}'`
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	require.NoError(t, err)
 	num, err := strconv.Atoi(strings.Trim(string(out), "\n"))
@@ -117,7 +123,7 @@ func checkTwoPostgresIsRunning(t *testing.T) bool {
 // checkExactlyOnePostgresIsPrimary
 // returns 'true' if there are two primary
 func checkExactlyOnePostgresIsPrimary(t *testing.T) bool {
-	cmd1 := `docker exec postgres_1 psql -t -c "select case when pg_is_in_recovery() then 'secondary' else 'primary' end as host_status;" "dbname=habrdb user=habrpguser password=pgpwd4habr" | awk '{print $1}' | grep -v "^$"`
+	cmd1 := `sudo docker exec postgres_1 psql -t -c "select case when pg_is_in_recovery() then 'secondary' else 'primary' end as host_status;" "dbname=habrdb user=habrpguser password=pgpwd4habr" | awk '{print $1}' | grep -v "^$"`
 	out1Arr, err := exec.Command("bash", "-c", cmd1).Output()
 	require.NoError(t, err)
 	out1 := strings.Trim(string(out1Arr), "\n")
@@ -284,4 +290,297 @@ func TestSink(t *testing.T) {
 	ensureSinkCreatingOnMaster(t, dst, []string{hosts[1], hosts[0]}, masterHost2) // reverse order
 
 	fmt.Println("everything is ok!")
+}
+
+func TestWithConnectionRealCluster(t *testing.T) {
+	// fill const with your favourite mdb cluster and run locally
+	t.Skip()
+	const (
+		replica    = "fill-in"
+		master     = "fill-in"
+		port       = 0
+		user       = "fill-in"
+		db         = "fill-in"
+		pass       = "fill-in"
+		mdbCluster = "fill-in"
+	)
+
+	connResolver := connection.NewMockConnectionResolver()
+	connection.Init(connResolver)
+	var src *PgSource
+
+	t.Run("Test prefer replica for mdb storage", func(t *testing.T) {
+		//should check no slot on master and choose any replica
+		mdbConnection := &connection.ConnectionPG{
+			Hosts: []*connection.Host{
+				{Name: replica, Port: port, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
+				{Name: master, Port: port, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+			},
+			User:           user,
+			Password:       pass,
+			Database:       "not used yet",
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      mdbCluster,
+		}
+		_ = connResolver.Add("conn1-real-cluster", "test-folder", mdbConnection)
+
+		src = &PgSource{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     db,
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn1-real-cluster",
+		}
+
+		storage := src.ToStorageParams(nil)
+		storage.PreferReplica = true
+		conConf, err := MakeConnConfigFromStorage(logger.Log, storage)
+		require.NoError(t, err)
+		require.Equal(t, replica, conConf.Host)
+		require.Equal(t, uint16(port), conConf.Port)
+		require.Equal(t, db, conConf.Database)
+		require.Equal(t, user, conConf.User)
+		require.Equal(t, pass, conConf.Password)
+	})
+
+	t.Run("Test choose master for onprem with pgha", func(t *testing.T) {
+		onPremConnection := &connection.ConnectionPG{
+			Hosts: []*connection.Host{
+				//no known roles
+				connection.SimpleHost("bad-host1", port),
+				connection.SimpleHost("bad-host2", port),
+				connection.SimpleHost(master, port),
+				connection.SimpleHost(replica, port),
+			},
+			User:           user,
+			Password:       pass,
+			Database:       "not used yet",
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      "",
+		}
+		_ = connResolver.Add("conn2-cluster-as-onprem", "test-folder", onPremConnection)
+
+		src = &PgSource{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     db,
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn2-cluster-as-onprem",
+		}
+
+		conConf, err := MakeConnConfigFromSrc(logger.Log, src)
+		require.NoError(t, err)
+		require.Equal(t, master, conConf.Host)
+		require.Equal(t, uint16(port), conConf.Port)
+		require.Equal(t, db, conConf.Database)
+		require.Equal(t, user, conConf.User)
+		require.Equal(t, pass, conConf.Password)
+	})
+
+	t.Run("Test use master for onprem prefer replica storage", func(t *testing.T) {
+		//for onpem we use master
+		storage := src.ToStorageParams(nil)
+		storage.PreferReplica = true
+		conConf, err := MakeConnConfigFromStorage(logger.Log, storage)
+		require.NoError(t, err)
+		require.Equal(t, master, conConf.Host)
+		require.Equal(t, uint16(port), conConf.Port)
+		require.Equal(t, db, conConf.Database)
+		require.Equal(t, user, conConf.User)
+		require.Equal(t, pass, conConf.Password)
+	})
+
+	t.Run("Should go to mdb for unresolved mdb cluster roles", func(t *testing.T) {
+		mdbConnectionNotResolved := &connection.ConnectionPG{
+			Hosts:          nil,
+			User:           user,
+			Password:       pass,
+			Database:       "not used yet",
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      mdbCluster,
+		}
+		_ = connResolver.Add("conn3-cluster-not-resolved", "test-folder", mdbConnectionNotResolved)
+
+		src = &PgSource{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     db,
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn3-cluster-not-resolved",
+		}
+
+		storage := src.ToStorageParams(nil)
+		storage.PreferReplica = true
+		_, err := MakeConnConfigFromStorage(logger.Log, storage)
+		require.Error(t, err)
+		require.Contains(t, err.Error(), "dbaas provider not initialized")
+	})
+}
+
+func TestWithConnection(t *testing.T) {
+	connResolver := connection.NewMockConnectionResolver()
+	connection.Init(connResolver)
+
+	var src *PgSource
+	t.Run("MakeConnConfigFromSrc", func(t *testing.T) {
+		fakeClusterConn := &connection.ConnectionPG{
+			Hosts: []*connection.Host{
+				{Name: "test-one", Port: 6432, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
+				{Name: "test-two", Port: 6432, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+			},
+			User:           "test-user",
+			Password:       "test-pass",
+			Database:       "not used yet",
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      "test-cluster",
+		}
+		_ = connResolver.Add("conn1-fake-cluster", "test-folder", fakeClusterConn)
+
+		src = &PgSource{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     "db1",
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn1-fake-cluster",
+		}
+
+		conConf, err := MakeConnConfigFromSrc(logger.Log, src)
+		require.NoError(t, err)
+		require.Equal(t, "test-two", conConf.Host) //master
+		require.Equal(t, uint16(6432), conConf.Port)
+		require.Equal(t, "db1", conConf.Database)
+		require.Equal(t, "test-user", conConf.User)
+		require.Equal(t, "test-pass", conConf.Password)
+
+	})
+
+	t.Run("MakeConnConfigFromStorage", func(t *testing.T) {
+		storage := src.ToStorageParams(nil)
+		conConf, err := MakeConnConfigFromStorage(logger.Log, storage)
+		require.NoError(t, err)
+		require.Equal(t, "test-two", conConf.Host) //master
+		require.Equal(t, uint16(6432), conConf.Port)
+		require.Equal(t, "db1", conConf.Database)
+		require.Equal(t, "test-user", conConf.User)
+		require.Equal(t, "test-pass", conConf.Password)
+
+	})
+
+	t.Run("MakeConnConfigFromSink", func(t *testing.T) {
+		dst := &PgDestination{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     "db1",
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn1-fake-cluster",
+		}
+
+		pgSink := dst.ToSinkParams()
+		conConf, err := MakeConnConfigFromSink(logger.Log, pgSink)
+		require.NoError(t, err)
+		require.Equal(t, "test-two", conConf.Host) //master
+		require.Equal(t, uint16(6432), conConf.Port)
+		require.Equal(t, "db1", conConf.Database)
+		require.Equal(t, "test-user", conConf.User)
+		require.Equal(t, "test-pass", conConf.Password)
+
+	})
+
+	t.Run("MakeConnConfigFromSrc for onprem one host", func(t *testing.T) {
+		fakeOnPremConn := &connection.ConnectionPG{
+			Hosts:          []*connection.Host{connection.SimpleHost("test-three", 1111)},
+			User:           "test-user",
+			Password:       "test-pass",
+			Database:       "not used yet",
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      "",
+		}
+		_ = connResolver.Add("conn2-fake-onprem", "test-folder", fakeOnPremConn)
+
+		src = &PgSource{
+			Hosts:        nil,
+			Port:         0, // should be never used
+			Database:     "db1",
+			User:         "VALUE_SHOULD_NOT_BE_FILLED",
+			Password:     "VALUE_SHOULD_NOT_BE_FILLED",
+			ConnectionID: "conn2-fake-onprem",
+		}
+
+		conConf, err := MakeConnConfigFromSrc(logger.Log, src)
+		require.NoError(t, err)
+		require.Equal(t, "test-three", conConf.Host) //one host
+		require.Equal(t, uint16(1111), conConf.Port)
+		require.Equal(t, "db1", conConf.Database)
+		require.Equal(t, "test-user", conConf.User)
+		require.Equal(t, "test-pass", conConf.Password)
+
+	})
+
+	t.Run("MakeConnConfigFromStorage for replica one host", func(t *testing.T) {
+		storage := src.ToStorageParams(nil)
+		storage.PreferReplica = true
+		conConf, err := MakeConnConfigFromStorage(logger.Log, storage)
+		require.NoError(t, err)
+		require.Equal(t, "test-three", conConf.Host) //only one host, so..
+		require.Equal(t, uint16(1111), conConf.Port)
+		require.Equal(t, "db1", conConf.Database)
+		require.Equal(t, "test-user", conConf.User)
+		require.Equal(t, "test-pass", conConf.Password)
+
+	})
+
+	t.Run("Get mdb host port", func(t *testing.T) {
+		//actually there should be no hosts/ports for mdb cluster
+		connIdeal := &connection.ConnectionPG{Hosts: []*connection.Host{}}
+		host, port, err := getHostPortFromMDBHostname("host-1", connIdeal)
+		require.NoError(t, err)
+		require.Equal(t, "host-1", host)
+		require.Equal(t, uint16(6432), port)
+
+		//actually there should be no hosts/ports for mdb cluster
+		connSomnitelnoButOK := &connection.ConnectionPG{Hosts: []*connection.Host{connection.SimpleHost("host-1", 0)}}
+		host, port, err = getHostPortFromMDBHostname("host-1", connSomnitelnoButOK)
+		require.NoError(t, err)
+		require.Equal(t, "host-1", host)
+		require.Equal(t, uint16(6432), port)
+
+		connOK := &connection.ConnectionPG{Hosts: []*connection.Host{
+			connection.SimpleHost("host-1", 444),
+			connection.SimpleHost("host-2", 444),
+		}}
+
+		host, port, err = getHostPortFromMDBHostname("host-1", connOK)
+		require.NoError(t, err)
+		require.Equal(t, "host-1", host)
+		require.Equal(t, uint16(444), port)
+
+		host, port, err = getHostPortFromMDBHostname("host-2:555", connOK)
+		require.NoError(t, err)
+		require.Equal(t, "host-2", host)
+		require.Equal(t, uint16(555), port)
+
+		host, port, err = getHostPortFromMDBHostname("host-3", connOK)
+		require.NoError(t, err)
+		require.Equal(t, "host-3", host)
+		require.Equal(t, uint16(6432), port)
+
+		connPortInName := &connection.ConnectionPG{Hosts: []*connection.Host{
+			connection.SimpleHost("host-1:333", 0),
+			connection.SimpleHost("host-2:333", 0),
+		}}
+		host, port, err = getHostPortFromMDBHostname("host-1:333", connPortInName)
+		require.NoError(t, err)
+		require.Equal(t, "host-1", host)
+		require.Equal(t, uint16(333), port)
+	})
 }
