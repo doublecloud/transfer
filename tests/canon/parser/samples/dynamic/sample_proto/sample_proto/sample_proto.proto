@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option go_package = "github.com/doublecloud/transfer/tests/canon/parser/samples/dynamic/sample_proto/sample_proto";
+
+message SampleProto {
+    double doubleField = 1;
+    float floatField = 2;
+    int32 int32Field = 3;
+    int64 int64Field = 4;
+    uint32 uint32Field = 5;
+    uint64 uint64Field = 6;
+    sint32 sint32Field = 7;
+    sint64 sint64Field = 8;
+    fixed32 fixed32Field = 9;
+    fixed64 fixed64Field = 10;
+    sfixed32 sfixed32Field = 11;
+    sfixed64 sfixed64Field = 12;
+    bool boolField = 13;
+    string stringField = 14;
+    bytes bytesField = 15;
+    map<string, int32> mapField = 16;
+    repeated string repeatedField = 17;
+    SampleEmbeddedMsg msgField = 18;
+}
+
+message SampleEmbeddedMsg {
+    string stringField = 1;
+    int32 int32Field = 2;
+    SampleEmbeddedEnum enumField = 3;
+}
+
+enum SampleEmbeddedEnum {
+    ITEM_1 = 0;
+    ITEM_2 = 1;
+}
