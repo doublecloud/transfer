@@ -57,18 +57,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            /usr/local/bin/clickhouse
-            /usr/bin/psql
-            ~/go/bin/gotestsum
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/go.sum') }}-clickhouse-psql
-          restore-keys: |
-            ${{ runner.os }}-deps-
       - shell: bash
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |
           go install gotest.tools/gotestsum@latest
           curl https://clickhouse.com/ | sh
@@ -126,7 +115,9 @@ jobs:
           { group: "pkg/providers", name: "providers-mysql", path: "mysql" },
           { group: "pkg/providers", name: "providers-sample", path: "sample" },
           { group: "pkg/providers", name: "providers-kafka", path: "kafka" },
+          { group: "pkg/providers", name: "providers-elastic", path: "elastic" },
           { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
+          { group: "pkg/providers", name: "providers-greenplum", path: "greenplum" },
           { group: "pkg/providers", name: "providers-kinesis", path: "kinesis" },
           # pkg test suites
           { group: "pkg", name: "transformer", path: "transformer" },
@@ -159,18 +150,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: Cache Dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            /usr/local/bin/clickhouse
-            /usr/bin/psql
-            ~/go/bin/gotestsum
-          key: ${{ runner.os }}-deps-${{ hashFiles('**/go.sum') }}-clickhouse-psql
-          restore-keys: |
-            ${{ runner.os }}-deps-
       - shell: bash
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: |
           go install gotest.tools/gotestsum@latest
           curl https://clickhouse.com/ | sh
