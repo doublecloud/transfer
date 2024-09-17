@@ -28,6 +28,7 @@ jobs:
     name: e2e / ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 2
       fail-fast: false
       matrix:
         suite: [
@@ -38,6 +39,7 @@ jobs:
           { group: "tests/e2e", name: "pg2pg", path: "pg2pg" },
           { group: "tests/e2e", name: "pg2ch", path: "pg2ch" },
           { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
+          { group: "tests/e2e", name: "kinesis2ch", path: "mongo2ch" },
         ]
     steps:
       - name: Checkout
@@ -53,6 +55,7 @@ jobs:
         run: |
           curl https://clickhouse.com/ | sh
           sudo ./clickhouse install
+          sudo apt-get install postgresql-client
       - shell: bash
         run: |
           echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
@@ -92,6 +95,7 @@ jobs:
     name: tests - ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 4
       fail-fast: false
       matrix:
         suite: [
@@ -134,6 +138,7 @@ jobs:
         run: |
           curl https://clickhouse.com/ | sh
           sudo ./clickhouse install
+          sudo apt-get install postgresql-client
       - shell: bash
         run: |
           echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
