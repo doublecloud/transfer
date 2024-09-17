@@ -48,15 +48,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22.0"
-      - name: Restore Go Build Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
@@ -141,15 +132,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.22.0"
-      - name: Restore Go Build Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
