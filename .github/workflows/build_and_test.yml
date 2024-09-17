@@ -28,7 +28,6 @@ jobs:
     name: e2e / ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 2
       fail-fast: false
       matrix:
         suite: [
@@ -95,7 +94,6 @@ jobs:
     name: tests - ${{ matrix.suite.name }}
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
       fail-fast: false
       matrix:
         suite: [
