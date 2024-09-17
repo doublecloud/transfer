@@ -191,15 +191,22 @@ func Restore(column ColSchema, value interface{}) interface{} {
 				}
 			}
 		}
-		rawVal, casts := value.(string)
-		if !casts {
+		rawVal, isString := value.(string)
+		if !isString {
 			return value
 		}
-		if column.OriginalType == "mysql:json" {
+
+		if column.OriginalType == "mysql:json" ||
+			strings.HasPrefix(column.OriginalType, "ch:Decimal(") ||
+			strings.HasPrefix(column.OriginalType, "ch:Nullable(Decimal(") {
+
 			return rawVal
 		}
+
 		if strings.HasPrefix(column.OriginalType, "pg:timestamp") {
-			// PostgreSQL `TIMESTAMP ...` is emitted as time.Time, not as string. And in PostgreSQL it has a form different form the JSON serialization of this type. This special deserialization is necessary for arrays - they have original type set to `any` and are not parsed as a normal timestamp
+			// PostgreSQL `TIMESTAMP ...` is emitted as time.Time, not as string. And in PostgreSQL it has a form
+			// different form the JSON serialization of this type. This special deserialization is necessary for
+			// arrays - they have original type set to `any` and are not parsed as a normal timestamp.
 			result, err := time.Parse(time.RFC3339Nano, rawVal)
 			if err != nil {
 				return rawVal

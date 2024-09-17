@@ -32,7 +32,7 @@ func (p *ParserNative) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem
 	return result
 }
 
-func NewParserNative(_ interface{}, _ bool, logger log.Logger, registry *stats.SourceStats) (parsers.Parser, error) {
+func NewParserNative(_ interface{}, _ bool, logger log.Logger, _ *stats.SourceStats) (parsers.Parser, error) {
 	parser := &ParserNative{
 		logger: logger,
 	}
