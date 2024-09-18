@@ -101,8 +101,8 @@ jobs:
       matrix:
         suite: [
           # canon test suites
-          { group: "tests/canon", name: "parser", path: "parser" },
-          { group: "tests/storage", name: "storage/pg", path: "pg" },
+          { group: "tests/canon", name: "canon-parser", path: "parser" },
+          { group: "tests/storage", name: "storage-pg", path: "pg" },
           # internal test suites
           { group: "internal", name: "internal", path: "..." },
           # provider test suites
