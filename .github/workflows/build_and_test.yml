@@ -125,7 +125,6 @@ jobs:
           { group: "pkg", name: "util", path: "util" },
           { group: "pkg", name: "stringutil", path: "stringutil" },
           { group: "pkg", name: "serializer", path: "serializer" },
-          { group: "pkg", name: "util", path: "util" },
           { group: "pkg", name: "worker", path: "worker" },
           { group: "pkg", name: "schemaregistry", path: "schemaregistry" },
           { group: "pkg", name: "parsers-generic", path: "parsers/generic" },
