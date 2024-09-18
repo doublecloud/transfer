@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option go_package = "github.com/doublecloud/transfer/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references2";
+
+package ru.yandex.market.maroco.workflow.v2;
+
+import "transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references2/my_file1.proto";
+
+message ReadyForLastMileBusinessContext {
+    optional .ru.yandex.market.x_func_tech.temporal.business.EventInfo event_info = 1;
+    optional int64 order_id = 2;
+    optional int64 puid = 3;
+    optional string app_platform = 4;
+    optional string order_status = 5;
+    optional string order_substatus = 6;
+    optional string last_order_substatus = 7;
+    optional string communication_id = 8;
+    optional string communication_title = 9;
+    optional string communication_text = 10;
+    optional string communication_link = 11;
+    optional string communication_picture = 12;
+    optional string communication_provider = 13;
+    repeated string order_ids = 14;
+    optional bool has_push_subscriptions = 15;
+}

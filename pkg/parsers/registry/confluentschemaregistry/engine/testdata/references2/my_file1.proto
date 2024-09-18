@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "github.com/doublecloud/transfer/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references2";
+
+package ru.yandex.market.x_func_tech.temporal.business;
+
+message EventInfo {
+  .ru.yandex.market.x_func_tech.temporal.business.EEventType event_type = 1;
+  optional .ru.yandex.market.x_func_tech.temporal.business.EEventResult event_result = 2;
+  optional string event_result_message = 3;
+  int64 event_ts = 4;
+  optional string activity_type_nm = 5;
+  string workflow_type_nm = 6;
+  optional string signal_nm = 7;
+  string workflow_id = 8;
+  optional string parent_workflow_id = 9;
+  string root_workflow_id = 10;
+  string run_id = 11;
+}
+
+enum EEventResult {
+  EVENT_RESULT_UNSPECIFIED = 0;
+  EVENT_RESULT_SUCCESS = 1;
+  EVENT_RESULT_FAIL = 2;
+}
+
+enum EEventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_WORKFLOW_EXECUTION_STARTED = 1;
+  EVENT_TYPE_WORKFLOW_EXECUTION_COMPLETED = 2;
+  EVENT_TYPE_WORKFLOW_EXECUTION_FAILED = 3;
+  EVENT_TYPE_WORKFLOW_TASK_STARTED = 6;
+  EVENT_TYPE_WORKFLOW_TASK_COMPLETED = 7;
+  EVENT_TYPE_WORKFLOW_TASK_TIMED_OUT = 8;
+  EVENT_TYPE_WORKFLOW_TASK_FAILED = 9;
+  EVENT_TYPE_ACTIVITY_TASK_STARTED = 11;
+  EVENT_TYPE_ACTIVITY_TASK_COMPLETED = 12;
+  EVENT_TYPE_ACTIVITY_TASK_FAILED = 13;
+  EVENT_TYPE_ACTIVITY_TASK_CANCEL_REQUESTED = 15;
+  EVENT_TYPE_ACTIVITY_TASK_CANCELED = 16;
+  EVENT_TYPE_TIMER_STARTED = 17;
+  EVENT_TYPE_TIMER_FIRED = 18;
+  EVENT_TYPE_WORKFLOW_EXECUTION_CANCEL_REQUESTED = 20;
+  EVENT_TYPE_WORKFLOW_EXECUTION_CANCELED = 21;
+  EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_INITIATED = 22;
+  EVENT_TYPE_REQUEST_CANCEL_EXTERNAL_WORKFLOW_EXECUTION_FAILED = 23;
+  EVENT_TYPE_WORKFLOW_EXECUTION_SIGNALED = 26;
+  EVENT_TYPE_WORKFLOW_EXECUTION_TERMINATED = 27;
+  EVENT_TYPE_WORKFLOW_EXECUTION_CONTINUED_AS_NEW = 28;
+}

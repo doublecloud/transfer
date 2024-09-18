@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option go_package = "github.com/doublecloud/transfer/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references";
+
+import "transfer_manager/go/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references/my_file1.proto";
+
+message my_msg2 {
+    my_msg1 msg1_field = 1;
+    string msg2_string_field = 2;
+}
