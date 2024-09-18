@@ -29,7 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 2
       matrix:
         suite: [
           # CLI test suites
@@ -97,7 +96,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      max-parallel: 4
       matrix:
         suite: [
           # canon test suites

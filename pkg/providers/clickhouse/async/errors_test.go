@@ -49,7 +49,7 @@ var cases = []testCase{{
 }}
 
 var (
-	target   = chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("gotest/init.sql"))
+	target   = chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("gotest/errors_test_init.sql"))
 	transfer = new(server.Transfer)
 )
 
