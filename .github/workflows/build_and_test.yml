@@ -105,6 +105,10 @@ jobs:
           { group: "pkg/providers", name: "providers-sample", path: "sample" },
           { group: "pkg/providers", name: "providers-kafka", path: "kafka" },
           { group: "pkg/providers", name: "providers-kinesis", path: "kinesis" },
+          { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
+          { group: "pkg/providers", name: "providers-greenplum", path: "greenplum" },
+          { group: "pkg/providers", name: "providers-clickhouse", path: "clickhouse" },
+          { group: "pkg/providers", name: "providers-elastic", path: "elastic" },
           # pkg test suites
           { group: "pkg", name: "abstract", path: "abstract" },
           { group: "pkg", name: "transformer", path: "transformer" },

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"os"
 	"testing"
 
@@ -17,13 +18,7 @@ import (
 )
 
 var (
-	pgSource = postgres.PgSource{
-		Hosts:    []string{"localhost"},
-		User:     os.Getenv("PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
-		Database: os.Getenv("PG_LOCAL_DATABASE"),
-		Port:     helpers.GetIntFromEnv("PG_LOCAL_PORT"),
-	}
+	pgSource = pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("init_source"))
 	gpSource = greenplum.GpSource{
 		Connection: greenplum.GpConnection{
 			OnPremises: &greenplum.GpCluster{
