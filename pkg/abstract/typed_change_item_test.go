@@ -10,6 +10,7 @@ import (
 )
 
 func TestTypedChangeItem(t *testing.T) {
+	fmt.Printf("=====%v\n", time.Local)
 	ci := &TypedChangeItem{
 		ID:          291975574,
 		CommitTime:  1601382119000000000,
