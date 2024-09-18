@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         suite: [
           # CLI test suites
@@ -38,6 +39,9 @@ jobs:
           { group: "tests/e2e", name: "pg2pg", path: "pg2pg" },
           { group: "tests/e2e", name: "pg2ch", path: "pg2ch" },
           { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
+          { group: "tests/e2e", name: "kinesis2ch", path: "kinesis2ch" },
+          { group: "tests/e2e", name: "pg2s3", path: "pg2s3" },
+          { group: "tests/e2e", name: "ch2s3", path: "ch2s3" },
         ]
     steps:
       - name: Checkout
@@ -93,10 +97,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
+      max-parallel: 4
       matrix:
         suite: [
           # canon test suites
           { group: "tests/canon", name: "parser", path: "parser" },
+          { group: "tests/storage", name: "storage/pg", path: "pg" },
           # internal test suites
           { group: "internal", name: "internal", path: "..." },
           # provider test suites
