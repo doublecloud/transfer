@@ -3,6 +3,7 @@ package abstract
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 )
 
 func TestTypedChangeItem(t *testing.T) {
+	_ = os.Unsetenv("TZ")
 	ci := &TypedChangeItem{
 		ID:          291975574,
 		CommitTime:  1601382119000000000,
