@@ -872,6 +872,9 @@ func (l *SnapshotLoader) DoUploadTables(ctx context.Context, source abstract.Sto
 	for {
 		if err := parallelismSemaphore.Acquire(ctx, 1); err != nil {
 			logger.Log.Error("Failed to acquire semaphore to load next table", log.Any("worker_index", l.workerIndex), log.Error(ctx.Err()))
+			if tableUploadErr != nil {
+				return errors.CategorizedErrorf(categories.Internal, "Upload error: %w", err)
+			}
 			return errors.CategorizedErrorf(categories.Internal, "failed to acquire semaphore: %w", err)
 		}
 		waitToComplete.Add(1)
