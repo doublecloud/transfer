@@ -6,7 +6,7 @@ import (
 
 // FakeClientWithTransferState is a fake controlplane client which stores sharded object transfer state
 type FakeClientWithTransferState struct {
-	coordinator.FakeClient
+	coordinator.CoordinatorNoOp
 	state map[string]*coordinator.TransferStateData
 }
 
@@ -21,7 +21,7 @@ func (c *FakeClientWithTransferState) GetTransferState(transferID string) (map[s
 
 func NewFakeClientWithTransferState() *FakeClientWithTransferState {
 	return &FakeClientWithTransferState{
-		FakeClient: coordinator.FakeClient{},
-		state:      nil,
+		CoordinatorNoOp: coordinator.CoordinatorNoOp{},
+		state:           nil,
 	}
 }

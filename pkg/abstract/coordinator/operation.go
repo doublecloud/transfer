@@ -67,3 +67,8 @@ type Sharding interface {
 	// Deprecated: used only in A2
 	UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error
 }
+
+// Progressable is opt-in interface to show total progress over upload once completed
+type Progressable interface {
+	Progress() []*server.OperationTablePart
+}

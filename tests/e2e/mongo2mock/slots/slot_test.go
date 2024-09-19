@@ -91,7 +91,7 @@ func (m mockSinker) Push(items []abstract.ChangeItem) error { return nil }
 
 // controlplane that catches replication failure
 type mockCPFailRepl struct {
-	cpclient.FakeClient
+	cpclient.CoordinatorNoOp
 	err error
 }
 
