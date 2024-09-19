@@ -12,18 +12,13 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/greenplum"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 )
 
 var (
-	pgSource = postgres.PgSource{
-		Hosts:    []string{"localhost"},
-		User:     os.Getenv("PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
-		Database: os.Getenv("PG_LOCAL_DATABASE"),
-		Port:     helpers.GetIntFromEnv("PG_LOCAL_PORT"),
-	}
+	pgSource = pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("init_source"))
 	gpSource = greenplum.GpSource{
 		Connection: greenplum.GpConnection{
 			OnPremises: &greenplum.GpCluster{

@@ -207,6 +207,7 @@ func offsetDateTestHours(t *testing.T) {
 func offsetDateTestDays(t *testing.T) {
 	t.Parallel()
 	_ = os.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
+	defer os.Unsetenv("TZ")
 	rcDays := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartDay, PartSize: 1, TimeColumn: ""}
 	rcDaysTimestamp := time.Now()
 
