@@ -13,33 +13,35 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ReplicateCommand() *cobra.Command {
+func ReplicateCommand(cp *coordinator.Coordinator, rt abstract.Runtime) *cobra.Command {
 	var transferParams string
 	replicationCommand := &cobra.Command{
 		Use:   "replicate",
 		Short: "Start local replication",
-		RunE:  replicate(&transferParams),
+		RunE:  replicate(cp, rt, &transferParams),
 	}
 	replicationCommand.Flags().StringVar(&transferParams, "transfer", "./transfer.yaml", "path to yaml file with transfer configuration")
 	return replicationCommand
 }
 
-func replicate(transferYaml *string) func(cmd *cobra.Command, args []string) error {
+func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		transfer, err := config.TransferFromYaml(transferYaml)
 		if err != nil {
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
-		return RunReplication(transfer)
+		transfer.Runtime = rt
+
+		return RunReplication(*cp, transfer)
 	}
 }
 
-func RunReplication(transfer *model.Transfer) error {
+func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer) error {
 	if err := provideradapter.ApplyForTransfer(transfer); err != nil {
 		return xerrors.Errorf("unable to adapt transfer: %w", err)
 	}
 	for {
-		worker := local.NewLocalWorker(coordinator.NewFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
+		worker := local.NewLocalWorker(cp, transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
 		err := worker.Run()
 		if abstract.IsFatal(err) {
 			return err

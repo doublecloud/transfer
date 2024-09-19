@@ -15,7 +15,7 @@ import (
 )
 
 type FakeControlplane struct {
-	coordinator.FakeClient
+	coordinator.CoordinatorNoOp
 	transfer *server.Transfer
 }
 

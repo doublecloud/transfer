@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/cmd/trcli/replicate"
 	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
@@ -38,10 +39,10 @@ func TestReplicate(t *testing.T) {
 	transfer.Src = src
 	transfer.Dst = dst
 
-	require.NoError(t, activate.RunActivate(transfer)) // so that a replication slot is created for source
+	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer)) // so that a replication slot is created for source
 
 	go func() {
-		require.NoError(t, replicate.RunReplication(transfer))
+		require.NoError(t, replicate.RunReplication(coordinator.NewStatefulFakeClient(), transfer))
 	}()
 
 	time.Sleep(5 * time.Second)
