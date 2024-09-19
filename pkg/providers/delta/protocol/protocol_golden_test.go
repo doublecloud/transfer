@@ -7,13 +7,13 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	store "github.com/doublecloud/transfer/pkg/providers/delta/store"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 )
 
 // badGoldenTest it's a set of cases that doomed to fail
 // that was designed that way
-var badGoldenTest = util.NewSet(
+var badGoldenTest = set.New(
 	"versions-not-contiguous",
 	"deltalog-state-reconstruction-without-protocol",
 	"deltalog-state-reconstruction-without-metadata",

@@ -1,14 +1,14 @@
 package mongo
 
 import (
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type bulkSplitter struct {
 	bulks              [][]mongo.WriteModel
 	currentOperations  []mongo.WriteModel
-	currentDocumentIDs util.Set[string]
+	currentDocumentIDs set.Set[string]
 }
 
 func (b *bulkSplitter) Add(operation mongo.WriteModel, id documentID, isolated bool) {
@@ -41,13 +41,13 @@ func (b *bulkSplitter) flush() {
 	}
 	b.bulks = append(b.bulks, b.currentOperations)
 	b.currentOperations = []mongo.WriteModel{}
-	b.currentDocumentIDs = *util.NewSet[string]()
+	b.currentDocumentIDs = *set.New[string]()
 }
 
 func newBulkSplitter() bulkSplitter {
 	return bulkSplitter{
 		bulks:              [][]mongo.WriteModel{},
 		currentOperations:  []mongo.WriteModel{},
-		currentDocumentIDs: *util.NewSet[string](),
+		currentDocumentIDs: *set.New[string](),
 	}
 }

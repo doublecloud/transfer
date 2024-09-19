@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -130,7 +130,7 @@ func syncPerDatabaseClusterTime(ctx context.Context, src *MongoSource, client *M
 }
 
 func EnableChangeStreams(ctx context.Context, client *MongoClientWrapper, colls []MongoCollection) error {
-	dbs := util.NewSet[string]()
+	dbs := set.New[string]()
 	for _, coll := range colls {
 		dbs.Add(coll.DatabaseName)
 		var commandResult bson.D

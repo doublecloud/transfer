@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/providers/delta/action"
 	"github.com/doublecloud/transfer/pkg/providers/delta/store"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 type SnapshotReader struct {
@@ -250,7 +250,7 @@ func (r *SnapshotReader) segmentFromCheckpoint(
 	checkpoints []*store.FileMeta,
 ) (*LogSegment, error) {
 	newCheckpointVersion := latestCheckpoint.Version
-	newCheckpointPaths := util.NewSet(latestCheckpoint.GetCorrespondingFiles(r.logStore.Root())...)
+	newCheckpointPaths := set.New(latestCheckpoint.GetCorrespondingFiles(r.logStore.Root())...)
 
 	deltasAfterCheckpoint := slices.Filter(deltas, func(f *store.FileMeta) bool {
 		ver, err := LogVersion(f.Path())

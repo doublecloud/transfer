@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 type Task interface {
@@ -151,7 +151,7 @@ func (p UpdateTransferParams) AddedTables() ([]TableDescription, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("invalid new objects: %w", err)
 	}
-	oldSet := util.NewSet(olds...)
+	oldSet := set.New(olds...)
 	var tables []TableDescription
 	for _, obj := range news {
 		if oldSet.Contains(obj) {

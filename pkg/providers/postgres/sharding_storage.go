@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/splitter"
 	"github.com/doublecloud/transfer/pkg/stringutil"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 func (s *Storage) checkMinMax(ctx context.Context, table abstract.TableID, col abstract.ColSchema) (min, max int64, err error) {
@@ -231,7 +231,7 @@ func (s *Storage) getTableKeyColumns(ctx context.Context, table abstract.TableDe
 	explicitShardingKeyFields := s.explicitShardingKeys(table)
 
 	if len(explicitShardingKeyFields) > 0 { // Use explicitly specified sharing keys if present
-		shardingKeyFieldsSet := util.NewSet[string](explicitShardingKeyFields...)
+		shardingKeyFieldsSet := set.New[string](explicitShardingKeyFields...)
 		for _, col := range columns.Columns() {
 			if shardingKeyFieldsSet.Contains(col.ColumnName) {
 				keys = append(keys, col)

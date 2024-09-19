@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/providers/delta/types"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/google/uuid"
 )
 
@@ -76,7 +76,7 @@ func (m *Metadata) PartitionSchema() (*types.StructType, error) {
 }
 
 func (m *Metadata) DataSchema() (*types.StructType, error) {
-	partitions := util.NewSet(m.PartitionColumns...)
+	partitions := set.New(m.PartitionColumns...)
 	s, err := m.Schema()
 	if err != nil {
 		return nil, err

@@ -2,7 +2,7 @@ package confluent
 
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 type referenceObj struct {
@@ -12,15 +12,15 @@ type referenceObj struct {
 }
 
 type schemasContainer struct {
-	inQueue util.Set[referenceObj]
+	inQueue set.Set[referenceObj]
 	schemas map[referenceObj]Schema
 }
 
 func (s *schemasContainer) addTask(referenceName, subject string, version int32) {
 	if _, ok := s.schemas[referenceObj{referenceName: referenceName, subject: subject, version: version}]; ok {
-		return // if we already got this schema
+		return // if we already got this schemaset.Set
 	}
-	s.inQueue.Add(referenceObj{ // if we occur >1 times this schema - util.Set deduplicate them
+	s.inQueue.Add(referenceObj{ // if we occur >1 times this schema - set.Set deduplicate them
 		referenceName: referenceName,
 		subject:       subject,
 		version:       version,
@@ -65,7 +65,7 @@ func (s *schemasContainer) references() map[string]Schema {
 }
 
 func newSchemasContainer(references []SchemaReference) *schemasContainer {
-	set := util.NewSet[referenceObj]()
+	set := set.New[referenceObj]()
 	for _, reference := range references {
 		set.Add(referenceObj{
 			referenceName: reference.Name,

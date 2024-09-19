@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"golang.org/x/exp/slices"
@@ -46,7 +46,7 @@ type RawDocGroupTransformer struct {
 	Tables        filter.Filter
 	Keys          []string
 	Fields        []string
-	keySet        *util.Set[string]
+	keySet        *set.Set[string]
 	targetSchemas map[string]*abstract.TableSchema
 	schemasLock   sync.RWMutex
 }
@@ -189,7 +189,7 @@ func NewRawDocGroupTransformer(config RawDocGrouperConfig) (*RawDocGroupTransfor
 		}
 	}
 
-	keySet := util.NewSet[string](keys...)
+	keySet := set.New[string](keys...)
 	if len(keys) != keySet.Len() {
 		return nil, xerrors.Errorf("Can't use same keys column names twice: %s", strings.Join(keys, ", "))
 	}

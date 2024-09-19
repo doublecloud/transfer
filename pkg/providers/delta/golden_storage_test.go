@@ -17,14 +17,14 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // badGoldenTest it's a set of cases that doomed to fail
 // that was designed that way
-var badGoldenTest = util.NewSet(
+var badGoldenTest = set.New(
 	// todo: special character, s3 client fail them
 	"deltatbl-special-chars-in-partition-column",
 	"data-reader-escaped-chars",

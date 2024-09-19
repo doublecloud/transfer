@@ -3,11 +3,11 @@ package changeitem
 import (
 	"sync"
 
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 var (
-	systemTables   = util.NewSet[string]()
+	systemTables   = set.New[string]()
 	systemTablesMu = &sync.RWMutex{}
 )
 
@@ -20,7 +20,7 @@ func SystemTables() []string {
 func RegisterSystemTables(tableNames ...string) {
 	systemTablesMu.Lock()
 	defer systemTablesMu.Unlock()
-	systemTables.AddRange(tableNames...)
+	systemTables.Add(tableNames...)
 }
 
 func IsSystemTable(in string) bool {

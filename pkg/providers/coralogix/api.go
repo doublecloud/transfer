@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 // see: https://coralogix.com/docs/rest-api-bulk/
@@ -40,7 +41,7 @@ type HTTPLogItem struct {
 	HiResTimestamp  string   `json:"hiResTimestamp,omitempty"`
 }
 
-var fatalCode = util.NewSet(403, 404)
+var fatalCode = set.New(403, 404)
 
 func SubmitLogs(data []HTTPLogItem, domain, token string) error {
 	payloadBytes, err := json.Marshal(data)

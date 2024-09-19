@@ -15,7 +15,7 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/elastic/go-elasticsearch/v7"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -124,7 +124,7 @@ func applyDump(indexName string, indexParams []byte, transfer *server.Transfer, 
 }
 
 func DeleteSystemFieldsFromIndexParams(params map[string]interface{}) {
-	deleteMask := util.NewSet([]string{
+	deleteMask := set.New([]string{
 		"settings.index.provided_name",
 		"settings.index.creation_date",
 		"settings.index.number_of_replicas",

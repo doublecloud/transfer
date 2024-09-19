@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/yandex/cloud/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 var (
@@ -98,7 +98,7 @@ func trimZeroDecimal(s string) string {
 	return s
 }
 
-func valuesListToSet(valList filter.Value) (*util.Set[interface{}], error) {
+func valuesListToSet(valList filter.Value) (*set.Set[interface{}], error) {
 	values := make([]interface{}, 0)
 	if valList.IsIntList() {
 		for _, val := range valList.AsIntList() {
@@ -125,7 +125,7 @@ func valuesListToSet(valList filter.Value) (*util.Set[interface{}], error) {
 	}
 
 	if len(values) > 0 {
-		return util.NewSet(values...), nil
+		return set.New(values...), nil
 	}
 
 	return nil, xerrors.Errorf("not appropriate type of list values: %s", valList.Type())

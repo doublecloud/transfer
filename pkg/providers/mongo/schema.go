@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
@@ -209,7 +209,7 @@ func (u *UpdateDocumentChangeItem) CheckDiffByKeys(checkKeys []string) map[strin
 		}
 	}
 
-	checkKeysSet := util.NewSet[string](checkKeys...)
+	checkKeysSet := set.New[string](checkKeys...)
 	for _, f := range u.RemovedFields() {
 		if checkKeysSet.Contains(f) {
 			changedFields[f] = nil

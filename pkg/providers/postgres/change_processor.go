@@ -15,6 +15,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/castx"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/doublecloud/transfer/pkg/util/strict"
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgtype"
@@ -135,7 +136,7 @@ func (c *changeProcessor) fixupChange(
 
 	errs := util.NewErrs()
 
-	skipCols := util.NewSet[string]()
+	skipCols := set.New[string]()
 	for i, name := range change.ColumnNames {
 		colSchema, ok := parsingSchema[abstract.ColumnName(name)]
 		if !ok {

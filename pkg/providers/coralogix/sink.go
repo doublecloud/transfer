@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/stats"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/spf13/cast"
 	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/xerrors"
@@ -29,7 +29,7 @@ type Sink struct {
 }
 
 var (
-	FatalErrors = util.NewSet("403 Forbidden")
+	FatalErrors = set.New("403 Forbidden")
 )
 
 func (s *Sink) Close() error {

@@ -22,6 +22,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/sink"
 	"github.com/doublecloud/transfer/pkg/storage"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/sync/semaphore"
 )
@@ -99,7 +100,7 @@ func (l *SnapshotLoader) LoadSnapshot(ctx context.Context) error {
 }
 
 func (l *SnapshotLoader) CheckIncludeDirectives(tables []abstract.TableDescription) error {
-	unfulfilledIncludes := util.NewSet[string]()
+	unfulfilledIncludes := set.New[string]()
 	if l.transfer.DataObjects != nil {
 		for _, includeObject := range l.transfer.DataObjects.IncludeObjects {
 			requiredTableID, err := abstract.ParseTableID(includeObject)
@@ -118,13 +119,13 @@ func (l *SnapshotLoader) CheckIncludeDirectives(tables []abstract.TableDescripti
 			}
 		}
 	} else if includeable, ok := l.transfer.Src.(server.Includeable); ok {
-		unfulfilledIncludes.AddRange(includeable.AllIncludes()...)
+		unfulfilledIncludes.Add(includeable.AllIncludes()...)
 		for _, table := range tables {
 			if unfulfilledIncludes.Empty() {
 				break
 			}
 			fulfilledIncludes := includeable.FulfilledIncludes(table.ID())
-			unfulfilledIncludes.RemoveRange(fulfilledIncludes...)
+			unfulfilledIncludes.Remove(fulfilledIncludes...)
 		}
 	}
 

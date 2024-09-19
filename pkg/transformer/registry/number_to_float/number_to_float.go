@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	yts "go.ytsaurus.tech/yt/go/schema"
 	"golang.org/x/xerrors"
@@ -18,7 +18,7 @@ const (
 )
 
 var (
-	supportedKinds = util.NewSet(abstract.InsertKind, abstract.UpdateKind)
+	supportedKinds = set.New(abstract.InsertKind, abstract.UpdateKind)
 )
 
 func init() {

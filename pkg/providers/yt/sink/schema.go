@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/migrate"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -225,7 +225,7 @@ func (s *Schema) ShardCol() (abstract.ColSchema, string) {
 
 // WORKAROUND TO BACK COMPATIBILITY WITH 'SYSTEM KEYS' - see TM-5087
 
-var genericParserSystemCols = util.NewSet(
+var genericParserSystemCols = set.New(
 	"_logfeller_timestamp",
 	"_timestamp",
 	"_partition",

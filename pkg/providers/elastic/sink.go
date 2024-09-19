@@ -18,6 +18,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esutil"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -29,7 +30,7 @@ type Sink struct {
 	logger log.Logger
 	stats  *stats.SinkerStats
 
-	existsIndexes      *util.Set[abstract.TableID]
+	existsIndexes      *set.Set[abstract.TableID]
 	existsIndexesMutex sync.RWMutex
 }
 
@@ -386,7 +387,7 @@ func NewSinkImpl(cfg *ElasticSearchDestination, logger log.Logger, registry metr
 		client:             client,
 		logger:             logger,
 		stats:              stats.NewSinkerStats(registry),
-		existsIndexes:      util.NewSet[abstract.TableID](),
+		existsIndexes:      set.New[abstract.TableID](),
 		existsIndexesMutex: sync.RWMutex{},
 	}, nil
 }

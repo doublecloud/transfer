@@ -3,7 +3,7 @@ package dblog
 import (
 	"strings"
 
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 var supportedTypesArr = []string{
@@ -64,7 +64,7 @@ var supportedTypesArr = []string{
 	"citext",
 }
 
-var supportedTypes = util.NewSet(supportedTypesArr...)
+var supportedTypes = set.New(supportedTypesArr...)
 
 func IsSupportedKeyType(keyType string) bool {
 	normalKeyType := strings.Split(keyType, "(")[0]

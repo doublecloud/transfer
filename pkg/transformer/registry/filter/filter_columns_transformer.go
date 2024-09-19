@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -38,7 +38,7 @@ type FilterColumnsTransformer struct {
 }
 
 type filteredTableSchema struct {
-	ColNames util.Set[string]
+	ColNames set.Set[string]
 	Columns  []abstract.ColSchema
 }
 
@@ -105,7 +105,7 @@ func (f *FilterColumnsTransformer) getFilteredSchema(tID abstract.TableID, schem
 }
 
 func (f *FilterColumnsTransformer) newFilteredTableSchema(schema *abstract.TableSchema) (*filteredTableSchema, error) {
-	colsNames := util.NewSet[string]([]string{}...)
+	colsNames := set.New[string]([]string{}...)
 	colsSchema := []abstract.ColSchema{}
 	for _, c := range schema.Columns() {
 		if !f.Columns.Match(c.ColumnName) {
@@ -154,7 +154,7 @@ func (f *FilterColumnsTransformer) cacheSchema(tID abstract.TableID, schema *abs
 	return filteredSchema, nil
 }
 
-func (f *FilterColumnsTransformer) getColumnIndexes(item abstract.ChangeItem, filteredColumns util.Set[string]) ([]int, error) {
+func (f *FilterColumnsTransformer) getColumnIndexes(item abstract.ChangeItem, filteredColumns set.Set[string]) ([]int, error) {
 	indexes := make([]int, 0)
 	for i, name := range item.ColumnNames {
 		if filteredColumns.Contains(name) {

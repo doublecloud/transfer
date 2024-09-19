@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 )
 
@@ -144,14 +144,14 @@ func (m *mockStorage) TableExists(table abstract.TableID) (bool, error) {
 }
 
 type mockSinker struct {
-	excludedKinds *util.Set[abstract.Kind]
+	excludedKinds *set.Set[abstract.Kind]
 	mux           sync.Mutex
 	table         abstract.TableID
 }
 
 func newMockSinker(excludedKinds ...abstract.Kind) *mockSinker {
 	return &mockSinker{
-		excludedKinds: util.NewSet(excludedKinds...),
+		excludedKinds: set.New(excludedKinds...),
 		mux:           sync.Mutex{},
 		table:         abstract.TableID{},
 	}

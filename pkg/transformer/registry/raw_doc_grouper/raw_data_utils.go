@@ -4,7 +4,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/yt/go/schema"
 	"golang.org/x/exp/slices"
 )
@@ -68,7 +68,7 @@ func CollectFieldsForTransformer(fields []string, columns abstract.TableColumns,
 }
 
 func allFieldsPresent(colNames []string, rawDocFields map[string]schema.Type, fields []string) bool {
-	colSet := util.NewSet[string](colNames...)
+	colSet := set.New[string](colNames...)
 	for _, key := range fields {
 		if _, ok := rawDocFields[key]; !ok && !colSet.Contains(key) {
 			return false

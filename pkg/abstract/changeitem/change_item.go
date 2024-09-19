@@ -11,6 +11,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/dterrors"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/yt/go/yson"
 )
 
@@ -90,8 +91,8 @@ const (
 	partitionCol = "_partition"
 )
 
-var RowEventKinds = util.NewSet(InsertKind, UpdateKind, DeleteKind, MongoUpdateDocumentKind)
-var SystemKinds = util.NewSet(
+var RowEventKinds = set.New(InsertKind, UpdateKind, DeleteKind, MongoUpdateDocumentKind)
+var SystemKinds = set.New(
 	InitTableLoad, InitShardedTableLoad, DoneTableLoad, DoneShardedTableLoad, DropTableKind, TruncateTableKind,
 	SynchronizeKind,
 )

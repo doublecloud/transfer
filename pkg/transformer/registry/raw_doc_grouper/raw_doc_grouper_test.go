@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 )
 
@@ -133,8 +133,8 @@ func TestRawDocGroupTransformer(t *testing.T) {
 			differentSchemas = append(differentSchemas, hash)
 			compareColumns(t, resultItem, []string{"col1", "col2", "col3", "etl_updated_at", "doc"})
 		}
-		require.Equal(t, util.NewSet[string](differentSchemas...).Len(), 3, "Different schema count mismatch, some changeItems should have same schemas!")
-		require.Equal(t, util.NewSet[string](differentSchemas...).Len(), util.NewSet[*abstract.TableSchema](differentTargetSchemas...).Len(), "input and output schema count mismatch!!")
+		require.Equal(t, set.New[string](differentSchemas...).Len(), 3, "Different schema count mismatch, some changeItems should have same schemas!")
+		require.Equal(t, set.New[string](differentSchemas...).Len(), set.New[*abstract.TableSchema](differentTargetSchemas...).Len(), "input and output schema count mismatch!!")
 	})
 
 	t.Run("System events schema fixed", func(t *testing.T) {

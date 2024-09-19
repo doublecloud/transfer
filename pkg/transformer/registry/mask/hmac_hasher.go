@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
 	tostring "github.com/doublecloud/transfer/pkg/transformer/registry/to_string"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
@@ -20,7 +20,7 @@ const MaskFieldTransformerType = abstract.TransformerType("mask_field")
 
 type HmacHasher struct {
 	Tables      filter.Filter
-	Columns     *util.Set[string]
+	Columns     *set.Set[string]
 	HashFactory func() hash.Hash
 	Salt        string
 	lgr         log.Logger
@@ -103,7 +103,7 @@ func (hh *HmacHasher) Description() string {
 }
 
 func NewHmacHasherTransformer(config MaskFunctionHash, lgr log.Logger, tables filter.Filter, columns []string) (abstract.Transformer, error) {
-	columnsSet := util.NewSet(columns...)
+	columnsSet := set.New(columns...)
 	return &HmacHasher{
 		Tables:      tables,
 		Columns:     columnsSet,

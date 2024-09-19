@@ -12,7 +12,7 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -42,7 +42,7 @@ var (
 	_ providers.Activator = (*Provider)(nil)
 )
 
-var systemTopics = util.NewSet(
+var systemTopics = set.New(
 	"__consumer_offsets", // is used to store information about committed offsets for each topic:partition per group of consumers (groupID).
 	"_schema",            // is not a default kafka topic (at least at kafka 8,9). This is an internal topic used by the Schema Registry which is a distributed storage layer for Avro schemas.
 )

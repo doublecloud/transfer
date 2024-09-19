@@ -21,7 +21,7 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/exp/slices"
@@ -389,7 +389,7 @@ func dumpUserDefinedTypes(ctx context.Context, connString string, connPass serve
 		return nil, err
 	}
 
-	tablesSchemas := util.NewSet[string]()
+	tablesSchemas := set.New[string]()
 	for _, t := range src.DBTables {
 		tableID, err := abstract.NewTableIDFromStringPg(t, false)
 		if err != nil {

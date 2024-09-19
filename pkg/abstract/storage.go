@@ -8,6 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 type LoadProgress func(current, progress, total uint64)
@@ -287,7 +288,7 @@ func TableIDsIntersection(a []TableID, b []TableID) []TableID {
 		return b
 	}
 	// both sets are not empty, find an intersection
-	resultSet := util.NewSet[TableID]()
+	resultSet := set.New[TableID]()
 	for iA := range a {
 		for iB := range b {
 			if a[iA].Includes(b[iB]) {

@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 )
@@ -18,7 +18,7 @@ func TestHmacHasherTransformer(t *testing.T) {
 	tf, _ := filter.NewFilter(nil, []string{})
 	hmacHasherTransformer := HmacHasher{
 		Tables:      tf,
-		Columns:     util.NewSet[string]("column1", "column2", "column3", "column4"),
+		Columns:     set.New[string]("column1", "column2", "column3", "column4"),
 		HashFactory: sha256.New,
 		Salt:        "the-best-tasty-saint-petersburg-salt",
 		lgr:         logger.Log,

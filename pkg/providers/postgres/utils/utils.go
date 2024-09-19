@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 const (
@@ -17,7 +17,7 @@ const (
 // it saves order, but enforces uniqueness.
 func HandleHostAndHosts(host string, hosts []string) []string {
 	allHosts := slices.Filter(append([]string{host}, hosts...), func(s string) bool { return s != "" })
-	allHosts = util.NewSet(allHosts...).SortedSliceFunc(func(a, b string) bool {
+	allHosts = set.New(allHosts...).SortedSliceFunc(func(a, b string) bool {
 		return a < b
 	})
 

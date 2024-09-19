@@ -1,4 +1,4 @@
-package util
+package set
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 )
 
 func TestSetContains(t *testing.T) {
-	s := NewSet[int](1, 3)
+	s := New[int](1, 3)
 	require.True(t, s.Contains(1))
 	require.False(t, s.Contains(2))
 	require.True(t, s.Contains(3))
@@ -22,16 +22,16 @@ func TestSetContains(t *testing.T) {
 
 func TestSetString(t *testing.T) {
 	var empty []int
-	require.Equal(t, fmt.Sprint(empty), fmt.Sprint(NewSet[int](empty...)))
+	require.Equal(t, fmt.Sprint(empty), fmt.Sprint(New[int](empty...)))
 
 	single := []int{1}
-	require.Equal(t, fmt.Sprint(single), fmt.Sprint(NewSet[int](single...)))
+	require.Equal(t, fmt.Sprint(single), fmt.Sprint(New[int](single...)))
 
 	var multiple []string
 	for _, permutation := range permutations([]int{1, 2, 3}) {
 		multiple = append(multiple, fmt.Sprint(permutation))
 	}
-	require.Contains(t, multiple, fmt.Sprint(NewSet[int](1, 2, 3)))
+	require.Contains(t, multiple, fmt.Sprint(New[int](1, 2, 3)))
 }
 
 func permutations[T any](items []T) [][]T {

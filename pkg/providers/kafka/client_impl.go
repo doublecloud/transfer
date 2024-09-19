@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/errors/coded"
 	"github.com/doublecloud/transfer/pkg/providers"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -93,7 +93,7 @@ func listTopics(broker string, mechanism sasl.Mechanism, tlsConfig *tls.Config) 
 		return nil, xerrors.Errorf("unable to list topics: %w", err)
 	}
 
-	return util.NewSet(slices.Map(partitions, func(t kafka.Partition) string {
+	return set.New(slices.Map(partitions, func(t kafka.Partition) string {
 		return t.Topic
 	})...).Slice(), nil
 }

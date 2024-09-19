@@ -24,7 +24,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	dt_canon "github.com/doublecloud/transfer/tests/canon"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -132,7 +132,7 @@ order by
 	case *mongo.MongoSource:
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
-		excluded := util.NewSet("admin", "config", "local")
+		excluded := set.New("admin", "config", "local")
 		client, err := mongo.Connect(ctx, src.ConnectionOptions([]string{}), logger.Log)
 		require.NoError(t, err)
 		dbs, err := client.ListDatabases(ctx, bson.D{})

@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/spf13/cast"
 	"go.ytsaurus.tech/library/go/core/log"
 	yts "go.ytsaurus.tech/yt/go/schema"
@@ -33,8 +33,8 @@ func init() {
 
 type termWithValues struct {
 	Term      parser.Term
-	ValuesSet *util.Set[interface{}] // not nil, when Term.Operator is IN/NOT IN
-	ByteValue []byte                 // not nil, when Term.Value.IsString()
+	ValuesSet *set.Set[interface{}] // not nil, when Term.Operator is IN/NOT IN
+	ByteValue []byte                // not nil, when Term.Value.IsString()
 }
 
 type filteringExpression []termWithValues
@@ -75,8 +75,8 @@ type FilterRowsTransformer struct {
 	Logger      log.Logger
 	Expressions []filteringExpression // ChangeItem transfers if it matches at least one of filters (expressions).
 
-	impossibleKinds  *util.Set[abstract.Kind] // Apply() will create a fatal error when receiving such kind.
-	appropriateKinds *util.Set[abstract.Kind] // Only appropriate kinds are filtered.
+	impossibleKinds  *set.Set[abstract.Kind] // Apply() will create a fatal error when receiving such kind.
+	appropriateKinds *set.Set[abstract.Kind] // Only appropriate kinds are filtered.
 }
 
 func NewFilterRowsTransformer(cfg Config, lgr log.Logger) (*FilterRowsTransformer, error) {
@@ -92,8 +92,8 @@ func NewFilterRowsTransformer(cfg Config, lgr log.Logger) (*FilterRowsTransforme
 		Tables:           tables,
 		Logger:           lgr,
 		Expressions:      expressions,
-		impossibleKinds:  util.NewSet(abstract.UpdateKind, "Update", abstract.DeleteKind, "Delete"),
-		appropriateKinds: util.NewSet(abstract.InsertKind, "Insert"),
+		impossibleKinds:  set.New(abstract.UpdateKind, "Update", abstract.DeleteKind, "Delete"),
+		appropriateKinds: set.New(abstract.InsertKind, "Insert"),
 	}, nil
 }
 
@@ -401,7 +401,7 @@ func matchBytesValue(val1, val2 []byte, op parser.OperatorType) (bool, error) {
 	return false, xerrors.Errorf("Unknown operation %s", op)
 }
 
-func matchValueToSet[T constraints.Ordered](val T, set *util.Set[interface{}], op parser.OperatorType) (bool, error) {
+func matchValueToSet[T constraints.Ordered](val T, set *set.Set[interface{}], op parser.OperatorType) (bool, error) {
 	if set == nil {
 		return false, xerrors.Errorf("unable to check value matching without set, operator: %s", op.String())
 	}

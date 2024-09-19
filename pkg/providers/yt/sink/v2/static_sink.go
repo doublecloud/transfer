@@ -13,14 +13,14 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/yt/sink/v2/statictable"
 	"github.com/doublecloud/transfer/pkg/providers/yt/sink/v2/transactions"
 	"github.com/doublecloud/transfer/pkg/stats"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
 )
 
 var (
-	expectedKinds = util.NewSet(
+	expectedKinds = set.New(
 		abstract.InitShardedTableLoad,
 		abstract.InitTableLoad,
 		abstract.InsertKind,
@@ -53,7 +53,7 @@ type sink struct {
 	partTx yt.Tx
 	writer staticTableWriter
 
-	handledSystemItems map[abstract.Kind]*util.Set[string]
+	handledSystemItems map[abstract.Kind]*set.Set[string]
 
 	metrics *stats.SinkerStats
 	logger  log.Logger
@@ -234,9 +234,9 @@ func NewStaticSink(cfg yt2.YtDestinationModel, cp coordinator.Coordinator, trans
 		mainTx:     transactions.NewMainTxClient(transferID, cp, ytClient, logger),
 		partTx:     nil,
 		writer:     nil,
-		handledSystemItems: map[abstract.Kind]*util.Set[string]{
-			abstract.InitShardedTableLoad: util.NewSet[string](),
-			abstract.DoneShardedTableLoad: util.NewSet[string](),
+		handledSystemItems: map[abstract.Kind]*set.Set[string]{
+			abstract.InitShardedTableLoad: set.New[string](),
+			abstract.DoneShardedTableLoad: set.New[string](),
 		},
 		metrics: stats.NewSinkerStats(registry),
 		logger:  logger,

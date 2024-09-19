@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -28,7 +28,7 @@ type SkipEventsConfig struct {
 
 type SkipEvents struct {
 	tables Filter
-	kinds  *util.Set[abstract.Kind]
+	kinds  *set.Set[abstract.Kind]
 }
 
 func NewSkipEvents(transformer SkipEventsConfig, logger log.Logger) (*SkipEvents, error) {
@@ -37,7 +37,7 @@ func NewSkipEvents(transformer SkipEventsConfig, logger log.Logger) (*SkipEvents
 		return nil, xerrors.Errorf("unable to init table filter: %w", err)
 	}
 
-	kinds := util.NewSet[abstract.Kind]()
+	kinds := set.New[abstract.Kind]()
 	for _, eventType := range transformer.Events {
 		kinds.Add(abstract.Kind(eventType))
 	}

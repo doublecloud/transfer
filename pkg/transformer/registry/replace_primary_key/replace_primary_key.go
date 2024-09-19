@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/filter"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -28,7 +28,7 @@ type Config struct {
 type ReplacePrimaryKeyTransformer struct {
 	Tables filter.Filter
 	Keys   []string
-	keySet *util.Set[string]
+	keySet *set.Set[string]
 }
 
 func (r *ReplacePrimaryKeyTransformer) Type() abstract.TransformerType {
@@ -131,7 +131,7 @@ func (r *ReplacePrimaryKeyTransformer) Description() string {
 }
 
 func NewReplacePrimaryKeyTransformer(cfg Config) (*ReplacePrimaryKeyTransformer, error) {
-	keySet := util.NewSet[string](cfg.Keys...)
+	keySet := set.New[string](cfg.Keys...)
 	if len(cfg.Keys) != keySet.Len() {
 		return nil, xerrors.Errorf("Can't use same keys column names twice: %s", strings.Join(cfg.Keys, ", "))
 	}

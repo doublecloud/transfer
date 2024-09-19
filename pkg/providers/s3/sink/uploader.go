@@ -14,12 +14,12 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/format"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 var (
-	FatalAWSCodes = util.NewSet("InvalidAccessKeyId")
+	FatalAWSCodes = set.New("InvalidAccessKeyId")
 )
 
 type replicationUploader struct {

@@ -1,4 +1,4 @@
-package util
+package set
 
 import (
 	"fmt"
@@ -11,29 +11,21 @@ type Set[T comparable] struct {
 	values map[T]struct{}
 }
 
-func NewSet[T comparable](values ...T) *Set[T] {
-	result := &Set[T]{values: make(map[T]struct{})}
-	result.AddRange(values...)
+func New[T comparable](values ...T) *Set[T] {
+	result := &Set[T]{values: make(map[T]struct{}, len(values))}
+	result.Add(values...)
 	return result
 }
 
-func (s *Set[T]) Add(value T) {
-	s.values[value] = struct{}{}
-}
-
-func (s *Set[T]) AddRange(values ...T) {
+func (s *Set[T]) Add(values ...T) {
 	for _, value := range values {
-		s.Add(value)
+		s.values[value] = struct{}{}
 	}
 }
 
-func (s *Set[T]) Remove(value T) {
-	delete(s.values, value)
-}
-
-func (s *Set[T]) RemoveRange(values ...T) {
+func (s *Set[T]) Remove(values ...T) {
 	for _, value := range values {
-		s.Remove(value)
+		delete(s.values, value)
 	}
 }
 
@@ -91,11 +83,11 @@ func (s *Set[T]) SortedSliceFunc(less func(a, b T) bool) []T {
 	return result
 }
 
-func (s *Set[T]) Difference(o *Set[T]) []T {
-	// Although this method should have returned a set, it does not do that to avoid repeatable operations
-	result := make([]T, 0)
+// Without returns slice representing elements of current Set without elements of input.
+func (s *Set[T]) Without(toExclude *Set[T]) []T {
+	var result []T
 	for value := range s.values {
-		if !o.Contains(value) {
+		if !toExclude.Contains(value) {
 			result = append(result, value)
 		}
 	}
@@ -103,5 +95,13 @@ func (s *Set[T]) Difference(o *Set[T]) []T {
 }
 
 func (s *Set[T]) Equals(o *Set[T]) bool {
-	return len(s.Difference(o)) == 0 && len(o.Difference(s)) == 0
+	if s.Len() != o.Len() {
+		return false
+	}
+	for v := range s.values {
+		if _, ok := o.values[v]; !ok {
+			return false
+		}
+	}
+	return true
 }

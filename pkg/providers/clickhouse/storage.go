@@ -25,6 +25,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/topology"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/doublecloud/transfer/pkg/util/size"
 	"github.com/dustin/go-humanize"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -32,7 +33,7 @@ import (
 )
 
 var (
-	systemDBs            = util.NewSet("INFORMATION_SCHEMA", "information_schema", "system", "_system")
+	systemDBs            = set.New("INFORMATION_SCHEMA", "information_schema", "system", "_system")
 	nonTransferableTypes = []string{
 		// For now we do not support next types:
 		//   Array(Date)

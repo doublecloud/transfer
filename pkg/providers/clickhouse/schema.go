@@ -4,7 +4,7 @@ import (
 	"sort"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 type Schema struct {
@@ -21,7 +21,7 @@ type Schema struct {
 
 // WORKAROUND TO BACK COMPATIBILITY WITH 'SYSTEM KEYS' - see TM-5087
 
-var genericParserSystemCols = util.NewSet(
+var genericParserSystemCols = set.New(
 	"_logfeller_timestamp",
 	"_timestamp",
 	"_partition",

@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -27,7 +27,7 @@ func (c *shardedCollectionSinkContext) Init(ctx context.Context, documentIDs []d
 		return xerrors.Errorf("sharding for %v is not enabled or trivial(sharded by _id)", c.collection.GetFullName())
 	}
 
-	idSet := util.NewSet[string]()
+	idSet := set.New[string]()
 	rawIDs := []interface{}{}
 	for _, id := range documentIDs {
 		if !idSet.Contains(id.String) {
