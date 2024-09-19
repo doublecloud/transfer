@@ -38,6 +38,8 @@ jobs:
           { group: "tests/e2e", name: "pg2pg", path: "pg2pg" },
           { group: "tests/e2e", name: "pg2ch", path: "pg2ch" },
           { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
+          { group: "tests/e2e", name: "kinesis2ch", path: "kinesis2ch" },
+          { group: "tests/e2e", name: "ch2s3", path: "ch2s3" },
         ]
     steps:
       - name: Checkout
@@ -96,7 +98,8 @@ jobs:
       matrix:
         suite: [
           # canon test suites
-          { group: "tests/canon", name: "parser", path: "parser" },
+          { group: "tests/canon", name: "canon-parser", path: "parser" },
+          { group: "tests/storage", name: "storage-pg", path: "pg" },
           # internal test suites
           { group: "internal", name: "internal", path: "..." },
           # provider test suites
@@ -105,6 +108,10 @@ jobs:
           { group: "pkg/providers", name: "providers-sample", path: "sample" },
           { group: "pkg/providers", name: "providers-kafka", path: "kafka" },
           { group: "pkg/providers", name: "providers-kinesis", path: "kinesis" },
+          { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
+          { group: "pkg/providers", name: "providers-greenplum", path: "greenplum" },
+          { group: "pkg/providers", name: "providers-clickhouse", path: "clickhouse" },
+          { group: "pkg/providers", name: "providers-elastic", path: "elastic" },
           # pkg test suites
           { group: "pkg", name: "abstract", path: "abstract" },
           { group: "pkg", name: "transformer", path: "transformer" },
@@ -117,7 +124,6 @@ jobs:
           { group: "pkg", name: "util", path: "util" },
           { group: "pkg", name: "stringutil", path: "stringutil" },
           { group: "pkg", name: "serializer", path: "serializer" },
-          { group: "pkg", name: "util", path: "util" },
           { group: "pkg", name: "worker", path: "worker" },
           { group: "pkg", name: "schemaregistry", path: "schemaregistry" },
           { group: "pkg", name: "parsers-generic", path: "parsers/generic" },
