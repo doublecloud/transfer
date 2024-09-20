@@ -17,6 +17,7 @@ type PgStorageParams struct {
 	Database                    string
 	ClusterID                   string // should be non-empty only one field: Hosts/ClusterID
 	TLSFile                     string
+	EnableTLS                   bool
 	UseFakePrimaryKey           bool
 	DBFilter                    []string
 	IgnoreUserTypes             bool
@@ -72,7 +73,7 @@ func (p *PgStorageParams) secureConnectionStatusString() string {
 }
 
 func (p *PgStorageParams) HasTLS() bool {
-	return p.TLSFile != ""
+	return p.TLSFile != "" || p.EnableTLS
 }
 
 func (p *PgStorageParams) String() string {

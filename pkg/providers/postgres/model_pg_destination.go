@@ -21,6 +21,7 @@ type PgDestination struct {
 	Password               server.SecretString
 	Port                   int
 	TLSFile                string
+	EnableTLS              bool
 	MaintainTables         bool
 	AllowDuplicates        bool
 	LoozeMode              bool
@@ -65,7 +66,7 @@ func (d *PgDestination) AllHosts() []string {
 }
 
 func (d *PgDestination) HasTLS() bool {
-	return d.TLSFile != ""
+	return d.TLSFile != "" || d.EnableTLS
 }
 
 func (d *PgDestination) CleanupMode() server.CleanupType {
@@ -216,6 +217,7 @@ func (d *PgDestination) ToStorageParams() *PgStorageParams {
 		Database:                    d.Database,
 		ClusterID:                   d.ClusterID,
 		TLSFile:                     d.TLSFile,
+		EnableTLS:                   d.EnableTLS,
 		UseFakePrimaryKey:           false,
 		DBFilter:                    nil,
 		IgnoreUserTypes:             false,

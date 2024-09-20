@@ -41,6 +41,7 @@ type PgSource struct {
 	SlotID                      string
 	SlotByteLagLimit            int64
 	TLSFile                     string
+	EnableTLS                   bool
 	KeeperSchema                string
 	SubNetworkID                string
 	SecurityGroupIDs            []string
@@ -176,7 +177,7 @@ func (s *PgSource) AllHosts() []string {
 }
 
 func (s *PgSource) HasTLS() bool {
-	return s.TLSFile != ""
+	return s.TLSFile != "" || s.EnableTLS
 }
 
 func (s *PgSource) fulfilledIncludesImpl(tID abstract.TableID, firstIncludeOnly bool) (result []string) {
@@ -489,6 +490,7 @@ func (s *PgSource) ToStorageParams(transfer *server.Transfer) *PgStorageParams {
 		Database:                    s.Database,
 		ClusterID:                   s.ClusterID,
 		TLSFile:                     s.TLSFile,
+		EnableTLS:                   s.EnableTLS,
 		UseFakePrimaryKey:           s.UseFakePrimaryKey,
 		DBFilter:                    nil,
 		IgnoreUserTypes:             s.IgnoreUserTypes,
