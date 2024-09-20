@@ -144,13 +144,12 @@ func (p *Provider) TestChecks() []abstract.CheckType {
 }
 
 func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
-	tr := abstract.NewTestResult(p.TestChecks()...)
-
 	src, ok := p.transfer.Src.(*model.ChSource)
 	if !ok {
 		return nil
 	}
 
+	tr := abstract.NewTestResult(p.TestChecks()...)
 	// Native connect
 	db, err := MakeConnection(src.ToStorageParams())
 	if err != nil {
@@ -182,11 +181,14 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 		return tr.NotOk(CredentialsCheckType, xerrors.Errorf("unable to query ClickHouse: %w", err))
 	}
 	defer rows.Close()
+	tr.Ok(CredentialsCheckType)
 
 	err = conn.Close()
 	if err != nil {
 		return tr.NotOk(ConnectivityNative, xerrors.Errorf("unable to close a connection to ClickHouse: %w", err))
 	}
+
+	tr.Ok(ConnectivityNative)
 
 	// HTTP connect
 	cl, err := httpclient.NewHTTPClientImpl(src.ToStorageParams().ToConnParams())
@@ -205,6 +207,8 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 			p.logger.Infof("host is reachable! host: %s", host)
 		}
 	}
+
+	tr.Ok(ConnectivityHTTP)
 	return tr
 }
 

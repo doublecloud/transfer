@@ -37,8 +37,6 @@ const (
 	CredentialsCheckType   = abstract.CheckType("credentials")
 	DataSampleCheckType    = abstract.CheckType("data-sample")
 	ConfigCheckType        = abstract.CheckType("config-valid-check")
-	InitCheckType          = abstract.CheckType("init-check")
-	PingCheckType          = abstract.CheckType("ping-check")
 	WriteableCheckType     = abstract.CheckType("writeable")
 	LoadTablesCheckType    = abstract.CheckType("load-all-tables")
 	EstimateTableCheckType = abstract.CheckType("estimate-table")
@@ -276,13 +274,16 @@ func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abst
 			return tr.NotOk(ConfigCheckType, errors.CategorizedErrorf(categories.Internal, "unable to restore transform config: %w", err))
 		}
 	}
+	tr.Ok(ConfigCheckType)
+
 	if tester, ok := providers.Source[providers.Tester](
 		logger.Log,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
 		coordinator.NewFakeClient(),
 		param.Transfer,
 	); ok {
-		tr = tester.Test(ctx)
+		partialTr := tester.Test(ctx)
+		tr.Combine(partialTr)
 		if tr.Err() != nil {
 			return tr
 		}
@@ -295,8 +296,6 @@ func TestSourceEndpoint(ctx context.Context, param *TestEndpointParams, tr *abst
 	); ok {
 		return SniffSnapshotData(ctx, tr, param.Transfer)
 	}
-
-	tr.Ok(ConfigCheckType)
 
 	if snifferP, ok := providers.Source[providers.Sniffer](
 		logger.Log,

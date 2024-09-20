@@ -1,6 +1,9 @@
 package abstract
 
-import "github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
+import (
+	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
+	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
+)
 
 // CheckType test check type
 type CheckType string
@@ -21,6 +24,29 @@ type TestResult struct {
 func (t *TestResult) Add(extraChecks ...CheckType) {
 	for _, check := range extraChecks {
 		t.Checks[check] = CheckResult{Error: nil, Success: false}
+	}
+}
+
+// Combine combines the two checkResult maps into one
+func (t *TestResult) Combine(partialResults *TestResult) {
+	for checkType, checkVal := range partialResults.Checks {
+		t.Checks[checkType] = checkVal
+	}
+
+	if t.Preview == nil {
+		t.Preview = map[changeitem.TableID][]changeitem.ChangeItem{}
+	}
+
+	if t.Schema == nil {
+		t.Schema = map[TableID]TableInfo{}
+	}
+
+	for tableID, items := range partialResults.Preview {
+		t.Preview[tableID] = items
+	}
+
+	for tableID, tableINfo := range partialResults.Schema {
+		t.Schema[tableID] = tableINfo
 	}
 }
 

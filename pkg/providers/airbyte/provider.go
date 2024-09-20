@@ -84,11 +84,11 @@ func (p *Provider) TestChecks() []abstract.CheckType {
 }
 
 func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
-	tr := abstract.NewTestResult(p.TestChecks()...)
 	src, ok := p.transfer.Src.(*AirbyteSource)
 	if !ok {
 		return nil
 	}
+	tr := abstract.NewTestResult(p.TestChecks()...)
 	storage, _ := NewStorage(p.logger, p.registry, p.cp, src, p.transfer)
 	tables, err := storage.TableList(nil)
 	if err != nil {
