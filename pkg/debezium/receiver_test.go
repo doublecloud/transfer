@@ -75,7 +75,7 @@ func getUpdateMinBinlogChangeItem() abstract.ChangeItem {
 }
 
 func makeChainConversion(t *testing.T, changeItems []abstract.ChangeItem, paramsMap map[string]string) ([]abstract.ChangeItem, []debeziumcommon.KeyValue) {
-	params := debeziumparameters.GetDefaultParameters(paramsMap)
+	params := debeziumparameters.EnrichedWithDefaults(paramsMap)
 	emitter, _ := NewMessagesEmitter(params, "", false, logger.Log)
 	receiver := NewReceiver(nil, nil)
 

@@ -100,7 +100,7 @@ func TestMysqlValByValInsert(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(mysqlSnapshotChangeItem)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 
@@ -117,7 +117,7 @@ func TestMysqlValByValInsertV8(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(mysqlSnapshotChangeItem)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 

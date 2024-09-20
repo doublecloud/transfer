@@ -544,6 +544,10 @@ func (m *Emitter) ToConfluentSchemaVal(changeItem *abstract.ChangeItem, snapshot
 	return result, nil
 }
 
+func (m *Emitter) skipTombstoneEvent() bool {
+	return debeziumparameters.GetTombstonesOnDelete(m.connectorParameters) == debeziumparameters.BoolFalse
+}
+
 // emitOneDebeziumMessage - function which emit one debezium message, it is called only from EmitKV,
 // EmitKV can emit for one changeItem different amount of messages - from 0 to 3
 // When EmitKV wants to emit N messages for one changeItem, it calls N times function emitOneDebeziumMessage, every time with different emitType argument
@@ -611,8 +615,8 @@ func (m *Emitter) emitOneDebeziumMessage(
 		return "", nil, xerrors.Errorf("unable to pack val, err: %w", err)
 	}
 
-	valSrt := string(val)
-	return string(key), &valSrt, nil
+	valStr := string(val)
+	return string(key), &valStr, nil
 }
 
 // EmitKV - main exported method - generates kafka key & kafka value
@@ -638,26 +642,32 @@ func (m *Emitter) EmitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time,
 		if err != nil {
 			return nil, xerrors.Errorf("unable to emit debezium event part 2: %w", err)
 		}
-		return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}, {DebeziumKey: key1, DebeziumVal: val1}, {DebeziumKey: key2, DebeziumVal: val2}}, nil
-	} else {
-		if changeItem.Kind == abstract.DeleteKind {
-			key0, val0, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, deleteEventEmitType, sessionPackers)
-			if err != nil {
-				return nil, xerrors.Errorf("unable to emit debezium event part 0: %w", err)
-			}
-			key1, val1, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, tombstoneEventEmitType, sessionPackers)
-			if err != nil {
-				return nil, xerrors.Errorf("unable to emit debezium event part 1: %w", err)
-			}
-			return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}, {DebeziumKey: key1, DebeziumVal: val1}}, nil
-		} else {
-			key, val, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, regularEmitType, sessionPackers)
-			if err != nil {
-				return nil, xerrors.Errorf("unable to emit debezium event: %w", err)
-			}
-			return []debeziumcommon.KeyValue{{DebeziumKey: key, DebeziumVal: val}}, nil
+		if m.skipTombstoneEvent() {
+			return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}, {DebeziumKey: key2, DebeziumVal: val2}}, nil
 		}
+		return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}, {DebeziumKey: key1, DebeziumVal: val1}, {DebeziumKey: key2, DebeziumVal: val2}}, nil
 	}
+
+	if changeItem.Kind == abstract.DeleteKind {
+		key0, val0, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, deleteEventEmitType, sessionPackers)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to emit debezium event part 0: %w", err)
+		}
+		if m.skipTombstoneEvent() {
+			return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}}, nil
+		}
+		key1, val1, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, tombstoneEventEmitType, sessionPackers)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to emit debezium event part 1: %w", err)
+		}
+		return []debeziumcommon.KeyValue{{DebeziumKey: key0, DebeziumVal: val0}, {DebeziumKey: key1, DebeziumVal: val1}}, nil
+	}
+
+	key, val, err := m.emitOneDebeziumMessage(changeItem, payloadTSMS, snapshot, regularEmitType, sessionPackers)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to emit debezium event: %w", err)
+	}
+	return []debeziumcommon.KeyValue{{DebeziumKey: key, DebeziumVal: val}}, nil
 }
 
 func (m *Emitter) TestSetIgnoreUnknownSources(ignoreUnknownSources bool) {
@@ -680,7 +690,7 @@ func NewMessagesEmitter(connectorParameters map[string]string, version string, d
 	return &Emitter{
 		database:             debeziumparameters.GetDBName(connectorParameters),
 		databaseServerName:   debeziumparameters.GetTopicPrefix(connectorParameters),
-		connectorParameters:  debeziumparameters.GetDefaultParameters(connectorParameters),
+		connectorParameters:  debeziumparameters.EnrichedWithDefaults(connectorParameters),
 		version:              version,
 		ignoreUnknownSources: false,
 		keyPacker:            keyPacker,

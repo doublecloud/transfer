@@ -51,7 +51,7 @@ func TestPgTimestampWithoutTimezone(t *testing.T) {
 
 	// prepare engines
 
-	paramsWithOriginalTypes := debeziumparameters.GetDefaultParameters(map[string]string{
+	paramsWithOriginalTypes := debeziumparameters.EnrichedWithDefaults(map[string]string{
 		debeziumparameters.DatabaseDBName:   "public",
 		debeziumparameters.TopicPrefix:      "my_topic",
 		debeziumparameters.SourceType:       "pg",
@@ -59,7 +59,7 @@ func TestPgTimestampWithoutTimezone(t *testing.T) {
 	})
 	emitterWithOriginalTypes, err := debezium.NewMessagesEmitter(paramsWithOriginalTypes, "", false, logger.Log)
 	require.NoError(t, err)
-	paramsWithoutOriginalTypes := debeziumparameters.GetDefaultParameters(map[string]string{
+	paramsWithoutOriginalTypes := debeziumparameters.EnrichedWithDefaults(map[string]string{
 		debeziumparameters.DatabaseDBName:   "public",
 		debeziumparameters.TopicPrefix:      "my_topic",
 		debeziumparameters.SourceType:       "pg",

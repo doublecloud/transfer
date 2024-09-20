@@ -46,7 +46,7 @@ func TestYDBValByValInsert(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(changeItemStr)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 

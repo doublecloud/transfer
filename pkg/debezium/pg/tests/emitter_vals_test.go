@@ -101,7 +101,7 @@ func TestPgValByValInsert(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(pgSnapshotChangeItem)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 
@@ -176,7 +176,7 @@ func TestPgArrByArrInsert(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(pgSnapshotChangeItem)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 
@@ -201,7 +201,7 @@ func TestPgWholeJSONSnapshot(t *testing.T) {
 	changeItem, err := abstract.UnmarshalChangeItem(changeItemStr)
 	require.NoError(t, err)
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
 	afterVals, err := debezium.BuildKVMap(changeItem, params, true)
 	require.NoError(t, err)
 
@@ -221,7 +221,7 @@ func TestPgUserDefinedType(t *testing.T) {
 	require.NoError(t, err)
 
 	// default behaviour: fail
-	params1 := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
+	params1 := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment"})
 	_, err = debezium.BuildKVMap(changeItem, params1, true)
 	require.Error(t, err)
 	require.True(t, debeziumcommon.IsUnknownTypeError(err))
@@ -233,7 +233,7 @@ func TestPgUserDefinedType(t *testing.T) {
 	require.True(t, debeziumcommon.IsUnknownTypeError(err))
 
 	// behaviour: skip
-	params2 := debeziumparameters.GetDefaultParameters(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment", debeziumparameters.UnknownTypesPolicy: debeziumparameters.UnknownTypesPolicySkip})
+	params2 := debeziumparameters.EnrichedWithDefaults(map[string]string{debeziumparameters.DatabaseDBName: "pguser", debeziumparameters.TopicPrefix: "fullfillment", debeziumparameters.UnknownTypesPolicy: debeziumparameters.UnknownTypesPolicySkip})
 	afterVals, err := debezium.BuildKVMap(changeItem, params2, true)
 	require.NoError(t, err)
 	require.Equal(t, 1, len(afterVals))

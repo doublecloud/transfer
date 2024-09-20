@@ -73,3 +73,46 @@ func TestEscapeHTMLMarshaling(t *testing.T) {
 	_, payload := getKV(t, changeItem, false, false)
 	require.Contains(t, string(payload), `"value":"<>!@#$%^&*()_"`)
 }
+
+func TestTombstonesOnDelete(t *testing.T) {
+	deleteItem := &abstract.ChangeItem{
+		Kind:   abstract.DeleteKind,
+		Schema: "public",
+		Table:  "test",
+		TableSchema: abstract.NewTableSchema([]abstract.ColSchema{
+			{TableSchema: "public", TableName: "test", ColumnName: "id", DataType: ytschema.TypeInt32.String(), PrimaryKey: true, OriginalType: "pg:integer"},
+			{TableSchema: "public", TableName: "test", ColumnName: "data", DataType: ytschema.TypeFloat64.String(), OriginalType: "pg:numeric"},
+		}),
+		OldKeys: abstract.OldKeysType{KeyNames: []string{"id"}, KeyTypes: []string{"integer"}, KeyValues: []any{8}},
+	}
+
+	t.Run("TombstonesOnDelete-True", func(t *testing.T) {
+		connectorParams := debeziumparameters.EnrichedWithDefaults(map[string]string{
+			debeziumparameters.TombstonesOnDelete: debeziumparameters.BoolTrue,
+		})
+		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, nil)
+		require.NoError(t, err)
+		messages, err := emitter.EmitKV(deleteItem, time.Now(), false, nil)
+		require.NoError(t, err)
+		nilValuesCounter := 0
+		for _, msg := range messages {
+			if msg.DebeziumVal == nil {
+				nilValuesCounter++
+			}
+		}
+		require.Equal(t, 1, nilValuesCounter)
+	})
+
+	t.Run("TombstonesOnDelete-False", func(t *testing.T) {
+		connectorParams := debeziumparameters.EnrichedWithDefaults(map[string]string{
+			debeziumparameters.TombstonesOnDelete: debeziumparameters.BoolFalse,
+		})
+		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, nil)
+		require.NoError(t, err)
+		messages, err := emitter.EmitKV(deleteItem, time.Now(), false, nil)
+		require.NoError(t, err)
+		for _, msg := range messages {
+			require.NotNil(t, msg.DebeziumVal)
+		}
+	})
+}

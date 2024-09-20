@@ -1,6 +1,12 @@
 package parameters
 
-import "strconv"
+import (
+	"slices"
+	"strconv"
+	"strings"
+
+	"github.com/doublecloud/transfer/internal/logger"
+)
 
 // Contract for parameters: all possible keys are present
 
@@ -127,15 +133,32 @@ var connectorSettings = []connectorSetting{
 	{KeyConverterSslCa, []string{}, ""},
 }
 
-type DebeziumParams map[string]string
+func possibleSettingValues(settingName string) []string {
+	for _, setting := range connectorSettings {
+		if setting.name == settingName {
+			return setting.possibleValues
+		}
+	}
+	return nil
+}
 
-func GetDefaultParameters(in map[string]string) map[string]string {
-	result := make(map[string]string)
+// EnrichedWithDefaults returns copy of provided params default values for parameters that are not set in the input and returns its copy.
+func EnrichedWithDefaults(params map[string]string) map[string]string {
+	result := make(map[string]string, len(connectorSettings))
 	for _, el := range connectorSettings {
 		result[el.name] = el.defaultValue
 	}
-	for k, v := range in {
-		result[k] = v
+	for settingName, value := range params {
+		result[settingName] = value
+		if _, ok := result[settingName]; !ok {
+			logger.Log.Warnf("Debezium setting '%s' is not known", settingName)
+			continue
+		}
+		possibleValues := possibleSettingValues(settingName)
+		if len(possibleValues) > 0 && !slices.Contains(possibleValues, value) {
+			msg := "Debezium setting '%s' value '%s' is impossible. Available values: [%s]"
+			logger.Log.Errorf(msg, settingName, value, strings.Join(possibleValues, ","))
+		}
 	}
 	return result
 }
@@ -164,6 +187,9 @@ func UseWriteIntoOneFullTopicName(in map[string]string) bool {
 }
 func GetDecimalHandlingMode(in map[string]string) string {
 	return in[DecimalHandlingMode]
+}
+func GetTombstonesOnDelete(in map[string]string) string {
+	return in[TombstonesOnDelete]
 }
 func GetKeyConverter(in map[string]string) string {
 	return in[KeyConverter]

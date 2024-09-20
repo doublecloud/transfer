@@ -12,7 +12,7 @@ func checkMysqlDatetime(t *testing.T, originalType, expectedDebeziumType, expect
 	colSchema := &abstract.ColSchema{
 		OriginalType: originalType,
 	}
-	currType, name, additionalKV := TimestampMysqlParamsTypeToKafkaType(colSchema, false, false, debeziumparameters.GetDefaultParameters(nil))
+	currType, name, additionalKV := TimestampMysqlParamsTypeToKafkaType(colSchema, false, false, debeziumparameters.EnrichedWithDefaults(nil))
 	require.Equal(t, expectedDebeziumType, currType)
 	require.Equal(t, expectedName, name)
 	require.Nil(t, additionalKV)

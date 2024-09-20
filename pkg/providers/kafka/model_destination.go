@@ -113,7 +113,7 @@ func (d *KafkaDestination) Compatible(src server.Source, transferType abstract.T
 
 func (d *KafkaDestination) Serializer() (server.SerializationFormat, bool) {
 	formatSettings := d.FormatSettings
-	formatSettings.Settings = debeziumparameters.GetDefaultParameters(formatSettings.Settings)
+	formatSettings.Settings = debeziumparameters.EnrichedWithDefaults(formatSettings.Settings)
 	return formatSettings, d.SaveTxOrder
 }
 

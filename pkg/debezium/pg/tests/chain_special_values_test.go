@@ -53,7 +53,7 @@ func TestUnparametrizedDecimal(t *testing.T) {
 
 	// check values
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{
 		debeziumparameters.DatabaseDBName: "public",
 		debeziumparameters.TopicPrefix:    "my_topic",
 		debeziumparameters.SourceType:     "pg",
@@ -88,7 +88,7 @@ func TestZeroDecimal(t *testing.T) {
 		}),
 	}
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{
 		debeziumparameters.DatabaseDBName: "public",
 		debeziumparameters.TopicPrefix:    "my_topic",
 		debeziumparameters.SourceType:     "pg",
@@ -153,7 +153,7 @@ func TestPgInterval(t *testing.T) {
 		"pg:interval minute to second(6)",
 	}
 
-	params := debeziumparameters.GetDefaultParameters(map[string]string{
+	params := debeziumparameters.EnrichedWithDefaults(map[string]string{
 		debeziumparameters.DatabaseDBName:   "database",
 		debeziumparameters.TopicPrefix:      "databaseServerName",
 		debeziumparameters.AddOriginalTypes: "false",
