@@ -56,7 +56,7 @@ type Clusterable interface {
 	MDBClusterID() string
 }
 
-type ConnectionManageable interface {
+type WithConnectionID interface {
 	GetConnectionID() string
 }
 

@@ -6,6 +6,8 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var _ ConnResolver = (*MockConnectionResolver)(nil)
@@ -13,6 +15,7 @@ var _ ConnResolver = (*MockConnectionResolver)(nil)
 type MockConnectionResolver struct {
 	connectionsByID map[string]ManagedConnection
 	foldersByID     map[string]string
+	permissionsByID map[string]bool
 }
 
 func (d *MockConnectionResolver) ResolveConnection(ctx context.Context, connectionID string, typ abstract.ProviderType) (ManagedConnection, error) {
@@ -39,13 +42,30 @@ func (d *MockConnectionResolver) Add(connectionID, folder string, connection any
 	}
 	d.connectionsByID[connectionID] = conn
 	d.foldersByID[connectionID] = folder
+	d.permissionsByID[connectionID] = true
 	return nil
+}
+
+func (d *MockConnectionResolver) DropPermission(connectionID string) {
+	d.permissionsByID[connectionID] = false
+}
+
+func (d *MockConnectionResolver) AddPermission(connectionID string) {
+	d.permissionsByID[connectionID] = true
+}
+
+func (d *MockConnectionResolver) Remove(connectionID string) {
+	d.connectionsByID[connectionID] = nil
+	delete(d.connectionsByID, connectionID)
+	delete(d.foldersByID, connectionID)
+	delete(d.permissionsByID, connectionID)
 }
 
 func NewMockConnectionResolver() *MockConnectionResolver {
 	return &MockConnectionResolver{
 		connectionsByID: make(map[string]ManagedConnection),
 		foldersByID:     make(map[string]string),
+		permissionsByID: make(map[string]bool),
 	}
 }
 
@@ -58,9 +78,9 @@ func (d *MockConnectionResolver) ResolveConnectionFolder(ctx context.Context, co
 }
 
 func (d *MockConnectionResolver) ResolveClusterOrHosts(ctx context.Context, connectionID string) (string, []string, error) {
-	conn, ok := d.connectionsByID[connectionID]
-	if !ok {
-		return "", nil, xerrors.Errorf("Unable to resolve connection %s", connectionID)
+	conn, err := d.get(connectionID, nil)
+	if err != nil {
+		return "", nil, xerrors.Errorf("Unable to resolve connection %s: %w", connectionID, err)
 	}
 
 	if pg, ok := conn.(*ConnectionPG); ok {
@@ -113,8 +133,15 @@ func (d *MockConnectionResolver) get(connectionID string, connType reflect.Type)
 	if !ok {
 		return nil, xerrors.Errorf("Unable to resolve connection %s", connectionID)
 	}
-	if reflect.TypeOf(res) != connType {
+
+	if connType != nil && reflect.TypeOf(res) != connType {
 		return nil, xerrors.Errorf("Unable to cast connection %s", connectionID)
+	}
+
+	permission := d.permissionsByID[connectionID]
+	if !permission {
+		return nil, status.Errorf(codes.PermissionDenied,
+			"Can't get connection '%v': trace-id = 111 span-id = 111 request-id = 111 rpc error: bebebebe", connectionID)
 	}
 	return res, nil
 }
