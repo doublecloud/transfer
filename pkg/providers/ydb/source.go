@@ -231,7 +231,7 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 	if cfg.ChangeFeedCustomName != "" {
 		feedName = cfg.ChangeFeedCustomName
 	}
-	reader, err := newReader(feedName, cfg.Tables, ydbClient, logger)
+	reader, err := newReader(feedName, cfg.Database, cfg.Tables, ydbClient, logger)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create stream reader: %w", err)
 	}

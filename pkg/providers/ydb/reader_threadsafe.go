@@ -3,6 +3,8 @@ package ydb
 import (
 	"context"
 	"io"
+	"path"
+	"strings"
 	"sync"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -36,11 +38,13 @@ func (r *readerThreadSafe) Close(ctx context.Context) error {
 	return r.readerImpl.Close(ctx)
 }
 
-func newReader(feedName string, tables []string, ydbClient *ydb.Driver, logger log.Logger) (*readerThreadSafe, error) {
+func newReader(feedName string, dbname string, tables []string, ydbClient *ydb.Driver, logger log.Logger) (*readerThreadSafe, error) {
+	dbname = strings.TrimLeft(dbname, "/")
 	selectors := make([]topicoptions.ReadSelector, len(tables))
 	for i, table := range tables {
+		table = strings.TrimLeft(table, "/")
 		selectors[i] = topicoptions.ReadSelector{
-			Path: makeChangeFeedPath(table, feedName),
+			Path: makeChangeFeedPath(path.Join(dbname, table), feedName),
 		}
 	}
 
