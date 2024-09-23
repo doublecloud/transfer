@@ -19,7 +19,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go binary
-RUN go build -o /app/trcli ./transfer_manager/go/cmd/trcli/*.go
+RUN go build -o /app/trcli ./cmd/trcli/*.go
 
 # Stage 2: Base image setup (use Ubuntu for the other tools and dependencies)
 FROM amd64/ubuntu:jammy
