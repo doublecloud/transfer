@@ -31,6 +31,7 @@ func main() {
 	var rt abstract.LocalRuntime
 	var cp coordinator.Coordinator
 
+	cp = coordinator.NewStatefulFakeClient()
 	loggerConfig := newLoggerConfig()
 	logger.Log = zap.Must(loggerConfig)
 	logLevel := defaultLogLevel
