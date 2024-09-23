@@ -286,12 +286,16 @@ func getTLSConfig(host string, hasTLS bool, tlsFile string, cluster string, tryH
 	//what changes for pg source/dst (but not storage!!) : use custom cert for mdb if present
 	if hasTLS {
 		rootCertPool := x509.NewCertPool()
-		if ok := rootCertPool.AppendCertsFromPEM([]byte(tlsFile)); !ok {
-			return nil, xerrors.New("unable to add TLS to cert pool")
+		if len(tlsFile) > 0 {
+			if ok := rootCertPool.AppendCertsFromPEM([]byte(tlsFile)); !ok {
+				return nil, xerrors.New("unable to add TLS to cert pool")
+			}
 		}
 		return &tls.Config{
 			RootCAs:    rootCertPool,
 			ServerName: host,
+
+			InsecureSkipVerify: len(tlsFile) == 0,
 		}, nil
 	}
 
