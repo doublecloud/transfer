@@ -1,0 +1,31 @@
+image: ghcr.io/doublecloud/transfer:latest
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "2048Mi"
+    cpu: "2000m"
+
+transferSpec:
+  id: dtttesthelm
+  type: SNAPSHOT_ONLY  # Options: SNAPSHOT_ONLY, INCREMENT_ONLY, SNAPSHOT_AND_INCREMENT
+  src:
+    type: pg
+    params:
+      {
+      }
+  dst:
+    type: stdout
+    params:
+      {
+      }
+
+# snapshot specific configurations
+snapshot:
+  worker_count: 1  # Number of parallel job instances
+
+# replication specific configurations
+replication:
+  worker_count: 1  # Number of replicas

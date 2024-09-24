@@ -1,0 +1,45 @@
+# templates/deployment-type.yaml
+
+{{- if eq .Values.transferSpec.type "SNAPSHOT_ONLY" }}
+# Include only the Job for SNAPSHOT_ONLY
+{{ include "data-upload-job.job" . }}
+{{- end }}
+
+{{- if eq .Values.transferSpec.type "INCREMENT_ONLY" }}
+# Include only the StatefulSet for INCREMENT_ONLY
+{{ include "data-upload-job.statefulset" . }}
+{{- end }}
+
+{{- if eq .Values.transferSpec.type "SNAPSHOT_AND_INCREMENT" }}
+# Include both Job and StatefulSet for SNAPSHOT_AND_INCREMENT
+{{ include "data-upload-job.job" . }}
+
+# Use Helm's built-in `postJob` hook to ensure the StatefulSet starts after the Job
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: post-job
+  labels:
+    app: data-upload
+spec:
+  template:
+    metadata:
+      labels:
+        app: post-job
+    spec:
+      containers:
+      - name: wait-for-job
+        image: bitnami/kubectl:latest  # You can use a kubectl image
+        command:
+        - /bin/bash
+        - -c
+        - |
+          while [[ $(kubectl get job data-upload-job -o jsonpath='{.status.succeeded}') != "{{ .Values.job.instanceCount }}" ]]; do
+            echo "Waiting for data-upload-job to finish..."
+            sleep 5
+          done
+      restartPolicy: Never
+  backoffLimit: 1
+---
+{{ include "data-upload-job.statefulset" . }}
+{{- end }}

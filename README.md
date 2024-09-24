@@ -52,11 +52,19 @@ make build
 docker pull ghcr.io/doublecloud/transfer:dev
 ```
 
-To run Transfer quickly:
+### 4. Deploy via helm-chart
 
-```shell
-docker run ghcr.io/doublecloud/transfer:dev activate --help
+Deploy as helm-chart in your own k8s cluster:
+
+```bash
+helm install transfer ./transfer \
+  --set transferSpec.id=my-custom-id \
+  --set transferSpec.src.params.host=my-postgres.awesome.cloud \
+  --set transferSpec.src.params.user="admin" \
+  --set transferSpec.src.params.password="password"
 ```
+
+More details [here](./helm).
 
 <div align="center">
 

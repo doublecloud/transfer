@@ -1,0 +1,18 @@
+# templates/configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: transfer-{{ .Values.transferSpec.id }}-config
+data:
+  config.yaml: |
+    id: {{ .Values.transferSpec.id }}
+    type: {{ .Values.transferSpec.type }}
+    src:
+      type: {{ .Values.transferSpec.src.type }}
+      params: |
+        {{ .Values.transferSpec.src.params | toJson }}
+    dst:
+      type: {{ .Values.transferSpec.dst.type }}
+      params: |
+        {{ .Values.transferSpec.dst.params | toJson }}
