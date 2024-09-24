@@ -40,7 +40,7 @@ func main() {
 
 	rootCommand := &cobra.Command{
 		Use:          "trcli",
-		Short:        "Transfer cli",
+		Short:        "Transfer cli2",
 		Example:      "./trcli help",
 		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
