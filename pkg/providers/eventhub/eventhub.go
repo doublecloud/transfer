@@ -3,6 +3,7 @@ package eventhub
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"sync"
 	"time"
 
@@ -159,17 +160,22 @@ func (s *Source) watchHandlers() {
 }
 
 func (s *Source) makeRawChangeItem(event *eventhubs.Event) abstract.ChangeItem {
-	var partitionID string // TODO(melkikh): understand, why Event.PartitionKey and Event.SystemProperties.PartitionKey are always nil
+	partitionID := 0 // TODO(melkikh): understand, why Event.PartitionKey and Event.SystemProperties.PartitionKey are always nil
 	offset := uint64(*event.SystemProperties.Offset)
 	if event.SystemProperties.PartitionKey != nil {
-		partitionID = *event.SystemProperties.PartitionKey
+		pID, err := strconv.Atoi(*event.SystemProperties.PartitionKey)
+		if err == nil {
+			partitionID = pID
+		}
+	} else if event.SystemProperties.PartitionID != nil {
+		partitionID = int(*event.SystemProperties.PartitionID)
 	}
 	topic := fmt.Sprintf("%v_%v", s.transferID, partitionID)
 	return abstract.MakeRawMessage(
 		s.transferID,
 		*event.SystemProperties.EnqueuedTime,
 		topic,
-		int(*event.SystemProperties.PartitionID),
+		partitionID,
 		int64(offset),
 		event.Data,
 	)
