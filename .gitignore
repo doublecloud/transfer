@@ -3,3 +3,4 @@ yt/**/proto/**.pb.go
 binaries
 /yt/
 **/ya.make
+**/*.secret.yaml

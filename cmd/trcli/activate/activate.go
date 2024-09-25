@@ -40,9 +40,12 @@ func activate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *st
 
 func RunActivate(cp coordinator.Coordinator, transfer *model.Transfer) error {
 	st := time.Now()
+	logger.Log.Infof("run activate with: %T", cp)
+	op := new(model.TransferOperation)
+	op.OperationID = transfer.ID + "/activation"
 	err := tasks.ActivateDelivery(
 		context.Background(),
-		nil,
+		op,
 		cp,
 		*transfer,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
