@@ -10,11 +10,11 @@ import (
 
 func TestQueriesSchemaEscaping(t *testing.T) {
 	schema := "testschema"
-	create := fmt.Sprintf(`create table( if not exists)? %s\.__.+`, schema)
-	insert := fmt.Sprintf(`insert into %s\.__.+.* values .+`, schema)
-	update := fmt.Sprintf(`update %s\.__.+`, schema)
-	selectQuery := fmt.Sprintf(`select .+ from %s\.__.+`, schema)
-	delete := fmt.Sprintf(`delete from %s.__.+`, schema)
+	create := fmt.Sprintf(`create table( if not exists)? "%s"\."__.+`, schema)
+	insert := fmt.Sprintf(`insert into "%s"\."__.+.* values .+`, schema)
+	update := fmt.Sprintf(`update "%s"\."__.+`, schema)
+	selectQuery := fmt.Sprintf(`select .+ from "%s"\."__.+`, schema)
+	delete := fmt.Sprintf(`delete from "%s"."__.+`, schema)
 
 	require.Regexp(t, create, unifyString(GetInitLSNSlotDDL(schema)))
 	require.Regexp(t, update, unifyString(GetMoveIteratorQuery(schema)))

@@ -27,7 +27,7 @@ type Config struct {
 }
 
 func KeeperDDL(schema string) string {
-	return fmt.Sprintf(`CREATE TABLE IF NOT EXISTS %s.%s (
+	return fmt.Sprintf(`CREATE TABLE IF NOT EXISTS "%s"."%s" (
     consumer TEXT PRIMARY KEY,
     locked_till TIMESTAMPTZ,
     locked_by TEXT,
@@ -111,7 +111,7 @@ func (k *Keeper) tryLock(consumer string) error {
 		row := conn.QueryRow(context.TODO(), fmt.Sprintf(`
 select exists(
    select *
-   	from %s.%s
+   	from "%s"."%s"
    where consumer = ($1) and (locked_till > (now()-interval'30 second') and locked_by != ($2))
 );`, k.schema, TableConsumerKeeper),
 			consumer,
@@ -128,7 +128,7 @@ select exists(
 		}
 
 		if _, err = conn.Exec(context.TODO(), fmt.Sprintf(`
-insert into %s.%s (consumer, locked_till, locked_by) values (($1), now(), ($2))
+insert into "%s"."%s" (consumer, locked_till, locked_by) values (($1), now(), ($2))
 on conflict (consumer) do update set locked_till = EXCLUDED.locked_till, locked_by = EXCLUDED.locked_by
 ;
 `, k.schema, TableConsumerKeeper), consumer, k.instance); err != nil {
@@ -143,7 +143,7 @@ func (k *Keeper) Lock(consumer string) (chan bool, error) {
 	err := k.do(func(conn *pgxpool.Pool) error {
 		rows, err := conn.Query(context.TODO(), fmt.Sprintf(`
    select locked_by
-   	from %s.%s
+   	from "%s"."%s"
    where consumer = ($1) and (locked_till > now() and locked_by != ($2))`, k.schema, TableConsumerKeeper),
 			consumer,
 			k.instance)

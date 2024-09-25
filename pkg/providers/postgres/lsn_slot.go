@@ -18,7 +18,7 @@ import (
 
 var (
 	InitLSNSlotDDL = fmt.Sprintf(`
-create table if not exists %%s.%s (
+create table if not exists "%%s"."%s" (
 	slot_id   text primary key,
 	iterator int,
 	replicated_iterator int,
@@ -28,18 +28,18 @@ create table if not exists %%s.%s (
 );`, TableMoleFinder)
 
 	MoveIteratorQuery = fmt.Sprintf(`
-update %%s.%s set iterator = iterator + 1, last_iterator_update = now()
+update "%%s"."%s" set iterator = iterator + 1, last_iterator_update = now()
 where slot_id = $1;`, TableMoleFinder)
 
 	UpdateReplicatedQuery = fmt.Sprintf(`
-update %%s.%s set replicated_iterator = $2, last_replicated_update = now()
+update "%%s"."%s" set replicated_iterator = $2, last_replicated_update = now()
 where slot_id = $1 and replicated_iterator = $2 - 1;`, TableMoleFinder)
 
 	SelectCommittedLSN = fmt.Sprintf(`
-select committed_lsn from %%s.%s where slot_id = $1;`, TableMoleFinder)
+select committed_lsn from "%%s"."%s" where slot_id = $1;`, TableMoleFinder)
 
 	InsertIntoMoleFinder = fmt.Sprintf(`
-insert into %%s.%s
+insert into "%%s"."%s"
 	(slot_id, iterator, replicated_iterator, last_iterator_update, last_replicated_update, committed_lsn)
 values
 	($1, null, null, now(), now(), $2)
@@ -51,15 +51,15 @@ on conflict (slot_id) do update
 		last_replicated_update = now(),
 		committed_lsn = excluded.committed_lsn;`, TableMoleFinder)
 
-	DeleteFromMoleFinder = fmt.Sprintf(`delete from %%s.%s where slot_id = $1`, TableMoleFinder)
+	DeleteFromMoleFinder = fmt.Sprintf(`delete from "%%s"."%s" where slot_id = $1`, TableMoleFinder)
 
 	InsertIntoMoleFinder2 = fmt.Sprintf(`
-insert into %%s.%s (slot_id, committed_lsn)
+insert into "%%s"."%s" (slot_id, committed_lsn)
 values ($1, $2)
 on conflict (slot_id) do update set committed_lsn = excluded.committed_lsn;`, TableMoleFinder)
 
 	SelectCommittedLSN2 = fmt.Sprintf(`
-select committed_lsn, replicated_iterator from %%s.%s where slot_id = $1`, TableMoleFinder)
+select committed_lsn, replicated_iterator from "%%s"."%s" where slot_id = $1`, TableMoleFinder)
 
 	SelectLsnForSlot = `select restart_lsn from pg_replication_slots where slot_name = $1;`
 )
