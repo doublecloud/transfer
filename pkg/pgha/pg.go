@@ -23,7 +23,6 @@ type PgHA struct {
 	user      string
 	password  string
 	dbName    string
-	hosts     []string
 	cluster   *hasql.Cluster
 	port      int
 	ssl       bool
@@ -42,10 +41,6 @@ func (pg *PgHA) Close() error {
 		pool.Close()
 	}
 	return err
-}
-
-func (pg *PgHA) Hosts() ([]string, error) {
-	return pg.hosts, nil
 }
 
 func (pg *PgHA) hostByRole(role dbaas.Role) (*string, error) {
@@ -180,10 +175,6 @@ func (pg *PgHA) Conn(role dbaas.Role) (*pgx.Conn, error) {
 	return conn, nil
 }
 
-func (pg *PgHA) Clone() (*PgHA, error) {
-	return NewFromHosts(pg.dbName, pg.user, pg.password, pg.hosts, pg.port, pg.ssl)
-}
-
 func (pg *PgHA) PoolSize() int64 {
 	return pg.poolSize
 }
@@ -261,7 +252,6 @@ func NewFromHosts(dbName, user, password string, hosts []string, port int, ssl b
 		user:      user,
 		password:  password,
 		dbName:    dbName,
-		hosts:     hosts,
 		cluster:   c,
 		port:      port,
 		ssl:       ssl,
