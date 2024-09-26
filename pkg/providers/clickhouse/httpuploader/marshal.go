@@ -105,6 +105,10 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 		}
 		hLen := writeColName(buf, columnName)
 		colType := rules.optTypes[colSchemaIndex]
+		if colType == nil {
+			return abstract.NewFatalError(xerrors.Errorf("unknown type for column %s in target table", columnName))
+		}
+
 		switch v := colValues[idx].(type) {
 		case time.Time:
 			marshalTime(colType, v, buf)
