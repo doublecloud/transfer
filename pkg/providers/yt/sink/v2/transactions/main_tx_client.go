@@ -52,7 +52,7 @@ func (c *MainTxClient) BeginTx() error {
 	if prevMainTxID != nil {
 		c.logger.Info("remove and abort previous tx from state", log.String("previous_main_tx", prevMainTxID.String()))
 		if err := c.client.AbortTx(context.Background(), *prevMainTxID, nil); err != nil {
-			c.logger.Error("cannot abort previous main transaction", log.String("tx_id", c.id.String()), log.Error(err))
+			c.logger.Error("cannot abort previous main transaction", log.String("tx_id", prevMainTxID.String()), log.Error(err))
 		}
 	}
 
