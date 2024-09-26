@@ -305,7 +305,7 @@ func TestWithConnectionRealCluster(t *testing.T) {
 		mdbCluster = "fill-in"
 	)
 
-	connResolver := connection.NewMockConnectionResolver()
+	connResolver := connection.NewStubConnectionResolver()
 	connection.Init(connResolver)
 	var src *PgSource
 
@@ -319,11 +319,12 @@ func TestWithConnectionRealCluster(t *testing.T) {
 			User:           user,
 			Password:       pass,
 			Database:       "not used yet",
+			DatabaseNames:  nil,
 			HasTLS:         false,
 			CACertificates: "",
 			ClusterID:      mdbCluster,
 		}
-		_ = connResolver.Add("conn1-real-cluster", "test-folder", mdbConnection)
+		_ = connResolver.Add("conn1-real-cluster", mdbConnection)
 
 		src = &PgSource{
 			Hosts:        nil,
@@ -357,11 +358,12 @@ func TestWithConnectionRealCluster(t *testing.T) {
 			User:           user,
 			Password:       pass,
 			Database:       "not used yet",
+			DatabaseNames:  nil,
 			HasTLS:         false,
 			CACertificates: "",
 			ClusterID:      "",
 		}
-		_ = connResolver.Add("conn2-cluster-as-onprem", "test-folder", onPremConnection)
+		_ = connResolver.Add("conn2-cluster-as-onprem", onPremConnection)
 
 		src = &PgSource{
 			Hosts:        nil,
@@ -400,11 +402,12 @@ func TestWithConnectionRealCluster(t *testing.T) {
 			User:           user,
 			Password:       pass,
 			Database:       "not used yet",
+			DatabaseNames:  nil,
 			HasTLS:         false,
 			CACertificates: "",
 			ClusterID:      mdbCluster,
 		}
-		_ = connResolver.Add("conn3-cluster-not-resolved", "test-folder", mdbConnectionNotResolved)
+		_ = connResolver.Add("conn3-cluster-not-resolved", mdbConnectionNotResolved)
 
 		src = &PgSource{
 			Hosts:        nil,
@@ -424,7 +427,7 @@ func TestWithConnectionRealCluster(t *testing.T) {
 }
 
 func TestWithConnection(t *testing.T) {
-	connResolver := connection.NewMockConnectionResolver()
+	connResolver := connection.NewStubConnectionResolver()
 	connection.Init(connResolver)
 
 	var src *PgSource
@@ -437,11 +440,12 @@ func TestWithConnection(t *testing.T) {
 			User:           "test-user",
 			Password:       "test-pass",
 			Database:       "not used yet",
+			DatabaseNames:  nil,
 			HasTLS:         false,
 			CACertificates: "",
 			ClusterID:      "test-cluster",
 		}
-		_ = connResolver.Add("conn1-fake-cluster", "test-folder", fakeClusterConn)
+		_ = connResolver.Add("conn1-fake-cluster", fakeClusterConn)
 
 		src = &PgSource{
 			Hosts:        nil,
@@ -501,11 +505,12 @@ func TestWithConnection(t *testing.T) {
 			User:           "test-user",
 			Password:       "test-pass",
 			Database:       "not used yet",
+			DatabaseNames:  nil,
 			HasTLS:         false,
 			CACertificates: "",
 			ClusterID:      "",
 		}
-		_ = connResolver.Add("conn2-fake-onprem", "test-folder", fakeOnPremConn)
+		_ = connResolver.Add("conn2-fake-onprem", fakeOnPremConn)
 
 		src = &PgSource{
 			Hosts:        nil,

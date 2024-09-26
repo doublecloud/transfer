@@ -10,7 +10,10 @@ import (
 var current ConnResolver
 
 type ManagedConnection interface {
-	IsManagedConnection()
+	GetUsername() string
+	GetClusterID() string
+	GetDataBases() []string
+	HostNames() []string
 }
 
 var _ ConnResolver = (*UnimplementedResolver)(nil)

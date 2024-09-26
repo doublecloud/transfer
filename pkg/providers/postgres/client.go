@@ -530,6 +530,7 @@ func makeConnectionFromSrc(src *PgSource) *connection.ConnectionPG {
 		Password:       src.Password,
 		ClusterID:      src.ClusterID,
 		Database:       src.Database,
+		DatabaseNames:  []string{src.Database},
 		HasTLS:         src.HasTLS(),
 		CACertificates: src.TLSFile,
 	}
@@ -544,6 +545,7 @@ func makeConnectionFromDst(dst *PgDestination) *connection.ConnectionPG {
 		Password:       dst.Password,
 		ClusterID:      dst.ClusterID,
 		Database:       dst.Database,
+		DatabaseNames:  []string{dst.Database},
 		HasTLS:         dst.HasTLS(),
 		CACertificates: dst.TLSFile,
 	}
@@ -558,6 +560,7 @@ func makeConnectionFromStorage(dst *PgStorageParams) *connection.ConnectionPG {
 		Password:       model.SecretString(dst.Password),
 		ClusterID:      dst.ClusterID,
 		Database:       dst.Database,
+		DatabaseNames:  []string{dst.Database},
 		HasTLS:         dst.HasTLS(),
 		CACertificates: dst.TLSFile,
 	}
@@ -572,6 +575,7 @@ func makeConnectionFromSink(dst PgSinkParams) *connection.ConnectionPG {
 		Password:       model.SecretString(dst.Password()),
 		ClusterID:      dst.ClusterID(),
 		Database:       dst.Database(),
+		DatabaseNames:  []string{dst.Database()},
 		HasTLS:         dst.HasTLS(),
 		CACertificates: dst.TLSFile(),
 	}

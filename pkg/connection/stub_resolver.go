@@ -1,0 +1,52 @@
+package connection
+
+import (
+	"context"
+
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/pkg/abstract"
+)
+
+var _ ConnResolver = (*StubConnectionResolver)(nil)
+
+type StubConnectionResolver struct {
+	ConnectionsByID map[string]ManagedConnection
+}
+
+func (d *StubConnectionResolver) ResolveConnection(ctx context.Context, connectionID string, typ abstract.ProviderType) (ManagedConnection, error) {
+	res, ok := d.ConnectionsByID[connectionID]
+	if !ok {
+		return nil, xerrors.Errorf("Unable to resolve connection %s", connectionID)
+	}
+
+	switch typ {
+	case "pg":
+		if pgConn, ok := res.(*ConnectionPG); ok {
+			return pgConn, nil
+		}
+		return nil, xerrors.Errorf("Unable to cast pg connection %s", connectionID)
+	case "ch":
+		if chConn, ok := res.(*ConnectionCH); ok {
+			return chConn, nil
+		}
+		return nil, xerrors.Errorf("Unable to cast ch connection %s", connectionID)
+
+	default:
+		return nil, xerrors.Errorf("Not implemented for provider %s", typ)
+	}
+}
+
+func (d *StubConnectionResolver) Add(connectionID string, connection any) error {
+	conn, ok := connection.(ManagedConnection)
+	if !ok {
+		return xerrors.Errorf("Wrong connection type: %s", connection)
+	}
+	d.ConnectionsByID[connectionID] = conn
+	return nil
+}
+
+func NewStubConnectionResolver() *StubConnectionResolver {
+	return &StubConnectionResolver{
+		ConnectionsByID: make(map[string]ManagedConnection),
+	}
+}

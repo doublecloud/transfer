@@ -4,17 +4,33 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
+var _ ManagedConnection = (*ConnectionPG)(nil)
+
 type ConnectionPG struct {
-	Hosts          []*Host
-	User           string
-	Password       model.SecretString
-	Database       string
+	Hosts    []*Host
+	User     string
+	Password model.SecretString
+	// currently filled with user data, not from db list in managed connection
+	Database string
+	// field in manage connection with applicable databases, currently used for info only.
+	// in the future we may want to check that DatabaseNames if defined includes Database from user input
+	DatabaseNames  []string
 	HasTLS         bool
 	CACertificates string
 	ClusterID      string
 }
 
-func (pg *ConnectionPG) IsManagedConnection() {}
+func (pg *ConnectionPG) GetUsername() string {
+	return pg.User
+}
+
+func (pg *ConnectionPG) GetClusterID() string {
+	return pg.ClusterID
+}
+
+func (pg *ConnectionPG) GetDataBases() []string {
+	return pg.DatabaseNames
+}
 
 func (pg *ConnectionPG) MasterHost() *Host {
 	for _, host := range pg.Hosts {
