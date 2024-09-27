@@ -1,6 +1,9 @@
 package replicate
 
 import (
+	"time"
+
+	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
@@ -31,6 +34,11 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
+		if transfer.IncrementOnly() {
+			if err := activate.RunActivate(*cp, transfer); err != nil {
+				return xerrors.Errorf("unable to activate transfer: %w", err)
+			}
+		}
 
 		return RunReplication(*cp, transfer)
 	}
@@ -50,5 +58,6 @@ func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer) error 
 			logger.Log.Warnf("unable to stop worker: %v", err)
 		}
 		logger.Log.Warnf("worker failed: %v, restart", err)
+		time.Sleep(10 * time.Second)
 	}
 }
