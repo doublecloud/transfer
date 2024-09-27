@@ -107,7 +107,7 @@ func main() {
 	rootCommand.PersistentFlags().StringVar(&logLevel, "log-level", defaultLogLevel, "Specifies logging level for output logs (\"panic\", \"fatal\", \"error\", \"warning\", \"info\", \"debug\")")
 	rootCommand.PersistentFlags().StringVar(&logConfig, "log-config", defaultLogConfig, "Specifies logging config for output logs (\"console\", \"json\", \"minimal\")")
 	rootCommand.PersistentFlags().StringVar(&coordinatorTyp, "coordinator", defaultCoordinator, "Specifies how to coordinate transfer nodes (\"memory\", \"s3\")")
-	rootCommand.PersistentFlags().StringVar(&coordinatorTyp, "coordinator-s3-bucket", "", "Bucket for s3 coordinator")
+	rootCommand.PersistentFlags().StringVar(&coordinatorS3Bucket, "coordinator-s3-bucket", "", "Bucket for s3 coordinator")
 	rootCommand.PersistentFlags().IntVar(&rt.CurrentJob, "coordinator-job-index", 0, "Worker job index")
 	rootCommand.PersistentFlags().IntVar(&rt.ShardingUpload.JobCount, "coordinator-job-count", 0, "Worker job count, if more then 1 - run consider as sharded, coordinator is required to be non memory")
 	rootCommand.PersistentFlags().IntVar(&rt.ShardingUpload.ProcessCount, "coordinator-process-count", 1, "Worker process count, how many readers must be opened for each job, default is 1")

@@ -1,6 +1,7 @@
-Here is a `README.md` file for your Helm chart that explains the purpose, usage, configuration, and deployment steps for users:
+Here’s the updated `README.md` file with a new section added to explain the `coordinator` properties and the `regular_snapshot` feature in `transferSpec`:
 
-```markdown
+---
+
 # Data Upload Helm Chart
 
 This Helm chart deploys a one-time data upload job or continuous replication service using Kubernetes. It supports three deployment types:
@@ -47,20 +48,25 @@ The chart is highly configurable. You can specify various parameters in the `val
 
 ### Parameters
 
-| Parameter                   | Description                                                                      | Default                  |
-|-----------------------------|----------------------------------------------------------------------------------|--------------------------|
-| `transferSpec.id`           | Unique ID for the data transfer job.                                             | `dtttest`                |
-| `transferSpec.type`         | Type of deployment: `SNAPSHOT_ONLY`, `INCREMENT_ONLY`, `SNAPSHOT_AND_INCREMENT`. | `SNAPSHOT_ONLY`          |
-| `transferSpec.src.type`     | Source type (e.g., `pg`).                                                        | `pg`                     |
-| `transferSpec.src.params`   | Source parameters.                                                               | `{}`                     |
-| `transferSpec.dst.type`     | Destination type (e.g., `ch`).                                                   | `ch`                     |
-| `transferSpec.dst.params`   | Destination parameters.                                                          | `{}`                     |
-| `snapshot.worker_count`     | Number of parallel instances for the snapshot job.                               | `1`                      |
-| `replication.worker_count`  | Number of replicas for the continuous replication `StatefulSet`.                 | `1`                      |
-| `resources.requests.cpu`    | CPU resource requests for the pods.                                              | `100m`                   |
-| `resources.requests.memory` | Memory resource requests for the pods.                                           | `128Mi`                  |
-| `resources.limits.cpu`      | CPU resource limits for the pods.                                                | `500m`                   |
-| `resources.limits.memory`   | Memory resource limits for the pods.                                             | `256Mi`                  |
+| Parameter                                       | Description                                                                      | Default                  |
+|-------------------------------------------------|----------------------------------------------------------------------------------|--------------------------|
+| `transferSpec.id`                               | Unique ID for the data transfer job.                                             | `dtttest`                |
+| `transferSpec.type`                             | Type of deployment: `SNAPSHOT_ONLY`, `INCREMENT_ONLY`, `SNAPSHOT_AND_INCREMENT`. | `SNAPSHOT_ONLY`          |
+| `transferSpec.src.type`                         | Source type (e.g., `pg`).                                                        | `pg`                     |
+| `transferSpec.src.params`                       | Source parameters.                                                               | `{}`                     |
+| `transferSpec.dst.type`                         | Destination type (e.g., `ch`).                                                   | `ch`                     |
+| `transferSpec.dst.params`                       | Destination parameters.                                                          | `{}`                     |
+| `snapshot.worker_count`                         | Number of parallel instances for the snapshot job.                               | `1`                      |
+| `replication.worker_count`                      | Number of replicas for the continuous replication `StatefulSet`.                 | `1`                      |
+| `resources.requests.cpu`                        | CPU resource requests for the pods.                                              | `100m`                   |
+| `resources.requests.memory`                     | Memory resource requests for the pods.                                           | `128Mi`                  |
+| `resources.limits.cpu`                          | CPU resource limits for the pods.                                                | `500m`                   |
+| `resources.limits.memory`                       | Memory resource limits for the pods.                                             | `256Mi`                  |
+| `coordinator.type`                              | Type of external coordinator service, e.g., `s3`.                                | `s3`                     |
+| `coordinator.bucket`                            | Name of the S3 bucket for coordination.                                          | `place_your_bucket`      |
+| `transferSpec.regular_snapshot.incremental`     | List of objects defining incremental snapshot settings.                          | `[]`                     |
+| `transferSpec.regular_snapshot.enabled`         | Enable or disable the regular snapshot mechanism.                                | `false`                  |
+| `transferSpec.regular_snapshot.cron_expression` | Cron expression for scheduled cron job.                                          | `0 1 * * *`              |
 
 ### Example `values.yaml`
 
@@ -73,37 +79,64 @@ resources:
     memory: "256Mi"
     cpu: "500m"
 
+coordinator:
+  type: s3
+  bucket: my-s3-bucket
+
 transferSpec:
   id: dtttest
   type: SNAPSHOT_AND_INCREMENT  # Options: SNAPSHOT_ONLY, INCREMENT_ONLY, SNAPSHOT_AND_INCREMENT
   src:
     type: pg
     params:
-      {
-        "host": "postgres-source-host",
-        "port": "5432",
-        "username": "user",
-        "password": "pass",
-        "database": "db_name"
-      }
+      Hosts:
+        - YOUR_PG_HOST
+      Database: YOUR_PG_NAME
+      User: YOUR_PG_USER
+      Password: YOUR_PG_PASSWORD
+      Port: 5432
+      BatchSize: 1024
+      SlotByteLagLimit: 53687091200
+      EnableTLS: true
+      KeeperSchema: public
+      DesiredTableSize: 1073741824
+      SnapshotDegreeOfParallelism: 4
   dst:
     type: ch
     params:
-      {
-        "host": "clickhouse-dest-host",
-        "port": "9000",
-        "username": "user",
-        "password": "pass",
-        "database": "db_name"
-      }
+      User: YOUR_CH_USER
+      Password: YOUR_CH_PASSWORD
+      ShardsList:
+        - Hosts:
+            - YOUR_CH_HOST
+      Database: default
+      HTTPPort: 8443
+      SSLEnabled: true
+      NativePort: 9440
+      MigrationOptions:
+        AddNewColumns: true
+      InsertParams:
+        MaterializedViewsIgnoreErrors: true
+      RetryCount: 20
+      UseSchemaInTableName: true
+      Interval: 1000000000
+      Cleanup: Drop
+      BufferTriggingSize: 536870912
+
+  regular_snapshot:
+    enabled: true
+    incremental:
+      - namespace: public
+        name: playing_with_neon
+        cursor_field: id
 
 # snapshot specific configurations
 snapshot:
-    worker_count: 4  # Number of parallel job instances
+  worker_count: 4  # Number of parallel job instances
 
 # replication specific configurations
 replication:
-    worker_count: 1  # Number of replicas
+  worker_count: 1  # Number of replicas
 ```
 
 ### Transfer Spec Configuration
@@ -116,13 +149,18 @@ The `transferSpec` section configures the data source (`src`) and destination (`
 src:
   type: pg  # Postgres source type
   params:
-    {
-      "host": "postgres-source-host",
-      "port": "5432",
-      "username": "user",
-      "password": "pass",
-      "database": "db_name"
-    }
+    Hosts:
+      - YOUR_NEON_DB
+    Database: YOUR_DB_NAME
+    User: YOUR_DB_USER
+    Password: YOUR_DB_PASSWORD
+    Port: 5432
+    BatchSize: 1024
+    SlotByteLagLimit: 53687091200
+    EnableTLS: true
+    KeeperSchema: public
+    DesiredTableSize: 1073741824
+    SnapshotDegreeOfParallelism: 4
 ```
 
 - **Destination Example**:
@@ -131,14 +169,57 @@ src:
 dst:
   type: ch  # Clickhouse destination type
   params:
-    {
-      "host": "clickhouse-dest-host",
-      "port": "9000",
-      "username": "user",
-      "password": "pass",
-      "database": "db_name"
-    }
+    User: YOUR_CH_USER
+    Password: YOUR_CH_PASSWORD
+    ShardsList:
+      - Hosts:
+          - YOUR_CH_HOST
+    Database: default
+    HTTPPort: 8443
+    SSLEnabled: true
+    NativePort: 9440
+    MigrationOptions:
+      AddNewColumns: true
+    InsertParams:
+      MaterializedViewsIgnoreErrors: true
+    RetryCount: 20
+    UseSchemaInTableName: true
+    Interval: 1000000000
+    Cleanup: Drop
+    BufferTriggingSize: 536870912
 ```
+
+### New Features: Coordinator and Regular Snapshots
+
+#### Coordinator Configuration
+
+The `coordinator` section configures an external coordination service, such as an S3 bucket, that can be used for coordinating data transfers or snapshots. This is useful when external storage or coordination mechanisms are required.
+
+- **Example**:
+
+```yaml
+coordinator:
+  type: s3
+  bucket: my-coordination-bucket
+```
+
+#### Regular Snapshot with Incremental Configuration
+
+The `regular_snapshot` feature allows for periodic snapshots with optional incremental replication. This is particularly useful when a regular snapshot schedule is needed alongside continuous data replication.
+
+- **Incremental Snapshot Example**:
+
+```yaml
+transferSpec:
+  regular_snapshot:
+    enabled: true
+    incremental:
+      - namespace: public
+        name: playing_with_neon
+        cursor_field: id
+```
+
+This example enables the `regular_snapshot` feature and specifies that incremental replication should track changes using the `id` field from the `playing_with_neon` table within the `public` namespace.
 
 ## Deployment Types
 
@@ -206,7 +287,9 @@ To view logs of a running `Job` or `StatefulSet` pod, you can use `kubectl`:
 kubectl logs <pod-name>
 ```
 
-For example, to get logs from the `Job`:
+For example, to get
+
+logs from the `Job`:
 
 ```bash
 kubectl get pods -l job-name=transfer
@@ -223,4 +306,3 @@ kubectl logs <pod-name>
 ## Contributing
 
 Feel free to open issues and submit PRs to improve this chart!
-

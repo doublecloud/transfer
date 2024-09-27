@@ -1,5 +1,3 @@
-# templates/configmap.yaml
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,3 +14,12 @@ data:
       type: {{ .Values.transferSpec.dst.type }}
       params: |
         {{ .Values.transferSpec.dst.params | toJson }}
+    {{if .Values.transferSpec.regular_snapshot}}
+    regular_snapshot: {{.Values.transferSpec.regular_snapshot | toJson }}
+    {{end}}
+    {{if .Values.transferSpec.data_objects}}
+    data_objects: {{.Values.transferSpec.data_objects | toJson }}
+    {{end}}
+    {{if .Values.transferSpec.transformation}}
+    transformation: {{.Values.transferSpec.transformation | toJson }}
+    {{end}}

@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: transfer-{{ .Values.transferSpec.id }}-on-demand-snapshot
+spec:
+  suspend: {{.Values.transferSpec.regular_snapshot.enabled}}
+  schedule: {{.Values.transferSpec.regular_snapshot.cron_expression}}
+  jobTemplate:
+    spec:
+      completions: {{ .Values.snapshot.worker_count }}
+      parallelism: {{ .Values.snapshot.worker_count }}
+      completionMode: Indexed
+      backoffLimit: 6
+      template:
+        spec:
+        {{- include "transfer.spec" (dict "commandType" "activate" "Values" .Values) | nindent 10 }}
+

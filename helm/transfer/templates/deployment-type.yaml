@@ -1,18 +1,28 @@
-# templates/deployment-type.yaml
-
 {{- if eq .Values.transferSpec.type "SNAPSHOT_ONLY" }}
 # Include only the Job for SNAPSHOT_ONLY
 {{ include "data-upload-job.job" . }}
+---
+# Include ondemand for SO
+{{ include "data-upload-job.job-ondemand" . }}
+---
 {{- end }}
 
 {{- if eq .Values.transferSpec.type "INCREMENT_ONLY" }}
 # Include only the StatefulSet for INCREMENT_ONLY
 {{ include "data-upload-job.statefulset" . }}
+---
+# Include ondemand for IO
+{{ include "data-upload-job.job-ondemand" . }}
+---
 {{- end }}
 
 {{- if eq .Values.transferSpec.type "SNAPSHOT_AND_INCREMENT" }}
 # Include both Job and StatefulSet for SNAPSHOT_AND_INCREMENT
 {{ include "data-upload-job.job" . }}
+---
+# Include ondemand for SI
+{{ include "data-upload-job.job-ondemand" . }}
+---
 
 # Use Helm's built-in `postJob` hook to ensure the StatefulSet starts after the Job
 apiVersion: batch/v1
@@ -34,7 +44,7 @@ spec:
         - /bin/bash
         - -c
         - |
-          while [[ $(kubectl get job data-upload-job -o jsonpath='{.status.succeeded}') != "{{ .Values.job.instanceCount }}" ]]; do
+          while [[ $(kubectl get job data-upload-job -o jsonpath='{.status.succeeded}') != "{{ .Values.snapshot.worker_count }}" ]]; do
             echo "Waiting for data-upload-job to finish..."
             sleep 5
           done
