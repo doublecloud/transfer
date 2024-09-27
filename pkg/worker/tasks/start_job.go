@@ -2,7 +2,6 @@ package tasks
 
 import (
 	"context"
-	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -35,10 +34,7 @@ func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer server.T
 		return nil
 	}
 
-	logger.Log.Info("Wait for transfer status change to apply")
-	time.Sleep(10 * time.Second)
 	logger.Log.Info("Transfer status change is considered completed")
-	time.Sleep(time.Second)
 	return nil
 }
 

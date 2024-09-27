@@ -1,9 +1,6 @@
 package tasks
 
 import (
-	"time"
-
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
@@ -26,7 +23,5 @@ var stopRuntime = func(cp coordinator.Coordinator, transfer server.Transfer) err
 	if env.IsTest() {
 		return nil
 	}
-	logger.Log.Infof("Wait to change apply")
-	time.Sleep(10 * time.Second)
 	return nil
 }
