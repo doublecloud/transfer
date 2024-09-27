@@ -75,7 +75,7 @@ require (
 	go.ytsaurus.tech/yt/go v0.0.21
 	golang.org/x/crypto v0.26.0
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
-	golang.org/x/mod v0.18.0
+	golang.org/x/mod v0.20.0
 	golang.org/x/net v0.28.0
 	golang.org/x/sync v0.8.0
 	golang.org/x/text v0.17.0
@@ -220,7 +220,7 @@ require (
 	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/term v0.23.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
-	golang.org/x/tools v0.22.1-0.20240628205440-9c895dd76b34 // indirect
+	golang.org/x/tools v0.22.1-0.20240829175637-39126e24d653 // indirect
 	gonum.org/v1/gonum v0.14.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
