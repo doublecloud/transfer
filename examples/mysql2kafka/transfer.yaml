@@ -1,0 +1,40 @@
+id: test
+type: INCREMENT_ONLY
+src:
+  type: mysql
+  params: |
+    {
+      "Host": "mysql",
+      "User": "testuser",
+      "Password": "testpassword",
+      "Database": "testdb",
+      "Port": 3306
+    }
+dst:
+  type: kafka
+  params: |
+    {
+      "ShowData": true,
+      "Connection": {
+        "TLS": "Disabled",
+        "Brokers": ["kafka:9092"]
+      },
+      "Auth": {
+        "Enabled": false
+      },
+      "ParralelWriterCount": 10,
+      "TopicPrefix": "cdc",
+      "FormatSettings": {
+        "Name": "Auto",
+        "Settings": {},
+        "SettingsKV": [],
+        "BatchingSettings": {
+          "Enabled": true,
+          "Interval": 100,
+          "MaxChangeItems": 0,
+          "MaxMessageSize": 0
+        }
+      },
+      "TopicConfigEntries": null,
+      "Compression": "UNCOMPRESSED"
+    }

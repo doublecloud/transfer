@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  kafka:
+    restart: always
+    image: docker.io/bitnami/kafka:3.3
+    volumes:
+      - ./.volumes/kafka/data:/bitnami"
+    ports:
+      - 9092:9092
+      - 9093:9093
+    container_name: broker1
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      ALLOW_ANONYMOUS_LOGIN: yes
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CFG_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CFG_BROKER_ID: 1
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: '1@localhost:9093'
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_KRAFT_CLUSTER_ID: r4zt_wrqTRuT7W2NJsB_GA
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./custom_my.cnf:/etc/mysql/my.cnf
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Golang-based load generator for MySQL CRUD operations
+  crud_load_gen:
+    build: loadgen
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpassword
+      MYSQL_DB: testdb
+
+  transfer:
+    build: ../../../../../..
+    command:
+      - replicate
+      - --transfer
+      - /usr/local/bin/transfer.yaml
+      - --log-level
+      - info
+    depends_on:
+      - mysql
+      - kafka
+    volumes:
+      - ./transfer.yaml:/usr/local/bin/transfer.yaml
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"  # Expose the Kafka UI on port 8080
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092  # Kafka broker
+    depends_on:
+      - kafka
+
+volumes:
+  kafka_data:
+  mysql_data:
