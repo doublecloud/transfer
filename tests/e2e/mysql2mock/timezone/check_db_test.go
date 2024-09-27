@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
@@ -19,7 +20,10 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const tableName = "__test1"
+const (
+	tableName         = "__test1"
+	timezoneTableName = "__test2"
+)
 
 var (
 	db     = os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE")
@@ -46,8 +50,6 @@ func (s *mockSinker) Close() error {
 	return nil
 }
 
-func dummyProgress(current, progress, total uint64) {}
-
 func makeConnConfig() *mysql.Config {
 	cfg := mysql.NewConfig()
 	cfg.Addr = fmt.Sprintf("%v:%v", source.Host, source.Port)
@@ -58,7 +60,7 @@ func makeConnConfig() *mysql.Config {
 	return cfg
 }
 
-func TestTimeZone(t *testing.T) {
+func TestTimeZoneSnapshotAndReplication(t *testing.T) {
 	defer func() {
 		require.NoError(t, helpers.CheckConnections(
 			helpers.LabeledPort{Label: "Mysql source", Port: source.Port},
@@ -68,7 +70,8 @@ func TestTimeZone(t *testing.T) {
 	storage, err := mysql_storage.NewStorage(source.ToStorageParams())
 	require.NoError(t, err)
 
-	rowsValues := []any{}
+	var rowsValuesOnSnapshot []any
+	var rowsValuesOnReplication []any
 
 	table := abstract.TableDescription{Name: tableName, Schema: source.Database}
 	err = storage.LoadTable(context.Background(), table, func(input []abstract.ChangeItem) error {
@@ -76,7 +79,7 @@ func TestTimeZone(t *testing.T) {
 			if item.Kind != "insert" {
 				continue
 			}
-			rowsValues = append(rowsValues, item.ColumnValues)
+			rowsValuesOnSnapshot = append(rowsValuesOnSnapshot, item.ColumnValues)
 		}
 		return nil
 	})
@@ -103,10 +106,10 @@ func TestTimeZone(t *testing.T) {
 			if item.Kind != "insert" {
 				continue
 			}
-			rowsValues = append(rowsValues, item.ColumnValues)
+			rowsValuesOnReplication = append(rowsValuesOnReplication, item.ColumnValues)
 		}
 
-		if len(rowsValues) >= 4 {
+		if len(rowsValuesOnSnapshot)+len(rowsValuesOnReplication) >= 4 {
 			_ = wrk.Stop()
 		}
 
@@ -142,5 +145,86 @@ func TestTimeZone(t *testing.T) {
 
 	require.NoError(t, <-errCh)
 
-	canon.SaveJSON(t, rowsValues)
+	require.Len(t, rowsValuesOnSnapshot, len(rowsValuesOnReplication))
+	for i := range rowsValuesOnSnapshot {
+		snapshotColumnValues, ok := rowsValuesOnSnapshot[i].([]any)
+		require.True(t, ok)
+		replicationColumnValues, ok := rowsValuesOnReplication[i].([]any)
+		require.True(t, ok)
+		require.Equal(t, snapshotColumnValues[1], replicationColumnValues[1])
+	}
+
+	allValues := append(rowsValuesOnSnapshot, rowsValuesOnReplication...)
+	canon.SaveJSON(t, allValues)
+}
+
+func TestDifferentTimezones(t *testing.T) {
+	defer func() {
+		require.NoError(t, helpers.CheckConnections(
+			helpers.LabeledPort{Label: "Mysql source", Port: source.Port},
+		))
+	}()
+
+	storageCfg := source.ToStorageParams()
+	checkTimezoneVals := func(cfg *mysql_storage.MysqlStorageParams, timezone string, expectedRows []any) {
+		cfg.Timezone = timezone
+		storage, err := mysql_storage.NewStorage(cfg)
+		require.NoError(t, err)
+		defer storage.Close()
+
+		var rows []any
+		table := abstract.TableDescription{Name: timezoneTableName, Schema: source.Database}
+		err = storage.LoadTable(context.Background(), table, func(input []abstract.ChangeItem) error {
+			for _, item := range input {
+				if item.Kind != "insert" {
+					continue
+				}
+				rows = append(rows, item.ColumnValues)
+			}
+			return nil
+		})
+		require.NoError(t, err)
+
+		require.Equal(t, expectedRows, rows)
+	}
+
+	timezone := ""
+	loc, err := time.LoadLocation(timezone)
+	require.NoError(t, err)
+	t1, _ := time.ParseInLocation(time.DateTime, "2020-12-31 10:00:00", loc)
+	t2, _ := time.ParseInLocation(time.DateTime, "2020-12-31 14:00:00", loc)
+	checkTimezoneVals(storageCfg, timezone, []any{
+		[]any{int32(1), t1},
+		[]any{int32(2), t2},
+	})
+
+	timezone = "UTC"
+	loc, err = time.LoadLocation(timezone)
+	require.NoError(t, err)
+	t1, _ = time.ParseInLocation(time.DateTime, "2020-12-31 10:00:00", loc)
+	t2, _ = time.ParseInLocation(time.DateTime, "2020-12-31 14:00:00", loc)
+	checkTimezoneVals(storageCfg, timezone, []any{
+		[]any{int32(1), t1},
+		[]any{int32(2), t2},
+	})
+
+	timezone = "Europe/Moscow"
+	loc, err = time.LoadLocation(timezone)
+	require.NoError(t, err)
+	t1, _ = time.ParseInLocation(time.DateTime, "2020-12-31 13:00:00", loc)
+	t2, _ = time.ParseInLocation(time.DateTime, "2020-12-31 17:00:00", loc)
+	checkTimezoneVals(storageCfg, timezone, []any{
+		[]any{int32(1), t1},
+		[]any{int32(2), t2},
+	})
+
+	timezone = "America/Los_Angeles"
+	loc, err = time.LoadLocation(timezone)
+	require.NoError(t, err)
+	t1, _ = time.ParseInLocation(time.DateTime, "2020-12-31 03:00:00", loc)
+	t2, _ = time.ParseInLocation(time.DateTime, "2020-12-31 07:00:00", loc)
+	checkTimezoneVals(storageCfg, timezone, []any{
+		[]any{int32(1), t1},
+		[]any{int32(2), t2},
+	})
 }

@@ -186,8 +186,6 @@ func pushCreateTable(ctx context.Context, tx Queryable, table abstract.TableID, 
 	return applyDDLs([]ddlValue{ddlItem}, pusher)
 }
 
-type loadProgressWithSavedTotal func(current, progress uint64)
-
 // fileOffset for next file we add this number to LSN
 const fileOffset = 1_000_000_000_000
 

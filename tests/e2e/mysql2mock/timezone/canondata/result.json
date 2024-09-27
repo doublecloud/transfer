@@ -1,12 +1,12 @@
 {
-    "timezone.timezone.TestTimeZone": [
+    "timezone.timezone.TestTimeZoneSnapshotAndReplication": [
         [
             1,
-            "2020-12-23T10:11:12+03:00"
+            "2020-12-23T13:11:12+03:00"
         ],
         [
             2,
-            "2020-12-23T14:15:16+03:00"
+            "2020-12-23T17:15:16+03:00"
         ],
         [
             3,

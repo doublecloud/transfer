@@ -272,6 +272,10 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	if _, err := tx.ExecContext(ctx, "set net_write_timeout=3600;"); err != nil {
 		return xerrors.Errorf("Unable to set net_write_timeout=3600: %w", err)
 	}
+	timezone := timezoneOffset(s.ConnectionParams.Location)
+	if _, err := tx.ExecContext(ctx, fmt.Sprintf("set time_zone = '%s';", timezone)); err != nil {
+		return xerrors.Errorf("unable to set session timezone %s: %w", timezone, err)
+	}
 
 	tableRowsCount, tableDataSizeInBytes, err := getTableRowsCountTableDataSizeInBytes(ctx, tx, table)
 	if err != nil {
@@ -527,6 +531,26 @@ func (s *Storage) TableExists(table abstract.TableID) (bool, error) {
 		return false, xerrors.Errorf("unable to count table rows:%w", err)
 	}
 	return rowsCount != 0, nil
+}
+
+func timezoneOffset(timezone *time.Location) string {
+	_, secondsOffset := time.Now().In(timezone).Zone()
+	sign := "+"
+	if secondsOffset < 0 {
+		sign = "-"
+		secondsOffset *= -1
+	}
+
+	minutesOffset := secondsOffset / 60
+	hours := strconv.Itoa(minutesOffset / 60)
+	if len(hours) == 1 {
+		hours = "0" + hours
+	}
+	minutes := strconv.Itoa(minutesOffset % 60)
+	if len(minutes) == 1 {
+		minutes = "0" + minutes
+	}
+	return fmt.Sprintf("%s%s:%s", sign, hours, minutes)
 }
 
 func NewStorage(config *MysqlStorageParams) (*Storage, error) {
