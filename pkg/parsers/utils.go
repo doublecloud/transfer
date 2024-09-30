@@ -26,7 +26,7 @@ type schema struct {
 }
 
 func adjustType(s string) string {
-	return strings.ToLower(strings.Replace(s, "VT_", "", -1))
+	return strings.ToLower(strings.ReplaceAll(s, "VT_", ""))
 }
 
 func decodeSchema(content string) ([]abstract.ColSchema, error) {

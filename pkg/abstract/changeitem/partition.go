@@ -40,8 +40,8 @@ func NewPartition(topicWithCluster string, partition uint32) Partition {
 		}
 	}
 
-	topic := strings.Replace(topicWithCluster[len(splittedParts[0])+2:], "--", "/", -1)
-	topic = strings.Replace(topic, "@", "/", -1)
+	topic := strings.ReplaceAll(topicWithCluster[len(splittedParts[0])+2:], "--", "/")
+	topic = strings.ReplaceAll(topic, "@", "/")
 	return Partition{
 		Partition: partition,
 		Cluster:   splittedParts[0],

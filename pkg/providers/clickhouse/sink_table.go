@@ -41,9 +41,8 @@ type sinkTable struct {
 }
 
 func normalizeTableName(table string) string {
-	res := strings.Replace(table, "-", "_", -1)
-	res = strings.Replace(res, ".", "_", -1)
-	return res
+	res := strings.ReplaceAll(table, "-", "_")
+	return strings.ReplaceAll(res, ".", "_")
 }
 
 func (t *sinkTable) Init(cols *abstract.TableSchema) error {

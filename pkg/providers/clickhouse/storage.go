@@ -529,7 +529,7 @@ func (s *Storage) listTables(schema, name string) ([]table, error) {
 }
 
 func (s *Storage) parsePkeys(raw string) []string {
-	stripped := strings.Replace(raw, " ", "", -1)
+	stripped := strings.ReplaceAll(raw, " ", "")
 	if stripped == "" {
 		return nil
 	}

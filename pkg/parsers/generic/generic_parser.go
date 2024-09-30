@@ -1060,7 +1060,7 @@ func (p *GenericParser) ParseVal(v interface{}, typ string) (interface{}, error)
 		case schema.TypeAny:
 			var res map[string]interface{}
 			// TODO: (tserakhau) fixme
-			vv = strings.Replace(vv, "\\\\", "\\", -1) // double escaping taxi bug
+			vv = strings.ReplaceAll(vv, "\\\\", "\\") // double escaping taxi bug
 			if err := json.Unmarshal([]byte(vv), &res); err == nil {
 				return res, nil
 			}
@@ -1131,7 +1131,7 @@ func (p *GenericParser) Opts() AuxParserOpts {
 }
 
 func (p *GenericParser) SetTopic(topicName string) {
-	p.name = strings.Replace(topicName, "/", "_", -1)
+	p.name = strings.ReplaceAll(topicName, "/", "_")
 	p.auxOpts.Topic = topicName
 }
 
@@ -1196,7 +1196,7 @@ func NewGenericParser(cfg ParserConfig, fields []abstract.ColSchema, logger log.
 		lfCfg:            lfCfg,
 		genericCfg:       genericCfg,
 		auxOpts:          opts,
-		name:             strings.Replace(opts.Topic, "/", "_", -1),
+		name:             strings.ReplaceAll(opts.Topic, "/", "_"),
 		jsonParserPool:   fastjson.ParserPool{},
 	}
 }

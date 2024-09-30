@@ -70,7 +70,7 @@ func buildChangeItem(
 		Counter:     0,
 		Kind:        abstract.InsertKind,
 		Schema:      "",
-		Table:       strings.Replace(partition.Topic, "/", "_", -1),
+		Table:       strings.ReplaceAll(partition.Topic, "/", "_"),
 		PartID:      "",
 		ColumnNames: tableSchema.ColumnNames(),
 		ColumnValues: []interface{}{

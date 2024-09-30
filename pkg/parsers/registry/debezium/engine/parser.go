@@ -48,7 +48,7 @@ func (p *DebeziumImpl) DoOne(partition abstract.Partition, buf []byte, offset ui
 			rawData = string(buf)
 		}
 		p.logger.Warn("Unable to receive changeItems", log.Error(err), log.Any("body", util.Sample(string(buf), 1*1024)))
-		return nil, generic.NewUnparsed(partition, strings.Replace(partition.Topic, "/", "_", -1), rawData, fmt.Sprintf("debezium receiver returned error, err: %s", err), 0, offset, writeTime)
+		return nil, generic.NewUnparsed(partition, strings.ReplaceAll(partition.Topic, "/", "_"), rawData, fmt.Sprintf("debezium receiver returned error, err: %s", err), 0, offset, writeTime)
 	}
 	return buf[msgLen:], *changeItem
 }
