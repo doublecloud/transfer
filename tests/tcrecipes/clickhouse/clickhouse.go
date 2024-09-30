@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -88,15 +89,31 @@ func WithInitScripts(scripts ...string) testcontainers.CustomizeRequestOption {
 // as a command line argument to the container.
 func WithConfigFile(configFile string) testcontainers.CustomizeRequestOption {
 	return func(req *testcontainers.GenericContainerRequest) error {
+		name := path.Base(configFile)
 		cf := testcontainers.ContainerFile{
 			HostFilePath:      configFile,
-			ContainerFilePath: "/etc/clickhouse-server/config.d/config.xml",
+			ContainerFilePath: path.Join("/etc/clickhouse-server/config.d/", name),
 			FileMode:          0755,
 		}
 		req.Files = append(req.Files, cf)
 
 		return nil
 	}
+}
+
+func WithConfigData(data string) testcontainers.CustomizeRequestOption {
+	f, err := os.CreateTemp("", "clickhouse-tc-config-*.xml") // in Go version older than 1.17 you can use ioutil.TempFile
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	// write data to the temporary file
+	if _, err := f.Write([]byte(data)); err != nil {
+		panic(err)
+	}
+
+	return WithConfigFile(f.Name())
 }
 
 // WithConfigFile sets the YAML config file to be used for the clickhouse container
@@ -154,73 +171,52 @@ func WithUsername(user string) testcontainers.CustomizeRequestOption {
 }
 
 func WithZookeeper(container *ZookeeperContainer) testcontainers.CustomizeRequestOption {
-	return func(req *testcontainers.GenericContainerRequest) error {
-		f, err := os.CreateTemp("", "clickhouse-tc-config-") // in Go version older than 1.17 you can use ioutil.TempFile
-		if err != nil {
-			panic(err)
-		}
+	return WithConfigData(fmt.Sprintf(`<?xml version="1.0"?>
+	<clickhouse>
+		<logger>
+			<level>debug</level>
+			<console>true</console>
+			<log remove="remove"/>
+			<errorlog remove="remove"/>
+		</logger>
 
-		defer f.Close()
+		<query_log>
+			<database>system</database>
+			<table>query_log</table>
+		</query_log>
 
-		// write data to the temporary file
-		data := []byte(fmt.Sprintf(`<?xml version="1.0"?>
-<clickhouse>
-    <logger>
-        <level>debug</level>
-        <console>true</console>
-        <log remove="remove"/>
-        <errorlog remove="remove"/>
-    </logger>
+		<timezone>Europe/Berlin</timezone>
 
-    <query_log>
-        <database>system</database>
-        <table>query_log</table>
-    </query_log>
+		<zookeeper>
+			<node index="1">
+				<host>%s</host>
+				<port>2181</port>
+			</node>
+		</zookeeper>
 
-    <timezone>Europe/Berlin</timezone>
+		<remote_servers>
+			<default>
+				<shard>
+					<replica>
+						<host>localhost</host>
+						<port>9000</port>
+					</replica>
+				</shard>
+			</default>
+		</remote_servers>
+		<macros>
+			<cluster>default</cluster>
+			<shard>shard</shard>
+			<replica>replica</replica>
+		</macros>
 
-    <zookeeper>
-        <node index="1">
-            <host>%s</host>
-            <port>2181</port>
-        </node>
-    </zookeeper>
+		<distributed_ddl>
+			<path>/clickhouse/task_queue/ddl</path>
+		</distributed_ddl>
 
-    <remote_servers>
-        <default>
-            <shard>
-                <replica>
-                    <host>localhost</host>
-                    <port>9000</port>
-                </replica>
-            </shard>
-        </default>
-    </remote_servers>
-    <macros>
-        <cluster>default</cluster>
-        <shard>shard</shard>
-        <replica>replica</replica>
-    </macros>
-
-    <distributed_ddl>
-        <path>/clickhouse/task_queue/ddl</path>
-    </distributed_ddl>
-
-    <format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
-</clickhouse>
-`, container.IP()))
-		if _, err := f.Write(data); err != nil {
-			panic(err)
-		}
-		cf := testcontainers.ContainerFile{
-			HostFilePath:      f.Name(),
-			ContainerFilePath: "/etc/clickhouse-server/config.d/config.xml",
-			FileMode:          0755,
-		}
-		req.Files = append(req.Files, cf)
-
-		return nil
-	}
+		<format_schema_path>/var/lib/clickhouse/format_schemas/</format_schema_path>
+	</clickhouse>
+	`, container.IP()))
 }
 
 // Prepare creates an instance of the ClickHouse container type
