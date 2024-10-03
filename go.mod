@@ -32,12 +32,12 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.6.0
-	github.com/jackc/pgconn v1.14.0
+	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgio v1.0.0
 	github.com/jackc/pglogrepl v0.0.0-20210731151948-9f1effd582c4
-	github.com/jackc/pgproto3/v2 v2.3.2
+	github.com/jackc/pgproto3/v2 v2.3.3
 	github.com/jackc/pgtype v1.14.0
-	github.com/jackc/pgx/v4 v4.18.0
+	github.com/jackc/pgx/v4 v4.18.3
 	github.com/jhump/protoreflect v1.15.6
 	github.com/jmoiron/sqlx v1.3.5
 	github.com/klauspost/compress v1.17.9
@@ -301,3 +301,7 @@ replace github.com/prometheus/client_model => github.com/prometheus/client_model
 replace github.com/prometheus/common => github.com/prometheus/common v0.46.0
 
 replace github.com/distribution/reference => github.com/distribution/reference v0.5.0
+
+replace github.com/jackc/pgconn => github.com/jackc/pgconn v1.14.0
+
+replace github.com/jackc/pgproto3/v2 => github.com/jackc/pgproto3/v2 v2.3.2
