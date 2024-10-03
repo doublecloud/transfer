@@ -19,6 +19,10 @@ import (
 	"golang.yandex/hasql/checkers"
 )
 
+const (
+	defaultPoolSize = 150
+)
+
 type PgHA struct {
 	user      string
 	password  string
@@ -257,7 +261,7 @@ func NewFromHosts(dbName, user, password string, hosts []string, port int, ssl b
 		ssl:       ssl,
 		pools:     map[string]*pgxpool.Pool{},
 		poolMutex: sync.Mutex{},
-		poolSize:  150,
+		poolSize:  defaultPoolSize,
 	}, nil
 }
 
@@ -304,4 +308,18 @@ func NewFromDBAAS(name, user, password, cluster string) (*PgHA, error) {
 	}
 
 	return NewFromHosts(name, user, password, hosts, 0, true)
+}
+
+func NewFromHASQL(cluster *hasql.Cluster, dbName, user, password string, port int, ssl bool) *PgHA {
+	return &PgHA{
+		user:      user,
+		password:  password,
+		dbName:    dbName,
+		cluster:   cluster,
+		port:      port,
+		ssl:       ssl,
+		pools:     map[string]*pgxpool.Pool{},
+		poolMutex: sync.Mutex{},
+		poolSize:  defaultPoolSize,
+	}
 }
