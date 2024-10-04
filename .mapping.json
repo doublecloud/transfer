@@ -2799,6 +2799,7 @@
   "tests/helpers/serde/ydb2ydb.go":"transfer_manager/go/tests/helpers/serde/ydb2ydb.go",
   "tests/helpers/table_schema.go":"transfer_manager/go/tests/helpers/table_schema.go",
   "tests/helpers/test_case.go":"transfer_manager/go/tests/helpers/test_case.go",
+  "tests/helpers/transformer/simple_transformer.go":"transfer_manager/go/tests/helpers/transformer/simple_transformer.go",
   "tests/helpers/transformers.go":"transfer_manager/go/tests/helpers/transformers.go",
   "tests/helpers/utils.go":"transfer_manager/go/tests/helpers/utils.go",
   "tests/helpers/utils/test_read_closer.go":"transfer_manager/go/tests/helpers/utils/test_read_closer.go",

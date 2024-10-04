@@ -14,6 +14,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/doublecloud/transfer/tests/helpers/serde"
+	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
 
@@ -162,8 +163,8 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	transfer.Src.(*pgcommon.PgSource).PreSteps.PrimaryKey = false
 	transfer.Dst.(*pgcommon.PgDestination).MaintainTables = true
 
-	debeziumSerDeTransformer := helpers.NewSimpleTransformer(t, serde.MakeDebeziumSerDeUdfWithoutCheck(emitter, receiver), serde.AnyTablesUdf)
-	helpers.AddTransformer(t, transfer, debeziumSerDeTransformer)
+	debeziumSerDeTransformer := simple_transformer.NewSimpleTransformer(t, serde.MakeDebeziumSerDeUdfWithoutCheck(emitter, receiver), serde.AnyTablesUdf)
+	require.NoError(t, transfer.AddExtraTransformer(debeziumSerDeTransformer))
 	helpers.Activate(t, transfer)
 
 	//---

@@ -12,6 +12,7 @@ import (
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
+	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
 
@@ -181,8 +182,8 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotAndIncrement)
 	transfer.Src.(*pgcommon.PgSource).NoHomo = true
-	serdeTransformer := helpers.NewSimpleTransformer(t, serdeUdf, anyTablesUdf)
-	helpers.AddTransformer(t, transfer, serdeTransformer)
+	serdeTransformer := simple_transformer.NewSimpleTransformer(t, serdeUdf, anyTablesUdf)
+	require.NoError(t, transfer.AddExtraTransformer(serdeTransformer))
 	worker := helpers.Activate(t, transfer)
 	defer worker.Close(t)
 

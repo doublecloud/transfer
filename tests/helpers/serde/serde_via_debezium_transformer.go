@@ -8,13 +8,13 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/debezium"
 	"github.com/doublecloud/transfer/pkg/debezium/testutil"
-	"github.com/doublecloud/transfer/tests/helpers"
+	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
 
 var CountOfProcessedMessage = 0
 
-func makeDebeziumSerDeUdf(emitter *debezium.Emitter, receiver *debezium.Receiver, checkYtTypes bool) helpers.SimpleTransformerApplyUDF {
+func makeDebeziumSerDeUdf(emitter *debezium.Emitter, receiver *debezium.Receiver, checkYtTypes bool) simple_transformer.SimpleTransformerApplyUDF {
 	return func(t *testing.T, items []abstract.ChangeItem) abstract.TransformerResult {
 		newChangeItems := make([]abstract.ChangeItem, 0)
 		for i := range items {
@@ -48,11 +48,11 @@ func makeDebeziumSerDeUdf(emitter *debezium.Emitter, receiver *debezium.Receiver
 	}
 }
 
-func MakeDebeziumSerDeUdfWithCheck(emitter *debezium.Emitter, receiver *debezium.Receiver) helpers.SimpleTransformerApplyUDF {
+func MakeDebeziumSerDeUdfWithCheck(emitter *debezium.Emitter, receiver *debezium.Receiver) simple_transformer.SimpleTransformerApplyUDF {
 	return makeDebeziumSerDeUdf(emitter, receiver, true)
 }
 
-func MakeDebeziumSerDeUdfWithoutCheck(emitter *debezium.Emitter, receiver *debezium.Receiver) helpers.SimpleTransformerApplyUDF {
+func MakeDebeziumSerDeUdfWithoutCheck(emitter *debezium.Emitter, receiver *debezium.Receiver) simple_transformer.SimpleTransformerApplyUDF {
 	return makeDebeziumSerDeUdf(emitter, receiver, false)
 }
 

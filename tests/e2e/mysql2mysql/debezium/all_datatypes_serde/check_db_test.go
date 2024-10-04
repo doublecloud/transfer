@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/tests/helpers"
+	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
 
@@ -183,8 +184,8 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotAndIncrement)
 	transfer.Src.(*mysql.MysqlSource).PlzNoHomo = true
 	transfer.Src.(*mysql.MysqlSource).AllowDecimalAsFloat = true
-	serdeTransformer := helpers.NewSimpleTransformer(t, serdeUdf, anyTablesUdf)
-	helpers.AddTransformer(t, transfer, serdeTransformer)
+	serdeTransformer := simple_transformer.NewSimpleTransformer(t, serdeUdf, anyTablesUdf)
+	require.NoError(t, transfer.AddExtraTransformer(serdeTransformer))
 	worker := helpers.Activate(t, transfer)
 	defer worker.Close(t)
 

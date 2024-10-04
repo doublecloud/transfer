@@ -15,6 +15,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/doublecloud/transfer/tests/helpers/serde"
+	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
 
@@ -88,8 +89,8 @@ func TestSnapshotAndReplicationSerDeViaDebeziumExternal(t *testing.T) {
 		},
 	}
 	receiver := debezium.NewReceiver(originalTypes, nil)
-	debeziumSerDeTransformer := helpers.NewSimpleTransformer(t, serde.MakeYdb2YdbDebeziumSerDeUdf(pathOut, nil, emitter, receiver), serde.AnyTablesUdf)
-	helpers.AddTransformer(t, transfer, debeziumSerDeTransformer)
+	debeziumSerDeTransformer := simple_transformer.NewSimpleTransformer(t, serde.MakeYdb2YdbDebeziumSerDeUdf(pathOut, nil, emitter, receiver), serde.AnyTablesUdf)
+	require.NoError(t, transfer.AddExtraTransformer(debeziumSerDeTransformer))
 
 	worker := helpers.Activate(t, transfer)
 
