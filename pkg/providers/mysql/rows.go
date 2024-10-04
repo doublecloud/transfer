@@ -173,6 +173,15 @@ func tryRestoreStringAndBytesTypes(event *RowsEvent, columnIndex int, columnYtTy
 	}
 }
 
+func alterUTF16Charset(charsetName string) string {
+	result := strings.ReplaceAll(charsetName, "utf16", "utf-16")
+	//by default mysql utf16 charset is big endian but in golang.org/x/net/html that we use here it is processed as little endian
+	if !strings.HasSuffix(strings.ToLower(charsetName), "le") {
+		result += "be"
+	}
+	return result
+}
+
 func tryDecodeText(event *RowsEvent, columnIndex int) error {
 	charsetName := extractCharset(event.GetColumnCollation(columnIndex))
 	if charsetName == "" {
@@ -181,6 +190,10 @@ func tryDecodeText(event *RowsEvent, columnIndex int) error {
 	if strings.HasPrefix(strings.ToLower(charsetName), "utf8") {
 		return nil
 	}
+	if strings.HasPrefix(strings.ToLower(charsetName), "utf16") {
+		charsetName = alterUTF16Charset(charsetName)
+	}
+
 	for i := range event.Data.Rows {
 		var columnValueAsBytes []byte
 		switch columnValue := event.Data.Rows[i][columnIndex].(type) {
