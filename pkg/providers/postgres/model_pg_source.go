@@ -80,6 +80,7 @@ type PgSource struct {
 }
 
 var _ server.Source = (*PgSource)(nil)
+var _ server.WithConnectionID = (*PgSource)(nil)
 
 func (s *PgSource) MDBClusterID() string {
 	return s.ClusterID

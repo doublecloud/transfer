@@ -48,12 +48,14 @@ type MysqlSource struct {
 	YtTracking  bool // deprecated: use Tracker
 	YdbTracking bool // deprecated: use Tracker
 
-	Tracker     MysqlTrackerStorage // deprecated: we only have one tracker now
-	PlzNoHomo   bool                // forcefully disable homo features, mostly for tests
-	RootCAFiles []string
+	Tracker      MysqlTrackerStorage // deprecated: we only have one tracker now
+	PlzNoHomo    bool                // forcefully disable homo features, mostly for tests
+	RootCAFiles  []string
+	ConnectionID string
 }
 
 var _ server.Source = (*MysqlSource)(nil)
+var _ server.WithConnectionID = (*MysqlSource)(nil)
 
 type MysqlDumpSteps struct {
 	View    bool
@@ -138,6 +140,10 @@ func (s *MysqlSource) MDBClusterID() string {
 	return s.ClusterID
 }
 
+func (s *MysqlSource) GetConnectionID() string {
+	return s.ConnectionID
+}
+
 func (s *MysqlSource) WithDefaults() {
 	if s.Port == 0 {
 		s.Port = 3306
@@ -191,7 +197,8 @@ func (s *MysqlSource) ToStorageParams() *MysqlStorageParams {
 		ConsistentSnapshot:  s.ConsistentSnapshot,
 		RootCAFiles:         s.RootCAFiles,
 
-		TableFilter: s,
-		PreSteps:    s.PreSteps,
+		TableFilter:  s,
+		PreSteps:     s.PreSteps,
+		ConnectionID: s.ConnectionID,
 	}
 }

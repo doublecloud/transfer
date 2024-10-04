@@ -177,9 +177,6 @@ func (p *Provider) Source() (abstract.Source, error) {
 	}
 	if err := backoff.Retry(func() error {
 		if source, err := NewSource(src, p.transfer.ID, p.transfer.DataObjects, p.logger, p.registry, p.cp, failOnDecimal); err != nil {
-			if src.ClusterID != "" {
-				src.Host = ""
-			}
 			return xerrors.Errorf("unable to create new mysql source: %w", err)
 		} else {
 			res = source

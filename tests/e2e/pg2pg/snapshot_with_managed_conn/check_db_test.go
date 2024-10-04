@@ -1,0 +1,92 @@
+package snapshot
+
+import (
+	"context"
+	"os"
+	"testing"
+
+	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/pkg/abstract"
+	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/connection"
+	"github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
+	"github.com/doublecloud/transfer/pkg/worker/tasks"
+	"github.com/doublecloud/transfer/tests/helpers"
+	"github.com/stretchr/testify/require"
+)
+
+const srcConnID = "src_connection_id"
+const targetConnID = "dst_connection_id"
+
+var (
+	TransferType  = abstract.TransferTypeSnapshotOnly
+	Source        = *pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("dump"), pgrecipe.WithConnection(srcConnID))
+	SrcConnection = pgrecipe.ManagedConnection(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("dump"))
+
+	Target           = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"), pgrecipe.WithConnection(targetConnID))
+	TargetConnection = pgrecipe.ManagedConnection(pgrecipe.WithPrefix("DB0_"))
+)
+
+func init() {
+	_ = os.Setenv("YC", "1")                                               // to not go to vanga
+	helpers.InitSrcDst(helpers.TransferID, &Source, &Target, TransferType) // to WithDefaults() & FillDependentFields(): IsHomo, helpers.TransferID, IsUpdateable
+	helpers.InitConnectionResolver(map[string]connection.ManagedConnection{srcConnID: SrcConnection, targetConnID: TargetConnection})
+}
+
+func TestGroup(t *testing.T) {
+	defer func() {
+		require.NoError(t, helpers.CheckConnections(
+			helpers.LabeledPort{Label: "PG source", Port: SrcConnection.Hosts[0].Port},
+			helpers.LabeledPort{Label: "PG target", Port: TargetConnection.Hosts[0].Port},
+		))
+	}()
+
+	t.Run("Group after port check", func(t *testing.T) {
+		t.Run("Existence", Existence)
+		t.Run("Verify", Verify)
+		t.Run("Snapshot", Snapshot)
+	})
+}
+
+func Existence(t *testing.T) {
+	_, err := postgres.NewStorage(Source.ToStorageParams(nil))
+	require.NoError(t, err)
+	_, err = postgres.NewStorage(Target.ToStorageParams())
+	require.NoError(t, err)
+}
+
+func Verify(t *testing.T) {
+	var transfer server.Transfer
+	transfer.Src = &Source
+	transfer.Dst = &Target
+	transfer.Type = "SNAPSHOT_ONLY"
+
+	err := tasks.VerifyDelivery(transfer, logger.Log, helpers.EmptyRegistry())
+	require.NoError(t, err)
+
+	dstStorage, err := postgres.NewStorage(Target.ToStorageParams())
+	require.NoError(t, err)
+
+	var result bool
+	err = dstStorage.Conn.QueryRow(context.Background(), `
+		SELECT EXISTS
+        (
+            SELECT 1
+            FROM pg_tables
+            WHERE schemaname = 'public'
+            AND tablename = '_ping'
+        );
+	`).Scan(&result)
+	require.NoError(t, err)
+	require.Equal(t, false, result)
+}
+
+func Snapshot(t *testing.T) {
+	Source.PreSteps.Constraint = true
+	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotOnly)
+
+	_ = helpers.Activate(t, transfer)
+
+	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams()))
+}

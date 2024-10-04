@@ -40,9 +40,8 @@ func CopySchema(source *MysqlSource, steps *MysqlDumpSteps, pusher abstract.Push
 	}
 
 	connection := sqlx.NewDb(storage.DB, "mysql")
-
 	if steps.Routine {
-		routinesDDL, err := getRoutinesDDLs(source, connection, databases, source.User)
+		routinesDDL, err := getRoutinesDDLs(connection, databases, storage.ConnectionParams.User)
 		if err != nil {
 			return xerrors.Errorf("unable to get routine ddl: %w", err)
 		}
@@ -395,7 +394,7 @@ type CreateFunctionRow struct {
 
 var NotEnoughProcPermissions = "You don't have enough permissions to get not null 'Create Function'/'Create Procedure' field. See mysql documentation ('SHOW CREATE PROCEDURE Statement') for details. user: %s, %s: %s.%s"
 
-func getRoutinesDDLs(source *MysqlSource, connection *sqlx.DB, databases []string, user string) ([]ddlValue, error) {
+func getRoutinesDDLs(connection *sqlx.DB, databases []string, user string) ([]ddlValue, error) {
 	rows, err := connection.Queryx(
 		fmt.Sprintf(
 			"select routine_schema, specific_name, routine_type from information_schema.routines where routine_schema in %v",
@@ -404,7 +403,6 @@ func getRoutinesDDLs(source *MysqlSource, connection *sqlx.DB, databases []strin
 		return nil, xerrors.Errorf("Unable to list routines for databases %v: %w", databases, err)
 	}
 	defer rows.Close()
-
 	var routines []RoutineRow
 	for rows.Next() {
 		values, err := rows.SliceScan()

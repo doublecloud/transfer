@@ -11,6 +11,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/connection"
 	mysql "github.com/doublecloud/transfer/pkg/providers/mysql"
 	mysqldriver "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/require"
@@ -43,6 +44,49 @@ func RecipeMysqlTarget() *mysql.MysqlDestination {
 	}
 	v.WithDefaults()
 	return &v
+}
+
+func RecipeMysqlSourceWithConnection(connID string) (*mysql.MysqlSource, *connection.ConnectionMySQL) {
+	port, _ := strconv.Atoi(os.Getenv("RECIPE_MYSQL_PORT"))
+	database := os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE")
+	src := mysql.MysqlSource{
+		ServerID:     1,
+		Database:     database,
+		ConnectionID: connID,
+	}
+	src.WithDefaults()
+
+	managedConnection := ManagedConnection(port, os.Getenv("RECIPE_MYSQL_HOST"), database, os.Getenv("RECIPE_MYSQL_USER"), os.Getenv("RECIPE_MYSQL_PASSWORD"))
+	return &src, managedConnection
+}
+
+func RecipeMysqlTargetWithConnection(connID string) (*mysql.MysqlDestination, *connection.ConnectionMySQL) {
+	port, _ := strconv.Atoi(os.Getenv("RECIPE_MYSQL_PORT"))
+	database := os.Getenv("RECIPE_MYSQL_TARGET_DATABASE")
+	v := mysql.MysqlDestination{
+		SkipKeyChecks: false,
+		Database:      database,
+		ConnectionID:  connID,
+	}
+	v.WithDefaults()
+
+	managedConnection := ManagedConnection(port, os.Getenv("RECIPE_MYSQL_HOST"), database, os.Getenv("RECIPE_MYSQL_USER"), os.Getenv("RECIPE_MYSQL_PASSWORD"))
+	return &v, managedConnection
+}
+
+func ManagedConnection(port int, host, dbName, user, password string) *connection.ConnectionMySQL {
+	return &connection.ConnectionMySQL{
+		BaseSQLConnection: &connection.BaseSQLConnection{
+			Hosts:          []*connection.Host{{Name: host, Port: port, Role: connection.RoleUnknown, ReplicaType: connection.ReplicaUndefined}},
+			User:           user,
+			Password:       server.SecretString(password),
+			Database:       dbName,
+			HasTLS:         false,
+			CACertificates: "",
+			ClusterID:      "",
+		},
+		DatabaseNames: nil,
+	}
 }
 
 func WithMysqlInclude(src *mysql.MysqlSource, regex []string) *mysql.MysqlSource {

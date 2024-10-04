@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/connection"
 	pgsink "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -19,21 +20,23 @@ import (
 )
 
 var (
-	TransferType = abstract.TransferTypeSnapshotAndIncrement
-	Source       = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
-	dstPort, _   = strconv.Atoi(os.Getenv("DB0_PG_LOCAL_PORT"))
-	Target       = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
+	TransferType  = abstract.TransferTypeSnapshotAndIncrement
+	Source        = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""), pgrecipe.WithConnection("connID"))
+	SrcConnection = pgrecipe.ManagedConnection(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
+	dstPort, _    = strconv.Atoi(os.Getenv("DB0_PG_LOCAL_PORT"))
+	Target        = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
 )
 
 func init() {
 	_ = os.Setenv("YC", "1")                                               // to not go to vanga
 	helpers.InitSrcDst(helpers.TransferID, &Source, &Target, TransferType) // to WithDefaults() & FillDependentFields(): IsHomo, transferID
+	helpers.InitConnectionResolver(map[string]connection.ManagedConnection{"connID": SrcConnection})
 }
 
 func TestGroup(t *testing.T) {
 	defer func() {
 		require.NoError(t, helpers.CheckConnections(
-			helpers.LabeledPort{Label: "PG source", Port: Source.Port},
+			helpers.LabeledPort{Label: "PG source", Port: SrcConnection.Hosts[0].Port},
 			helpers.LabeledPort{Label: "PG target", Port: Target.Port},
 		))
 	}()

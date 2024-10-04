@@ -12,7 +12,7 @@ var current ConnResolver
 type ManagedConnection interface {
 	GetUsername() string
 	GetClusterID() string
-	GetDataBases() []string
+	GetDatabases() []string
 	HostNames() []string
 }
 

@@ -356,7 +356,7 @@ func (h *binlogHandler) OnRow(event *RowsEvent) error {
 }
 
 func (h *binlogHandler) String() string {
-	return fmt.Sprintf("%v_%v", h.config.ClusterID, h.config.ServerID)
+	return fmt.Sprintf("%v_%v", h.connectionParams.ClusterID, h.config.ServerID)
 }
 
 func (h *binlogHandler) getRequiredCols(schema, table string) (map[string]bool, error) {
@@ -450,7 +450,7 @@ func (p *publisher) Run(sink abstract.AsyncSink) error {
 			return xerrors.Errorf("failed to get binlog tracker: %w", err)
 		}
 		if name == "" && pos == 0 {
-			p.logger.Errorf("Mysql tracker has no binlog position for server_id: %v:%v", p.config.Host, p.config.ServerID)
+			p.logger.Errorf("Mysql tracker has no binlog position for server_id: %v:%v", p.storage.ConnectionParams.Host, p.config.ServerID)
 			return xerrors.Errorf("MySQL tracker has no binlog position: %w", abstract.NewFatalError(xerrors.New("Binlog position not found in binlog tracker")))
 		}
 
@@ -624,7 +624,7 @@ func NewSource(src *MysqlSource, transferID string, objects *server.DataObjects,
 	// user settings
 	config.Addr = fmt.Sprintf("%v:%v", connectionParams.Host, connectionParams.Port)
 	config.User = connectionParams.User
-	config.Password = string(connectionParams.Password)
+	config.Password = connectionParams.Password
 	config.TimestampStringLocation = connectionParams.Location
 	config.ServerID = src.ServerID
 	config.FailOnDecimal = failOnDecimal

@@ -12,6 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/connection"
 	"github.com/doublecloud/transfer/pkg/dataplane/provideradapter"
 	"golang.org/x/exp/slices"
 )
@@ -56,6 +57,18 @@ func InitSrcDst(transferID string, src server.Source, dst server.Destination, tr
 	// fill dependent fields on drugs
 	_ = provideradapter.ApplyForTransfer(transfer)
 	transfer.FillDependentFields()
+}
+
+func InitConnectionResolver(connections map[string]connection.ManagedConnection) {
+	stubResolver := connection.NewStubConnectionResolver()
+	var err error
+	for connID, conn := range connections {
+		err = stubResolver.Add(connID, conn)
+		if err != nil {
+			panic(err)
+		}
+	}
+	connection.Init(stubResolver)
 }
 
 func MakeTransfer(transferID string, src server.Source, dst server.Destination, transferType abstract.TransferType) *server.Transfer {

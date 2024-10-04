@@ -20,4 +20,5 @@ type MysqlStorageParams struct {
 	PreSteps           *MysqlDumpSteps
 	ConsistentSnapshot bool
 	RootCAFiles        []string
+	ConnectionID       string
 }

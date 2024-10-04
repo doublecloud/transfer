@@ -3,6 +3,7 @@ package connection
 import (
 	"context"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
@@ -14,6 +15,7 @@ type StubConnectionResolver struct {
 }
 
 func (d *StubConnectionResolver) ResolveConnection(ctx context.Context, connectionID string, typ abstract.ProviderType) (ManagedConnection, error) {
+	logger.Log.Infof("Resolving connection data for id %s", connectionID)
 	res, ok := d.ConnectionsByID[connectionID]
 	if !ok {
 		return nil, xerrors.Errorf("Unable to resolve connection %s", connectionID)
@@ -25,6 +27,11 @@ func (d *StubConnectionResolver) ResolveConnection(ctx context.Context, connecti
 			return pgConn, nil
 		}
 		return nil, xerrors.Errorf("Unable to cast pg connection %s", connectionID)
+	case "mysql":
+		if mysqlConn, ok := res.(*ConnectionMySQL); ok {
+			return mysqlConn, nil
+		}
+		return nil, xerrors.Errorf("Unable to cast mysql connection %s", connectionID)
 	case "ch":
 		if chConn, ok := res.(*ConnectionCH); ok {
 			return chConn, nil
@@ -39,7 +46,7 @@ func (d *StubConnectionResolver) ResolveConnection(ctx context.Context, connecti
 func (d *StubConnectionResolver) Add(connectionID string, connection any) error {
 	conn, ok := connection.(ManagedConnection)
 	if !ok {
-		return xerrors.Errorf("Wrong connection type: %s", connection)
+		return xerrors.Errorf("Wrong connection type: %T", connection)
 	}
 	d.ConnectionsByID[connectionID] = conn
 	return nil

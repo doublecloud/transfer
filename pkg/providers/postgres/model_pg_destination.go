@@ -42,6 +42,7 @@ type PgDestination struct {
 }
 
 var _ server.Destination = (*PgDestination)(nil)
+var _ server.WithConnectionID = (*PgDestination)(nil)
 
 const PGDefaultQueryTimeout time.Duration = 30 * time.Minute
 

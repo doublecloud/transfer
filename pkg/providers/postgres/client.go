@@ -525,14 +525,16 @@ func toConnParams(host *connection.Host, params *connection.ConnectionPG) *Conne
 
 func makeConnectionFromSrc(src *PgSource) *connection.ConnectionPG {
 	connParams := &connection.ConnectionPG{
-		Hosts:          []*connection.Host{},
-		User:           src.User,
-		Password:       src.Password,
-		ClusterID:      src.ClusterID,
-		Database:       src.Database,
-		DatabaseNames:  []string{src.Database},
-		HasTLS:         src.HasTLS(),
-		CACertificates: src.TLSFile,
+		BaseSQLConnection: &connection.BaseSQLConnection{
+			Hosts:          []*connection.Host{},
+			User:           src.User,
+			Password:       src.Password,
+			ClusterID:      src.ClusterID,
+			Database:       src.Database,
+			HasTLS:         src.HasTLS(),
+			CACertificates: src.TLSFile,
+		},
+		DatabaseNames: []string{src.Database},
 	}
 	connParams.SetHosts(src.AllHosts(), src.Port)
 	return connParams
@@ -540,14 +542,16 @@ func makeConnectionFromSrc(src *PgSource) *connection.ConnectionPG {
 
 func makeConnectionFromDst(dst *PgDestination) *connection.ConnectionPG {
 	connParams := &connection.ConnectionPG{
-		Hosts:          []*connection.Host{},
-		User:           dst.User,
-		Password:       dst.Password,
-		ClusterID:      dst.ClusterID,
-		Database:       dst.Database,
-		DatabaseNames:  []string{dst.Database},
-		HasTLS:         dst.HasTLS(),
-		CACertificates: dst.TLSFile,
+		BaseSQLConnection: &connection.BaseSQLConnection{
+			Hosts:          []*connection.Host{},
+			User:           dst.User,
+			Password:       dst.Password,
+			ClusterID:      dst.ClusterID,
+			Database:       dst.Database,
+			HasTLS:         dst.HasTLS(),
+			CACertificates: dst.TLSFile,
+		},
+		DatabaseNames: []string{dst.Database},
 	}
 	connParams.SetHosts(dst.AllHosts(), dst.Port)
 	return connParams
@@ -555,14 +559,16 @@ func makeConnectionFromDst(dst *PgDestination) *connection.ConnectionPG {
 
 func makeConnectionFromStorage(dst *PgStorageParams) *connection.ConnectionPG {
 	connParams := &connection.ConnectionPG{
-		Hosts:          []*connection.Host{},
-		User:           dst.User,
-		Password:       model.SecretString(dst.Password),
-		ClusterID:      dst.ClusterID,
-		Database:       dst.Database,
-		DatabaseNames:  []string{dst.Database},
-		HasTLS:         dst.HasTLS(),
-		CACertificates: dst.TLSFile,
+		BaseSQLConnection: &connection.BaseSQLConnection{
+			Hosts:          []*connection.Host{},
+			User:           dst.User,
+			Password:       model.SecretString(dst.Password),
+			ClusterID:      dst.ClusterID,
+			Database:       dst.Database,
+			HasTLS:         dst.HasTLS(),
+			CACertificates: dst.TLSFile,
+		},
+		DatabaseNames: []string{dst.Database},
 	}
 	connParams.SetHosts(dst.AllHosts, dst.Port)
 	return connParams
@@ -570,14 +576,16 @@ func makeConnectionFromStorage(dst *PgStorageParams) *connection.ConnectionPG {
 
 func makeConnectionFromSink(dst PgSinkParams) *connection.ConnectionPG {
 	connParams := &connection.ConnectionPG{
-		Hosts:          []*connection.Host{},
-		User:           dst.User(),
-		Password:       model.SecretString(dst.Password()),
-		ClusterID:      dst.ClusterID(),
-		Database:       dst.Database(),
-		DatabaseNames:  []string{dst.Database()},
-		HasTLS:         dst.HasTLS(),
-		CACertificates: dst.TLSFile(),
+		BaseSQLConnection: &connection.BaseSQLConnection{
+			Hosts:          []*connection.Host{},
+			User:           dst.User(),
+			Password:       model.SecretString(dst.Password()),
+			ClusterID:      dst.ClusterID(),
+			Database:       dst.Database(),
+			HasTLS:         dst.HasTLS(),
+			CACertificates: dst.TLSFile(),
+		},
+		DatabaseNames: []string{dst.Database()},
 	}
 	connParams.SetHosts(dst.AllHosts(), dst.Port())
 	return connParams

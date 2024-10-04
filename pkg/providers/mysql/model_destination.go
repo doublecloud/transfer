@@ -41,12 +41,18 @@ type MysqlDestination struct {
 	// Used for snapshot in runtime only
 	prevSkipKeyChecks      bool
 	prevPerTransactionPush bool
+	ConnectionID           string
 }
 
 var _ server.Destination = (*MysqlDestination)(nil)
+var _ server.WithConnectionID = (*MysqlDestination)(nil)
 
 func (d *MysqlDestination) MDBClusterID() string {
 	return d.ClusterID
+}
+
+func (d *MysqlDestination) GetConnectionID() string {
+	return d.ConnectionID
 }
 
 func (d *MysqlDestination) CleanupMode() server.CleanupType {
@@ -140,5 +146,6 @@ func (d *MysqlDestination) ToStorageParams() *MysqlStorageParams {
 		PreSteps:            DefaultMysqlDumpPreSteps(),
 		ConsistentSnapshot:  false,
 		RootCAFiles:         d.RootCAFiles,
+		ConnectionID:        d.ConnectionID,
 	}
 }

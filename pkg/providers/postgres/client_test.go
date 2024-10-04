@@ -312,17 +312,19 @@ func TestWithConnectionRealCluster(t *testing.T) {
 	t.Run("Test prefer replica for mdb storage", func(t *testing.T) {
 		//should check no slot on master and choose any replica
 		mdbConnection := &connection.ConnectionPG{
-			Hosts: []*connection.Host{
-				{Name: replica, Port: port, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
-				{Name: master, Port: port, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+			BaseSQLConnection: &connection.BaseSQLConnection{
+				Hosts: []*connection.Host{
+					{Name: replica, Port: port, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
+					{Name: master, Port: port, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+				},
+				User:           user,
+				Password:       pass,
+				Database:       "not used yet",
+				HasTLS:         false,
+				CACertificates: "",
+				ClusterID:      mdbCluster,
 			},
-			User:           user,
-			Password:       pass,
-			Database:       "not used yet",
-			DatabaseNames:  nil,
-			HasTLS:         false,
-			CACertificates: "",
-			ClusterID:      mdbCluster,
+			DatabaseNames: nil,
 		}
 		_ = connResolver.Add("conn1-real-cluster", mdbConnection)
 
@@ -348,20 +350,23 @@ func TestWithConnectionRealCluster(t *testing.T) {
 
 	t.Run("Test choose master for onprem with pgha", func(t *testing.T) {
 		onPremConnection := &connection.ConnectionPG{
-			Hosts: []*connection.Host{
-				//no known roles
-				connection.SimpleHost("bad-host1", port),
-				connection.SimpleHost("bad-host2", port),
-				connection.SimpleHost(master, port),
-				connection.SimpleHost(replica, port),
+			BaseSQLConnection: &connection.BaseSQLConnection{
+
+				Hosts: []*connection.Host{
+					//no known roles
+					connection.SimpleHost("bad-host1", port),
+					connection.SimpleHost("bad-host2", port),
+					connection.SimpleHost(master, port),
+					connection.SimpleHost(replica, port),
+				},
+				User:           user,
+				Password:       pass,
+				Database:       "not used yet",
+				HasTLS:         false,
+				CACertificates: "",
+				ClusterID:      "",
 			},
-			User:           user,
-			Password:       pass,
-			Database:       "not used yet",
-			DatabaseNames:  nil,
-			HasTLS:         false,
-			CACertificates: "",
-			ClusterID:      "",
+			DatabaseNames: nil,
 		}
 		_ = connResolver.Add("conn2-cluster-as-onprem", onPremConnection)
 
@@ -398,14 +403,16 @@ func TestWithConnectionRealCluster(t *testing.T) {
 
 	t.Run("Should go to mdb for unresolved mdb cluster roles", func(t *testing.T) {
 		mdbConnectionNotResolved := &connection.ConnectionPG{
-			Hosts:          nil,
-			User:           user,
-			Password:       pass,
-			Database:       "not used yet",
-			DatabaseNames:  nil,
-			HasTLS:         false,
-			CACertificates: "",
-			ClusterID:      mdbCluster,
+			BaseSQLConnection: &connection.BaseSQLConnection{
+				Hosts:          nil,
+				User:           user,
+				Password:       pass,
+				Database:       "not used yet",
+				HasTLS:         false,
+				CACertificates: "",
+				ClusterID:      mdbCluster,
+			},
+			DatabaseNames: nil,
 		}
 		_ = connResolver.Add("conn3-cluster-not-resolved", mdbConnectionNotResolved)
 
@@ -433,17 +440,19 @@ func TestWithConnection(t *testing.T) {
 	var src *PgSource
 	t.Run("MakeConnConfigFromSrc", func(t *testing.T) {
 		fakeClusterConn := &connection.ConnectionPG{
-			Hosts: []*connection.Host{
-				{Name: "test-one", Port: 6432, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
-				{Name: "test-two", Port: 6432, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+			BaseSQLConnection: &connection.BaseSQLConnection{
+				Hosts: []*connection.Host{
+					{Name: "test-one", Port: 6432, Role: connection.Replica, ReplicaType: connection.ReplicaSync},
+					{Name: "test-two", Port: 6432, Role: connection.Master, ReplicaType: connection.ReplicaUndefined},
+				},
+				User:           "test-user",
+				Password:       "test-pass",
+				Database:       "not used yet",
+				HasTLS:         false,
+				CACertificates: "",
+				ClusterID:      "test-cluster",
 			},
-			User:           "test-user",
-			Password:       "test-pass",
-			Database:       "not used yet",
-			DatabaseNames:  nil,
-			HasTLS:         false,
-			CACertificates: "",
-			ClusterID:      "test-cluster",
+			DatabaseNames: nil,
 		}
 		_ = connResolver.Add("conn1-fake-cluster", fakeClusterConn)
 
@@ -501,14 +510,17 @@ func TestWithConnection(t *testing.T) {
 
 	t.Run("MakeConnConfigFromSrc for onprem one host", func(t *testing.T) {
 		fakeOnPremConn := &connection.ConnectionPG{
-			Hosts:          []*connection.Host{connection.SimpleHost("test-three", 1111)},
-			User:           "test-user",
-			Password:       "test-pass",
-			Database:       "not used yet",
-			DatabaseNames:  nil,
-			HasTLS:         false,
-			CACertificates: "",
-			ClusterID:      "",
+			BaseSQLConnection: &connection.BaseSQLConnection{
+
+				Hosts:          []*connection.Host{connection.SimpleHost("test-three", 1111)},
+				User:           "test-user",
+				Password:       "test-pass",
+				Database:       "not used yet",
+				HasTLS:         false,
+				CACertificates: "",
+				ClusterID:      "",
+			},
+			DatabaseNames: nil,
 		}
 		_ = connResolver.Add("conn2-fake-onprem", fakeOnPremConn)
 
@@ -546,23 +558,23 @@ func TestWithConnection(t *testing.T) {
 
 	t.Run("Get mdb host port", func(t *testing.T) {
 		//actually there should be no hosts/ports for mdb cluster
-		connIdeal := &connection.ConnectionPG{Hosts: []*connection.Host{}}
+		connIdeal := &connection.ConnectionPG{BaseSQLConnection: &connection.BaseSQLConnection{Hosts: []*connection.Host{}}}
 		host, port, err := getHostPortFromMDBHostname("host-1", connIdeal)
 		require.NoError(t, err)
 		require.Equal(t, "host-1", host)
 		require.Equal(t, uint16(6432), port)
 
 		//actually there should be no hosts/ports for mdb cluster
-		connSomnitelnoButOK := &connection.ConnectionPG{Hosts: []*connection.Host{connection.SimpleHost("host-1", 0)}}
+		connSomnitelnoButOK := &connection.ConnectionPG{BaseSQLConnection: &connection.BaseSQLConnection{Hosts: []*connection.Host{connection.SimpleHost("host-1", 0)}}}
 		host, port, err = getHostPortFromMDBHostname("host-1", connSomnitelnoButOK)
 		require.NoError(t, err)
 		require.Equal(t, "host-1", host)
 		require.Equal(t, uint16(6432), port)
 
-		connOK := &connection.ConnectionPG{Hosts: []*connection.Host{
+		connOK := &connection.ConnectionPG{BaseSQLConnection: &connection.BaseSQLConnection{Hosts: []*connection.Host{
 			connection.SimpleHost("host-1", 444),
 			connection.SimpleHost("host-2", 444),
-		}}
+		}}}
 
 		host, port, err = getHostPortFromMDBHostname("host-1", connOK)
 		require.NoError(t, err)
@@ -579,10 +591,10 @@ func TestWithConnection(t *testing.T) {
 		require.Equal(t, "host-3", host)
 		require.Equal(t, uint16(6432), port)
 
-		connPortInName := &connection.ConnectionPG{Hosts: []*connection.Host{
+		connPortInName := &connection.ConnectionPG{BaseSQLConnection: &connection.BaseSQLConnection{Hosts: []*connection.Host{
 			connection.SimpleHost("host-1:333", 0),
 			connection.SimpleHost("host-2:333", 0),
-		}}
+		}}}
 		host, port, err = getHostPortFromMDBHostname("host-1:333", connPortInName)
 		require.NoError(t, err)
 		require.Equal(t, "host-1", host)
