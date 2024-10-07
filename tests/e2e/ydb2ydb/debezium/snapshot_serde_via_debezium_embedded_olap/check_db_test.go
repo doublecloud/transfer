@@ -26,6 +26,8 @@ var pathOut = "dectest/timmyb32r-test-out"
 var sourceChangeItem abstract.ChangeItem
 
 func TestSnapshotSerDeViaDebeziumEmbeddedOLAP(t *testing.T) {
+	t.SkipNow() // https://st.yandex-team.ru/TM-7986
+
 	src := &ydb.YdbSource{
 		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
