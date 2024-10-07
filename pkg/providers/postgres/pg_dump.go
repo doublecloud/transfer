@@ -360,7 +360,7 @@ func filterSequences(sequences SequenceMap, filter abstract.Includeable) (includ
 		sequenceIncluded := false
 		if len(sequenceInfo.DependentTables) == 0 {
 			// special case for a SEQUENCE which is not used by any table
-			sequenceIncluded = filter.Include(abstract.NonExistentTableID)
+			sequenceIncluded = filter.Include(*abstract.NewTableID(sequenceInfo.SequenceID.Namespace, ""))
 		}
 		for _, table := range sequenceInfo.DependentTables {
 			if filter.Include(table) {
