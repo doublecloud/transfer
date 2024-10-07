@@ -65,7 +65,7 @@ require (
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.79.0
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.81.1
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.11.7
 	go.uber.org/atomic v1.11.0
@@ -197,7 +197,7 @@ require (
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
-	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240528144234-5d5a685e41f7 // indirect
+	github.com/ydb-platform/ydb-go-genproto v0.0.0-20240920120314-0fed943b0136 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	github.com/zeebo/assert v1.3.1 // indirect
