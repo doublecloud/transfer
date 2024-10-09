@@ -331,7 +331,13 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 }
 
 func (s *Storage) getBinlogPosition(ctx context.Context, tx Queryable) (string, uint32, error) {
-	binlogStatus, err := tx.QueryContext(ctx, "show master status;")
+	masterStatusQuery := "show master status;"
+	_, version := CheckMySQLVersion(s)
+	if strings.HasPrefix(version, "8.4") {
+		masterStatusQuery = " SHOW BINARY LOG STATUS;"
+	}
+
+	binlogStatus, err := tx.QueryContext(ctx, masterStatusQuery)
 	if IsErrorCode(err, ErrCodeSyntax) {
 		logger.Log.Warn("master status failed with `1064`-code, probably protocol mismatch, retry with `show replication status;`")
 		// for single-store compatibility, see: https://docs.singlestore.com/cloud/reference/sql-reference/operational-commands/show-replication-status/

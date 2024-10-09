@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"math"
+	"context"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -10,28 +10,25 @@ import (
 )
 
 func GetLogFilePosition(storage *Storage) (string, uint32, string, error) {
-	var file string
-	var position uint64
-	var doDB string
-	var ignoreDB string
-	var gtid string
-	if err := storage.DB.QueryRow("show master status;").Scan(&file, &position, &doDB, &ignoreDB, &gtid); err != nil {
-		if err = storage.DB.QueryRow("show master status;").Scan(&file, &position, &doDB, &ignoreDB); err != nil {
-			return "", 0, "", xerrors.Errorf("Failed to get master status: %w", err)
-		}
+	ctx := context.Background()
+	tx, rollbacks, err := storage.getSnapshotQueryable(ctx)
+	if err != nil {
+		return "", 0, "", xerrors.Errorf("Can't get table read transaction: %w", err)
+	}
+	defer rollbacks.Do()
 
-		if err = storage.DB.QueryRow("SELECT BINLOG_GTID_POS(?, ?);", file, position).Scan(&gtid); err != nil {
-			return "", 0, "", xerrors.Errorf("Failed to get gtid: %w", err)
-		}
+	file, pos, err := storage.getBinlogPosition(ctx, tx)
+	if err != nil {
+		return "", 0, "", xerrors.Errorf("unable to get binlog position: %w", err)
 	}
 
-	if position > math.MaxUint32 {
-		return "", 0, "", xerrors.Errorf("Last binlog file %v:%v is more than 4GB", file, position)
+	gtid, err := storage.getGtid(ctx, tx)
+	if err != nil {
+		return "", 0, "", xerrors.Errorf("unable to get gtid: %w", err)
 	}
 
-	smallPosition := uint32(position)
-	logger.Log.Infof("Last binlog position: %v:%v", file, smallPosition)
-	return file, smallPosition, gtid, nil
+	logger.Log.Infof("Last binlog position: %v:%v", file, pos)
+	return file, pos, gtid, nil
 }
 
 func SyncBinlogPosition(src *MysqlSource, id string, cp coordinator.Coordinator) error {
@@ -52,7 +49,7 @@ func SyncBinlogPosition(src *MysqlSource, id string, cp coordinator.Coordinator)
 		return xerrors.Errorf("failed to get log file position: %w", err)
 	}
 
-	flavor := CheckMySQLVersion(storage)
+	flavor, _ := CheckMySQLVersion(storage)
 	gtidModeEnabled, err := IsGtidModeEnabled(storage, flavor)
 	if err != nil {
 		return xerrors.Errorf("Unable to check gtid mode: %w", err)

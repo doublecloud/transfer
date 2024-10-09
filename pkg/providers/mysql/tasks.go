@@ -53,7 +53,7 @@ func RemoveTracker(src *MysqlSource, id string, cp coordinator.Coordinator) erro
 	}
 	defer func() { _ = storage.DB.Close() }()
 
-	flavor := CheckMySQLVersion(storage)
+	flavor, _ := CheckMySQLVersion(storage)
 	enabled, err := IsGtidModeEnabled(storage, flavor)
 	if err != nil {
 		return xerrors.Errorf("Unable to check gtid mode: %w", err)

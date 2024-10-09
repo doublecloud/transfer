@@ -321,8 +321,9 @@ func IsGtidModeEnabled(storage *Storage, flavor string) (bool, error) {
 	return strings.ToLower(gtidMode) == "on", nil
 }
 
-func CheckMySQLVersion(storage *Storage) string {
+func CheckMySQLVersion(storage *Storage) (string, string) {
 	flavor := mysql.MySQLFlavor
+	var version string
 
 	rows, err := storage.DB.Query("SHOW VARIABLES LIKE '%version%';")
 	if err != nil {
@@ -337,13 +338,14 @@ func CheckMySQLVersion(storage *Storage) string {
 		}
 		if name == "version" {
 			logger.Log.Infof("MySQL version is %v", val)
-		}
-		if name == "version" || name == "version_comment" {
+
 			val = strings.ToLower(val)
 			if strings.Contains(strings.ToLower(val), "mariadb") {
-				return mysql.MariaDBFlavor
+				return mysql.MariaDBFlavor, val
 			}
+			version = val
+			break
 		}
 	}
-	return flavor
+	return flavor, version
 }

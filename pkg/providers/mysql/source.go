@@ -609,7 +609,7 @@ func NewSource(src *MysqlSource, transferID string, objects *server.DataObjects,
 	}
 	rollbacks.Add(storage.Close)
 
-	flavor := CheckMySQLVersion(storage)
+	flavor, _ := CheckMySQLVersion(storage)
 
 	config := new(Config)
 
