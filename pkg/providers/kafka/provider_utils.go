@@ -7,6 +7,7 @@ import (
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	debezium_prod_status "github.com/doublecloud/transfer/pkg/debezium/prodstatus"
 	"github.com/doublecloud/transfer/pkg/providers/airbyte"
+	clickhouse "github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 )
@@ -33,6 +34,8 @@ func InferFormatSettings(src server.Source, formatSettings server.SerializationF
 			result.Name = server.SerializationFormatLbMirror
 		case *airbyte.AirbyteSource:
 			result.Name = server.SerializationFormatJSON
+		case *clickhouse.ChSource:
+			result.Name = server.SerializationFormatNative
 		default:
 			result.Name = server.SerializationFormatDebezium
 		}
