@@ -17,7 +17,6 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/maplock"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/parsers/generic"
@@ -266,14 +265,6 @@ func (s *sinker) checkTable(schema []abstract.ColSchema, table string) (bool, er
 				createTableErr = xerrors.Errorf("incompatible schema changes in table %s: %w", table, createTableErr)
 				s.logger.Warn(fmt.Sprintf("Ban table %s", table), log.Any("yt_ban", 1), log.Error(createTableErr))
 				s.banned[table] = true
-				// NOTE this call rewrites previously existing "table banned" warnings
-				if err := s.cp.OpenStatusMessage(
-					s.transferID,
-					banTablesCategory,
-					errors.ToTransferStatusMessage(createTableErr),
-				); err != nil {
-					s.logger.Warn("failed to open status message for table ban", log.Error(err), log.NamedError("ban_error", createTableErr))
-				}
 				return true, createTableErr
 			}
 			return false, xerrors.Errorf("failed to create table in YT: %w", createTableErr)
@@ -650,7 +641,6 @@ func (s *sinker) rotateTable() error {
 		tableNames = append(tableNames, tableName)
 	}
 	s.schemaMutex.Unlock()
-
 	for _, tableName := range tableNames {
 		nodePath := yt2.SafeChild(s.dir, tableName)
 		var childNodes []YtRotationNode
@@ -702,7 +692,6 @@ func (s *sinker) rotateTable() error {
 			if _, err := s.checkTable(tSchema, tablePath); err != nil {
 				s.logger.Warn("Unable to init clone", log.Error(err))
 			}
-
 		}
 	}
 

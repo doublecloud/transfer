@@ -101,19 +101,25 @@ func (r *pluggableTransformer) Close() error {
 	return nil
 }
 
+const dbtStatusMessageCategory = "dbt"
+
 func (r *pluggableTransformer) run() error {
 	ctx := context.Background()
 	for configurationI, configuration := range r.configurations {
 		if err := newRunner(r.dst, configuration, r.transfer).Run(ctx); err != nil {
 			if errOSM := r.cp.OpenStatusMessage(
 				r.transfer.ID,
-				"dbt",
+				dbtStatusMessageCategory,
 				errors.ToTransferStatusMessage(errors.CategorizedErrorf(categories.Target, "failed to run DBT transformation [%d] in the target database: %w", configurationI, err)),
 			); errOSM != nil {
 				logger.Log.Warn("failed to open a status message for a DBT error", log.Error(errOSM), log.NamedError("dbt_error", err))
 			}
 			logger.Log.Error("DBT transformation failed", log.Int("transformation_i", configurationI), log.Error(err))
 			return errors.CategorizedErrorf(categories.Target, "failed to run DBT transformation [%d] in the target database: %w", configurationI, err)
+		} else {
+			if errCSM := r.cp.CloseStatusMessagesForCategory(r.transfer.ID, dbtStatusMessageCategory); errCSM != nil {
+				return xerrors.Errorf("unable to remove warning: %w", errCSM)
+			}
 		}
 	}
 	return nil
