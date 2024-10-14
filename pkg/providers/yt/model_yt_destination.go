@@ -52,12 +52,10 @@ type YtDestinationModel interface {
 	Ordered() bool
 	UseStaticTableOnSnapshot() bool
 	AltNames() map[string]string
-	NoBan() bool
 	Spec() *YTSpec
 	TolerateKeyChanges() bool
 	InitialTabletCount() uint32
 	WriteTimeoutSec() uint32
-	AllowReupload() bool
 	ChunkSize() uint32
 	BufferTriggingSize() uint64
 	BufferTriggingInterval() time.Duration
@@ -118,7 +116,6 @@ type YtDestination struct {
 	// If true, some errors on data insertion to YT will be skipped, and a warning will be written to the log.
 	// Among such errors are:
 	// * we were unable to find table schema in cache for some reason: https://github.com/doublecloud/transfer/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L482-484
-	// * a table is banned AND NoBan option is false (which is the default): https://github.com/doublecloud/transfer/arcadia/transfer_manager/go/pkg/providers/yt/sink/sink.go?rev=11063561#L489-492
 	// * a row (or a value inside a row) being inserted into the YT table has exceeded YT limits (16 MB by default).
 	LoseDataOnError bool
 
@@ -131,13 +128,11 @@ type YtDestination struct {
 	TransformerConfig        map[string]string
 	UseStaticTableOnSnapshot bool // optional.Optional[bool] breaks compatibility
 	AltNames                 map[string]string
-	NoBan                    bool
 	Cleanup                  server.CleanupType
 	Spec                     YTSpec
 	TolerateKeyChanges       bool
 	InitialTabletCount       uint32
 	WriteTimeoutSec          uint32
-	AllowReupload            bool
 	ChunkSize                uint32 // ChunkSize defines the number of items in a single request to YT for dynamic sink and chunk size in bytes for static sink
 	BufferTriggingSize       uint64
 	BufferTriggingInterval   time.Duration
@@ -159,7 +154,6 @@ type YtDestinationWrapper struct {
 	Model *YtDestination
 	// This is for pre/post-snapshot hacks (to be removed)
 	_pushWal bool
-	_noBan   bool
 }
 
 var _ server.Destination = (*YtDestinationWrapper)(nil)
@@ -234,14 +228,11 @@ func (d *YtDestinationWrapper) PreSnapshotHacks() {
 
 func (d *YtDestinationWrapper) PostSnapshotHacks() {
 	d.Model.PushWal = d._pushWal
-	d.Model.NoBan = d._noBan
 }
 
 func (d *YtDestinationWrapper) SetSnapshotLoad() {
 	d._pushWal = d.Model.PushWal
 	d.Model.PushWal = false
-	d._noBan = d.Model.NoBan
-	d.Model.NoBan = true
 }
 
 func (d *YtDestinationWrapper) ToStorageParams() *YtStorageParams {
@@ -362,10 +353,6 @@ func (d *YtDestinationWrapper) AltNames() map[string]string {
 	return d.Model.AltNames
 }
 
-func (d *YtDestinationWrapper) NoBan() bool {
-	return d.Model.NoBan
-}
-
 func (d *YtDestinationWrapper) Spec() *YTSpec {
 	return &d.Model.Spec
 }
@@ -380,10 +367,6 @@ func (d *YtDestinationWrapper) InitialTabletCount() uint32 {
 
 func (d *YtDestinationWrapper) WriteTimeoutSec() uint32 {
 	return d.Model.WriteTimeoutSec
-}
-
-func (d *YtDestinationWrapper) AllowReupload() bool {
-	return d.Model.AllowReupload
 }
 
 func (d *YtDestinationWrapper) ChunkSize() uint32 {
@@ -524,6 +507,5 @@ func NewYtDestinationV1(model YtDestination) YtDestinationModel {
 	return &YtDestinationWrapper{
 		Model:    &model,
 		_pushWal: false,
-		_noBan:   false,
 	}
 }

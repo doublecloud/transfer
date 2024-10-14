@@ -53,7 +53,6 @@ type sinker struct {
 	timeout             time.Duration
 	lock                *maplock.Mutex
 	chunkSize           int
-	banned              map[string]bool
 	closed              bool
 	progressInited      bool
 	staticSnapshotState map[string]StaticTableSnapshotState // it's like map: tableName -> in-place finite-state machine
@@ -141,7 +140,7 @@ var (
 	reNonKeyComputed        = regexp.MustCompile(`Non-key column .*`)
 )
 
-var bannableRes = []*regexp.Regexp{
+var schemaMismatchRes = []*regexp.Regexp{
 	reTypeMismatch,
 	reSortOrderMismatch,
 	reExpressionMismatch,
@@ -183,7 +182,7 @@ func (s *sinker) pushWalSlice(input []abstract.ChangeItem) error {
 }
 
 func (s *sinker) pushWal(input []abstract.ChangeItem) error {
-	if ban, err := s.checkTable(WalTableSchema, yt2.TableWAL); err != nil && !ban {
+	if err := s.checkTable(WalTableSchema, yt2.TableWAL); err != nil {
 		//nolint:descriptiveerrors
 		return err
 	}
@@ -216,7 +215,7 @@ func (s *sinker) Close() error {
 	return errs
 }
 
-func (s *sinker) checkTable(schema []abstract.ColSchema, table string) (bool, error) {
+func (s *sinker) checkTable(schema []abstract.ColSchema, table string) error {
 	for {
 		if s.lock.TryLock(table) {
 			break
@@ -225,9 +224,6 @@ func (s *sinker) checkTable(schema []abstract.ColSchema, table string) (bool, er
 		s.logger.Debugf("Unable to lock table checker %v", table)
 	}
 	defer s.lock.Unlock(table)
-	if s.banned[table] {
-		return true, xerrors.New("banned table")
-	}
 
 	if s.staticSnapshotState[table] == StaticTableSnapshotInitialized {
 		s.logger.Info("Try to create snapshot table", log.Any("table", table), log.Any("schema", schema))
@@ -235,11 +231,11 @@ func (s *sinker) checkTable(schema []abstract.ColSchema, table string) (bool, er
 		var err error
 		currStaticTable, err := s.newStaticTable(schema, table)
 		if err != nil {
-			return false, xerrors.Errorf("cannot create static table for pre-store in YT for snapshot upload, table: %s, err: %v", table, err)
+			return xerrors.Errorf("cannot create static table for pre-store in YT for snapshot upload, table: %s, err: %v", table, err)
 		}
 		s.tables[table] = currStaticTable
 		s.staticSnapshotState[table] = StaticTableSnapshotActivated
-		return false, nil
+		return nil
 	}
 
 	_, isSst := s.tables[table].(*SingleStaticTable)
@@ -253,42 +249,36 @@ func (s *sinker) checkTable(schema []abstract.ColSchema, table string) (bool, er
 	if s.tables[table] == nil {
 		if schema == nil {
 			s.logger.Error("No schema for table", log.Any("table", table))
-			return false, xerrors.New("no schema for table")
+			return xerrors.New("no schema for table")
 		}
 
 		s.logger.Info("Try to create table", log.Any("table", table), log.Any("schema", schema))
 		genericTable, createTableErr := s.newGenericTable(schema, table)
 		if createTableErr != nil {
 			s.logger.Error("Create table error", log.Any("table", table), log.Error(createTableErr))
-
-			if leadsToTableBan(createTableErr) || s.banned[table] { // the second condition must never be true at this point
-				createTableErr = xerrors.Errorf("incompatible schema changes in table %s: %w", table, createTableErr)
-				s.logger.Warn(fmt.Sprintf("Ban table %s", table), log.Any("yt_ban", 1), log.Error(createTableErr))
-				s.banned[table] = true
-				return true, createTableErr
+			if isIncompatibleSchema(createTableErr) {
+				return xerrors.Errorf("incompatible schema changes in table %s: %w", table, createTableErr)
 			}
-			return false, xerrors.Errorf("failed to create table in YT: %w", createTableErr)
+			return xerrors.Errorf("failed to create table in YT: %w", createTableErr)
 		}
 		s.logger.Info("Table created", log.Any("table", table), log.Any("schema", schema))
 		s.tables[table] = genericTable
 	}
 
-	return false, nil
+	return nil
 }
 
-func leadsToTableBan(err error) bool {
+func isIncompatibleSchema(err error) bool {
 	if IsIncompatibleSchemaErr(err) {
 		return true
 	}
-	for _, re := range bannableRes {
+	for _, re := range schemaMismatchRes {
 		if yterrors.ContainsMessageRE(err, re) {
 			return true
 		}
 	}
 	return false
 }
-
-const banTablesCategory string = "yt_sink_ban_tables"
 
 func (s *sinker) checkPrimaryKeyChanges(input []abstract.ChangeItem) error {
 	if !s.config.Ordered() && s.config.VersionColumn() == "" {
@@ -523,17 +513,8 @@ func (s *sinker) pushOneBatch(table string, batch []abstract.ChangeItem) error {
 		}
 	}
 
-	if isBanned, err := s.checkTable(scm, table); err != nil {
+	if err := s.checkTable(scm, table); err != nil {
 		s.logger.Error("Check table error", log.Error(err), log.Any("table", table))
-		if isBanned {
-			if !s.config.LoseDataOnError() || s.config.NoBan() {
-				s.logger.Error("No ban allowed", log.Error(err))
-				return xerrors.Errorf("No ban allowed: %w", err)
-			} else {
-				s.logger.Warn("banned table in not strict mode", log.Any("table", table), log.Error(err))
-				return xerrors.Errorf("banned table (%v) in not strict mode: %w", table, err)
-			}
-		}
 		return xerrors.Errorf("Check table (%v) error: %w", table, err)
 	}
 
@@ -543,7 +524,6 @@ func (s *sinker) pushOneBatch(table string, batch []abstract.ChangeItem) error {
 			return xerrors.Errorf("unable to upload batch: %w", err)
 		}
 		s.logger.Infof("Upload %v changes delay %v", len(subslice), time.Since(start))
-
 	}
 	return nil
 }
@@ -606,10 +586,6 @@ func (s *sinker) pushSlice(batch []abstract.ChangeItem, table string) error {
 				log.Error(err),
 			)
 			s.metrics.Table(table, "error", 1)
-			if !s.config.NoBan() && yterrors.ContainsErrorCode(err, yterrors.CodeSchemaViolation) {
-				s.logger.Warnf("code schema violation for table: %v, table skipped", table)
-				continue
-			}
 			return err
 		}
 		s.metrics.Table(table, "rows", len(batch[i:end]))
@@ -689,7 +665,7 @@ func (s *sinker) rotateTable() error {
 			s.schemaMutex.Lock()
 			tSchema := s.schemas[tableName]
 			s.schemaMutex.Unlock()
-			if _, err := s.checkTable(tSchema, tablePath); err != nil {
+			if err := s.checkTable(tSchema, tablePath); err != nil {
 				s.logger.Warn("Unable to init clone", log.Error(err))
 			}
 		}
@@ -918,7 +894,6 @@ func newSinker(cfg yt2.YtDestinationModel, transferID string, jobIndex int, lgr 
 		timeout:             15 * time.Second,
 		lock:                maplock.NewMapMutex(),
 		chunkSize:           chunkSize,
-		banned:              map[string]bool{},
 		closed:              false,
 		progressInited:      false,
 		staticSnapshotState: map[string]StaticTableSnapshotState{},

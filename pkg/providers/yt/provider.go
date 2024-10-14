@@ -12,7 +12,6 @@ func init() {
 		return &YtDestinationWrapper{
 			Model:    new(YtDestination),
 			_pushWal: false,
-			_noBan:   false,
 		}
 	}
 	destinationCopyFactory := func() server.Destination {
