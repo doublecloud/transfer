@@ -2,6 +2,7 @@ package kafka
 
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
@@ -40,6 +41,12 @@ var _ server.Destination = (*KafkaDestination)(nil)
 
 type TopicConfigEntry struct {
 	ConfigName, ConfigValue string
+}
+
+func topicConfigEntryToSlices(t []TopicConfigEntry) [][2]string {
+	return slices.Map(t, func(tt TopicConfigEntry) [2]string {
+		return [2]string{tt.ConfigName, tt.ConfigValue}
+	})
 }
 
 func (d *KafkaDestination) MDBClusterID() string {

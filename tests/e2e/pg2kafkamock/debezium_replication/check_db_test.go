@@ -15,11 +15,12 @@ import (
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/debezium/testutil"
 	kafka2 "github.com/doublecloud/transfer/pkg/providers/kafka"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
+	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
 	"github.com/doublecloud/transfer/tests/helpers"
-	"github.com/golang/mock/gomock"
-	"github.com/segmentio/kafka-go"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 )
 
 var (
@@ -179,15 +180,15 @@ var canonizedDebeziumDeleteV = `{"schema":{"type":"struct","fields":[{"type":"st
 var index = 0
 var tt *testing.T
 
-func callbackFunc(_ interface{}, msgs ...interface{}) error {
+func callbackFunc(_, _, _ interface{}, msgs ...interface{}) error {
 	//----------------------------------------------------------------------
 	// filter only 'basic_types' table
 
-	finalMsgs := make([]kafka.Message, 0)
+	finalMsgs := make([]serializer.SerializedMessage, 0)
 	for _, el := range msgs {
 		switch v := el.(type) {
-		case kafka.Message:
-			finalMsgs = append(finalMsgs, v)
+		case []serializer.SerializedMessage:
+			finalMsgs = append(finalMsgs, v...)
 		}
 	}
 	if len(finalMsgs) == 0 {
@@ -313,19 +314,18 @@ func TestReplication(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	producer := kafka2.NewMockwriter(ctrl)
-	producer.EXPECT().WriteMessages(gomock.Any(), gomock.Any()).AnyTimes().Do(callbackFunc)
-	producer.EXPECT().Close().AnyTimes()
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).AnyTimes().Do(callbackFunc)
+	currWriter.EXPECT().Close().AnyTimes()
 
-	client := kafka2.NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(producer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "fullfillment.public.basic_types", gomock.Any(), gomock.Any(), gomock.Any())
+	factory := writer.NewMockAbstractWriterFactory(ctrl)
+	factory.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	sink, err := kafka2.NewSinkImpl(
 		dst,
 		solomon.NewRegistry(nil).WithTags(map[string]string{"ts": time.Now().String()}),
 		logger.Log,
-		client,
+		factory,
 		false,
 	)
 	require.NoError(t, err)

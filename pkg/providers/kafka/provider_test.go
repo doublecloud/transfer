@@ -12,6 +12,7 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/blank"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,15 +24,17 @@ func TestTopicResolver(t *testing.T) {
 	require.NoError(t, err)
 	kafkaSource.ParserConfig = parserConfigMap
 
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic1", logger.Log))
+	kafkaClient, err := client.NewClient(kafkaSource.Connection.Brokers, nil, nil)
+	require.NoError(t, err)
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic1", nil))
 	loadData(t, kafkaSource, "topic1")
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic2", logger.Log))
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic3", logger.Log))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic2", nil))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic3", nil))
 	loadData(t, kafkaSource, "topic3")
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic_ZSTD", logger.Log))
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic_LZ4", logger.Log))
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic_SNAPPY", logger.Log))
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, "topic_GZIP", logger.Log))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic_ZSTD", nil))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic_LZ4", nil))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic_SNAPPY", nil))
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, "topic_GZIP", nil))
 	loadData(t, kafkaSource, "topic_GZIP")
 
 	time.Sleep(10 * time.Second) // just in case, to ensure our logger actually flush stuff

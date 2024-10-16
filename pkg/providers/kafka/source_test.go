@@ -12,6 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	jsonparser "github.com/doublecloud/transfer/pkg/parsers/registry/json"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
 	"github.com/stretchr/testify/require"
 	"github.com/twmb/franz-go/pkg/kgo"
 )
@@ -21,7 +22,7 @@ type mockKafkaReader struct {
 	maxCommittedOffset int64
 }
 
-func (m *mockKafkaReader) CommitMessages(ctx context.Context, msgs ...kgo.Record) error {
+func (m *mockKafkaReader) CommitMessages(_ context.Context, msgs ...kgo.Record) error {
 	maxOffset := int64(0)
 	for _, el := range msgs {
 		if el.Offset > maxOffset {
@@ -32,7 +33,7 @@ func (m *mockKafkaReader) CommitMessages(ctx context.Context, msgs ...kgo.Record
 	return nil
 }
 
-func (m *mockKafkaReader) FetchMessage(ctx context.Context) (kgo.Record, error) {
+func (m *mockKafkaReader) FetchMessage(_ context.Context) (kgo.Record, error) {
 	msg := kgo.Record{
 		Topic:     "",
 		Offset:    m.offset,
@@ -111,7 +112,9 @@ func TestConsumer(t *testing.T) {
 	kafkaSource.Topic = "topic1"
 	kafkaSource.ParserConfig = parserConfigMap
 
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, kafkaSource.Topic, logger.Log))
+	kafkaClient, err := client.NewClient(kafkaSource.Connection.Brokers, nil, nil)
+	require.NoError(t, err)
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, kafkaSource.Topic, nil))
 
 	lgr, closer, err := logger.NewKafkaLogger(&logger.KafkaConfig{
 		Broker:   kafkaSource.Connection.Brokers[0],
@@ -143,7 +146,9 @@ func TestMissedTopic(t *testing.T) {
 	require.Error(t, err)
 	require.True(t, abstract.IsFatal(err))
 	kafkaSource.Topic = "topic1"
-	require.NoError(t, CreateSourceTopicIfNotExist(kafkaSource, kafkaSource.Topic, logger.Log))
+	kafkaClient, err := client.NewClient(kafkaSource.Connection.Brokers, nil, nil)
+	require.NoError(t, err)
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, kafkaSource.Topic, nil))
 	_, err = NewSource("asd", kafkaSource, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.NoError(t, err)
 }

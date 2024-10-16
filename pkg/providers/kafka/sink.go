@@ -2,14 +2,13 @@ package kafka
 
 import (
 	"context"
-	"fmt"
-	"sync"
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
 	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -19,19 +18,15 @@ import (
 )
 
 const (
-	requestTimeout = 5 * time.Minute
-	pushTimeout    = 5 * time.Minute
+	pushTimeout = 5 * time.Minute
 )
 
 type sink struct {
-	config       *KafkaDestination
-	logger       log.Logger
-	metrics      *stats.SinkerStats
-	serializer   serializer.Serializer
-	knownTopics  map[string]bool
-	writer       writer
-	writersMutex sync.Mutex
-	client       client
+	config     *KafkaDestination
+	logger     log.Logger
+	metrics    *stats.SinkerStats
+	serializer serializer.Serializer
+	writer     writer.AbstractWriter
 }
 
 func serializeKafkaMirror(input []abstract.ChangeItem) map[abstract.TablePartID][]serializer.SerializedMessage {
@@ -92,23 +87,13 @@ func (s *sink) Push(input []abstract.ChangeItem) error {
 		currMessages := tableToMessages[pushTasks[i]]
 		timings.Started(currTablePartID)
 		topicName := queues.GetTopicName(s.config.Topic, s.config.TopicPrefix, currTablePartID)
-		err := s.ensureTopicExists(topicName)
-		if err != nil {
-			return xerrors.Errorf("unable to ensureTopicExists, currTableID: %s, err: %w", currTablePartID, err)
-		}
-		timings.FoundWriter(currTablePartID)
 
-		finalMsgs := make([]kafka.Message, 0, len(currMessages)) // bcs 'debezium' can generate 1..3 messages from one changeItem
-		for _, msg := range currMessages {
-			finalMsgs = append(finalMsgs, kafka.Message{Key: msg.Key, Value: msg.Value, Topic: topicName})
-		}
-
-		if err := s.writer.WriteMessages(ctx, finalMsgs...); err != nil {
+		if err := s.writer.WriteMessages(ctx, s.logger, topicName, currMessages); err != nil {
 			switch t := err.(type) {
 			case kafka.WriteErrors:
 				return xerrors.Errorf("returned kafka.WriteErrors, err: %w", util.NewErrs(t...))
 			case kafka.MessageTooLargeError:
-				return abstract.NewFatalError(xerrors.Errorf("one message exceeded max message size (client-side limit, can be changed by private option BatchBytes), len(key):%d, len(val):%d, err:%w", len(t.Message.Key), len(t.Message.Value), err))
+				return xerrors.Errorf("message exceeded max message size (current BatchBytes: %d, len(key):%d, len(val):%d", s.config.BatchBytes, len(t.Message.Key), len(t.Message.Value))
 			default:
 				return xerrors.Errorf("unable to write messages, len(input): %d, tableID: %s, messages: %d : %w", len(input), currTablePartID.Fqtn(), len(currMessages), err)
 			}
@@ -125,44 +110,14 @@ func (s *sink) Push(input []abstract.ChangeItem) error {
 	return nil
 }
 
-func (s *sink) ensureTopicExists(topic string) error {
-	s.writersMutex.Lock()
-	defer s.writersMutex.Unlock()
-	writerID := fmt.Sprintf("topic:%v", topic)
-	if s.knownTopics[writerID] {
-		return nil
-	}
-	mechanism, err := s.config.Auth.GetAuthMechanism()
-	if err != nil {
-		return xerrors.Errorf("unable to define auth mechanism: %w", err)
-	}
-	tlsCfg, err := s.config.Connection.TLSConfig()
-	if err != nil {
-		return xerrors.Errorf("unable to construct tls config: %w", err)
-	}
-	brokers, err := ResolveBrokers(s.config.Connection)
-	if err != nil {
-		return xerrors.Errorf("unable to resolve brokers: %w", err)
-	}
-	if err := s.client.CreateTopicIfNotExist(s.config.Connection.Brokers, topic, mechanism, tlsCfg, s.config.TopicConfigEntries); err != nil {
-		return xerrors.Errorf("unable to create topic, broker: %s, topic: %s, err: %w", brokers, topic, err)
-	}
-	s.knownTopics[writerID] = true
-	return nil
-}
-
 func (s *sink) Close() error {
-	s.writersMutex.Lock()
-	defer s.writersMutex.Unlock()
-
 	if err := s.writer.Close(); err != nil {
 		return xerrors.Errorf("failed to close part: %w", err)
 	}
-
 	return nil
 }
 
-func NewSinkImpl(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logger, client client, isSnapshot bool) (abstract.Sinker, error) {
+func NewSinkImpl(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logger, writerFactory writer.AbstractWriterFactory, isSnapshot bool) (abstract.Sinker, error) {
 	brokers, err := ResolveBrokers(cfg.Connection)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to resolve brokers: %w", err)
@@ -196,23 +151,20 @@ func NewSinkImpl(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logge
 	}
 
 	result := sink{
-		config:       cfg,
-		logger:       lgr,
-		metrics:      stats.NewSinkerStats(registry),
-		serializer:   currSerializer,
-		knownTopics:  map[string]bool{},
-		writer:       client.BuildWriter(cfg.Connection.Brokers, cfg.Compression.AsKafka(), mechanism, tlsCfg),
-		writersMutex: sync.Mutex{},
-		client:       client,
+		config:     cfg,
+		logger:     lgr,
+		metrics:    stats.NewSinkerStats(registry),
+		serializer: currSerializer,
+		writer:     writerFactory.BuildWriter(cfg.Connection.Brokers, cfg.Compression.AsKafka(), mechanism, tlsCfg, topicConfigEntryToSlices(cfg.TopicConfigEntries), cfg.BatchBytes),
 	}
 
 	return &result, nil
 }
 
 func NewReplicationSink(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logger) (abstract.Sinker, error) {
-	return NewSinkImpl(cfg, registry, lgr, &clientImpl{cfg: cfg, lgr: lgr}, false)
+	return NewSinkImpl(cfg, registry, lgr, writer.NewWriterFactory(lgr), false)
 }
 
 func NewSnapshotSink(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logger) (abstract.Sinker, error) {
-	return NewSinkImpl(cfg, registry, lgr, &clientImpl{cfg: cfg, lgr: lgr}, true)
+	return NewSinkImpl(cfg, registry, lgr, writer.NewWriterFactory(lgr), true)
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/dbaas"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
 )
 
 func ResolveBrokers(s *KafkaConnectionOptions) ([]string, error) {
@@ -35,7 +36,11 @@ func ResolveOnPremBrokers(connectionOpt *KafkaConnectionOptions, kafkaAuth *Kafk
 	if err != nil {
 		return nil, xerrors.Errorf("Can't get auth mechanism: %w", err)
 	}
-	connection, err := createBrokerConn(connectionOpt.Brokers[0], auth, tls)
+	kafkaClient, err := client.NewClient(connectionOpt.Brokers, auth, tls)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to create kafka client, err: %w", err)
+	}
+	connection, err := kafkaClient.CreateBrokerConn()
 	if err != nil {
 		return nil, xerrors.Errorf("Can't create kafka connection: %w", err)
 	}

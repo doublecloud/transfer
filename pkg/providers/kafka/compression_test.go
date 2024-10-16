@@ -21,9 +21,9 @@ func TestReadWriteWithCompression(t *testing.T) {
 		kafkaSource.Topic = "topic_" + string(compression)
 		dst.Topic = "topic_" + string(compression)
 		dst.Compression = compression
-		snkr, err := NewReplicationSink(dst, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
+		currSink, err := NewReplicationSink(dst, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
 		require.NoError(t, err)
-		require.NoError(t, snkr.Push([]abstract.ChangeItem{*sinkTestMirrorChangeItem}))
+		require.NoError(t, currSink.Push([]abstract.ChangeItem{*sinkTestMirrorChangeItem}))
 		time.Sleep(time.Second) // just in case
 
 		src, err := NewSource("asd", kafkaSource, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))

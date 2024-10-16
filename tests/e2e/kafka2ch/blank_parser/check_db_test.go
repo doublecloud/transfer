@@ -14,6 +14,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/parsers/registry/json"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/kafka"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/jsonparser"
@@ -26,7 +27,9 @@ func TestLogs(t *testing.T) {
 	src, err := kafka.SourceRecipe()
 	require.NoError(t, err)
 	src.Topic = "logs"
-	require.NoError(t, kafka.CreateSourceTopicIfNotExist(src, src.Topic, logger.Log))
+	kafkaClient, err := client.NewClient(src.Connection.Brokers, nil, nil)
+	require.NoError(t, err)
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, src.Topic, nil))
 	dst, err := chrecipe.Target(chrecipe.WithInitFile("ch_init.sql"), chrecipe.WithDatabase("mtmobproxy"))
 	require.NoError(t, err)
 

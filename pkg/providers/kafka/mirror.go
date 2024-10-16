@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"go.ytsaurus.tech/yt/go/schema"
+	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
 
 const (
@@ -18,12 +18,12 @@ const (
 
 var (
 	kafkaRawDataSchema = abstract.NewTableSchema([]abstract.ColSchema{
-		{ColumnName: kafkaRawMessageTopic, DataType: string(schema.TypeString), PrimaryKey: true, Required: true},
-		{ColumnName: kafkaRawMessagePartition, DataType: string(schema.TypeUint32), PrimaryKey: true, Required: true},
-		{ColumnName: kafkaRawMessageOffset, DataType: string(schema.TypeUint64), PrimaryKey: true, Required: true},
-		{ColumnName: kafkaRawMessageWriteTime, DataType: string(schema.TypeDatetime), PrimaryKey: true, Required: true},
-		{ColumnName: kafkaRawMessageKey, DataType: string(schema.TypeBytes)},
-		{ColumnName: kafkaRawMessageData, DataType: string(schema.TypeBytes)},
+		{ColumnName: kafkaRawMessageTopic, DataType: ytschema.TypeString.String(), PrimaryKey: true, Required: true},
+		{ColumnName: kafkaRawMessagePartition, DataType: ytschema.TypeUint32.String(), PrimaryKey: true, Required: true},
+		{ColumnName: kafkaRawMessageOffset, DataType: ytschema.TypeUint64.String(), PrimaryKey: true, Required: true},
+		{ColumnName: kafkaRawMessageWriteTime, DataType: ytschema.TypeDatetime.String(), PrimaryKey: true, Required: true},
+		{ColumnName: kafkaRawMessageKey, DataType: ytschema.TypeBytes.String()},
+		{ColumnName: kafkaRawMessageData, DataType: ytschema.TypeBytes.String()},
 	})
 	kafkaRawDataColumns = []string{kafkaRawMessageTopic, kafkaRawMessagePartition, kafkaRawMessageOffset, kafkaRawMessageWriteTime, kafkaRawMessageKey, kafkaRawMessageData}
 	kafkaRawDataColsIDX = abstract.ColIDX(kafkaRawDataSchema.Columns())

@@ -11,9 +11,10 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
-	gomock "github.com/golang/mock/gomock"
-	"github.com/segmentio/kafka-go"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
+	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
 	"github.com/stretchr/testify/require"
+	"go.uber.org/mock/gomock"
 )
 
 var sinkTestTypicalChangeItem *abstract.ChangeItem
@@ -51,11 +52,10 @@ func TestNative(t *testing.T) {
 	value, err := json.Marshal(sinkTestTypicalChangeItem)
 	require.NoError(t, err)
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: []byte("public_basic_types15"), Value: value, Topic: "foo_bar"}}).Return(nil)
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "foo_bar", gomock.Any(), gomock.Any(), gomock.Any())
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar", []serializer.SerializedMessage{{Key: []byte("public_basic_types15"), Value: value}}).Return(nil)
+	client := writer.NewMockAbstractWriterFactory(ctrl)
+	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,
@@ -95,17 +95,16 @@ func TestJSON(t *testing.T) {
 	k := `public_basic_types15`
 	v := `{"id":1,"val":-8388605}`
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: []byte(k), Value: []byte(v), Topic: "foo_bar"}}).Return(nil)
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "foo_bar", gomock.Any(), gomock.Any(), gomock.Any())
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar", []serializer.SerializedMessage{{Key: []byte(k), Value: []byte(v)}}).Return(nil)
+	factory := writer.NewMockAbstractWriterFactory(ctrl)
+	factory.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,
 		solomon.NewRegistry(nil).WithTags(map[string]string{"ts": time.Now().String()}),
 		logger.Log,
-		client,
+		factory,
 		false,
 	)
 	require.NoError(t, err)
@@ -143,11 +142,10 @@ func TestDebezium(t *testing.T) {
 	k := `{"payload":{"id":1},"schema":{"fields":[{"field":"id","optional":false,"type":"int32"}],"name":"foo_bar.public.basic_types15.Key","optional":false,"type":"struct"}}`
 	v := `{"payload":{"after":{"id":1,"val":-8388605},"before":null,"op":"c","source":{"connector":"postgresql","db":"","lsn":25051056,"name":"foo_bar","schema":"public","snapshot":"false","table":"basic_types15","ts_ms":1643660670333,"txId":601,"version":"1.1.2.Final","xmin":null},"transaction":null,"ts_ms":1643660670333},"schema":{"fields":[{"field":"before","fields":[{"field":"id","optional":false,"type":"int32"},{"field":"val","optional":true,"type":"int32"}],"name":"foo_bar.public.basic_types15.Value","optional":true,"type":"struct"},{"field":"after","fields":[{"field":"id","optional":false,"type":"int32"},{"field":"val","optional":true,"type":"int32"}],"name":"foo_bar.public.basic_types15.Value","optional":true,"type":"struct"},{"field":"source","fields":[{"field":"version","optional":false,"type":"string"},{"field":"connector","optional":false,"type":"string"},{"field":"name","optional":false,"type":"string"},{"field":"ts_ms","optional":false,"type":"int64"},{"default":"false","field":"snapshot","name":"io.debezium.data.Enum","optional":true,"parameters":{"allowed":"true,last,false"},"type":"string","version":1},{"field":"db","optional":false,"type":"string"},{"field":"table","optional":false,"type":"string"},{"field":"lsn","optional":true,"type":"int64"},{"field":"schema","optional":false,"type":"string"},{"field":"txId","optional":true,"type":"int64"},{"field":"xmin","optional":true,"type":"int64"}],"name":"io.debezium.connector.postgresql.Source","optional":false,"type":"struct"},{"field":"op","optional":false,"type":"string"},{"field":"ts_ms","optional":true,"type":"int64"},{"field":"transaction","fields":[{"field":"id","optional":false,"type":"string"},{"field":"total_order","optional":false,"type":"int64"},{"field":"data_collection_order","optional":false,"type":"int64"}],"optional":true,"type":"struct"}],"name":"foo_bar.public.basic_types15.Envelope","optional":false,"type":"struct"}}`
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: []byte(k), Value: []byte(v), Topic: "foo_bar.public.basic_types15"}})
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "foo_bar.public.basic_types15", gomock.Any(), gomock.Any(), gomock.Any())
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar.public.basic_types15", []serializer.SerializedMessage{{Key: []byte(k), Value: []byte(v)}})
+	client := writer.NewMockAbstractWriterFactory(ctrl)
+	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,
@@ -186,11 +184,10 @@ func TestMirror(t *testing.T) {
 
 	v := `blablabla`
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Value: []byte(v), Topic: "foo_bar"}})
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "foo_bar", gomock.Any(), gomock.Any(), gomock.Any())
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar", []serializer.SerializedMessage{{Value: []byte(v)}})
+	client := writer.NewMockAbstractWriterFactory(ctrl)
+	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,
@@ -230,11 +227,10 @@ func TestMirrorKafka(t *testing.T) {
 	k := []byte(`my_key`)
 	v := []byte(`blablabla`)
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: k, Value: v, Topic: "foo_bar"}})
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, "foo_bar", gomock.Any(), gomock.Any(), gomock.Any())
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar", []serializer.SerializedMessage{{Key: k, Value: v}})
+	client := writer.NewMockAbstractWriterFactory(ctrl)
+	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,
@@ -281,9 +277,9 @@ func TestAddDTSystemTables(t *testing.T) {
 		dst1 := dst
 		dst1.AddSystemTables = false
 
-		writer := NewMockwriter(ctrl)
-		client := NewMockclient(ctrl)
-		client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
+		currWriter := writer.NewMockAbstractWriter(ctrl)
+		client := writer.NewMockAbstractWriterFactory(ctrl)
+		client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 		testSink, err := NewSinkImpl(
 			dst1,
@@ -307,11 +303,10 @@ func TestAddDTSystemTables(t *testing.T) {
 
 		topicName := fmt.Sprintf("foo_bar.public.%s", abstract.TableConsumerKeeper)
 
-		writer := NewMockwriter(ctrl)
-		writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: []byte(k), Value: []byte(v), Topic: topicName}})
-		client := NewMockclient(ctrl)
-		client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-		client.EXPECT().CreateTopicIfNotExist([]string{"my_broker_0"}, topicName, gomock.Any(), gomock.Any(), gomock.Any())
+		currWriter := writer.NewMockAbstractWriter(ctrl)
+		currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), topicName, []serializer.SerializedMessage{{Key: []byte(k), Value: []byte(v)}})
+		client := writer.NewMockAbstractWriterFactory(ctrl)
+		client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 		testSink, err := NewSinkImpl(
 			dst2,
@@ -362,26 +357,10 @@ func TestPassConfigEntries(t *testing.T) {
 	k := `public_basic_types15`
 	v := `{"id":1,"val":-8388605}`
 
-	writer := NewMockwriter(ctrl)
-	writer.EXPECT().WriteMessages(gomock.Any(), []kafka.Message{{Key: []byte(k), Value: []byte(v), Topic: "foo_bar"}}).Return(nil)
-	client := NewMockclient(ctrl)
-	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any()).Return(writer)
-	client.EXPECT().CreateTopicIfNotExist(
-		[]string{"my_broker_0"},
-		"foo_bar",
-		gomock.Any(),
-		gomock.Any(),
-		[]TopicConfigEntry{
-			{
-				ConfigName:  "cleanup.policy",
-				ConfigValue: "compact",
-			},
-			{
-				ConfigName:  "segment.bytes",
-				ConfigValue: "200",
-			},
-		},
-	)
+	currWriter := writer.NewMockAbstractWriter(ctrl)
+	currWriter.EXPECT().WriteMessages(gomock.Any(), gomock.Any(), "foo_bar", []serializer.SerializedMessage{{Key: []byte(k), Value: []byte(v)}}).Return(nil)
+	client := writer.NewMockAbstractWriterFactory(ctrl)
+	client.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
 	testSink, err := NewSinkImpl(
 		dst,

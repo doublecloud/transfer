@@ -35,7 +35,7 @@ type reader interface {
 	Close() error
 }
 
-type publisher struct {
+type Source struct {
 	config        *KafkaSource
 	metrics       *stats.SourceStats
 	logger        log.Logger
@@ -66,7 +66,7 @@ type publisher struct {
 // actually this is throttler by consumed memory
 // backoff is needed here to not write logs too frequently
 
-func (p *publisher) waitLimits() {
+func (p *Source) waitLimits() {
 	backoffTimer := backoff.NewExponentialBackOff()
 	backoffTimer.Reset()
 	backoffTimer.MaxElapsedTime = 0
@@ -92,7 +92,7 @@ func (p *publisher) waitLimits() {
 	}
 }
 
-func (p *publisher) Run(sink abstract.AsyncSink) error {
+func (p *Source) Run(sink abstract.AsyncSink) error {
 	parseWrapper := func(buffer []kgo.Record) []abstract.ChangeItem {
 		if len(buffer) == 0 {
 			return []abstract.ChangeItem{abstract.MakeSynchronizeEvent()}
@@ -105,7 +105,7 @@ func (p *publisher) Run(sink abstract.AsyncSink) error {
 	return p.run(parseQ)
 }
 
-func (p *publisher) run(parseQ *parsequeue.WaitableParseQueue[[]kgo.Record]) error {
+func (p *Source) run(parseQ *parsequeue.WaitableParseQueue[[]kgo.Record]) error {
 	defer func() {
 		p.metrics.Master.Set(0)
 		p.Stop()
@@ -185,7 +185,7 @@ func (p *publisher) run(parseQ *parsequeue.WaitableParseQueue[[]kgo.Record]) err
 	}
 }
 
-func (p *publisher) Stop() {
+func (p *Source) Stop() {
 	p.once.Do(func() {
 		p.cancel()
 		if err := p.reader.Close(); err != nil {
@@ -194,25 +194,25 @@ func (p *publisher) Stop() {
 	})
 }
 
-func (p *publisher) inLimits() bool {
+func (p *Source) inLimits() bool {
 	p.inflightMutex.Lock()
 	defer p.inflightMutex.Unlock()
 	return p.config.BufferSize == 0 || int(p.config.BufferSize) > p.inflightBytes
 }
 
-func (p *publisher) addInflight(size int) {
+func (p *Source) addInflight(size int) {
 	p.inflightMutex.Lock()
 	defer p.inflightMutex.Unlock()
 	p.inflightBytes += size
 }
 
-func (p *publisher) reduceInflight(size int) {
+func (p *Source) reduceInflight(size int) {
 	p.inflightMutex.Lock()
 	defer p.inflightMutex.Unlock()
 	p.inflightBytes = p.inflightBytes - size
 }
 
-func (p *publisher) Fetch() ([]abstract.ChangeItem, error) {
+func (p *Source) Fetch() ([]abstract.ChangeItem, error) {
 	waitTimeout := 10 * time.Second
 	ctx, cancel := context.WithTimeout(context.Background(), waitTimeout)
 	defer cancel()
@@ -259,7 +259,7 @@ func (p *publisher) Fetch() ([]abstract.ChangeItem, error) {
 	}
 }
 
-func (p *publisher) ack(data []kgo.Record, pushSt time.Time, err error) {
+func (p *Source) ack(data []kgo.Record, pushSt time.Time, err error) {
 	totalSize := 0
 	for _, msg := range data {
 		totalSize += len(msg.Value)
@@ -286,7 +286,7 @@ func (p *publisher) ack(data []kgo.Record, pushSt time.Time, err error) {
 	p.metrics.PushTime.RecordDuration(time.Since(pushSt))
 }
 
-func (p *publisher) parse(buffer []kgo.Record) []abstract.ChangeItem {
+func (p *Source) parse(buffer []kgo.Record) []abstract.ChangeItem {
 	var data []abstract.ChangeItem
 	totalSize := 0
 	for _, msg := range buffer {
@@ -329,7 +329,7 @@ func (p *publisher) parse(buffer []kgo.Record) []abstract.ChangeItem {
 	return data
 }
 
-func (p *publisher) makeRawChangeItem(msg kgo.Record) abstract.ChangeItem {
+func (p *Source) makeRawChangeItem(msg kgo.Record) abstract.ChangeItem {
 	if p.config.IsHomo {
 		return MakeKafkaRawMessage(
 			msg.Topic,
@@ -352,7 +352,7 @@ func (p *publisher) makeRawChangeItem(msg kgo.Record) abstract.ChangeItem {
 	)
 }
 
-func (p *publisher) changeItemAsMessage(ci abstract.ChangeItem) (parsers.Message, abstract.Partition) {
+func (p *Source) changeItemAsMessage(ci abstract.ChangeItem) (parsers.Message, abstract.Partition) {
 	partition := uint32(ci.ColumnValues[1].(int))
 	seqNo := ci.ColumnValues[2].(uint64)
 	wTime := ci.ColumnValues[3].(time.Time)
@@ -380,7 +380,7 @@ func (p *publisher) changeItemAsMessage(ci abstract.ChangeItem) (parsers.Message
 		}
 }
 
-func (p *publisher) sendSynchronizeEventIfNeeded(parseQ *parsequeue.WaitableParseQueue[[]kgo.Record]) error {
+func (p *Source) sendSynchronizeEventIfNeeded(parseQ *parsequeue.WaitableParseQueue[[]kgo.Record]) error {
 	if p.config.SynchronizeIsNeeded {
 		p.logger.Info("Sending synchronize event")
 		if err := parseQ.Add([]kgo.Record{}); err != nil {
@@ -450,10 +450,10 @@ func ensureTopicExists(cl *kgo.Client, topics []string) error {
 	return nil
 }
 
-func newSource(cfg *KafkaSource, logger log.Logger, registry metrics.Registry) (*publisher, error) {
+func newSource(cfg *KafkaSource, logger log.Logger, registry metrics.Registry) (*Source, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
-	source := &publisher{
+	source := &Source{
 		config:            cfg,
 		metrics:           stats.NewSourceStats(registry),
 		reader:            nil,
@@ -491,20 +491,20 @@ func newSource(cfg *KafkaSource, logger log.Logger, registry metrics.Registry) (
 	return source, nil
 }
 
-func newSourceWithReader(cfg *KafkaSource, logger log.Logger, registry metrics.Registry, r reader) (*publisher, error) {
+func newSourceWithReader(cfg *KafkaSource, logger log.Logger, registry metrics.Registry, r reader) (*Source, error) {
 	source, err := newSource(cfg, logger, registry)
 	if err != nil {
-		return nil, xerrors.Errorf("unable to create publisher: %w", err)
+		return nil, xerrors.Errorf("unable to create Source: %w", err)
 	}
 	source.reader = r
 
 	return source, nil
 }
 
-func newSourceWithCallbacks(cfg *KafkaSource, logger log.Logger, registry metrics.Registry, opts []kgo.Opt) (*publisher, error) {
+func newSourceWithCallbacks(cfg *KafkaSource, logger log.Logger, registry metrics.Registry, opts []kgo.Opt) (*Source, error) {
 	source, err := newSource(cfg, logger, registry)
 	if err != nil {
-		return nil, xerrors.Errorf("unable to create publisher: %w", err)
+		return nil, xerrors.Errorf("unable to create Source: %w", err)
 	}
 
 	var topics []string
@@ -543,15 +543,7 @@ func newSourceWithCallbacks(cfg *KafkaSource, logger log.Logger, registry metric
 	return source, nil
 }
 
-func CreateSourceTopicIfNotExist(src *KafkaSource, topic string, lgr log.Logger) error {
-	dst := new(KafkaDestination)
-	dst.Auth = src.Auth
-	dst.Connection = src.Connection
-	client := &clientImpl{cfg: dst, lgr: lgr}
-	return client.CreateTopicIfNotExist(src.Connection.Brokers, topic, nil, nil, nil)
-}
-
-func NewSource(transferID string, cfg *KafkaSource, logger log.Logger, registry metrics.Registry) (*publisher, error) {
+func NewSource(transferID string, cfg *KafkaSource, logger log.Logger, registry metrics.Registry) (*Source, error) {
 	tlsConfig, err := cfg.Connection.TLSConfig()
 	if err != nil {
 		return nil, xerrors.Errorf("unable to get TLS config: %w", err)

@@ -12,6 +12,7 @@ import (
 	server "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
+	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
 	"github.com/doublecloud/transfer/pkg/util/set"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -54,7 +55,7 @@ type Provider struct {
 	transfer *server.Transfer
 }
 
-func (p *Provider) Sniffer(ctx context.Context) (abstract.Fetchable, error) {
+func (p *Provider) Sniffer(_ context.Context) (abstract.Fetchable, error) {
 	src, ok := p.transfer.Src.(*KafkaSource)
 	if !ok {
 		return nil, xerrors.Errorf("unexpected source type: %T", p.transfer.Src)
@@ -86,9 +87,13 @@ func (p *Provider) Sniffer(ctx context.Context) (abstract.Fetchable, error) {
 		if err != nil {
 			return nil, xerrors.Errorf("unable to construct tls config: %w", err)
 		}
-		topics, err = listTopics(brokers[0], mechanism, tlsCfg)
+		kafkaClient, err := client.NewClient(brokers, mechanism, tlsCfg)
 		if err != nil {
-			return nil, xerrors.Errorf("unabel to list topics: %w", err)
+			return nil, xerrors.Errorf("unable to create kafka client, err: %w", err)
+		}
+		topics, err = kafkaClient.ListTopics()
+		if err != nil {
+			return nil, xerrors.Errorf("unable to list topics: %w", err)
 		}
 		topics = slices.Filter(topics, func(s string) bool {
 			return !systemTopics.Contains(s) // ignore system topics
@@ -143,7 +148,7 @@ func (p *Provider) SnapshotSink(middlewares.Config) (abstract.Sinker, error) {
 	return NewSnapshotSink(&cfgCopy, p.registry, p.logger)
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, table abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(_ context.Context, _ *server.TransferOperation, _ abstract.TableMap, _ providers.ActivateCallbacks) error {
 	if p.transfer.SrcType() == ProviderType && !p.transfer.IncrementOnly() {
 		return xerrors.New("Only allowed mode for Kafka source is replication")
 	}
