@@ -7,10 +7,15 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func NewParserAuditTrailsV1(inWrapped interface{}, sniff bool, logger log.Logger, registry *stats.SourceStats) (parsers.Parser, error) {
+func NewParserAuditTrailsV1(inWrapped any, sniff bool, logger log.Logger, registry *stats.SourceStats) (parsers.Parser, error) {
 	in := inWrapped.(*ParserConfigAuditTrailsV1Common)
-
-	return audittrailsv1engine.NewAuditTrailsV1ParserImpl(in.UseElasticSchema, sniff, logger, registry), nil
+	return audittrailsv1engine.NewAuditTrailsV1ParserImpl(
+		in.UseElasticSchema,
+		in.RemoveNestingInDetails,
+		sniff,
+		logger,
+		registry,
+	)
 }
 
 func init() {

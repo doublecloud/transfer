@@ -61,7 +61,8 @@ func TestNotElastic(t *testing.T) {
 		if line == "" {
 			continue
 		}
-		parser := NewAuditTrailsV1ParserImpl(false, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := NewAuditTrailsV1ParserImpl(false, false, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		require.NoError(t, err)
 		msg := makePersqueueReadMessage(0, line)
 		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
 		require.Len(t, result, 1)
@@ -79,7 +80,8 @@ func TestElastic(t *testing.T) {
 		if line == "" {
 			continue
 		}
-		parser := NewAuditTrailsV1ParserImpl(true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := NewAuditTrailsV1ParserImpl(true, false, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		require.NoError(t, err)
 		msg := makePersqueueReadMessage(0, line)
 		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
 		require.Len(t, result, 1)
@@ -89,4 +91,26 @@ func TestElastic(t *testing.T) {
 		abstract.Dump(result)
 	}
 	canon.SaveJSON(t, canonArr)
+}
+
+func TestRemoveNestingElastic(t *testing.T) {
+	var canonArr []interface{}
+	for _, line := range rawLines {
+		if line == "" {
+			continue
+		}
+		parser, err := NewAuditTrailsV1ParserImpl(true, true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		require.NoError(t, err)
+		msg := makePersqueueReadMessage(0, line)
+		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
+		require.Len(t, result, 1)
+		result[0] = normalizeChangeItem(result[0])
+		canonArr = append(canonArr, result[0])
+	}
+	canon.SaveJSON(t, canonArr)
+}
+
+func TestRemoveNestingNotElastic(t *testing.T) {
+	_, err := NewAuditTrailsV1ParserImpl(false, true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+	require.ErrorIs(t, err, removeNestingNotSupportedError)
 }

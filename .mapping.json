@@ -686,6 +686,7 @@
   "pkg/parsers/registry.go":"transfer_manager/go/pkg/parsers/registry.go",
   "pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestCanonWholeProgram0/extracted":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestCanonWholeProgram0/extracted",
   "pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestCanonWholeProgram1/extracted":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestCanonWholeProgram1/extracted",
+  "pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestRemoveNestingElastic/extracted":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/gotest.gotest.TestRemoveNestingElastic/extracted",
   "pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/result.json":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/gotest/canondata/result.json",
   "pkg/parsers/registry/audittrailsv1/engine/ingest_pipeline.go":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/ingest_pipeline.go",
   "pkg/parsers/registry/audittrailsv1/engine/ingest_pipeline.json":"transfer_manager/go/pkg/parsers/registry/audittrailsv1/engine/ingest_pipeline.json",

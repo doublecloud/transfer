@@ -1,7 +1,8 @@
 package audittrailsv1
 
 type ParserConfigAuditTrailsV1Common struct {
-	UseElasticSchema bool // UI can't set this parameter - it's only for internal use - from FillDependentFields
+	UseElasticSchema       bool // Hidden parameter only for internal usage.
+	RemoveNestingInDetails bool // Convert details to map[string]string instead of map[string]any.
 }
 
 func (c *ParserConfigAuditTrailsV1Common) IsNewParserConfig() {}
