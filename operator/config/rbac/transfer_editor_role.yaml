@@ -1,0 +1,27 @@
+# permissions for end users to edit transfers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: operator
+    app.kubernetes.io/managed-by: kustomize
+  name: transfer-editor-role
+rules:
+- apiGroups:
+  - trsfrcrd.dc
+  resources:
+  - transfers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - trsfrcrd.dc
+  resources:
+  - transfers/status
+  verbs:
+  - get
