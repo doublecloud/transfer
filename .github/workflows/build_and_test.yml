@@ -145,6 +145,10 @@ jobs:
           sudo ./clickhouse install
       - shell: bash
         run: |
+          pg_dump --help
+          pg_dump --version
+      - shell: bash
+        run: |
           echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
           export RECIPE_CLICKHOUSE_BIN=clickhouse
           export USE_TESTCONTAINERS=1
