@@ -60,6 +60,9 @@ jobs:
           sudo apt-get update
           # Remove all PostgreSQL-related packages
           sudo apt-get remove -y postgresql postgresql-client postgresql-*
+          # Disable 'needrestart' during installation to avoid PostgreSQL 14 check error
+          sudo systemctl stop needrestart.service || true
+          sudo systemctl disable needrestart.service || true
           sudo apt-get install -y wget ca-certificates
           # Add the PostgreSQL APT repository
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
@@ -161,6 +164,9 @@ jobs:
           sudo apt-get update
           # Remove all PostgreSQL-related packages
           sudo apt-get remove -y postgresql postgresql-client postgresql-*
+          # Disable 'needrestart' during installation to avoid PostgreSQL 14 check error
+          sudo systemctl stop needrestart.service || true
+          sudo systemctl disable needrestart.service || true
           sudo apt-get install -y wget ca-certificates
           # Add the PostgreSQL APT repository
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
