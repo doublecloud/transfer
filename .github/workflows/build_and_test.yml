@@ -58,11 +58,14 @@ jobs:
       - name: Install PostgreSQL 16.2
         run: |
           sudo apt-get update
-          sudo apt-get remove -y postgresql-client-14  # Remove pre-installed PostgreSQL 14 client
+          # Remove all PostgreSQL-related packages
+          sudo apt-get remove -y postgresql postgresql-client postgresql-*
           sudo apt-get install -y wget ca-certificates
+          # Add the PostgreSQL APT repository
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           sudo apt-get update
+          # Install PostgreSQL Client 16
           sudo apt-get install -y postgresql-client-16
           pg_dump --version
       - shell: bash
@@ -156,11 +159,14 @@ jobs:
       - name: Install PostgreSQL 16.2
         run: |
           sudo apt-get update
-          sudo apt-get remove -y postgresql-client-14  # Remove pre-installed PostgreSQL 14 client
+          # Remove all PostgreSQL-related packages
+          sudo apt-get remove -y postgresql postgresql-client postgresql-*
           sudo apt-get install -y wget ca-certificates
+          # Add the PostgreSQL APT repository
           wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           sudo apt-get update
+          # Install PostgreSQL Client 16
           sudo apt-get install -y postgresql-client-16
           pg_dump --version
       - shell: bash
