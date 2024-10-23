@@ -53,7 +53,24 @@ func (p *Provider) Storage() (abstract.Storage, error) {
 	if !ok {
 		return nil, xerrors.Errorf("unexpected target type: %T", p.transfer.Dst)
 	}
+	p.fillIncludedTables(src)
 	return NewStorage(src.ToStorageParams())
+}
+
+func (p *Provider) fillIncludedTables(src *YdbSource) {
+	include := p.transfer.DataObjects.GetIncludeObjects()
+	if len(include) == 0 {
+		return
+	}
+
+	result := make([]string, 0)
+	for _, table := range include {
+		tid := abstract.TableID{Namespace: "", Name: table}
+		if src.Include(tid) {
+			result = append(result, table)
+		}
+	}
+	src.Tables = result
 }
 
 func (p *Provider) Source() (abstract.Source, error) {
@@ -61,6 +78,8 @@ func (p *Provider) Source() (abstract.Source, error) {
 	if !ok {
 		return nil, xerrors.Errorf("Unknown source type: %T", p.transfer.Src)
 	}
+	p.fillIncludedTables(src)
+
 	err := CreateChangeFeedIfNotExists(src, p.transfer.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to upsert changeFeed, err: %w", err)
@@ -73,7 +92,12 @@ func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation,
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
 	}
+	p.fillIncludedTables(src)
+
 	if !p.transfer.SnapshotOnly() {
+		if len(src.Tables) == 0 {
+			return xerrors.Errorf("unable to replicate all tables in the database")
+		}
 		err := DropChangeFeed(src, p.transfer.ID)
 		if err != nil {
 			return xerrors.Errorf("unable to drop changeFeed, err: %w", err)
@@ -102,6 +126,8 @@ func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperatio
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
 	}
+	p.fillIncludedTables(src)
+
 	if !p.transfer.SnapshotOnly() {
 		err := DropChangeFeed(src, p.transfer.ID)
 		if err != nil {
@@ -116,6 +142,8 @@ func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) 
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
 	}
+	p.fillIncludedTables(src)
+
 	return DropChangeFeed(src, p.transfer.ID)
 }
 

@@ -212,10 +212,6 @@ func (s *Source) toChangeItems(batch *topicreader.Batch) ([]abstract.ChangeItem,
 }
 
 func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.Registry) (*Source, error) {
-	if len(cfg.Tables) == 0 {
-		return nil, xerrors.Errorf("unable to replicate all tables in the database")
-	}
-
 	clientCtx, cancelFunc := context.WithCancel(context.Background())
 	var rb util.Rollbacks
 	defer rb.Do()
