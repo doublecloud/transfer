@@ -46,15 +46,21 @@ CREATE VIEW __test_view AS SELECT id, name FROM __test WHERE id > 0;
 
 CREATE MATERIALIZED VIEW __test_materialized_view AS SELECT id, name FROM __test WHERE id < 0;
 
+CREATE INDEX __test_index ON __test  USING btree(name);
+
 CREATE SCHEMA santa;
 
 CREATE TYPE santa.my_enum AS ENUM ('RED', 'BLUE');
+CREATE CAST (varchar AS santa.my_enum) WITH INOUT AS IMPLICIT;
 
 CREATE TABLE santa."Ho-Ho-Ho"(i SERIAL PRIMARY KEY, t TEXT, f FLOAT, j santa.my_enum);
 
 INSERT INTO santa."Ho-Ho-Ho"(t, f, j) VALUES ('merry', 1.0, 'BLUE'), ('Christmas', 2.0, 'RED');
 
 CREATE SEQUENCE santa."Rudolf" START 2;
+
+CREATE INDEX hoho_index ON santa."Ho-Ho-Ho" USING btree(t);
+ALTER TABLE santa."Ho-Ho-Ho" ADD CONSTRAINT hoho_unq UNIQUE(f);
 
 
 CREATE TABLE wide_boys(column_1 int, column_2 int) PARTITION BY RANGE (column_2);
@@ -66,3 +72,81 @@ CREATE TABLE wide_boys_part_1 PARTITION OF wide_boys FOR VALUES FROM (0) TO (10)
 CREATE TABLE wide_boys_part_2 (column_1 int primary key, column_2 int);
 ALTER TABLE wide_boys ATTACH PARTITION wide_boys_part_2 FOR VALUES FROM (10) TO (25);
 
+-- foreign and primary key
+CREATE TABLE table_with_pk (
+    id   integer
+);
+ALTER TABLE table_with_pk ADD CONSTRAINT PK_table_with_pk PRIMARY KEY (id);
+
+CREATE TABLE table_with_fk (
+    id integer
+);
+ALTER TABLE table_with_fk ADD CONSTRAINT FK_table_with_fk FOREIGN KEY (id) REFERENCES table_with_pk(id);
+
+CREATE TYPE santa."my custom type" AS (
+    field1 VARCHAR,
+    field2 INT
+);
+
+CREATE OR REPLACE FUNCTION santa.process_my_custom_type(input santa."my custom type")
+    RETURNS VARCHAR AS $$
+BEGIN
+    RETURN 'Field 1: ' || input.field1 || ', Field 2: ' || input.field2;
+END;
+$$ LANGUAGE plpgsql;
+
+-- this function will be extracted if you transfer tables from public and santa schemas
+CREATE OR REPLACE FUNCTION text_to_my_enum(input varchar) RETURNS santa.my_enum AS $$
+BEGIN
+END;
+$$ LANGUAGE plpgsql;
+
+-- ugly names
+CREATE SCHEMA ugly;
+
+CREATE TABLE ugly.ugly_table(
+    ugly int
+);
+
+CREATE TYPE ugly."my "" enum ():.* " AS ENUM ('ugly', 'enum');
+
+CREATE OR REPLACE FUNCTION ugly."function for cast ugly enum"(input ugly."my "" enum ():.* ")
+    RETURNS VARCHAR AS $$
+BEGIN
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE CAST (ugly."my "" enum ():.* " AS varchar) WITH FUNCTION ugly."function for cast ugly enum" AS ASSIGNMENT;
+
+-- function cast from other schema
+CREATE SCHEMA only_type;
+CREATE TABLE only_type.table(a int);
+CREATE TYPE only_type.type AS ENUM ('a', 'b');
+
+CREATE FUNCTION ugly.function_with_arg_from_santa(only_type.type, int, boolean)
+    RETURNS TEXT AS $$
+BEGIN
+END;
+$$ LANGUAGE plpgsql;
+CREATE CAST (only_type.type AS TEXT) WITH FUNCTION ugly.function_with_arg_from_santa(only_type.type, int, boolean) AS ASSIGNMENT;
+
+-- index attach
+CREATE SCHEMA ia;
+CREATE TABLE ia.ia_table (
+    ia integer
+)
+    PARTITION BY RANGE (ia);
+
+CREATE TABLE ia.ia_part_1 (
+    ia integer
+);
+
+ALTER TABLE ONLY ia.ia_table ATTACH PARTITION ia.ia_part_1 FOR VALUES FROM (0) TO (10);
+
+CREATE INDEX ia_idx ON ONLY ia.ia_table USING btree (ia);
+
+CREATE INDEX ia_idx_part_1 ON ia.ia_part_1 USING btree (ia);
+
+CREATE INDEX ia_part_1_ia_idx ON ia.ia_part_1 USING btree (ia);
+
+ALTER INDEX ia.ia_idx ATTACH PARTITION ia.ia_part_1_ia_idx;

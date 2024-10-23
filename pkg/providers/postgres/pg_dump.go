@@ -288,6 +288,36 @@ func ApplyPgDumpPostSteps(pgdump []*pgDumpItem, transfer *server.Transfer, regis
 	return nil
 }
 
+// extract type name from query looked as CREATE TYPE <typename> ...
+func extractTypeName(createTypeSQL string) string {
+	cutSQL := strings.TrimPrefix(createTypeSQL, "\n--\n") // erase pg_dump redundant symbols
+	cutSQL = strings.TrimPrefix(cutSQL, "CREATE TYPE ")   // <typename> ...
+	parts := splitSQLBySeparator(cutSQL, " ")             // ["<typename>", ...]
+	return parts[0]
+}
+
+func determineExcludedTypes(allTypes []*pgDumpItem, allowedTypes []*pgDumpItem) *set.Set[string] {
+	excludedTypes := set.New[string]()
+	for _, t := range allTypes {
+		typeName := extractTypeName(t.Body)
+		if t.Schema == "public" {
+			cutName := strings.TrimPrefix(typeName, "public.")
+			excludedTypes.Add(cutName)
+		}
+		excludedTypes.Add(typeName)
+	}
+	for _, t := range allowedTypes {
+		typeName := extractTypeName(t.Body)
+		if t.Schema == "public" {
+			cutName := strings.TrimPrefix(typeName, "public.")
+			excludedTypes.Remove(cutName)
+		}
+		excludedTypes.Remove(typeName)
+	}
+
+	return excludedTypes
+}
+
 // loadPgDumpSchema actually loads the schema from PostgreSQL source using a storage constructed in-place
 func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Transfer) ([]*pgDumpItem, error) {
 	storage, err := NewStorage(src.ToStorageParams(transfer))
@@ -319,17 +349,42 @@ func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Trans
 	}
 	seqsIncluded, seqsExcluded := filterSequences(seqs, abstract.NewIntersectionIncludeable(src, transfer))
 
-	result, err := dumpUserDefinedTypes(ctx, connString, secretPass, src)
+	userDefinedItems, err := dumpDefinedItems(connString, secretPass, src)
+	if err != nil {
+		return nil, xerrors.Errorf("failed to dump defined items")
+	}
+
+	tablesSchemas := set.New[string]()
+	for _, t := range src.DBTables {
+		tableID, err := abstract.NewTableIDFromStringPg(t, false)
+		if err != nil {
+			return nil, xerrors.Errorf("failed to parse from string: %w", err)
+		}
+		tablesSchemas.Add(tableID.Namespace)
+	}
+
+	result := dumpCollations(userDefinedItems["COLLATION"], tablesSchemas)
+
+	types, err := dumpUserDefinedTypes(ctx, userDefinedItems["TYPE"], src, tablesSchemas)
 	if err != nil {
 		return nil, err
 	}
+	result = append(result, types...)
+
+	excludedTypes := determineExcludedTypes(userDefinedItems["TYPE"], types)
+
+	functions := dumpFunctions(userDefinedItems["FUNCTION"], src, excludedTypes, tablesSchemas)
+	result = append(result, functions...)
+
+	casts := dumpCasts(userDefinedItems["CAST"], src, excludedTypes, tablesSchemas)
+	result = append(result, casts...)
 
 	pgDumpArgs, err := pgDumpSchemaArgs(src, seqsIncluded, seqsExcluded)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to compose arguments for pg_dump: %w", err)
 	}
 	dump, err := execPgDump(src.PgDumpCommand, connString, secretPass, pgDumpArgs)
-	result = append(result, dump...)
+	result = append(result, filterDump(dump, src.DBTables)...)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to execute pg_dump to get schema: %w", err)
 	}
@@ -380,7 +435,7 @@ func filterSequences(sequences SequenceMap, filter abstract.Includeable) (includ
 	return included, excluded
 }
 
-func dumpUserDefinedTypes(ctx context.Context, connString string, connPass server.SecretString, src *PgSource) ([]*pgDumpItem, error) {
+func dumpUserDefinedTypes(ctx context.Context, dumpedTypes []*pgDumpItem, src *PgSource, tablesSchemas *set.Set[string]) ([]*pgDumpItem, error) {
 	if len(src.DBTables) == 0 || (!src.PreSteps.Type && !src.PostSteps.Type) {
 		return nil, nil
 	}
@@ -389,15 +444,62 @@ func dumpUserDefinedTypes(ctx context.Context, connString string, connPass serve
 		return nil, err
 	}
 
-	tablesSchemas := set.New[string]()
-	for _, t := range src.DBTables {
-		tableID, err := abstract.NewTableIDFromStringPg(t, false)
-		if err != nil {
-			return nil, xerrors.Errorf("failed to parse from string: %w", err)
+	result := make([]*pgDumpItem, 0)
+
+	for _, d := range dumpedTypes {
+		if tablesSchemas.Contains(d.Schema) {
+			result = append(result, d)
 		}
-		tablesSchemas.Add(tableID.Namespace)
 	}
 
+	return result, nil
+}
+
+func dumpCollations(collations []*pgDumpItem, tablesSchemas *set.Set[string]) []*pgDumpItem {
+	result := make([]*pgDumpItem, 0, len(collations))
+
+	for _, c := range collations {
+		if tablesSchemas.Contains(c.Schema) {
+			result = append(result, c)
+		}
+	}
+
+	return result
+}
+
+// parse and validate types in cast
+func isAllowedCast(createCastSQL string, excludedTypes *set.Set[string], tablesSchemas *set.Set[string]) bool {
+	cleanedStatement := strings.TrimPrefix(createCastSQL, "\n--\nCREATE CAST (")
+	parts := splitSQLBySeparator(cleanedStatement, " AS ")
+
+	if len(parts) < 2 {
+		return false
+	}
+
+	sourceType := parts[0]
+	if excludedTypes.Contains(sourceType) {
+		return false
+	}
+
+	partsByBracket := splitSQLBySeparator(parts[1], ") ")
+	targetType := partsByBracket[0]
+	if excludedTypes.Contains(targetType) {
+		return false
+	}
+	// check if create cast with function
+	partsByFunction := splitSQLBySeparator(partsByBracket[1], "FUNCTION ")
+	if len(partsByFunction) == 1 {
+		return true
+	}
+	schemaPart := splitSQLBySeparator(partsByFunction[1], ".")
+
+	return tablesSchemas.Contains(schemaPart[0])
+}
+
+func dumpDefinedItems(connString string, connPass server.SecretString, src *PgSource) (map[string][]*pgDumpItem, error) {
+	if src.DBTables == nil {
+		return make(map[string][]*pgDumpItem), nil
+	}
 	args := []string{
 		"--no-publications",
 		"--no-subscriptions",
@@ -408,19 +510,150 @@ func dumpUserDefinedTypes(ctx context.Context, connString string, connPass serve
 		"*.*",
 	}
 
-	result := make([]*pgDumpItem, 0)
 	dump, err := execPgDump(src.PgDumpCommand, connString, connPass, args)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to execute pg_dump to get user-defined types: %w", err)
+		return nil, xerrors.Errorf("failed to execute pg_dump to get user-defined entities: %w", err)
 	}
 
+	result := make(map[string][]*pgDumpItem, 0)
 	for _, d := range dump {
-		if tablesSchemas.Contains(d.Schema) && d.Typ == "TYPE" {
-			result = append(result, d)
-		}
+		result[d.Typ] = append(result[d.Typ], d)
 	}
 
 	return result, nil
+}
+
+// strings.Split without considering the separator inside the quotes
+func splitSQLBySeparator(SQL string, sep string) []string {
+	result := make([]string, 0)
+
+	parts := strings.Split(SQL, sep)
+
+	cur := ""
+	for _, i := range parts {
+		qouteCntBefore := strings.Count(cur, "\"")
+		if qouteCntBefore%2 != 0 {
+			cur += sep
+		}
+		cur += i
+		quoteCntAfter := strings.Count(cur, "\"")
+		if quoteCntAfter%2 == 0 {
+			result = append(result, cur)
+			cur = ""
+		}
+	}
+
+	return result
+}
+
+// parse args in ... FUNCTION <functionName>([argName1] arg1, [argName2] arg2, ..., [argName] arg) ... argName is optional
+func extractFunctionArgsTypes(functionBody string) []string {
+	nameWithoutCloseBracket := splitSQLBySeparator(functionBody, ")")
+	argsParts := splitSQLBySeparator(nameWithoutCloseBracket[0], "(")
+	argsWithNames := splitSQLBySeparator(argsParts[1], ", ")
+
+	result := make([]string, 0, len(argsWithNames))
+	for _, argWithName := range argsWithNames {
+		splitArg := splitSQLBySeparator(argWithName, " ")
+		if len(splitArg) == 1 {
+			result = append(result, splitArg[0])
+		} else {
+			result = append(result, splitArg[1])
+		}
+	}
+
+	// return arg1, arg_2, ..., arg
+	return result
+}
+
+// function is allowed if all types of args are allowed and
+func isAllowedFunction(function *pgDumpItem, excludedTypes *set.Set[string]) bool {
+	argsTypes := extractFunctionArgsTypes(function.Body)
+	for _, t := range argsTypes {
+		if excludedTypes.Contains(t) {
+			return false
+		}
+	}
+
+	parts := splitSQLBySeparator(function.Body, "RETURNS ")
+	partWithReturnedType := parts[1]
+
+	returnedType := splitSQLBySeparator(partWithReturnedType, "\n")[0]
+
+	return !excludedTypes.Contains(returnedType)
+}
+
+func dumpFunctions(functions []*pgDumpItem, src *PgSource, excludedTypes *set.Set[string], schemas *set.Set[string]) []*pgDumpItem {
+	if len(src.DBTables) == 0 || (!src.PreSteps.Function && !src.PostSteps.Function) {
+		return nil
+	}
+
+	result := make([]*pgDumpItem, 0)
+
+	for _, f := range functions {
+		if schemas.Contains(f.Schema) && isAllowedFunction(f, excludedTypes) {
+			result = append(result, f)
+		}
+	}
+
+	return result
+}
+
+func dumpCasts(definedCasts []*pgDumpItem, src *PgSource, excludedTypes *set.Set[string], tablesSchemas *set.Set[string]) []*pgDumpItem {
+	if len(src.DBTables) == 0 || (!src.PreSteps.Cast && !src.PostSteps.Cast) {
+		return nil
+	}
+	result := make([]*pgDumpItem, 0, len(definedCasts))
+
+	for _, c := range definedCasts {
+		if isAllowedCast(c.Body, excludedTypes, tablesSchemas) {
+			result = append(result, c)
+		}
+	}
+
+	return result
+}
+
+func filterDump(dump []*pgDumpItem, DBTables []string) []*pgDumpItem {
+	if len(DBTables) == 0 {
+		return dump
+	}
+	result := make([]*pgDumpItem, 0, len(dump))
+	createdIndexes := set.New[string]()
+
+	for _, i := range dump {
+		switch i.Typ {
+		case "TABLE_ATTACH":
+			catSQL := strings.TrimPrefix(i.Body, "\n--\nALTER TABLE ONLY ")
+			splitSQL := splitSQLBySeparator(catSQL, " ATTACH")
+			parentTable := splitSQL[0]
+
+			if !slices.Contains(DBTables, parentTable) {
+				continue
+			}
+		case "INDEX":
+			catSQL := strings.TrimPrefix(i.Body, "\n--\nCREATE INDEX ")
+			splitSQL := splitSQLBySeparator(catSQL, " ON ")
+			indexFullName := i.Schema + "." + splitSQL[0]
+
+			if createdIndexes.Contains(indexFullName) {
+				continue
+			}
+			createdIndexes.Add(indexFullName)
+		case "INDEX_ATTACH":
+			catSQL := strings.TrimPrefix(i.Body, "\n--\nALTER INDEX ")
+			splitSQL := splitSQLBySeparator(catSQL, " ATTACH")
+			indexFullName := splitSQL[0]
+
+			if !createdIndexes.Contains(indexFullName) {
+				continue
+			}
+		}
+
+		result = append(result, i)
+	}
+
+	return result
 }
 
 func execPgDump(pgDump []string, connString string, password server.SecretString, args []string) ([]*pgDumpItem, error) {

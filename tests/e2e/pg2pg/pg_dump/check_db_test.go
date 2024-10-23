@@ -1,6 +1,8 @@
 package pgdump
 
 import (
+	"context"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -13,9 +15,18 @@ import (
 )
 
 var (
-	TransferType = abstract.TransferTypeSnapshotOnly
-	Source       = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
-	Target       = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
+	TransferType   = abstract.TransferTypeSnapshotOnly
+	Source         = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
+	Target         = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
+	targetAsSource = postgres.PgSource{
+		ClusterID:     Target.ClusterID,
+		Hosts:         Target.Hosts,
+		User:          Target.User,
+		Password:      Target.Password,
+		Database:      Target.Database,
+		Port:          Target.Port,
+		PgDumpCommand: Source.PgDumpCommand,
+	}
 )
 
 func init() {
@@ -43,8 +54,9 @@ func Existence(t *testing.T) {
 }
 
 func Snapshot(t *testing.T) {
-	Source.PreSteps.Constraint = true
-	Source.PreSteps.Trigger = true
+	Source.PreSteps.Cast = true
+	targetAsSource.WithDefaults()
+
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotOnly)
 
 	// extract schema
@@ -53,18 +65,11 @@ func Snapshot(t *testing.T) {
 
 	// apply on target
 	require.NoError(t, postgres.ApplyPgDumpPreSteps(itemsSource, transfer, helpers.EmptyRegistry()))
+	require.NoError(t, postgres.ApplyPgDumpPostSteps(itemsSource, transfer, helpers.EmptyRegistry()))
 
 	// make target a source and extract its schema
-	targetAsSource := postgres.PgSource{
-		ClusterID:     Target.ClusterID,
-		Hosts:         Target.Hosts,
-		User:          Target.User,
-		Password:      Target.Password,
-		Database:      Target.Database,
-		Port:          Target.Port,
-		PgDumpCommand: Source.PgDumpCommand,
-	}
-	targetAsSource.WithDefaults()
+	targetAsSource.PreSteps = Source.PreSteps
+	targetAsSource.PostSteps = Source.PostSteps
 	backwardFakeTransfer := helpers.MakeTransfer(helpers.TransferID, &targetAsSource, &Target, abstract.TransferTypeSnapshotOnly)
 	itemsTarget, err := postgres.ExtractPgDumpSchema(backwardFakeTransfer)
 	require.NoError(t, err)
@@ -72,6 +77,7 @@ func Snapshot(t *testing.T) {
 	// compare schemas
 	require.Less(t, 0, len(itemsSource))
 	require.Equal(t, len(itemsSource), len(itemsTarget))
+	require.Equal(t, itemsSource, itemsTarget)
 	setvalsCount := 0
 	for i := 0; i < len(itemsSource); i++ {
 		require.Equal(t, itemsSource[i].Typ, itemsTarget[i].Typ)
@@ -83,35 +89,114 @@ func Snapshot(t *testing.T) {
 	require.Equal(t, 2, setvalsCount, "The number of setval() calls for SEQUENCEs must be equal to the number of sequences in dump")
 
 	// test extract dump with DBTables
-	// with custom types
-	Source.DBTables = []string{"santa.\"Ho-Ho-Ho\""}
-	transfer = helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotOnly)
-
-	itemsSource, err = postgres.ExtractPgDumpSchema(transfer)
-	require.NoError(t, err)
-
-	existEnumType := false
-	for _, i := range itemsSource {
-		if i.Typ == "TYPE" && i.Name == "my_enum" {
-			existEnumType = true
-			break
-		}
-	}
-	require.True(t, existEnumType)
+	// with custom types, also check cast, function, collation and index
+	itemTypToCnt := extractPgDumpTypToCnt(t, []string{"santa.\"Ho-Ho-Ho\""}, []string{"santa"})
+	require.Equal(t, 0, itemTypToCnt["POLICY"])
+	require.Equal(t, 1, itemTypToCnt["CAST"])
+	require.Equal(t, 2, itemTypToCnt["TYPE"])
+	require.Equal(t, 1, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 0, itemTypToCnt["COLLATION"])
+	require.Equal(t, 1, itemTypToCnt["INDEX"])
 
 	// without custom types
-	Source.DBTables = []string{"__test"}
-	transfer = helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotOnly)
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"public.__test"}, []string{"public"})
+	require.Equal(t, 0, itemTypToCnt["TYPE"])
+	require.Equal(t, 1, itemTypToCnt["POLICY"])
+	require.Equal(t, 1, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 1, itemTypToCnt["COLLATION"])
 
-	itemsSource, err = postgres.ExtractPgDumpSchema(transfer)
+	// transfer tables from public and santa schemas
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"public.__test", "santa.\"Ho-Ho-Ho\""}, []string{"public", "santa"})
+	require.Equal(t, 2, itemTypToCnt["TYPE"])
+	require.Equal(t, 3, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 1, itemTypToCnt["POLICY"])
+
+	// tableAttach
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"public.wide_boys", "public.wide_boys_part_1", "public.wide_boys_part_2"}, []string{"public"})
+	require.Equal(t, 2, itemTypToCnt["TABLE_ATTACH"])
+
+	// without table attach
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"public.wide_boys_part_1"}, []string{"public"})
+	require.Equal(t, 0, itemTypToCnt["TABLE_ATTACH"])
+
+	// PRIMARY KEY, FK_CONSTRAINT
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"public.table_with_pk", "public.table_with_fk"}, []string{"public"})
+	require.Equal(t, 1, itemTypToCnt["PRIMARY_KEY"])
+	require.Equal(t, 1, itemTypToCnt["FK_CONSTRAINT"])
+	require.Equal(t, 0, itemTypToCnt["POLICY"])
+
+	// quoting names
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"ugly.ugly_table"}, []string{"ugly"})
+	require.Equal(t, 1, itemTypToCnt["TYPE"])
+	require.Equal(t, 1, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 1, itemTypToCnt["CAST"])
+
+	// cast with function from other schema
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"ugly.ugly_table", "only_type.table"}, []string{"ugly", "only_type"})
+	require.Equal(t, 2, itemTypToCnt["TYPE"])
+	require.Equal(t, 2, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 2, itemTypToCnt["CAST"])
+
+	// cast and function shouldn't be dumped
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"only_type.table"}, []string{"only_type"})
+	require.Equal(t, 1, itemTypToCnt["TYPE"])
+	require.Equal(t, 0, itemTypToCnt["FUNCTION"])
+	require.Equal(t, 0, itemTypToCnt["CAST"])
+
+	// with index attach
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"ia.ia_table", "ia.ia_part_1"}, []string{"ia"})
+	require.Equal(t, 3, itemTypToCnt["INDEX"])
+	require.Equal(t, 1, itemTypToCnt["INDEX_ATTACH"])
+	require.Equal(t, 1, itemTypToCnt["TABLE_ATTACH"])
+
+	// without index attach
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"ia.ia_table"}, []string{"ia"})
+	require.Equal(t, 1, itemTypToCnt["INDEX"])
+	require.Equal(t, 0, itemTypToCnt["INDEX_ATTACH"])
+	require.Equal(t, 0, itemTypToCnt["TABLE_ATTACH"])
+
+	// without index attach
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"ia.ia_part_1"}, []string{"ia"})
+	require.Equal(t, 2, itemTypToCnt["INDEX"])
+	require.Equal(t, 0, itemTypToCnt["INDEX_ATTACH"])
+	require.Equal(t, 0, itemTypToCnt["TABLE_ATTACH"])
+}
+
+func extractPgDumpTypToCnt(t *testing.T, DBTables []string, schemas []string) map[string]int {
+	Source.DBTables = DBTables
+	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, abstract.TransferTypeSnapshotOnly)
+
+	// clear target
+	storage, err := postgres.NewStorage(targetAsSource.ToStorageParams(transfer))
 	require.NoError(t, err)
 
-	existEnumType = false
-	for _, i := range itemsSource {
-		if i.Typ == "TYPE" {
-			existEnumType = true
-			break
-		}
+	for _, schema := range schemas {
+		_, err := storage.Conn.Exec(context.Background(), fmt.Sprintf("DROP SCHEMA IF EXISTS %s CASCADE; CREATE SCHEMA %s;", schema, schema))
+		require.NoError(t, err)
 	}
-	require.False(t, existEnumType)
+
+	itemsSource, err := postgres.ExtractPgDumpSchema(transfer)
+	require.NoError(t, err)
+
+	// apply on target
+	require.NoError(t, postgres.ApplyPgDumpPreSteps(itemsSource, transfer, helpers.EmptyRegistry()))
+	require.NoError(t, postgres.ApplyPgDumpPostSteps(itemsSource, transfer, helpers.EmptyRegistry()))
+
+	// make target a source and extract its schema
+	targetAsSource.DBTables = Source.DBTables
+	targetAsSource.PreSteps = Source.PreSteps
+	targetAsSource.PostSteps = Source.PostSteps
+
+	// compare schemas
+	backwardFakeTransfer := helpers.MakeTransfer(helpers.TransferID, &targetAsSource, &Target, abstract.TransferTypeSnapshotOnly)
+	itemsTarget, err := postgres.ExtractPgDumpSchema(backwardFakeTransfer)
+	require.NoError(t, err)
+	require.Equal(t, itemsSource, itemsTarget)
+
+	itemTypToCnt := make(map[string]int)
+	for _, i := range itemsSource {
+		itemTypToCnt[i.Typ]++
+	}
+
+	return itemTypToCnt
 }
