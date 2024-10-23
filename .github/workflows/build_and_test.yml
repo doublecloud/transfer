@@ -40,6 +40,7 @@ jobs:
           { group: "tests/e2e", name: "mongo2ch", path: "mongo2ch" },
           { group: "tests/e2e", name: "kinesis2ch", path: "kinesis2ch" },
           { group: "tests/e2e", name: "ch2s3", path: "ch2s3" },
+          { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
         ]
     steps:
       - name: Checkout
@@ -115,7 +116,6 @@ jobs:
           { group: "pkg/providers", name: "providers-sample", path: "sample" },
           { group: "pkg/providers", name: "providers-kafka", path: "kafka" },
           { group: "pkg/providers", name: "providers-kinesis", path: "kinesis" },
-          { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
           { group: "pkg/providers", name: "providers-greenplum", path: "greenplum" },
           { group: "pkg/providers", name: "providers-clickhouse", path: "clickhouse" },
           { group: "pkg/providers", name: "providers-elastic", path: "elastic" },
