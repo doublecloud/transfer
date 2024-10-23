@@ -7,14 +7,13 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // NewAllGroup returns an intitialized AllGroup for consuming
 // all shards on a stream
-func NewAllGroup(ksis kinesisiface.KinesisAPI, store Store, streamName string, logger log.Logger) *AllGroup {
+func NewAllGroup(ksis KinesisReader, store Store, streamName string, logger log.Logger) *AllGroup {
 	return &AllGroup{
 		Store:      store,
 		ksis:       ksis,
@@ -31,7 +30,7 @@ func NewAllGroup(ksis kinesisiface.KinesisAPI, store Store, streamName string, l
 type AllGroup struct {
 	Store
 
-	ksis       kinesisiface.KinesisAPI
+	ksis       KinesisReader
 	streamName string
 	logger     log.Logger
 
@@ -88,7 +87,7 @@ func (g *AllGroup) findNewShards(shardc chan *kinesis.Shard) {
 }
 
 // listShards pulls a list of shard IDs from the kinesis api
-func listShards(ksis kinesisiface.KinesisAPI, streamName string) ([]*kinesis.Shard, error) {
+func listShards(ksis KinesisReader, streamName string) ([]*kinesis.Shard, error) {
 	var ss []*kinesis.Shard
 	var listShardsInput = &kinesis.ListShardsInput{
 		StreamName: aws.String(streamName),

@@ -2,6 +2,7 @@ package consumer
 
 import (
 	"context"
+	"github.com/aws/aws-sdk-go/aws/request"
 	"sync"
 	"time"
 
@@ -9,12 +10,18 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kinesis"
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"go.ytsaurus.tech/library/go/core/log"
 )
+
+// KinesisReader is a lightweight interface that narrow down usage to just what really needed by this code
+type KinesisReader interface {
+	ListShards(*kinesis.ListShardsInput) (*kinesis.ListShardsOutput, error)
+	GetRecords(*kinesis.GetRecordsInput) (*kinesis.GetRecordsOutput, error)
+	GetShardIteratorWithContext(aws.Context, *kinesis.GetShardIteratorInput, ...request.Option) (*kinesis.GetShardIteratorOutput, error)
+}
 
 // Record wraps the record returned from the Kinesis library and
 // extends to include the shard id.
@@ -65,7 +72,7 @@ type Consumer struct {
 	streamName               string
 	initialShardIteratorType string
 	initialTimestamp         *time.Time
-	client                   kinesisiface.KinesisAPI
+	client                   KinesisReader
 	group                    Group
 	logger                   log.Logger
 	store                    Store
