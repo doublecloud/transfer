@@ -1,0 +1,169 @@
+{
+    "gotest.gotest.TestSourceCDC/Canon": [
+        {
+            "columnnames": [
+                "id_int",
+                "id_string",
+                "val_datetime",
+                "val_int"
+            ],
+            "columnvalues": [
+                1,
+                "a2V5XzE=",
+                "2019-09-16T00:00:00Z",
+                123
+            ],
+            "commitTime": 0,
+            "id": 0,
+            "kind": "update",
+            "nextlsn": 0,
+            "oldkeys": {
+                "keynames": [
+                    "id_int",
+                    "id_string"
+                ],
+                "keytypes": [
+                    "stub",
+                    "stub"
+                ],
+                "keyvalues": [
+                    1,
+                    "a2V5XzE="
+                ]
+            },
+            "part": "0",
+            "query": "",
+            "schema": "",
+            "table": "test_table_canon",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id_int",
+                    "original_type": "ydb:Uint64",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint64"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id_string",
+                    "original_type": "ydb:String",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "val_int",
+                    "original_type": "ydb:Int64",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int64"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "val_datetime",
+                    "original_type": "ydb:Datetime",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        },
+        {
+            "columnnames": null,
+            "commitTime": 0,
+            "id": 0,
+            "kind": "delete",
+            "nextlsn": 0,
+            "oldkeys": {
+                "keynames": [
+                    "id_int",
+                    "id_string"
+                ],
+                "keytypes": [
+                    "stub",
+                    "stub"
+                ],
+                "keyvalues": [
+                    1,
+                    "a2V5XzE="
+                ]
+            },
+            "part": "0",
+            "query": "",
+            "schema": "",
+            "table": "test_table_canon",
+            "table_schema": [
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id_int",
+                    "original_type": "ydb:Uint64",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "uint64"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": true,
+                    "name": "id_string",
+                    "original_type": "ydb:String",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "string"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "val_int",
+                    "original_type": "ydb:Int64",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "int64"
+                },
+                {
+                    "expression": "",
+                    "fake_key": false,
+                    "key": false,
+                    "name": "val_datetime",
+                    "original_type": "ydb:Datetime",
+                    "path": "",
+                    "required": false,
+                    "table_name": "",
+                    "table_schema": "",
+                    "type": "datetime"
+                }
+            ],
+            "txPosition": 0,
+            "tx_id": ""
+        }
+    ]
+}

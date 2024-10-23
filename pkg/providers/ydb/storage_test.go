@@ -168,7 +168,7 @@ func TestYdbStorage_TableList(t *testing.T) {
 	for i := 0; i < 6; i++ {
 		require.NoError(t, sinker.Push([]abstract.ChangeItem{{
 			Kind:         "insert",
-			Schema:       "foo",
+			Schema:       "table_list",
 			Table:        fmt.Sprintf("t_%v", i),
 			ColumnNames:  names,
 			ColumnValues: vals,
@@ -181,7 +181,15 @@ func TestYdbStorage_TableList(t *testing.T) {
 	for t := range tables {
 		logger.Log.Infof("input table: %v %v", t.Namespace, t.Name)
 	}
-	require.Len(t, tables, 6)
+
+	tableForTest := 0
+	for table := range tables {
+		if len(table.Name) > 10 && table.Name[:10] == "table_list" {
+			tableForTest++
+		}
+	}
+
+	require.Equal(t, 6, tableForTest)
 
 	upCtx := util.ContextWithTimestamp(context.Background(), time.Now())
 

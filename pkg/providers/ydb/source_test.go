@@ -2,12 +2,28 @@ package ydb
 
 import (
 	"context"
+	"fmt"
+	"os"
+	"path"
+	"strings"
+	"sync"
 	"testing"
 
+	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mockstorage "github.com/doublecloud/transfer/tests/helpers/mock_storage"
 	"github.com/stretchr/testify/require"
+	"github.com/ydb-platform/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table/types"
 )
+
+const partitionsCount = 3
 
 func TestGetUpToDateTableSchema(t *testing.T) {
 	// prepare
@@ -55,4 +71,289 @@ func TestGetUpToDateTableSchema(t *testing.T) {
 	_, err = src.getUpToDateTableSchema("tableName0", ev1)
 	require.NoError(t, err)
 	require.Equal(t, "tableName0", *tableNameAskedSchema)
+}
+
+type asyncSinkMock struct {
+	PushCallback func(items []abstract.ChangeItem)
+}
+
+func (s asyncSinkMock) AsyncPush(items []abstract.ChangeItem) chan error {
+	errChan := make(chan error, 1)
+	s.PushCallback(items)
+	errChan <- nil
+	return errChan
+}
+
+func (s asyncSinkMock) Close() error {
+	return nil
+}
+
+func TestSourceCDC(t *testing.T) {
+	db := driver(t)
+	transferID := "test_transfer"
+
+	srcCfgTemplate := YdbSource{
+		Instance: os.Getenv("YDB_ENDPOINT"),
+		Database: os.Getenv("YDB_DATABASE"),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
+	}
+	srcCfgTemplate.WithDefaults()
+
+	t.Run("Simple", func(t *testing.T) {
+		uniqKeysCount := 5
+		tableName := "test_table"
+		expectedItemsCount := prepareTableAndFeed(t, transferID, tableName, uniqKeysCount, 50)
+
+		srcCfg := srcCfgTemplate
+		srcCfg.Tables = []string{tableName}
+		src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+		require.NoError(t, err)
+
+		pushedItems := waitExpectedEvents(t, src, expectedItemsCount)
+
+		checkEventsOrder(t, pushedItems, expectedItemsCount/uniqKeysCount)
+	})
+
+	t.Run("Many tables", func(t *testing.T) {
+		uniqKeysCount := 5
+		tableNames := []string{"test_many_table_1", "test_many_table_2", "test_many_table_3"}
+		expectedItemsCount := 0
+		expectedItemsCount += prepareTableAndFeed(t, transferID, tableNames[0], uniqKeysCount, 10)
+		expectedItemsCount += prepareTableAndFeed(t, transferID, tableNames[1], uniqKeysCount, 10)
+		expectedItemsCount += prepareTableAndFeed(t, transferID, tableNames[2], uniqKeysCount, 10)
+
+		srcCfg := srcCfgTemplate
+		srcCfg.Tables = tableNames
+		src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+		require.NoError(t, err)
+
+		pushedItems := waitExpectedEvents(t, src, expectedItemsCount)
+
+		checkEventsOrder(t, pushedItems, expectedItemsCount/uniqKeysCount/len(tableNames))
+	})
+
+	t.Run("Custom feed", func(t *testing.T) {
+		uniqKeysCount := 5
+		tableName := "test_table_custom_feed"
+		customFeedName := "custom_change_feed"
+		expectedItemsCount := prepareTableAndFeed(t, customFeedName, tableName, uniqKeysCount, 20)
+
+		srcCfg := srcCfgTemplate
+		srcCfg.Tables = []string{tableName}
+		srcCfg.ChangeFeedCustomName = customFeedName
+		src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+		require.NoError(t, err)
+
+		pushedItems := waitExpectedEvents(t, src, expectedItemsCount)
+
+		checkEventsOrder(t, pushedItems, expectedItemsCount/uniqKeysCount)
+	})
+
+	t.Run("Compound primary key", func(t *testing.T) {
+		uniqKeysCount := 5
+		updatesPerKey := 10
+		tableName := "test_table_compound_key"
+		tablePath := formTablePath(tableName)
+		createTableAndFeed(t, db, transferID, tablePath,
+			options.WithColumn("id_int", types.Optional(types.TypeUint64)),
+			options.WithColumn("id_string", types.Optional(types.TypeString)),
+			options.WithColumn("val", types.Optional(types.TypeInt64)),
+			options.WithPrimaryKeyColumn("id_int", "id_string"),
+		)
+
+		var upsertQueries []string
+		for i := 0; i < uniqKeysCount; i++ {
+			for j := 0; j < uniqKeysCount; j++ {
+				for k := 1; k <= updatesPerKey; k++ {
+					upsertQueries = append(upsertQueries,
+						fmt.Sprintf("UPSERT INTO `%s` (id_int, id_string, val) VALUES (%d, '%d', %d);", tablePath, i, j, k),
+					)
+				}
+			}
+		}
+		execQueries(t, db, upsertQueries)
+
+		srcCfg := srcCfgTemplate
+		srcCfg.Tables = []string{tableName}
+		src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+		require.NoError(t, err)
+
+		pushedItems := waitExpectedEvents(t, src, len(upsertQueries))
+
+		checkEventsOrder(t, pushedItems, len(upsertQueries)/uniqKeysCount/uniqKeysCount)
+	})
+
+	t.Run("Sending synchronize events", func(t *testing.T) {
+		t.Skip()
+		// TODO - implement after TM-7382
+	})
+
+	t.Run("Use full path", func(t *testing.T) {
+		t.Skip()
+		// TODO - now it doesn't work
+	})
+
+	t.Run("Canon", func(t *testing.T) {
+		tableName := "test_table_canon"
+		tablePath := formTablePath(tableName)
+		createTableAndFeed(t, db, transferID, tablePath,
+			options.WithColumn("id_int", types.Optional(types.TypeUint64)),
+			options.WithColumn("id_string", types.Optional(types.TypeString)),
+			options.WithColumn("val_int", types.Optional(types.TypeInt64)),
+			options.WithColumn("val_datetime", types.Optional(types.TypeDatetime)),
+			options.WithPrimaryKeyColumn("id_int", "id_string"),
+		)
+
+		upsertQuery := func(idInt int, idStr string, valInt int, valDatetime string) string {
+			return fmt.Sprintf("UPSERT INTO `%s` (id_int, id_string, val_int, val_datetime) VALUES (%d, '%s', %d, Datetime('%s'));",
+				tablePath, idInt, idStr, valInt, valDatetime)
+		}
+		deleteQuery := func(idInt int, idStr string) string {
+			return fmt.Sprintf("DELETE FROM `%s` WHERE id_int = %d AND id_string = '%s';", tablePath, idInt, idStr)
+		}
+
+		upsertQueries := []string{
+			upsertQuery(1, "key_1", 123, "2019-09-16T00:00:00Z"),
+			deleteQuery(1, "key_1"),
+		}
+		execQueries(t, db, upsertQueries)
+
+		srcCfg := srcCfgTemplate
+		srcCfg.Tables = []string{tableName}
+		src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+		require.NoError(t, err)
+
+		pushedItems := waitExpectedEvents(t, src, len(upsertQueries))
+		for i := range pushedItems {
+			pushedItems[i].CommitTime = 0
+			pushedItems[i].LSN = 0
+		}
+
+		canon.SaveJSON(t, pushedItems)
+	})
+}
+
+// events with the same primary keys are ordered,
+// but not ordered relative to events for records with other keys
+func checkEventsOrder(t *testing.T, events []abstract.ChangeItem, expectedVal int) {
+	if len(events) == 0 {
+		return
+	}
+
+	keysCount := 0
+	for _, col := range events[0].TableSchema.Columns() {
+		if col.IsKey() {
+			keysCount++
+		} else {
+			break
+		}
+	}
+	require.Equal(t, len(events[0].ColumnNames), keysCount+1, "For test should be one not key column at the end")
+
+	keyEventVal := make(map[string]int64)
+	for _, event := range events {
+		key := strings.Join(append(event.KeyVals(), event.Table), "|||")
+		val := event.ColumnValues[keysCount].(int64)
+
+		if _, ok := keyEventVal[key]; ok {
+			require.True(t, val > keyEventVal[key])
+		}
+		keyEventVal[key] = val
+	}
+
+	for _, val := range keyEventVal {
+		require.Equal(t, int64(expectedVal), val)
+	}
+}
+
+func waitExpectedEvents(t *testing.T, src *Source, expectedItemsCount int) []abstract.ChangeItem {
+	pushedItems := make([]abstract.ChangeItem, 0, expectedItemsCount)
+
+	sink := &asyncSinkMock{
+		PushCallback: func(items []abstract.ChangeItem) {
+			pushedItems = append(pushedItems, items...)
+		},
+	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		require.ErrorIs(t, src.Run(sink), context.Canceled)
+		wg.Done()
+	}()
+
+	for len(pushedItems) != expectedItemsCount {
+	}
+	src.Stop()
+	wg.Wait()
+
+	return pushedItems
+}
+
+func prepareTableAndFeed(t *testing.T, feedName, tableName string, differentKeysCount, updatesPerKey int) int {
+	db := driver(t)
+	tablePath := formTablePath(tableName)
+	createTableAndFeed(t, db, feedName, tablePath,
+		options.WithColumn("id", types.Optional(types.TypeUint64)),
+		options.WithColumn("val", types.Optional(types.TypeInt64)),
+		options.WithPrimaryKeyColumn("id"),
+	)
+
+	var upsertQueries []string
+	for i := 0; i < differentKeysCount; i++ {
+		for j := 1; j <= updatesPerKey; j++ {
+			upsertQueries = append(upsertQueries,
+				fmt.Sprintf("UPSERT INTO `%s` (id, val) VALUES (%d, %d);", tablePath, uint64(i), int64(j)),
+			)
+		}
+	}
+	execQueries(t, db, upsertQueries)
+
+	return len(upsertQueries)
+}
+
+func execQueries(t *testing.T, db *ydb.Driver, queries []string) {
+	require.NoError(t, db.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
+		writeTx := table.TxControl(
+			table.BeginTx(
+				table.WithSerializableReadWrite(),
+			),
+			table.CommitTx(),
+		)
+		for _, q := range queries {
+			if _, _, err := s.Execute(ctx, writeTx, q, nil); err != nil {
+				return err
+			}
+		}
+		return nil
+	}))
+}
+
+func createTableAndFeed(t *testing.T, db *ydb.Driver, feedName, tablePath string, opts ...options.CreateTableOption) {
+	opts = append(opts, options.WithPartitions(options.WithUniformPartitions(partitionsCount)))
+
+	require.NoError(t, db.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
+		return s.CreateTable(context.Background(), tablePath, opts...)
+	}))
+
+	require.NoError(t, createChangeFeedOneTable(context.Background(), db, tablePath, feedName, "NEW_IMAGE"))
+}
+
+func formTablePath(tableName string) string {
+	return "/" + path.Join(os.Getenv("YDB_DATABASE"), tableName)
+}
+
+func driver(t *testing.T) *ydb.Driver {
+	instance := os.Getenv("YDB_ENDPOINT")
+	database := os.Getenv("YDB_DATABASE")
+	token := os.Getenv("YDB_TOKEN")
+
+	db, err := ydb.Open(
+		context.Background(),
+		sugar.DSN(instance, database, false),
+		ydb.WithAccessTokenCredentials(token),
+	)
+	require.NoError(t, err)
+
+	return db
 }
