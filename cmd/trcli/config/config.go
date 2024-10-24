@@ -1,12 +1,13 @@
 package config
 
 import (
-	"os"
-
+	"fmt"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"gopkg.in/yaml.v2"
+	"os"
+	"strings"
 )
 
 func TransferFromYaml(params *string) (*model.Transfer, error) {
@@ -59,6 +60,11 @@ func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 	var transfer TransferYamlView
 	if err := yaml.Unmarshal(rawData, &transfer); err != nil {
 		return nil, err
+	}
+	for _, v := range os.Environ() {
+		env := os.Getenv(v)
+		transfer.Src.Params = strings.ReplaceAll(transfer.Src.Params, fmt.Sprintf("${%v}", v), env)
+		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.Params, fmt.Sprintf("${%v}", v), env)
 	}
 	return &transfer, nil
 }
