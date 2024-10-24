@@ -64,9 +64,9 @@ func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 		return nil, err
 	}
 	for _, v := range os.Environ() {
-		env := os.Getenv(v)
-		transfer.Src.Params = strings.ReplaceAll(transfer.Src.Params, fmt.Sprintf("${%v}", v), env)
-		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.Params, fmt.Sprintf("${%v}", v), env)
+		pair := strings.SplitN(v, "=", 2)
+		transfer.Src.Params = strings.ReplaceAll(transfer.Src.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
+		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
 	}
 	return &transfer, nil
 }
