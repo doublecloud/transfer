@@ -2,12 +2,14 @@ package config
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
+	"gopkg.in/yaml.v2"
+
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	"gopkg.in/yaml.v2"
-	"os"
-	"strings"
 )
 
 func TransferFromYaml(params *string) (*model.Transfer, error) {
