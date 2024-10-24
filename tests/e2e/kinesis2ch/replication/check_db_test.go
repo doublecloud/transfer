@@ -108,7 +108,3 @@ func TestReplication(t *testing.T) {
 		User:       target.User,
 	})
 }
-
-func TestSnapshot(t *testing.T) {
-	TestReplication(t)
-}
