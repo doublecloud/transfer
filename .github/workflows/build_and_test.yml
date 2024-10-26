@@ -73,8 +73,6 @@ jobs:
             if ls "$dir"/*_test.go >/dev/null 2>&1; then
               echo "::group::$dir"
               echo "Running tests for directory: $dir"
-              docker ps -q
-              ps -ef
 
               gotestsum \
                 --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
@@ -86,7 +84,7 @@ jobs:
                 -- -timeout=15m
               echo "::endgroup::"
           
-              docker ps -q
+              docker ps
 
               # Wait for Docker containers to stop
               echo "Waiting for active Docker containers to stop..."
