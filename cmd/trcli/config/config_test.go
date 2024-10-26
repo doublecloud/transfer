@@ -1,15 +1,14 @@
 package config
 
 import (
-	"github.com/stretchr/testify/require"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseTransferYaml_WithEnvSubstitution(t *testing.T) {
-
 	require.NoError(t, os.Setenv("FOO", "secret1"))
 	require.NoError(t, os.Setenv("BAR", "secret2"))
 	defer os.Unsetenv("FOO")
