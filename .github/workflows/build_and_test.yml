@@ -82,6 +82,13 @@ jobs:
                 --packages="$dir" \
                 -- -timeout=15m
               echo "::endgroup::"
+          
+              # Wait for Docker containers to stop
+              echo "Waiting for active Docker containers to stop..."
+              while [ "$(docker ps -q | wc -l)" -ne 0 ]; do
+                echo "Still waiting for Docker containers to stop..."
+                sleep 5
+              done
             else
               echo "No Go test files found in $dir, skipping tests."
             fi
