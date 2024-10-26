@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"os"
 	"sort"
 	"strconv"
@@ -61,6 +62,7 @@ func TestListSequencesInParallel(t *testing.T) {
 	}
 
 	for i := 0; i < 5; i++ {
+		fmt.Println("open tx")
 		tx, err := pool.BeginTx(ctx, txOptions)
 		require.NoError(t, err)
 		defer func() {
