@@ -49,6 +49,9 @@ func connect(ctx context.Context, t *testing.T) *pgxpool.Pool {
 }
 
 func TestListSequencesInParallel(t *testing.T) {
+	if os.Getenv("USE_TESTCONTAINERS") == "1" {
+		t.Skip()
+	}
 	_ = pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("test_scripts"))
 	ctx := context.Background()
 	pool := connect(ctx, t)
@@ -73,7 +76,7 @@ func TestListSequencesInParallel(t *testing.T) {
 }
 
 func TestListSequences(t *testing.T) {
-	_ = pgrecipe.RecipeSource(pgrecipe.WithInitDir("test_scripts"))
+	_ = pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("test_scripts"))
 	ctx := context.Background()
 	pool := connect(ctx, t)
 	defer pool.Close()
