@@ -230,9 +230,10 @@ func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*
 		},
 		ExposedPorts: []string{HTTPPort.Port(), NativePort.Port()},
 		WaitingFor: wait.ForAll(
+			wait.NewHostPortStrategy(NativePort),
 			wait.NewHTTPStrategy("/").WithPort(HTTPPort).WithStatusCodeMatcher(func(status int) bool {
 				return status == 200
-			}).WithStartupTimeout(10 * time.Second),
+			}).WithStartupTimeout(10*time.Second),
 		),
 	}
 

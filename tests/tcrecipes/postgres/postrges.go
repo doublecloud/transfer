@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"github.com/testcontainers/testcontainers-go/wait"
 	"net"
 	"os"
 	"path/filepath"
@@ -195,6 +196,7 @@ func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*
 		},
 		ExposedPorts: []string{defaultPort.Port()},
 		Cmd:          []string{"postgres", "-c", "fsync=off"},
+		WaitingFor:   wait.ForAll(wait.NewHostPortStrategy(defaultPort)),
 	}
 
 	genericContainerReq := testcontainers.GenericContainerRequest{

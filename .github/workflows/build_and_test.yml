@@ -73,7 +73,6 @@ jobs:
             if ls "$dir"/*_test.go >/dev/null 2>&1; then
               echo "::group::$dir"
               echo "Running tests for directory: $dir"
-
               gotestsum \
                 --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
                 --junitfile-project-name="${{ matrix.suite.group }}" \
@@ -83,15 +82,6 @@ jobs:
                 --packages="$dir" \
                 -- -timeout=15m
               echo "::endgroup::"
-          
-              docker ps
-
-              # Wait for Docker containers to stop
-              echo "Waiting for active Docker containers to stop..."
-              while [ "$(docker ps -q | wc -l)" -ne 0 ]; do
-                echo "Still waiting for Docker containers to stop..."
-                sleep 5
-              done
             else
               echo "No Go test files found in $dir, skipping tests."
             fi
