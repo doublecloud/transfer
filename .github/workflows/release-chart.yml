@@ -1,0 +1,39 @@
+name: Release Helm Chart
+
+on:
+  push:
+    branches:
+      - 'release-chart-*'
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+
+      - name: Log in to GitHub Container Registry
+        env:
+          CR_PAT: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo $CR_PAT | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and Package Helm Chart
+        run: |
+          helm dependency update ./helm/transfer
+          helm package ./helm/transfer --destination ./charts
+
+
+      - name: Publish Helm Chart to OCI Registry
+        env:
+          CHART_VERSION: ${{ github.ref_name }}
+        run: |
+          CHART_NAME=$(ls ./charts/transfer-*.tgz)
+          echo "$CHART_NAME"
+          helm push $CHART_NAME oci://ghcr.io/doublecloud/transfer
