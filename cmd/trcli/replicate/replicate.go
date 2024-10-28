@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/internal/logger"
-	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
@@ -16,18 +16,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ReplicateCommand(cp *coordinator.Coordinator, rt abstract.Runtime) *cobra.Command {
+func ReplicateCommand(cp *coordinator.Coordinator, rt abstract.Runtime, registry metrics.Registry) *cobra.Command {
 	var transferParams string
 	replicationCommand := &cobra.Command{
 		Use:   "replicate",
 		Short: "Start local replication",
-		RunE:  replicate(cp, rt, &transferParams),
+		RunE:  replicate(cp, rt, &transferParams, registry),
 	}
 	replicationCommand.Flags().StringVar(&transferParams, "transfer", "./transfer.yaml", "path to yaml file with transfer configuration")
 	return replicationCommand
 }
 
-func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string) func(cmd *cobra.Command, args []string) error {
+func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string, registry metrics.Registry) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		transfer, err := config.TransferFromYaml(transferYaml)
 		if err != nil {
@@ -35,21 +35,21 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 		}
 		transfer.Runtime = rt
 		if transfer.IncrementOnly() {
-			if err := activate.RunActivate(*cp, transfer); err != nil {
+			if err := activate.RunActivate(*cp, transfer, registry); err != nil {
 				return xerrors.Errorf("unable to activate transfer: %w", err)
 			}
 		}
 
-		return RunReplication(*cp, transfer)
+		return RunReplication(*cp, transfer, registry)
 	}
 }
 
-func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer) error {
+func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry) error {
 	if err := provideradapter.ApplyForTransfer(transfer); err != nil {
 		return xerrors.Errorf("unable to adapt transfer: %w", err)
 	}
 	for {
-		worker := local.NewLocalWorker(cp, transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
+		worker := local.NewLocalWorker(cp, transfer, registry, logger.Log)
 		err := worker.Run()
 		if abstract.IsFatal(err) {
 			return err

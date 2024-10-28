@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/internal/logger"
-	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
@@ -15,30 +15,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ActivateCommand(cp *coordinator.Coordinator, rt abstract.Runtime) *cobra.Command {
+func ActivateCommand(cp *coordinator.Coordinator, rt abstract.Runtime, registry metrics.Registry) *cobra.Command {
 	var transferParams string
 	activationCommand := &cobra.Command{
 		Use:   "activate",
 		Short: "Activate transfer locally",
 		Args:  cobra.MatchAll(cobra.ExactArgs(0)),
-		RunE:  activate(cp, rt, &transferParams),
+		RunE:  activate(cp, rt, &transferParams, registry),
 	}
 	activationCommand.Flags().StringVar(&transferParams, "transfer", "./transfer.yaml", "path to yaml file with transfer configuration")
 	return activationCommand
 }
 
-func activate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string) func(cmd *cobra.Command, args []string) error {
+func activate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string, registry metrics.Registry) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		transfer, err := config.TransferFromYaml(transferYaml)
 		if err != nil {
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
-		return RunActivate(*cp, transfer)
+		return RunActivate(*cp, transfer, registry)
 	}
 }
 
-func RunActivate(cp coordinator.Coordinator, transfer *model.Transfer) error {
+func RunActivate(cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry) error {
 	st := time.Now()
 	logger.Log.Infof("run activate with: %T", cp)
 	op := new(model.TransferOperation)
@@ -48,7 +48,7 @@ func RunActivate(cp coordinator.Coordinator, transfer *model.Transfer) error {
 		op,
 		cp,
 		*transfer,
-		solomon.NewRegistry(solomon.NewRegistryOpts()),
+		registry,
 	)
 
 	if err != nil {

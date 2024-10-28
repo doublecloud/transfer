@@ -7,7 +7,8 @@ import (
 
 	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/config"
-	coordinator2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -35,7 +36,7 @@ func TestActivate(t *testing.T) {
 	transfer.Src = src
 	transfer.Dst = dst
 
-	require.NoError(t, activate.RunActivate(coordinator2.NewStatefulFakeClient(), transfer))
+	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts())))
 
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t2", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 2))
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t3", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 5))

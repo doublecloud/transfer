@@ -7,6 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/cmd/trcli/upload"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
@@ -41,7 +42,7 @@ func TestUpload(t *testing.T) {
 	tables, err := config.ParseTablesYaml(tablesYaml)
 	require.NoError(t, err)
 
-	require.NoError(t, upload.RunUpload(coordinator.NewFakeClient(), transfer, tables))
+	require.NoError(t, upload.RunUpload(coordinator.NewFakeClient(), transfer, tables, solomon.NewRegistry(solomon.NewRegistryOpts())))
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t2", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 2))
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t3", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 2))
 }
