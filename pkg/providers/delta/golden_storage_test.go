@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -158,7 +158,7 @@ func prepareCfg(t *testing.T) *DeltaSource {
 		Bucket:           testBucket,
 		AccessKey:        testAccessKey,
 		S3ForcePathStyle: true,
-		SecretKey:        server.SecretString(testSecret),
+		SecretKey:        model.SecretString(testSecret),
 		TableNamespace:   "test_namespace",
 		TableName:        "test_name",
 	}
@@ -172,7 +172,7 @@ func prepareCfg(t *testing.T) *DeltaSource {
 		// to go to real S3
 		cfg.Endpoint = os.Getenv("S3_ENDPOINT")
 		cfg.AccessKey = os.Getenv("S3_ACCESS_KEY")
-		cfg.SecretKey = server.SecretString(os.Getenv("S3_SECRET"))
+		cfg.SecretKey = model.SecretString(os.Getenv("S3_SECRET"))
 		cfg.Bucket = os.Getenv("S3_BUCKET")
 		cfg.Region = os.Getenv("S3_REGION")
 	}

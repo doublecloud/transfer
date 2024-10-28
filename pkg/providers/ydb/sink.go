@@ -18,7 +18,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/maplock"
 	"github.com/doublecloud/transfer/pkg/providers/ydb/decimal"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -475,20 +475,20 @@ func (s *sinker) recursiveCleanupOldTables(currPath ydbPath, dir scheme.Director
 		case scheme.EntryTable, scheme.EntryColumnTable:
 			var tableTime time.Time
 			switch s.config.Rotation.PartType {
-			case server.RotatorPartHour:
-				t, err := time.Parse(server.HourFormat, child.Name)
+			case model.RotatorPartHour:
+				t, err := time.Parse(model.HourFormat, child.Name)
 				if err != nil {
 					continue
 				}
 				tableTime = t
-			case server.RotatorPartDay:
-				t, err := time.Parse(server.DayFormat, child.Name)
+			case model.RotatorPartDay:
+				t, err := time.Parse(model.DayFormat, child.Name)
 				if err != nil {
 					continue
 				}
 				tableTime = t
-			case server.RotatorPartMonth:
-				t, err := time.Parse(server.MonthFormat, child.Name)
+			case model.RotatorPartMonth:
+				t, err := time.Parse(model.MonthFormat, child.Name)
 				if err != nil {
 					continue
 				}
@@ -557,7 +557,7 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 		switch item.Kind {
 		// Truncate - implemented as drop
 		case abstract.DropTableKind, abstract.TruncateTableKind:
-			if s.config.Cleanup == server.DisabledCleanup {
+			if s.config.Cleanup == model.DisabledCleanup {
 				s.logger.Infof("Skipped dropping/truncating table '%v' due cleanup policy", s.getTableFullPath(item.Fqtn()))
 				continue
 			}

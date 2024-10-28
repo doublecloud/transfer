@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 )
 
-type RegisterFunc = func(destination server.Destination) (SupportedDestination, error)
+type RegisterFunc = func(destination model.Destination) (SupportedDestination, error)
 
 var NotSupportedErr = xerrors.New("DBT not supported")
 
@@ -18,7 +18,7 @@ func Register(f RegisterFunc) {
 	adapters = append(adapters, f)
 }
 
-func ToSupportedDestination(destination server.Destination) (SupportedDestination, error) {
+func ToSupportedDestination(destination model.Destination) (SupportedDestination, error) {
 	for _, adapter := range adapters {
 		res, err := adapter(destination)
 		if err != nil {

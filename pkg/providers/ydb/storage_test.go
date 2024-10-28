@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -55,7 +55,7 @@ func TestYdbStorage_TableLoad(t *testing.T) {
 	}
 
 	src := &YdbSource{
-		Token:    server.SecretString(token),
+		Token:    model.SecretString(token),
 		Database: prefix,
 		Instance: endpoint,
 		Tables:   nil,
@@ -75,7 +75,7 @@ func TestYdbStorage_TableLoad(t *testing.T) {
 
 	cfg := YdbDestination{
 		Database: prefix,
-		Token:    server.SecretString(token),
+		Token:    model.SecretString(token),
 		Instance: endpoint,
 	}
 	cfg.WithDefaults()
@@ -134,7 +134,7 @@ func TestYdbStorage_TableList(t *testing.T) {
 	}
 
 	src := YdbSource{
-		Token:              server.SecretString(token),
+		Token:              model.SecretString(token),
 		Database:           prefix,
 		Instance:           endpoint,
 		Tables:             nil,
@@ -150,7 +150,7 @@ func TestYdbStorage_TableList(t *testing.T) {
 
 	cfg := YdbDestination{
 		Database: prefix,
-		Token:    server.SecretString(token),
+		Token:    model.SecretString(token),
 		Instance: endpoint,
 	}
 	cfg.WithDefaults()

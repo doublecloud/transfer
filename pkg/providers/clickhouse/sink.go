@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/conn"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -145,7 +145,7 @@ func (s *sink) rotate() error {
 	return nil
 }
 
-func newSinkImpl(transfer *server.Transfer, config model.ChSinkParams, logger log.Logger, metrics metrics.Registry, runtime abstract.Runtime) (*sink, error) {
+func newSinkImpl(transfer *dp_model.Transfer, config model.ChSinkParams, logger log.Logger, metrics metrics.Registry, runtime abstract.Runtime) (*sink, error) {
 	if err := conn.ResolveShards(config, transfer); err != nil {
 		return nil, xerrors.Errorf("Can't resolve shards: %w", err)
 	}
@@ -199,7 +199,7 @@ func newSinkImpl(transfer *server.Transfer, config model.ChSinkParams, logger lo
 	return result, nil
 }
 
-func NewSink(transfer *server.Transfer, logger log.Logger, metrics metrics.Registry, runtime abstract.Runtime, middlewaresConfig middlewares.Config) (abstract.Sinker, error) {
+func NewSink(transfer *dp_model.Transfer, logger log.Logger, metrics metrics.Registry, runtime abstract.Runtime, middlewaresConfig middlewares.Config) (abstract.Sinker, error) {
 	dst, ok := transfer.Dst.(*model.ChDestination)
 	if !ok {
 		panic("expected ClickHouse destination in ClickHouse sink constructor")

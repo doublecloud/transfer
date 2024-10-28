@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
@@ -27,7 +27,7 @@ func (p *Provider) loadClickHouseSchema() error {
 		return xerrors.Errorf("failed to resolve storage: %w", err)
 	}
 	defer storage.Close()
-	tables, err := server.FilteredTableList(storage, p.transfer)
+	tables, err := dp_model.FilteredTableList(storage, p.transfer)
 	if err != nil {
 		return xerrors.Errorf("failed to list tables and their schemas: %w", err)
 	}

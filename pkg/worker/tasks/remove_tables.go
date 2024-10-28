@@ -5,11 +5,11 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 )
 
-func RemoveTables(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, tables []string) error {
+func RemoveTables(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, tables []string) error {
 	active, err := GetLeftTerminalSrcEndpoints(cp, transfer)
 	if err != nil {
 		return nil
@@ -17,7 +17,7 @@ func RemoveTables(ctx context.Context, cp coordinator.Coordinator, transfer serv
 	if len(active) == 0 {
 		return xerrors.New("RemoveTable supports maximum one-lb-in-the-middle case")
 	}
-	isRunning := transfer.Status == server.Running
+	isRunning := transfer.Status == model.Running
 	if isRunning {
 		if err := StopJob(cp, transfer); err != nil {
 			return xerrors.Errorf("stop job: %w", err)
@@ -43,7 +43,7 @@ func RemoveTables(ctx context.Context, cp coordinator.Coordinator, transfer serv
 			if err != nil {
 				return xerrors.Errorf("Cannot load source endpoint to update tables list changes: %w", err)
 			}
-			source, _ := c.(server.Source)
+			source, _ := c.(model.Source)
 			updatedSrc, _ := source.(*postgres.PgSource)
 			updatedSrc.DBTables = src.DBTables
 			updatedSrc.ExcludedTables = src.ExcludedTables

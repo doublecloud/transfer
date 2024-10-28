@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -93,11 +93,11 @@ func (l *SnapshotLoader) SplitTables(
 	logger log.Logger,
 	tables []abstract.TableDescription,
 	source abstract.Storage,
-) ([]*server.OperationTablePart, error) {
-	tablesParts := []*server.OperationTablePart{}
+) ([]*model.OperationTablePart, error) {
+	tablesParts := []*model.OperationTablePart{}
 	addTablesParts := func(shardedTable ...abstract.TableDescription) {
 		for i, shard := range shardedTable {
-			operationTable := server.NewOperationTablePartFromDescription(l.operationID, &shard)
+			operationTable := model.NewOperationTablePartFromDescription(l.operationID, &shard)
 			operationTable.PartsCount = uint64(len(shardedTable))
 			operationTable.PartIndex = uint64(i)
 			tablesParts = append(tablesParts, operationTable)
@@ -105,7 +105,7 @@ func (l *SnapshotLoader) SplitTables(
 	}
 
 	shardingStorage, isShardingStorage := source.(abstract.ShardingStorage)
-	isShardeableDestination := server.IsShardeableDestination(l.transfer.Dst)
+	isShardeableDestination := model.IsShardeableDestination(l.transfer.Dst)
 	isTmpPolicyEnabled := l.transfer.TmpPolicy != nil
 
 	reasonWhyNotSharded := ""
@@ -209,7 +209,7 @@ func (l *SnapshotLoader) WaitWorkersCompleted(ctx context.Context, workersCount 
 		completedWorkersCount := 0
 		partsInProgress := int64(0)
 		var errs util.Errors
-		progress := server.NewAggregatedProgress()
+		progress := model.NewAggregatedProgress()
 		progress.PartsCount = totalProgress.PartsCount
 		progress.ETARowsCount = totalProgress.ETARowsCount
 		for _, worker := range workers {

@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
@@ -188,7 +188,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 		}
 	}
 
-	return server.FilteredMap(tables, includeTableFilter), nil
+	return model.FilteredMap(tables, includeTableFilter), nil
 }
 
 func (s *Storage) getSchema(index string) (*SchemaDescription, error) {

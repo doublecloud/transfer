@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/stretchr/testify/require"
 )
@@ -168,7 +168,7 @@ func TestCheckIncludeDirectives_Src_YDBSpecific(t *testing.T) {
 		{Name: "table2/full/path", Schema: ""},
 	}
 	// although, user input still can have one leading slash
-	transfer := new(server.Transfer)
+	transfer := new(model.Transfer)
 	transfer.Src = &YdbSource{Tables: []string{
 		// this is a canonical table description: full path with slashes, no leading slash
 		"table1/full/path",

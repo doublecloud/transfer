@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -46,7 +46,7 @@ func (s *fakeSinker) Move(ctx context.Context, src, dst abstract.TableID) error 
 func TestTmpPolicy(t *testing.T) {
 	table := "table"
 	transferID := "transfer"
-	config := server.NewTmpPolicyConfig("_tmp", func(tableID abstract.TableID) bool {
+	config := model.NewTmpPolicyConfig("_tmp", func(tableID abstract.TableID) bool {
 		return tableID == *abstract.NewTableID("", table)
 	})
 	suffix := config.BuildSuffix(transferID)
@@ -82,7 +82,7 @@ func TestTmpPolicy(t *testing.T) {
 func TestTmpPolicyNotIncluded(t *testing.T) {
 	table := "table"
 	transferID := "transfer"
-	config := server.NewTmpPolicyConfig("_tmp", nil)
+	config := model.NewTmpPolicyConfig("_tmp", nil)
 	sinker := TableTemporator(logger.Log, transferID, *config)(newFakeSinker(t,
 		func(item *abstract.ChangeItem) error {
 			require.Equal(t, table, item.Table)

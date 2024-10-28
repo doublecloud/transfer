@@ -4,10 +4,10 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-var _ server.Destination = (*LfStagingDestination)(nil)
+var _ model.Destination = (*LfStagingDestination)(nil)
 
 type LfStagingDestination struct {
 	Cluster           string
@@ -28,8 +28,8 @@ type LfStagingDestination struct {
 	MergeYtPool                     string
 }
 
-func (d *LfStagingDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *LfStagingDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
 func (d *LfStagingDestination) Transformer() map[string]string {

@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 const (
@@ -12,7 +12,7 @@ const (
 )
 
 var (
-	_ server.Source = (*SampleSource)(nil)
+	_ model.Source = (*SampleSource)(nil)
 )
 
 type SampleSource struct {

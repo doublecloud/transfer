@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -34,7 +34,7 @@ func (c *tmpCleanerYt) Close() error {
 	return nil
 }
 
-func (c *tmpCleanerYt) CleanupTmp(ctx context.Context, transferID string, tmpPolicy *server.TmpPolicyConfig) error {
+func (c *tmpCleanerYt) CleanupTmp(ctx context.Context, transferID string, tmpPolicy *model.TmpPolicyConfig) error {
 	dirExists, err := c.client.NodeExists(ctx, c.dir, nil)
 	if err != nil {
 		return xerrors.Errorf("unable to check if target directory '%v' exists: %w", c.dir, err)

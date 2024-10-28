@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -393,7 +393,7 @@ type publisher struct {
 	transferID      string
 	gtidReplication bool
 	cp              coordinator.Coordinator
-	objects         *server.DataObjects
+	objects         *model.DataObjects
 	flusherErr      error
 	storage         *Storage
 }
@@ -594,7 +594,7 @@ func (p *publisher) flusher() {
 	}
 }
 
-func NewSource(src *MysqlSource, transferID string, objects *server.DataObjects, logger log.Logger, registry metrics.Registry, cp coordinator.Coordinator, failOnDecimal bool) (abstract.Source, error) {
+func NewSource(src *MysqlSource, transferID string, objects *model.DataObjects, logger log.Logger, registry metrics.Registry, cp coordinator.Coordinator, failOnDecimal bool) (abstract.Source, error) {
 	var rollbacks util.Rollbacks
 	defer rollbacks.Do()
 

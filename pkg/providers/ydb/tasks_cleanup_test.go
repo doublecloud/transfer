@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/stretchr/testify/require"
 )
@@ -71,9 +71,9 @@ func testCaseYDBCleanupPaths(
 	}
 
 	sinker := new(mockSink)
-	dst := &server.MockDestination{
+	dst := &model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.Drop,
+		Cleanup:       model.Drop,
 	}
 
 	sinker.PushCallback = func(items []abstract.ChangeItem) {
@@ -86,7 +86,7 @@ func testCaseYDBCleanupPaths(
 
 	transferID := "dttlohpidr"
 
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:   transferID,
 		Type: abstract.TransferTypeSnapshotOnly,
 		Src:  src,

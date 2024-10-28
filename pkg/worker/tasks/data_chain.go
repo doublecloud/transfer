@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -23,80 +23,80 @@ import (
 //     - terminal->terminal
 //---------------------------------------------------------------------------------------------------------------------
 
-func GetLeftTerminalTransfers(cp coordinator.Coordinator, transfer server.Transfer) ([]*server.Transfer, error) {
+func GetLeftTerminalTransfers(cp coordinator.Coordinator, transfer model.Transfer) ([]*model.Transfer, error) {
 	if isLeftTerminalType(transfer) {
-		return []*server.Transfer{&transfer}, nil
+		return []*model.Transfer{&transfer}, nil
 	} else {
 		return getLeftTerminalTransfersForLbSrc(cp, transfer)
 	}
 }
 
-func GetLeftTerminalSrcEndpoints(cp coordinator.Coordinator, transfer server.Transfer) ([]server.Source, error) {
+func GetLeftTerminalSrcEndpoints(cp coordinator.Coordinator, transfer model.Transfer) ([]model.Source, error) {
 	transfers, err := GetLeftTerminalTransfers(cp, transfer)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]server.Source, 0)
+	result := make([]model.Source, 0)
 	for _, currTransfer := range transfers {
 		result = append(result, currTransfer.Src)
 	}
 	return result, nil
 }
 
-func GetRightTerminalTransfers(cp coordinator.Coordinator, transfer server.Transfer) ([]*server.Transfer, error) {
+func GetRightTerminalTransfers(cp coordinator.Coordinator, transfer model.Transfer) ([]*model.Transfer, error) {
 	if isRightTerminalType(transfer) {
-		return []*server.Transfer{&transfer}, nil
+		return []*model.Transfer{&transfer}, nil
 	} else {
 		return getRightTerminalTransfersForLbDst(cp, transfer)
 	}
 }
 
-func GetRightTerminalDstEndpoints(cp coordinator.Coordinator, transfer server.Transfer) ([]server.Destination, error) {
+func GetRightTerminalDstEndpoints(cp coordinator.Coordinator, transfer model.Transfer) ([]model.Destination, error) {
 	transfers, err := GetRightTerminalTransfers(cp, transfer)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]server.Destination, 0)
+	result := make([]model.Destination, 0)
 	for _, currTransfer := range transfers {
 		result = append(result, currTransfer.Dst)
 	}
 	return result, nil
 }
 
-func isLeftTerminalType(transfer server.Transfer) bool {
+func isLeftTerminalType(transfer model.Transfer) bool {
 	switch transfer.Src.(type) {
-	case server.TransitionalEndpoint:
+	case model.TransitionalEndpoint:
 		return false
 	default:
 		return true
 	}
 }
 
-func isRightTerminalType(transfer server.Transfer) bool {
+func isRightTerminalType(transfer model.Transfer) bool {
 	switch transfer.Dst.(type) {
-	case server.TransitionalEndpoint:
+	case model.TransitionalEndpoint:
 		return false
 	default:
 		return true
 	}
 }
 
-func getLeftTerminalTransfersForLbSrc(cp coordinator.Coordinator, transfer server.Transfer) ([]*server.Transfer, error) {
-	result := make([]*server.Transfer, 0)
+func getLeftTerminalTransfersForLbSrc(cp coordinator.Coordinator, transfer model.Transfer) ([]*model.Transfer, error) {
+	result := make([]*model.Transfer, 0)
 
-	transfers, err := cp.GetTransfers([]server.TransferStatus{server.Running}, transfer.ID)
+	transfers, err := cp.GetTransfers([]model.TransferStatus{model.Running}, transfer.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to get transfers: %w", err)
 	}
 
-	src, ok := transfer.Src.(server.TransitionalEndpoint)
+	src, ok := transfer.Src.(model.TransitionalEndpoint)
 
 	if !ok {
 		return nil, xerrors.Errorf("transfer %v is not lb-src", transfer)
 	}
 
 	for _, currTransfer := range transfers {
-		if dst, ok := currTransfer.Dst.(server.TransitionalEndpoint); ok {
+		if dst, ok := currTransfer.Dst.(model.TransitionalEndpoint); ok {
 			if dst.TransitionalWith(src) {
 				logger.Log.Infof("Found lb origin %v", currTransfer.ID)
 				if isLeftTerminalType(*currTransfer) {
@@ -109,22 +109,22 @@ func getLeftTerminalTransfersForLbSrc(cp coordinator.Coordinator, transfer serve
 	return result, nil
 }
 
-func getRightTerminalTransfersForLbDst(cp coordinator.Coordinator, transfer server.Transfer) ([]*server.Transfer, error) {
-	result := make([]*server.Transfer, 0)
+func getRightTerminalTransfersForLbDst(cp coordinator.Coordinator, transfer model.Transfer) ([]*model.Transfer, error) {
+	result := make([]*model.Transfer, 0)
 
-	transfers, err := cp.GetTransfers([]server.TransferStatus{server.Running}, transfer.ID)
+	transfers, err := cp.GetTransfers([]model.TransferStatus{model.Running}, transfer.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to get transfers: %w", err)
 	}
 
-	src, ok := transfer.Dst.(server.TransitionalEndpoint)
+	src, ok := transfer.Dst.(model.TransitionalEndpoint)
 
 	if !ok {
 		return nil, xerrors.Errorf("transfer %v is not lb-dst", transfer)
 	}
 
 	for _, currTransfer := range transfers {
-		if dst, ok := currTransfer.Src.(server.TransitionalEndpoint); ok {
+		if dst, ok := currTransfer.Src.(model.TransitionalEndpoint); ok {
 			if dst.TransitionalWith(src) {
 				logger.Log.Infof("Found lb target %v", currTransfer.ID)
 				if isRightTerminalType(*currTransfer) {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -21,7 +21,7 @@ type SnapshotTableProgressTracker struct {
 
 	operationID         string
 	cpClient            coordinator.Coordinator
-	parts               map[string]*server.OperationTablePart
+	parts               map[string]*model.OperationTablePart
 	progressUpdateMutex *sync.Mutex
 
 	// TODO: Remove, A2 thing
@@ -44,7 +44,7 @@ func NewSnapshotTableProgressTracker(
 
 		operationID:         operationID,
 		cpClient:            cpClient,
-		parts:               map[string]*server.OperationTablePart{},
+		parts:               map[string]*model.OperationTablePart{},
 		progressUpdateMutex: progressUpdateMutex,
 
 		// TODO: Remove, A2 thing
@@ -94,7 +94,7 @@ func (t *SnapshotTableProgressTracker) pushProgress() {
 		progressFunc()
 	}
 
-	partsCopy := make([]*server.OperationTablePart, 0, len(t.parts))
+	partsCopy := make([]*model.OperationTablePart, 0, len(t.parts))
 	for _, table := range t.parts {
 		partsCopy = append(partsCopy, table.Copy())
 	}
@@ -127,7 +127,7 @@ func (t *SnapshotTableProgressTracker) pushProgress() {
 	t.progressUpdateMutex.Unlock()
 }
 
-func (t *SnapshotTableProgressTracker) Add(part *server.OperationTablePart) {
+func (t *SnapshotTableProgressTracker) Add(part *model.OperationTablePart) {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()
 	t.parts[part.Key()] = part
@@ -138,14 +138,14 @@ func (t *SnapshotTableProgressTracker) Flush() {
 }
 
 // AddGetProgress TODO: Remove, A2 thing
-func (t *SnapshotTableProgressTracker) AddGetProgress(part *server.OperationTablePart, progressFunc func()) {
+func (t *SnapshotTableProgressTracker) AddGetProgress(part *model.OperationTablePart, progressFunc func()) {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()
 	t.progressFuncs[part.Key()] = progressFunc
 }
 
 // RemoveGetProgress TODO: Remove, A2 thing
-func (t *SnapshotTableProgressTracker) RemoveGetProgress(part *server.OperationTablePart) {
+func (t *SnapshotTableProgressTracker) RemoveGetProgress(part *model.OperationTablePart) {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()
 	delete(t.progressFuncs, part.Key())

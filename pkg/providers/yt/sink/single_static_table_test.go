@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/internal/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/cleanup"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
@@ -147,7 +147,7 @@ func simple(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "arc_warden_simple_test"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// write some change items
@@ -197,7 +197,7 @@ func nilConfigNotAllowed(t *testing.T) {
 	defer teardown(ytClient, "//home/cdc/test/TM-1572")
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
-	_, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), "nil_not_allowed", []abstract.ColSchema{}, nil, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	_, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), "nil_not_allowed", []abstract.ColSchema{}, nil, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.Error(t, err)
 	require.Contains(t, strings.ToLower(err.Error()), "parameter 'cfg *server.ytdestination' should not be 'nil'")
 }
@@ -212,7 +212,7 @@ func repeatedValuesInKeyColumnOfSortedTableAreAllowed(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "arc_warden_repeated_values_in_key_column_of_sorted_table_not_allowed"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// write some change items
@@ -277,7 +277,7 @@ func absentSchemaKeysInSortedTableIsNotAllowed(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "schema_without_keys_not_allowed_in_sorted_table"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// even if there is no repetition in source data we should have been provided with certain primary key
@@ -307,7 +307,7 @@ func repeatedKeysInOrderedTableIsAllowed(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "repeated_keys_in_ordered_table_is_allowed"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// write some change items
@@ -359,7 +359,7 @@ func absentSchemaKeysInOrderedTableIsAllowed(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "schema_without_keys_allowed_in_ordered_table"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, withoutKeysSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// even if there is no repetition in source data we should have been provided with certain primary key
@@ -388,7 +388,7 @@ func schemaExtensionIsAllowed(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "arc_warden_ext"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	arcWardenSchemaExtended := []abstract.ColSchema{
@@ -454,7 +454,7 @@ func wrongChangeItemsAreIgnored(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "arc_warden_ignore_change_items"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// write some change items
@@ -529,7 +529,7 @@ func tableAppearsAtomicallyAfterCommit(t *testing.T) {
 	// schema might be unknown during initialization
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "arc_warden_appears_atomically"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, arcWardenSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	// write some change items
@@ -564,7 +564,7 @@ func tableWithOnlyPrimaryKeys(t *testing.T) {
 
 	sinkStats := stats.NewSinkerStats(metrics.NewRegistry())
 	tableName := "all_keys_test"
-	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, allKeysSchema.Columns(), cfg, 0, "", server.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
+	sst, err := NewSingleStaticTable(ytClient, ypath.Path(cfg.Path()), tableName, allKeysSchema.Columns(), cfg, 0, "", model.DisabledCleanup, sinkStats, logger.Log, yt2.ExePath)
 	require.NoError(t, err)
 
 	err = sst.Write(

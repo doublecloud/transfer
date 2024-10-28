@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/base/events"
 	"github.com/doublecloud/transfer/pkg/util/pool"
@@ -16,8 +16,8 @@ import (
 type legacyEventTarget struct {
 	logger      log.Logger
 	asyncSink   abstract.AsyncSink
-	cleanupType server.CleanupType
-	tmpPolicy   *server.TmpPolicyConfig
+	cleanupType model.CleanupType
+	tmpPolicy   *model.TmpPolicyConfig
 	pushQ       chan pushItem
 	convertPool pool.Pool
 }
@@ -41,8 +41,8 @@ type pushItem struct {
 func NewEventTarget(
 	logger log.Logger,
 	asyncSink abstract.AsyncSink,
-	cleanupType server.CleanupType,
-	tmpPolicy *server.TmpPolicyConfig) base.EventTarget {
+	cleanupType model.CleanupType,
+	tmpPolicy *model.TmpPolicyConfig) base.EventTarget {
 	parallelism := runtime.GOMAXPROCS(0)
 	t := &legacyEventTarget{
 		logger:      logger,

@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/base/adapter"
 	"github.com/doublecloud/transfer/pkg/base/events"
@@ -27,16 +27,16 @@ import (
 	"golang.org/x/sync/semaphore"
 )
 
-func (l *SnapshotLoader) descriptionsToParts(operationID string, descriptions ...abstract.TableDescription) []*server.OperationTablePart {
+func (l *SnapshotLoader) descriptionsToParts(operationID string, descriptions ...abstract.TableDescription) []*model.OperationTablePart {
 	tables := map[string][]abstract.TableDescription{}
 	for _, description := range descriptions {
 		tables[description.Fqtn()] = append(tables[description.Fqtn()], description)
 	}
 
-	parts := []*server.OperationTablePart{}
+	parts := []*model.OperationTablePart{}
 	for _, tableDescriptions := range tables {
 		for i, description := range tableDescriptions {
-			part := server.NewOperationTablePartFromDescription(operationID, &description)
+			part := model.NewOperationTablePartFromDescription(operationID, &description)
 			part.PartIndex = uint64(i)
 			part.PartsCount = uint64(len(tableDescriptions))
 			parts = append(parts, part)
@@ -47,9 +47,9 @@ func (l *SnapshotLoader) descriptionsToParts(operationID string, descriptions ..
 }
 
 func (l *SnapshotLoader) sendTableControlEventV2(
-	eventFactory func(part *server.OperationTablePart) (base.Event, error),
+	eventFactory func(part *model.OperationTablePart) (base.Event, error),
 	target base.EventTarget,
-	tables ...*server.OperationTablePart,
+	tables ...*model.OperationTablePart,
 ) error {
 	tablesSet := map[string]bool{}
 	for _, table := range tables {
@@ -76,8 +76,8 @@ func (l *SnapshotLoader) sendTableControlEventV2(
 	return nil
 }
 
-func (l *SnapshotLoader) sendStateEventV2(ctx context.Context, state events.TableLoadState, provider base.SnapshotProvider, target base.EventTarget, tables ...*server.OperationTablePart) error {
-	eventFactory := func(part *server.OperationTablePart) (base.Event, error) {
+func (l *SnapshotLoader) sendStateEventV2(ctx context.Context, state events.TableLoadState, provider base.SnapshotProvider, target base.EventTarget, tables ...*model.OperationTablePart) error {
+	eventFactory := func(part *model.OperationTablePart) (base.Event, error) {
 		dataObjectPart, err := provider.TablePartToDataObjectPart(part.ToTableDescription())
 		if err != nil {
 			return nil, xerrors.Errorf("unable create data object part for table part %v: %w", part.TableFQTN(), err)
@@ -92,8 +92,8 @@ func (l *SnapshotLoader) sendStateEventV2(ctx context.Context, state events.Tabl
 	return l.sendTableControlEventV2(eventFactory, target, tables...)
 }
 
-func (l *SnapshotLoader) sendCleanupEventV2(target base.EventTarget, tables ...*server.OperationTablePart) error {
-	eventFactory := func(part *server.OperationTablePart) (base.Event, error) {
+func (l *SnapshotLoader) sendCleanupEventV2(target base.EventTarget, tables ...*model.OperationTablePart) error {
+	eventFactory := func(part *model.OperationTablePart) (base.Event, error) {
 		return events.CleanupEvent(*part.ToTableID()), nil
 	}
 
@@ -125,8 +125,8 @@ func (l *SnapshotLoader) applyTransferTmpPolicyV2(inputFilter base.DataObjectFil
 		return nil
 	}
 
-	if err := server.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
-		return xerrors.Errorf(server.ErrInvalidTmpPolicy, err)
+	if err := model.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
+		return xerrors.Errorf(model.ErrInvalidTmpPolicy, err)
 	}
 	l.transfer.TmpPolicy = l.transfer.TmpPolicy.WithInclude(func(tableID abstract.TableID) bool {
 		if inputFilter == nil {
@@ -152,7 +152,7 @@ func (l *SnapshotLoader) createSnapshotProviderV2() (base.SnapshotProvider, erro
 	return snapshotProvider, nil
 }
 
-func IntersectFilter(transfer *server.Transfer, basic base.DataObjectFilter) (base.DataObjectFilter, error) {
+func IntersectFilter(transfer *model.Transfer, basic base.DataObjectFilter) (base.DataObjectFilter, error) {
 	if transfer.DataObjects == nil || len(transfer.DataObjects.IncludeObjects) == 0 {
 		return basic, nil
 	}
@@ -196,7 +196,7 @@ func (l *SnapshotLoader) uploadV2Single(ctx context.Context, snapshotProvider ba
 		return xerrors.Errorf("failed apply transfer tmp policy: %w", err)
 	}
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PreSnapshotHacks()
 	}
 
@@ -301,7 +301,7 @@ func (l *SnapshotLoader) uploadV2Single(ctx context.Context, snapshotProvider ba
 	}
 	logger.Log.Info("next incremental state uploaded", log.Any("state", nextIncrement))
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PostSnapshotHacks()
 	}
 
@@ -342,7 +342,7 @@ func (l *SnapshotLoader) uploadV2Main(ctx context.Context, snapshotProvider base
 		inputFilter = filter.NewFromDescription(tables)
 	}
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PreSnapshotHacks()
 	}
 
@@ -455,7 +455,7 @@ func (l *SnapshotLoader) uploadV2Main(ctx context.Context, snapshotProvider base
 	}
 	logger.Log.Info("next incremental state uploaded", log.Any("state", nextIncrement))
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PostSnapshotHacks()
 	}
 
@@ -487,7 +487,7 @@ func (l *SnapshotLoader) uploadV2Secondary(ctx context.Context, snapshotProvider
 		logger.Log.Warnf("Worker %v restarted, cleared assigned tables parts count %v", l.workerIndex, prevAssignedTablesParts)
 	}
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PreSnapshotHacks()
 	}
 
@@ -515,7 +515,7 @@ func (l *SnapshotLoader) uploadV2Secondary(ctx context.Context, snapshotProvider
 		return xerrors.Errorf("unable to close data provider: %w", err)
 	}
 
-	if hackable, ok := l.transfer.Dst.(server.HackableTarget); ok {
+	if hackable, ok := l.transfer.Dst.(model.HackableTarget); ok {
 		hackable.PostSnapshotHacks()
 	}
 

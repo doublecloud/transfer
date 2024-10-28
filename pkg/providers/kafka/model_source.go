@@ -3,7 +3,7 @@ package kafka
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 )
 
@@ -14,9 +14,9 @@ type KafkaSource struct {
 	Auth        *KafkaAuth
 	Topic       string
 	GroupTopics []string
-	Transformer *server.DataTransformOptions
+	Transformer *model.DataTransformOptions
 
-	BufferSize server.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
+	BufferSize model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 
 	SecurityGroupIDs []string
 
@@ -25,7 +25,7 @@ type KafkaSource struct {
 	SynchronizeIsNeeded bool // true, if we need to send synchronize events on releasing partitions
 }
 
-var _ server.Source = (*KafkaSource)(nil)
+var _ model.Source = (*KafkaSource)(nil)
 
 func (s *KafkaSource) MDBClusterID() string {
 	if s.Connection != nil {
@@ -98,7 +98,7 @@ func (s *KafkaSource) Parser() map[string]interface{} {
 	return s.ParserConfig
 }
 
-var _ server.HostResolver = (*KafkaSource)(nil)
+var _ model.HostResolver = (*KafkaSource)(nil)
 
 func (s *KafkaSource) HostsNames() ([]string, error) {
 	if s.Connection != nil && s.Connection.ClusterID != "" {

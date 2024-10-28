@@ -7,18 +7,18 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type loadProgress struct {
 	sink        abstract.Sinker
 	lastReport  time.Time
-	part        *server.OperationTablePart
+	part        *model.OperationTablePart
 	workerIndex int
 }
 
-func NewLoadProgress(workerIndex int, part *server.OperationTablePart, progressUpdateMutex *sync.Mutex) *loadProgress {
+func NewLoadProgress(workerIndex int, part *model.OperationTablePart, progressUpdateMutex *sync.Mutex) *loadProgress {
 	return &loadProgress{
 		sink:        nil,
 		lastReport:  time.Now(),

@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/config/env"
 	"github.com/doublecloud/transfer/pkg/instanceutil"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -145,14 +145,14 @@ func getJobIndex() string {
 	return fmt.Sprintf("%d", idx)
 }
 
-func NewMeteringOpts(transfer *server.Transfer, task *server.TransferOperation) (*MeteringOpts, error) {
+func NewMeteringOpts(transfer *model.Transfer, task *model.TransferOperation) (*MeteringOpts, error) {
 	return NewMeteringOptsWithTags(transfer, task, map[string]interface{}{})
 }
 
-func NewMeteringOptsWithTags(transfer *server.Transfer, task *server.TransferOperation, runtimeTags map[string]interface{}) (*MeteringOpts, error) {
+func NewMeteringOptsWithTags(transfer *model.Transfer, task *model.TransferOperation, runtimeTags map[string]interface{}) (*MeteringOpts, error) {
 	dstMDBClusterID := ""
 	if transfer.Dst != nil {
-		if clusterable, ok := transfer.Dst.(server.Clusterable); ok {
+		if clusterable, ok := transfer.Dst.(model.Clusterable); ok {
 			dstMDBClusterID = clusterable.MDBClusterID()
 		}
 	}

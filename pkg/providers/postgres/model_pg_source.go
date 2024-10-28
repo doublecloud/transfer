@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/utils"
@@ -34,7 +34,7 @@ type PgSource struct {
 
 	Database                    string
 	User                        string
-	Password                    server.SecretString
+	Password                    model.SecretString
 	Port                        int
 	DBTables                    []string
 	BatchSize                   uint32 // BatchSize is a limit on the number of rows in the replication (not snapshot) source internal buffer
@@ -55,12 +55,12 @@ type PgSource struct {
 	PostSteps                   *PgDumpSteps
 	UseFakePrimaryKey           bool
 	IgnoreUserTypes             bool
-	IgnoreUnknownTables         bool             // see: if table schema unknown - ignore it TM-3104 and TM-2934
-	MaxBufferSize               server.BytesSize // Deprecated: is not used anymore
-	ExcludeDescendants          bool             // Deprecated: is not used more, use CollapseInheritTables instead
-	DesiredTableSize            uint64           // desired table part size for snapshot sharding
-	SnapshotDegreeOfParallelism int              // desired table parts count for snapshot sharding
-	EmitTimeTypes               bool             // Deprecated: is not used anymore
+	IgnoreUnknownTables         bool            // see: if table schema unknown - ignore it TM-3104 and TM-2934
+	MaxBufferSize               model.BytesSize // Deprecated: is not used anymore
+	ExcludeDescendants          bool            // Deprecated: is not used more, use CollapseInheritTables instead
+	DesiredTableSize            uint64          // desired table part size for snapshot sharding
+	SnapshotDegreeOfParallelism int             // desired table parts count for snapshot sharding
+	EmitTimeTypes               bool            // Deprecated: is not used anymore
 
 	DBLogEnabled bool   // force DBLog snapshot instead of common
 	ChunkSize    uint64 // number of rows in chunk, this field needed for DBLog snapshot, if it is 0, it will be calculated automatically
@@ -79,8 +79,8 @@ type PgSource struct {
 	ConnectionID                string
 }
 
-var _ server.Source = (*PgSource)(nil)
-var _ server.WithConnectionID = (*PgSource)(nil)
+var _ model.Source = (*PgSource)(nil)
+var _ model.WithConnectionID = (*PgSource)(nil)
 
 func (s *PgSource) MDBClusterID() string {
 	return s.ClusterID
@@ -163,7 +163,7 @@ func DefaultPgDumpPostSteps() *PgDumpSteps {
 	return steps
 }
 
-func (s *PgSource) FillDependentFields(transfer *server.Transfer) {
+func (s *PgSource) FillDependentFields(transfer *model.Transfer) {
 	if s.SlotID == "" {
 		s.SlotID = transfer.ID
 	}
@@ -354,7 +354,7 @@ func (s *PgSource) Validate() error {
 	return nil
 }
 
-func (s *PgSource) ExtraTransformers(ctx context.Context, transfer *server.Transfer, registry metrics.Registry) ([]abstract.Transformer, error) {
+func (s *PgSource) ExtraTransformers(ctx context.Context, transfer *model.Transfer, registry metrics.Registry) ([]abstract.Transformer, error) {
 	var result []abstract.Transformer
 	if s.CollapseInheritTables {
 		pgStorageAbstract, err := storage.NewStorage(transfer, coordinator.NewFakeClient(), registry)
@@ -432,8 +432,8 @@ func (d PgSourceWrapper) LoozeMode() bool {
 	return false
 }
 
-func (d PgSourceWrapper) CleanupMode() server.CleanupType {
-	return server.Drop
+func (d PgSourceWrapper) CleanupMode() model.CleanupType {
+	return model.Drop
 }
 
 func (d PgSourceWrapper) Tables() map[string]string {
@@ -464,7 +464,7 @@ func (s *PgSource) ToSinkParams() PgSourceWrapper {
 	}
 }
 
-func (s *PgSource) isPreferReplica(transfer *server.Transfer) bool {
+func (s *PgSource) isPreferReplica(transfer *model.Transfer) bool {
 	// PreferReplica auto-derives into 'true', if ALL next properties fulfilled:
 	// - It can be used only on 'managed' installation - bcs we are searching replicas via mdb api
 	// - It can be used only on heterogeneous transfers - bcs "for homo there are some technical restrictions" (https://github.com/doublecloud/transfer/review/4059241/details#comment-5973004)
@@ -475,7 +475,7 @@ func (s *PgSource) isPreferReplica(transfer *server.Transfer) bool {
 	return !s.IsHomo && transfer != nil && (transfer.SnapshotOnly() || !transfer.IncrementOnly())
 }
 
-func (s *PgSource) ToStorageParams(transfer *server.Transfer) *PgStorageParams {
+func (s *PgSource) ToStorageParams(transfer *model.Transfer) *PgStorageParams {
 	var useBinarySerialization bool
 	if s.SnapshotSerializationFormat == PgSerializationFormatAuto {
 		useBinarySerialization = s.IsHomo

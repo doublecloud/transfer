@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
 	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -52,7 +52,7 @@ func (s *sink) Push(input []abstract.ChangeItem) error {
 
 	var tableToMessages map[abstract.TablePartID][]serializer.SerializedMessage
 	var err error
-	if s.config.FormatSettings.Name == server.SerializationFormatLbMirror { // see comments to the function 'GroupAndSerializeLB'
+	if s.config.FormatSettings.Name == model.SerializationFormatLbMirror { // see comments to the function 'GroupAndSerializeLB'
 		// 'id' here - sourceID
 		tableToMessages, _, err = s.serializer.(*serializer.MirrorSerializer).GroupAndSerializeLB(input)
 	} else {
@@ -141,7 +141,7 @@ func NewSinkImpl(cfg *KafkaDestination, registry metrics.Registry, lgr log.Logge
 	}
 
 	currFormat := cfg.FormatSettings
-	if currFormat.Name == server.SerializationFormatDebezium {
+	if currFormat.Name == model.SerializationFormatDebezium {
 		currFormat = serializer.MakeFormatSettingsWithTopicPrefix(currFormat, cfg.TopicPrefix, cfg.Topic)
 	}
 

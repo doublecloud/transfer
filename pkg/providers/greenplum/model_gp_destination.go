@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -14,7 +14,7 @@ import (
 type GpDestination struct {
 	Connection GpConnection
 
-	CleanupPolicy server.CleanupType
+	CleanupPolicy dp_model.CleanupType
 
 	SubnetID         string
 	SecurityGroupIDs []string
@@ -25,7 +25,7 @@ type GpDestination struct {
 	QueryTimeout time.Duration
 }
 
-var _ server.Destination = (*GpDestination)(nil)
+var _ dp_model.Destination = (*GpDestination)(nil)
 
 func (d *GpDestination) MDBClusterID() string {
 	if d.Connection.MDBCluster != nil {
@@ -39,7 +39,7 @@ func (d *GpDestination) IsDestination() {}
 func (d *GpDestination) WithDefaults() {
 	d.Connection.WithDefaults()
 	if d.CleanupPolicy.IsValid() != nil {
-		d.CleanupPolicy = server.DisabledCleanup
+		d.CleanupPolicy = dp_model.DisabledCleanup
 	}
 
 	if d.BufferTriggingSize == 0 {
@@ -78,7 +78,7 @@ func (d *GpDestination) Transformer() map[string]string {
 	return make(map[string]string)
 }
 
-func (d *GpDestination) CleanupMode() server.CleanupType {
+func (d *GpDestination) CleanupMode() dp_model.CleanupType {
 	return d.CleanupPolicy
 }
 

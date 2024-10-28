@@ -4,20 +4,20 @@ import (
 	"encoding/gob"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 func init() {
-	destinationFactory := func() server.Destination {
+	destinationFactory := func() model.Destination {
 		return &YtDestinationWrapper{
 			Model:    new(YtDestination),
 			_pushWal: false,
 		}
 	}
-	destinationCopyFactory := func() server.Destination {
+	destinationCopyFactory := func() model.Destination {
 		return new(YtCopyDestination)
 	}
-	stagingFactory := func() server.Destination {
+	stagingFactory := func() model.Destination {
 		return new(LfStagingDestination)
 	}
 
@@ -27,10 +27,10 @@ func init() {
 	gob.RegisterName("*server.YtCopyDestination", new(YtCopyDestination))
 	gob.RegisterName("*server.LfStagingDestination", new(LfStagingDestination))
 
-	server.RegisterDestination(ProviderType, destinationFactory)
-	server.RegisterDestination(StagingType, stagingFactory)
-	server.RegisterDestination(CopyType, destinationCopyFactory)
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterDestination(ProviderType, destinationFactory)
+	model.RegisterDestination(StagingType, stagingFactory)
+	model.RegisterDestination(CopyType, destinationCopyFactory)
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(YtSource)
 	})
 

@@ -11,15 +11,15 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type SyncTask struct {
-	task     *server.TransferOperation
+	task     *model.TransferOperation
 	logger   log.Logger
-	transfer server.Transfer
+	transfer model.Transfer
 	wg       *sync.WaitGroup
 	cp       coordinator.Coordinator
 }
@@ -53,10 +53,10 @@ func (s *SyncTask) run() {
 // NewSyncTask only used for local debug, can operate properly only on single machine transfer server installation
 // with enable `all_in_one_binary` flag
 func NewSyncTask(
-	task *server.TransferOperation,
+	task *model.TransferOperation,
 	cp coordinator.Coordinator,
-	workflow server.OperationWorkflow,
-	transfer server.Transfer,
+	workflow model.OperationWorkflow,
+	transfer model.Transfer,
 ) (*SyncTask, error) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -68,7 +68,7 @@ func NewSyncTask(
 		wg:       wg,
 	}
 
-	if task.Status == server.NewTask {
+	if task.Status == model.NewTask {
 		if err := workflow.OnStart(task); err != nil {
 			st.Stop()
 			return nil, xerrors.Errorf("unable to start task workflow: %w", err)

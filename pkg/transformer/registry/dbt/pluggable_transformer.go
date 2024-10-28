@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/transformer"
@@ -17,7 +17,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func PluggableTransformer(transfer *server.Transfer, _ metrics.Registry, cp coordinator.Coordinator) func(abstract.Sinker) abstract.Sinker {
+func PluggableTransformer(transfer *model.Transfer, _ metrics.Registry, cp coordinator.Coordinator) func(abstract.Sinker) abstract.Sinker {
 	supportedDestination, err := ToSupportedDestination(transfer.Dst)
 	if err != nil {
 		return IdentityMiddleware
@@ -60,13 +60,13 @@ type pluggableTransformer struct {
 
 	sink     abstract.Sinker
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func newPluggableTransformer(
 	s abstract.Sinker,
 	cp coordinator.Coordinator,
-	transfer *server.Transfer,
+	transfer *model.Transfer,
 	ctx context.Context,
 	dst SupportedDestination,
 	configurations []*Config,

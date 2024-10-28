@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/async/dao"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/async/model/db"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/async/model/parts"
@@ -249,7 +249,7 @@ func (s *sink) pushDataRows(items []abstract.ChangeItem) (resCh chan error) {
 }
 
 func NewSink(
-	transfer *server.Transfer, dst *model.ChDestination, lgr log.Logger, mtrcs metrics.Registry, mw abstract.Middleware,
+	transfer *dp_model.Transfer, dst *model.ChDestination, lgr log.Logger, mtrcs metrics.Registry, mw abstract.Middleware,
 ) (abstract.AsyncSink, error) {
 	lgr.Infof("Using async clickhouse sink with parts")
 	params := dst.ToSinkParams(transfer)

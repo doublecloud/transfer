@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/data"
 	"github.com/doublecloud/transfer/pkg/errors"
@@ -22,11 +22,11 @@ import (
 
 var NoTablesError = xerrors.New("Unable to find any tables")
 
-func ActivateDelivery(ctx context.Context, task *server.TransferOperation, cp coordinator.Coordinator, transfer server.Transfer, registry metrics.Registry) error {
+func ActivateDelivery(ctx context.Context, task *model.TransferOperation, cp coordinator.Coordinator, transfer model.Transfer, registry metrics.Registry) error {
 	rollbacks := util.Rollbacks{}
 	defer rollbacks.Do()
 	rollbacks.Add(func() {
-		if err := cp.SetStatus(transfer.ID, server.Failing); err != nil {
+		if err := cp.SetStatus(transfer.ID, model.Failing); err != nil {
 			logger.Log.Warn("failed to set failing transfer's status", log.Error(err))
 		}
 	})
@@ -77,7 +77,7 @@ func ActivateDelivery(ctx context.Context, task *server.TransferOperation, cp co
 		}
 
 		if !transfer.IncrementOnly() {
-			err := cp.SetStatus(transfer.ID, server.Started)
+			err := cp.SetStatus(transfer.ID, model.Started)
 			if err != nil {
 				return errors.CategorizedErrorf(categories.Internal, "Cannot update transfer status: %w", err)
 			}
@@ -132,7 +132,7 @@ func ActivateDelivery(ctx context.Context, task *server.TransferOperation, cp co
 	}
 
 	if !transfer.IncrementOnly() {
-		err := cp.SetStatus(transfer.ID, server.Started)
+		err := cp.SetStatus(transfer.ID, model.Started)
 		if err != nil {
 			return errors.CategorizedErrorf(categories.Internal, "Cannot update transfer status: %w", err)
 		}
@@ -175,18 +175,18 @@ func ActivateDelivery(ctx context.Context, task *server.TransferOperation, cp co
 }
 
 // ObtainAllSrcTables uses a temporary Storage for transfer source to obtain a list of tables
-func ObtainAllSrcTables(transfer *server.Transfer, registry metrics.Registry) (abstract.TableMap, error) {
+func ObtainAllSrcTables(transfer *model.Transfer, registry metrics.Registry) (abstract.TableMap, error) {
 	srcStorage, err := storage.NewStorage(transfer, coordinator.NewFakeClient(), registry)
 	if err != nil {
 		return nil, xerrors.Errorf(ResolveStorageErrorText, err)
 	}
 	defer srcStorage.Close()
-	result, err := server.FilteredTableList(srcStorage, transfer)
+	result, err := model.FilteredTableList(srcStorage, transfer)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list and filter tables in source: %w", err)
 	}
 	if !transfer.SnapshotOnly() && transfer.SrcType() != transfer.DstType() {
-		server.ExcludeViews(result)
+		model.ExcludeViews(result)
 	}
 
 	for tableID, tableInfo := range result {

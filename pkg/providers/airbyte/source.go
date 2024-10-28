@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -24,7 +24,7 @@ type Source struct {
 	config   *AirbyteSource
 	catalog  *Catalog
 	metrics  *stats.SourceStats
-	transfer *server.Transfer
+	transfer *model.Transfer
 
 	wg     sync.WaitGroup
 	ctx    context.Context
@@ -83,7 +83,7 @@ func (s *Source) Stop() {
 	s.wg.Wait()
 }
 
-func NewSource(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *server.Transfer) *Source {
+func NewSource(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *model.Transfer) *Source {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &Source{
 		registry: registry,

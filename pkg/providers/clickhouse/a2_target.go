@@ -17,7 +17,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/ptr"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/base/events"
 	"github.com/doublecloud/transfer/pkg/format"
@@ -151,11 +151,11 @@ func (c *HTTPTarget) AsyncPush(input base.EventBatch) chan error {
 			switch event := ev.(type) {
 			case events.CleanupEvent:
 				switch c.config.Cleanup() {
-				case server.DisabledCleanup:
+				case dp_model.DisabledCleanup:
 					continue
-				case server.Truncate:
+				case dp_model.Truncate:
 					ddl = "TRUNCATE TABLE IF EXISTS %s"
-				case server.Drop:
+				case dp_model.Drop:
 					ddl = "DROP TABLE IF EXISTS %s NO DELAY"
 				}
 
@@ -334,7 +334,7 @@ func (c *HTTPTarget) execDDL(executor func(distributed bool) error) error {
 	return nil
 }
 
-func newHTTPTargetImpl(transfer *server.Transfer, config model.ChSinkParams, mtrc metrics.Registry, logger log.Logger) (*HTTPTarget, error) {
+func newHTTPTargetImpl(transfer *dp_model.Transfer, config model.ChSinkParams, mtrc metrics.Registry, logger log.Logger) (*HTTPTarget, error) {
 	if err := conn.ResolveShards(config, transfer); err != nil {
 		return nil, xerrors.Errorf("Can't resolve shards: %w", err)
 	}
@@ -363,7 +363,7 @@ func newHTTPTargetImpl(transfer *server.Transfer, config model.ChSinkParams, mtr
 	return target, nil
 }
 
-func NewHTTPTarget(transfer *server.Transfer, mtrc metrics.Registry, logger log.Logger) (*HTTPTarget, error) {
+func NewHTTPTarget(transfer *dp_model.Transfer, mtrc metrics.Registry, logger log.Logger) (*HTTPTarget, error) {
 	dst, ok := transfer.Dst.(*model.ChDestination)
 	if !ok {
 		panic("expected ClickHouse destination in ClickHouse sink constructor")

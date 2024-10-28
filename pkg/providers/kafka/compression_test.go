@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -16,7 +16,7 @@ func TestReadWriteWithCompression(t *testing.T) {
 	require.NoError(t, err)
 	dst, err := DestinationRecipe()
 	require.NoError(t, err)
-	dst.FormatSettings.Name = server.SerializationFormatMirror
+	dst.FormatSettings.Name = model.SerializationFormatMirror
 	tc := func(compression Encoding) {
 		kafkaSource.Topic = "topic_" + string(compression)
 		dst.Topic = "topic_" + string(compression)

@@ -4,10 +4,10 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-func isNativeExtraElementViolatesConstraint(batchingSettings server.Batching, startIndex, currIndex int, lenElements []uint64, prevBodiesSize uint64) bool {
+func isNativeExtraElementViolatesConstraint(batchingSettings model.Batching, startIndex, currIndex int, lenElements []uint64, prevBodiesSize uint64) bool {
 	numNewChangeItems := currIndex - startIndex + 1
 
 	if batchingSettings.MaxMessageSize != 0 {
@@ -26,7 +26,7 @@ func isNativeExtraElementViolatesConstraint(batchingSettings server.Batching, st
 	return false
 }
 
-func BatchNative(batchingSettings server.Batching, in []abstract.ChangeItem) []SerializedMessage {
+func BatchNative(batchingSettings model.Batching, in []abstract.ChangeItem) []SerializedMessage {
 	serializedElements := make([]string, len(in))
 	lenElements := make([]uint64, len(in))
 	for i := range in {

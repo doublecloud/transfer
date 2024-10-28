@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/middlewares"
@@ -18,7 +18,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func VerifyDelivery(transfer server.Transfer, lgr log.Logger, registry metrics.Registry) error {
+func VerifyDelivery(transfer model.Transfer, lgr log.Logger, registry metrics.Registry) error {
 	switch dst := transfer.Dst.(type) {
 	case *postgres.PgDestination:
 		// _ping and other tables created if MaintainTables is set to true

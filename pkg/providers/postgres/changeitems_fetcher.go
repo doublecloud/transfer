@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/dustin/go-humanize"
 	"github.com/jackc/pgtype"
@@ -24,7 +24,7 @@ type ChangeItemsFetcher struct {
 	sourceStats      *stats.SourceStats
 	unmarshallerData UnmarshallerData
 	limitCount       int
-	limitBytes       server.BytesSize
+	limitBytes       model.BytesSize
 	maybeHasMore     bool
 	logger           log.Logger
 }
@@ -58,7 +58,7 @@ func (f *ChangeItemsFetcher) WithLimitCount(limitCount int) *ChangeItemsFetcher 
 }
 
 // WithLimitBytes accepts 0 to disable limit
-func (f *ChangeItemsFetcher) WithLimitBytes(limitBytes server.BytesSize) *ChangeItemsFetcher {
+func (f *ChangeItemsFetcher) WithLimitBytes(limitBytes model.BytesSize) *ChangeItemsFetcher {
 	f.limitBytes = limitBytes
 	return f
 }
@@ -75,7 +75,7 @@ func (f *ChangeItemsFetcher) MaybeHasMore() bool {
 func (f *ChangeItemsFetcher) Fetch() (items []abstract.ChangeItem, err error) {
 	result := make([]abstract.ChangeItem, f.limitCount)
 	resultCount := 0
-	resultBytes := server.BytesSize(0)
+	resultBytes := model.BytesSize(0)
 
 	casters := make([]*Unmarshaller, len(f.rows.FieldDescriptions())) // slice is much faster than map for some reason
 	for i, fd := range f.rows.FieldDescriptions() {
@@ -99,7 +99,7 @@ func (f *ChangeItemsFetcher) Fetch() (items []abstract.ChangeItem, err error) {
 		for i := range f.rows.FieldDescriptions() {
 			fRawValue := rawData[i]
 
-			resultBytes += server.BytesSize(len(fRawValue))
+			resultBytes += model.BytesSize(len(fRawValue))
 			rowRawSize += uint64(len(fRawValue))
 
 			ciResult.ColumnValues[i], err = casters[i].Cast(fRawValue)

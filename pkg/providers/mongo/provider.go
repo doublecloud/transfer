@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -18,10 +18,10 @@ func init() {
 	gob.RegisterName("*server.MongoCollection", new(MongoCollection))
 	gob.RegisterName("*server.MongoSource", new(MongoSource))
 	gob.RegisterName("*server.MongoDestination", new(MongoDestination))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	model.RegisterDestination(ProviderType, func() model.Destination {
 		return new(MongoDestination)
 	})
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(MongoSource)
 	})
 
@@ -68,7 +68,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Source() (abstract.Source, error) {
@@ -157,7 +157,7 @@ func (p *Provider) DestinationSampleableStorage() (abstract.SampleableStorage, e
 	return dstStorageMongo, nil
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	src, ok := p.transfer.Src.(*MongoSource)
 	if !ok {
 		return xerrors.Errorf("unexpected source: %T", p.transfer.Src)
@@ -186,7 +186,7 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
@@ -34,10 +34,10 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       cpclient.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.IncrementOnly() {
 		if err := callbacks.Cleanup(tables); err != nil {
 			return xerrors.Errorf("Sinker cleanup failed: %w", err)
@@ -80,7 +80,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 	return s3_sink.NewSinker(p.logger, dst, p.registry, p.cp, p.transfer.ID)
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

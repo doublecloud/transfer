@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type CoordinatorNoOp struct {
@@ -88,30 +88,30 @@ func (f *CoordinatorNoOp) UpdateTestResults(id string, request *abstract.TestRes
 	return nil
 }
 
-func (f *CoordinatorNoOp) GetTransfers(statuses []server.TransferStatus, transferID string) ([]*server.Transfer, error) {
+func (f *CoordinatorNoOp) GetTransfers(statuses []model.TransferStatus, transferID string) ([]*model.Transfer, error) {
 	return nil, nil
 }
 
-func (f *CoordinatorNoOp) SetStatus(transferID string, status server.TransferStatus) error {
+func (f *CoordinatorNoOp) SetStatus(transferID string, status model.TransferStatus) error {
 	logger.Log.Infof("fake change status: %v -> %v", transferID, status)
 	return nil
 }
 
-func (f *CoordinatorNoOp) GetEndpoint(transferID string, isSource bool) (server.EndpointParams, error) {
+func (f *CoordinatorNoOp) GetEndpoint(transferID string, isSource bool) (model.EndpointParams, error) {
 	logger.Log.Infof("fake get endpoint: %v", transferID)
 	return nil, nil
 }
 
-func (f *CoordinatorNoOp) GetEndpointTransfers(transferID string, isSource bool) ([]*server.Transfer, error) {
+func (f *CoordinatorNoOp) GetEndpointTransfers(transferID string, isSource bool) ([]*model.Transfer, error) {
 	logger.Log.Infof("fake get endpoint transfers: %v", transferID)
 	return nil, nil
 }
 
-func (f *CoordinatorNoOp) UpdateEndpoint(transferID string, endpoint server.EndpointParams) error {
+func (f *CoordinatorNoOp) UpdateEndpoint(transferID string, endpoint model.EndpointParams) error {
 	return nil
 }
 
-func (f *CoordinatorNoOp) GetOperationProgress(operationID string) (*server.AggregatedProgress, error) {
+func (f *CoordinatorNoOp) GetOperationProgress(operationID string) (*model.AggregatedProgress, error) {
 	return nil, nil
 }
 
@@ -119,7 +119,7 @@ func (f *CoordinatorNoOp) CreateOperationWorkers(operationID string, workersCoun
 	return nil
 }
 
-func (f *CoordinatorNoOp) GetOperationWorkers(operationID string) ([]*server.OperationWorker, error) {
+func (f *CoordinatorNoOp) GetOperationWorkers(operationID string) ([]*model.OperationWorker, error) {
 	return nil, nil
 }
 
@@ -127,15 +127,15 @@ func (f *CoordinatorNoOp) GetOperationWorkersCount(operationID string, completed
 	return 2, nil
 }
 
-func (f *CoordinatorNoOp) CreateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+func (f *CoordinatorNoOp) CreateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error {
 	return nil
 }
 
-func (f *CoordinatorNoOp) GetOperationTablesParts(operationID string) ([]*server.OperationTablePart, error) {
+func (f *CoordinatorNoOp) GetOperationTablesParts(operationID string) ([]*model.OperationTablePart, error) {
 	return nil, nil
 }
 
-func (f *CoordinatorNoOp) AssignOperationTablePart(operationID string, workerIndex int) (*server.OperationTablePart, error) {
+func (f *CoordinatorNoOp) AssignOperationTablePart(operationID string, workerIndex int) (*model.OperationTablePart, error) {
 	return nil, nil
 }
 
@@ -143,6 +143,6 @@ func (f *CoordinatorNoOp) ClearAssignedTablesParts(ctx context.Context, operatio
 	return 0, nil
 }
 
-func (f *CoordinatorNoOp) UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+func (f *CoordinatorNoOp) UpdateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error {
 	return nil
 }

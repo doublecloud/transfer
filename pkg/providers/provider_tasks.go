@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/cleanup"
 	"github.com/doublecloud/transfer/pkg/util"
 )
@@ -28,19 +28,19 @@ var NopActivateCallback = ActivateCallbacks{
 // Activator enable custom functionality on transfer `Activate` task.
 type Activator interface {
 	Provider
-	Activate(ctx context.Context, task *server.TransferOperation, table abstract.TableMap, callbacks ActivateCallbacks) error
+	Activate(ctx context.Context, task *model.TransferOperation, table abstract.TableMap, callbacks ActivateCallbacks) error
 }
 
 // Cleanuper enable custom functionality on transfer `Activate`/`Upload`/`Reupload` tasks on `Cleanup` stage.
 type Cleanuper interface {
 	Provider
-	Cleanup(ctx context.Context, task *server.TransferOperation) error
+	Cleanup(ctx context.Context, task *model.TransferOperation) error
 }
 
 // Deactivator enable custom functionality on transfer `Deactivate` task.
 type Deactivator interface {
 	Provider
-	Deactivate(ctx context.Context, task *server.TransferOperation) error
+	Deactivate(ctx context.Context, task *model.TransferOperation) error
 }
 
 // Tester check that it's possible to execute provider with provided transfer params. Will return structured test result for that specific provider.
@@ -70,11 +70,11 @@ type Updater interface {
 
 type Cleaner interface {
 	cleanup.Closeable
-	CleanupTmp(ctx context.Context, transferID string, tmpPolicy *server.TmpPolicyConfig) error
+	CleanupTmp(ctx context.Context, transferID string, tmpPolicy *model.TmpPolicyConfig) error
 }
 
 // TMPCleaner enable custom functionality on transfer `TMP Policy` inside `Cleanup` stage of `Activate` task.
 type TMPCleaner interface {
 	Provider
-	TMPCleaner(ctx context.Context, task *server.TransferOperation) (Cleaner, error)
+	TMPCleaner(ctx context.Context, task *model.TransferOperation) (Cleaner, error)
 }

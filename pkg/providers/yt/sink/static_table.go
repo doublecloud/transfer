@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -156,7 +156,7 @@ func (t *StaticTable) commit(tableID abstract.TableID) error {
 }
 
 func (t *StaticTable) mergeIfNeeded(ctx context.Context, tableWriter *tableWriter) error {
-	if t.config == nil || t.config.CleanupMode() != server.DisabledCleanup {
+	if t.config == nil || t.config.CleanupMode() != model.DisabledCleanup {
 		return nil
 	}
 

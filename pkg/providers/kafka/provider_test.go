@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/blank"
 	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
@@ -43,7 +43,7 @@ func TestTopicResolver(t *testing.T) {
 		logger.Log,
 		solomon.NewRegistry(solomon.NewRegistryOpts()),
 		cpclient.NewFakeClient(),
-		&server.Transfer{Src: kafkaSource, ID: "asd"},
+		&model.Transfer{Src: kafkaSource, ID: "asd"},
 	).(*Provider)
 
 	sniffer, err := provider.Sniffer(context.Background())

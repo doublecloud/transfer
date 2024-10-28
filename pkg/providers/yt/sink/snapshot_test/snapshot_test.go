@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/providers/yt/sink"
 	ytstorage "github.com/doublecloud/transfer/pkg/providers/yt/storage"
@@ -42,7 +42,7 @@ var (
 		CellBundle:               "default",
 		PrimaryMedium:            "default",
 		UseStaticTableOnSnapshot: false,
-		Cleanup:                  server.DisabledCleanup,
+		Cleanup:                  model.DisabledCleanup,
 		CanAlter:                 true,
 	})
 )

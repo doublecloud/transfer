@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -17,10 +17,10 @@ func init() {
 	gob.Register(new(CoralogixDestination))
 	providers.Register(ProviderType, New)
 	abstract.RegisterProviderName(ProviderType, "Coralogix")
-	server.RegisterDestination(ProviderType, destinationModelFactory)
+	model.RegisterDestination(ProviderType, destinationModelFactory)
 }
 
-func destinationModelFactory() server.Destination {
+func destinationModelFactory() model.Destination {
 	return new(CoralogixDestination)
 }
 
@@ -35,7 +35,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p Provider) Sink(config middlewares.Config) (abstract.Sinker, error) {
@@ -50,7 +50,7 @@ func (p Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

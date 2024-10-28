@@ -3,7 +3,7 @@ package postgres
 import (
 	"time"
 
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type PgSinkParams interface {
@@ -30,7 +30,7 @@ type PgSinkParams interface {
 	// If 'true' - when error occurs, we are logging error, and return nil. So it's 'lose data if error'
 	// private option
 	LoozeMode() bool
-	CleanupMode() server.CleanupType
+	CleanupMode() model.CleanupType
 	// Tables
 	// It's altnames source->destination
 	// private option

@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/conn"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
@@ -20,7 +20,7 @@ func TestIncrementalShardedStorage(t *testing.T) {
 			chrecipe.WithInitFile("incremental.sql"),
 		)
 	)
-	shard1, err := clickhouse.NewStorage(incrementalDB.ToStorageParams(), new(server.Transfer))
+	shard1, err := clickhouse.NewStorage(incrementalDB.ToStorageParams(), new(model.Transfer))
 	require.NoError(t, err)
 	ctx := context.Background()
 

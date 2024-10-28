@@ -8,14 +8,14 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 	"golang.org/x/exp/maps"
 )
 
 func TestJSONSerializerEmptyInput(t *testing.T) {
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        false,
 		Interval:       0,
 		MaxChangeItems: 0,
@@ -79,7 +79,7 @@ func TestJSONSerializerTopicNameAllTypes(t *testing.T) {
 		"basic_types15",
 		"insert")
 	changeItem.Schema = "public"
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        false,
 		Interval:       0,
 		MaxChangeItems: 0,

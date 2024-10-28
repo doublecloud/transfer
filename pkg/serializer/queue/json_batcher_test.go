@@ -6,11 +6,11 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 func TestJSONBatcher(t *testing.T) {
-	commonTest(t, func(batchingSettings server.Batching) Serializer {
+	commonTest(t, func(batchingSettings model.Batching) Serializer {
 		result, _ := NewJSONSerializer(batchingSettings, false, logger.Log)
 		return result
 	}, func(in abstract.ChangeItem) int {

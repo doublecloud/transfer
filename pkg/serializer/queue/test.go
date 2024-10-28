@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -33,7 +33,7 @@ func init() {
 }
 
 func checkTestCase(t *testing.T, serializerF serializerFactory, enabled bool, maxChangeItems int, maxMessageSize int64, expectedLen int) {
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        enabled,
 		Interval:       0,
 		MaxChangeItems: maxChangeItems,
@@ -48,7 +48,7 @@ func checkTestCase(t *testing.T, serializerF serializerFactory, enabled bool, ma
 	}
 }
 
-type serializerFactory = func(batchingSettings server.Batching) Serializer
+type serializerFactory = func(batchingSettings model.Batching) Serializer
 type masterChangeItemSize = func(in abstract.ChangeItem) int
 type batchSize = func(elemSize, elemsNum int) int64
 

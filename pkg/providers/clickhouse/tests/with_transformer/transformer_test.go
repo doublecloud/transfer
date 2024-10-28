@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/sink"
@@ -22,7 +22,7 @@ import (
 )
 
 var (
-	source         = server.MockSource{}
+	source         = model.MockSource{}
 	target         = *chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("init.sql"))
 	targetAsSource = *chrecipe.MustSource(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("init.sql"))
 )

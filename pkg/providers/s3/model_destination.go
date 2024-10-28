@@ -6,14 +6,14 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 )
 
 func init() {
 	gob.RegisterName("*server.S3Destination", new(S3Destination))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	dp_model.RegisterDestination(ProviderType, func() dp_model.Destination {
 		return new(S3Destination)
 	})
 	abstract.RegisterProviderName(ProviderType, "ObjectStorage")
@@ -31,9 +31,9 @@ const (
 )
 
 type S3Destination struct {
-	OutputFormat     server.ParsingFormat
+	OutputFormat     dp_model.ParsingFormat
 	OutputEncoding   Encoding
-	BufferSize       server.BytesSize
+	BufferSize       dp_model.BytesSize
 	BufferInterval   time.Duration
 	Endpoint         string
 	Region           string
@@ -52,7 +52,7 @@ type S3Destination struct {
 	AnyAsString      bool
 }
 
-var _ server.Destination = (*S3Destination)(nil)
+var _ dp_model.Destination = (*S3Destination)(nil)
 
 func (d *S3Destination) WithDefaults() {
 	if d.Layout == "" {
@@ -62,7 +62,7 @@ func (d *S3Destination) WithDefaults() {
 		d.BufferInterval = time.Second * 30
 	}
 	if d.BufferSize == 0 {
-		d.BufferSize = server.BytesSize(model.BufferTriggingSizeDefault)
+		d.BufferSize = dp_model.BytesSize(model.BufferTriggingSizeDefault)
 	}
 	if d.Concurrency == 0 {
 		d.Concurrency = 4
@@ -81,7 +81,7 @@ func (d *S3Destination) ConnectionConfig() ConnectionConfig {
 	return ConnectionConfig{
 		AccessKey:        d.AccessKey,
 		S3ForcePathStyle: d.S3ForcePathStyle,
-		SecretKey:        server.SecretString(d.Secret),
+		SecretKey:        dp_model.SecretString(d.Secret),
 		Endpoint:         d.Endpoint,
 		UseSSL:           d.UseSSL,
 		VerifySSL:        d.VerifySSL,
@@ -94,8 +94,8 @@ func (d *S3Destination) Transformer() map[string]string {
 	return map[string]string{}
 }
 
-func (d *S3Destination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *S3Destination) CleanupMode() dp_model.CleanupType {
+	return dp_model.DisabledCleanup
 }
 
 func (S3Destination) IsDestination() {
@@ -109,9 +109,9 @@ func (d *S3Destination) Validate() error {
 	return nil
 }
 
-func (d *S3Destination) compatible(src server.Source) bool {
-	parseable, ok := src.(server.Parseable)
-	if d.OutputFormat == server.ParsingFormatRaw {
+func (d *S3Destination) compatible(src dp_model.Source) bool {
+	parseable, ok := src.(dp_model.Parseable)
+	if d.OutputFormat == dp_model.ParsingFormatRaw {
 		if ok {
 			return parseable.Parser() == nil
 		}
@@ -124,7 +124,7 @@ func (d *S3Destination) compatible(src server.Source) bool {
 	}
 }
 
-func (d *S3Destination) Compatible(src server.Source, _ abstract.TransferType) error {
+func (d *S3Destination) Compatible(src dp_model.Source, _ abstract.TransferType) error {
 	if d.compatible(src) {
 		return nil
 	}

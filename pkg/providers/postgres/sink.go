@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/dustin/go-humanize"
@@ -426,7 +426,7 @@ func (s *sink) batchInsert(input []abstract.ChangeItem) error {
 			}
 			s.keys = newKeys
 		case abstract.DropTableKind:
-			if s.config.CleanupMode() != server.Drop {
+			if s.config.CleanupMode() != model.Drop {
 				s.logger.Infof("Skipped dropping table '%v' due cleanup policy", item.PgName())
 				continue
 			}
@@ -443,7 +443,7 @@ func (s *sink) batchInsert(input []abstract.ChangeItem) error {
 				}
 			}
 		case abstract.TruncateTableKind:
-			if s.config.CleanupMode() != server.Truncate {
+			if s.config.CleanupMode() != model.Truncate {
 				s.logger.Infof("Skipped truncating table '%v' due cleanup policy", item.PgName())
 				continue
 			}

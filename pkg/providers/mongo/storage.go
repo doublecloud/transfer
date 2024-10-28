@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.mongodb.org/mongo-driver/bson"
@@ -183,7 +183,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 			}
 		}
 	}
-	return server.FilteredMap(tables, includeTableFilter), nil
+	return model.FilteredMap(tables, includeTableFilter), nil
 }
 
 func filterSystemCollections(specs []*mongo.CollectionSpecification) ([]string, error) {

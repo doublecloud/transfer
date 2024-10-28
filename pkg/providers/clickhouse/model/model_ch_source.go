@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type ClickhouseIOFormat string
@@ -28,7 +28,7 @@ type ChSource struct {
 	HTTPPort         int
 	NativePort       int
 	User             string
-	Password         server.SecretString
+	Password         model.SecretString
 	SSLEnabled       bool
 	PemFileContent   string
 	Database         string
@@ -42,7 +42,7 @@ type ChSource struct {
 	RootCACertPaths  []string
 }
 
-var _ server.Source = (*ChSource)(nil)
+var _ model.Source = (*ChSource)(nil)
 
 func (s *ChSource) MDBClusterID() string {
 	return s.MdbClusterID
@@ -139,7 +139,7 @@ func (s *ChSource) AllIncludes() []string {
 	return s.IncludeTables
 }
 
-func (s *ChSource) IsAbstract2(dst server.Destination) bool {
+func (s *ChSource) IsAbstract2(dst model.Destination) bool {
 	if _, ok := dst.(*ChDestination); ok {
 		return true
 	}
@@ -166,8 +166,8 @@ func (s ChSourceWrapper) ShardByRoundRobin() bool {
 	return false
 }
 
-func (s ChSourceWrapper) Cleanup() server.CleanupType {
-	return server.DisabledCleanup
+func (s ChSourceWrapper) Cleanup() model.CleanupType {
+	return model.DisabledCleanup
 }
 
 func (s ChSourceWrapper) MdbClusterID() string {
@@ -279,7 +279,7 @@ func (s ChSourceWrapper) ShardByTransferID() bool {
 	return false
 }
 
-func (s ChSourceWrapper) Rotation() *server.RotatorConfig {
+func (s ChSourceWrapper) Rotation() *model.RotatorConfig {
 	return nil
 }
 

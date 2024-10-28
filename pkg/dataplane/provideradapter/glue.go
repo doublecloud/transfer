@@ -4,26 +4,26 @@ import (
 	"reflect"
 
 	"github.com/doublecloud/transfer/internal/logger"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"golang.org/x/xerrors"
 )
 
 var (
-	adapterRegistry = map[reflect.Type]func(val server.EndpointParams) Adapter{}
+	adapterRegistry = map[reflect.Type]func(val model.EndpointParams) Adapter{}
 )
 
 type Adapter interface {
 	WithConfig() error
 }
 
-func Register[T server.EndpointParams](f func(val T) Adapter) {
+func Register[T model.EndpointParams](f func(val T) Adapter) {
 	var t T
-	adapterRegistry[reflect.TypeOf(t)] = func(val server.EndpointParams) Adapter {
+	adapterRegistry[reflect.TypeOf(t)] = func(val model.EndpointParams) Adapter {
 		return f(val.(T))
 	}
 }
 
-func ApplyForTransfer(transfer *server.Transfer) error {
+func ApplyForTransfer(transfer *model.Transfer) error {
 	if err := ApplyForEndpoint(transfer.Src); err != nil {
 		return xerrors.Errorf("unable to adapt src: %w", err)
 	}
@@ -33,7 +33,7 @@ func ApplyForTransfer(transfer *server.Transfer) error {
 	return nil
 }
 
-func ApplyForEndpoint(endpoint server.EndpointParams) error {
+func ApplyForEndpoint(endpoint model.EndpointParams) error {
 	if endpoint == nil {
 		return nil
 	}

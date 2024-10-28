@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -15,12 +15,12 @@ import (
 const ProviderType = abstract.ProviderType("delta")
 
 func init() {
-	sourceFactory := func() server.Source {
+	sourceFactory := func() model.Source {
 		return new(DeltaSource)
 	}
 
 	gob.Register(new(DeltaSource))
-	server.RegisterSource(ProviderType, sourceFactory)
+	model.RegisterSource(ProviderType, sourceFactory)
 	abstract.RegisterProviderName(ProviderType, "Delta Lake")
 }
 
@@ -33,7 +33,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p Provider) Type() abstract.ProviderType {

@@ -6,19 +6,19 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/config/env"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 )
 
-func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task *server.TransferOperation) error {
+func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task *model.TransferOperation) error {
 	if !transfer.IsMain() {
 		return nil
 	}
-	transfer.Status = server.Running
+	transfer.Status = model.Running
 	if transfer.SnapshotOnly() {
-		transfer.Status = server.Completed
+		transfer.Status = model.Completed
 	}
 	if err := cp.SetStatus(transfer.ID, transfer.Status); err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "Cannot transit transfer into the %s state: %w", string(transfer.Status), err)
@@ -38,6 +38,6 @@ func StartJob(ctx context.Context, cp coordinator.Coordinator, transfer server.T
 	return nil
 }
 
-var startRuntime = func(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task *server.TransferOperation) error {
+var startRuntime = func(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task *model.TransferOperation) error {
 	return nil
 }

@@ -3,13 +3,13 @@ package queue
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/serializer"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type JSONSerializer struct {
-	batchingSettings server.Batching
+	batchingSettings model.Batching
 	saveTxOrder      bool
 	logger           log.Logger
 }
@@ -82,7 +82,7 @@ func (s *JSONSerializer) Serialize(input []abstract.ChangeItem) (map[abstract.Ta
 	return idToGroup, nil
 }
 
-func NewJSONSerializer(batchingSettings server.Batching, saveTxOrder bool, logger log.Logger) (*JSONSerializer, error) {
+func NewJSONSerializer(batchingSettings model.Batching, saveTxOrder bool, logger log.Logger) (*JSONSerializer, error) {
 	return &JSONSerializer{
 		batchingSettings: batchingSettings,
 		saveTxOrder:      saveTxOrder,

@@ -17,7 +17,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/conn"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/errors"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -866,7 +866,7 @@ func parseSemver(version string) (*semver.Version, error) {
 	}, nil
 }
 
-func NewStorage(config *model.ChStorageParams, transfer *server.Transfer, opts ...StorageOpt) (ClickhouseStorage, error) {
+func NewStorage(config *model.ChStorageParams, transfer *dp_model.Transfer, opts ...StorageOpt) (ClickhouseStorage, error) {
 	singleHost := false
 	if config.IsManaged() {
 		shards, err := model.ShardFromCluster(config.MdbClusterID, config.ChClusterName)

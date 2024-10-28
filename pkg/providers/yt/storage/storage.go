@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	ytprovider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -67,7 +67,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 		}
 	}
 
-	return server.FilteredMap(res, includeTableFilter), nil
+	return model.FilteredMap(res, includeTableFilter), nil
 }
 
 func getTableName(t abstract.TableDescription) string {

@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/middlewares"
@@ -32,12 +32,12 @@ const (
 	TableListErrorText      string = "failed to list tables and their schemas: %w"
 )
 
-type TablePartProvider func() (*server.OperationTablePart, error)
+type TablePartProvider func() (*model.OperationTablePart, error)
 
 type SnapshotLoader struct {
 	cp          coordinator.Coordinator
 	operationID string
-	transfer    *server.Transfer
+	transfer    *model.Transfer
 	registry    metrics.Registry
 
 	// Transfer params
@@ -56,7 +56,7 @@ type SnapshotLoader struct {
 	schemaLock  sync.Mutex
 }
 
-func NewSnapshotLoader(cp coordinator.Coordinator, operationID string, transfer *server.Transfer, registry metrics.Registry) *SnapshotLoader {
+func NewSnapshotLoader(cp coordinator.Coordinator, operationID string, transfer *model.Transfer, registry metrics.Registry) *SnapshotLoader {
 	return &SnapshotLoader{
 		cp:          cp,
 		operationID: operationID,
@@ -118,7 +118,7 @@ func (l *SnapshotLoader) CheckIncludeDirectives(tables []abstract.TableDescripti
 				unfulfilledIncludes.Add(includeObject)
 			}
 		}
-	} else if includeable, ok := l.transfer.Src.(server.Includeable); ok {
+	} else if includeable, ok := l.transfer.Src.(model.Includeable); ok {
 		unfulfilledIncludes.Add(includeable.AllIncludes()...)
 		for _, table := range tables {
 			if unfulfilledIncludes.Empty() {
@@ -148,7 +148,7 @@ func (l *SnapshotLoader) endpointsPreSnapshotActions(sourceStorage abstract.Stor
 			dst.CopyUpload = true
 		}
 		dst.PerTransactionPush = false
-	case server.HackableTarget:
+	case model.HackableTarget:
 		defer dst.PreSnapshotHacks()
 	}
 }
@@ -156,15 +156,15 @@ func (l *SnapshotLoader) endpointsPreSnapshotActions(sourceStorage abstract.Stor
 // TODO Remove, legacy hacks
 func (l *SnapshotLoader) endpointsPostSnapshotActions() {
 	switch dst := l.transfer.Dst.(type) {
-	case server.HackableTarget:
+	case model.HackableTarget:
 		defer dst.PostSnapshotHacks()
 	}
 }
 
 func (l *SnapshotLoader) applyTransferTmpPolicy(tables []abstract.TableDescription) error {
 	if l.transfer.TmpPolicy != nil && l.transfer.TmpPolicy.Suffix != "" {
-		if err := server.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
-			return errors.CategorizedErrorf(categories.Target, server.ErrInvalidTmpPolicy, err)
+		if err := model.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
+			return errors.CategorizedErrorf(categories.Target, model.ErrInvalidTmpPolicy, err)
 		}
 		include := make(map[abstract.TableID]struct{})
 		for _, table := range tables {
@@ -370,7 +370,7 @@ func (l *SnapshotLoader) uploadSharded(ctx context.Context, tables []abstract.Ta
 	return nil
 }
 
-func (l *SnapshotLoader) dumpTablePartsToLogs(parts []*server.OperationTablePart) {
+func (l *SnapshotLoader) dumpTablePartsToLogs(parts []*model.OperationTablePart) {
 	chunkSize := 1000
 	for i := 0; i < len(parts); i += chunkSize {
 		end := i + chunkSize
@@ -378,7 +378,7 @@ func (l *SnapshotLoader) dumpTablePartsToLogs(parts []*server.OperationTablePart
 			end = len(parts)
 		}
 
-		partsToDump := slices.Map(parts[i:end], func(part *server.OperationTablePart) string {
+		partsToDump := slices.Map(parts[i:end], func(part *model.OperationTablePart) string {
 			return part.String()
 		})
 		logger.Log.Info(fmt.Sprintf("Tables parts (shards) to copy [%v, %v]", i+1, end), log.Strings("parts", partsToDump))
@@ -772,7 +772,7 @@ func (l *SnapshotLoader) sendTableControlEvent(
 	ctx context.Context,
 	sourceStorage abstract.Storage,
 	kind abstract.Kind,
-	tables ...*server.OperationTablePart,
+	tables ...*model.OperationTablePart,
 ) error {
 	if kind != abstract.InitShardedTableLoad && kind != abstract.DoneShardedTableLoad {
 		return xerrors.Errorf("Unsupported event type '%v'", kind)
@@ -816,7 +816,7 @@ func (l *SnapshotLoader) sendTableControlEvent(
 	return nil
 }
 
-func (l *SnapshotLoader) sendTablePartControlEvent(event []abstract.ChangeItem, pusher abstract.Pusher, part *server.OperationTablePart) error {
+func (l *SnapshotLoader) sendTablePartControlEvent(event []abstract.ChangeItem, pusher abstract.Pusher, part *model.OperationTablePart) error {
 	if len(event) != 1 {
 		return xerrors.Errorf("Logic error, wrong control events count, must be 1, but get %v", len(event))
 	}
@@ -834,10 +834,10 @@ func (l *SnapshotLoader) sendTablePartControlEvent(event []abstract.ChangeItem, 
 	return nil
 }
 
-func (l *SnapshotLoader) GetLocalTablePartProvider(tables ...*server.OperationTablePart) TablePartProvider {
+func (l *SnapshotLoader) GetLocalTablePartProvider(tables ...*model.OperationTablePart) TablePartProvider {
 	index := 0
 	readMutex := sync.Mutex{}
-	return func() (*server.OperationTablePart, error) {
+	return func() (*model.OperationTablePart, error) {
 		readMutex.Lock()
 		defer readMutex.Unlock()
 
@@ -852,7 +852,7 @@ func (l *SnapshotLoader) GetLocalTablePartProvider(tables ...*server.OperationTa
 }
 
 func (l *SnapshotLoader) GetRemoteTablePartProvider() TablePartProvider {
-	return func() (*server.OperationTablePart, error) {
+	return func() (*model.OperationTablePart, error) {
 		return l.cp.AssignOperationTablePart(l.operationID, l.workerIndex)
 	}
 }

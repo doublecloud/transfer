@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/doublecloud/transfer/internal/logger"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -14,7 +14,7 @@ type CoordinatorInMemory struct {
 	mu    sync.Mutex
 	state map[string]map[string]*TransferStateData
 
-	progress []*server.OperationTablePart
+	progress []*model.OperationTablePart
 }
 
 func NewStatefulFakeClient() *CoordinatorInMemory {
@@ -28,11 +28,11 @@ func NewStatefulFakeClient() *CoordinatorInMemory {
 	}
 }
 
-func (f *CoordinatorInMemory) Progress() []*server.OperationTablePart {
+func (f *CoordinatorInMemory) Progress() []*model.OperationTablePart {
 	return f.progress
 }
 
-func (f *CoordinatorInMemory) UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+func (f *CoordinatorInMemory) UpdateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	f.progress = tables

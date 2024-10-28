@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/debezium"
 	"github.com/doublecloud/transfer/pkg/debezium/packer"
 	lightningcache "github.com/doublecloud/transfer/pkg/debezium/packer/lightning_cache"
@@ -92,7 +92,7 @@ func (s *DebeziumSerializer) Serialize(input []abstract.ChangeItem) (map[abstrac
 	return s.SerializeImpl(input, runtime.NumCPU()*4, 64)
 }
 
-func MakeFormatSettingsWithTopicPrefix(format server.SerializationFormat, topicPrefix string, topicFullPath string) server.SerializationFormat {
+func MakeFormatSettingsWithTopicPrefix(format model.SerializationFormat, topicPrefix string, topicFullPath string) model.SerializationFormat {
 	formatSettingsCopy := make(map[string]string) // to not modify 'formatSettings'
 	for k, v := range format.Settings {
 		formatSettingsCopy[k] = v
@@ -106,7 +106,7 @@ func MakeFormatSettingsWithTopicPrefix(format server.SerializationFormat, topicP
 			formatSettingsCopy[debeziumparameters.TopicPrefix] = defaultTopicPrefix
 		}
 	}
-	return server.SerializationFormat{
+	return model.SerializationFormat{
 		Name:             format.Name,
 		Settings:         formatSettingsCopy,
 		SettingsKV:       format.SettingsKV,

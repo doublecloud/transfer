@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/sink"
 )
@@ -74,7 +74,7 @@ func RemoveTracker(src *MysqlSource, id string, cp coordinator.Coordinator) erro
 	return nil
 }
 
-func LoadMysqlSchema(transfer *server.Transfer, registry metrics.Registry, isAfter bool) error {
+func LoadMysqlSchema(transfer *model.Transfer, registry metrics.Registry, isAfter bool) error {
 	mysqlSource, ok := transfer.Src.(*MysqlSource)
 	if !ok {
 		return nil
@@ -102,7 +102,7 @@ func LoadMysqlSchema(transfer *server.Transfer, registry metrics.Registry, isAft
 }
 
 // See TM-4581
-func checkRestrictedColumnTypes(transfer *server.Transfer, tables abstract.TableMap) error {
+func checkRestrictedColumnTypes(transfer *model.Transfer, tables abstract.TableMap) error {
 	if transfer.SrcType() != ProviderType {
 		return nil // Only MySQL sources affected by the decimal bug
 	}

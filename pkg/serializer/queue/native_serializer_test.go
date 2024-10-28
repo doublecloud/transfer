@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -25,7 +25,7 @@ func init() {
 }
 
 func TestNativeSerializerEmptyInput(t *testing.T) {
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        false,
 		Interval:       0,
 		MaxChangeItems: 0,
@@ -40,7 +40,7 @@ func TestNativeSerializerEmptyInput(t *testing.T) {
 }
 
 func TestNativeSerializerTopicName(t *testing.T) {
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        false,
 		Interval:       0,
 		MaxChangeItems: 0,
@@ -90,7 +90,7 @@ func TestNativeSerializerTopicName(t *testing.T) {
 }
 
 func TestBatchNativeSerializerTopicName(t *testing.T) {
-	batcher := server.Batching{
+	batcher := model.Batching{
 		Enabled:        false,
 		Interval:       0,
 		MaxChangeItems: 0,

@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/internal/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	eventhub2 "github.com/doublecloud/transfer/pkg/providers/eventhub"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/google/uuid"
@@ -87,7 +87,7 @@ func TestNewSource(t *testing.T) {
 		Auth: &eventhub2.EventHubAuth{
 			Method:   eventhub2.EventHubAuthSAS,
 			KeyName:  os.Getenv("EVENTHUB_KEY_NAME"),
-			KeyValue: server.SecretString(os.Getenv("EVENTHUB_KEY_VALUE")),
+			KeyValue: model.SecretString(os.Getenv("EVENTHUB_KEY_VALUE")),
 		},
 	}
 

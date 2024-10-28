@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/stretchr/testify/require"
 	yt_schema "go.ytsaurus.tech/yt/go/schema"
@@ -161,7 +161,7 @@ func TestRotate(t *testing.T) {
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
 		PrimaryMedium: "default",
-		Rotation: &server.RotatorConfig{
+		Rotation: &model.RotatorConfig{
 			KeepPartCount:     10,
 			PartType:          "d",
 			PartSize:          1,

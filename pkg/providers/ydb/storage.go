@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"github.com/doublecloud/transfer/pkg/xtls"
@@ -191,7 +191,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 		tInfo.Schema = abstract.NewTableSchema(FromYdbSchema(desc.Columns, desc.PrimaryKey))
 		tableMap[*abstract.NewTableID("", tableName)] = tInfo
 	}
-	return server.FilteredMap(tableMap, includeTableFilter), nil
+	return model.FilteredMap(tableMap, includeTableFilter), nil
 }
 
 func (s *Storage) describeTable(ctx context.Context, tablePath string, opts ...options.DescribeTableOption) (*options.Description, error) {

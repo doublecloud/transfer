@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -110,19 +110,19 @@ func (c *CoordinatorS3) RemoveTransferState(transferID string, keys []string) er
 }
 
 // GetOperationProgress do nothing
-func (c *CoordinatorS3) GetOperationProgress(operationID string) (*server.AggregatedProgress, error) {
-	return server.NewAggregatedProgress(), nil
+func (c *CoordinatorS3) GetOperationProgress(operationID string) (*model.AggregatedProgress, error) {
+	return model.NewAggregatedProgress(), nil
 }
 
 // CreateOperationWorkers creates worker files with initial progress for the operation.
 func (c *CoordinatorS3) CreateOperationWorkers(operationID string, workersCount int) error {
 	for i := 1; i <= workersCount; i++ {
-		worker := &server.OperationWorker{
+		worker := &model.OperationWorker{
 			OperationID: operationID,
 			WorkerIndex: i,
 			Completed:   false,
 			Err:         "",
-			Progress: &server.AggregatedProgress{
+			Progress: &model.AggregatedProgress{
 				PartsCount:          0,
 				CompletedPartsCount: 0,
 				ETARowsCount:        0,
@@ -147,21 +147,21 @@ func (c *CoordinatorS3) CreateOperationWorkers(operationID string, workersCount 
 }
 
 // GetOperationWorkers fetches all workers for the given operationID.
-func (c *CoordinatorS3) GetOperationWorkers(operationID string) ([]*server.OperationWorker, error) {
+func (c *CoordinatorS3) GetOperationWorkers(operationID string) ([]*model.OperationWorker, error) {
 	prefix := operationID + "/worker_"
 	objects, err := c.listObjects(prefix)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list prefix: %s: %w", prefix, err)
 	}
 
-	var workers []*server.OperationWorker
+	var workers []*model.OperationWorker
 	for _, obj := range objects {
 		resp, err := c.getObject(*obj.Key)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to get key: %s: %w", *obj.Key, err)
 		}
 
-		var worker server.OperationWorker
+		var worker model.OperationWorker
 		if err := json.Unmarshal(resp, &worker); err != nil {
 			return nil, xerrors.Errorf("failed to unmarshal worker: %w", err)
 		}
@@ -182,7 +182,7 @@ func (c *CoordinatorS3) GetOperationWorkersCount(operationID string, completed b
 }
 
 // CreateOperationTablesParts creates table parts for an operation and stores them in S3.
-func (c *CoordinatorS3) CreateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+func (c *CoordinatorS3) CreateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error {
 	for _, table := range tables {
 		key := fmt.Sprintf("%s/table_%v.json", operationID, table.TableKey())
 
@@ -199,21 +199,21 @@ func (c *CoordinatorS3) CreateOperationTablesParts(operationID string, tables []
 }
 
 // GetOperationTablesParts fetches table parts for a given operation.
-func (c *CoordinatorS3) GetOperationTablesParts(operationID string) ([]*server.OperationTablePart, error) {
+func (c *CoordinatorS3) GetOperationTablesParts(operationID string) ([]*model.OperationTablePart, error) {
 	prefix := operationID + "/table_"
 	objects, err := c.listObjects(prefix)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to list: %s: %w", prefix, err)
 	}
 
-	var tables []*server.OperationTablePart
+	var tables []*model.OperationTablePart
 	for _, obj := range objects {
 		resp, err := c.getObject(*obj.Key)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to get: %s: %w", *obj.Key, err)
 		}
 
-		var table server.OperationTablePart
+		var table model.OperationTablePart
 		if err := json.Unmarshal(resp, &table); err != nil {
 			return nil, xerrors.Errorf("failed to unmarshal table part: %w", err)
 		}
@@ -224,7 +224,7 @@ func (c *CoordinatorS3) GetOperationTablesParts(operationID string) ([]*server.O
 }
 
 // AssignOperationTablePart assigns a table part to a worker.
-func (c *CoordinatorS3) AssignOperationTablePart(operationID string, workerIndex int) (*server.OperationTablePart, error) {
+func (c *CoordinatorS3) AssignOperationTablePart(operationID string, workerIndex int) (*model.OperationTablePart, error) {
 	tables, err := c.GetOperationTablesParts(operationID)
 	if err != nil {
 		return nil, err
@@ -286,12 +286,12 @@ func (c *CoordinatorS3) ClearAssignedTablesParts(ctx context.Context, operationI
 }
 
 // UpdateOperationTablesParts updates the status of table parts in S3.
-func (c *CoordinatorS3) UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error {
+func (c *CoordinatorS3) UpdateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error {
 	currentTables, err := c.GetOperationTablesParts(operationID)
 	if err != nil {
 		return xerrors.Errorf("failed to get tables parts: %w", err)
 	}
-	curTbls := map[string]*server.OperationTablePart{}
+	curTbls := map[string]*model.OperationTablePart{}
 	for _, table := range currentTables {
 		curTbls[table.TableKey()] = table
 	}

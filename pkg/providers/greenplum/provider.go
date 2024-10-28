@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
@@ -17,11 +17,11 @@ import (
 )
 
 func init() {
-	destinationFactory := func() server.Destination {
+	destinationFactory := func() model.Destination {
 		return new(GpDestination)
 	}
-	server.RegisterDestination(ProviderType, destinationFactory)
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterDestination(ProviderType, destinationFactory)
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(GpSource)
 	})
 
@@ -70,10 +70,10 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.SnapshotOnly() || p.transfer.IncrementOnly() {
 		return abstract.NewFatalError(xerrors.Errorf("only snapshot mode is allowed for the Greenplum source"))
 	}
@@ -105,7 +105,7 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

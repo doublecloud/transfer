@@ -9,7 +9,7 @@ import (
 	"github.com/cenkalti/backoff/v4"
 	"github.com/docker/go-connections/nat"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/tests/tcrecipes"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
@@ -62,7 +62,7 @@ func RecipeSource(options ...RecipeOption) *MongoSource {
 		ReplicaSet:             os.Getenv(opts.prefix + "MONGO_REPLICA_SET"),
 		AuthSource:             "",
 		User:                   os.Getenv(opts.prefix + "MONGO_LOCAL_USER"),
-		Password:               server.SecretString(os.Getenv(opts.prefix + "MONGO_LOCAL_PASSWORD")),
+		Password:               model.SecretString(os.Getenv(opts.prefix + "MONGO_LOCAL_PASSWORD")),
 		SRVMode:                false,
 		Collections:            opts.collection,
 		ExcludedCollections:    nil,
@@ -103,7 +103,7 @@ func RecipeTarget(options ...RecipeOption) *MongoDestination {
 		ReplicaSet:        os.Getenv(opts.prefix + "MONGO_REPLICA_SET"),
 		AuthSource:        "",
 		User:              os.Getenv(opts.prefix + "MONGO_LOCAL_USER"),
-		Password:          server.SecretString(os.Getenv(opts.prefix + "MONGO_LOCAL_PASSWORD")),
+		Password:          model.SecretString(os.Getenv(opts.prefix + "MONGO_LOCAL_PASSWORD")),
 		SRVMode:           false,
 		TransformerConfig: nil,
 		Cleanup:           "",

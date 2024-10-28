@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/tests/tcrecipes/kafka"
 )
 
@@ -24,7 +24,7 @@ func SourceRecipe() (*KafkaSource, error) {
 	src := new(KafkaSource)
 	src.Connection = &KafkaConnectionOptions{
 		ClusterID:    "",
-		TLS:          server.DisabledTLS,
+		TLS:          model.DisabledTLS,
 		TLSFile:      "",
 		Brokers:      []string{brokers},
 		SubNetworkID: "",
@@ -35,7 +35,7 @@ func SourceRecipe() (*KafkaSource, error) {
 		User:      "",
 		Password:  "",
 	}
-	src.BufferSize = server.BytesSize(1024)
+	src.BufferSize = model.BytesSize(1024)
 	return src, nil
 }
 
@@ -73,7 +73,7 @@ func DestinationRecipe() (*KafkaDestination, error) {
 	dst := new(KafkaDestination)
 	dst.Connection = &KafkaConnectionOptions{
 		ClusterID:    "",
-		TLS:          server.DisabledTLS,
+		TLS:          model.DisabledTLS,
 		TLSFile:      "",
 		Brokers:      []string{brokers},
 		SubNetworkID: "",
@@ -84,8 +84,8 @@ func DestinationRecipe() (*KafkaDestination, error) {
 		User:      "",
 		Password:  "",
 	}
-	dst.FormatSettings = server.SerializationFormat{
-		Name:             server.SerializationFormatAuto,
+	dst.FormatSettings = model.SerializationFormat{
+		Name:             model.SerializationFormatAuto,
 		Settings:         nil,
 		SettingsKV:       nil,
 		BatchingSettings: nil,

@@ -14,7 +14,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/serializer"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -248,7 +248,7 @@ func (s *sinker) tryUploadWithIntersectionGuard(cache *FileCache, filePath strin
 func (s *sinker) bucket(row abstract.ChangeItem) string {
 	rowBucketTime := time.Unix(0, int64(row.CommitTime))
 	if s.cfg.LayoutColumn != "" {
-		rowBucketTime = server.ExtractTimeCol(row, s.cfg.LayoutColumn)
+		rowBucketTime = model.ExtractTimeCol(row, s.cfg.LayoutColumn)
 	}
 	if s.cfg.LayoutTZ != "" {
 		loc, _ := time.LoadLocation(s.cfg.LayoutTZ)
@@ -286,7 +286,7 @@ func (s *sinker) rowPart(row abstract.ChangeItem) string {
 	return res
 }
 
-func (s *sinker) UpdateOutputFormat(f server.ParsingFormat) {
+func (s *sinker) UpdateOutputFormat(f model.ParsingFormat) {
 	s.cfg.OutputFormat = f
 }
 
@@ -312,7 +312,7 @@ func (s *sinker) createSnapshotIOHolder() (*snapshotHolder, error) {
 
 func createSerializer(cfg *s3_provider.S3Destination) (serializer.BatchSerializer, error) {
 	switch cfg.OutputFormat {
-	case server.ParsingFormatRaw:
+	case model.ParsingFormatRaw:
 		return serializer.NewRawBatchSerializer(
 			&serializer.RawBatchSerializerConfig{
 				SerializerConfig: &serializer.RawSerializerConfig{
@@ -321,7 +321,7 @@ func createSerializer(cfg *s3_provider.S3Destination) (serializer.BatchSerialize
 				BatchConfig: nil,
 			},
 		), nil
-	case server.ParsingFormatJSON:
+	case model.ParsingFormatJSON:
 		return serializer.NewJSONBatchSerializer(
 			&serializer.JSONBatchSerializerConfig{
 				SerializerConfig: &serializer.JSONSerializerConfig{
@@ -332,9 +332,9 @@ func createSerializer(cfg *s3_provider.S3Destination) (serializer.BatchSerialize
 				BatchConfig: nil,
 			},
 		), nil
-	case server.ParsingFormatCSV:
+	case model.ParsingFormatCSV:
 		return serializer.NewCsvBatchSerializer(nil), nil
-	case server.ParsingFormatPARQUET:
+	case model.ParsingFormatPARQUET:
 		return serializer.NewParquetBatchSerializer(), nil
 	default:
 		return nil, xerrors.New("s3_sink: Unsupported format")

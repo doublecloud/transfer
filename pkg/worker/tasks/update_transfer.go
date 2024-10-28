@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 )
 
@@ -16,7 +16,7 @@ import (
 // `control plane` will prepare `UpdateDataObjectsParams` update transfer and start operation
 // `data plane` for all new object we will generate homo-DDL and upload data
 // this operation similar to `AddTables` but without endpoint mutation
-func UpdateTransfer(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, registry metrics.Registry, objects abstract.UpdateTransferParams) error {
+func UpdateTransfer(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, registry metrics.Registry, objects abstract.UpdateTransferParams) error {
 	tables, err := objects.AddedTables()
 	if err != nil {
 		return xerrors.Errorf("unable to extract added tables: %w", err)

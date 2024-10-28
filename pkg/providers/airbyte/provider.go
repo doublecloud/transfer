@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -28,7 +28,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       cpclient.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Source() (abstract.Source, error) {
@@ -39,7 +39,7 @@ func (p *Provider) Source() (abstract.Source, error) {
 	return NewSource(p.logger, p.registry, p.cp, src, p.transfer), nil
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.IncrementOnly() {
 		toCleanup := abstract.TableMap{}
 		state, err := p.cp.GetTransferState(p.transfer.ID)
@@ -102,7 +102,7 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
@@ -21,7 +21,7 @@ import (
 )
 
 func TestResolveJSONLineSchema(t *testing.T) {
-	src := s3.PrepareCfg(t, "data3", server.ParsingFormatJSONLine)
+	src := s3.PrepareCfg(t, "data3", model.ParsingFormatJSONLine)
 
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		src.PathPrefix = "test_jsonline_schemas"

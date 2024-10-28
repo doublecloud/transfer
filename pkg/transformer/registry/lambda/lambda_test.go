@@ -11,7 +11,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/functions"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -47,13 +47,13 @@ func TestLambdaTransformer(t *testing.T) {
 			Namespace: "public",
 			Name:      "test",
 		},
-		Options: &server.DataTransformOptions{
+		Options: &model.DataTransformOptions{
 			CloudFunction:         "mock-func",
 			NumberOfRetries:       1,
 			BufferSize:            100 * 1024,
 			BufferFlushInterval:   time.Second,
 			InvocationTimeout:     time.Minute,
-			BackupMode:            server.S3BackupModeNoBackup,
+			BackupMode:            model.S3BackupModeNoBackup,
 			CloudFunctionsBaseURL: "http://" + ts.Listener.Addr().String(),
 		},
 	}, logger.Log)

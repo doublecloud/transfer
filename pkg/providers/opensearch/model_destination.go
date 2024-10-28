@@ -3,7 +3,7 @@ package opensearch
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/elastic"
 )
 
@@ -16,17 +16,17 @@ type OpenSearchDestination struct {
 	ClusterID        string
 	DataNodes        []OpenSearchHostPort
 	User             string
-	Password         server.SecretString
+	Password         model.SecretString
 	SSLEnabled       bool
 	TLSFile          string
 	SubNetworkID     string
 	SecurityGroupIDs []string
-	Cleanup          server.CleanupType
+	Cleanup          model.CleanupType
 
 	SanitizeDocKeys bool
 }
 
-var _ server.Destination = (*OpenSearchDestination)(nil)
+var _ model.Destination = (*OpenSearchDestination)(nil)
 
 func (d *OpenSearchDestination) MDBClusterID() string {
 	return d.ClusterID
@@ -84,12 +84,12 @@ func (d *OpenSearchDestination) Transformer() map[string]string {
 	return make(map[string]string)
 }
 
-func (d *OpenSearchDestination) CleanupMode() server.CleanupType {
+func (d *OpenSearchDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 
-func (d *OpenSearchDestination) Compatible(src server.Source, transferType abstract.TransferType) error {
-	if transferType == abstract.TransferTypeSnapshotOnly || server.IsAppendOnlySource(src) {
+func (d *OpenSearchDestination) Compatible(src model.Source, transferType abstract.TransferType) error {
+	if transferType == abstract.TransferTypeSnapshotOnly || model.IsAppendOnlySource(src) {
 		return nil
 	}
 	return xerrors.Errorf("OpenSearch target supports only AppendOnly sources or snapshot transfers")

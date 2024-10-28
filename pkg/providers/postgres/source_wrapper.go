@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -26,7 +26,7 @@ type Worker struct {
 	slot       AbstractSlot
 	conn       *pgxpool.Pool
 	cp         coordinator.Coordinator
-	objects    *server.DataObjects
+	objects    *model.DataObjects
 }
 
 func (w *Worker) Run(sink abstract.AsyncSink) error {
@@ -120,7 +120,7 @@ func (w *Worker) Stop() {
 	}
 }
 
-func NewSourceWrapper(src *PgSource, transferID string, objects *server.DataObjects, lgr log.Logger, registry *stats.SourceStats, cp coordinator.Coordinator) (abstract.Source, error) {
+func NewSourceWrapper(src *PgSource, transferID string, objects *model.DataObjects, lgr log.Logger, registry *stats.SourceStats, cp coordinator.Coordinator) (abstract.Source, error) {
 	var rollbacks util.Rollbacks
 	defer rollbacks.Do()
 

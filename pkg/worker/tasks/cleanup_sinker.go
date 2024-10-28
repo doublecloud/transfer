@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/middlewares"
@@ -26,19 +26,19 @@ func (l *SnapshotLoader) CleanupSinker(tables abstract.TableMap) error {
 	if l.transfer.IncrementOnly() {
 		return nil
 	}
-	if l.transfer.Dst.CleanupMode() == server.DisabledCleanup {
+	if l.transfer.Dst.CleanupMode() == model.DisabledCleanup {
 		return nil
 	}
 
 	if l.transfer.TmpPolicy != nil {
-		if err := server.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
-			return errors.CategorizedErrorf(categories.Target, server.ErrInvalidTmpPolicy, err)
+		if err := model.EnsureTmpPolicySupported(l.transfer.Dst, l.transfer); err != nil {
+			return errors.CategorizedErrorf(categories.Target, model.ErrInvalidTmpPolicy, err)
 		}
 		logger.Log.Info("sink cleanup skipped due to tmp policy")
 		return nil
 	}
 
-	if dstTmpProvider, ok := l.transfer.Dst.(server.TmpPolicyProvider); ok && dstTmpProvider.EnsureCustomTmpPolicySupported() == nil {
+	if dstTmpProvider, ok := l.transfer.Dst.(model.TmpPolicyProvider); ok && dstTmpProvider.EnsureCustomTmpPolicySupported() == nil {
 		logger.Log.Info("sink cleanup skipped due to enabled custom tmp policy")
 		return nil
 	}
@@ -53,7 +53,7 @@ func (l *SnapshotLoader) CleanupSinker(tables abstract.TableMap) error {
 	defer sink.Close()
 
 	toCleanupTables := tables.Copy()
-	if isPostgresHomoTransfer(l.transfer) && l.transfer.Dst.CleanupMode() == server.Drop {
+	if isPostgresHomoTransfer(l.transfer) && l.transfer.Dst.CleanupMode() == model.Drop {
 		viewsOnDst, err := getDestinationDependentViews(l.transfer, tables)
 		if err != nil {
 			return errors.CategorizedErrorf(categories.Target, "failed to get dependent views from destination database: %w", err)
@@ -90,7 +90,7 @@ func (l *SnapshotLoader) CleanupSinker(tables abstract.TableMap) error {
 	return nil
 }
 
-func isPostgresHomoTransfer(transfer *server.Transfer) bool {
+func isPostgresHomoTransfer(transfer *model.Transfer) bool {
 	if _, ok := transfer.Src.(*postgres.PgSource); !ok {
 		return false
 	}
@@ -100,7 +100,7 @@ func isPostgresHomoTransfer(transfer *server.Transfer) bool {
 	return true
 }
 
-func checkDependentViewsPostgresHomo(transfer *server.Transfer, viewsOnSrc, viewsOnDst map[abstract.TableID][]abstract.TableID) error {
+func checkDependentViewsPostgresHomo(transfer *model.Transfer, viewsOnSrc, viewsOnDst map[abstract.TableID][]abstract.TableID) error {
 	viewsOnDstOnly, viewsOnBoth := leftDiff(viewsOnDst, viewsOnSrc)
 	if len(viewsOnDstOnly) > 0 {
 		return xerrors.Errorf(
@@ -118,7 +118,7 @@ func checkDependentViewsPostgresHomo(transfer *server.Transfer, viewsOnSrc, view
 	return nil
 }
 
-func extractExcluded(transfer *server.Transfer, dependentViews map[abstract.TableID][]abstract.TableID) map[abstract.TableID][]abstract.TableID {
+func extractExcluded(transfer *model.Transfer, dependentViews map[abstract.TableID][]abstract.TableID) map[abstract.TableID][]abstract.TableID {
 	excluded := make(map[abstract.TableID][]abstract.TableID)
 	src := transfer.Src.(*postgres.PgSource)
 	for table, views := range dependentViews {
@@ -149,7 +149,7 @@ func sprintfDependentViews(views map[abstract.TableID][]abstract.TableID) string
 	return res
 }
 
-func getSourceDependentViews(transfer *server.Transfer, tables abstract.TableMap) (map[abstract.TableID][]abstract.TableID, error) {
+func getSourceDependentViews(transfer *model.Transfer, tables abstract.TableMap) (map[abstract.TableID][]abstract.TableID, error) {
 	src := transfer.Src.(*postgres.PgSource)
 	srcStorage, err := postgres.NewStorage(src.ToStorageParams(transfer))
 	if err != nil {
@@ -160,7 +160,7 @@ func getSourceDependentViews(transfer *server.Transfer, tables abstract.TableMap
 	return getDependentViews(srcStorage, tables)
 }
 
-func getDestinationDependentViews(transfer *server.Transfer, tables abstract.TableMap) (map[abstract.TableID][]abstract.TableID, error) {
+func getDestinationDependentViews(transfer *model.Transfer, tables abstract.TableMap) (map[abstract.TableID][]abstract.TableID, error) {
 	dst := transfer.Dst.(*postgres.PgDestination)
 	dstStorage, err := postgres.NewStorage(dst.ToStorageParams())
 	if err != nil {

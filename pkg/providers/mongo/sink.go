@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -178,7 +178,7 @@ func (s *sinker) processDDL(ctx context.Context, item *abstract.ChangeItem) erro
 	case abstract.DoneShardedTableLoad:
 		// not needed for now
 	case abstract.DropTableKind:
-		if s.config.Cleanup != server.Drop {
+		if s.config.Cleanup != model.Drop {
 			s.logger.Infof("Skipped dropping collection '%v.%v' due cleanup policy", item.Schema, item.Table)
 			return nil
 		}
@@ -186,7 +186,7 @@ func (s *sinker) processDDL(ctx context.Context, item *abstract.ChangeItem) erro
 			return xerrors.Errorf("unable to drop collection: %w", err)
 		}
 	case abstract.TruncateTableKind:
-		if s.config.Cleanup != server.Truncate {
+		if s.config.Cleanup != model.Truncate {
 			s.logger.Infof("Skipped truncating collection '%v.%v' due cleanup policy", item.Schema, item.Table)
 			return nil
 		}

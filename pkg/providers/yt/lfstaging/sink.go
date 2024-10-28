@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -185,7 +185,7 @@ func (s sink) Close() error {
 func NewSinker(
 	cfg *ytcommon.LfStagingDestination,
 	jobIndex int,
-	transfer *server.Transfer,
+	transfer *model.Transfer,
 	logger log.Logger,
 ) (abstract.Sinker, error) {
 	ytClient, err := ytclient.NewYtClientWrapper(ytclient.HTTP, logger, &yt.Config{

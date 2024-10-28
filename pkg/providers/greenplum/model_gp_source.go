@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/utils"
 )
@@ -23,7 +23,7 @@ type GpSource struct {
 	SecurityGroupIDs []string
 }
 
-var _ server.Source = (*GpSource)(nil)
+var _ model.Source = (*GpSource)(nil)
 
 func (s *GpSource) MDBClusterID() string {
 	if s.Connection.MDBCluster != nil {
@@ -39,8 +39,8 @@ type GpSourceAdvancedProps struct {
 	// EnforceConsistency enables *enforcement* of consistent snapshot. When it is not set, the user is responsible for snapshot consistency
 	EnforceConsistency bool
 
-	batchLimitRows int              // deprecated: is not used anymore
-	batchLimitSize server.BytesSize // deprecated: is not used anymore
+	batchLimitRows int             // deprecated: is not used anymore
+	batchLimitSize model.BytesSize // deprecated: is not used anymore
 
 	ServiceSchema string
 
@@ -71,7 +71,7 @@ type GpConnection struct {
 }
 
 type PgAuthProps struct {
-	Password      server.SecretString
+	Password      model.SecretString
 	CACertificate string
 }
 

@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/dustin/go-humanize"
 )
 
@@ -67,7 +67,7 @@ type ChSinkServerParams interface {
 	// it seems we can derive it - just like we derive 'IsUpdateable' flag.
 	// furthermore - we can get rid of 'system' columns term - just merge it with 'key' columns
 	SystemColumnsFirst() bool
-	Cleanup() server.CleanupType
+	Cleanup() model.CleanupType
 	RootCertPaths() []string
 	InsertSettings() InsertParams
 }
@@ -141,7 +141,7 @@ type ChSinkParams interface {
 	ChSinkShardParams
 	// Rotation
 	// TODO - I think we don't need this (bcs of TTL in schema), and if need - we can make it by some universal mechanism
-	Rotation() *server.RotatorConfig
+	Rotation() *model.RotatorConfig
 
 	Shards() map[string][]string // shardName->[host]. It's used in sink.go to slice on shards
 

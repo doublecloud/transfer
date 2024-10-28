@@ -3,14 +3,14 @@ package elastic
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type ElasticSearchSource struct {
 	ClusterID            string // Deprecated: new endpoints should be on premise only
 	DataNodes            []ElasticSearchHostPort
 	User                 string
-	Password             server.SecretString
+	Password             model.SecretString
 	SSLEnabled           bool
 	TLSFile              string
 	SubNetworkID         string
@@ -18,7 +18,7 @@ type ElasticSearchSource struct {
 	DumpIndexWithMapping bool
 }
 
-var _ server.Source = (*ElasticSearchSource)(nil)
+var _ model.Source = (*ElasticSearchSource)(nil)
 
 func (s *ElasticSearchSource) ToElasticSearchSource() (*ElasticSearchSource, ServerType) {
 	return s, ElasticSearch

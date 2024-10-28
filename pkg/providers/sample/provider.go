@@ -8,18 +8,18 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {
 	gob.Register(new(SampleSource))
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(SampleSource)
 	})
 	abstract.RegisterProviderName(ProviderType, "Sample")
-	providers.Register(ProviderType, func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+	providers.Register(ProviderType, func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 		return &Provider{
 			logger:   lgr,
 			registry: registry,
@@ -41,10 +41,10 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, table abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, table abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	_, ok := p.transfer.Src.(*SampleSource)
 	if !ok {
 		return xerrors.Errorf("unexpected source: %T", p.transfer.Src)

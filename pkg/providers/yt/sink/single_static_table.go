@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/randutil"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -41,7 +41,7 @@ type SingleStaticTable struct {
 	config          yt2.YtDestinationModel
 	metrics         *stats.SinkerStats
 	transferID      string
-	cleanupType     server.CleanupType
+	cleanupType     model.CleanupType
 	pathToBinary    ypath.Path
 
 	writtenCount uint
@@ -342,7 +342,7 @@ func finishSingleStaticTableLoading(
 	dirPath ypath.Path,
 	transferID string,
 	tableName string,
-	cleanupType server.CleanupType,
+	cleanupType model.CleanupType,
 	pathToBinary ypath.Path,
 	tableWriterSpec interface{},
 	buildAttrs func(schema schema.Schema) map[string]interface{},
@@ -352,7 +352,7 @@ func finishSingleStaticTableLoading(
 	tablePrefix := tableName + partInfix
 	tmpSuffix := buildTmpSuffix(transferID)
 	var cleanupPath ypath.Path
-	if cleanupType != server.DisabledCleanup {
+	if cleanupType != model.DisabledCleanup {
 		cleanupPath = dirPath.Child(tableName)
 	}
 	return Merge(ctx, client, logger, dirPath, cleanupPath, tablePrefix, partInfix, tmpSuffix, pathToBinary, tableWriterSpec, buildAttrs, tableRotationEnabled)
@@ -381,7 +381,7 @@ func NewSingleStaticTable(
 	cfg yt2.YtDestinationModel,
 	jobIndex int,
 	transferID string,
-	cleanupType server.CleanupType,
+	cleanupType model.CleanupType,
 	metrics *stats.SinkerStats,
 	logger log.Logger,
 	pathToBinary ypath.Path,

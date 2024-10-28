@@ -4,18 +4,18 @@ import (
 	"encoding/gob"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/protobuf/protoparser"
 )
 
 func init() {
 	gob.Register(new(S3Source))
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(S3Source)
 	})
 }
 
-var _ server.Source = (*S3Source)(nil)
+var _ model.Source = (*S3Source)(nil)
 
 const (
 	// defaultReadBatchSize is magic number by in-leskin, impacts how many rows we push each times
@@ -49,7 +49,7 @@ type S3Source struct {
 	TableName      string
 	TableNamespace string
 
-	InputFormat  server.ParsingFormat
+	InputFormat  model.ParsingFormat
 	OutputSchema []abstract.ColSchema
 
 	AirbyteFormat string // this is for backward compatibility with airbyte. we store raw format for later parsing.
@@ -65,7 +65,7 @@ type S3Source struct {
 type ConnectionConfig struct {
 	AccessKey        string
 	S3ForcePathStyle bool
-	SecretKey        server.SecretString
+	SecretKey        model.SecretString
 	Endpoint         string
 	UseSSL           bool
 	VerifySSL        bool
@@ -180,7 +180,7 @@ func (s *S3Source) WithDefaults() {
 	}
 	s.ConnectionConfig.S3ForcePathStyle = true
 
-	if s.InputFormat == server.ParsingFormatJSONLine {
+	if s.InputFormat == model.ParsingFormatJSONLine {
 		if s.Format.JSONLSetting == nil {
 			s.Format.JSONLSetting = new(JSONLSetting)
 		}
@@ -192,7 +192,7 @@ func (s *S3Source) WithDefaults() {
 		}
 	}
 
-	if s.InputFormat == server.ParsingFormatCSV {
+	if s.InputFormat == model.ParsingFormatCSV {
 		if s.Format.CSVSetting == nil {
 			s.Format.CSVSetting = new(CSVSetting)
 		}
@@ -212,7 +212,7 @@ func (s *S3Source) IsAppendOnly() bool {
 
 func (s *S3Source) IsSource() {}
 
-func (s *S3Source) IsAbstract2(server.Destination) bool { return len(s.AirbyteFormat) > 0 } // for airbyte legacy format compatibility
+func (s *S3Source) IsAbstract2(model.Destination) bool { return len(s.AirbyteFormat) > 0 } // for airbyte legacy format compatibility
 
 func (s *S3Source) TableID() abstract.TableID {
 	return abstract.TableID{Namespace: s.TableNamespace, Name: s.TableName}

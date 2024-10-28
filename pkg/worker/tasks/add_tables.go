@@ -9,14 +9,14 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func AddTables(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, tables []string, registry metrics.Registry) error {
+func AddTables(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, tables []string, registry metrics.Registry) error {
 	if transfer.IsTransitional() {
 		err := TransitionalAddTables(ctx, cp, transfer, task, tables, registry)
 		if err != nil {
@@ -66,7 +66,7 @@ func AddTables(ctx context.Context, cp coordinator.Coordinator, transfer server.
 	if err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "Cannot load source endpoint for updating: %w", err)
 	}
-	newSrc, _ := e.(server.Source)
+	newSrc, _ := e.(model.Source)
 	setSourceTables(newSrc, commonTableSet)
 	if err := cp.UpdateEndpoint(transfer.ID, newSrc); err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "Cannot store source endpoint with added tables: %w", err)
@@ -75,7 +75,7 @@ func AddTables(ctx context.Context, cp coordinator.Coordinator, transfer server.
 	return StartJob(ctx, cp, transfer, &task)
 }
 
-func isAllowedSourceType(source server.Source) bool {
+func isAllowedSourceType(source model.Source) bool {
 	switch source.(type) {
 	case *postgres.PgSource:
 		return true
@@ -83,7 +83,7 @@ func isAllowedSourceType(source server.Source) bool {
 	return false
 }
 
-func verifyCanAddTables(source server.Source, tables []string, transfer *server.Transfer) error {
+func verifyCanAddTables(source model.Source, tables []string, transfer *model.Transfer) error {
 	switch src := source.(type) {
 	case *postgres.PgSource:
 		if err := postgres.VerifyPostgresTablesNames(tables); err != nil {
@@ -104,7 +104,7 @@ func verifyCanAddTables(source server.Source, tables []string, transfer *server.
 	}
 }
 
-func applyAddedTablesSchema(transfer *server.Transfer, registry metrics.Registry) error {
+func applyAddedTablesSchema(transfer *model.Transfer, registry metrics.Registry) error {
 	switch src := transfer.Src.(type) {
 	case *postgres.PgSource:
 		if src.PreSteps.AnyStepIsTrue() {
@@ -121,7 +121,7 @@ func applyAddedTablesSchema(transfer *server.Transfer, registry metrics.Registry
 	return nil
 }
 
-func replaceSourceTables(source server.Source, targetTables []string) (oldTables []string) {
+func replaceSourceTables(source model.Source, targetTables []string) (oldTables []string) {
 	switch src := source.(type) {
 	case *postgres.PgSource:
 		oldTables = src.DBTables
@@ -130,7 +130,7 @@ func replaceSourceTables(source server.Source, targetTables []string) (oldTables
 	return oldTables
 }
 
-func setSourceTables(source server.Source, tableSet map[string]bool) {
+func setSourceTables(source model.Source, tableSet map[string]bool) {
 	result := make([]string, 0)
 	for name, add := range tableSet {
 		if add {
@@ -144,7 +144,7 @@ func setSourceTables(source server.Source, tableSet map[string]bool) {
 	}
 }
 
-func prepareSourceParamsToStore(source server.Source) string {
+func prepareSourceParamsToStore(source model.Source) string {
 	var params string
 	switch src := source.(type) {
 	case *postgres.PgSource:

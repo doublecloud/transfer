@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/config/env"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -23,7 +23,7 @@ const (
 )
 
 type YtDestinationModel interface {
-	server.TmpPolicyProvider
+	dp_model.TmpPolicyProvider
 	ytclient.ConnParams
 
 	ToStorageParams() *YtStorageParams
@@ -46,7 +46,7 @@ type YtDestinationModel interface {
 	LoseDataOnError() bool
 	DiscardBigValues() bool
 	TabletCount() int
-	Rotation() *server.RotatorConfig
+	Rotation() *dp_model.RotatorConfig
 	VersionColumn() string
 	AutoFlushPeriod() int
 	Ordered() bool
@@ -60,7 +60,7 @@ type YtDestinationModel interface {
 	BufferTriggingSize() uint64
 	BufferTriggingInterval() time.Duration
 	Transformer() map[string]string
-	CleanupMode() server.CleanupType
+	CleanupMode() dp_model.CleanupType
 	WithDefaults()
 	IsDestination()
 	GetProviderType() abstract.ProviderType
@@ -121,14 +121,14 @@ type YtDestination struct {
 
 	DiscardBigValues         bool
 	TabletCount              int // DEPRECATED - remove in March
-	Rotation                 *server.RotatorConfig
+	Rotation                 *dp_model.RotatorConfig
 	VersionColumn            string
 	AutoFlushPeriod          int
 	Ordered                  bool
 	TransformerConfig        map[string]string
 	UseStaticTableOnSnapshot bool // optional.Optional[bool] breaks compatibility
 	AltNames                 map[string]string
-	Cleanup                  server.CleanupType
+	Cleanup                  dp_model.CleanupType
 	Spec                     YTSpec
 	TolerateKeyChanges       bool
 	InitialTabletCount       uint32
@@ -156,7 +156,7 @@ type YtDestinationWrapper struct {
 	_pushWal bool
 }
 
-var _ server.Destination = (*YtDestinationWrapper)(nil)
+var _ dp_model.Destination = (*YtDestinationWrapper)(nil)
 
 func (d *YtDestinationWrapper) MarshalJSON() ([]byte, error) {
 	return json.Marshal(d.Model)
@@ -314,7 +314,7 @@ func (d *YtDestinationWrapper) TabletCount() int {
 	return d.Model.TabletCount
 }
 
-func (d *YtDestinationWrapper) Rotation() *server.RotatorConfig {
+func (d *YtDestinationWrapper) Rotation() *dp_model.RotatorConfig {
 	return d.Model.Rotation
 }
 
@@ -385,7 +385,7 @@ func (d *YtDestinationWrapper) Transformer() map[string]string {
 	return d.Model.TransformerConfig
 }
 
-func (d *YtDestinationWrapper) CleanupMode() server.CleanupType {
+func (d *YtDestinationWrapper) CleanupMode() dp_model.CleanupType {
 	return d.Model.Cleanup
 }
 
@@ -422,7 +422,7 @@ func (d *YtDestinationWrapper) WithDefaults() {
 		d.Model.Pool = poolDefault
 	}
 	if d.Model.Cleanup == "" {
-		d.Model.Cleanup = server.Drop
+		d.Model.Cleanup = dp_model.Drop
 	}
 	if d.Model.WriteTimeoutSec == 0 {
 		d.Model.WriteTimeoutSec = 60
