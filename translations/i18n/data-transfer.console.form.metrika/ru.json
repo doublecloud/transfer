@@ -1,0 +1,18 @@
+{
+    "console.form.metrika.MetrikaSource.counter_ids.array_item_label": "Счётчик",
+    "console.form.metrika.MetrikaSource.counter_ids.title": "Счётчики",
+    "console.form.metrika.MetrikaSource.disabled.title": "Выключено",
+    "console.form.metrika.MetrikaSource.enabled.title": "Включено",
+    "console.form.metrika.MetrikaSource.hits.columns.title": "Поля",
+    "console.form.metrika.MetrikaSource.hits.columns.usage": "Список полей хита, которые нужно экспортировать. Помимо выбранных полей из данного списка, всегда экспортируются несколько обязательных полей.",
+    "console.form.metrika.MetrikaSource.hits.title": "Хиты",
+    "console.form.metrika.MetrikaSource.hits.usage": "Включить поставку хитов. Хит это событие, зафиксированное Яндекс.Метрикой на странице.",
+    "console.form.metrika.MetrikaSource.hits_deprecated.title": "Хиты (необновляемые, устарело)",
+    "console.form.metrika.MetrikaSource.title": "Параметры эндпоинта",
+    "console.form.metrika.MetrikaSource.token.title": "Токен",
+    "console.form.metrika.MetrikaSource.token.usage": "Токен используется для подтверждения доступа к счётчикам. Получить его можно <a href=\"https://oauth.yandex.ru/authorize?response_type=token&client_id=36b7fc9aa96c4fa09158bcacbbdc796a\" target=\"_blank\">по ссылке</a>.",
+    "console.form.metrika.MetrikaSource.visits.columns.title": "Поля",
+    "console.form.metrika.MetrikaSource.visits.columns.usage": "Список полей визита, которые нужно экспортировать. Помимо выбранных полей из данного списка, всегда экспортируются несколько обязательных полей.",
+    "console.form.metrika.MetrikaSource.visits.title": "Визиты",
+    "console.form.metrika.MetrikaSource.visits.usage": "Включить поставку визитов. Визит это сессия одного пользователя на сайте. Подробнее о визитах см. в <a href=\"https://yandex.ru/support/metrica/general/glossary.html?lang=ru\" target=\"_blank\">документации Яндекс.Метрики</a>."
+}

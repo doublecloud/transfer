@@ -1,0 +1,19 @@
+{
+    "console.form.eventhub.EventhubAdvancedSettings.converter.title": "Правила конвертации",
+    "console.form.eventhub.EventhubAdvancedSettings.transformer.title": "Правила трансформации",
+    "console.form.eventhub.EventhubAdvancedSettings.transformer.usage": "Обработка входящего потока с помощью Cloud Functions.",
+    "console.form.eventhub.EventhubConnection.hub_name.title": "Хаб",
+    "console.form.eventhub.EventhubConnection.key_name.title": "Имя ключа",
+    "console.form.eventhub.EventhubConnection.key_name.usage": "Имя ключа (политика), используемое для аутентификации.",
+    "console.form.eventhub.EventhubConnection.key_value.title": "Ключ подключения",
+    "console.form.eventhub.EventhubConnection.key_value.usage": "Ключ для авторизации маркера SAS.",
+    "console.form.eventhub.EventhubConnection.namespace_name.title": "Пространство имён",
+    "console.form.eventhub.EventhubConnection.topic.title": "Топик",
+    "console.form.eventhub.EventhubSource.advanced_settings.title": "Расширенные настройки",
+    "console.form.eventhub.EventhubSource.connection.title": "Настройки подключения",
+    "console.form.eventhub.EventhubSource.consumer_group.title": "Группа потребителей",
+    "console.form.eventhub.EventhubSource.consumer_group.usage": "Группы получателей событий позволяют каждому из получающих события приложений иметь отдельное представление потока события. То есть, представляет собой позицию в очереди событий.",
+    "console.form.eventhub.EventhubSource.starting_offset.title": "Начальный отступ",
+    "console.form.eventhub.EventhubSource.starting_offset.usage": "Начальная позиция события в разделе.",
+    "console.form.eventhub.EventhubSource.title": "Параметры эндпоинта"
+}
