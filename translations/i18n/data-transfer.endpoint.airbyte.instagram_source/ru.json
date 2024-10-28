@@ -1,0 +1,7 @@
+{
+    "endpoint.airbyte.instagram_source.InstagramSource.access_token.title": "Access Token",
+    "endpoint.airbyte.instagram_source.InstagramSource.access_token.usage": "Значение сгенерированного токена доступа",
+    "endpoint.airbyte.instagram_source.InstagramSource.start_date.title": "Начальная дата",
+    "endpoint.airbyte.instagram_source.InstagramSource.start_date.usage": "Дата в формате ГГГГ-ММ-ДДT00:00:00Z для начала репликации данных для User Insights. Все данные, созданные после этой даты, будут реплицированы.",
+    "endpoint.airbyte.instagram_source.InstagramSource.title": "Параметры эндпоинта"
+}

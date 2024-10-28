@@ -1,0 +1,9 @@
+{
+    "endpoint.airbyte.bigquery_source.BigQuerySource.credentials_json.title": "Учетные данные",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.credentials_json.usage": "Содержимое JSON-файла ключа сервисного аккаунта",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.dataset_id.title": "Идентификатор набора данных по умолчанию",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.dataset_id.usage": "Идентификатор набора данных для поиска таблиц и форм просмотра. Если вы загружаете данные только из одного набора данных, установка этого параметра может привести к более быстрому обнаружению схемы.",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.project_id.title": "Идентификатор проекта",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.project_id.usage": "Идентификатор проекта GCP для проекта, содержащего набор данных приемника BigQuery.",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.title": "Параметры эндпоинта"
+}

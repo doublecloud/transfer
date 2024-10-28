@@ -1,0 +1,15 @@
+{
+    "endpoint.airbyte.redshift_source.RedshiftSource.database.title": "База данных",
+    "endpoint.airbyte.redshift_source.RedshiftSource.database.usage": "мя базы данных. Пример: master.",
+    "endpoint.airbyte.redshift_source.RedshiftSource.host.title": "Хост",
+    "endpoint.airbyte.redshift_source.RedshiftSource.host.usage": "Эндпоинт хоста кластера Redshift (должен включать идентификатор кластера, регион и заканчиваться на .redshift.amazonaws.com).",
+    "endpoint.airbyte.redshift_source.RedshiftSource.password.title": "Пароль",
+    "endpoint.airbyte.redshift_source.RedshiftSource.password.usage": "Пароль, связанный с именем пользователя",
+    "endpoint.airbyte.redshift_source.RedshiftSource.port.title": "Порт",
+    "endpoint.airbyte.redshift_source.RedshiftSource.port.usage": "Порт базы данных",
+    "endpoint.airbyte.redshift_source.RedshiftSource.schemas.title": "Схемы",
+    "endpoint.airbyte.redshift_source.RedshiftSource.schemas.usage": "Список схем для синхронизации. Укажите одну или несколько явным образом или оставьте поле пустым, чтобы обработать все схемы. Имена схем чувствительны к регистру.",
+    "endpoint.airbyte.redshift_source.RedshiftSource.title": "Параметры эндпоинта",
+    "endpoint.airbyte.redshift_source.RedshiftSource.username.title": "Имя пользователя",
+    "endpoint.airbyte.redshift_source.RedshiftSource.username.usage": "Имя пользователя, используемое для доступа к базе данных"
+}

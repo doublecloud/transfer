@@ -1,0 +1,18 @@
+{
+    "endpoint.airbyte.salesforce_source.SalesforceSource.StreamCriteria.criteria.title": "Критерий поиска",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.StreamCriteria.criteria.usage": "Один из:\n\n[\"starts with\", \"ends with\", \"contains\", \"exacts\", \"starts not with\", \"ends not with\", \"not contains\", \"not exacts\"]",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.StreamCriteria.value.title": "Значение поиска",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.client_id.title": "Имя",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.client_id.usage": "ID клиента вашего приложения для разработчиков Salesforce",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.client_secret.title": "Access Token",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.client_secret.usage": "Client Secret вашего приложения для разработчиков Salesforce",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.is_sandbox.title": "Песочница",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.is_sandbox.usage": "Показывает находится ли приложение в изолированной программной среде Salesforce или нет.",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.refresh_token.title": "Refresh Token",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.refresh_token.usage": "Токен обновления Salesforce, используемый Airbyte для доступа к вашему аккаунта Salesforce.",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.start_date.title": "Начальная дата",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.start_date.usage": "Дата в формате ГГГГ-ММ-ДД. Любые данные до этой даты не будут реплицированы. Это поле использует поле \" updated\", если оно доступно, иначе поля \"created\", если они доступны для потока. Если не задано, то по умолчанию все ваши данные реплицируются. Примеры: 2021-07-25, 2021-07-25T00:00:00Z",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.streams_criteria.title": "Критерии фильтрации потоков",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.streams_criteria.usage": "Добавьте критерии отбора для потоков, чтобы получать только релевантные для вас потоки",
+    "endpoint.airbyte.salesforce_source.SalesforceSource.title": "Параметры эндпоинта"
+}

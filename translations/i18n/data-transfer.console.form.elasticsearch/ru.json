@@ -1,0 +1,22 @@
+{
+    "console.form.elasticsearch.ElasticSearchConnection.connection_type.title": "Тип подключения",
+    "console.form.elasticsearch.ElasticSearchConnection.password.title": "Пароль",
+    "console.form.elasticsearch.ElasticSearchConnection.security_groups.title": "Группы безопасности",
+    "console.form.elasticsearch.ElasticSearchConnection.user.title": "Пользователь",
+    "console.form.elasticsearch.ElasticSearchConnectionType.mdb_cluster_id.title": "Кластер Managed Service for Elasticsearch",
+    "console.form.elasticsearch.ElasticSearchConnectionType.on_premise.title": "Пользовательская инсталляция",
+    "console.form.elasticsearch.ElasticSearchSource.connection.title": "Настройки подключения",
+    "console.form.elasticsearch.ElasticSearchSource.dump_index_with_mapping.title": "Перенести индекс с сопоставлением типов",
+    "console.form.elasticsearch.ElasticSearchSource.title": "Параметры эндпоинта",
+    "console.form.elasticsearch.ElasticSearchTarget.cleanup_policy.title": "Политика очистки",
+    "console.form.elasticsearch.ElasticSearchTarget.connection.title": "Настройки подключения",
+    "console.form.elasticsearch.ElasticSearchTarget.sanitize_doc_keys.title": "Исправить некорректные ключи в документах",
+    "console.form.elasticsearch.ElasticSearchTarget.title": "Параметры эндпоинта",
+    "console.form.elasticsearch.OnPremiseElasticSearch.addresses.array_item_label": "Узел",
+    "console.form.elasticsearch.OnPremiseElasticSearch.addresses.title": "Узлы с данными",
+    "console.form.elasticsearch.OnPremiseElasticSearch.ca_certificate.title": "Сертификат CA",
+    "console.form.elasticsearch.OnPremiseElasticSearch.ssl_enabled.title": "SSL",
+    "console.form.elasticsearch.OnPremiseElasticSearch.subnet_id.title": "Идентификатор подсети",
+    "console.form.elasticsearch.OnPremiseElasticSearchHostPort.host.title": "Хост",
+    "console.form.elasticsearch.OnPremiseElasticSearchHostPort.port.title": "Порт"
+}

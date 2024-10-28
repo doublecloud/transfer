@@ -1,0 +1,19 @@
+{
+    "console.form.eventhub.EventhubAdvancedSettings.converter.title": "Conversion rules",
+    "console.form.eventhub.EventhubAdvancedSettings.transformer.title": "Transformation rules",
+    "console.form.eventhub.EventhubAdvancedSettings.transformer.usage": "Transform data with custom Cloud Functions.",
+    "console.form.eventhub.EventhubConnection.hub_name.title": "Event hub",
+    "console.form.eventhub.EventhubConnection.key_name.title": "Key name",
+    "console.form.eventhub.EventhubConnection.key_name.usage": "Name of the key (policy) used for authentication.",
+    "console.form.eventhub.EventhubConnection.key_value.title": "Key value",
+    "console.form.eventhub.EventhubConnection.key_value.usage": "Key for a SAS token authorization.",
+    "console.form.eventhub.EventhubConnection.namespace_name.title": "Namespace",
+    "console.form.eventhub.EventhubConnection.topic.title": "Topic",
+    "console.form.eventhub.EventhubSource.advanced_settings.title": "Advanced settings",
+    "console.form.eventhub.EventhubSource.connection.title": "Connection settings",
+    "console.form.eventhub.EventhubSource.consumer_group.title": "Consumer group",
+    "console.form.eventhub.EventhubSource.consumer_group.usage": "Consumer groups enable consuming applications to each have a separate view of the event stream. They read the stream independently at their own pace and with their own offsets.",
+    "console.form.eventhub.EventhubSource.starting_offset.title": "Starting offset",
+    "console.form.eventhub.EventhubSource.starting_offset.usage": "Starting position of an event within a partition.",
+    "console.form.eventhub.EventhubSource.title": "Endpoint parameters"
+}

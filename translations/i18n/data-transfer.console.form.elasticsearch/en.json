@@ -1,0 +1,22 @@
+{
+    "console.form.elasticsearch.ElasticSearchConnection.connection_type.title": "Connection type",
+    "console.form.elasticsearch.ElasticSearchConnection.password.title": "Password",
+    "console.form.elasticsearch.ElasticSearchConnection.security_groups.title": "Security groups",
+    "console.form.elasticsearch.ElasticSearchConnection.user.title": "User",
+    "console.form.elasticsearch.ElasticSearchConnectionType.mdb_cluster_id.title": "Managed Service for Elasticsearch cluster",
+    "console.form.elasticsearch.ElasticSearchConnectionType.on_premise.title": "Custom installation",
+    "console.form.elasticsearch.ElasticSearchSource.connection.title": "Connection settings",
+    "console.form.elasticsearch.ElasticSearchSource.dump_index_with_mapping.title": "Dump an index with type mapping",
+    "console.form.elasticsearch.ElasticSearchSource.title": "Endpoint settings",
+    "console.form.elasticsearch.ElasticSearchTarget.cleanup_policy.title": "Cleanup policy",
+    "console.form.elasticsearch.ElasticSearchTarget.connection.title": "Connection",
+    "console.form.elasticsearch.ElasticSearchTarget.sanitize_doc_keys.title": "Sanitize documents keys",
+    "console.form.elasticsearch.ElasticSearchTarget.title": "Endpoint parameters",
+    "console.form.elasticsearch.OnPremiseElasticSearch.addresses.array_item_label": "Nodes",
+    "console.form.elasticsearch.OnPremiseElasticSearch.addresses.title": "Data nodes",
+    "console.form.elasticsearch.OnPremiseElasticSearch.ca_certificate.title": "CA certificate",
+    "console.form.elasticsearch.OnPremiseElasticSearch.ssl_enabled.title": "SSL",
+    "console.form.elasticsearch.OnPremiseElasticSearch.subnet_id.title": "Subnet ID",
+    "console.form.elasticsearch.OnPremiseElasticSearchHostPort.host.title": "Host",
+    "console.form.elasticsearch.OnPremiseElasticSearchHostPort.port.title": "Port"
+}

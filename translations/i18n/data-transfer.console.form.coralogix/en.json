@@ -1,0 +1,15 @@
+{
+    "console.form.coralogix.column_mapping.category.title": "Column for Category",
+    "console.form.coralogix.column_mapping.class_name.title": "Column for Class name",
+    "console.form.coralogix.column_mapping.host.title": "Column for host",
+    "console.form.coralogix.column_mapping.message_template.title": "Message template",
+    "console.form.coralogix.column_mapping.message_template.usage": "go-template formatted string, example: '[{{.level}}{{.message}}]' all columns in source available in context",
+    "console.form.coralogix.column_mapping.method_name.title": "Column for source",
+    "console.form.coralogix.column_mapping.severity.title": "Severity",
+    "console.form.coralogix.column_mapping.subsystem.title": "Column for Sub System",
+    "console.form.coralogix.column_mapping.thread_id.title": "Column for Thread ID",
+    "console.form.coralogix.column_mapping.timestamp.title": "Timestamp",
+    "console.form.coralogix.column_mapping.title": "Log Column Mapping",
+    "console.form.coralogix.domain.title": "Domain",
+    "console.form.coralogix.token.title": "API Key"
+}
