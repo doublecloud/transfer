@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
@@ -47,7 +47,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 	provider abstract.ProviderType
 }
 
@@ -144,7 +144,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 	return s, nil
 }
 
-func getJobIndex(transfer *server.Transfer) int {
+func getJobIndex(transfer *model.Transfer) int {
 	if shardingTaskRuntime, ok := transfer.Runtime.(abstract.ShardingTaskRuntime); ok {
 		return shardingTaskRuntime.CurrentJobIndex()
 	} else {
@@ -152,7 +152,7 @@ func getJobIndex(transfer *server.Transfer) int {
 	}
 }
 
-func (p *Provider) TMPCleaner(ctx context.Context, task *server.TransferOperation) (providers.Cleaner, error) {
+func (p *Provider) TMPCleaner(ctx context.Context, task *model.TransferOperation) (providers.Cleaner, error) {
 	dst, ok := p.transfer.Dst.(yt_provider.YtDestinationModel)
 	if !ok {
 		return nil, xerrors.Errorf("unexpected destincation type: %T", p.transfer.Dst)
@@ -160,7 +160,7 @@ func (p *Provider) TMPCleaner(ctx context.Context, task *server.TransferOperatio
 	return yt_provider.NewTmpCleaner(dst, p.logger)
 }
 
-func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) error {
 	dst, ok := p.transfer.Dst.(yt_provider.YtDestinationModel)
 	if !ok {
 		return xerrors.Errorf("unexpected dst type: %T", p.transfer.Dst)
@@ -178,8 +178,8 @@ func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) 
 	return nil
 }
 
-func New(provider abstract.ProviderType) func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
-	return func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(provider abstract.ProviderType) func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
+	return func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 		return &Provider{
 			logger:   lgr,
 			registry: registry,

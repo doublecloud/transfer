@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
 
@@ -12,7 +12,7 @@ type TableName = string
 
 type MysqlDestination struct {
 	AllowReplace         bool
-	Cleanup              server.CleanupType
+	Cleanup              model.CleanupType
 	ClusterID            string
 	Database             string
 	DisableParallelWrite map[TableName]bool
@@ -20,7 +20,7 @@ type MysqlDestination struct {
 	IsPublic             bool
 	MaintainTables       bool
 	MaxParralelWriters   int64
-	Password             server.SecretString
+	Password             model.SecretString
 	PerTransactionPush   bool
 	Port                 int
 	ProgressTrackerDB    string
@@ -44,8 +44,8 @@ type MysqlDestination struct {
 	ConnectionID           string
 }
 
-var _ server.Destination = (*MysqlDestination)(nil)
-var _ server.WithConnectionID = (*MysqlDestination)(nil)
+var _ model.Destination = (*MysqlDestination)(nil)
+var _ model.WithConnectionID = (*MysqlDestination)(nil)
 
 func (d *MysqlDestination) MDBClusterID() string {
 	return d.ClusterID
@@ -55,7 +55,7 @@ func (d *MysqlDestination) GetConnectionID() string {
 	return d.ConnectionID
 }
 
-func (d *MysqlDestination) CleanupMode() server.CleanupType {
+func (d *MysqlDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 
@@ -76,7 +76,7 @@ func (d *MysqlDestination) WithDefaults() {
 			",NO_ENGINE_SUBSTITUTION" // явно требуем указать движок для таблицы
 	}
 	if d.Cleanup == "" {
-		d.Cleanup = server.Drop
+		d.Cleanup = model.Drop
 	}
 	if d.DisableParallelWrite == nil {
 		d.DisableParallelWrite = map[TableName]bool{}

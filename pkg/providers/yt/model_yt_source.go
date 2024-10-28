@@ -2,7 +2,7 @@ package yt
 
 import (
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/config/env"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/dustin/go-humanize"
@@ -27,7 +27,7 @@ type YtSource struct {
 	Connection           ConnectionData
 }
 
-var _ server.Source = (*YtSource)(nil)
+var _ model.Source = (*YtSource)(nil)
 
 func (s *YtSource) IsSource()       {}
 func (s *YtSource) IsStrictSource() {}
@@ -49,7 +49,7 @@ func (s *YtSource) Validate() error {
 	return nil
 }
 
-func (s *YtSource) IsAbstract2(server.Destination) bool { return true }
+func (s *YtSource) IsAbstract2(model.Destination) bool { return true }
 
 func (s *YtSource) RowIdxEnabled() bool {
 	return s.RowIdxColumnName != ""

@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -33,7 +33,7 @@ type MongoSource struct {
 	ReplicaSet             string
 	AuthSource             string
 	User                   string
-	Password               server.SecretString
+	Password               model.SecretString
 	Collections            []MongoCollection
 	ExcludedCollections    []MongoCollection
 	SubNetworkID           string
@@ -67,7 +67,7 @@ type MongoSource struct {
 	SRVMode bool
 }
 
-var _ server.Source = (*MongoSource)(nil)
+var _ model.Source = (*MongoSource)(nil)
 
 type BatcherParameters struct {
 	BatchSizeLimit     uint

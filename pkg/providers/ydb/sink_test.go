@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/types"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -32,7 +32,7 @@ func TestSinker_Push(t *testing.T) {
 
 	cfg := YdbDestination{
 		Database:           prefix,
-		Token:              server.SecretString(token),
+		Token:              model.SecretString(token),
 		Instance:           endpoint,
 		DropUnknownColumns: true,
 		ShardCount:         -1,

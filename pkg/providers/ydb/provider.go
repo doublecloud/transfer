@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -17,10 +17,10 @@ import (
 func init() {
 	gob.RegisterName("*server.YdbDestination", new(YdbDestination))
 	gob.RegisterName("*server.YdbSource", new(YdbSource))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	model.RegisterDestination(ProviderType, func() model.Destination {
 		return new(YdbDestination)
 	})
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(YdbSource)
 	})
 
@@ -45,7 +45,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Storage() (abstract.Storage, error) {
@@ -87,7 +87,7 @@ func (p *Provider) Source() (abstract.Source, error) {
 	return NewSource(p.transfer.ID, src, p.logger, p.registry)
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	src, ok := p.transfer.Src.(*YdbSource)
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
@@ -121,7 +121,7 @@ func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation,
 	return nil
 }
 
-func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Deactivate(ctx context.Context, task *model.TransferOperation) error {
 	src, ok := p.transfer.Src.(*YdbSource)
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
@@ -137,7 +137,7 @@ func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperatio
 	return nil
 }
 
-func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) error {
 	src, ok := p.transfer.Src.(*YdbSource)
 	if !ok {
 		return xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
@@ -159,7 +159,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 	return NewSinker(p.logger, dst, p.registry)
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

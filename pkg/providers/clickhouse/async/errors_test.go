@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/nop"
 	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors/coded"
 	"github.com/doublecloud/transfer/pkg/providers"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
@@ -50,12 +50,12 @@ var cases = []testCase{{
 
 var (
 	target   = chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("gotest/errors_test_init.sql"))
-	transfer = new(server.Transfer)
+	transfer = new(model.Transfer)
 )
 
 func TestCodedErrors(t *testing.T) {
 	transfer.ID = "dttsample"
-	target.Cleanup = server.DisabledCleanup
+	target.Cleanup = model.DisabledCleanup
 	for _, tc := range cases {
 		t.Run(tc.name, testCodedError(tc))
 	}

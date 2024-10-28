@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -67,7 +67,7 @@ type Sampleable interface {
 	DestinationSampleableStorage() (abstract.SampleableStorage, error)
 }
 
-type ProviderFactory func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) Provider
+type ProviderFactory func(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) Provider
 
 var knownProviders = map[abstract.ProviderType]ProviderFactory{}
 
@@ -77,7 +77,7 @@ func Register(providerType abstract.ProviderType, fac ProviderFactory) {
 }
 
 // Source resolve a specific provider interface from registry by `transfer.SrcType()` provider type.
-func Source[T Provider](lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) (T, bool) {
+func Source[T Provider](lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) (T, bool) {
 	var defRes T
 	f, ok := knownProviders[transfer.SrcType()]
 	if !ok {
@@ -89,7 +89,7 @@ func Source[T Provider](lgr log.Logger, registry metrics.Registry, cp coordinato
 }
 
 // Destination resolve a specific provider interface from registry by `transfer.DstType()` provider type.
-func Destination[T Provider](lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) (T, bool) {
+func Destination[T Provider](lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) (T, bool) {
 	var defRes T
 	f, ok := knownProviders[transfer.DstType()]
 	if !ok {

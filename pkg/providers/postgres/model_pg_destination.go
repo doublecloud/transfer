@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/utils"
@@ -18,7 +18,7 @@ type PgDestination struct {
 
 	Database               string `json:"Name"`
 	User                   string
-	Password               server.SecretString
+	Password               dp_model.SecretString
 	Port                   int
 	TLSFile                string
 	EnableTLS              bool
@@ -32,7 +32,7 @@ type PgDestination struct {
 	SecurityGroupIDs       []string
 	CopyUpload             bool // THIS IS NOT PARAMETER. If you set it on endpoint into true/false - nothing happened. It's workaround, this flag is set by common code (Activate/UploadTable) automatically. You have not options to turn-off CopyUpload behaviour.
 	PerTransactionPush     bool
-	Cleanup                server.CleanupType
+	Cleanup                dp_model.CleanupType
 	BatchSize              int // deprecated: use BufferTriggingSize instead
 	BufferTriggingSize     uint64
 	BufferTriggingInterval time.Duration
@@ -41,8 +41,8 @@ type PgDestination struct {
 	ConnectionID           string
 }
 
-var _ server.Destination = (*PgDestination)(nil)
-var _ server.WithConnectionID = (*PgDestination)(nil)
+var _ dp_model.Destination = (*PgDestination)(nil)
+var _ dp_model.WithConnectionID = (*PgDestination)(nil)
 
 const PGDefaultQueryTimeout time.Duration = 30 * time.Minute
 
@@ -54,7 +54,7 @@ func (d *PgDestination) GetConnectionID() string {
 	return d.ConnectionID
 }
 
-func (d *PgDestination) FillDependentFields(transfer *server.Transfer) {
+func (d *PgDestination) FillDependentFields(transfer *dp_model.Transfer) {
 	_, isHomo := transfer.Src.(*PgSource)
 	if !isHomo && !d.MaintainTables {
 		d.MaintainTables = true
@@ -70,7 +70,7 @@ func (d *PgDestination) HasTLS() bool {
 	return d.TLSFile != "" || d.EnableTLS
 }
 
-func (d *PgDestination) CleanupMode() server.CleanupType {
+func (d *PgDestination) CleanupMode() dp_model.CleanupType {
 	return d.Cleanup
 }
 
@@ -86,7 +86,7 @@ func (d *PgDestination) WithDefaults() {
 		d.Port = 6432
 	}
 	if d.Cleanup == "" {
-		d.Cleanup = server.Drop
+		d.Cleanup = dp_model.Drop
 	}
 
 	if d.BufferTriggingSize == 0 {
@@ -171,7 +171,7 @@ func (d PgDestinationWrapper) LoozeMode() bool {
 	return d.Model.LoozeMode
 }
 
-func (d PgDestinationWrapper) CleanupMode() server.CleanupType {
+func (d PgDestinationWrapper) CleanupMode() dp_model.CleanupType {
 	return d.Model.CleanupMode()
 }
 

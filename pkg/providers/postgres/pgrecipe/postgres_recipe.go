@@ -14,7 +14,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/connection"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/tests/tcrecipes"
@@ -161,7 +161,7 @@ func ManagedConnection(opts ...RecipeOption) *connection.ConnectionPG {
 		BaseSQLConnection: &connection.BaseSQLConnection{
 			Hosts:          []*connection.Host{{Name: "localhost", Port: port, Role: connection.RoleUnknown, ReplicaType: connection.ReplicaUndefined}},
 			User:           os.Getenv(params.prefix + "PG_LOCAL_USER"),
-			Password:       server.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD")),
+			Password:       model.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD")),
 			Database:       os.Getenv(params.prefix + "PG_LOCAL_DATABASE"),
 			HasTLS:         false,
 			CACertificates: "",
@@ -191,7 +191,7 @@ func RecipeSource(opts ...RecipeOption) *postgres.PgSource {
 		srcPort, _ := strconv.Atoi(os.Getenv(params.prefix + "PG_LOCAL_PORT"))
 		v.Hosts = []string{"localhost"}
 		v.User = os.Getenv(params.prefix + "PG_LOCAL_USER")
-		v.Password = server.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD"))
+		v.Password = model.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD"))
 		v.Port = srcPort
 	} else {
 		v.ConnectionID = params.connectionID
@@ -227,7 +227,7 @@ func RecipeTarget(opts ...RecipeOption) *postgres.PgDestination {
 		dstPort, _ := strconv.Atoi(os.Getenv(params.prefix + "PG_LOCAL_PORT"))
 		v.Hosts = []string{"localhost"}
 		v.User = os.Getenv(params.prefix + "PG_LOCAL_USER")
-		v.Password = server.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD"))
+		v.Password = model.SecretString(os.Getenv(params.prefix + "PG_LOCAL_PASSWORD"))
 		v.Port = dstPort
 	} else {
 		v.ConnectionID = params.connectionID

@@ -9,25 +9,25 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/stretchr/testify/require"
 )
 
 type FakeControlplane struct {
 	coordinator.CoordinatorNoOp
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func (f *FakeControlplane) GetEndpoint(transferID string, isSource bool) (server.EndpointParams, error) {
+func (f *FakeControlplane) GetEndpoint(transferID string, isSource bool) (model.EndpointParams, error) {
 	if isSource {
 		return f.transfer.Src, nil
 	}
 	return f.transfer.Dst, nil
 }
 
-func (f *FakeControlplane) GetEndpointTransfers(transferID string, isSource bool) ([]*server.Transfer, error) {
-	result := make([]*server.Transfer, 1)
+func (f *FakeControlplane) GetEndpointTransfers(transferID string, isSource bool) ([]*model.Transfer, error) {
+	result := make([]*model.Transfer, 1)
 	result[0] = f.transfer
 	return result, nil
 }
@@ -185,18 +185,18 @@ func (m *mockSinker) Push(input []abstract.ChangeItem) error {
 }
 
 func TestEveryTableHasOwnSink(t *testing.T) {
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID: "test_transfer_id",
 		Runtime: &abstract.LocalRuntime{
 			ShardingUpload: abstract.ShardUploadParams{
 				ProcessCount: 2,
 			},
 		},
-		Src: &server.MockSource{
+		Src: &model.MockSource{
 			StorageFactory:   func() abstract.Storage { return &mockStorage{} },
 			AllTablesFactory: func() abstract.TableMap { return nil },
 		},
-		Dst: &server.MockDestination{
+		Dst: &model.MockDestination{
 			SinkerFactory: func() abstract.Sinker {
 				return newMockSinker(abstract.InitShardedTableLoad, abstract.DoneShardedTableLoad)
 			},

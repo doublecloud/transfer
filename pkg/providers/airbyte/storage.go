@@ -15,7 +15,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -34,7 +34,7 @@ type Storage struct {
 	config   *AirbyteSource
 	catalog  *Catalog
 	metrics  *stats.SourceStats
-	transfer *server.Transfer
+	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
 }
 
@@ -449,7 +449,7 @@ func (a *Storage) storeState(id abstract.TableID, state json.RawMessage) error {
 	return nil
 }
 
-func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *server.Transfer) (*Storage, error) {
+func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *model.Transfer) (*Storage, error) {
 	state, err := cp.GetTransferState(transfer.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to extract transfer state: %w", err)

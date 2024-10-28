@@ -3,7 +3,7 @@ package coordinator
 import (
 	"context"
 
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type TransferHeartbeat struct {
@@ -27,7 +27,7 @@ type StatusMessageProvider interface {
 // just to start / stop transfer and move it via transfer workflow
 type TransferStatus interface {
 	// SetStatus move transfer to certain status
-	SetStatus(transferID string, status server.TransferStatus) error
+	SetStatus(transferID string, status model.TransferStatus) error
 	// FailReplication stop replication with error
 	FailReplication(transferID string, err error) error
 	// TransferHealth add heartbeat for replication instance

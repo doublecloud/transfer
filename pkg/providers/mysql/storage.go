@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/dustin/go-humanize"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -481,7 +481,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 		result[tID] = tInfo
 	}
 
-	return server.FilteredMap(result, includeTableFilter), nil
+	return model.FilteredMap(result, includeTableFilter), nil
 }
 
 func (s *Storage) LoadSchema() (schema abstract.DBSchema, err error) {

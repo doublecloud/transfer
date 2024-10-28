@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
@@ -41,7 +41,7 @@ func TestTargetPush(t *testing.T) {
 	require.NoError(t, err)
 	client, err := httpclient.NewHTTPClientImpl(chDst.ToReplicationFromPGSinkParams())
 	require.NoError(t, err)
-	target, err := newHTTPTargetImpl(new(server.Transfer), chDst.ToReplicationFromPGSinkParams(), solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
+	target, err := newHTTPTargetImpl(new(dp_model.Transfer), chDst.ToReplicationFromPGSinkParams(), solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
 	require.NoError(t, err)
 	require.NoError(t, <-target.AsyncPush(
 		&schema.DDLBatch{

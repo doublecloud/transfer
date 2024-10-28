@@ -3,7 +3,7 @@ package opensearch
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/elastic"
 )
 
@@ -11,7 +11,7 @@ type OpenSearchSource struct {
 	ClusterID            string
 	DataNodes            []OpenSearchHostPort
 	User                 string
-	Password             server.SecretString
+	Password             model.SecretString
 	SSLEnabled           bool
 	TLSFile              string
 	SubNetworkID         string
@@ -19,7 +19,7 @@ type OpenSearchSource struct {
 	DumpIndexWithMapping bool
 }
 
-var _ server.Source = (*OpenSearchSource)(nil)
+var _ model.Source = (*OpenSearchSource)(nil)
 
 func (s *OpenSearchSource) MDBClusterID() string {
 	return s.ClusterID

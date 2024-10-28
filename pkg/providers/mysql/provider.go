@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
@@ -20,10 +20,10 @@ import (
 func init() {
 	gob.RegisterName("*server.MysqlSource", new(MysqlSource))
 	gob.RegisterName("*server.MysqlDestination", new(MysqlDestination))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	model.RegisterDestination(ProviderType, func() model.Destination {
 		return new(MysqlDestination)
 	})
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(MysqlSource)
 	})
 
@@ -79,7 +79,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) SourceSampleableStorage() (abstract.SampleableStorage, []abstract.TableDescription, error) {
@@ -141,9 +141,9 @@ func (p *Provider) Storage() (abstract.Storage, error) {
 	if !src.IsHomo {
 		src.IsHomo = p.transfer.DstType() == ProviderType && !src.PlzNoHomo
 	}
-	if serializer, ok := p.transfer.Dst.(server.Serializable); ok {
+	if serializer, ok := p.transfer.Dst.(model.Serializable); ok {
 		serializationFormat, _ := serializer.Serializer()
-		if serializationFormat.Name == server.SerializationFormatDebezium {
+		if serializationFormat.Name == model.SerializationFormatDebezium {
 			timeZone := debeziumparameters.GetMysqlTimeZone(serializationFormat.Settings)
 			src.Timezone = timeZone
 		}
@@ -168,9 +168,9 @@ func (p *Provider) Source() (abstract.Source, error) {
 	src.InitServerID(p.transfer.ID)
 	// See TM-4581
 	failOnDecimal := !src.IsHomo && !src.AllowDecimalAsFloat
-	if serializer, ok := p.transfer.Dst.(server.Serializable); ok {
+	if serializer, ok := p.transfer.Dst.(model.Serializable); ok {
 		serializationFormat, _ := serializer.Serializer()
-		if serializationFormat.Name == server.SerializationFormatDebezium {
+		if serializationFormat.Name == model.SerializationFormatDebezium {
 			timeZone := debeziumparameters.GetMysqlTimeZone(serializationFormat.Settings)
 			src.Timezone = timeZone
 		}
@@ -196,7 +196,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 	return NewSinker(p.logger, dst, p.registry)
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	registry := solomon.NewRegistry(solomon.NewRegistryOpts())
 	src, ok := p.transfer.Src.(*MysqlSource)
 	if !ok {
@@ -207,7 +207,7 @@ func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation,
 	}
 	if p.transfer.SrcType() == p.transfer.DstType() {
 		// mysql treat views as metadata, so no need to transfer them separately
-		server.ExcludeViews(tables)
+		model.ExcludeViews(tables)
 	}
 	if !p.transfer.SnapshotOnly() {
 		if src.IsHomo {
@@ -244,7 +244,7 @@ func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation,
 	return nil
 }
 
-func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Deactivate(ctx context.Context, task *model.TransferOperation) error {
 	if p.transfer.SnapshotOnly() {
 		return nil
 	}
@@ -263,7 +263,7 @@ func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperatio
 	return nil
 }
 
-func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) error {
 	src, ok := p.transfer.Src.(*MysqlSource)
 	if !ok {
 		return xerrors.Errorf("unexpected source type: %T", p.transfer.Src)
@@ -279,7 +279,7 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

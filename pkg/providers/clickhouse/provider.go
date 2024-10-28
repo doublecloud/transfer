@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/data"
 	"github.com/doublecloud/transfer/pkg/middlewares"
@@ -25,10 +25,10 @@ import (
 func init() {
 	gob.RegisterName("*server.ChSource", new(model.ChSource))
 	gob.RegisterName("*server.ChDestination", new(model.ChDestination))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	dp_model.RegisterDestination(ProviderType, func() dp_model.Destination {
 		return new(model.ChDestination)
 	})
-	server.RegisterSource(ProviderType, func() server.Source {
+	dp_model.RegisterSource(ProviderType, func() dp_model.Source {
 		return new(model.ChSource)
 	})
 
@@ -53,7 +53,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *dp_model.Transfer
 }
 
 func (p *Provider) Target(options ...abstract.SinkOption) (base.EventTarget, error) {
@@ -110,7 +110,7 @@ func (p *Provider) DataProvider() (base.DataProvider, error) {
 	return NewClickhouseProvider(p.logger, p.registry, specificConfig, p.transfer)
 }
 
-func (p *Provider) Activate(_ context.Context, _ *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(_ context.Context, _ *dp_model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.SnapshotOnly() {
 		return xerrors.New("Only allowed mode for CH source is snapshot")
 	}
@@ -212,7 +212,7 @@ func (p *Provider) Test(ctx context.Context) *abstract.TestResult {
 	return tr
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *dp_model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/functions"
 	"github.com/doublecloud/transfer/pkg/parsers"
@@ -33,7 +33,7 @@ type Source struct {
 	stopCh                         chan struct{}
 	hub                            *eventhubs.Hub
 	metrics                        *stats.SourceStats
-	transformer                    *server.DataTransformOptions
+	transformer                    *model.DataTransformOptions
 	executor                       *functions.Executor
 	parser                         parsers.Parser
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
 	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
@@ -33,7 +33,7 @@ func TestNative(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -43,8 +43,8 @@ func TestNative(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatNative,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatNative,
 		},
 	}
 	dst.WithDefaults()
@@ -76,7 +76,7 @@ func TestJSON(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -86,8 +86,8 @@ func TestJSON(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatJSON,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatJSON,
 		},
 	}
 	dst.WithDefaults()
@@ -119,7 +119,7 @@ func TestDebezium(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -129,8 +129,8 @@ func TestDebezium(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		TopicPrefix: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatDebezium,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatDebezium,
 			Settings: map[string]string{
 				debeziumparameters.DatabaseDBName: "",
 				debeziumparameters.SourceType:     "pg",
@@ -166,7 +166,7 @@ func TestMirror(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -176,8 +176,8 @@ func TestMirror(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatMirror,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatMirror,
 		},
 	}
 	dst.WithDefaults()
@@ -208,7 +208,7 @@ func TestMirrorKafka(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -218,8 +218,8 @@ func TestMirrorKafka(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatMirror,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatMirror,
 		},
 	}
 	dst.WithDefaults()
@@ -251,7 +251,7 @@ func TestAddDTSystemTables(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -261,8 +261,8 @@ func TestAddDTSystemTables(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		TopicPrefix: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatDebezium,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatDebezium,
 			Settings: map[string]string{
 				debeziumparameters.SourceType: "pg",
 			},
@@ -328,7 +328,7 @@ func TestPassConfigEntries(t *testing.T) {
 
 	dst := &KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
 		Auth: &KafkaAuth{
@@ -338,8 +338,8 @@ func TestPassConfigEntries(t *testing.T) {
 			Password:  "qwert12345",
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatJSON,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatJSON,
 		},
 		TopicConfigEntries: []TopicConfigEntry{
 			{

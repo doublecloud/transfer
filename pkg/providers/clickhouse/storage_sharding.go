@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/schema"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -323,7 +323,7 @@ func NewShardedStorage(shards map[string]*Storage) ClickhouseStorage {
 	return &ShardStorage{shards: shards, logger: logger.Log}
 }
 
-func NewShardedFromUrls(shardUrls map[string][]string, config *model.ChStorageParams, transfer *server.Transfer, opts ...StorageOpt) (ClickhouseStorage, error) {
+func NewShardedFromUrls(shardUrls map[string][]string, config *model.ChStorageParams, transfer *dp_model.Transfer, opts ...StorageOpt) (ClickhouseStorage, error) {
 	shards := map[string]*Storage{}
 	allShardsAreSingleHost := slices.IndexFunc(maps.Values(shardUrls),
 		func(hosts []string) bool { return len(hosts) > 1 }) == -1

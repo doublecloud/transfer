@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/dataplane/provideradapter"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -19,9 +19,9 @@ import (
 
 type runTaskVisitor struct {
 	params   interface{}
-	task     server.TransferOperation
+	task     model.TransferOperation
 	cp       coordinator.Coordinator
-	transfer server.Transfer
+	transfer model.Transfer
 	registry metrics.Registry
 	ctx      context.Context
 }
@@ -200,7 +200,7 @@ func (v runTaskVisitor) PushOperationHealthMeta(t time.Time) {
 	}
 }
 
-func Run(ctx context.Context, task server.TransferOperation, command abstract.RunnableTask, cp coordinator.Coordinator, transfer server.Transfer, params interface{}, registry metrics.Registry) error {
+func Run(ctx context.Context, task model.TransferOperation, command abstract.RunnableTask, cp coordinator.Coordinator, transfer model.Transfer, params interface{}, registry metrics.Registry) error {
 	if _, ok := command.(abstract.ShardableTask); !ok {
 		if rt, ok := transfer.Runtime.(abstract.ShardingTaskRuntime); ok && !rt.IsMain() {
 			logger.Log.Warn("run non sharding task inside sharding runtime secondary worker, will do nothing")

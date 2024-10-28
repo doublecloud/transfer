@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 var OperationStateNotFoundError = xerrors.New("state is not found")
@@ -39,25 +39,25 @@ type OperationStatus interface {
 // main worker is usually first instance of multi-node transfer operation worker
 type Sharding interface {
 	// GetOperationProgress called by *main* worker to track progress over secondary workers
-	GetOperationProgress(operationID string) (*server.AggregatedProgress, error)
+	GetOperationProgress(operationID string) (*model.AggregatedProgress, error)
 	// CreateOperationWorkers init secondary workers state inside coordinator
 	CreateOperationWorkers(operationID string, workersCount int) error
 	// GetOperationWorkers return all secondary workers to *main* worker
-	GetOperationWorkers(operationID string) ([]*server.OperationWorker, error)
+	GetOperationWorkers(operationID string) ([]*model.OperationWorker, error)
 	// GetOperationWorkersCount return number of registered secondary operation workers to *main* worker
 	GetOperationWorkersCount(operationID string, completed bool) (int, error)
 	// CreateOperationTablesParts store operation parts (or shards or splits).
 	// each part is either full table, or some part of table defined by predicate
 	// called by *main* worker
-	CreateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error
+	CreateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error
 	// GetOperationTablesParts return list of part needed to be uploaded
 	// called by *secondary* workers
-	GetOperationTablesParts(operationID string) ([]*server.OperationTablePart, error)
+	GetOperationTablesParts(operationID string) ([]*model.OperationTablePart, error)
 	// AssignOperationTablePart assign next part to defined *secondary* worker
 	// each worker indexed, and use this index to assign parts
 	// act as iterator.
 	// if no more parts left - return `nil, nil`
-	AssignOperationTablePart(operationID string, workerIndex int) (*server.OperationTablePart, error)
+	AssignOperationTablePart(operationID string, workerIndex int) (*model.OperationTablePart, error)
 	// ClearAssignedTablesParts clear all assignments for worker
 	// and return the number of table parts for which the assignment was cleared
 	ClearAssignedTablesParts(ctx context.Context, operationID string, workerIndex int) (int64, error)
@@ -65,10 +65,10 @@ type Sharding interface {
 	// used to track more granular part progress
 	//
 	// Deprecated: used only in A2
-	UpdateOperationTablesParts(operationID string, tables []*server.OperationTablePart) error
+	UpdateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error
 }
 
 // Progressable is opt-in interface to show total progress over upload once completed
 type Progressable interface {
-	Progress() []*server.OperationTablePart
+	Progress() []*model.OperationTablePart
 }

@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/greenplum"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
@@ -36,7 +36,7 @@ var (
 			Database: os.Getenv("PG_LOCAL_DATABASE"),
 			User:     os.Getenv("PG_LOCAL_USER"),
 			AuthProps: greenplum.PgAuthProps{
-				Password: server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+				Password: model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 			},
 		},
 	}

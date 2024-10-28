@@ -1,0 +1,11 @@
+{
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_key_id.title": "Key ID",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_key_id.usage": "AWS CloudTrail Access Key ID. See <a href=\"https://docs.airbyte.io/integrations/sources/aws-cloudtrail\">AWS CloudTrail documentation</a> for more information on how to obtain the key.",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_region_name.title": "Region name",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_region_name.usage": "The default AWS region, for example, us-west-1 or us-west-2. When specifying a region during client initialization, this property is named region_name.",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_secret_key.title": "Secret key",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.aws_secret_key.usage": "AWS CloudTrail Secret Key ID. See the <a href=\"https://docs.airbyte.io/integrations/sources/aws-cloudtrail\">AWS CloudTrail documentation</a> for more information on how to obtain the key.",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.start_date.title": "Start date",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.start_date.usage": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD. examples: 2021-01-01",
+    "endpoint.airbyte.aws_cloud_trail_source.AWSCloudTrailSource.title": "Endpoint parameters"
+}

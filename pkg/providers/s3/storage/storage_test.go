@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/predicate"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/stretchr/testify/require"
@@ -89,7 +89,7 @@ func TestCanonParquet(t *testing.T) {
 
 func TestCanonJsonline(t *testing.T) {
 	testCasePath := "test_jsonline_files"
-	cfg := s3.PrepareCfg(t, "jsonlinecanon", server.ParsingFormatJSONLine)
+	cfg := s3.PrepareCfg(t, "jsonlinecanon", model.ParsingFormatJSONLine)
 	cfg.PathPrefix = testCasePath
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)
@@ -151,7 +151,7 @@ func TestCanonJsonline(t *testing.T) {
 
 func TestCanonCsv(t *testing.T) {
 	testCasePath := "test_csv_large"
-	cfg := s3.PrepareCfg(t, "csv_canon", server.ParsingFormatCSV)
+	cfg := s3.PrepareCfg(t, "csv_canon", model.ParsingFormatCSV)
 	cfg.PathPrefix = testCasePath
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)
@@ -220,7 +220,7 @@ func TestCanonCsv(t *testing.T) {
 
 func TestEstimateTableRowsCount(t *testing.T) {
 	testCasePath := "test_csv_large"
-	cfg := s3.PrepareCfg(t, "estimate_rows", server.ParsingFormatCSV)
+	cfg := s3.PrepareCfg(t, "estimate_rows", model.ParsingFormatCSV)
 	cfg.PathPrefix = testCasePath
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)

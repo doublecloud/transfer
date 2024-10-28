@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/sharding"
 	"github.com/stretchr/testify/require"
@@ -74,7 +74,7 @@ func TestMultiShard_Push(t *testing.T) {
 		ShardCol:      "test",
 	}
 	q.WithDefaults()
-	sharder, err := newSinkImpl(new(server.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), nil)
+	sharder, err := newSinkImpl(new(dp_model.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), nil)
 	require.NoError(t, err)
 
 	checker := func(row abstract.ChangeItem, expected int) {
@@ -133,7 +133,7 @@ func TestMultiShard_Push_ManualMap(t *testing.T) {
 		ShardCol: "test",
 	}
 	q.WithDefaults()
-	sharder, err := newSinkImpl(new(server.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), nil)
+	sharder, err := newSinkImpl(new(dp_model.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), nil)
 	require.NoError(t, err)
 
 	checker := func(row abstract.ChangeItem, expected int) {
@@ -178,7 +178,7 @@ func TestNewSink_shardRoundRobin(t *testing.T) {
 		},
 		CurrentJob: 7,
 	}
-	sharder, err := newSinkImpl(new(server.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
+	sharder, err := newSinkImpl(new(dp_model.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
 	require.NoError(t, err)
 
 	for i, row := range rows {
@@ -219,7 +219,7 @@ func TestNewSink_shardColumnShardingNoKey(t *testing.T) {
 		},
 		CurrentJob: 7,
 	}
-	sharder, err := newSinkImpl(new(server.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
+	sharder, err := newSinkImpl(new(dp_model.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
 	require.NoError(t, err)
 
 	for _, row := range rows {
@@ -278,7 +278,7 @@ func TestNewSink_shardColumnShardingNoKeyWithUserMapping(t *testing.T) {
 		},
 		CurrentJob: 7,
 	}
-	sharder, err := newSinkImpl(new(server.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
+	sharder, err := newSinkImpl(new(dp_model.Transfer), q.ToReplicationFromPGSinkParams(), logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), rt)
 	require.NoError(t, err)
 
 	for _, row := range rows {

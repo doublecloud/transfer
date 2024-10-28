@@ -2,16 +2,16 @@ package bigquery
 
 import (
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-var _ server.Destination = (*BigQueryDestination)(nil)
+var _ model.Destination = (*BigQueryDestination)(nil)
 
 type BigQueryDestination struct {
 	ProjectID     string
 	Dataset       string
 	Creds         string
-	CleanupPolicy server.CleanupType
+	CleanupPolicy model.CleanupType
 }
 
 func (b *BigQueryDestination) GetProviderType() abstract.ProviderType {
@@ -24,11 +24,11 @@ func (b *BigQueryDestination) Validate() error {
 
 func (b *BigQueryDestination) WithDefaults() {
 	if b.CleanupPolicy == "" {
-		b.CleanupPolicy = server.Drop
+		b.CleanupPolicy = model.Drop
 	}
 }
 
-func (b *BigQueryDestination) CleanupMode() server.CleanupType {
+func (b *BigQueryDestination) CleanupMode() model.CleanupType {
 	return b.CleanupPolicy
 }
 

@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/parsequeue"
 	sequencer2 "github.com/doublecloud/transfer/pkg/providers/postgres/sequencer"
@@ -49,7 +49,7 @@ type replication struct {
 	sharedCtx       context.Context
 	sharedCtxCancel context.CancelFunc
 	changeProcessor *changeProcessor
-	objects         *server.DataObjects
+	objects         *model.DataObjects
 	sequencer       *sequencer2.Sequencer
 	parseQ          *parsequeue.ParseQueue[[]abstract.ChangeItem]
 	objectsMap      map[abstract.TableID]bool //tables to include in transfer
@@ -341,7 +341,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 	var lastMessageTime time.Time
 	var messageCounter int
 	var data []*pglogrepl.XLogData
-	bufferSize := server.BytesSize(0)
+	bufferSize := model.BytesSize(0)
 	for {
 		select {
 		case <-p.stopCh:
@@ -453,7 +453,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 				bufferSize = 0
 				messageCounter = 0
 			} else {
-				bufferSize += server.BytesSize(len(xld.WALData))
+				bufferSize += model.BytesSize(len(xld.WALData))
 			}
 		case pglogrepl.PrimaryKeepaliveMessageByteID:
 			p.mutex.Lock()
@@ -540,7 +540,7 @@ func (p *replication) parseWal2JsonChanges(cp *changeProcessor, xld *pglogrepl.X
 	return changes, nil
 }
 
-func NewReplicationPublisher(version PgVersion, replConn *mutexedPgConn, connPool *pgxpool.Pool, slot AbstractSlot, stats *stats.SourceStats, source *PgSource, transferID string, lgr log.Logger, cp coordinator.Coordinator, objects *server.DataObjects) (abstract.Source, error) {
+func NewReplicationPublisher(version PgVersion, replConn *mutexedPgConn, connPool *pgxpool.Pool, slot AbstractSlot, stats *stats.SourceStats, source *PgSource, transferID string, lgr log.Logger, cp coordinator.Coordinator, objects *model.DataObjects) (abstract.Source, error) {
 	mutex := &sync.Mutex{}
 	if tracker, ok := slot.(*LsnTrackedSlot); ok {
 		// Start mole finder

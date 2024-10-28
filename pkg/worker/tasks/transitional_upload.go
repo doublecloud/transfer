@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/storage"
 	"github.com/doublecloud/transfer/pkg/terryid"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -18,7 +18,7 @@ import (
 
 // TransitUpload is shitty method mainly for transfers with LB in the middle,
 // so we could make @lupach happy and isolate crappy code in separate func.
-func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task *server.TransferOperation, spec UploadSpec, registry metrics.Registry) error {
+func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task *model.TransferOperation, spec UploadSpec, registry metrics.Registry) error {
 	rollbacks := util.Rollbacks{}
 	defer rollbacks.Do()
 
@@ -41,14 +41,14 @@ func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer ser
 		return xerrors.New("Upload supports maximum one-lb-in-the-middle case")
 	}
 	rollbacks.Add(func() {
-		if err := cp.SetStatus(transfer.ID, server.Failed); err != nil {
+		if err := cp.SetStatus(transfer.ID, model.Failed); err != nil {
 			logger.Log.Error("Unable to change status", log.Any("id", transfer.ID), log.Any("task_id", task.OperationID))
 		}
 	})
 	if err := StopJob(cp, transfer); err != nil {
 		return xerrors.Errorf("stop job: %w", err)
 	}
-	if err := cp.SetStatus(transfer.ID, server.Scheduled); err != nil {
+	if err := cp.SetStatus(transfer.ID, model.Scheduled); err != nil {
 		return xerrors.Errorf("unable to set controlplane status: %w", err)
 	}
 
@@ -57,16 +57,16 @@ func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer ser
 		return xerrors.Errorf("unable to get right terminal destination endpoints: %w", err)
 	}
 
-	var transfers []server.Transfer
+	var transfers []model.Transfer
 	for _, src := range sources {
 		for _, dst := range destinations {
-			utTransfer := server.Transfer{
+			utTransfer := model.Transfer{
 				ID:                transfer.ID,
 				TransferName:      "",
 				Description:       "",
 				Labels:            "",
 				Author:            "",
-				Status:            server.Running,
+				Status:            model.Running,
 				Type:              abstract.TransferTypeSnapshotOnly,
 				FolderID:          "",
 				Runtime:           transfer.Runtime,
@@ -138,7 +138,7 @@ func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer ser
 }
 
 // TransitReupload is shitty method mainly for transfers with LB in the middle, same as TransitUpload
-func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, registry metrics.Registry) error {
+func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, registry metrics.Registry) error {
 	snapshotLoader := NewSnapshotLoader(cp, task.OperationID, &transfer, registry)
 	if !transfer.IsMain() {
 		if err := snapshotLoader.UploadTables(ctx, nil, false); err != nil {
@@ -158,7 +158,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer s
 		return xerrors.Errorf("unable to get right terminal destination endpoints: %w", err)
 	}
 
-	var transfers []*server.Transfer
+	var transfers []*model.Transfer
 
 	for _, src := range srcs {
 		for _, dst := range dsts {
@@ -166,7 +166,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer s
 				return xerrors.Errorf("Reupload is forbidden: %w", err)
 			}
 
-			rut := new(server.Transfer)
+			rut := new(model.Transfer)
 			rut.Src = src
 			rut.Dst = dst
 			rut.ID = transfer.ID
@@ -180,7 +180,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer s
 	}
 
 	if !transfer.IncrementOnly() {
-		err := cp.SetStatus(transfer.ID, server.Started)
+		err := cp.SetStatus(transfer.ID, model.Started)
 		if err != nil {
 			return xerrors.Errorf("Cannot update transfer status: %w", err)
 		}
@@ -195,7 +195,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer s
 			continue
 		}
 
-		if rut.Dst.CleanupMode() != server.DisabledCleanup {
+		if rut.Dst.CleanupMode() != model.DisabledCleanup {
 			tables, err := ObtainAllSrcTables(rut, registry)
 			if err != nil {
 				if xerrors.Is(err, storage.UnsupportedSourceErr) {
@@ -222,7 +222,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer s
 }
 
 // TransitionalAddTables same as above
-func TransitionalAddTables(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, tables []string, registry metrics.Registry) error {
+func TransitionalAddTables(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, tables []string, registry metrics.Registry) error {
 	linkedTransfers, err := GetLeftTerminalTransfers(cp, transfer)
 	if err != nil {
 		return xerrors.Errorf("Unable to resolve left terminal transfer: %w", err)
@@ -237,7 +237,7 @@ func TransitionalAddTables(ctx context.Context, cp coordinator.Coordinator, tran
 	if err != nil {
 		return xerrors.Errorf("Unable to resolve right terminal transfer: %w", err)
 	}
-	filteredTransfers := make([]server.Transfer, 0)
+	filteredTransfers := make([]model.Transfer, 0)
 	for i, tr := range linkedTransfers {
 		if !isAllowedSourceType(tr.Src) {
 			logger.Log.Errorf("Add tables supported only for pg sources")
@@ -292,7 +292,7 @@ func TransitionalAddTables(ctx context.Context, cp coordinator.Coordinator, tran
 		if err != nil {
 			return xerrors.Errorf("Cannot load source endpoint for updating: %w", err)
 		}
-		newSrc, _ := e.(server.Source)
+		newSrc, _ := e.(model.Source)
 		setSourceTables(newSrc, commonTableSet)
 		if err := cp.UpdateEndpoint(currTransfer.ID, e); err != nil {
 			return xerrors.Errorf("Cannot store source endpoint with added tables: %w", err)

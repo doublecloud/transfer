@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/changeitem/strictify"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -770,7 +770,7 @@ func overrideFilter(filter MongoCollectionFilter, includeTables map[abstract.Tab
 	return filter
 }
 
-func NewSource(src *MongoSource, transferID string, objects *server.DataObjects, logger log.Logger, registry metrics.Registry, cp coordinator.Coordinator) (abstract.Source, error) {
+func NewSource(src *MongoSource, transferID string, objects *model.DataObjects, logger log.Logger, registry metrics.Registry, cp coordinator.Coordinator) (abstract.Source, error) {
 	includeObjects, err := abstract.BuildIncludeMap(objects.GetIncludeObjects())
 	if err != nil {
 		return nil, abstract.NewFatalError(xerrors.Errorf("to build exclude map: %w", err))

@@ -6,18 +6,18 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/storage"
 )
 
-func checkReuploadAllowed(src server.Source, dst server.Destination) error {
-	if appendOnlySource, ok := src.(server.AppendOnlySource); ok && appendOnlySource.IsAppendOnly() {
+func checkReuploadAllowed(src model.Source, dst model.Destination) error {
+	if appendOnlySource, ok := src.(model.AppendOnlySource); ok && appendOnlySource.IsAppendOnly() {
 		return xerrors.New("Reupload from append only source is not allowed")
 	}
 	return nil
 }
 
-func Reupload(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task server.TransferOperation, registry metrics.Registry) error {
+func Reupload(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, registry metrics.Registry) error {
 	if transfer.IsTransitional() {
 		// there is no code to change, if you need to change it - think twice.
 		return TransitReupload(ctx, cp, transfer, task, registry)
@@ -39,7 +39,7 @@ func Reupload(ctx context.Context, cp coordinator.Coordinator, transfer server.T
 	}
 
 	if !transfer.IncrementOnly() {
-		err := cp.SetStatus(transfer.ID, server.Started)
+		err := cp.SetStatus(transfer.ID, model.Started)
 		if err != nil {
 			return xerrors.Errorf("Cannot update transfer status: %w", err)
 		}
@@ -54,7 +54,7 @@ func Reupload(ctx context.Context, cp coordinator.Coordinator, transfer server.T
 			return xerrors.Errorf("upload (v2) failed: %w", err)
 		}
 	} else {
-		if transfer.Dst.CleanupMode() != server.DisabledCleanup {
+		if transfer.Dst.CleanupMode() != model.DisabledCleanup {
 			tables, err := ObtainAllSrcTables(&transfer, registry)
 			if err != nil {
 				if !xerrors.Is(err, storage.UnsupportedSourceErr) {

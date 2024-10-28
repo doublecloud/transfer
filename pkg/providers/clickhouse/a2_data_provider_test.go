@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/base/events"
 	"github.com/doublecloud/transfer/pkg/providers"
@@ -56,7 +56,7 @@ func (f *fakeTarget) Close() error {
 func TestClickhouseProvider(t *testing.T) {
 	src, err := chrecipe.Source(chrecipe.WithInitFile("gotest/dump.sql"))
 	require.NoError(t, err)
-	pr, err := NewClickhouseProvider(logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), src, new(server.Transfer))
+	pr, err := NewClickhouseProvider(logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), src, new(model.Transfer))
 	require.NoError(t, err)
 	require.NoError(t, pr.Init())
 	objs, err := pr.DataObjects(nil)
@@ -93,7 +93,7 @@ func TestSwappedPortsConnectionClickhouseProvider(t *testing.T) {
 
 	src.NativePort, src.HTTPPort = src.HTTPPort, src.NativePort
 
-	trf := new(server.Transfer)
+	trf := new(model.Transfer)
 	trf.Src = src
 
 	if tester, ok := providers.Source[providers.Tester](
@@ -111,7 +111,7 @@ func TestConnectionClickhouseProvider(t *testing.T) {
 	src, err := chrecipe.Source(chrecipe.WithInitFile("gotest/dump.sql"))
 	require.NoError(t, err)
 
-	trf := new(server.Transfer)
+	trf := new(model.Transfer)
 	trf.Src = src
 
 	if tester, ok := providers.Source[providers.Tester](

@@ -7,13 +7,13 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/stretchr/testify/require"
 )
 
 func TestMergeWithIncrementalState(t *testing.T) {
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:   "transfer1",
 		Type: abstract.TransferTypeSnapshotOnly,
 		RegularSnapshot: &abstract.RegularSnapshot{

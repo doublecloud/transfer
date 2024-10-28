@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/functions"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -25,12 +25,12 @@ func init() {
 
 type Config struct {
 	TableID abstract.TableID
-	Options *server.DataTransformOptions
+	Options *model.DataTransformOptions
 }
 
 type mapper struct {
 	table    abstract.TableID
-	cfg      *server.DataTransformOptions
+	cfg      *model.DataTransformOptions
 	lgr      log.Logger
 	executor *functions.Executor
 }

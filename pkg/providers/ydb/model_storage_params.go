@@ -1,6 +1,6 @@
 package ydb
 
-import server "github.com/doublecloud/transfer/pkg/abstract/model"
+import "github.com/doublecloud/transfer/pkg/abstract/model"
 
 type YdbStorageParams struct {
 	Database           string
@@ -10,7 +10,7 @@ type YdbStorageParams struct {
 	UseFullPaths       bool
 
 	// auth props
-	Token            server.SecretString
+	Token            model.SecretString
 	ServiceAccountID string
 	UserdataAuth     bool
 	SAKeyContent     string

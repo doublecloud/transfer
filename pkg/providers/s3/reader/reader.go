@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3iface"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/protobuf/protoparser"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/providers/s3/pusher"
@@ -112,31 +112,31 @@ func New(
 	metrics *stats.SourceStats,
 ) (Reader, error) {
 	switch src.InputFormat {
-	case server.ParsingFormatPARQUET:
+	case model.ParsingFormatPARQUET:
 		reader, err := NewParquet(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new parquet reader: %w", err)
 		}
 		return reader, nil
-	case server.ParsingFormatJSON:
+	case model.ParsingFormatJSON:
 		reader, err := NewJSONParserReader(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new json reader: %w", err)
 		}
 		return reader, nil
-	case server.ParsingFormatJSONLine:
+	case model.ParsingFormatJSONLine:
 		reader, err := NewJSONLineReader(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new jsonline reader: %w", err)
 		}
 		return reader, nil
-	case server.ParsingFormatCSV:
+	case model.ParsingFormatCSV:
 		reader, err := NewCSVReader(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new csv reader: %w", err)
 		}
 		return reader, nil
-	case server.ParsingFormatPROTO:
+	case model.ParsingFormatPROTO:
 		if len(src.Format.ProtoParser.DescFile) == 0 {
 			return nil, xerrors.New("desc file required")
 		}
@@ -173,7 +173,7 @@ func New(
 			return nil, xerrors.Errorf("failed to initialize new csv reader: %w", err)
 		}
 		return reader, nil
-	case server.ParsingFormatLine:
+	case model.ParsingFormatLine:
 		reader, err := NewLineReader(src, lgr, sess, metrics)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new line reader: %w", err)

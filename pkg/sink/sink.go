@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/config/env"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
@@ -27,7 +27,7 @@ var NoAsyncSinkErr = xerrors.NewSentinel("no applicable AsyncSink for this trans
 
 // MakeAsyncSink creates a ready-to-use complete sink pipeline, topped with an asynchronous sink wrapper.
 // The pipeline may include multiple middlewares and transformations. Their concrete set depends on transfer settings, its source and destination.
-func MakeAsyncSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config, opts ...abstract.SinkOption) (abstract.AsyncSink, error) {
+func MakeAsyncSink(transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config, opts ...abstract.SinkOption) (abstract.AsyncSink, error) {
 	var pipelineAsync abstract.AsyncSink = nil
 	middleware, err := syncMiddleware(transfer, lgr, mtrcs, cp, opts...)
 	if err != nil {
@@ -50,7 +50,7 @@ func MakeAsyncSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Regi
 	return pipelineAsync, nil
 }
 
-func syncMiddleware(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, opts ...abstract.SinkOption) (abstract.Middleware, error) {
+func syncMiddleware(transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, opts ...abstract.SinkOption) (abstract.Middleware, error) {
 	transformer, err := middlewares.Transformation(transfer, lgr, mtrcs)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to set transformation middleware: %w", err)
@@ -63,7 +63,7 @@ func syncMiddleware(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Reg
 		pipeline = middlewares.OutputDataMetering()(pipeline)
 
 		pipeline = middlewares.Statistician(lgr, stats.NewWrapperStats(mtrcs))(pipeline)
-		if dst, ok := transfer.Dst.(server.SystemTablesDependantDestination); !ok || !dst.ReliesOnSystemTablesTransferring() {
+		if dst, ok := transfer.Dst.(model.SystemTablesDependantDestination); !ok || !dst.ReliesOnSystemTablesTransferring() {
 			pipeline = middlewares.Filter(mtrcs, middlewares.ExcludeSystemTables)(pipeline)
 		}
 
@@ -88,9 +88,9 @@ func syncMiddleware(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Reg
 }
 
 // ConstructBaseSink creates a sink of proper type
-func ConstructBaseSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config) (abstract.Sinker, error) {
+func ConstructBaseSink(transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, config middlewares.Config) (abstract.Sinker, error) {
 	switch dst := transfer.Dst.(type) {
-	case *server.MockDestination:
+	case *model.MockDestination:
 		return dst.SinkerFactory(), nil
 	default:
 		if !config.ReplicationStage {
@@ -115,14 +115,14 @@ func ConstructBaseSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.
 	}
 }
 
-func constructBaseAsyncSink(transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, middleware abstract.Middleware) (abstract.AsyncSink, error) {
+func constructBaseAsyncSink(transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Registry, cp coordinator.Coordinator, middleware abstract.Middleware) (abstract.AsyncSink, error) {
 	if asyncF, ok := providers.Destination[providers.AsyncSinker](lgr, mtrcs, cp, transfer); ok {
 		return asyncF.AsyncSink(middleware)
 	}
 	return nil, NoAsyncSinkErr
 }
 
-func wrapSinkIntoAsyncPipeline(sink abstract.Sinker, transfer *server.Transfer, lgr log.Logger, mtrcs metrics.Registry, middleware abstract.Middleware, config middlewares.Config) abstract.AsyncSink {
+func wrapSinkIntoAsyncPipeline(sink abstract.Sinker, transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Registry, middleware abstract.Middleware, config middlewares.Config) abstract.AsyncSink {
 	sink = middlewares.ErrorTracker(mtrcs)(sink)
 	if config.EnableRetries {
 		sink = middlewares.Retrier(lgr, context.Background())(sink)
@@ -142,7 +142,7 @@ func wrapSinkIntoAsyncPipeline(sink abstract.Sinker, transfer *server.Transfer, 
 	return pipelineAsync
 }
 
-func calculateBuffererConfig(transfer *server.Transfer, middlewaresConfig middlewares.Config, lgr log.Logger) *bufferer.BuffererConfig {
+func calculateBuffererConfig(transfer *model.Transfer, middlewaresConfig middlewares.Config, lgr log.Logger) *bufferer.BuffererConfig {
 	if middlewaresConfig.NoData {
 		return nil
 	}
@@ -170,8 +170,8 @@ func calculateBuffererConfig(transfer *server.Transfer, middlewaresConfig middle
 	return &result
 }
 
-func getMemoryThrottlerSettings(transfer *server.Transfer) (uint64, bool) {
-	if val, err := transfer.SystemLabel(server.SystemLabelMemThrottle); err == nil && val == "on" {
+func getMemoryThrottlerSettings(transfer *model.Transfer) (uint64, bool) {
+	if val, err := transfer.SystemLabel(model.SystemLabelMemThrottle); err == nil && val == "on" {
 		if rt, ok := transfer.Runtime.(abstract.LimitedResourceRuntime); ok {
 			return rt.RAMGuarantee(), rt.RAMGuarantee() != 0
 		}

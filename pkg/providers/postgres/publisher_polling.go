@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/dustin/go-humanize"
 	"github.com/jackc/pgconn"
@@ -45,7 +45,7 @@ type poller struct {
 	pgVersion       PgVersion
 	cp              coordinator.Coordinator
 	changeProcessor *changeProcessor
-	objects         *server.DataObjects
+	objects         *model.DataObjects
 
 	skippedTables map[abstract.TableID]bool
 }
@@ -602,7 +602,7 @@ func NewPollingPublisher(
 	slot AbstractSlot,
 	registry *stats.SourceStats,
 	cfg *PgSource,
-	objects *server.DataObjects,
+	objects *model.DataObjects,
 	transferID string,
 	lgr log.Logger,
 	cp coordinator.Coordinator,

@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/storage"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -18,7 +18,7 @@ type UploadSpec struct {
 	Tables []abstract.TableDescription
 }
 
-func missingTables(transfer *server.Transfer, registry metrics.Registry, requested []abstract.TableDescription) (result []string, err error) {
+func missingTables(transfer *model.Transfer, registry metrics.Registry, requested []abstract.TableDescription) (result []string, err error) {
 	presentTables, err := ObtainAllSrcTables(transfer, registry)
 	if err != nil {
 		return nil, xerrors.Errorf(TableListErrorText, err)
@@ -33,7 +33,7 @@ func missingTables(transfer *server.Transfer, registry metrics.Registry, request
 	return result, nil
 }
 
-func inaccessibleTables(transfer *server.Transfer, registry metrics.Registry, requested []abstract.TableDescription) ([]string, error) {
+func inaccessibleTables(transfer *model.Transfer, registry metrics.Registry, requested []abstract.TableDescription) ([]string, error) {
 	srcStorage, err := storage.NewStorage(transfer, coordinator.NewFakeClient(), registry)
 	if err != nil {
 		return nil, xerrors.Errorf(ResolveStorageErrorText, err)
@@ -55,7 +55,7 @@ func inaccessibleTables(transfer *server.Transfer, registry metrics.Registry, re
 	return result, nil
 }
 
-func Upload(ctx context.Context, cp coordinator.Coordinator, transfer server.Transfer, task *server.TransferOperation, spec UploadSpec, registry metrics.Registry) error {
+func Upload(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task *model.TransferOperation, spec UploadSpec, registry metrics.Registry) error {
 	var taskID string
 	if task != nil {
 		taskID = task.OperationID
@@ -75,14 +75,14 @@ func Upload(ctx context.Context, cp coordinator.Coordinator, transfer server.Tra
 		return nil
 	}
 	rollbacks.Add(func() {
-		if err := cp.SetStatus(transfer.ID, server.Failed); err != nil {
+		if err := cp.SetStatus(transfer.ID, model.Failed); err != nil {
 			logger.Log.Error("Unable to change status", log.Any("id", transfer.ID), log.Any("task_id", taskID))
 		}
 	})
 	if err := StopJob(cp, transfer); err != nil {
 		return xerrors.Errorf("stop job: %w", err)
 	}
-	if err := cp.SetStatus(transfer.ID, server.Scheduled); err != nil {
+	if err := cp.SetStatus(transfer.ID, model.Scheduled); err != nil {
 		return xerrors.Errorf("unable to set controlplane status: %w", err)
 	}
 

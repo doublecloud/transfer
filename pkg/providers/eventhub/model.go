@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 )
 
@@ -14,7 +14,7 @@ const (
 	ProviderType    = abstract.ProviderType("eventhub")
 )
 
-var _ server.Source = (*EventHubSource)(nil)
+var _ model.Source = (*EventHubSource)(nil)
 
 type EventHubSource struct {
 	NamespaceName     string
@@ -24,16 +24,16 @@ type EventHubSource struct {
 	StartingOffset    string
 	StartingTimeStamp *time.Time
 	Auth              *EventHubAuth
-	Transformer       *server.DataTransformOptions
+	Transformer       *model.DataTransformOptions
 
 	ParserConfig map[string]interface{}
 }
 
-var _ server.Source = (*EventHubSource)(nil)
+var _ model.Source = (*EventHubSource)(nil)
 
 type EventHubAuth struct {
 	Method, KeyName string
-	KeyValue        server.SecretString
+	KeyValue        model.SecretString
 }
 
 func (s *EventHubSource) WithDefaults() {

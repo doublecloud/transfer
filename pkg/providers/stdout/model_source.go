@@ -2,12 +2,12 @@ package stdout
 
 import (
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type EmptySource struct{}
 
-var _ server.Source = (*EmptySource)(nil)
+var _ model.Source = (*EmptySource)(nil)
 
 func (EmptySource) WithDefaults() {
 }

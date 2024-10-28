@@ -6,12 +6,12 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 // TableTemporator provides support for temporary policy
-func TableTemporator(logger log.Logger, transferID string, config server.TmpPolicyConfig) func(abstract.Movable) abstract.Sinker {
+func TableTemporator(logger log.Logger, transferID string, config model.TmpPolicyConfig) func(abstract.Movable) abstract.Sinker {
 	return func(m abstract.Movable) abstract.Sinker {
 		return newTemporator(m, logger, transferID, config)
 	}
@@ -20,7 +20,7 @@ func TableTemporator(logger log.Logger, transferID string, config server.TmpPoli
 type temporator struct {
 	movable abstract.Movable
 
-	config server.TmpPolicyConfig
+	config model.TmpPolicyConfig
 	suffix string
 
 	tablesDstTmp *tableMap
@@ -28,7 +28,7 @@ type temporator struct {
 	logger log.Logger
 }
 
-func newTemporator(m abstract.Movable, logger log.Logger, transferID string, config server.TmpPolicyConfig) *temporator {
+func newTemporator(m abstract.Movable, logger log.Logger, transferID string, config model.TmpPolicyConfig) *temporator {
 	return &temporator{
 		movable: m,
 

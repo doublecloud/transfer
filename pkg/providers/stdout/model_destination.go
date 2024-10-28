@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
 
@@ -16,7 +16,7 @@ type StdoutDestination struct {
 	TriggingInterval  time.Duration
 }
 
-var _ server.Destination = (*StdoutDestination)(nil)
+var _ model.Destination = (*StdoutDestination)(nil)
 
 func (StdoutDestination) WithDefaults() {
 }
@@ -25,8 +25,8 @@ func (d *StdoutDestination) Transformer() map[string]string {
 	return d.TransformerConfig
 }
 
-func (d *StdoutDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *StdoutDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
 func (StdoutDestination) IsDestination() {

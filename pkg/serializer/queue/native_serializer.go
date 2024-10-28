@@ -2,12 +2,12 @@ package queue
 
 import (
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 // NativeSerializer - for legacy compatibility: transfers named: realty-rent-prod/realty-rent-test
 type NativeSerializer struct {
-	batchingSettings server.Batching
+	batchingSettings model.Batching
 	saveTxOrder      bool
 }
 
@@ -43,7 +43,7 @@ func (s *NativeSerializer) Serialize(input []abstract.ChangeItem) (map[abstract.
 	return idToGroup, nil
 }
 
-func NewNativeSerializer(batchingSettings server.Batching, saveTxOrder bool) (*NativeSerializer, error) {
+func NewNativeSerializer(batchingSettings model.Batching, saveTxOrder bool) (*NativeSerializer, error) {
 	return &NativeSerializer{
 		batchingSettings: batchingSettings,
 		saveTxOrder:      saveTxOrder,

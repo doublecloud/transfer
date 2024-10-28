@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/maplock"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/parsers/generic"
@@ -375,7 +375,7 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 		switch item.Kind {
 		// Drop and truncate are essentially the same operations
 		case abstract.DropTableKind, abstract.TruncateTableKind:
-			if s.config.CleanupMode() == server.DisabledCleanup {
+			if s.config.CleanupMode() == model.DisabledCleanup {
 				s.logger.Infof("Skipped dropping/truncating table '%v' due cleanup policy", tableYPath)
 				continue
 			}
@@ -848,7 +848,7 @@ func NewSinker(
 	logger log.Logger,
 	registry metrics.Registry,
 	cp coordinator.Coordinator,
-	tmpPolicyConfig *server.TmpPolicyConfig,
+	tmpPolicyConfig *model.TmpPolicyConfig,
 ) (abstract.Sinker, error) {
 	var result abstract.Sinker
 

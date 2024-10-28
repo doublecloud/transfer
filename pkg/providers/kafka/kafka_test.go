@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -25,7 +25,7 @@ func TestKafka(t *testing.T) {
 	}
 	sinker, _ := NewReplicationSink(&KafkaDestination{
 		Connection: &KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+			TLS:     model.DefaultTLS,
 			Brokers: []string{os.Getenv("KAFKA_BROKER")},
 		},
 		Auth: &KafkaAuth{
@@ -35,8 +35,8 @@ func TestKafka(t *testing.T) {
 			Password:  os.Getenv("KAFKA_PASSWORD"),
 		},
 		Topic: "foo_bar",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatJSON,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatJSON,
 		},
 	}, solomon.NewRegistry(solomon.NewRegistryOpts()), logger.Log)
 

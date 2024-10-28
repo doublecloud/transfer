@@ -6,13 +6,13 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/cleanup"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-func CleanupResource(ctx context.Context, task server.TransferOperation, transfer server.Transfer, logger log.Logger, cp coordinator.Coordinator) error {
+func CleanupResource(ctx context.Context, task model.TransferOperation, transfer model.Transfer, logger log.Logger, cp coordinator.Coordinator) error {
 	err := cleanupTmp(ctx, transfer, logger, cp, task)
 	if err != nil {
 		return xerrors.Errorf("unable to cleanup tmp: %w", err)
@@ -30,16 +30,16 @@ func CleanupResource(ctx context.Context, task server.TransferOperation, transfe
 	return cleanuper.Cleanup(ctx, &task)
 }
 
-func cleanupTmp(ctx context.Context, transfer server.Transfer, logger log.Logger, cp coordinator.Coordinator, task server.TransferOperation) error {
+func cleanupTmp(ctx context.Context, transfer model.Transfer, logger log.Logger, cp coordinator.Coordinator, task model.TransferOperation) error {
 	tmpPolicy := transfer.TmpPolicy
 	if tmpPolicy == nil {
 		logger.Info("tmp policy is not set")
 		return nil
 	}
 
-	err := server.EnsureTmpPolicySupported(transfer.Dst, &transfer)
+	err := model.EnsureTmpPolicySupported(transfer.Dst, &transfer)
 	if err != nil {
-		return xerrors.Errorf(server.ErrInvalidTmpPolicy, err)
+		return xerrors.Errorf(model.ErrInvalidTmpPolicy, err)
 	}
 
 	cleanuper, ok := providers.Destination[providers.TMPCleaner](logger, solomon.NewRegistry(solomon.NewRegistryOpts()), cp, &transfer)

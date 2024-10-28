@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/data"
 	"github.com/doublecloud/transfer/pkg/errors"
@@ -22,7 +22,7 @@ import (
 )
 
 type LocalWorker struct {
-	transfer            *server.Transfer
+	transfer            *model.Transfer
 	registry            metrics.Registry
 	logger              log.Logger
 	sink                abstract.AsyncSink
@@ -187,7 +187,7 @@ func (w *LocalWorker) Run() error {
 	return nil
 }
 
-func NewLocalWorker(cp coordinator.Coordinator, transfer *server.Transfer, registry metrics.Registry, lgr log.Logger) *LocalWorker {
+func NewLocalWorker(cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry, lgr log.Logger) *LocalWorker {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &LocalWorker{
 		transfer:            transfer,

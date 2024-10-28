@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors/coded"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -19,7 +19,7 @@ func VerifyPostgresTablesNames(tables []string) error {
 	return nil
 }
 
-func VerifyPostgresTables(src *PgSource, transfer *server.Transfer, lgr log.Logger) error {
+func VerifyPostgresTables(src *PgSource, transfer *model.Transfer, lgr log.Logger) error {
 	if len(src.DBTables) == 0 {
 		return nil
 	}

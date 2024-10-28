@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type MysqlFlavorType string
@@ -21,7 +21,7 @@ type MysqlTrackerStorage string
 type MysqlSource struct {
 	Host              string
 	User              string
-	Password          server.SecretString
+	Password          model.SecretString
 	ClusterID         string
 	ServerID          uint32
 	IncludeTableRegex []string
@@ -54,8 +54,8 @@ type MysqlSource struct {
 	ConnectionID string
 }
 
-var _ server.Source = (*MysqlSource)(nil)
-var _ server.WithConnectionID = (*MysqlSource)(nil)
+var _ model.Source = (*MysqlSource)(nil)
+var _ model.WithConnectionID = (*MysqlSource)(nil)
 
 type MysqlDumpSteps struct {
 	View    bool

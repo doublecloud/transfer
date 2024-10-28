@@ -4,7 +4,7 @@ import (
 	"sort"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type MongoDestination struct {
@@ -15,9 +15,9 @@ type MongoDestination struct {
 	ReplicaSet        string
 	AuthSource        string
 	User              string
-	Password          server.SecretString
+	Password          model.SecretString
 	TransformerConfig map[string]string
-	Cleanup           server.CleanupType
+	Cleanup           model.CleanupType
 	SubNetworkID      string
 	SecurityGroupIDs  []string
 	TLSFile           string
@@ -29,7 +29,7 @@ type MongoDestination struct {
 	SRVMode bool
 }
 
-var _ server.Destination = (*MongoDestination)(nil)
+var _ model.Destination = (*MongoDestination)(nil)
 
 func (d *MongoDestination) MDBClusterID() string {
 	return d.ClusterID
@@ -40,14 +40,14 @@ func (d *MongoDestination) WithDefaults() {
 		d.Port = 27018
 	}
 	if d.Cleanup == "" {
-		d.Cleanup = server.Drop
+		d.Cleanup = model.Drop
 	}
 	if len(d.Hosts) > 1 {
 		sort.Strings(d.Hosts)
 	}
 }
 
-func (d *MongoDestination) CleanupMode() server.CleanupType {
+func (d *MongoDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 

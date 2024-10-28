@@ -19,7 +19,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/providers"
@@ -137,7 +137,7 @@ func (p *ChecksumParameters) GetPriorityComparators() []ChecksumComparator {
 	return p.PriorityComparators
 }
 
-func Checksum(transfer server.Transfer, lgr log.Logger, registry metrics.Registry, params *ChecksumParameters) error {
+func Checksum(transfer model.Transfer, lgr log.Logger, registry metrics.Registry, params *ChecksumParameters) error {
 	var err error
 	var srcStorage, dstStorage abstract.SampleableStorage
 	var tables []abstract.TableDescription

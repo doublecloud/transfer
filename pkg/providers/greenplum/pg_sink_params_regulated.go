@@ -3,7 +3,7 @@ package greenplum
 import (
 	"time"
 
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type PgSinkParamsRegulated struct {
@@ -17,7 +17,7 @@ type PgSinkParamsRegulated struct {
 	FMaintainTables         bool
 	FPerTransactionPush     bool
 	FLoozeMode              bool
-	FCleanupMode            server.CleanupType
+	FCleanupMode            model.CleanupType
 	FTables                 map[string]string
 	FCopyUpload             bool
 	FIgnoreUniqueConstraint bool
@@ -69,7 +69,7 @@ func (p PgSinkParamsRegulated) LoozeMode() bool {
 	return p.FLoozeMode
 }
 
-func (p PgSinkParamsRegulated) CleanupMode() server.CleanupType {
+func (p PgSinkParamsRegulated) CleanupMode() model.CleanupType {
 	return p.FCleanupMode
 }
 

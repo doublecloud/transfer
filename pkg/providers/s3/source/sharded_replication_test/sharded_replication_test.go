@@ -14,7 +14,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/providers/s3/sink/testutil"
 	"github.com/doublecloud/transfer/pkg/providers/s3/source"
@@ -68,7 +68,7 @@ func TestNativeS3PathsAreUnescaped(t *testing.T) {
 
 	src.TableNamespace = "test"
 	src.TableName = "data"
-	src.InputFormat = server.ParsingFormatCSV
+	src.InputFormat = model.ParsingFormatCSV
 	src.WithDefaults()
 	src.Format.CSVSetting.BlockSize = 10000000
 	src.ReadBatchSize = 4000 // just for testing so its faster, normally much smaller
@@ -78,7 +78,7 @@ func TestNativeS3PathsAreUnescaped(t *testing.T) {
 		QueueName: sqsQueueName,
 		ConnectionConfig: s3.ConnectionConfig{
 			AccessKey: sqsUser,
-			SecretKey: server.SecretString(sqsKey),
+			SecretKey: model.SecretString(sqsKey),
 			Endpoint:  sqsEndpoint,
 			Region:    sqsRegion,
 		},

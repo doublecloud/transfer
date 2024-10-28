@@ -15,7 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/doublecloud/transfer/internal/logger"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/tests/tcrecipes"
 	"github.com/doublecloud/transfer/tests/tcrecipes/objectstorage"
 	"github.com/stretchr/testify/require"
@@ -46,7 +46,7 @@ func createBucket(t *testing.T, cfg *S3Destination) {
 	logger.Log.Info("create bucket result", log.Any("res", res))
 }
 
-func PrepareS3(t *testing.T, bucket string, format server.ParsingFormat, encoding Encoding) *S3Destination {
+func PrepareS3(t *testing.T, bucket string, format model.ParsingFormat, encoding Encoding) *S3Destination {
 	if tcrecipes.Enabled() {
 		_, err := objectstorage.Prepare(context.Background())
 		require.NoError(t, err)
@@ -96,7 +96,7 @@ func EnvOrDefault(key string, def string) string {
 	return def
 }
 
-func PrepareCfg(t *testing.T, bucket string, format server.ParsingFormat) *S3Source {
+func PrepareCfg(t *testing.T, bucket string, format model.ParsingFormat) *S3Source {
 	if tcrecipes.Enabled() {
 		_, err := objectstorage.Prepare(context.Background())
 		require.NoError(t, err)
@@ -111,11 +111,11 @@ func PrepareCfg(t *testing.T, bucket string, format server.ParsingFormat) *S3Sou
 	if format != "" {
 		cfg.InputFormat = format
 	} else {
-		cfg.InputFormat = server.ParsingFormatPARQUET
+		cfg.InputFormat = model.ParsingFormatPARQUET
 	}
 	cfg.ConnectionConfig.AccessKey = testAccessKey
 	cfg.ConnectionConfig.S3ForcePathStyle = true
-	cfg.ConnectionConfig.SecretKey = server.SecretString(testSecret)
+	cfg.ConnectionConfig.SecretKey = model.SecretString(testSecret)
 	cfg.ConnectionConfig.Region = "ru-central1"
 	cfg.ConnectionConfig.Endpoint = fmt.Sprintf("http://localhost:%v", os.Getenv("S3MDS_PORT"))
 
@@ -128,7 +128,7 @@ func PrepareCfg(t *testing.T, bucket string, format server.ParsingFormat) *S3Sou
 		}
 		cfg.ConnectionConfig.Endpoint = os.Getenv("S3_ENDPOINT")
 		cfg.ConnectionConfig.AccessKey = os.Getenv("S3_ACCESS_KEY")
-		cfg.ConnectionConfig.SecretKey = server.SecretString(os.Getenv("S3_SECRET"))
+		cfg.ConnectionConfig.SecretKey = model.SecretString(os.Getenv("S3_SECRET"))
 		cfg.ConnectionConfig.Region = os.Getenv("S3_REGION")
 	}
 	if os.Getenv("S3MDS_PORT") != "" {

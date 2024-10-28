@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/util"
 	mathutil "github.com/doublecloud/transfer/pkg/util/math"
@@ -45,7 +45,7 @@ func newSink(dst *GpDestination, registry metrics.Registry, lgr log.Logger, tran
 	}
 }
 
-func NewSink(transfer *server.Transfer, registry metrics.Registry, lgr log.Logger, config middlewares.Config) (abstract.Sinker, error) {
+func NewSink(transfer *model.Transfer, registry metrics.Registry, lgr log.Logger, config middlewares.Config) (abstract.Sinker, error) {
 	dst, ok := transfer.Dst.(*GpDestination)
 	if !ok {
 		return nil, abstract.NewFatalError(xerrors.Errorf("cannot construct GP sink from destination of type %T", transfer.Dst))
@@ -257,7 +257,7 @@ func (s *Sink) processCleanupChangeItem(ctx context.Context, changeItem *abstrac
 	if err := s.flushRowChangeItems(ctx); err != nil {
 		return xerrors.Errorf("failed to flush rows: %w", err)
 	}
-	if s.sinkParams.CleanupMode() == server.DisabledCleanup {
+	if s.sinkParams.CleanupMode() == model.DisabledCleanup {
 		return nil
 	}
 	if err := s.pushChangeItemsToSegment(ctx, Coordinator(), []abstract.ChangeItem{*changeItem}); err != nil {

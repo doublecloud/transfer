@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/sink"
 	transformers_registry "github.com/doublecloud/transfer/pkg/transformer"
@@ -28,7 +28,7 @@ func (m *mockSinker) Push(items []abstract.ChangeItem) error {
 
 func TestMultipleTransformers(t *testing.T) {
 	tableName := "test_table"
-	trans := &server.Transformation{
+	trans := &model.Transformation{
 		Transformers: &transformers_registry.Transformers{
 			DebugMode: true,
 			Transformers: []transformers_registry.Transformer{
@@ -65,11 +65,11 @@ func TestMultipleTransformers(t *testing.T) {
 	}
 
 	mockSinker := new(mockSinker)
-	transfer := &server.Transfer{
-		Src: &server.MockSource{},
-		Dst: &server.MockDestination{
+	transfer := &model.Transfer{
+		Src: &model.MockSource{},
+		Dst: &model.MockDestination{
 			SinkerFactory: func() abstract.Sinker { return mockSinker },
-			Cleanup:       server.Drop,
+			Cleanup:       model.Drop,
 		},
 		Transformation: trans,
 	}

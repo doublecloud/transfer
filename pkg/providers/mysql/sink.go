@@ -14,7 +14,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors/coded"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -197,7 +197,7 @@ func (s *sinker) prepareInputPerTables(input []abstract.ChangeItem) (map[abstrac
 				return nil, xerrors.Errorf("unable to fill unique constraints: %w", err)
 			}
 		case abstract.DropTableKind:
-			if s.config.Cleanup != server.Drop {
+			if s.config.Cleanup != model.Drop {
 				s.logger.Infof("Skipped dropping table '%v.%v' due cleanup policy", db, row.Table)
 				continue
 			}
@@ -210,7 +210,7 @@ func (s *sinker) prepareInputPerTables(input []abstract.ChangeItem) (map[abstrac
 				s.logger.Infof("Done DDL:\n%v", util.Sample(ddlQ, maxSampleLen))
 			}
 		case abstract.TruncateTableKind:
-			if s.config.Cleanup != server.Truncate {
+			if s.config.Cleanup != model.Truncate {
 				s.logger.Infof("Skipped truncating table '%v.%v' due cleanup policy", db, row.Table)
 				continue
 			}
@@ -328,7 +328,7 @@ func (s *sinker) perTransactionPush(input []abstract.ChangeItem) error {
 				}
 				queries = append(queries, ddlQ)
 			case abstract.DropTableKind:
-				if s.config.Cleanup != server.Drop {
+				if s.config.Cleanup != model.Drop {
 					s.logger.Infof("Skipped dropping table '%v.%v' due cleanup policy", db, row.Table)
 					continue
 				}
@@ -341,7 +341,7 @@ func (s *sinker) perTransactionPush(input []abstract.ChangeItem) error {
 					s.logger.Infof("Done DDL:\n%v", util.Sample(ddlQ, maxSampleLen))
 				}
 			case abstract.TruncateTableKind:
-				if s.config.Cleanup != server.Truncate {
+				if s.config.Cleanup != model.Truncate {
 					s.logger.Infof("Skipped truncating table '%v.%v' due cleanup policy", db, row.Table)
 					continue
 				}

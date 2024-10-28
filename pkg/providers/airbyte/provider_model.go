@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
 	"github.com/doublecloud/transfer/pkg/util"
 )
@@ -25,7 +25,7 @@ func init() {
 	gob.RegisterName("*server.JSONSchema", new(JSONSchema))
 	gob.RegisterName("*server.JSONProperty", new(JSONProperty))
 	gob.RegisterName("*server.StringOrArray", new(StringOrArray))
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(AirbyteSource)
 	})
 	abstract.RegisterProviderName(ProviderType, "Airbyte")
@@ -35,14 +35,14 @@ type AirbyteSource struct {
 	Config         string
 	BaseDir        string
 	ProtoConfig    string
-	BatchSizeLimit server.BytesSize
+	BatchSizeLimit model.BytesSize
 	RecordsLimit   int
 	EndpointType   EndpointType
 	MaxRowSize     int
 	Image          string
 }
 
-var _ server.Source = (*AirbyteSource)(nil)
+var _ model.Source = (*AirbyteSource)(nil)
 
 type SyncStreams struct {
 	Streams []AirbyteSyncStream `json:"streams"`
@@ -200,11 +200,11 @@ func (s *AirbyteSource) Validate() error {
 	return nil
 }
 
-func (*AirbyteSource) IsSource()                           {}
-func (*AirbyteSource) IsStrictSource()                     {}
-func (*AirbyteSource) IsAbstract2(server.Destination) bool { return false }
-func (*AirbyteSource) IsIncremental()                      {}
-func (*AirbyteSource) SupportsStartCursorValue() bool      { return false }
+func (*AirbyteSource) IsSource()                          {}
+func (*AirbyteSource) IsStrictSource()                    {}
+func (*AirbyteSource) IsAbstract2(model.Destination) bool { return false }
+func (*AirbyteSource) IsIncremental()                     {}
+func (*AirbyteSource) SupportsStartCursorValue() bool     { return false }
 
 func (s *AirbyteSource) SupportMultiWorkers() bool {
 	return false

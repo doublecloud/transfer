@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -20,16 +20,16 @@ func init() {
 	gob.RegisterName("*server.ElasticSearchDestination", new(ElasticSearchDestination))
 	gob.RegisterName("*server.ElasticSearchSource", new(ElasticSearchSource))
 
-	server.RegisterDestination(ProviderType, destinationModelFactory)
+	model.RegisterDestination(ProviderType, destinationModelFactory)
 
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(ElasticSearchSource)
 	})
 
 	providers.Register(ProviderType, New)
 }
 
-func destinationModelFactory() server.Destination {
+func destinationModelFactory() model.Destination {
 	return new(ElasticSearchDestination)
 }
 
@@ -46,14 +46,14 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	if !p.transfer.SnapshotOnly() {
 		return abstract.NewFatalError(xerrors.Errorf("only snapshot mode is allowed for the Elastic source"))
 	}
@@ -96,7 +96,7 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 	return NewSink(dst, p.logger, p.registry)
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

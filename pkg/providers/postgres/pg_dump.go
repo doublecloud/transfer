@@ -18,7 +18,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
 	"github.com/doublecloud/transfer/pkg/util/set"
@@ -70,7 +70,7 @@ func (i *pgDumpItem) TableDescription() (*abstract.TableDescription, error) {
 	return nil, xerrors.New("Not found `CREATE TABLE` line")
 }
 
-func ApplyCommands(commands []*pgDumpItem, transfer server.Transfer, registry metrics.Registry, types ...string) error {
+func ApplyCommands(commands []*pgDumpItem, transfer model.Transfer, registry metrics.Registry, types ...string) error {
 	if _, ok := transfer.Dst.(*PgDestination); !ok {
 		return nil
 	}
@@ -133,7 +133,7 @@ func formatFqtn(in string) (string, error) {
 	return tableID.Fqtn(), nil
 }
 
-func PostgresDumpConnString(src *PgSource) (string, server.SecretString, error) {
+func PostgresDumpConnString(src *PgSource) (string, model.SecretString, error) {
 
 	config, err := GetConnParamsFromSrc(logger.Log, src)
 	if err != nil {
@@ -226,7 +226,7 @@ func dumpSequenceValues(ctx context.Context, conn *pgx.Conn, sequences []abstrac
 }
 
 // sourceInPgPg returns a non-nil object only for homogenous PG-PG transfers
-func sourceInPgPg(transfer *server.Transfer) *PgSource {
+func sourceInPgPg(transfer *model.Transfer) *PgSource {
 	var src *PgSource
 	var srcIsPG bool
 	var dstIsPG bool
@@ -239,7 +239,7 @@ func sourceInPgPg(transfer *server.Transfer) *PgSource {
 }
 
 // ExtractPgDumpSchema returns the dump ONLY for homogenous PG-PG transfers. It also logs its actions
-func ExtractPgDumpSchema(transfer *server.Transfer) ([]*pgDumpItem, error) {
+func ExtractPgDumpSchema(transfer *model.Transfer) ([]*pgDumpItem, error) {
 	src := sourceInPgPg(transfer)
 	if src == nil {
 		return nil, nil
@@ -255,7 +255,7 @@ func ExtractPgDumpSchema(transfer *server.Transfer) ([]*pgDumpItem, error) {
 }
 
 // ApplyPgDumpPreSteps takes the given dump and applies pre-steps defined in transfer source ONLY for homogenous PG-PG transfers. It also logs its actions
-func ApplyPgDumpPreSteps(pgdump []*pgDumpItem, transfer *server.Transfer, registry metrics.Registry) error {
+func ApplyPgDumpPreSteps(pgdump []*pgDumpItem, transfer *model.Transfer, registry metrics.Registry) error {
 	if len(pgdump) == 0 {
 		return nil
 	}
@@ -272,7 +272,7 @@ func ApplyPgDumpPreSteps(pgdump []*pgDumpItem, transfer *server.Transfer, regist
 }
 
 // ApplyPgDumpPostSteps takes the given dump and applies post-steps defined in transfer source ONLY for homogenous PG-PG transfers. It also logs its actions
-func ApplyPgDumpPostSteps(pgdump []*pgDumpItem, transfer *server.Transfer, registry metrics.Registry) error {
+func ApplyPgDumpPostSteps(pgdump []*pgDumpItem, transfer *model.Transfer, registry metrics.Registry) error {
 	if len(pgdump) == 0 {
 		return nil
 	}
@@ -319,7 +319,7 @@ func determineExcludedTypes(allTypes []*pgDumpItem, allowedTypes []*pgDumpItem) 
 }
 
 // loadPgDumpSchema actually loads the schema from PostgreSQL source using a storage constructed in-place
-func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *server.Transfer) ([]*pgDumpItem, error) {
+func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *model.Transfer) ([]*pgDumpItem, error) {
 	storage, err := NewStorage(src.ToStorageParams(transfer))
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create a PostgreSQL Storage object: %w", err)
@@ -496,7 +496,7 @@ func isAllowedCast(createCastSQL string, excludedTypes *set.Set[string], tablesS
 	return tablesSchemas.Contains(schemaPart[0])
 }
 
-func dumpDefinedItems(connString string, connPass server.SecretString, src *PgSource) (map[string][]*pgDumpItem, error) {
+func dumpDefinedItems(connString string, connPass model.SecretString, src *PgSource) (map[string][]*pgDumpItem, error) {
 	if src.DBTables == nil {
 		return make(map[string][]*pgDumpItem), nil
 	}
@@ -656,7 +656,7 @@ func filterDump(dump []*pgDumpItem, DBTables []string) []*pgDumpItem {
 	return result
 }
 
-func execPgDump(pgDump []string, connString string, password server.SecretString, args []string) ([]*pgDumpItem, error) {
+func execPgDump(pgDump []string, connString string, password model.SecretString, args []string) ([]*pgDumpItem, error) {
 	if len(pgDump) == 0 {
 		pgDump = []string{"pg_dump"}
 	}

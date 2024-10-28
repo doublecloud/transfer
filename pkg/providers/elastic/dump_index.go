@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
 	"github.com/doublecloud/transfer/pkg/util/set"
@@ -29,7 +29,7 @@ type IsElasticLikeDestination interface {
 }
 
 // sourceHomoElasticSearch returns a non-nil object only for homogenous OpenSearch / ElasticSearch transfers
-func srcDstHomoElasticSearch(transfer *server.Transfer) (*ElasticSearchSource, ServerType) {
+func srcDstHomoElasticSearch(transfer *model.Transfer) (*ElasticSearchSource, ServerType) {
 	src, srcIsElasticLike := transfer.Src.(IsElasticLikeSource)
 	_, dstIsElasticLike := transfer.Dst.(IsElasticLikeDestination)
 	if srcIsElasticLike && dstIsElasticLike {
@@ -38,7 +38,7 @@ func srcDstHomoElasticSearch(transfer *server.Transfer) (*ElasticSearchSource, S
 	return nil, 0
 }
 
-func DumpIndexInfo(transfer *server.Transfer, logger log.Logger, mRegistry metrics.Registry) error {
+func DumpIndexInfo(transfer *model.Transfer, logger log.Logger, mRegistry metrics.Registry) error {
 	src, serverType := srcDstHomoElasticSearch(transfer)
 	if src == nil {
 		return nil
@@ -84,7 +84,7 @@ func WaitForIndexToExist(client *elasticsearch.Client, indexName string, timeout
 	)
 }
 
-func applyDump(indexName string, indexParams []byte, transfer *server.Transfer, registry metrics.Registry) error {
+func applyDump(indexName string, indexParams []byte, transfer *model.Transfer, registry metrics.Registry) error {
 	sink, err := sink_factory.MakeAsyncSink(transfer, logger.Log, registry, coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
 	if err != nil {
 		return err

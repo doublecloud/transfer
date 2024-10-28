@@ -15,7 +15,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/credentials"
 	"github.com/doublecloud/transfer/pkg/format"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -23,7 +23,7 @@ import (
 
 type Executor struct {
 	eventSource EventSource
-	cfg         *server.DataTransformOptions
+	cfg         *model.DataTransformOptions
 	logger      log.Logger
 	registry    metrics.Registry
 	httpClient  *http.Client
@@ -311,7 +311,7 @@ func (e *Executor) Do(data []abstract.ChangeItem) ([]abstract.ChangeItem, error)
 	return processed, nil
 }
 
-func NewExecutor(cfg *server.DataTransformOptions, baseURL string, source EventSource, lgr log.Logger, registry metrics.Registry) (*Executor, error) {
+func NewExecutor(cfg *model.DataTransformOptions, baseURL string, source EventSource, lgr log.Logger, registry metrics.Registry) (*Executor, error) {
 	var creds credentials.Credentials
 	if cfg.ServiceAccountID != "" {
 		serviceAccountCreds, err := credentials.NewServiceAccountCreds(lgr, cfg.ServiceAccountID)

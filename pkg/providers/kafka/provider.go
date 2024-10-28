@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"github.com/doublecloud/transfer/pkg/providers/kafka/client"
@@ -18,15 +18,15 @@ import (
 )
 
 func init() {
-	destinationFactory := func() server.Destination {
+	destinationFactory := func() model.Destination {
 		return new(KafkaDestination)
 	}
 	gob.RegisterName("*server.KafkaSource", new(KafkaSource))
 	gob.RegisterName("*server.KafkaDestination", new(KafkaDestination))
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(KafkaSource)
 	})
-	server.RegisterDestination(ProviderType, destinationFactory)
+	model.RegisterDestination(ProviderType, destinationFactory)
 	abstract.RegisterProviderName(ProviderType, "Kafka")
 
 	providers.Register(ProviderType, New)
@@ -52,7 +52,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       cpclient.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Sniffer(_ context.Context) (abstract.Fetchable, error) {
@@ -148,14 +148,14 @@ func (p *Provider) SnapshotSink(middlewares.Config) (abstract.Sinker, error) {
 	return NewSnapshotSink(&cfgCopy, p.registry, p.logger)
 }
 
-func (p *Provider) Activate(_ context.Context, _ *server.TransferOperation, _ abstract.TableMap, _ providers.ActivateCallbacks) error {
+func (p *Provider) Activate(_ context.Context, _ *model.TransferOperation, _ abstract.TableMap, _ providers.ActivateCallbacks) error {
 	if p.transfer.SrcType() == ProviderType && !p.transfer.IncrementOnly() {
 		return xerrors.New("Only allowed mode for Kafka source is replication")
 	}
 	return nil
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

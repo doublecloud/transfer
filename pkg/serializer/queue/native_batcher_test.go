@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 func TestNativeBatcher(t *testing.T) {
-	commonTest(t, func(batchingSettings server.Batching) Serializer {
+	commonTest(t, func(batchingSettings model.Batching) Serializer {
 		result, _ := NewNativeSerializer(batchingSettings, true)
 		return result
 	}, func(in abstract.ChangeItem) int {

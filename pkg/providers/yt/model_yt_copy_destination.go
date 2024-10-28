@@ -3,7 +3,7 @@ package yt
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/yt/go/mapreduce/spec"
 	"go.ytsaurus.tech/yt/go/yt"
 )
@@ -18,7 +18,7 @@ type YtCopyDestination struct {
 	ResourceLimits     *spec.ResourceLimits
 }
 
-var _ server.Destination = (*YtCopyDestination)(nil)
+var _ model.Destination = (*YtCopyDestination)(nil)
 
 func (y *YtCopyDestination) IsDestination() {}
 
@@ -26,8 +26,8 @@ func (y *YtCopyDestination) Transformer() map[string]string {
 	return make(map[string]string)
 }
 
-func (y *YtCopyDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (y *YtCopyDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
 func (y *YtCopyDestination) WithDefaults() {

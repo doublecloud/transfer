@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/dbt"
 )
@@ -41,7 +41,7 @@ func (d *Adapter) DBTConfiguration(_ context.Context) (any, error) {
 	}, nil
 }
 
-func New(endpoint server.Destination) (dbt.SupportedDestination, error) {
+func New(endpoint dp_model.Destination) (dbt.SupportedDestination, error) {
 	ch, ok := endpoint.(*model.ChDestination)
 	if !ok {
 		return nil, dbt.NotSupportedErr

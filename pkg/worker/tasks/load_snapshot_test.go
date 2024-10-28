@@ -5,14 +5,14 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCheckIncludeDirectives_DataObjects_NoError(t *testing.T) {
-	transfer := new(server.Transfer)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{
+	transfer := new(model.Transfer)
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{
 		"schema1.table1",
 		"schema2.*",
 	}}
@@ -30,8 +30,8 @@ func TestCheckIncludeDirectives_DataObjects_NoError(t *testing.T) {
 }
 
 func TestCheckIncludeDirectives_DataObjects_Error(t *testing.T) {
-	transfer := new(server.Transfer)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{
+	transfer := new(model.Transfer)
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{
 		"schema1.table1",
 		"schema1.table2",
 		"schema2.*",
@@ -50,8 +50,8 @@ func TestCheckIncludeDirectives_DataObjects_Error(t *testing.T) {
 }
 
 func TestCheckIncludeDirectives_DataObjects_FqtnVariants(t *testing.T) {
-	transfer := new(server.Transfer)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{
+	transfer := new(model.Transfer)
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{
 		"schema1.table1",
 		"\"schema1\".table1",
 		"schema1.\"table1\"",
@@ -69,7 +69,7 @@ func TestCheckIncludeDirectives_DataObjects_FqtnVariants(t *testing.T) {
 }
 
 func TestCheckIncludeDirectives_Src_NoError(t *testing.T) {
-	transfer := new(server.Transfer)
+	transfer := new(model.Transfer)
 	transfer.Src = &postgres.PgSource{DBTables: []string{
 		"schema1.table1",
 		"schema2.*",
@@ -84,7 +84,7 @@ func TestCheckIncludeDirectives_Src_NoError(t *testing.T) {
 }
 
 func TestCheckIncludeDirectives_Src_Error(t *testing.T) {
-	transfer := new(server.Transfer)
+	transfer := new(model.Transfer)
 	transfer.Src = &postgres.PgSource{DBTables: []string{
 		"schema1.table1",
 		"schema1.table2",

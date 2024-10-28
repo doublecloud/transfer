@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type YdbColumnsFilterType string
@@ -46,19 +46,19 @@ type YdbSource struct {
 
 	// replication stuff:
 	ChangeFeedMode       ChangeFeedModeType
-	ChangeFeedCustomName string           // user can specify pre-created feed's name, otherwise it will created with name == transferID
-	BufferSize           server.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
+	ChangeFeedCustomName string          // user can specify pre-created feed's name, otherwise it will created with name == transferID
+	BufferSize           model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 	VerboseSDKLogs       bool
 
 	// auth stuff:
-	Token            server.SecretString
+	Token            model.SecretString
 	UserdataAuth     bool
 	ServiceAccountID string
 	TokenServiceURL  string
 	SAKeyContent     string
 }
 
-var _ server.Source = (*YdbSource)(nil)
+var _ model.Source = (*YdbSource)(nil)
 
 func (s *YdbSource) MDBClusterID() string {
 	return s.Instance + s.Database
@@ -145,7 +145,7 @@ func (s *YdbSource) Validate() error {
 	return nil
 }
 
-func (s *YdbSource) ExtraTransformers(_ context.Context, _ *server.Transfer, _ metrics.Registry) ([]abstract.Transformer, error) {
+func (s *YdbSource) ExtraTransformers(_ context.Context, _ *model.Transfer, _ metrics.Registry) ([]abstract.Transformer, error) {
 	var result []abstract.Transformer
 	if !s.UseFullPaths {
 		result = append(result, NewYDBRelativePathTransformer(s.Tables))

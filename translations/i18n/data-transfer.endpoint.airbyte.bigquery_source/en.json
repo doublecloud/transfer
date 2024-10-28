@@ -1,0 +1,9 @@
+{
+    "endpoint.airbyte.bigquery_source.BigQuerySource.credentials_json.title": "Credentials ",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.credentials_json.usage": "The contents of your Service Account Key JSON file. See <a href=\"https://docs.airbyte.io/integrations/sources/bigquery#setup-the-bigquery-source-in-airbyte\">Setup the BigQuery source in Airbyte</a> for more information on how to obtain the key.",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.dataset_id.title": "Default dataset ID",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.dataset_id.usage": "The dataset ID to search for tables and views. If you are only loading data from one dataset, setting this option could result in much faster schema discovery.",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.project_id.title": "Project ID",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.project_id.usage": "The GCP project ID for the project containing the target BigQuery dataset.",
+    "endpoint.airbyte.bigquery_source.BigQuerySource.title": "Endpoint parameters"
+}

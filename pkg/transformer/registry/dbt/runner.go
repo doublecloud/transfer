@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
@@ -18,10 +18,10 @@ type runner struct {
 	dst SupportedDestination
 	cfg *Config
 
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func newRunner(dst SupportedDestination, cfg *Config, transfer *server.Transfer) *runner {
+func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) *runner {
 	return &runner{
 		dst: dst,
 		cfg: cfg,

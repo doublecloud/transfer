@@ -8,14 +8,14 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/stretchr/testify/require"
 )
 
 func TestShardWithBlob(t *testing.T) {
 	testCasePath := "yellow_taxi"
-	cfg := s3.PrepareCfg(t, "blobiki_bobiki", server.ParsingFormatPARQUET)
+	cfg := s3.PrepareCfg(t, "blobiki_bobiki", model.ParsingFormatPARQUET)
 	cfg.PathPrefix = testCasePath
 	if os.Getenv("S3MDS_PORT") != "" { // for local recipe we need to upload test case to internet
 		s3.PrepareTestCase(t, cfg, cfg.PathPrefix)

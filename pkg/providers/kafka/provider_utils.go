@@ -3,7 +3,7 @@ package kafka
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	debezium_prod_status "github.com/doublecloud/transfer/pkg/debezium/prodstatus"
 	"github.com/doublecloud/transfer/pkg/providers/airbyte"
@@ -16,31 +16,31 @@ type Mirrareable interface {
 	ForceMirror()
 }
 
-func InferFormatSettings(src server.Source, formatSettings server.SerializationFormat) server.SerializationFormat {
+func InferFormatSettings(src model.Source, formatSettings model.SerializationFormat) model.SerializationFormat {
 	result := formatSettings.Copy()
 
-	if result.Name == server.SerializationFormatAuto {
-		if server.IsDefaultMirrorSource(src) {
-			result.Name = server.SerializationFormatMirror
+	if result.Name == model.SerializationFormatAuto {
+		if model.IsDefaultMirrorSource(src) {
+			result.Name = model.SerializationFormatMirror
 			return *result
 		}
-		if server.IsAppendOnlySource(src) {
-			result.Name = server.SerializationFormatJSON
+		if model.IsAppendOnlySource(src) {
+			result.Name = model.SerializationFormatJSON
 			return *result
 		}
 
 		switch src.(type) {
 		case Mirrareable:
-			result.Name = server.SerializationFormatLbMirror
+			result.Name = model.SerializationFormatLbMirror
 		case *airbyte.AirbyteSource:
-			result.Name = server.SerializationFormatJSON
+			result.Name = model.SerializationFormatJSON
 		case *clickhouse.ChSource:
-			result.Name = server.SerializationFormatNative
+			result.Name = model.SerializationFormatNative
 		default:
-			result.Name = server.SerializationFormatDebezium
+			result.Name = model.SerializationFormatDebezium
 		}
 	}
-	if result.Name == server.SerializationFormatDebezium {
+	if result.Name == model.SerializationFormatDebezium {
 		switch s := src.(type) {
 		case *postgres.PgSource:
 			if _, ok := result.Settings[debeziumparameters.DatabaseDBName]; !ok {
@@ -55,36 +55,36 @@ func InferFormatSettings(src server.Source, formatSettings server.SerializationF
 	return *result
 }
 
-func sourceCompatible(src server.Source, transferType abstract.TransferType, serializationName server.SerializationFormatName) error {
+func sourceCompatible(src model.Source, transferType abstract.TransferType, serializationName model.SerializationFormatName) error {
 	switch serializationName {
-	case server.SerializationFormatAuto:
+	case model.SerializationFormatAuto:
 		return nil
-	case server.SerializationFormatDebezium:
+	case model.SerializationFormatDebezium:
 		if debezium_prod_status.IsSupportedSource(src.GetProviderType().Name(), transferType) {
 			return nil
 		}
 		return xerrors.Errorf("in debezium serializer not supported source type: %s", src.GetProviderType().Name())
-	case server.SerializationFormatJSON:
+	case model.SerializationFormatJSON:
 		if src.GetProviderType().Name() == airbyte.ProviderType.Name() {
 			return nil
 		}
-		if server.IsAppendOnlySource(src) {
+		if model.IsAppendOnlySource(src) {
 			return nil
 		}
 		return xerrors.New("in JSON serializer supported only next source types: AppendOnly and airbyte")
-	case server.SerializationFormatNative:
+	case model.SerializationFormatNative:
 		return nil
-	case server.SerializationFormatMirror:
-		if server.IsDefaultMirrorSource(src) {
+	case model.SerializationFormatMirror:
+		if model.IsDefaultMirrorSource(src) {
 			return nil
 		}
 		return xerrors.New("in Mirror serialized supported only default mirror source types")
-	case server.SerializationFormatLbMirror:
+	case model.SerializationFormatLbMirror:
 		if src.GetProviderType().Name() == "lb" { // sorry again
 			return nil
 		}
 		return xerrors.New("in LbMirror serialized supported only lb source type")
-	case server.SerializationFormatRawColumn:
+	case model.SerializationFormatRawColumn:
 		return nil
 	default:
 		return xerrors.Errorf("unknown serializer name: %s", serializationName)

@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -22,7 +22,7 @@ type SnapshotTableMetricsTracker struct {
 	waitForComplete sync.WaitGroup
 	closed          bool
 
-	transfer     *server.Transfer
+	transfer     *model.Transfer
 	registry     metrics.Registry
 	totalETA     float64
 	tablesETAs   map[string]float64
@@ -32,7 +32,7 @@ type SnapshotTableMetricsTracker struct {
 	sharded bool
 
 	// For non-sharded snapshot
-	parts               []*server.OperationTablePart
+	parts               []*model.OperationTablePart
 	progressUpdateMutex *sync.Mutex
 
 	// For sharded snapshot
@@ -42,9 +42,9 @@ type SnapshotTableMetricsTracker struct {
 
 func NewNotShardedSnapshotTableMetricsTracker(
 	ctx context.Context,
-	transfer *server.Transfer,
+	transfer *model.Transfer,
 	registry metrics.Registry,
-	parts []*server.OperationTablePart,
+	parts []*model.OperationTablePart,
 	progressUpdateMutex *sync.Mutex,
 ) (*SnapshotTableMetricsTracker, error) {
 	ctx, cancel := context.WithCancel(ctx)
@@ -84,7 +84,7 @@ func NewNotShardedSnapshotTableMetricsTracker(
 
 func NewShardedSnapshotTableMetricsTracker(
 	ctx context.Context,
-	transfer *server.Transfer,
+	transfer *model.Transfer,
 	registry metrics.Registry,
 	operationID string,
 	cpClient coordinator.Coordinator,
@@ -152,17 +152,17 @@ func (t *SnapshotTableMetricsTracker) Close() {
 	t.closed = true
 }
 
-func (t *SnapshotTableMetricsTracker) getTablesPartsNotSharded() []*server.OperationTablePart {
+func (t *SnapshotTableMetricsTracker) getTablesPartsNotSharded() []*model.OperationTablePart {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()
-	partsCopy := make([]*server.OperationTablePart, 0, len(t.parts))
+	partsCopy := make([]*model.OperationTablePart, 0, len(t.parts))
 	for _, table := range t.parts {
 		partsCopy = append(partsCopy, table.Copy())
 	}
 	return partsCopy
 }
 
-func (t *SnapshotTableMetricsTracker) getTablesParts() []*server.OperationTablePart {
+func (t *SnapshotTableMetricsTracker) getTablesParts() []*model.OperationTablePart {
 	if t.sharded {
 		parts, err := t.cpClient.GetOperationTablesParts(t.operationID)
 		if err != nil {

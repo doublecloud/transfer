@@ -17,7 +17,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/providers/s3/sink/testutil"
@@ -109,7 +109,7 @@ func generateRawMessages(table string, part, from, to int) []abstract.ChangeItem
 //
 
 func TestS3SinkerUploadTable(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "TestS3SinkerUploadTable", server.ParsingFormatCSV, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, "TestS3SinkerUploadTable", model.ParsingFormatCSV, s3_provider.GzipEncoding)
 	cfg.Layout = "e2e_test-2006-01-02"
 	cp := testutil.NewFakeClientWithTransferState()
 	sinker, err := NewSinker(logger.Log, cfg, solomon.NewRegistry(solomon.NewRegistryOpts()), cp, "TestS3SinkerUploadTable")
@@ -131,7 +131,7 @@ func TestS3SinkerUploadTable(t *testing.T) {
 }
 
 func TestS3SinkBucketTZ(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "TestS3SinkBucketTZ", server.ParsingFormatCSV, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, "TestS3SinkBucketTZ", model.ParsingFormatCSV, s3_provider.GzipEncoding)
 	cfg.Layout = "02 Jan 06 15:04 MST"
 	cfg.LayoutTZ = "CET"
 
@@ -147,7 +147,7 @@ func TestS3SinkBucketTZ(t *testing.T) {
 }
 
 func TestS3SinkerUploadTableGzip(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "TestS3SinkerUploadTableGzip", server.ParsingFormatCSV, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, "TestS3SinkerUploadTableGzip", model.ParsingFormatCSV, s3_provider.GzipEncoding)
 	cfg.Layout = "test_gzip"
 
 	cp := testutil.NewFakeClientWithTransferState()
@@ -203,7 +203,7 @@ func generateBullets(table string, count int) []abstract.ChangeItem {
 
 func TestJsonReplication(t *testing.T) {
 	bucket := "testjsonnoencode"
-	cfg := s3_provider.PrepareS3(t, bucket, server.ParsingFormatJSON, s3_provider.NoEncoding)
+	cfg := s3_provider.PrepareS3(t, bucket, model.ParsingFormatJSON, s3_provider.NoEncoding)
 	cfg.Layout = bucket
 	cp := testutil.NewFakeClientWithTransferState()
 
@@ -270,7 +270,7 @@ func TestJsonReplication(t *testing.T) {
 }
 
 func TestRawReplication(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "testrawgzip", server.ParsingFormatRaw, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, "testrawgzip", model.ParsingFormatRaw, s3_provider.GzipEncoding)
 	cfg.Layout = "test_raw_gzip"
 	cp := testutil.NewFakeClientWithTransferState()
 	sinker, err := NewSinker(logger.Log, cfg, solomon.NewRegistry(solomon.NewRegistryOpts()), cp, "TestRawReplication")
@@ -314,7 +314,7 @@ func TestRawReplication(t *testing.T) {
 }
 
 func TestReplicationWithWorkerFailure(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "TestReplicationWithWorkerFailure", server.ParsingFormatCSV, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, "TestReplicationWithWorkerFailure", model.ParsingFormatCSV, s3_provider.GzipEncoding)
 	cp := testutil.NewFakeClientWithTransferState()
 	sinker, err := NewSinker(logger.Log, cfg, solomon.NewRegistry(solomon.NewRegistryOpts()), cp, "TestReplicationWithWorkerFailure")
 	require.NoError(t, err)
@@ -363,7 +363,7 @@ func TestReplicationWithWorkerFailure(t *testing.T) {
 }
 
 func TestCustomColLayautFailures(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, t.Name(), server.ParsingFormatCSV, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, t.Name(), model.ParsingFormatCSV, s3_provider.GzipEncoding)
 	cfg.LayoutColumn = "logical_time"
 
 	cp := testutil.NewFakeClientWithTransferState()
@@ -418,7 +418,7 @@ func TestCustomColLayautFailures(t *testing.T) {
 }
 
 func TestParquetReplication(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, t.Name(), server.ParsingFormatPARQUET, s3_provider.GzipEncoding)
+	cfg := s3_provider.PrepareS3(t, t.Name(), model.ParsingFormatPARQUET, s3_provider.GzipEncoding)
 	cfg.LayoutColumn = "logical_time"
 
 	cp := testutil.NewFakeClientWithTransferState()
@@ -449,7 +449,7 @@ func TestParquetReplication(t *testing.T) {
 }
 
 func TestParquetReadAfterWrite(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, t.Name(), server.ParsingFormatPARQUET, s3_provider.NoEncoding)
+	cfg := s3_provider.PrepareS3(t, t.Name(), model.ParsingFormatPARQUET, s3_provider.NoEncoding)
 	cfg.LayoutColumn = "logical_time"
 
 	cp := testutil.NewFakeClientWithTransferState()
@@ -467,7 +467,7 @@ func TestParquetReadAfterWrite(t *testing.T) {
 }
 
 func TestRawReplicationHugeFiles(t *testing.T) {
-	cfg := s3_provider.PrepareS3(t, "hugereplfiles", server.ParsingFormatRaw, s3_provider.NoEncoding)
+	cfg := s3_provider.PrepareS3(t, "hugereplfiles", model.ParsingFormatRaw, s3_provider.NoEncoding)
 	cfg.BufferSize = 5 * 1024 * 1024
 	cfg.Layout = "huge_repl_files"
 

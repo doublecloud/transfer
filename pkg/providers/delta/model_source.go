@@ -2,20 +2,20 @@ package delta
 
 import (
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 )
 
 // To verify providers contract implementation
 var (
-	_ server.Source = (*DeltaSource)(nil)
+	_ model.Source = (*DeltaSource)(nil)
 )
 
 type DeltaSource struct {
 	Bucket           string
 	AccessKey        string
 	S3ForcePathStyle bool
-	SecretKey        server.SecretString
+	SecretKey        model.SecretString
 	PathPrefix       string
 	Endpoint         string
 	UseSSL           bool

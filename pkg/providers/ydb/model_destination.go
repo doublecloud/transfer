@@ -4,25 +4,25 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
 
 type YdbDestination struct {
-	Token                   server.SecretString
+	Token                   model.SecretString
 	Database                string
 	Path                    string
 	Instance                string
 	LegacyWriter            bool
 	ShardCount              int64
-	Rotation                *server.RotatorConfig
+	Rotation                *model.RotatorConfig
 	TransformerConfig       map[string]string
 	AltNames                map[string]string
 	StoragePolicy           string
 	CompactionPolicy        string
 	SubNetworkID            string
 	SecurityGroupIDs        []string
-	Cleanup                 server.CleanupType
+	Cleanup                 model.CleanupType
 	DropUnknownColumns      bool
 	Underlay                bool
 	ServiceAccountID        string
@@ -42,7 +42,7 @@ type YdbDestination struct {
 	UserdataAuth    bool // allow fallback to Instance metadata Auth
 }
 
-var _ server.Destination = (*YdbDestination)(nil)
+var _ model.Destination = (*YdbDestination)(nil)
 
 func (d *YdbDestination) MDBClusterID() string {
 	return d.Instance + d.Database
@@ -53,14 +53,14 @@ func (YdbDestination) IsDestination() {
 
 func (d *YdbDestination) WithDefaults() {
 	if d.Cleanup == "" {
-		d.Cleanup = server.Drop
+		d.Cleanup = model.Drop
 	}
 	if d.DefaultCompression == "" {
 		d.DefaultCompression = "off"
 	}
 }
 
-func (d *YdbDestination) CleanupMode() server.CleanupType {
+func (d *YdbDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 

@@ -3,7 +3,7 @@ package elastic
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type ElasticSearchHostPort struct {
@@ -15,17 +15,17 @@ type ElasticSearchDestination struct {
 	ClusterID        string // Deprecated: new endpoints should be on premise only
 	DataNodes        []ElasticSearchHostPort
 	User             string
-	Password         server.SecretString
+	Password         model.SecretString
 	SSLEnabled       bool
 	TLSFile          string
 	SubNetworkID     string
 	SecurityGroupIDs []string
-	Cleanup          server.CleanupType
+	Cleanup          model.CleanupType
 
 	SanitizeDocKeys bool
 }
 
-var _ server.Destination = (*ElasticSearchDestination)(nil)
+var _ model.Destination = (*ElasticSearchDestination)(nil)
 
 func (d *ElasticSearchDestination) ToElasticSearchDestination() (*ElasticSearchDestination, ServerType) {
 	return d, ElasticSearch
@@ -79,12 +79,12 @@ func (d *ElasticSearchDestination) Transformer() map[string]string {
 	return make(map[string]string)
 }
 
-func (d *ElasticSearchDestination) CleanupMode() server.CleanupType {
+func (d *ElasticSearchDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 
-func (d *ElasticSearchDestination) Compatible(src server.Source, transferType abstract.TransferType) error {
-	if transferType == abstract.TransferTypeSnapshotOnly || server.IsAppendOnlySource(src) {
+func (d *ElasticSearchDestination) Compatible(src model.Source, transferType abstract.TransferType) error {
+	if transferType == abstract.TransferTypeSnapshotOnly || model.IsAppendOnlySource(src) {
 		return nil
 	}
 	return xerrors.Errorf("ElasticSearch target supports only AppendOnly sources or snapshot transfers")

@@ -8,14 +8,14 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 func init() {
 	gob.Register(new(KinesisSource))
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(KinesisSource)
 	})
 	abstract.RegisterProviderName(ProviderType, "Kinesis")
@@ -35,7 +35,7 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       cpclient.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
 func (p *Provider) Type() abstract.ProviderType {
@@ -50,14 +50,14 @@ func (p *Provider) Source() (abstract.Source, error) {
 	return NewSource(p.transfer.ID, p.cp, src, p.logger, p.registry)
 }
 
-func (p *Provider) Activate(context.Context, *server.TransferOperation, abstract.TableMap, providers.ActivateCallbacks) error {
+func (p *Provider) Activate(context.Context, *model.TransferOperation, abstract.TableMap, providers.ActivateCallbacks) error {
 	if p.transfer.SrcType() == ProviderType && !p.transfer.IncrementOnly() {
 		return xerrors.New("Only allowed mode for kinesis source is replication")
 	}
 	return nil
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp cpclient.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

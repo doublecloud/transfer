@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
@@ -29,7 +29,7 @@ type KafkaDestination struct {
 	SaveTxOrder     bool
 
 	// for now, 'FormatSettings' is private option - it's WithDefaults(): SerializationFormatAuto - 'Mirror' for queues, 'Debezium' for the rest
-	FormatSettings server.SerializationFormat
+	FormatSettings model.SerializationFormat
 
 	TopicConfigEntries []TopicConfigEntry
 
@@ -37,7 +37,7 @@ type KafkaDestination struct {
 	Compression Encoding
 }
 
-var _ server.Destination = (*KafkaDestination)(nil)
+var _ model.Destination = (*KafkaDestination)(nil)
 
 type TopicConfigEntry struct {
 	ConfigName, ConfigValue string
@@ -75,13 +75,13 @@ func (d *KafkaDestination) WithDefaults() {
 		}
 	}
 	if d.FormatSettings.Name == "" {
-		d.FormatSettings.Name = server.SerializationFormatAuto
+		d.FormatSettings.Name = model.SerializationFormatAuto
 	}
 	if d.FormatSettings.Settings == nil {
 		d.FormatSettings.Settings = make(map[string]string)
 	}
 	if d.FormatSettings.BatchingSettings == nil {
-		d.FormatSettings.BatchingSettings = &server.Batching{
+		d.FormatSettings.BatchingSettings = &model.Batching{
 			Enabled:        false,
 			Interval:       0,
 			MaxChangeItems: 0,
@@ -93,8 +93,8 @@ func (d *KafkaDestination) WithDefaults() {
 	}
 }
 
-func (d *KafkaDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *KafkaDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
 func (d *KafkaDestination) Transformer() map[string]string {
@@ -114,11 +114,11 @@ func (d *KafkaDestination) Validate() error {
 	return nil
 }
 
-func (d *KafkaDestination) Compatible(src server.Source, transferType abstract.TransferType) error {
+func (d *KafkaDestination) Compatible(src model.Source, transferType abstract.TransferType) error {
 	return sourceCompatible(src, transferType, d.FormatSettings.Name)
 }
 
-func (d *KafkaDestination) Serializer() (server.SerializationFormat, bool) {
+func (d *KafkaDestination) Serializer() (model.SerializationFormat, bool) {
 	formatSettings := d.FormatSettings
 	formatSettings.Settings = debeziumparameters.EnrichedWithDefaults(formatSettings.Settings)
 	return formatSettings, d.SaveTxOrder
@@ -132,7 +132,7 @@ func (d *KafkaDestination) BuffererConfig() bufferer.BuffererConfig {
 	}
 }
 
-var _ server.HostResolver = (*KafkaDestination)(nil)
+var _ model.HostResolver = (*KafkaDestination)(nil)
 
 func (d *KafkaDestination) HostsNames() ([]string, error) {
 	if d.Connection != nil && d.Connection.ClusterID != "" {

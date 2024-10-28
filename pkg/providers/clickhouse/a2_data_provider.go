@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/schema"
@@ -135,7 +135,7 @@ func (c *DataProvider) TablePartToDataObjectPart(tableDescription *abstract.Tabl
 	return &part, nil
 }
 
-func NewClickhouseProvider(logger log.Logger, registry metrics.Registry, config *model.ChSource, transfer *server.Transfer) (base.SnapshotProvider, error) {
+func NewClickhouseProvider(logger log.Logger, registry metrics.Registry, config *model.ChSource, transfer *dp_model.Transfer) (base.SnapshotProvider, error) {
 	shards := config.ToSinkParams().Shards()
 	if config.ToStorageParams().IsManaged() {
 		res, err := model.ShardFromCluster(config.MdbClusterID, config.ChClusterName)

@@ -5,10 +5,10 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-func isJSONExtraElementViolatesConstraint(batchingSettings server.Batching, startIndex, currIndex int, lenElements []uint64, prevBodiesSize uint64) bool {
+func isJSONExtraElementViolatesConstraint(batchingSettings model.Batching, startIndex, currIndex int, lenElements []uint64, prevBodiesSize uint64) bool {
 	numNewChangeItems := currIndex - startIndex + 1
 	if batchingSettings.MaxMessageSize != 0 {
 		newLinesNum := numNewChangeItems - 1
@@ -26,7 +26,7 @@ func isJSONExtraElementViolatesConstraint(batchingSettings server.Batching, star
 	return false
 }
 
-func BatchJSON(batchingSettings server.Batching, in []abstract.ChangeItem) ([]SerializedMessage, error) {
+func BatchJSON(batchingSettings model.Batching, in []abstract.ChangeItem) ([]SerializedMessage, error) {
 	serializedElements := make([]string, len(in))
 	lenElements := make([]uint64, len(in))
 	for i := range in {

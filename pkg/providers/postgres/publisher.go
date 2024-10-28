@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jackc/pgconn"
@@ -34,7 +34,7 @@ var commonWal2jsonArguments = []argument{
 
 type wal2jsonArguments []argument
 
-func newWal2jsonArguments(config *PgSource, trackLSN bool, objects *server.DataObjects) (wal2jsonArguments, error) {
+func newWal2jsonArguments(config *PgSource, trackLSN bool, objects *model.DataObjects) (wal2jsonArguments, error) {
 	var result []argument
 
 	result = append(result, commonWal2jsonArguments...)
@@ -77,7 +77,7 @@ func (a wal2jsonArguments) toSQLFormat() string {
 	return result
 }
 
-func addTablesList(config *PgSource, trackLSN bool, objects *server.DataObjects) ([]abstract.TableID, error) {
+func addTablesList(config *PgSource, trackLSN bool, objects *model.DataObjects) ([]abstract.TableID, error) {
 	sourceIncludeTableIDs := make([]abstract.TableID, 0, len(config.DBTables))
 	for _, directive := range config.DBTables {
 		parsedDirective, err := abstract.ParseTableID(directive)
@@ -219,7 +219,7 @@ func lastFullLSN(changes []abstract.ChangeItem, lastID uint32, prevLSN, lastMaxL
 	return changes[txs[len(txs)-2].Right-1].LSN
 }
 
-func newWalSource(config *PgSource, objects *server.DataObjects, transferID string, registry *stats.SourceStats, lgr log.Logger, slot AbstractSlot, cp coordinator.Coordinator) (abstract.Source, error) {
+func newWalSource(config *PgSource, objects *model.DataObjects, transferID string, registry *stats.SourceStats, lgr log.Logger, slot AbstractSlot, cp coordinator.Coordinator) (abstract.Source, error) {
 	rb := util.Rollbacks{}
 	defer rb.Do()
 

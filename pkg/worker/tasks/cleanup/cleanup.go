@@ -7,21 +7,21 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var cleanupKinds = map[server.CleanupType]abstract.Kind{
-	server.Drop:     abstract.DropTableKind,
-	server.Truncate: abstract.TruncateTableKind,
+var cleanupKinds = map[model.CleanupType]abstract.Kind{
+	model.Drop:     abstract.DropTableKind,
+	model.Truncate: abstract.TruncateTableKind,
 }
 
-func CleanupTables(sink abstract.AsyncSink, tables abstract.TableMap, cleanupType server.CleanupType) error {
+func CleanupTables(sink abstract.AsyncSink, tables abstract.TableMap, cleanupType model.CleanupType) error {
 	var toDelete abstract.TableMap
 	var nextToDelete abstract.TableMap
 	var errors map[string]string
 
-	if cleanupType == server.DisabledCleanup {
+	if cleanupType == model.DisabledCleanup {
 		logger.Log.Info("Cleanup is disabled, nothing to do")
 		return nil
 	}

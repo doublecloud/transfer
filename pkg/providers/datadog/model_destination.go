@@ -3,11 +3,11 @@ package datadog
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type DatadogDestination struct {
-	ClientAPIKey server.SecretString
+	ClientAPIKey model.SecretString
 	DatadogHost  string
 
 	// mapping to columns
@@ -19,7 +19,7 @@ type DatadogDestination struct {
 	ChunkSize       int
 }
 
-var _ server.Destination = (*DatadogDestination)(nil)
+var _ model.Destination = (*DatadogDestination)(nil)
 
 func (d *DatadogDestination) GetProviderType() abstract.ProviderType {
 	return ProviderType
@@ -35,12 +35,12 @@ func (d *DatadogDestination) WithDefaults() {
 	}
 }
 
-func (d *DatadogDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *DatadogDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
-func (d *DatadogDestination) Compatible(src server.Source, transferType abstract.TransferType) error {
-	if _, ok := src.(server.AppendOnlySource); ok {
+func (d *DatadogDestination) Compatible(src model.Source, transferType abstract.TransferType) error {
+	if _, ok := src.(model.AppendOnlySource); ok {
 		return nil
 	}
 	return xerrors.Errorf("%T is not compatible with Datadog, only append only source allowed", src)

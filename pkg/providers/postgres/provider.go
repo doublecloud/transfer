@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 	"github.com/doublecloud/transfer/pkg/middlewares"
@@ -25,10 +25,10 @@ import (
 func init() {
 	gob.RegisterName("*server.PgSource", new(PgSource))
 	gob.RegisterName("*server.PgDestination", new(PgDestination))
-	server.RegisterDestination(ProviderType, func() server.Destination {
+	model.RegisterDestination(ProviderType, func() model.Destination {
 		return new(PgDestination)
 	})
-	server.RegisterSource(ProviderType, func() server.Source {
+	model.RegisterSource(ProviderType, func() model.Source {
 		return new(PgSource)
 	})
 
@@ -84,10 +84,10 @@ type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
 	cp       coordinator.Coordinator
-	transfer *server.Transfer
+	transfer *model.Transfer
 }
 
-func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) error {
 	src, ok := p.transfer.Src.(*PgSource)
 	if !ok {
 		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
@@ -104,7 +104,7 @@ func (p *Provider) Cleanup(ctx context.Context, task *server.TransferOperation) 
 	return nil
 }
 
-func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperation) error {
+func (p *Provider) Deactivate(ctx context.Context, task *model.TransferOperation) error {
 	src, ok := p.transfer.Src.(*PgSource)
 	if !ok {
 		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
@@ -129,7 +129,7 @@ func (p *Provider) Deactivate(ctx context.Context, task *server.TransferOperatio
 	return nil
 }
 
-func (p *Provider) Activate(ctx context.Context, task *server.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
+func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, tables abstract.TableMap, callbacks providers.ActivateCallbacks) error {
 	src, ok := p.transfer.Src.(*PgSource)
 	if !ok {
 		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
@@ -413,7 +413,7 @@ func (p *Provider) DBLogUpload(src *PgSource, tables abstract.TableMap) error {
 	return nil
 }
 
-func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *server.Transfer) providers.Provider {
+func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
 	return &Provider{
 		logger:   lgr,
 		registry: registry,

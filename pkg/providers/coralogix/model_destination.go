@@ -3,11 +3,11 @@ package coralogix
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
 type CoralogixDestination struct {
-	Token  server.SecretString
+	Token  model.SecretString
 	Domain string
 
 	MessageTemplate string
@@ -41,12 +41,12 @@ func (d *CoralogixDestination) WithDefaults() {
 	}
 }
 
-func (d *CoralogixDestination) CleanupMode() server.CleanupType {
-	return server.DisabledCleanup
+func (d *CoralogixDestination) CleanupMode() model.CleanupType {
+	return model.DisabledCleanup
 }
 
-func (d *CoralogixDestination) Compatible(src server.Source, transferType abstract.TransferType) error {
-	if _, ok := src.(server.AppendOnlySource); ok {
+func (d *CoralogixDestination) Compatible(src model.Source, transferType abstract.TransferType) error {
+	if _, ok := src.(model.AppendOnlySource); ok {
 		return nil
 	}
 	return xerrors.Errorf("%T is not compatible with Coralogix, only append only source allowed", src)

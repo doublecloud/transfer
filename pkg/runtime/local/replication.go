@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/dataplane/provideradapter"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/metering"
@@ -22,12 +22,12 @@ import (
 
 type Spec struct {
 	ID   string
-	Src  server.Source
-	Dst  server.Destination
+	Src  model.Source
+	Dst  model.Destination
 	Type abstract.TransferType
 
-	Transformation *server.Transformation
-	DataObjects    *server.DataObjects
+	Transformation *model.Transformation
+	DataObjects    *model.DataObjects
 	FolderID       string
 
 	TypeSystemVersion int
@@ -38,19 +38,19 @@ const ReplicationStatusMessagesCategory string = "replication"
 const healthReportPeriod time.Duration = 1 * time.Minute
 const replicationRetryInterval time.Duration = 10 * time.Second
 
-func RunReplicationWithMeteringTags(ctx context.Context, cp coordinator.Coordinator, transfer *server.Transfer, registry metrics.Registry, runtimeTags map[string]interface{}) error {
+func RunReplicationWithMeteringTags(ctx context.Context, cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry, runtimeTags map[string]interface{}) error {
 	metering.InitializeWithTags(transfer, nil, runtimeTags)
 	shared.ApplyRuntimeLimits(transfer.Runtime)
 	return runReplication(ctx, cp, transfer, registry, logger.Log)
 }
 
-func RunReplication(ctx context.Context, cp coordinator.Coordinator, transfer *server.Transfer, registry metrics.Registry) error {
+func RunReplication(ctx context.Context, cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry) error {
 	metering.Initialize(transfer, nil)
 	shared.ApplyRuntimeLimits(transfer.Runtime)
 	return runReplication(ctx, cp, transfer, registry, logger.Log)
 }
 
-func runReplication(ctx context.Context, cp coordinator.Coordinator, transfer *server.Transfer, registry metrics.Registry, lgr log.Logger) error {
+func runReplication(ctx context.Context, cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry, lgr log.Logger) error {
 	if err := provideradapter.ApplyForTransfer(transfer); err != nil {
 		return xerrors.Errorf("unable to adapt transfer: %w", err)
 	}
@@ -84,7 +84,7 @@ func runReplication(ctx context.Context, cp coordinator.Coordinator, transfer *s
 	}
 }
 
-func replicationAttempt(ctx context.Context, cp coordinator.Coordinator, transfer *server.Transfer, registry metrics.Registry, lgr log.Logger, replicationStats *stats.ReplicationStats, retryCount int64) (err error, attemptAgain bool) {
+func replicationAttempt(ctx context.Context, cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry, lgr log.Logger, replicationStats *stats.ReplicationStats, retryCount int64) (err error, attemptAgain bool) {
 	replicationStats.Running.Set(float64(1))
 	defer func() {
 		replicationStats.Running.Set(float64(0))
@@ -159,7 +159,7 @@ func reportTransferHealth(ctx context.Context, cp coordinator.Coordinator, trans
 }
 
 // Does not return unless an error occurs
-func iteration(ctx context.Context, cp coordinator.Coordinator, dataFlow *server.Transfer, registry metrics.Registry, lgr log.Logger) (err error) {
+func iteration(ctx context.Context, cp coordinator.Coordinator, dataFlow *model.Transfer, registry metrics.Registry, lgr log.Logger) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = xerrors.Errorf("Panic: %v", r)

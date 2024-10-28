@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	ch_async "github.com/doublecloud/transfer/pkg/providers/clickhouse/async"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/conn"
@@ -24,7 +24,7 @@ import (
 )
 
 var (
-	source = server.MockSource{}
+	source = model.MockSource{}
 	target = *chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("init.sql"))
 
 	targetTable = "async_test_table"

@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
 
@@ -23,7 +23,7 @@ type ChDestination struct {
 	MdbClusterID     string `json:"Cluster"`
 	ChClusterName    string // CH cluster to which data will be transfered. Other clusters would be ignored.
 	User             string
-	Password         server.SecretString
+	Password         model.SecretString
 	Database         string
 	Partition        string
 	SSLEnabled       bool
@@ -61,12 +61,12 @@ type ChDestination struct {
 	UseSchemaInTableName bool
 	ShardCol             string
 	Interval             time.Duration
-	AltNamesList         []server.AltName
+	AltNamesList         []model.AltName
 
 	// ChSinkParams
 	ShardByTransferID          bool
 	ShardByRoundRobin          bool
-	Rotation                   *server.RotatorConfig
+	Rotation                   *model.RotatorConfig
 	ShardsList                 []ClickHouseShard
 	ColumnValueToShardNameList []ClickHouseColumnValueToShardName
 
@@ -74,7 +74,7 @@ type ChDestination struct {
 	TransformerConfig  map[string]string
 	SubNetworkID       string
 	SecurityGroupIDs   []string
-	Cleanup            server.CleanupType
+	Cleanup            model.CleanupType
 	PemFileContent     string // timmyb32r: this field is not used in sinker! It seems we are not able to transfer into on-premise ch with cert
 	InflightBuffer     int    // deprecated: use BufferTriggingSize instead. Items' count triggering a buffer flush
 	BufferTriggingSize uint64
@@ -109,7 +109,7 @@ func (d *ChDestination) Transformer() map[string]string {
 	return d.TransformerConfig
 }
 
-func (d *ChDestination) CleanupMode() server.CleanupType {
+func (d *ChDestination) CleanupMode() model.CleanupType {
 	return d.Cleanup
 }
 
@@ -121,7 +121,7 @@ func (d *ChDestination) WithDefaults() {
 		d.Interval = time.Second
 	}
 	if d.Cleanup == "" {
-		d.Cleanup = server.Drop
+		d.Cleanup = model.Drop
 	}
 	if d.NativePort == 0 {
 		d.NativePort = 9440
@@ -179,7 +179,7 @@ func (d *ChDestination) Validate() error {
 	return nil
 }
 
-func (d *ChDestination) shallUseJSON(transfer *server.Transfer) bool {
+func (d *ChDestination) shallUseJSON(transfer *model.Transfer) bool {
 	if d.ForceJSONMode || !d.ProtocolUnspecified {
 		return d.ForceJSONMode
 	}
@@ -190,11 +190,11 @@ func (d *ChDestination) shallUseJSON(transfer *server.Transfer) bool {
 	if transfer.Src != nil && transfer.Src.GetProviderType() == "metrika" {
 		return false
 	}
-	return server.IsAppendOnlySource(transfer.Src)
+	return model.IsAppendOnlySource(transfer.Src)
 }
 
 // ToSinkParams converts the model into sink properties object, which contains extra information which depends on transfer type
-func (d *ChDestination) ToSinkParams(transfer *server.Transfer) ChDestinationWrapper {
+func (d *ChDestination) ToSinkParams(transfer *model.Transfer) ChDestinationWrapper {
 	wrapper := newChDestinationWrapper(*d)
 	wrapper.useJSON = d.shallUseJSON(transfer)
 	return *wrapper
@@ -205,8 +205,8 @@ func (d *ChDestination) ToReplicationFromPGSinkParams() ChDestinationWrapper {
 	return *newChDestinationWrapper(*d)
 }
 
-func (d *ChDestination) FillDependentFields(transfer *server.Transfer) {
-	if !server.IsAppendOnlySource(transfer.Src) && !transfer.SnapshotOnly() {
+func (d *ChDestination) FillDependentFields(transfer *model.Transfer) {
+	if !model.IsAppendOnlySource(transfer.Src) && !transfer.SnapshotOnly() {
 		d.IsUpdateable = true
 		if d.ShardCol != "" {
 			d.ShardCol = ""
@@ -242,7 +242,7 @@ func (d ChDestinationWrapper) RootCertPaths() []string {
 	return d.Model.RootCACertPaths
 }
 
-func (d ChDestinationWrapper) Cleanup() server.CleanupType {
+func (d ChDestinationWrapper) Cleanup() model.CleanupType {
 	return d.Model.Cleanup
 }
 
@@ -359,7 +359,7 @@ func (d ChDestinationWrapper) ShardByRoundRobin() bool {
 	return d.Model.ShardByRoundRobin
 }
 
-func (d ChDestinationWrapper) Rotation() *server.RotatorConfig {
+func (d ChDestinationWrapper) Rotation() *model.RotatorConfig {
 	return d.Model.Rotation
 }
 

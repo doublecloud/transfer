@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	Source = server.MockSource{}
+	Source = model.MockSource{}
 	Target = *chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("init.sql"))
 )
 

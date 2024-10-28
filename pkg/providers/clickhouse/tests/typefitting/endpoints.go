@@ -1,13 +1,13 @@
 package typefitting
 
 import (
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 )
 
 var (
 	//nolint:exhaustivestruct
-	source = server.MockSource{}
+	source = model.MockSource{}
 	target = *chrecipe.MustTarget(chrecipe.WithDatabase("test"), chrecipe.WithInitFile("init.sql"))
 )
 
