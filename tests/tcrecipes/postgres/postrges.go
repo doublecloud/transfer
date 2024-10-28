@@ -17,7 +17,7 @@ import (
 
 const defaultUser = "postgres"
 const defaultPassword = "postgres"
-const defaultPostgresImage = "docker.io/postgres:11-alpine"
+const defaultPostgresImage = "docker.io/postgres:16-alpine"
 const defaultPort = nat.Port("5432/tcp")
 
 // PostgresContainer represents the postgres container type used in the module

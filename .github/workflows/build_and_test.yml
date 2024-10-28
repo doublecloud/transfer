@@ -65,28 +65,7 @@ jobs:
           pg_dump --version
       - shell: bash
         run: |
-          echo "Running ${{ matrix.suite.group }} suite ${{ matrix.suite.name }}"
-          export RECIPE_CLICKHOUSE_BIN=clickhouse
-          export USE_TESTCONTAINERS=1
-          for dir in $(find ./${{ matrix.suite.group }}/${{ matrix.suite.path }} -type d); do
-
-            if ls "$dir"/*_test.go >/dev/null 2>&1; then
-              echo "::group::$dir"
-              echo "Running tests for directory: $dir"
-              gotestsum \
-                --junitfile="reports/${{ matrix.suite.name }}_${dir//\//_}.xml" \
-                --junitfile-project-name="${{ matrix.suite.group }}" \
-                --junitfile-testsuite-name="short" \
-                --rerun-fails \
-                --format github-actions \
-                --packages="$dir" \
-                -- -timeout=15m
-              echo "::endgroup::"
-            else
-              echo "No Go test files found in $dir, skipping tests."
-            fi
-
-          done
+          make run-tests SUITE_GROUP="${{ matrix.suite.group }}" SUITE_PATH="${{ matrix.suite.path }}" SUITE_NAME="${{ matrix.suite.name }}"
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
