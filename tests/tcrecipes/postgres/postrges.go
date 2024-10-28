@@ -12,11 +12,12 @@ import (
 	"github.com/docker/go-connections/nat"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 const defaultUser = "postgres"
 const defaultPassword = "postgres"
-const defaultPostgresImage = "docker.io/postgres:11-alpine"
+const defaultPostgresImage = "docker.io/postgres:16-alpine"
 const defaultPort = nat.Port("5432/tcp")
 
 // PostgresContainer represents the postgres container type used in the module
@@ -195,6 +196,7 @@ func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*
 		},
 		ExposedPorts: []string{defaultPort.Port()},
 		Cmd:          []string{"postgres", "-c", "fsync=off"},
+		WaitingFor:   wait.ForAll(wait.NewHostPortStrategy(defaultPort)),
 	}
 
 	genericContainerReq := testcontainers.GenericContainerRequest{
