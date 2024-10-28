@@ -1,7 +1,0 @@
-{
-    "endpoint.airbyte.instagram_source.InstagramSource.access_token.title": "Access Token",
-    "endpoint.airbyte.instagram_source.InstagramSource.access_token.usage": "The value of the access token generated. See  <a href=\"https://docs.airbyte.io/integrations/sources/instagram\">Airbyte documentation</a> for more information",
-    "endpoint.airbyte.instagram_source.InstagramSource.start_date.title": "Start date",
-    "endpoint.airbyte.instagram_source.InstagramSource.start_date.usage": "The date in format YYYY-MM-DDT00:00:00Z to start replicating data for User Insights. All data generated after this date will be replicated.",
-    "endpoint.airbyte.instagram_source.InstagramSource.title": "Endpoint parameters"
-}
