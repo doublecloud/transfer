@@ -1673,6 +1673,7 @@
   "pkg/serializer/reference/canondata/reference.reference.TestStreamSerializer_raw_newline/result":"transfer_manager/go/pkg/serializer/reference/canondata/reference.reference.TestStreamSerializer_raw_newline/result",
   "pkg/serializer/reference/canondata/result.json":"transfer_manager/go/pkg/serializer/reference/canondata/result.json",
   "pkg/serializer/reference/reference_test.go":"transfer_manager/go/pkg/serializer/reference/reference_test.go",
+  "pkg/serverutil/endpoint.go":"transfer_manager/go/pkg/serverutil/endpoint.go",
   "pkg/sink/sink.go":"transfer_manager/go/pkg/sink/sink.go",
   "pkg/source/eventsource/source.go":"transfer_manager/go/pkg/source/eventsource/source.go",
   "pkg/source/source_factory.go":"transfer_manager/go/pkg/source/source_factory.go",
