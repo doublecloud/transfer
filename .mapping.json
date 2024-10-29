@@ -2317,6 +2317,8 @@
   "tests/e2e/mysql2pg/snapshot_and_replication_with_conn/dump/db.sql":"transfer_manager/go/tests/e2e/mysql2pg/snapshot_and_replication_with_conn/dump/db.sql",
   "tests/e2e/mysql2yt/all_datatypes/check_db_test.go":"transfer_manager/go/tests/e2e/mysql2yt/all_datatypes/check_db_test.go",
   "tests/e2e/mysql2yt/all_datatypes/dump/type_check.sql":"transfer_manager/go/tests/e2e/mysql2yt/all_datatypes/dump/type_check.sql",
+  "tests/e2e/mysql2yt/all_types/dump/init_db.sql":"transfer_manager/go/tests/e2e/mysql2yt/all_types/dump/init_db.sql",
+  "tests/e2e/mysql2yt/all_types/replication_test.go":"transfer_manager/go/tests/e2e/mysql2yt/all_types/replication_test.go",
   "tests/e2e/mysql2yt/alters/check_db_test.go":"transfer_manager/go/tests/e2e/mysql2yt/alters/check_db_test.go",
   "tests/e2e/mysql2yt/alters/dump/type_check.sql":"transfer_manager/go/tests/e2e/mysql2yt/alters/dump/type_check.sql",
   "tests/e2e/mysql2yt/collapse/check_db_test.go":"transfer_manager/go/tests/e2e/mysql2yt/collapse/check_db_test.go",

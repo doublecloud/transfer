@@ -262,3 +262,17 @@ func ChSchemaForYtTypesTestData() string {
 		nested2 String
 	`
 }
+
+func NewEnvWithNode(t *testing.T, path string) *yttest.Env {
+	ytEnv, cancel := yttest.NewEnv(t)
+	t.Cleanup(cancel)
+
+	_, err := ytEnv.YT.CreateNode(ytEnv.Ctx, ypath.Path(path), yt.NodeMap, &yt.CreateNodeOptions{Recursive: true})
+	require.NoError(t, err)
+
+	t.Cleanup(func() {
+		err := ytEnv.YT.RemoveNode(ytEnv.Ctx, ypath.Path(path), &yt.RemoveNodeOptions{Recursive: true})
+		require.NoError(t, err)
+	})
+	return ytEnv
+}
