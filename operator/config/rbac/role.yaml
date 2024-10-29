@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - trsfrcrd.dc
+  resources:
+  - transfers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - trsfrcrd.dc
+  resources:
+  - transfers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - trsfrcrd.dc
+  resources:
+  - transfers/status
+  verbs:
+  - get
+  - patch
+  - update
