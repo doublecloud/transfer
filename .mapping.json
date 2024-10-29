@@ -108,6 +108,7 @@
   "cmd/trcli/check/tests/pg2ch_test.go":"transfer_manager/go/cmd/trcli/check/tests/pg2ch_test.go",
   "cmd/trcli/check/tests/transfer.yaml":"transfer_manager/go/cmd/trcli/check/tests/transfer.yaml",
   "cmd/trcli/config/config.go":"transfer_manager/go/cmd/trcli/config/config.go",
+  "cmd/trcli/config/config_test.go":"transfer_manager/go/cmd/trcli/config/config_test.go",
   "cmd/trcli/config/model.go":"transfer_manager/go/cmd/trcli/config/model.go",
   "cmd/trcli/main.go":"transfer_manager/go/cmd/trcli/main.go",
   "cmd/trcli/replicate/replicate.go":"transfer_manager/go/cmd/trcli/replicate/replicate.go",
