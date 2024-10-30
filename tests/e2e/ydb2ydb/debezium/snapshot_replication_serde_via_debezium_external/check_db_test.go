@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/debezium"
 	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
@@ -24,7 +24,7 @@ var pathOut = "dectest/test-dst"
 
 func TestSnapshotAndReplicationSerDeViaDebeziumExternal(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{path},
@@ -49,7 +49,7 @@ func TestSnapshotAndReplicationSerDeViaDebeziumExternal(t *testing.T) {
 	require.NoError(t, sinker.Push([]abstract.ChangeItem{*currChangeItem}))
 
 	dst := &ydb.YdbDestination{
-		Token:    server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database: helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance: helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 	}

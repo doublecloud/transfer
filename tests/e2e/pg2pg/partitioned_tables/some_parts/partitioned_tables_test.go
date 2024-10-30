@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -61,7 +61,7 @@ func Existence(t *testing.T) {
 }
 
 func Verify(t *testing.T) {
-	var transfer server.Transfer
+	var transfer model.Transfer
 	transfer.Src = &Source
 	transfer.Dst = &Target
 	transfer.Type = "SNAPSOT_AND_INCREMENT"

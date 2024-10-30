@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	cp_client "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	ydb_provider "github.com/doublecloud/transfer/pkg/providers/ydb"
 	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
@@ -32,7 +32,7 @@ var (
 	}
 	Target = ydb_provider.YdbDestination{
 		Database: os.Getenv("YDB_DATABASE"),
-		Token:    server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
 		Instance: os.Getenv("YDB_ENDPOINT"),
 	}
 )
@@ -159,7 +159,7 @@ func TestSnapshot(t *testing.T) {
 	createTestData(t)
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
-	snapshotLoader := tasks.NewSnapshotLoader(cp_client.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	require.NoError(t, snapshotLoader.UploadV2(context.Background(), nil, nil))
 
 	targetStorage := helpers.GetSampleableStorageByModel(t, Target)

@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -75,9 +75,9 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	sinkerNoCollapse := &helpers.MockSink{}
 	sinkerNoCollapseMutex := sync.Mutex{}
-	targetNoCollapse := server.MockDestination{
+	targetNoCollapse := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkerNoCollapse },
-		Cleanup:       server.Drop,
+		Cleanup:       model.Drop,
 	}
 
 	var result []abstract.ChangeItem
@@ -96,7 +96,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	}
 
 	transfer := helpers.MakeTransfer("data-objects", &SourceCollapse, &targetNoCollapse, abstract.TransferTypeSnapshotOnly)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.log_table_inheritance_partitioning", "public.log_table_declarative_partitioning"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"public.log_table_inheritance_partitioning", "public.log_table_declarative_partitioning"}}
 	_ = helpers.Activate(t, transfer)
 	for k, data := range splitByTables(result) {
 		logger.Log.Infof("%s:\n%v", k.String(), abstract.Sniff(data))
@@ -105,7 +105,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	require.Len(t, result, 16)
 
 	replicationTransfer := helpers.MakeTransfer("data-objects", &SourceCollapse, &targetNoCollapse, abstract.TransferTypeIncrementOnly)
-	replicationTransfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.log_table_inheritance_partitioning", "public.log_table_declarative_partitioning"}}
+	replicationTransfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"public.log_table_inheritance_partitioning", "public.log_table_declarative_partitioning"}}
 	w := helpers.Activate(t, replicationTransfer)
 	sinkToSource, err := postgres.NewSink(logger.Log, helpers.TransferID, SourceCollapse.ToSinkParams(), helpers.EmptyRegistry())
 	schema := abstract.NewTableSchema([]abstract.ColSchema{

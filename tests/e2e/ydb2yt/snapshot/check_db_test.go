@@ -9,10 +9,10 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytstorage "github.com/doublecloud/transfer/pkg/providers/yt/storage"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -21,13 +21,13 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -36,7 +36,7 @@ func TestGroup(t *testing.T) {
 		Underlay:           false,
 		ServiceAccountID:   "",
 	}
-	dst := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+	dst := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:                     "//home/cdc/test/pg2yt_e2e",
 		Cluster:                  os.Getenv("YT_PROXY"),
 		CellBundle:               "default",
@@ -81,11 +81,11 @@ func TestGroup(t *testing.T) {
 
 	t.Run("activate transfer", func(t *testing.T) {
 		transfer := helpers.MakeTransfer(helpers.TransferID, src, dst, abstract.TransferTypeSnapshotOnly)
-		require.NoError(t, tasks.ActivateDelivery(context.TODO(), nil, cpclient.NewStatefulFakeClient(), *transfer, helpers.EmptyRegistry()))
+		require.NoError(t, tasks.ActivateDelivery(context.TODO(), nil, coordinator.NewStatefulFakeClient(), *transfer, helpers.EmptyRegistry()))
 	})
 
 	t.Run("check data", func(t *testing.T) {
-		ytStorageParams := ytcommon.YtStorageParams{
+		ytStorageParams := yt_provider.YtStorageParams{
 			Token:   dst.Token(),
 			Cluster: os.Getenv("YT_PROXY"),
 			Path:    dst.Path(),

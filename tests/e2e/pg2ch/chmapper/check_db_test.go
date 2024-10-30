@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -41,7 +41,7 @@ func testSnapshot(t *testing.T, source *postgres.PgSource, target model.ChDestin
 	Target.ForceJSONMode = false
 	transfer := helpers.MakeTransfer(helpers.TransferID, source, &target, TransferType)
 	transfer.TypeSystemVersion = 8
-	transfer.Transformation = &server.Transformation{Transformers: &transformer.Transformers{Transformers: []transformer.Transformer{
+	transfer.Transformation = &dp_model.Transformation{Transformers: &transformer.Transformers{Transformers: []transformer.Transformer{
 		{
 			chmapper.TransformerType: chmapper.Config{
 				Table: chmapper.TableRemap{

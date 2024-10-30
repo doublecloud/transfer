@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/debezium"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
@@ -28,7 +28,7 @@ func TestCompareSnapshotAndReplication(t *testing.T) {
 	var extractedFromSnapshot []abstract.ChangeItem
 
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{path},
@@ -65,9 +65,9 @@ func TestCompareSnapshotAndReplication(t *testing.T) {
 			}
 		}
 	}
-	targetMock := server.MockDestination{
+	targetMock := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkMock },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 
 	transfer := helpers.MakeTransfer("fake", src, &targetMock, abstract.TransferTypeIncrementOnly)

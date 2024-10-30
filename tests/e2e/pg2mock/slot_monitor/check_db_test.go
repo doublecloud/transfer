@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -52,7 +52,7 @@ func TestSnapshot(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{SinkerFactory: func() abstract.Sinker {
+		&model.MockDestination{SinkerFactory: func() abstract.Sinker {
 			return sinker
 		}},
 		abstract.TransferTypeSnapshotAndIncrement,
@@ -66,7 +66,7 @@ func TestSnapshot(t *testing.T) {
 
 	tables, err := tasks.ObtainAllSrcTables(transfer, helpers.EmptyRegistry())
 	require.NoError(t, err)
-	snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	err = snapshotLoader.UploadTables(context.Background(), tables.ConvertToTableDescriptions(), true)
 	require.Error(t, err)
 	require.True(t, abstract.IsFatal(err))

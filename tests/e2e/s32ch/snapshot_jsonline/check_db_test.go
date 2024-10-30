@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -31,7 +31,7 @@ var dst = model.ChDestination{
 	HTTPPort:            helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_HTTP_PORT"),
 	NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 	ProtocolUnspecified: true,
-	Cleanup:             server.Drop,
+	Cleanup:             dp_model.Drop,
 }
 
 func TestNativeS3(t *testing.T) {
@@ -46,7 +46,7 @@ func TestNativeS3(t *testing.T) {
 	}
 	src.TableNamespace = "example"
 	src.TableName = "data"
-	src.InputFormat = server.ParsingFormatJSONLine
+	src.InputFormat = dp_model.ParsingFormatJSONLine
 	src.WithDefaults()
 	src.Format.JSONLSetting.BlockSize = 1 * 1024 * 1024
 	dst.WithDefaults()

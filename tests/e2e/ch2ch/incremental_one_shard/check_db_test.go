@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -33,7 +33,7 @@ const cursorValue = "2019-01-03"
 func init() {
 	_ = os.Setenv("YC", "1") // to not go to vanga
 	helpers.InitSrcDst(helpers.TransferID, &Source, &Target, TransferType)
-	Target.Cleanup = server.DisabledCleanup
+	Target.Cleanup = model.DisabledCleanup
 }
 
 func TestIncrementalSnapshot(t *testing.T) {

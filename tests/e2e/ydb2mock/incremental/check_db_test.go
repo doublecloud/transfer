@@ -13,7 +13,7 @@ import (
 	libslices "github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -26,7 +26,7 @@ import (
 
 func TestYDBIncrementalSnapshot(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -53,9 +53,9 @@ func TestYDBIncrementalSnapshot(t *testing.T) {
 			readItems = append(readItems, items...)
 		},
 	}
-	dst := &server.MockDestination{
+	dst := &model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 
 	db, err := ydbsdk.Open(

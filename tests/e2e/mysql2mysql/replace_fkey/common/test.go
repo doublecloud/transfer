@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -67,7 +67,7 @@ func Load(t *testing.T) {
 	_, err := mysql.NewSinker(logger.Log, &sourceAsDestination, helpers.EmptyRegistry())
 	require.NoError(t, err)
 
-	connector := &server.Transfer{
+	connector := &model.Transfer{
 		ID:  "test-id",
 		Src: &Source,
 		Dst: &Target,

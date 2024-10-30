@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/e2e/mongo2yt/rotator"
 	"go.ytsaurus.tech/yt/go/ypath"
@@ -28,7 +28,7 @@ func TestCases(t *testing.T) {
 
 	t.Run("cleanup=drop;rotation=day;use_static_table=false;table_type=dynamic", func(t *testing.T) {
 		source, target := rotator.PrefilledSourceAndTarget()
-		target.Cleanup = server.Drop
+		target.Cleanup = model.Drop
 		target.Rotation = rotator.DayRotation
 		target.UseStaticTableOnSnapshot = false
 		target.Static = false

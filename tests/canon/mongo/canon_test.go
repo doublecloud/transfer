@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -31,7 +31,7 @@ func snapshotPlusIncrementScenario(t *testing.T, databaseName, collectionName st
 		Hosts:    []string{"localhost"},
 		Port:     helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:     os.Getenv("MONGO_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
 		Collections: []mongocommon.MongoCollection{
 			{DatabaseName: databaseName, CollectionName: collectionName},
 		},
@@ -56,9 +56,9 @@ func snapshotPlusIncrementScenario(t *testing.T, databaseName, collectionName st
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
+		&model.MockDestination{
 			SinkerFactory: validator.New(
-				server.IsStrictSource(Source),
+				model.IsStrictSource(Source),
 				validator.InitDone(t),
 				validator.ValuesTypeChecker,
 				validator.Referencer(t),
@@ -66,7 +66,7 @@ func snapshotPlusIncrementScenario(t *testing.T, databaseName, collectionName st
 					return strings.TrimPrefix(colSchema.OriginalType, "mongo:")
 				}),
 			),
-			Cleanup: server.Drop,
+			Cleanup: model.Drop,
 		},
 		abstract.TransferTypeSnapshotAndIncrement,
 	)

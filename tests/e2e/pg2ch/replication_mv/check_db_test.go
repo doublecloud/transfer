@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -41,7 +41,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 		))
 	}()
 
-	Target.Cleanup = server.DisabledCleanup
+	Target.Cleanup = dp_model.DisabledCleanup
 
 	connConfig, err := pgcommon.MakeConnConfigFromSrc(logger.Log, &Source)
 	require.NoError(t, err)

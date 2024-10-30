@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
 	"github.com/doublecloud/transfer/pkg/debezium/testutil"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -42,9 +42,9 @@ func TestSnapshot(t *testing.T) {
 	//------------------------------------------------------------------------------
 
 	sinker := &helpers.MockSink{}
-	target := server.MockDestination{
+	target := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	transfer := helpers.MakeTransfer("fake", Source, &target, abstract.TransferTypeSnapshotOnly)
 

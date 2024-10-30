@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -27,7 +27,7 @@ var (
 		Hosts:       []string{"localhost"},
 		Port:        helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:        os.Getenv("MONGO_LOCAL_USER"),
-		Password:    server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
+		Password:    model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
 		Collections: []mongocommon.MongoCollection{},
 	}
 	Target = mongocommon.MongoDestination{
@@ -35,8 +35,8 @@ var (
 		Port:     helpers.GetIntFromEnv("DB0_MONGO_LOCAL_PORT"),
 		Database: targetDBName,
 		User:     os.Getenv("DB0_MONGO_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD")),
-		Cleanup:  server.Drop,
+		Password: model.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD")),
+		Cleanup:  model.Drop,
 	}
 )
 
@@ -136,7 +136,7 @@ func Load(t *testing.T) {
 	//------------------------------------------------------------------------------------
 	// Start worker
 
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		Type: abstract.TransferTypeSnapshotAndIncrement,
 		Src:  &Source,
 		Dst:  &Target,

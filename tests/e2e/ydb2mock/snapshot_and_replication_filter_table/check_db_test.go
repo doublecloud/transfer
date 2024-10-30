@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -19,7 +19,7 @@ const testTableName = "test_table/my_lovely_table"
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -31,9 +31,9 @@ func TestGroup(t *testing.T) {
 	}
 
 	sinker := &helpers.MockSink{}
-	dst := &server.MockDestination{
+	dst := &model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 
 	var changeItems []abstract.ChangeItem
@@ -79,13 +79,13 @@ func TestGroup(t *testing.T) {
 	)
 }
 
-func runTestCase(t *testing.T, caseName string, src *ydb.YdbSource, dst *server.MockDestination, changeItems *[]abstract.ChangeItem, srcTables []string, includeObjects []string, isError bool) {
+func runTestCase(t *testing.T, caseName string, src *ydb.YdbSource, dst *model.MockDestination, changeItems *[]abstract.ChangeItem, srcTables []string, includeObjects []string, isError bool) {
 	fmt.Printf("starting test case: %s\n", caseName)
 	src.Tables = srcTables
 	*changeItems = make([]abstract.ChangeItem, 0)
 
 	transfer := helpers.MakeTransfer("fake", src, dst, abstract.TransferTypeSnapshotAndIncrement)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: includeObjects}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: includeObjects}
 	_, err := helpers.ActivateErr(transfer)
 	if isError {
 		require.Error(t, err)

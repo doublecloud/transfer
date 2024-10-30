@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -36,7 +36,7 @@ func testSnapshot(t *testing.T, source *postgres.PgSource, target model.ChDestin
 	}()
 	source.DBTables = []string{"public.__test_1", "public.__test_2", "public.__test_3"}
 	transfer := helpers.MakeTransfer(helpers.TransferID, source, &target, TransferType)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.__test_1", "public.__test_2"}}
+	transfer.DataObjects = &dp_model.DataObjects{IncludeObjects: []string{"public.__test_1", "public.__test_2"}}
 
 	worker := helpers.Activate(t, transfer)
 	defer worker.Close(t)

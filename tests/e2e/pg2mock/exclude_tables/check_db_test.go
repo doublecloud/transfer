@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
@@ -19,7 +19,7 @@ import (
 
 var (
 	Source = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("init_source"))
-	Target = server.MockDestination{
+	Target = model.MockDestination{
 		SinkerFactory: makeMockSinker,
 	}
 )
@@ -66,10 +66,10 @@ func TestExcludeTablesWithEmptyWhitelist(t *testing.T) {
 	source := Source
 	source.DBTables = []string{}
 	source.ExcludedTables = []string{"public.second_table"}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test_id",
 		Src: &source,
-		Dst: &server.MockDestination{SinkerFactory: func() abstract.Sinker {
+		Dst: &model.MockDestination{SinkerFactory: func() abstract.Sinker {
 			return sinker
 		}},
 	}
@@ -133,10 +133,10 @@ func TestExcludeTablesWithNonEmptyWhitelist(t *testing.T) {
 	source := Source
 	source.DBTables = []string{"public.\".first_table\"", "public.\"second_table\""}
 	source.ExcludedTables = []string{"public.\"first_table\""}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test_id",
 		Src: &source,
-		Dst: &server.MockDestination{SinkerFactory: func() abstract.Sinker {
+		Dst: &model.MockDestination{SinkerFactory: func() abstract.Sinker {
 			return sinker
 		}},
 	}

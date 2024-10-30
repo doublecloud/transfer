@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/connection"
 	"github.com/doublecloud/transfer/pkg/dataplane/provideradapter"
 	"golang.org/x/exp/slices"
@@ -44,11 +44,11 @@ func StrictEquality(l, r string) bool {
 	return l == r
 }
 
-func InitSrcDst(transferID string, src server.Source, dst server.Destination, transferType abstract.TransferType) {
+func InitSrcDst(transferID string, src model.Source, dst model.Destination, transferType abstract.TransferType) {
 	src.WithDefaults()
 	dst.WithDefaults()
 
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:   transferID,
 		Type: transferType,
 		Src:  src,
@@ -71,10 +71,10 @@ func InitConnectionResolver(connections map[string]connection.ManagedConnection)
 	connection.Init(stubResolver)
 }
 
-func MakeTransfer(transferID string, src server.Source, dst server.Destination, transferType abstract.TransferType) *server.Transfer {
+func MakeTransfer(transferID string, src model.Source, dst model.Destination, transferType abstract.TransferType) *model.Transfer {
 	src.WithDefaults()
 	dst.WithDefaults()
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:   transferID,
 		Type: transferType,
 		Src:  src,
@@ -87,7 +87,7 @@ func MakeTransfer(transferID string, src server.Source, dst server.Destination, 
 	return transfer
 }
 
-func WithLocalRuntime(transfer *server.Transfer, jobCount int, processCount int) *server.Transfer {
+func WithLocalRuntime(transfer *model.Transfer, jobCount int, processCount int) *model.Transfer {
 	transfer.Runtime = &abstract.LocalRuntime{
 		Host:       "",
 		CurrentJob: 0,
@@ -99,8 +99,8 @@ func WithLocalRuntime(transfer *server.Transfer, jobCount int, processCount int)
 	return transfer
 }
 
-func MakeTransferForIncrementalSnapshot(transferID string, src server.Source, dst server.Destination, transferType abstract.TransferType,
-	namespace, tableName, cursorField, initialState string, incrementDelay int64) *server.Transfer {
+func MakeTransferForIncrementalSnapshot(transferID string, src model.Source, dst model.Destination, transferType abstract.TransferType,
+	namespace, tableName, cursorField, initialState string, incrementDelay int64) *model.Transfer {
 
 	regularSnapshot := &abstract.RegularSnapshot{
 		Incremental: []abstract.IncrementalTable{
@@ -110,7 +110,7 @@ func MakeTransferForIncrementalSnapshot(transferID string, src server.Source, ds
 		CronExpression:        "",
 	}
 
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:              transferID,
 		Type:            transferType,
 		Src:             src,

@@ -10,9 +10,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -40,7 +40,7 @@ func makeExpectedTableContent() (result []string) {
 
 type fixture struct {
 	t            *testing.T
-	transfer     server.Transfer
+	transfer     model.Transfer
 	ytEnv        *yttest.Env
 	destroyYtEnv func()
 }
@@ -70,8 +70,8 @@ func (f *fixture) readAll() (result []string) {
 	return
 }
 
-func makeTarget() server.Destination {
-	target := yt2.NewYtDestinationV1(yt2.YtDestination{
+func makeTarget() model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/mysql2yt_e2e_no_pkey",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
@@ -86,7 +86,7 @@ func setup(t *testing.T) *fixture {
 
 	return &fixture{
 		t: t,
-		transfer: server.Transfer{
+		transfer: model.Transfer{
 			ID:  "dttwhatever",
 			Src: helpers.RecipeMysqlSource(),
 			Dst: makeTarget(),
@@ -98,7 +98,7 @@ func setup(t *testing.T) *fixture {
 
 func srcAndDstPorts(fxt *fixture) (int, int, error) {
 	sourcePort := fxt.transfer.Src.(*mysql.MysqlSource).Port
-	ytCluster := fxt.transfer.Dst.(yt2.YtDestinationModel).Cluster()
+	ytCluster := fxt.transfer.Dst.(yt_provider.YtDestinationModel).Cluster()
 	targetPort, err := helpers.GetPortFromStr(ytCluster)
 	if err != nil {
 		return 1, 1, err
@@ -119,7 +119,7 @@ func TestSnapshotOnlyWorksWithStaticTables(t *testing.T) {
 	}()
 
 	defer fixture.teardown()
-	fixture.transfer.Dst.(yt2.YtDestinationModel).SetStaticTable()
+	fixture.transfer.Dst.(yt_provider.YtDestinationModel).SetStaticTable()
 	fixture.transfer.Type = abstract.TransferTypeSnapshotOnly
 
 	err = tasks.ActivateDelivery(context.TODO(), nil, coordinator.NewStatefulFakeClient(), fixture.transfer, helpers.EmptyRegistry())

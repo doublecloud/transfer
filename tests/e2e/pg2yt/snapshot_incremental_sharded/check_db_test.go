@@ -10,27 +10,27 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
 	yt_helpers "github.com/doublecloud/transfer/tests/helpers/yt"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
-	ytMain "go.ytsaurus.tech/yt/go/yt"
+	yt_main "go.ytsaurus.tech/yt/go/yt"
 	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 const ytPath = "//home/cdc/test/pg2yt_e2e"
 
 var (
-	Source = pgcommon.PgSource{
+	Source = pg_provider.PgSource{
 		ClusterID:                   os.Getenv("PG_CLUSTER_ID"),
 		Hosts:                       []string{"localhost"},
 		User:                        os.Getenv("PG_LOCAL_USER"),
-		Password:                    server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:                    model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:                    os.Getenv("PG_LOCAL_DATABASE"),
 		Port:                        helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		DBTables:                    []string{"public.__test"},
@@ -46,7 +46,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -64,9 +64,9 @@ func TestGroup(t *testing.T) {
 	defer cancel()
 
 	ctx := context.Background()
-	_, err = ytEnv.YT.CreateNode(ctx, ypath.Path(ytPath), ytMain.NodeMap, &ytMain.CreateNodeOptions{Recursive: true})
+	_, err = ytEnv.YT.CreateNode(ctx, ypath.Path(ytPath), yt_main.NodeMap, &yt_main.CreateNodeOptions{Recursive: true})
 	defer func() {
-		err := ytEnv.YT.RemoveNode(ctx, ypath.Path(ytPath), &ytMain.RemoveNodeOptions{Recursive: true})
+		err := ytEnv.YT.RemoveNode(ctx, ypath.Path(ytPath), &yt_main.RemoveNodeOptions{Recursive: true})
 		require.NoError(t, err)
 	}()
 	require.NoError(t, err)
@@ -96,7 +96,7 @@ func Snapshot(t *testing.T) {
 		helpers.GetSampleableStorageByModel(t, Source),
 		helpers.GetSampleableStorageByModel(t, Target.LegacyModel()), 60*time.Second), "Wrong row number after first snapshot round!")
 
-	conn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 	defer conn.Close()
 
@@ -161,7 +161,7 @@ func getExpectedRowsCount(t *testing.T, conn *pgxpool.Pool) uint64 {
 }
 
 func removeAddedData(t *testing.T) {
-	conn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 	_, err = conn.Exec(context.Background(), "delete from __test where id >= 14")
 	require.NoError(t, err)

@@ -10,9 +10,9 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/internal/logger"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/connection"
-	mysql "github.com/doublecloud/transfer/pkg/providers/mysql"
+	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	mysqldriver "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -23,7 +23,7 @@ func RecipeMysqlSource() *mysql.MysqlSource {
 	src := mysql.MysqlSource{
 		Host:     os.Getenv("RECIPE_MYSQL_HOST"),
 		User:     os.Getenv("RECIPE_MYSQL_USER"),
-		Password: server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database: os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE"),
 		Port:     port,
 		ServerID: 1,
@@ -37,7 +37,7 @@ func RecipeMysqlTarget() *mysql.MysqlDestination {
 	v := mysql.MysqlDestination{
 		Host:          os.Getenv("RECIPE_MYSQL_HOST"),
 		User:          os.Getenv("RECIPE_MYSQL_USER"),
-		Password:      server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password:      model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database:      os.Getenv("RECIPE_MYSQL_TARGET_DATABASE"),
 		Port:          port,
 		SkipKeyChecks: false,
@@ -79,7 +79,7 @@ func ManagedConnection(port int, host, dbName, user, password string) *connectio
 		BaseSQLConnection: &connection.BaseSQLConnection{
 			Hosts:          []*connection.Host{{Name: host, Port: port, Role: connection.RoleUnknown, ReplicaType: connection.ReplicaUndefined}},
 			User:           user,
-			Password:       server.SecretString(password),
+			Password:       model.SecretString(password),
 			Database:       dbName,
 			HasTLS:         false,
 			CACertificates: "",

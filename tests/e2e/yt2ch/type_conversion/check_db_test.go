@@ -11,10 +11,10 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
-	ytprovider "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -28,7 +28,7 @@ import (
 var (
 	TransferType        = abstract.TransferTypeSnapshotOnly
 	YtColumns, TestData = yt_helpers.YtTypesTestData()
-	Source              = ytprovider.YtSource{
+	Source              = yt_provider.YtSource{
 		Cluster: os.Getenv("YT_PROXY"),
 		Proxy:   os.Getenv("YT_PROXY"),
 		Paths:   []string{"//home/cdc/junk/types_test"},
@@ -43,7 +43,7 @@ var (
 		NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified: true,
 		SSLEnabled:          false,
-		Cleanup:             server.DisabledCleanup,
+		Cleanup:             dp_model.DisabledCleanup,
 	}
 )
 

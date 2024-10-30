@@ -11,9 +11,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mysql_source "github.com/doublecloud/transfer/pkg/providers/mysql"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -42,7 +42,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -56,8 +56,8 @@ func makeConnConfig() *mysql.Config {
 	return cfg
 }
 
-func makeTarget() server.Destination {
-	target := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+func makeTarget() model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/test/mysql2yt/date_time",
 		Cluster:       targetCluster,
 		CellBundle:    "default",
@@ -102,7 +102,7 @@ func TestDateTime(t *testing.T) {
 	err = snapshotLoader.LoadSnapshot(context.Background())
 	require.NoError(t, err)
 
-	require.NoError(t, helpers.CompareStorages(t, source, ytDestination.(ytcommon.YtDestinationModel).LegacyModel(), helpers.NewCompareStorageParams()))
+	require.NoError(t, helpers.CompareStorages(t, source, ytDestination.(yt_provider.YtDestinationModel).LegacyModel(), helpers.NewCompareStorageParams()))
 
 	fakeClient := coordinator.NewStatefulFakeClient()
 	err = mysql_source.SyncBinlogPosition(&source, transfer.ID, fakeClient)
@@ -130,6 +130,6 @@ func TestDateTime(t *testing.T) {
 	_, err = db.Exec(`INSERT INTO time_test VALUES (107, '2025-05-25', '2025-05-25 00:05:25.555', '2025-05-25 00:05:25.555555')`)
 	require.NoError(t, err)
 
-	require.NoError(t, helpers.WaitEqualRowsCount(t, source.Database, tableName, helpers.GetSampleableStorageByModel(t, source), helpers.GetSampleableStorageByModel(t, ytDestination.(ytcommon.YtDestinationModel).LegacyModel()), 60*time.Second))
-	require.NoError(t, helpers.CompareStorages(t, source, ytDestination.(ytcommon.YtDestinationModel).LegacyModel(), helpers.NewCompareStorageParams()))
+	require.NoError(t, helpers.WaitEqualRowsCount(t, source.Database, tableName, helpers.GetSampleableStorageByModel(t, source), helpers.GetSampleableStorageByModel(t, ytDestination.(yt_provider.YtDestinationModel).LegacyModel()), 60*time.Second))
+	require.NoError(t, helpers.CompareStorages(t, source, ytDestination.(yt_provider.YtDestinationModel).LegacyModel(), helpers.NewCompareStorageParams()))
 }

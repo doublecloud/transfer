@@ -10,10 +10,10 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
 	yt_helpers "github.com/doublecloud/transfer/tests/helpers/yt"
@@ -24,18 +24,18 @@ import (
 	"go.ytsaurus.tech/yt/go/yttest"
 )
 
-var Source = pgcommon.PgSource{
+var Source = pg_provider.PgSource{
 	ClusterID: os.Getenv("PG_CLUSTER_ID"),
 	Hosts:     []string{"localhost"},
 	User:      os.Getenv("PG_LOCAL_USER"),
-	Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+	Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 	Database:  os.Getenv("PG_LOCAL_DATABASE"),
 	Port:      helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 	DBTables:  []string{"public.__fullnames", "public.__food_expenditure"},
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -61,7 +61,7 @@ func teardown(env *yttest.Env, p string) {
 
 // initializes YT client and sinker config
 // do not forget to call testTeardown when resources are not needed anymore
-func initYt(t *testing.T, cypressPath string) (testEnv *yttest.Env, testCfg ytcommon.YtDestinationModel, testTeardown func()) {
+func initYt(t *testing.T, cypressPath string) (testEnv *yttest.Env, testCfg yt_provider.YtDestinationModel, testTeardown func()) {
 	env, cancel := yttest.NewEnv(t)
 	cfg := yt_helpers.RecipeYtTarget(cypressPath)
 	return env, cfg, func() {
@@ -101,7 +101,7 @@ func testUploadToYt(t *testing.T) {
 	var pgRowCount, ytRowCount int64
 
 	// get current data from database
-	srcConn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	srcConn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 
 	countQuery := fmt.Sprintf(`
@@ -120,7 +120,7 @@ func testUploadToYt(t *testing.T) {
 	solomonDefaultRegistry := solomon.NewRegistry(nil)
 	tables, err := tasks.ObtainAllSrcTables(transfer, solomonDefaultRegistry)
 	require.NoError(t, err)
-	snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	err = snapshotLoader.UploadTables(testContext, tables.ConvertToTableDescriptions(), true)
 	require.NoError(t, err)
 

@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
@@ -49,7 +49,7 @@ func TestNativeS3(t *testing.T) {
 	require.NoError(t, err)
 	src.TableNamespace = "example"
 	src.TableName = "data"
-	src.InputFormat = server.ParsingFormatJSON
+	src.InputFormat = dp_model.ParsingFormatJSON
 	src.Format.JSONLSetting = new(s3.JSONLSetting)
 	src.Format.JSONLSetting.BlockSize = 1 * 1024 * 1024
 	src.OutputSchema = []abstract.ColSchema{

@@ -12,11 +12,11 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -27,7 +27,7 @@ import (
 
 var (
 	TransferType = abstract.TransferTypeSnapshotOnly
-	Source       = yt2.YtSource{
+	Source       = yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//table_for_tests"},
@@ -50,7 +50,7 @@ var (
 		NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified: true,
 		SSLEnabled:          false,
-		Cleanup:             server.Drop,
+		Cleanup:             dp_model.Drop,
 	}
 )
 
@@ -80,7 +80,7 @@ func TestBigTable(t *testing.T) {
 	// defer require.NoError(t, helpers.CheckConnections(, Target.NativePort))
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
-	snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	require.NoError(t, snapshotLoader.UploadV2(context.Background(), nil, nil))
 
 	chClient, err := httpclient.NewHTTPClientImpl(Target.ToStorageParams().ToConnParams())

@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/debezium"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -58,9 +58,9 @@ func TestSnapshotAndReplication(t *testing.T) {
 	// extract changeItems
 
 	sinker := &helpers.MockSink{}
-	target := server.MockDestination{
+	target := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	transfer := helpers.MakeTransfer("fake", &Source, &target, abstract.TransferTypeSnapshotAndIncrement)
 

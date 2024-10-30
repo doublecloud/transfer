@@ -10,9 +10,9 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mysql_source "github.com/doublecloud/transfer/pkg/providers/mysql"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/go-sql-driver/mysql"
@@ -40,8 +40,8 @@ func makeConnConfig() *mysql.Config {
 	return cfg
 }
 
-func makeTarget() yt2.YtDestinationModel {
-	target := yt2.NewYtDestinationV1(yt2.YtDestination{
+func makeTarget() yt_provider.YtDestinationModel {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/test/mysql2yt/collapse",
 		Cluster:       targetCluster,
 		CellBundle:    "default",
@@ -62,7 +62,7 @@ func TestCollapse(t *testing.T) {
 	}()
 
 	ytDestination := makeTarget()
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "collapse_test",
 		Src: &source,
 		Dst: ytDestination,

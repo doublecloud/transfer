@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongodataagent "github.com/doublecloud/transfer/pkg/providers/mongo"
 	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytstorage "github.com/doublecloud/transfer/pkg/providers/yt/storage"
@@ -28,10 +28,10 @@ const (
 )
 
 var (
-	NoneRotation *server.RotatorConfig = nil
-	DayRotation                        = &server.RotatorConfig{
+	NoneRotation *model.RotatorConfig = nil
+	DayRotation                       = &model.RotatorConfig{
 		KeepPartCount:     14,
-		PartType:          server.RotatorPartDay,
+		PartType:          model.RotatorPartDay,
 		PartSize:          1,
 		TimeColumn:        TimeColumnName,
 		TableNameTemplate: "",
@@ -50,7 +50,7 @@ func PrefilledSourceAndTarget() (mongodataagent.MongoSource, ytcommon.YtDestinat
 			Hosts:             []string{"localhost"},
 			Port:              helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 			User:              os.Getenv("MONGO_LOCAL_USER"),
-			Password:          server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
+			Password:          model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
 			ReplicationSource: mongodataagent.MongoReplicationSourcePerDatabaseUpdateDocument,
 		}, ytcommon.YtDestination{
 			Path:          fmt.Sprintf("//home/cdc/test/mongo2yt/rotator/prefill%d", prefillIteration),
@@ -117,13 +117,13 @@ func ScenarioCheckActivation(
 	targetModel := ytcommon.NewYtDestinationV1(target)
 	transferType := abstract.TransferTypeSnapshotOnly
 	helpers.InitSrcDst(helpers.TransferID, &source, targetModel, transferType)
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		Type: transferType,
 		Src:  &source,
 		Dst:  targetModel,
 		ID:   helpers.TransferID,
 	}
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{table.Fqtn()}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{table.Fqtn()}}
 	// add transformation in order to control rotation
 	err := transfer.AddExtraTransformer(helpers.NewSimpleTransformer(t, makeAppendTimeMiddleware(rotationTime), includeAllTables))
 	require.NoError(t, err)
@@ -211,9 +211,9 @@ func ScenarioCheckActivation(
 	// check count1 and count2 depending on cleanup policy
 	cum := targetModel.CleanupMode()
 	switch cum {
-	case server.Drop:
+	case model.Drop:
 		require.Equal(t, uint64(1), count2)
-	case server.DisabledCleanup:
+	case model.DisabledCleanup:
 		require.Equal(t, uint64(1), count2-count1)
 	default:
 		require.Fail(t, fmt.Sprintf("invalid type of cleanup of YT destination: %v", cum))

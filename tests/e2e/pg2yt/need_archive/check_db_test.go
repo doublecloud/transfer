@@ -9,14 +9,14 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
-	ytMain "go.ytsaurus.tech/yt/go/yt"
+	yt_main "go.ytsaurus.tech/yt/go/yt"
 	"go.ytsaurus.tech/yt/go/yttest"
 )
 
@@ -26,13 +26,13 @@ var (
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      srcPort,
 		DBTables:  []string{"public.__test"},
 		SlotID:    "test_slot_id",
 	}
-	Target = ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+	Target = yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/test/pg2yt_e2e_replication",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
@@ -47,7 +47,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -66,9 +66,9 @@ func TestGroup(t *testing.T) {
 	ytEnv, cancel := yttest.NewEnv(t)
 	defer cancel()
 
-	_, err = ytEnv.YT.CreateNode(ctx, ypath.Path("//home/cdc/test/pg2yt_e2e_replication"), ytMain.NodeMap, &ytMain.CreateNodeOptions{Recursive: true})
+	_, err = ytEnv.YT.CreateNode(ctx, ypath.Path("//home/cdc/test/pg2yt_e2e_replication"), yt_main.NodeMap, &yt_main.CreateNodeOptions{Recursive: true})
 	defer func() {
-		err := ytEnv.YT.RemoveNode(ctx, ypath.Path("//home/cdc/test/pg2yt_e2e_replication"), &ytMain.RemoveNodeOptions{Recursive: true})
+		err := ytEnv.YT.RemoveNode(ctx, ypath.Path("//home/cdc/test/pg2yt_e2e_replication"), &yt_main.RemoveNodeOptions{Recursive: true})
 		require.NoError(t, err)
 	}()
 	require.NoError(t, err)
@@ -119,15 +119,15 @@ func schemaContainsColumn(sch schema.Schema, colName string) bool {
 	return false
 }
 
-func closeReader(reader ytMain.TableReader) {
+func closeReader(reader yt_main.TableReader) {
 	err := reader.Close()
 	if err != nil {
 		logger.Log.Warn("Could not close table reader")
 	}
 }
 
-func checkRowCount(client ytMain.Client, tablePath ypath.Path, rowsNumber int) (bool, error) {
-	reader, err := client.SelectRows(context.Background(), fmt.Sprintf("SUM(1) AS row_count FROM [%s] GROUP BY 1", tablePath), &ytMain.SelectRowsOptions{})
+func checkRowCount(client yt_main.Client, tablePath ypath.Path, rowsNumber int) (bool, error) {
+	reader, err := client.SelectRows(context.Background(), fmt.Sprintf("SUM(1) AS row_count FROM [%s] GROUP BY 1", tablePath), &yt_main.SelectRowsOptions{})
 	if err != nil {
 		return false, err
 	}
@@ -149,7 +149,7 @@ func checkRowCount(client ytMain.Client, tablePath ypath.Path, rowsNumber int) (
 	return false, nil
 }
 
-func waitForRows(t *testing.T, client ytMain.Client, tablePaths []ypath.Path, rowsNumber int) {
+func waitForRows(t *testing.T, client yt_main.Client, tablePaths []ypath.Path, rowsNumber int) {
 	finished := make([]bool, len(tablePaths))
 
 	for {

@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -81,9 +81,9 @@ func TestMySQLHeteroViewsInteraction(t *testing.T) {
 						}
 					}
 				}}
-				target := server.MockDestination{
+				target := model.MockDestination{
 					SinkerFactory: func() abstract.Sinker { return sinker },
-					Cleanup:       server.DisabledCleanup,
+					Cleanup:       model.DisabledCleanup,
 				}
 				transfer := helpers.MakeTransfer("fake", &source, &target, params.transferType)
 				worker, err := helpers.ActivateErr(transfer)

@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
@@ -20,7 +20,7 @@ import (
 
 var (
 	Source = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("init_source"))
-	Target = server.MockDestination{
+	Target = model.MockDestination{
 		SinkerFactory: makeMockSinker,
 	}
 )
@@ -63,10 +63,10 @@ func testAtLeastOnePushHasMultipleItems(t *testing.T) {
 	}()
 
 	sinker := &mockSinker{}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test_id",
 		Src: &Source,
-		Dst: &server.MockDestination{SinkerFactory: func() abstract.Sinker {
+		Dst: &model.MockDestination{SinkerFactory: func() abstract.Sinker {
 			return sinker
 		}},
 	}

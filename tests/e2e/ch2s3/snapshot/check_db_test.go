@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -25,7 +25,7 @@ var (
 )
 
 func TestSnapshotParquet(t *testing.T) {
-	s3Target := s3_provider.PrepareS3(t, testBucket, server.ParsingFormatPARQUET, s3_provider.GzipEncoding)
+	s3Target := s3_provider.PrepareS3(t, testBucket, model.ParsingFormatPARQUET, s3_provider.GzipEncoding)
 	s3Target.WithDefaults()
 
 	require.NoError(t, helpers.CheckConnections(

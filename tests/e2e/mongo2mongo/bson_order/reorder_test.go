@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -25,7 +25,7 @@ func makeSource(t *testing.T, database, collection string) *mongocommon.MongoSou
 		Hosts:    []string{"localhost"},
 		Port:     helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:     helpers.GetEnvOfFail(t, "MONGO_LOCAL_USER"),
-		Password: server.SecretString(helpers.GetEnvOfFail(t, "MONGO_LOCAL_PASSWORD")),
+		Password: model.SecretString(helpers.GetEnvOfFail(t, "MONGO_LOCAL_PASSWORD")),
 		Collections: []mongocommon.MongoCollection{
 			{DatabaseName: database, CollectionName: collection},
 		},
@@ -42,7 +42,7 @@ func makeTarget(t *testing.T, targetDatabase string) *mongocommon.MongoDestinati
 		Hosts:    []string{"localhost"},
 		Port:     helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:     helpers.GetEnvOfFail(t, "MONGO_LOCAL_USER"),
-		Password: server.SecretString(helpers.GetEnvOfFail(t, "MONGO_LOCAL_PASSWORD")),
+		Password: model.SecretString(helpers.GetEnvOfFail(t, "MONGO_LOCAL_PASSWORD")),
 		Database: targetDatabase,
 	}
 }
@@ -185,9 +185,9 @@ func generateBsonAsIndex(amount int) []interface{} {
 	return documents
 }
 
-type transferStage func(t *testing.T, inserter func() uint64, transfer *server.Transfer, targetDatabase, targetCollection string)
+type transferStage func(t *testing.T, inserter func() uint64, transfer *model.Transfer, targetDatabase, targetCollection string)
 
-func snapshotOnlyStage(t *testing.T, inserter func() uint64, transfer *server.Transfer, _, _ string) {
+func snapshotOnlyStage(t *testing.T, inserter func() uint64, transfer *model.Transfer, _, _ string) {
 	_ = inserter()
 
 	tables, err := tasks.ObtainAllSrcTables(transfer, helpers.EmptyRegistry())
@@ -198,7 +198,7 @@ func snapshotOnlyStage(t *testing.T, inserter func() uint64, transfer *server.Tr
 	require.NoError(t, err)
 }
 
-func replicationOnlyStage(t *testing.T, inserter func() uint64, transfer *server.Transfer, targetDatabase, targetCollection string) {
+func replicationOnlyStage(t *testing.T, inserter func() uint64, transfer *model.Transfer, targetDatabase, targetCollection string) {
 	err := tasks.ActivateDelivery(context.TODO(), nil, cpclient.NewFakeClient(), *transfer, helpers.EmptyRegistry())
 	require.NoError(t, err)
 

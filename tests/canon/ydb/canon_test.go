@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -23,7 +23,7 @@ func init() {
 
 func TestCanonSource(t *testing.T) {
 	Source := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{"canon_table"},
@@ -50,7 +50,7 @@ func TestCanonSource(t *testing.T) {
 
 func TestCanonLongPathSource(t *testing.T) {
 	Source := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -107,9 +107,9 @@ func runCanon(t *testing.T, Source *ydb.YdbSource, tablePath string, validators 
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
-			SinkerFactory: validator.New(server.IsStrictSource(Source), validators...),
-			Cleanup:       server.DisabledCleanup,
+		&model.MockDestination{
+			SinkerFactory: validator.New(model.IsStrictSource(Source), validators...),
+			Cleanup:       model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotAndIncrement,
 	)

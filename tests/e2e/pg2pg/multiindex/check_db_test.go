@@ -10,8 +10,8 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -39,10 +39,10 @@ func TestMultiindexBasic(t *testing.T) {
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
 
-	srcConn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	srcConn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 	defer srcConn.Close()
-	dstConn, err := pgcommon.MakeConnPoolFromDst(&Target, logger.Log)
+	dstConn, err := pg_provider.MakeConnPoolFromDst(&Target, logger.Log)
 	require.NoError(t, err)
 	defer dstConn.Close()
 
@@ -104,16 +104,16 @@ func TestMultiindexPkeyChange(t *testing.T) {
 
 	Target.PerTransactionPush = true // in per table mode result depends on collapse and so may flap
 
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test_id",
 		Src: &Source,
 		Dst: &Target,
 	}
 
-	srcConn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	srcConn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 	defer srcConn.Close()
-	dstConn, err := pgcommon.MakeConnPoolFromDst(&Target, logger.Log)
+	dstConn, err := pg_provider.MakeConnPoolFromDst(&Target, logger.Log)
 	require.NoError(t, err)
 	defer dstConn.Close()
 

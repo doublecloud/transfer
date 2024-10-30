@@ -11,9 +11,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -46,15 +46,15 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
-func makeSource() server.Source {
+func makeSource() model.Source {
 	src := &postgres.PgSource{
 		Hosts:    []string{"localhost"},
 		User:     os.Getenv("SOURCE_PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
 		Database: os.Getenv("SOURCE_PG_LOCAL_DATABASE"),
 		Port:     helpers.GetIntFromEnv("SOURCE_PG_LOCAL_PORT"),
 		DBTables: []string{"public.test"},
@@ -64,8 +64,8 @@ func makeSource() server.Source {
 	return src
 }
 
-func makeTarget(useStaticTableOnSnapshot bool) server.Destination {
-	target := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+func makeTarget(useStaticTableOnSnapshot bool) model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:                     "//home/cdc/pg2yt_e2e_pkey_change",
 		Cluster:                  os.Getenv("YT_PROXY"),
 		CellBundle:               "default",
@@ -89,7 +89,7 @@ func exec(t *testing.T, conn *pgx.Conn, query string) {
 
 type fixture struct {
 	t            *testing.T
-	transfer     *server.Transfer
+	transfer     *model.Transfer
 	ytEnv        *yttest.Env
 	destroyYtEnv func()
 }
@@ -220,7 +220,7 @@ func (f *fixture) loadAndCheckSnapshot() {
 
 func srcAndDstPorts(fxt *fixture) (int, int, error) {
 	sourcePort := fxt.transfer.Src.(*postgres.PgSource).Port
-	ytCluster := fxt.transfer.Dst.(ytcommon.YtDestinationModel).Cluster()
+	ytCluster := fxt.transfer.Dst.(yt_provider.YtDestinationModel).Cluster()
 	targetPort, err := helpers.GetPortFromStr(ytCluster)
 	if err != nil {
 		return 1, 1, err
@@ -280,7 +280,7 @@ func TestPkeyUpdateIndex(t *testing.T) {
 
 	defer fixture.teardown()
 
-	fixture.transfer.Dst.(ytcommon.YtDestinationModel).SetIndex([]string{"idxcol"})
+	fixture.transfer.Dst.(yt_provider.YtDestinationModel).SetIndex([]string{"idxcol"})
 
 	fixture.loadAndCheckSnapshot()
 
@@ -326,7 +326,7 @@ func TestPkeyUpdateIndexToast(t *testing.T) {
 
 	defer fixture.teardown()
 
-	fixture.transfer.Dst.(ytcommon.YtDestinationModel).SetIndex([]string{"idxcol"})
+	fixture.transfer.Dst.(yt_provider.YtDestinationModel).SetIndex([]string{"idxcol"})
 
 	fixture.loadAndCheckSnapshot()
 

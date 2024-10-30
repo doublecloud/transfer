@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -160,13 +160,13 @@ func Table() []abstract.ChangeItem {
 	}}
 }
 
-func Canon(t *testing.T, source server.Source) {
+func Canon(t *testing.T, source model.Source) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		source,
-		&server.MockDestination{
-			SinkerFactory: validator.New(server.IsStrictSource(source), validator.ValuesTypeChecker, validator.Referencer(t)),
-			Cleanup:       server.DisabledCleanup,
+		&model.MockDestination{
+			SinkerFactory: validator.New(model.IsStrictSource(source), validator.ValuesTypeChecker, validator.Referencer(t)),
+			Cleanup:       model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)

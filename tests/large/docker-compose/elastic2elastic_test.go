@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/elastic"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -48,7 +48,7 @@ func TestElasticToElasticSnapshot(t *testing.T) {
 		TLSFile:          "",
 		SubNetworkID:     "",
 		SecurityGroupIDs: nil,
-		Cleanup:          server.Drop,
+		Cleanup:          model.Drop,
 		SanitizeDocKeys:  false,
 	}
 	helpers.InitSrcDst(elastic2elasticTransferID, &elasticSrc, &elasticDst, abstract.TransferTypeSnapshotOnly)

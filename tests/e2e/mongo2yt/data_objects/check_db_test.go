@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongodataagent "github.com/doublecloud/transfer/pkg/providers/mongo"
 	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
@@ -28,7 +28,7 @@ var (
 		Hosts:             []string{"localhost"},
 		Port:              helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:              os.Getenv("MONGO_LOCAL_USER"),
-		Password:          server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
+		Password:          model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
 		ReplicationSource: mongodataagent.MongoReplicationSourcePerDatabaseUpdateDocument,
 	}
 	Target = yt_helpers.RecipeYtTarget("//home/cdc/test/mongo2yt_e2e")
@@ -113,13 +113,13 @@ func Load(t *testing.T) {
 	//------------------------------------------------------------------------------------
 	// start worker
 
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		Type: abstract.TransferTypeSnapshotAndIncrement,
 		Src:  &Source,
 		Dst:  Target,
 		ID:   helpers.TransferID,
 	}
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"db.test_incl"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"db.test_incl"}}
 
 	err = tasks.ActivateDelivery(context.TODO(), nil, cpclient.NewFakeClient(), transfer, helpers.EmptyRegistry())
 	require.NoError(t, err)

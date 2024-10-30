@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -28,7 +28,7 @@ func TestCanonSource(t *testing.T) {
 	}
 	src.TableNamespace = "test"
 	src.TableName = "types"
-	src.InputFormat = server.ParsingFormatJSONLine
+	src.InputFormat = model.ParsingFormatJSONLine
 	src.WithDefaults()
 	src.Format.JSONLSetting.BlockSize = 1 * 1024 * 1024
 	src.HideSystemCols = false
@@ -74,16 +74,16 @@ func TestCanonSource(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		src,
-		&server.MockDestination{
+		&model.MockDestination{
 			SinkerFactory: validator.New(
-				server.IsStrictSource(src),
+				model.IsStrictSource(src),
 				validator.InitDone(t),
 				validator.Referencer(t),
 				validator.TypesystemChecker(s3.ProviderType, func(colSchema abstract.ColSchema) string {
 					return colSchema.OriginalType
 				}),
 			),
-			Cleanup: server.Drop,
+			Cleanup: model.Drop,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)

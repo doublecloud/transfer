@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -21,7 +21,7 @@ func TestGroup(t *testing.T) {
 	// prepare common part
 
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -33,9 +33,9 @@ func TestGroup(t *testing.T) {
 	}
 
 	sinker := &helpers.MockSink{}
-	dst := &server.MockDestination{
+	dst := &model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 
 	var changeItems []abstract.ChangeItem
@@ -128,7 +128,7 @@ func TestGroup(t *testing.T) {
 	)
 }
 
-func runTestCase(t *testing.T, caseName string, src *ydb.YdbSource, dst *server.MockDestination, changeItems *[]abstract.ChangeItem, useFullPath bool, pathsIn []string, pathsExpected []string) {
+func runTestCase(t *testing.T, caseName string, src *ydb.YdbSource, dst *model.MockDestination, changeItems *[]abstract.ChangeItem, useFullPath bool, pathsIn []string, pathsExpected []string) {
 	fmt.Printf("starting test case: %s\n", caseName)
 	src.UseFullPaths = useFullPath
 	src.Tables = pathsIn

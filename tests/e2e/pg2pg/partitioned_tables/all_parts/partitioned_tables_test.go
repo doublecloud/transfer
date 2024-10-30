@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -30,8 +30,8 @@ var (
 )
 
 func init() {
-	TruncateTarget.Cleanup = server.Truncate
-	DropTarget.Cleanup = server.Drop
+	TruncateTarget.Cleanup = model.Truncate
+	DropTarget.Cleanup = model.Drop
 	helpers.InitSrcDst(helpers.TransferID, &TruncateSource, &TruncateTarget, TransferType) // to WithDefaults() & FillDependentFields(): IsHomo, transferID
 	helpers.InitSrcDst(helpers.TransferID, &DropSource, &DropTarget, TransferType)         // to WithDefaults() & FillDependentFields(): IsHomo, transferID
 }
@@ -59,7 +59,7 @@ func Existence(t *testing.T) {
 }
 
 func Verify(t *testing.T) {
-	var transfer server.Transfer
+	var transfer model.Transfer
 	transfer.Src = &DropSource
 	transfer.Dst = &DropTarget
 	transfer.Type = "SNAPSOT_AND_INCREMENT"
@@ -92,7 +92,7 @@ func Load(t *testing.T) {
 	load(t, truncateTransfer, false)
 }
 
-func load(t *testing.T, transfer *server.Transfer, updateSource bool) {
+func load(t *testing.T, transfer *model.Transfer, updateSource bool) {
 	worker := helpers.Activate(t, transfer)
 	defer worker.Close(t)
 

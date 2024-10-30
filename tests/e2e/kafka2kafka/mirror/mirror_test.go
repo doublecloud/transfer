@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	kafkasink "github.com/doublecloud/transfer/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -30,7 +30,7 @@ func TestReplication(t *testing.T) {
 	dst, err := kafkasink.DestinationRecipe()
 	require.NoError(t, err)
 	dst.Topic = dstTopic
-	dst.FormatSettings = server.SerializationFormat{Name: server.SerializationFormatMirror}
+	dst.FormatSettings = model.SerializationFormat{Name: model.SerializationFormatMirror}
 
 	// write to source topic
 
@@ -61,9 +61,9 @@ func TestReplication(t *testing.T) {
 			result = append(result, in...)
 		},
 	}
-	mockTarget := server.MockDestination{
+	mockTarget := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return mockSink },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	additionalTransfer := helpers.MakeTransfer("additional", &kafkasink.KafkaSource{
 		Connection:  dst.Connection,

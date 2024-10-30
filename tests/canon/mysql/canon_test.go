@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -34,7 +34,7 @@ func TestCanonSource(t *testing.T) {
 		ClusterID:           os.Getenv("CLUSTER_ID"),
 		Host:                os.Getenv("RECIPE_MYSQL_HOST"),
 		User:                os.Getenv("RECIPE_MYSQL_USER"),
-		Password:            server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password:            model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database:            os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE"),
 		Port:                helpers.GetIntFromEnv("RECIPE_MYSQL_PORT"),
 		AllowDecimalAsFloat: true,
@@ -62,9 +62,9 @@ func TestCanonSource(t *testing.T) {
 			transfer := helpers.MakeTransfer(
 				tableName,
 				Source,
-				&server.MockDestination{
+				&model.MockDestination{
 					SinkerFactory: validator.New(
-						server.IsStrictSource(Source),
+						model.IsStrictSource(Source),
 						validator.InitDone(t),
 						validator.Canonizator(t),
 						validator.TypesystemChecker(mysql.ProviderType, func(colSchema abstract.ColSchema) string {
@@ -73,11 +73,11 @@ func TestCanonSource(t *testing.T) {
 						),
 						counterSinkFactory,
 					),
-					Cleanup: server.DisabledCleanup,
+					Cleanup: model.DisabledCleanup,
 				},
 				abstract.TransferTypeSnapshotAndIncrement,
 			)
-			transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{Source.Database + "." + tableName}}
+			transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{Source.Database + "." + tableName}}
 			worker := helpers.Activate(t, transfer)
 
 			_, err = conn.Exec(fmt.Sprintf(`truncate table %s`, tableName))

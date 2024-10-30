@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -90,9 +90,9 @@ func TestConnLimitPg2MockSnapOnly(t *testing.T) {
 				}
 
 				sinker := &helpers.MockSink{PushCallback: pushCallback}
-				target := server.MockDestination{
+				target := model.MockDestination{
 					SinkerFactory: func() abstract.Sinker { return sinker },
-					Cleanup:       server.DisabledCleanup,
+					Cleanup:       model.DisabledCleanup,
 				}
 				transfer := helpers.MakeTransfer("fake", &source, &target, abstract.TransferTypeSnapshotOnly)
 				transfer.Runtime = &abstract.LocalRuntime{ShardingUpload: abstract.ShardUploadParams{JobCount: 1, ProcessCount: params.processCount}}

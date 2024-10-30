@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/sample"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -27,7 +27,7 @@ func TestSnapshot(t *testing.T) {
 		))
 	}()
 	Target.WithDefaults()
-	Target.Cleanup = server.DisabledCleanup
+	Target.Cleanup = model.DisabledCleanup
 
 	Source.WithDefaults()
 	helpers.InitSrcDst(helpers.TransferID, &Source, &Target, TransferType)

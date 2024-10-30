@@ -10,10 +10,10 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -29,7 +29,7 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -42,7 +42,7 @@ func makeExpectedTableContent() (result []string) {
 
 type fixture struct {
 	t            *testing.T
-	transfer     server.Transfer
+	transfer     model.Transfer
 	ytEnv        *yttest.Env
 	destroyYtEnv func()
 }
@@ -72,8 +72,8 @@ func (f *fixture) readAll() (result []string) {
 	return
 }
 
-func makeTarget() server.Destination {
-	target := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+func makeTarget() model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/pg2yt_e2e_no_pkey",
 		CellBundle:    "default",
 		PrimaryMedium: "default",
@@ -88,7 +88,7 @@ func setup(t *testing.T) *fixture {
 
 	return &fixture{
 		t: t,
-		transfer: server.Transfer{
+		transfer: model.Transfer{
 			ID:  "dttwhatever",
 			Src: pgrecipe.RecipeSource(),
 			Dst: makeTarget(),
@@ -100,7 +100,7 @@ func setup(t *testing.T) *fixture {
 
 func srcAndDstPorts(fxt *fixture) (int, int, error) {
 	sourcePort := fxt.transfer.Src.(*postgres.PgSource).Port
-	ytCluster := fxt.transfer.Dst.(ytcommon.YtDestinationModel).Cluster()
+	ytCluster := fxt.transfer.Dst.(yt_provider.YtDestinationModel).Cluster()
 	targetPort, err := helpers.GetPortFromStr(ytCluster)
 	if err != nil {
 		return 1, 1, err
@@ -121,7 +121,7 @@ func TestSnapshotOnlyWorksWithStaticTables(t *testing.T) {
 	}()
 
 	defer fixture.teardown()
-	fixture.transfer.Dst.(ytcommon.YtDestinationModel).SetStaticTable()
+	fixture.transfer.Dst.(yt_provider.YtDestinationModel).SetStaticTable()
 	fixture.transfer.Type = abstract.TransferTypeSnapshotOnly
 
 	err = tasks.ActivateDelivery(context.Background(), nil, coordinator.NewStatefulFakeClient(), fixture.transfer, helpers.EmptyRegistry())

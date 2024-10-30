@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -28,7 +28,7 @@ var Target = model.ChDestination{
 	NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 	ProtocolUnspecified: true,
 	ChClusterName:       "test_shard_localhost",
-	Cleanup:             server.Truncate,
+	Cleanup:             dp_model.Truncate,
 }
 
 func TestNativeS3(t *testing.T) {

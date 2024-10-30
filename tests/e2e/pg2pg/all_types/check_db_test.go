@@ -8,8 +8,8 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgStorage "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/canon/postgres"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -20,7 +20,7 @@ func TestAllDataTypes(t *testing.T) {
 	Source := pgrecipe.RecipeSource(pgrecipe.WithPrefix(""))
 	Source.WithDefaults()
 	Target := pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
-	conn, err := pgStorage.MakeConnPoolFromDst(Target, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromDst(Target, logger.Log)
 	require.NoError(t, err)
 	// TODO: Allow to optionally transit extensions as part of transfer
 	_, err = conn.Exec(context.Background(), `
@@ -35,7 +35,7 @@ create extension if not exists citext;
 	tableCase := func(tableName string) func(t *testing.T) {
 		return func(t *testing.T) {
 			t.Run("initial data", func(t *testing.T) {
-				conn, err := pgStorage.MakeConnPoolFromSrc(Source, logger.Log)
+				conn, err := pg_provider.MakeConnPoolFromSrc(Source, logger.Log)
 				require.NoError(t, err)
 				_, err = conn.Exec(context.Background(), postgres.TableSQLs[tableName])
 				require.NoError(t, err)
@@ -48,16 +48,16 @@ create extension if not exists citext;
 				Target,
 				abstract.TransferTypeSnapshotAndIncrement,
 			)
-			transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{tableName}}
+			transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{tableName}}
 			worker := helpers.Activate(t, transfer)
 
-			conn, err := pgStorage.MakeConnPoolFromSrc(Source, logger.Log)
+			conn, err := pg_provider.MakeConnPoolFromSrc(Source, logger.Log)
 			require.NoError(t, err)
 			_, err = conn.Exec(context.Background(), postgres.TableSQLs[tableName])
 			require.NoError(t, err)
-			srcStorage, err := pgStorage.NewStorage(Source.ToStorageParams(nil))
+			srcStorage, err := pg_provider.NewStorage(Source.ToStorageParams(nil))
 			require.NoError(t, err)
-			dstStorage, err := pgStorage.NewStorage(Target.ToStorageParams())
+			dstStorage, err := pg_provider.NewStorage(Target.ToStorageParams())
 			require.NoError(t, err)
 			tid, err := abstract.ParseTableID(tableName)
 			require.NoError(t, err)
