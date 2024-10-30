@@ -10,7 +10,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -32,16 +32,16 @@ func TestUnsopportedData(t *testing.T) {
 		t.Run(file.Name(), func(t *testing.T) {
 			src.TableNamespace = "s3_source_parquet"
 			src.TableName = file.Name()
-			src.InputFormat = server.ParsingFormatPARQUET
+			src.InputFormat = model.ParsingFormatPARQUET
 			src.PathPattern = "data/" + file.Name()
 			src.WithDefaults()
 
 			transfer := helpers.MakeTransfer(
 				helpers.TransferID,
 				src,
-				&server.MockDestination{
-					SinkerFactory: validator.New(server.IsStrictSource(src)),
-					Cleanup:       server.Drop,
+				&model.MockDestination{
+					SinkerFactory: validator.New(model.IsStrictSource(src)),
+					Cleanup:       model.Drop,
 				},
 				abstract.TransferTypeSnapshotOnly,
 			)
@@ -97,18 +97,18 @@ func TestCanonSource(t *testing.T) {
 		t.Run(file.Name(), func(t *testing.T) {
 			src.TableNamespace = "s3_source_parquet"
 			src.TableName = file.Name()
-			src.InputFormat = server.ParsingFormatPARQUET
+			src.InputFormat = model.ParsingFormatPARQUET
 			src.PathPattern = "data/" + file.Name()
 			src.WithDefaults()
 
 			transfer := helpers.MakeTransfer(
 				helpers.TransferID,
 				src,
-				&server.MockDestination{
+				&model.MockDestination{
 					SinkerFactory: func() abstract.Sinker {
 						return &rowsCutter{
 							sink: validator.New(
-								server.IsStrictSource(src),
+								model.IsStrictSource(src),
 								validator.InitDone(t),
 								validator.ValuesTypeChecker,
 								validator.Canonizator(t),
@@ -120,7 +120,7 @@ func TestCanonSource(t *testing.T) {
 							)(),
 						}
 					},
-					Cleanup: server.Drop,
+					Cleanup: model.Drop,
 				},
 				abstract.TransferTypeSnapshotOnly,
 			)

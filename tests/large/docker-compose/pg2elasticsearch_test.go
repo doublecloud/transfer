@@ -5,7 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/elastic"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -34,7 +34,7 @@ var (
 		TLSFile:          "",
 		SubNetworkID:     "",
 		SecurityGroupIDs: nil,
-		Cleanup:          server.DisabledCleanup,
+		Cleanup:          model.DisabledCleanup,
 	}
 )
 

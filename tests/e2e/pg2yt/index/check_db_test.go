@@ -11,9 +11,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -49,15 +49,15 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
-func makeSource() server.Source {
+func makeSource() model.Source {
 	src := &postgres.PgSource{
 		Hosts:    []string{"localhost"},
 		User:     os.Getenv("SOURCE_PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
 		Database: os.Getenv("SOURCE_PG_LOCAL_DATABASE"),
 		Port:     helpers.GetIntFromEnv("SOURCE_PG_LOCAL_PORT"),
 		DBTables: []string{"public.test"},
@@ -67,8 +67,8 @@ func makeSource() server.Source {
 	return src
 }
 
-func makeTarget() server.Destination {
-	target := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+func makeTarget() model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:                     "//home/cdc/pg2yt_e2e_index",
 		Cluster:                  os.Getenv("YT_PROXY"),
 		CellBundle:               "default",
@@ -99,7 +99,7 @@ func (f *fixture) exec(query string) {
 
 type fixture struct {
 	t            *testing.T
-	transfer     *server.Transfer
+	transfer     *model.Transfer
 	ytEnv        *yttest.Env
 	pgConn       *pgx.Conn
 	destroyYtEnv func()
@@ -254,7 +254,7 @@ func (f *fixture) loadAndCheckSnapshot() {
 
 func srcAndDstPorts(fxt *fixture) (int, int, error) {
 	sourcePort := fxt.transfer.Src.(*postgres.PgSource).Port
-	ytCluster := fxt.transfer.Dst.(ytcommon.YtDestinationModel).Cluster()
+	ytCluster := fxt.transfer.Dst.(yt_provider.YtDestinationModel).Cluster()
 	targetPort, err := helpers.GetPortFromStr(ytCluster)
 	if err != nil {
 		return 1, 1, err
@@ -361,7 +361,7 @@ func TestIndexPrimaryKey(t *testing.T) {
 
 func TestSkipLongStrings(t *testing.T) {
 	fixture := setup(t, map[string]interface{}{"id": markerID})
-	fixture.transfer.Dst.(*ytcommon.YtDestinationWrapper).Model.LoseDataOnError = true
+	fixture.transfer.Dst.(*yt_provider.YtDestinationWrapper).Model.LoseDataOnError = true
 
 	sourcePort, targetPort, err := srcAndDstPorts(fixture)
 	require.NoError(t, err)

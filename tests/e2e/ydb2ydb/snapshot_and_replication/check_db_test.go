@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/doublecloud/transfer/tests/helpers/serde"
@@ -68,7 +68,7 @@ func makeYdb2YdbFixPathUdf() helpers.SimpleTransformerApplyUDF {
 
 func TestSnapshotAndReplication(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{path, pathCompoundKey},
@@ -101,7 +101,7 @@ func TestSnapshotAndReplication(t *testing.T) {
 	require.NoError(t, sinker.Push([]abstract.ChangeItem{*currCompoundChangeItem}))
 
 	dst := &ydb.YdbDestination{
-		Token:    server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database: helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance: helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 	}

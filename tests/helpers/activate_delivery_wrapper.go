@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -45,17 +45,17 @@ func (q *Worker) Close(t *testing.T) {
 }
 
 // Restart replication worker with updated transfer
-func (q *Worker) Restart(t *testing.T, transfer *server.Transfer) {
+func (q *Worker) Restart(t *testing.T, transfer *model.Transfer) {
 	q.Close(t)
 	q.initLocalWorker(transfer)
 	q.worker.Start()
 }
 
-func (q *Worker) initLocalWorker(transfer *server.Transfer) {
+func (q *Worker) initLocalWorker(transfer *model.Transfer) {
 	q.worker = local.NewLocalWorker(q.cp, transfer, EmptyRegistry(), logger.LoggerWithLevel(zapcore.DebugLevel))
 }
 
-func Activate(t *testing.T, transfer *server.Transfer, onErrorCallback ...func(err error)) *Worker {
+func Activate(t *testing.T, transfer *model.Transfer, onErrorCallback ...func(err error)) *Worker {
 	if len(onErrorCallback) == 0 {
 		// append default callback checker: no error!
 		onErrorCallback = append(onErrorCallback, func(err error) {
@@ -68,12 +68,12 @@ func Activate(t *testing.T, transfer *server.Transfer, onErrorCallback ...func(e
 	return result
 }
 
-func ActivateErr(transfer *server.Transfer, onErrorCallback ...func(err error)) (*Worker, error) {
+func ActivateErr(transfer *model.Transfer, onErrorCallback ...func(err error)) (*Worker, error) {
 	cp := &fakeCpErrRepl{Coordinator: coordinator.NewStatefulFakeClient(), onErrorCallback: onErrorCallback}
 	return ActivateWithCP(transfer, cp)
 }
 
-func ActivateWithCP(transfer *server.Transfer, cp coordinator.Coordinator) (*Worker, error) {
+func ActivateWithCP(transfer *model.Transfer, cp coordinator.Coordinator) (*Worker, error) {
 	result := &Worker{
 		worker: nil,
 		cp:     cp,

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -24,10 +24,10 @@ var (
 		Hosts:     []string{"localhost"},
 		ClusterID: os.Getenv("TARGET_CLUSTER_ID"),
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      dstPort,
-		Cleanup:   server.Drop,
+		Cleanup:   model.Drop,
 	}
 )
 

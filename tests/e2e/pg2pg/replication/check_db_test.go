@@ -9,8 +9,8 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgsink "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -46,14 +46,14 @@ func TestGroup(t *testing.T) {
 }
 
 func Existence(t *testing.T) {
-	_, err := pgsink.NewStorage(Source.ToStorageParams(nil))
+	_, err := pg_provider.NewStorage(Source.ToStorageParams(nil))
 	require.NoError(t, err)
-	_, err = pgsink.NewStorage(Target.ToStorageParams())
+	_, err = pg_provider.NewStorage(Target.ToStorageParams())
 	require.NoError(t, err)
 }
 
 func Verify(t *testing.T) {
-	var transfer server.Transfer
+	var transfer model.Transfer
 	transfer.Src = &Source
 	transfer.Dst = &Target
 	transfer.Type = "INCREMENT_ONLY"
@@ -61,7 +61,7 @@ func Verify(t *testing.T) {
 	err := tasks.VerifyDelivery(transfer, logger.Log, helpers.EmptyRegistry())
 	require.NoError(t, err)
 
-	dstStorage, err := pgsink.NewStorage(Target.ToStorageParams())
+	dstStorage, err := pg_provider.NewStorage(Target.ToStorageParams())
 	require.NoError(t, err)
 
 	var result bool
@@ -89,7 +89,7 @@ func Load(t *testing.T) {
 
 	//-----------------------------------------------------------------------------------------------------------------
 
-	sink, err := pgsink.NewSink(logger.Log, helpers.TransferID, Source.ToSinkParams(), helpers.EmptyRegistry())
+	sink, err := pg_provider.NewSink(logger.Log, helpers.TransferID, Source.ToSinkParams(), helpers.EmptyRegistry())
 	require.NoError(t, err)
 
 	arrColSchema := abstract.NewTableSchema([]abstract.ColSchema{

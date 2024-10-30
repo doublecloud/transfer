@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -164,7 +164,7 @@ var YtColumns = []schema.Column{
 }
 
 func TestCanonSource(t *testing.T) {
-	Source := &yt2.YtSource{
+	Source := &yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//home/cdc/junk/test_table"},
@@ -178,9 +178,9 @@ func TestCanonSource(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
-			SinkerFactory: validator.New(server.IsStrictSource(Source), validator.Canonizator(t)),
-			Cleanup:       server.DisabledCleanup,
+		&model.MockDestination{
+			SinkerFactory: validator.New(model.IsStrictSource(Source), validator.Canonizator(t)),
+			Cleanup:       model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)
@@ -188,7 +188,7 @@ func TestCanonSource(t *testing.T) {
 }
 
 func TestCanonSourceWithDataObjects(t *testing.T) {
-	Source := &yt2.YtSource{
+	Source := &yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//home/cdc/junk/test_parent_dir"},
@@ -202,18 +202,18 @@ func TestCanonSourceWithDataObjects(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
-			SinkerFactory: validator.New(server.IsStrictSource(Source), validator.Canonizator(t)),
-			Cleanup:       server.DisabledCleanup,
+		&model.MockDestination{
+			SinkerFactory: validator.New(model.IsStrictSource(Source), validator.Canonizator(t)),
+			Cleanup:       model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"//home/cdc/junk/test_parent_dir/nested_dir/some_table"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"//home/cdc/junk/test_parent_dir/nested_dir/some_table"}}
 	_ = helpers.Activate(t, transfer)
 }
 
 func TestCanonSourceWithDirInDataObjects(t *testing.T) {
-	Source := &yt2.YtSource{
+	Source := &yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//home/cdc/junk/test_parent_dir"},
@@ -227,17 +227,17 @@ func TestCanonSourceWithDirInDataObjects(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
-			SinkerFactory: validator.New(server.IsStrictSource(Source), validator.Canonizator(t)),
-			Cleanup:       server.DisabledCleanup,
+		&model.MockDestination{
+			SinkerFactory: validator.New(model.IsStrictSource(Source), validator.Canonizator(t)),
+			Cleanup:       model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"//home/cdc/junk/test_parent_dir/nested_dir2"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"//home/cdc/junk/test_parent_dir/nested_dir2"}}
 	_ = helpers.Activate(t, transfer)
 }
 
-func createTestData(t *testing.T, Source *yt2.YtSource, path string) {
+func createTestData(t *testing.T, Source *yt_provider.YtSource, path string) {
 	ytc, err := ytclient.NewYtClientWrapper(ytclient.HTTP, nil, &yt.Config{Proxy: Source.Proxy})
 	require.NoError(t, err)
 	_ = ytc.RemoveNode(context.Background(), ypath.NewRich(path).YPath(), nil)

@@ -8,9 +8,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 )
@@ -19,7 +19,7 @@ func TestSnapshotAndReplication(t *testing.T) {
 	currTableName := "test_table"
 
 	source := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{currTableName},
@@ -29,7 +29,7 @@ func TestSnapshotAndReplication(t *testing.T) {
 		ServiceAccountID:   "",
 		ChangeFeedMode:     ydb.ChangeFeedModeUpdates,
 	}
-	target := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:                     "//home/cdc/test/pg2yt_e2e",
 		Cluster:                  os.Getenv("YT_PROXY"),
 		CellBundle:               "default",

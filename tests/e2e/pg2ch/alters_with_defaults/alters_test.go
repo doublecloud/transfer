@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
@@ -50,7 +50,7 @@ func TestAlter(t *testing.T) {
 		AddNewColumns: true,
 	}
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.__test"}}
+	transfer.DataObjects = &dp_model.DataObjects{IncludeObjects: []string{"public.__test"}}
 	var terminateErr error
 	localWorker := helpers.Activate(t, transfer, func(err error) {
 		terminateErr = err

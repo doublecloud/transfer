@@ -11,10 +11,10 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
-	ytprovider "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -26,7 +26,7 @@ import (
 
 var (
 	TransferType = abstract.TransferTypeSnapshotOnly
-	Source       = ytprovider.YtSource{
+	Source       = yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//home/cdc/junk/test_table"},
@@ -49,7 +49,7 @@ var (
 		NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified: true,
 		SSLEnabled:          false,
-		Cleanup:             server.Drop,
+		Cleanup:             dp_model.Drop,
 		Interval:            time.Duration(-1),
 	}
 )
@@ -305,7 +305,7 @@ func TestSnapshot(t *testing.T) {
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
 	transfer.Labels = `{"dt-async-ch": "on"}`
-	snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 	require.NoError(t, snapshotLoader.UploadV2(context.Background(), nil, nil))
 
 	chTarget := helpers.GetSampleableStorageByModel(t, Target)

@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -255,7 +255,7 @@ func YDBTwoTablesEqual(t *testing.T, token, database, instance, tableA, tableB s
 
 func YDBPullDataFromTable(t *testing.T, token, database, instance, table string) []abstract.ChangeItem {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(token),
+		Token:              model.SecretString(token),
 		Database:           database,
 		Instance:           instance,
 		Tables:             []string{table},
@@ -270,9 +270,9 @@ func YDBPullDataFromTable(t *testing.T, token, database, instance, table string)
 		BufferSize:         0,
 	}
 	sinkMock := &MockSink{}
-	targetMock := server.MockDestination{
+	targetMock := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkMock },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	transferMock := MakeTransfer("fake", src, &targetMock, abstract.TransferTypeSnapshotOnly)
 

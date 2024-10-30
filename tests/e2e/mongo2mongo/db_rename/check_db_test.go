@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -23,7 +23,7 @@ var (
 		Hosts:       []string{"localhost"},
 		Port:        helpers.GetIntFromEnv("MONGO_LOCAL_PORT"),
 		User:        os.Getenv("MONGO_LOCAL_USER"),
-		Password:    server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
+		Password:    model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD")),
 		Collections: []mongocommon.MongoCollection{},
 	}
 	Target = mongocommon.MongoDestination{
@@ -31,7 +31,7 @@ var (
 		Port:     helpers.GetIntFromEnv("DB0_MONGO_LOCAL_PORT"),
 		Database: "custom_target_db",
 		User:     os.Getenv("DB0_MONGO_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD")),
 	}
 )
 

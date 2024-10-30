@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -22,7 +22,7 @@ func init() {
 func TestViewReplication(t *testing.T) {
 	Source := *pgrecipe.RecipeSource(pgrecipe.WithInitDir("init_source"))
 	Target := *pgrecipe.RecipeTarget(pgrecipe.WithInitDir("init_target"))
-	Target.Cleanup = server.Truncate
+	Target.Cleanup = model.Truncate
 
 	defer func() {
 		require.NoError(t, helpers.CheckConnections(

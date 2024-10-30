@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/blank"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/json"
@@ -38,12 +38,12 @@ func TestLogs(t *testing.T) {
 	require.NoError(t, err)
 	src.ParserConfig = parserConfigMap
 	require.NoError(t, err)
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:  "e2e_test",
 		Src: src,
 		Dst: dst,
 	}
-	transfer.Transformation = &server.Transformation{
+	transfer.Transformation = &model.Transformation{
 		Transformers: &transformer.Transformers{Transformers: []transformer.Transformer{{
 			jsonparser.TransformerType: &jsonparser.Config{
 				Parser: &json.ParserConfigJSONCommon{

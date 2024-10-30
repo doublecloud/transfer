@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/storage"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -119,7 +119,7 @@ func Snapshot(t *testing.T) {
 	defer storage.Close()
 	mysqlStorage, ok := storage.(*mysql.Storage)
 	require.True(t, ok)
-	tables, err := server.FilteredTableList(storage, transfer)
+	tables, err := model.FilteredTableList(storage, transfer)
 	require.NoError(t, err)
 
 	err = mysqlStorage.BeginSnapshot(context.TODO())
@@ -129,9 +129,9 @@ func Snapshot(t *testing.T) {
 
 	operationID := "test-operation"
 
-	operationTables := []*server.OperationTablePart{}
+	operationTables := []*model.OperationTablePart{}
 	for _, table := range tables.ConvertToTableDescriptions() {
-		operationTables = append(operationTables, server.NewOperationTablePartFromDescription(operationID, &table))
+		operationTables = append(operationTables, model.NewOperationTablePartFromDescription(operationID, &table))
 	}
 
 	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), operationID, transfer, helpers.EmptyRegistry())

@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -276,7 +276,7 @@ func DropSelective(t *testing.T) {
 	require.NoError(t, err)
 	defer dstStorage.Close()
 
-	tablesAfterCleanup, err := server.FilteredTableList(dstStorage, transfer)
+	tablesAfterCleanup, err := model.FilteredTableList(dstStorage, transfer)
 	require.NoError(t, err)
 
 	_, items1Exists := tablesAfterCleanup[abstract.TableID{Namespace: "public", Name: "items_1"}]

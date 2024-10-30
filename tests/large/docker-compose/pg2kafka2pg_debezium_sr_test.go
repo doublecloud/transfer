@@ -8,11 +8,11 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/debezium"
-	kafkasink "github.com/doublecloud/transfer/pkg/providers/kafka"
+	kafka_provider "github.com/doublecloud/transfer/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -109,17 +109,17 @@ func TestPg2Kafka2PgSchemaRegistry(t *testing.T) {
 
 					PgDumpCommand: dockerPgDump,
 				}
-				kafkaTarget := kafkasink.KafkaDestination{
-					Connection: &kafkasink.KafkaConnectionOptions{
-						TLS:     server.DisabledTLS,
+				kafkaTarget := kafka_provider.KafkaDestination{
+					Connection: &kafka_provider.KafkaConnectionOptions{
+						TLS:     model.DisabledTLS,
 						Brokers: []string{kafkaBrokerAddress},
 					},
-					Auth:  &kafkasink.KafkaAuth{Enabled: false},
+					Auth:  &kafka_provider.KafkaAuth{Enabled: false},
 					Topic: dbName,
-					FormatSettings: server.SerializationFormat{
-						Name:     server.SerializationFormatDebezium,
+					FormatSettings: model.SerializationFormat{
+						Name:     model.SerializationFormatDebezium,
 						Settings: testCases[i].serializerParams,
-						BatchingSettings: &server.Batching{
+						BatchingSettings: &model.Batching{
 							Enabled:        false,
 							Interval:       0,
 							MaxChangeItems: 0,
@@ -133,15 +133,15 @@ func TestPg2Kafka2PgSchemaRegistry(t *testing.T) {
 					SchemaRegistryURL: testCases[i].parserConfigSchemaRegistry,
 				})
 				require.NoError(t, err)
-				kafkaSource := kafkasink.KafkaSource{
-					Connection: &kafkasink.KafkaConnectionOptions{
-						TLS:     server.DisabledTLS,
+				kafkaSource := kafka_provider.KafkaSource{
+					Connection: &kafka_provider.KafkaConnectionOptions{
+						TLS:     model.DisabledTLS,
 						Brokers: []string{kafkaBrokerAddress},
 					},
-					Auth:             &kafkasink.KafkaAuth{Enabled: false},
+					Auth:             &kafka_provider.KafkaAuth{Enabled: false},
 					Topic:            dbName,
 					Transformer:      nil,
-					BufferSize:       server.BytesSize(1024),
+					BufferSize:       model.BytesSize(1024),
 					SecurityGroupIDs: nil,
 					ParserConfig:     parserConfigMap,
 					IsHomo:           false,
@@ -152,7 +152,7 @@ func TestPg2Kafka2PgSchemaRegistry(t *testing.T) {
 					Password: "123",
 					Port:     postgresPort,
 					Hosts:    []string{"localhost"},
-					Cleanup:  server.Drop,
+					Cleanup:  model.Drop,
 				}
 				pg2kafka := helpers.MakeTransfer(dbName+"_pg_kafka", &pgSource, &kafkaTarget, abstract.TransferTypeSnapshotOnly)
 				kafka2pg := helpers.MakeTransfer(dbName+"_kafka_pg", &kafkaSource, &pgTarget, abstract.TransferTypeIncrementOnly)

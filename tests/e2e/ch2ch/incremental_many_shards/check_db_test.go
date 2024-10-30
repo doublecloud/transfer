@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
@@ -38,7 +38,7 @@ func init() {
 		{Name: "_", Hosts: []string{"localhost"}},
 		{Name: "[", Hosts: []string{"localhost"}},
 	}
-	Target.Cleanup = server.DisabledCleanup
+	Target.Cleanup = dp_model.DisabledCleanup
 }
 
 func TestIncrementalSnapshot(t *testing.T) {

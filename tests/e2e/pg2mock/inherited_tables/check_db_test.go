@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -95,9 +95,9 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	sinkerNoCollapse := &helpers.MockSink{}
 	sinkerNoCollapseMutex := sync.Mutex{}
-	targetNoCollapse := server.MockDestination{
+	targetNoCollapse := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkerNoCollapse },
-		Cleanup:       server.Drop,
+		Cleanup:       model.Drop,
 	}
 	transferNoCollapse := helpers.MakeTransfer("fake_no_collapse", &SourceNoCollapse, &targetNoCollapse, abstract.TransferTypeSnapshotAndIncrement)
 
@@ -138,9 +138,9 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	sinkerCollapse := &helpers.MockSink{}
 	sinkerCollapseMutex := sync.Mutex{}
-	targetCollapse := server.MockDestination{
+	targetCollapse := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkerCollapse },
-		Cleanup:       server.Drop,
+		Cleanup:       model.Drop,
 	}
 	transferCollapse := helpers.MakeTransfer("fake_collapse", &SourceCollapse, &targetCollapse, abstract.TransferTypeSnapshotAndIncrement)
 

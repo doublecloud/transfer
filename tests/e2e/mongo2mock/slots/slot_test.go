@@ -9,7 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/randutil"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
@@ -41,19 +41,19 @@ func getSource(collection ...mongo.MongoCollection) *mongo.MongoSource {
 		Hosts:       []string{"localhost"},
 		Port:        port,
 		User:        userName,
-		Password:    server.SecretString(userPassword),
+		Password:    model.SecretString(userPassword),
 		Collections: collection,
 	}
 }
 
-func getTransfer(source *mongo.MongoSource) server.Transfer {
-	tr := server.Transfer{
+func getTransfer(source *mongo.MongoSource) model.Transfer {
+	tr := model.Transfer{
 		ID:   transferSlotID,
 		Type: abstract.TransferTypeSnapshotAndIncrement,
 		Src:  source,
-		Dst: &server.MockDestination{
+		Dst: &model.MockDestination{
 			SinkerFactory: func() abstract.Sinker { return new(mockSinker) },
-			Cleanup:       server.Drop,
+			Cleanup:       model.Drop,
 		},
 	}
 	tr.FillDependentFields()

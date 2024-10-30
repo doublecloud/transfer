@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
@@ -88,7 +88,7 @@ func Snapshot(t *testing.T) {
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, Source, Target, abstract.TransferTypeSnapshotAndIncrement)
 	transfer.TypeSystemVersion = 7
-	transfer.Transformation = &server.Transformation{Transformers: &transformer.Transformers{
+	transfer.Transformation = &dp_model.Transformation{Transformers: &transformer.Transformers{
 		DebugMode: false,
 		Transformers: []transformer.Transformer{{
 			clickhouse.Type: clickhouse.Config{

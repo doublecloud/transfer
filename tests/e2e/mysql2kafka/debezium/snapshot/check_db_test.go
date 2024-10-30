@@ -9,8 +9,8 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	kafka2 "github.com/doublecloud/transfer/pkg/providers/kafka"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	kafka_provider "github.com/doublecloud/transfer/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -39,10 +39,10 @@ func TestSnapshot(t *testing.T) {
 	//------------------------------------------------------------------------------
 	//prepare dst
 
-	dst, err := kafka2.DestinationRecipe()
+	dst, err := kafka_provider.DestinationRecipe()
 	require.NoError(t, err)
 	dst.Topic = "dbserver1"
-	dst.FormatSettings = server.SerializationFormat{Name: server.SerializationFormatDebezium}
+	dst.FormatSettings = model.SerializationFormat{Name: model.SerializationFormatDebezium}
 	//------------------------------------------------------------------------------
 	// prepare additional transfer: from dst to mock
 
@@ -53,11 +53,11 @@ func TestSnapshot(t *testing.T) {
 			result = append(result, in...)
 		},
 	}
-	mockTarget := server.MockDestination{
+	mockTarget := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return mockSink },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
-	additionalTransfer := helpers.MakeTransfer("additional", &kafka2.KafkaSource{
+	additionalTransfer := helpers.MakeTransfer("additional", &kafka_provider.KafkaSource{
 		Connection:  dst.Connection,
 		Auth:        dst.Auth,
 		GroupTopics: []string{dst.Topic},
@@ -92,7 +92,7 @@ func TestSnapshot(t *testing.T) {
 
 	for {
 		if len(result) == 1 {
-			canonVal := eraseMeta(string(kafka2.GetKafkaRawMessageData(&result[0])))
+			canonVal := eraseMeta(string(kafka_provider.GetKafkaRawMessageData(&result[0])))
 			canon.SaveJSON(t, canonVal)
 			break
 		}

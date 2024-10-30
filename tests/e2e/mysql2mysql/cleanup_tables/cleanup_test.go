@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/sink"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -52,7 +52,7 @@ func DropAll(t *testing.T) {
 	sink, err := sink.MakeAsyncSink(transfer, logger.Log, helpers.EmptyRegistry(), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
 	require.NoError(t, err)
 
-	err = cleanup.CleanupTables(sink, tables, server.Drop)
+	err = cleanup.CleanupTables(sink, tables, model.Drop)
 	require.NoError(t, err)
 }
 
@@ -66,13 +66,13 @@ func DropFilter(t *testing.T) {
 	sink, err := sink.MakeAsyncSink(transfer, logger.Log, helpers.EmptyRegistry(), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
 	require.NoError(t, err)
 
-	err = cleanup.CleanupTables(sink, tables, server.Drop)
+	err = cleanup.CleanupTables(sink, tables, model.Drop)
 	require.NoError(t, err)
 }
 
 func TruncateAll(t *testing.T) {
 	dstCopy := Target
-	dstCopy.Cleanup = server.Truncate
+	dstCopy.Cleanup = model.Truncate
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &dstCopy, abstract.TransferTypeSnapshotAndIncrement)
 
 	tables, err := tasks.ObtainAllSrcTables(transfer, helpers.EmptyRegistry())
@@ -82,6 +82,6 @@ func TruncateAll(t *testing.T) {
 	sink, err := sink.MakeAsyncSink(transfer, logger.Log, helpers.EmptyRegistry(), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
 	require.NoError(t, err)
 
-	err = cleanup.CleanupTables(sink, tables, server.Truncate)
+	err = cleanup.CleanupTables(sink, tables, model.Truncate)
 	require.NoError(t, err)
 }

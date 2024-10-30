@@ -18,7 +18,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/mongo"
@@ -35,7 +35,7 @@ import (
 
 // ConductSequenceWithAllSubsequencesTest is the method which MUST be called by concrete sequence checking tests.
 // It automatically conducts a test for all subsequences of the given sequence test and canonizes the output.
-func ConductSequenceWithAllSubsequencesTest(t *testing.T, sequenceCase dt_canon.CanonizedSequenceCase, transfer *server.Transfer, sink abstract.Sinker, sinkAsSource server.Source) {
+func ConductSequenceWithAllSubsequencesTest(t *testing.T, sequenceCase dt_canon.CanonizedSequenceCase, transfer *dp_model.Transfer, sink abstract.Sinker, sinkAsSource dp_model.Source) {
 	snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, solomon.NewRegistry(nil).WithTags(map[string]string{"ts": time.Now().String()}))
 	require.NoError(t, snapshotLoader.CleanupSinker(sequenceCase.Tables))
 
@@ -50,12 +50,12 @@ func ConductSequenceWithAllSubsequencesTest(t *testing.T, sequenceCase dt_canon.
 	}
 }
 
-func Dump(t *testing.T, source server.Source) {
+func Dump(t *testing.T, source dp_model.Source) {
 	logger.Log.Info(dumpToString(t, source))
 	canon.SaveJSON(t, dumpToString(t, source))
 }
 
-func dumpToString(t *testing.T, source server.Source) string {
+func dumpToString(t *testing.T, source dp_model.Source) string {
 	switch src := source.(type) {
 	case *model.ChSource:
 		return FromClickhouse(t, src, false)

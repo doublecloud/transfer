@@ -15,7 +15,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -61,7 +61,7 @@ func TestMain(m *testing.M) {
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -71,7 +71,7 @@ func TestGroup(t *testing.T) {
 		ServiceAccountID:   "",
 	}
 	dst := &s3_provider.S3Destination{
-		OutputFormat:     server.ParsingFormatJSON,
+		OutputFormat:     model.ParsingFormatJSON,
 		BufferSize:       1 * 1024 * 1024,
 		BufferInterval:   time.Second * 5,
 		Bucket:           testBucket,

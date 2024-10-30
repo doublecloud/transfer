@@ -8,9 +8,9 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
@@ -19,20 +19,20 @@ import (
 
 var (
 	srcPort = helpers.GetIntFromEnv("PG_LOCAL_PORT")
-	Source  = pgcommon.PgSource{
+	Source  = pg_provider.PgSource{
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      srcPort,
 	}
-	Target = ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+	Target = yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/test/pg2yt_e2e",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
 		PrimaryMedium: "default",
-		Cleanup:       server.Truncate,
+		Cleanup:       model.Truncate,
 	})
 )
 
@@ -42,7 +42,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -65,14 +65,14 @@ func TestGroup(t *testing.T) {
 
 func EmptyTableList(t *testing.T) {
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotAndIncrement)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.__test"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"public.__test"}}
 
 	localWorker := helpers.Activate(t, transfer)
 	defer localWorker.Close(t)
 
 	//------------------------------------------------------------------------------
 
-	conn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 
 	_, err = conn.Exec(context.Background(), "insert into __test (str, id, da, i) values ('qqq', 111, '1999-09-16', 1)")
@@ -109,14 +109,14 @@ func EmptyTableList(t *testing.T) {
 func NotEmptyTableList(t *testing.T) {
 	Source.DBTables = []string{"public.__test", "public.__not_included_test"}
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotAndIncrement)
-	transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{"public.__test"}}
+	transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{"public.__test"}}
 
 	localWorker := helpers.Activate(t, transfer)
 	defer localWorker.Close(t)
 
 	//------------------------------------------------------------------------------
 
-	conn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 
 	_, err = conn.Exec(context.Background(), "insert into __test (str, id, da, i) values ('qqq', 111, '1999-09-16', 1)")

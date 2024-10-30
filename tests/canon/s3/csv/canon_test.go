@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/s3"
 	"github.com/doublecloud/transfer/tests/canon/validator"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -33,7 +33,7 @@ func TestCanonSource(t *testing.T) {
 	src.Format.CSVSetting = new(s3.CSVSetting)
 	src.Format.CSVSetting.BlockSize = 1 * 1024 * 1024
 	src.Format.CSVSetting.QuoteChar = "\""
-	src.InputFormat = server.ParsingFormatCSV
+	src.InputFormat = model.ParsingFormatCSV
 	src.WithDefaults()
 	src.HideSystemCols = true
 	src.OutputSchema = []abstract.ColSchema{
@@ -167,16 +167,16 @@ func TestCanonSource(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		src,
-		&server.MockDestination{
+		&model.MockDestination{
 			SinkerFactory: validator.New(
-				server.IsStrictSource(src),
+				model.IsStrictSource(src),
 				validator.InitDone(t),
 				validator.Referencer(t),
 				validator.TypesystemChecker(s3.ProviderType, func(colSchema abstract.ColSchema) string {
 					return colSchema.OriginalType
 				}),
 			),
-			Cleanup: server.Drop,
+			Cleanup: model.Drop,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)
@@ -205,7 +205,7 @@ func TestNativeS3WithProvidedSchemaAndSystemCols(t *testing.T) {
 	src.TableName = "types"
 	src.Format.CSVSetting = new(s3.CSVSetting)
 	src.Format.CSVSetting.QuoteChar = "\""
-	src.InputFormat = server.ParsingFormatCSV
+	src.InputFormat = model.ParsingFormatCSV
 	src.WithDefaults()
 	src.Format.CSVSetting.BlockSize = 1 * 1024 * 1024
 
@@ -234,12 +234,12 @@ func TestNativeS3WithProvidedSchemaAndSystemCols(t *testing.T) {
 		},
 	}
 
-	transfer := helpers.MakeTransfer(helpers.TransferID, src, &server.MockDestination{
+	transfer := helpers.MakeTransfer(helpers.TransferID, src, &model.MockDestination{
 		SinkerFactory: validator.New(
-			server.IsStrictSource(src),
+			model.IsStrictSource(src),
 			validator.Canonizator(t, storeItems),
 		),
-		Cleanup: server.DisabledCleanup,
+		Cleanup: model.DisabledCleanup,
 	}, abstract.TransferTypeSnapshotOnly)
 
 	helpers.Activate(t, transfer)
@@ -274,7 +274,7 @@ func TestNativeS3MissingColumnsAreFilled(t *testing.T) {
 	src.TableName = "types"
 	src.Format.CSVSetting = new(s3.CSVSetting)
 
-	src.InputFormat = server.ParsingFormatCSV
+	src.InputFormat = model.ParsingFormatCSV
 	src.WithDefaults()
 	src.Format.CSVSetting.BlockSize = 1 * 1024 * 1024
 	src.Format.CSVSetting.QuoteChar = "\""
@@ -318,12 +318,12 @@ func TestNativeS3MissingColumnsAreFilled(t *testing.T) {
 		},
 	}
 
-	transfer := helpers.MakeTransfer(helpers.TransferID, src, &server.MockDestination{
+	transfer := helpers.MakeTransfer(helpers.TransferID, src, &model.MockDestination{
 		SinkerFactory: validator.New(
-			server.IsStrictSource(src),
+			model.IsStrictSource(src),
 			validator.Canonizator(t, storeItems),
 		),
-		Cleanup: server.DisabledCleanup,
+		Cleanup: model.DisabledCleanup,
 	}, abstract.TransferTypeSnapshotOnly)
 
 	helpers.Activate(t, transfer)

@@ -10,8 +10,8 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	kafka2 "github.com/doublecloud/transfer/pkg/providers/kafka"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
+	kafka_provider "github.com/doublecloud/transfer/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -53,10 +53,10 @@ func TestReplication(t *testing.T) {
 	//------------------------------------------------------------------------------
 	//prepare dst
 
-	dst, err := kafka2.DestinationRecipe()
+	dst, err := kafka_provider.DestinationRecipe()
 	require.NoError(t, err)
 	dst.Topic = "dbserver1"
-	dst.FormatSettings = server.SerializationFormat{Name: server.SerializationFormatDebezium}
+	dst.FormatSettings = dp_model.SerializationFormat{Name: dp_model.SerializationFormatDebezium}
 
 	// prepare additional transfer: from dst to mock
 
@@ -71,11 +71,11 @@ func TestReplication(t *testing.T) {
 			}
 		},
 	}
-	mockTarget := server.MockDestination{
+	mockTarget := dp_model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return mockSink },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       dp_model.DisabledCleanup,
 	}
-	additionalTransfer := helpers.MakeTransfer("additional", &kafka2.KafkaSource{
+	additionalTransfer := helpers.MakeTransfer("additional", &kafka_provider.KafkaSource{
 		Connection:  dst.Connection,
 		Auth:        dst.Auth,
 		GroupTopics: []string{dst.Topic},
@@ -133,7 +133,7 @@ func TestReplication(t *testing.T) {
 		if len(result) == 6 {
 			canonData := make([]string, 6)
 			for i := 0; i < len(result); i += 1 {
-				canonVal := eraseMeta(string(kafka2.GetKafkaRawMessageData(&result[0])))
+				canonVal := eraseMeta(string(kafka_provider.GetKafkaRawMessageData(&result[0])))
 				canonData = append(canonData, canonVal)
 			}
 			canon.SaveJSON(t, canonData)

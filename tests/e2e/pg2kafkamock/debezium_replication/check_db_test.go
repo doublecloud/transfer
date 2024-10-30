@@ -10,11 +10,11 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/debezium/testutil"
-	kafka2 "github.com/doublecloud/transfer/pkg/providers/kafka"
+	kafka_provider "github.com/doublecloud/transfer/pkg/providers/kafka"
 	"github.com/doublecloud/transfer/pkg/providers/kafka/writer"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	serializer "github.com/doublecloud/transfer/pkg/serializer/queue"
@@ -27,7 +27,7 @@ var (
 	Source = pgcommon.PgSource{
 		Hosts:    []string{"localhost"},
 		User:     os.Getenv("PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database: os.Getenv("PG_LOCAL_DATABASE"),
 		Port:     helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		SlotID:   "testslot",
@@ -284,20 +284,20 @@ func TestReplication(t *testing.T) {
 
 	tt = t
 
-	dst := &kafka2.KafkaDestination{
-		Connection: &kafka2.KafkaConnectionOptions{
-			TLS:     server.DefaultTLS,
+	dst := &kafka_provider.KafkaDestination{
+		Connection: &kafka_provider.KafkaConnectionOptions{
+			TLS:     model.DefaultTLS,
 			Brokers: []string{"my_broker_0"},
 		},
-		Auth: &kafka2.KafkaAuth{
+		Auth: &kafka_provider.KafkaAuth{
 			Enabled:   true,
 			Mechanism: "SHA-512",
 			User:      "user1",
 			Password:  "qwert12345",
 		},
 		TopicPrefix: "fullfillment",
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatDebezium,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatDebezium,
 			Settings: map[string]string{
 				debeziumparameters.DatabaseDBName:   "pguser",
 				debeziumparameters.AddOriginalTypes: "false",
@@ -321,7 +321,7 @@ func TestReplication(t *testing.T) {
 	factory := writer.NewMockAbstractWriterFactory(ctrl)
 	factory.EXPECT().BuildWriter([]string{"my_broker_0"}, gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(currWriter)
 
-	sink, err := kafka2.NewSinkImpl(
+	sink, err := kafka_provider.NewSinkImpl(
 		dst,
 		solomon.NewRegistry(nil).WithTags(map[string]string{"ts": time.Now().String()}),
 		logger.Log,
@@ -330,7 +330,7 @@ func TestReplication(t *testing.T) {
 	)
 	require.NoError(t, err)
 
-	target := server.MockDestination{SinkerFactory: func() abstract.Sinker { return sink }}
+	target := model.MockDestination{SinkerFactory: func() abstract.Sinker { return sink }}
 	transfer := helpers.MakeTransfer("fake", &Source, &target, abstract.TransferTypeIncrementOnly)
 
 	worker := helpers.Activate(t, transfer)

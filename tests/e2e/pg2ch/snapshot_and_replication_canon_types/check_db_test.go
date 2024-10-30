@@ -9,7 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
@@ -55,7 +55,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 				Target,
 				abstract.TransferTypeSnapshotAndIncrement,
 			)
-			transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{tableName}}
+			transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{tableName}}
 			worker := helpers.Activate(t, transfer)
 
 			conn, err = pgcommon.MakeConnPoolFromSrc(Source, logger.Log)

@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -31,7 +31,7 @@ var (
 		Password: "123",
 		Database: "postgres",
 
-		Cleanup:            server.Drop,
+		Cleanup:            model.Drop,
 		DisableSQLFallback: true,
 	}
 

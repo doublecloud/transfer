@@ -12,8 +12,8 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -56,16 +56,16 @@ func makeTestFunction(usePolling bool) func(t *testing.T) {
 		sourceCopy.SlotID = slotID
 		sourceCopy.KeeperSchema = schema
 		sourceCopy.DBTables = []string{fmt.Sprintf("%s.__test", schema)}
-		transfer := server.Transfer{
+		transfer := model.Transfer{
 			ID:  "test_id",
 			Src: &sourceCopy,
 			Dst: &Target,
 		}
 
-		srcConn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+		srcConn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 		require.NoError(t, err)
 		defer srcConn.Close()
-		dstConn, err := pgcommon.MakeConnPoolFromDst(&Target, logger.Log)
+		dstConn, err := pg_provider.MakeConnPoolFromDst(&Target, logger.Log)
 		require.NoError(t, err)
 		defer dstConn.Close()
 

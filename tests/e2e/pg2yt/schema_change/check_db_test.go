@@ -9,9 +9,9 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
 	pgx "github.com/jackc/pgx/v4"
@@ -34,11 +34,11 @@ var (
 	targetCluster = os.Getenv("YT_PROXY")
 )
 
-func makeSource(tableName, slotID string) server.Source {
+func makeSource(tableName, slotID string) model.Source {
 	src := &postgres.PgSource{
 		Hosts:    []string{"localhost"},
 		User:     os.Getenv("SOURCE_PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("SOURCE_PG_LOCAL_PASSWORD")),
 		Database: os.Getenv("SOURCE_PG_LOCAL_DATABASE"),
 		Port:     sourcePort,
 		DBTables: []string{tableName},
@@ -48,8 +48,8 @@ func makeSource(tableName, slotID string) server.Source {
 	return src
 }
 
-func makeTarget(namespace string) server.Destination {
-	target := yt2.NewYtDestinationV1(yt2.YtDestination{
+func makeTarget(namespace string) model.Destination {
+	target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          fmt.Sprintf("//home/cdc/%s/pg2yt_e2e_schema_change", namespace),
 		Cluster:       targetCluster,
 		CellBundle:    "default",
@@ -84,9 +84,9 @@ func TestSchemaChange(t *testing.T) {
 	defer cancel()
 
 	src := makeSource("public.test1", "slot1")
-	dst := makeTarget("test1").(yt2.YtDestinationModel)
+	dst := makeTarget("test1").(yt_provider.YtDestinationModel)
 
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:  "test1",
 		Src: src,
 		Dst: dst,
@@ -145,7 +145,7 @@ func TestSchemaChange(t *testing.T) {
 	err = r.Close()
 	require.NoError(t, err)
 
-	transfer = &server.Transfer{
+	transfer = &model.Transfer{
 		ID:  "test1",
 		Src: makeSource("public.test1", "slot1"),
 		Dst: makeTarget("test1"),
@@ -235,7 +235,7 @@ func TestNoSchemaNarrowingAttempted(t *testing.T) {
 	src := makeSource("public.test2", "slot2")
 	dst := makeTarget("test2")
 
-	transfer := &server.Transfer{
+	transfer := &model.Transfer{
 		ID:  "test2",
 		Src: src,
 		Dst: dst,
@@ -258,5 +258,5 @@ func TestNoSchemaNarrowingAttempted(t *testing.T) {
 	_, err = conn.Exec(context.Background(), `INSERT INTO test2 VALUES (2, 'lel')`)
 	require.NoError(t, err)
 
-	require.NoError(t, helpers.WaitEqualRowsCount(t, "public", "test2", helpers.GetSampleableStorageByModel(t, src), helpers.GetSampleableStorageByModel(t, dst.(yt2.YtDestinationModel).LegacyModel()), 60*time.Second))
+	require.NoError(t, helpers.WaitEqualRowsCount(t, "public", "test2", helpers.GetSampleableStorageByModel(t, src), helpers.GetSampleableStorageByModel(t, dst.(yt_provider.YtDestinationModel).LegacyModel()), 60*time.Second))
 }

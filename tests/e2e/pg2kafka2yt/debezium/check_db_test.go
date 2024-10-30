@@ -8,7 +8,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/debezium"
 	"github.com/doublecloud/transfer/pkg/providers/kafka"
@@ -23,7 +23,7 @@ var (
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		DBTables:  []string{"public.__test"},
@@ -64,13 +64,13 @@ func TestReplication(t *testing.T) {
 
 	kafkaDst := &kafka.KafkaDestination{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     server.DisabledTLS,
+			TLS:     model.DisabledTLS,
 			Brokers: []string{brokers},
 		},
 		Auth:  &kafka.KafkaAuth{Enabled: false},
 		Topic: topicName,
-		FormatSettings: server.SerializationFormat{
-			Name: server.SerializationFormatAuto,
+		FormatSettings: model.SerializationFormat{
+			Name: model.SerializationFormatAuto,
 		},
 	}
 	kafkaDst.WithDefaults()
@@ -88,13 +88,13 @@ func TestReplication(t *testing.T) {
 
 	kafkaSrc := &kafka.KafkaSource{
 		Connection: &kafka.KafkaConnectionOptions{
-			TLS:     server.DisabledTLS,
+			TLS:     model.DisabledTLS,
 			Brokers: []string{brokers},
 		},
 		Auth:             &kafka.KafkaAuth{Enabled: false},
 		Topic:            topicName,
 		Transformer:      nil,
-		BufferSize:       server.BytesSize(1024),
+		BufferSize:       model.BytesSize(1024),
 		SecurityGroupIDs: nil,
 		ParserConfig:     parserConfigMap,
 		IsHomo:           false,

@@ -8,9 +8,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -37,20 +37,20 @@ func TestYTStatic(t *testing.T) {
 	src := &postgres.PgSource{
 		Hosts:    []string{"localhost"},
 		User:     os.Getenv("PG_LOCAL_USER"),
-		Password: server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database: os.Getenv("PG_LOCAL_DATABASE"),
 		Port:     helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 	}
 	src.WithDefaults()
 
-	dstModel := &yt2.YtDestination{
+	dstModel := &yt_provider.YtDestination{
 		Path:          "//home/cdc/tests/e2e/pg2yt/yt_static",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
 		PrimaryMedium: "default",
 		Static:        true,
 	}
-	dst := &yt2.YtDestinationWrapper{Model: dstModel}
+	dst := &yt_provider.YtDestinationWrapper{Model: dstModel}
 	dst.WithDefaults()
 
 	transfer := helpers.MakeTransfer("upload_pg_yt_static", src, dst, abstract.TransferTypeSnapshotOnly)
@@ -85,7 +85,7 @@ SELECT id
 FROM generate_series(101, 200) AS t(id);
 `)
 		require.NoError(t, err)
-		dstModel.Cleanup = server.DisabledCleanup
+		dstModel.Cleanup = model.DisabledCleanup
 		tables := []abstract.TableDescription{{Name: "test_table", Schema: "public", Filter: "id >= 101 AND id <= 200"}}
 		snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewStatefulFakeClient(), "test-operation2", transfer, helpers.EmptyRegistry())
 		require.NoError(t, snapshotLoader.UploadTables(ctx, tables, true))
@@ -112,7 +112,7 @@ DELETE FROM test_table
 WHERE id >= 101 AND id <= 200;
 `)
 		require.NoError(t, err)
-		dstModel.Cleanup = server.Drop
+		dstModel.Cleanup = model.Drop
 		tables := []abstract.TableDescription{{Name: "test_table", Schema: "public"}}
 		snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewStatefulFakeClient(), "test-operation3", transfer, helpers.EmptyRegistry())
 		require.NoError(t, snapshotLoader.UploadTables(ctx, tables, true))

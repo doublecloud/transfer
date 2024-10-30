@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	jsonparser "github.com/doublecloud/transfer/pkg/parsers/registry/json"
 	kafkasink "github.com/doublecloud/transfer/pkg/providers/kafka"
@@ -26,13 +26,13 @@ var (
 
 	source = kafkasink.KafkaSource{
 		Connection: &kafkasink.KafkaConnectionOptions{
-			TLS:     server.DisabledTLS,
+			TLS:     model.DisabledTLS,
 			Brokers: []string{os.Getenv("KAFKA_RECIPE_BROKER_LIST")},
 		},
 		Auth:             &kafkasink.KafkaAuth{Enabled: false},
 		Topic:            topicName,
 		Transformer:      nil,
-		BufferSize:       server.BytesSize(1024),
+		BufferSize:       model.BytesSize(1024),
 		SecurityGroupIDs: nil,
 		ParserConfig:     nil,
 		IsHomo:           false,
@@ -92,9 +92,9 @@ func TestReplication(t *testing.T) {
 			Connection: source.Connection,
 			Auth:       source.Auth,
 			Topic:      source.Topic,
-			FormatSettings: server.SerializationFormat{
-				Name: server.SerializationFormatJSON,
-				BatchingSettings: &server.Batching{
+			FormatSettings: model.SerializationFormat{
+				Name: model.SerializationFormatJSON,
+				BatchingSettings: &model.Batching{
 					Enabled:        false,
 					Interval:       0,
 					MaxChangeItems: 0,

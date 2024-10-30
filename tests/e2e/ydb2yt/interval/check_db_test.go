@@ -11,9 +11,9 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytstorage "github.com/doublecloud/transfer/pkg/providers/yt/storage"
 	"github.com/doublecloud/transfer/pkg/xtls"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -75,17 +75,17 @@ func execQuery(t *testing.T, ydbConn *ydb3.Driver, query string) {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:    server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database: helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance: helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 	}
-	dst := ytcommon.NewYtDestinationV1(ytcommon.YtDestination{
+	dst := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
 		Path:          "//home/cdc/test/pg2yt_e2e",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CellBundle:    "default",
@@ -135,7 +135,7 @@ func TestGroup(t *testing.T) {
 	})
 
 	t.Run("canon", func(t *testing.T) {
-		ytStorageParams := ytcommon.YtStorageParams{
+		ytStorageParams := yt_provider.YtStorageParams{
 			Token:   dst.Token(),
 			Cluster: os.Getenv("YT_PROXY"),
 			Path:    dst.Path(),

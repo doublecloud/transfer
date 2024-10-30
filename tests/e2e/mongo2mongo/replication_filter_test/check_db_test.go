@@ -14,7 +14,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongodataagent "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -33,7 +33,7 @@ func sourceFromConfig() (*mongodataagent.MongoSource, error) {
 	ret.Hosts = []string{"localhost"}
 	ret.Port = srcPort
 	ret.User = os.Getenv("MONGO_LOCAL_USER")
-	ret.Password = server.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD"))
+	ret.Password = model.SecretString(os.Getenv("MONGO_LOCAL_PASSWORD"))
 	ret.WithDefaults()
 	return ret, nil
 }
@@ -47,15 +47,15 @@ func targetFromConfig() (*mongodataagent.MongoDestination, error) {
 	ret.Hosts = []string{"localhost"}
 	ret.Port = trgPort
 	ret.User = os.Getenv("DB0_MONGO_LOCAL_USER")
-	ret.Password = server.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD"))
-	ret.Cleanup = server.Drop
+	ret.Password = model.SecretString(os.Getenv("DB0_MONGO_LOCAL_PASSWORD"))
+	ret.Cleanup = model.Drop
 	return ret, nil
 }
 
-func makeTransfer(id string, source *mongodataagent.MongoSource, target *mongodataagent.MongoDestination) *server.Transfer {
+func makeTransfer(id string, source *mongodataagent.MongoSource, target *mongodataagent.MongoDestination) *model.Transfer {
 	source.SlotID = id // set slot ID in order to get valid cluster time on ActivateDelivery
 
-	transfer := new(server.Transfer)
+	transfer := new(model.Transfer)
 	transfer.Type = abstract.TransferTypeSnapshotAndIncrement
 	transfer.Src = source
 	transfer.Dst = target

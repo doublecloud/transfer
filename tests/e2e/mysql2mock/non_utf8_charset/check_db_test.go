@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mysql_storage "github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -91,10 +91,10 @@ func TestNonUtf8Charset(t *testing.T) {
 	require.True(t, called)
 
 	var sinker mockSinker
-	target := server.MockDestination{SinkerFactory: func() abstract.Sinker {
+	target := model.MockDestination{SinkerFactory: func() abstract.Sinker {
 		return &sinker
 	}}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test",
 		Src: source,
 		Dst: &target,

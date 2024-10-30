@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/sink"
@@ -22,7 +22,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func constructSinkCleanupAndPush(t *testing.T, transfer *server.Transfer, items []abstract.ChangeItem, tables abstract.TableMap) {
+func constructSinkCleanupAndPush(t *testing.T, transfer *model.Transfer, items []abstract.ChangeItem, tables abstract.TableMap) {
 	as, err := sink.MakeAsyncSink(transfer, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()), coordinator.NewFakeClient(), middlewares.MakeConfig(middlewares.WithNoData))
 	require.NoError(t, err)
 	defer func() { require.NoError(t, as.Close()) }()
@@ -40,7 +40,7 @@ func constructSinkCleanupAndPush(t *testing.T, transfer *server.Transfer, items 
 // The final state of the target database is obtained as if it was a snapshot source; that is why a sink-as-source object is required.
 //
 // This method conducts a cleanup of the target database automatically before each test. Note that transfer's target endpoint should specify cleanup policy DROP or TRUNCATE for this feature to work.
-func ReferenceTestFn(transfer *server.Transfer, sinkAsSource server.Source, items []abstract.ChangeItem) func(*testing.T) {
+func ReferenceTestFn(transfer *model.Transfer, sinkAsSource model.Source, items []abstract.ChangeItem) func(*testing.T) {
 	tables := make(abstract.TableMap)
 	for _, item := range items {
 		if _, ok := tables[item.TableID()]; ok {

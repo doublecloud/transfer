@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mysql_storage "github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -86,10 +86,10 @@ func TestTimeZoneSnapshotAndReplication(t *testing.T) {
 	require.NoError(t, err)
 
 	var sinker mockSinker
-	target := server.MockDestination{SinkerFactory: func() abstract.Sinker {
+	target := model.MockDestination{SinkerFactory: func() abstract.Sinker {
 		return &sinker
 	}}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:  "test",
 		Src: source,
 		Dst: &target,

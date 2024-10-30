@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	ytprovider "github.com/doublecloud/transfer/pkg/providers/yt"
@@ -43,7 +43,7 @@ var (
 		NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified: true,
 		SSLEnabled:          false,
-		Cleanup:             server.DisabledCleanup,
+		Cleanup:             dp_model.DisabledCleanup,
 	}
 )
 

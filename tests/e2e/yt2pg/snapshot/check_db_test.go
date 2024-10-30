@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"github.com/doublecloud/transfer/tests/helpers"
@@ -27,7 +27,7 @@ import (
 
 var (
 	TransferType = abstract.TransferTypeSnapshotOnly
-	Source       = yt2.YtSource{
+	Source       = yt_provider.YtSource{
 		Cluster:          os.Getenv("YT_PROXY"),
 		Proxy:            os.Getenv("YT_PROXY"),
 		Paths:            []string{"//home/cdc/junk/test_table"},
@@ -39,10 +39,10 @@ var (
 		Hosts:     []string{"localhost"},
 		ClusterID: os.Getenv("TARGET_CLUSTER_ID"),
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      dstPort,
-		Cleanup:   server.Truncate,
+		Cleanup:   model.Truncate,
 	}
 )
 
@@ -242,7 +242,7 @@ func doSnapshotForTSV(t *testing.T, typeSystemVersion int) {
 		if typeSystemVersion != 0 {
 			transfer.TypeSystemVersion = typeSystemVersion
 		}
-		snapshotLoader := tasks.NewSnapshotLoader(client2.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
+		snapshotLoader := tasks.NewSnapshotLoader(coordinator.NewFakeClient(), "test-operation", transfer, helpers.EmptyRegistry())
 		require.NoError(t, snapshotLoader.UploadV2(context.Background(), nil, nil))
 
 		pgTarget := helpers.GetSampleableStorageByModel(t, Target)

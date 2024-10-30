@@ -11,7 +11,7 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/canon/validator"
@@ -30,7 +30,7 @@ func TestCanonSource(t *testing.T) {
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      srcPort,
 		SlotID:    "test_slot_id",
@@ -55,9 +55,9 @@ func TestCanonSource(t *testing.T) {
 			transfer := helpers.MakeTransfer(
 				tableName,
 				Source,
-				&server.MockDestination{
+				&model.MockDestination{
 					SinkerFactory: validator.New(
-						server.IsStrictSource(Source),
+						model.IsStrictSource(Source),
 						validator.InitDone(t),
 						validator.Canonizator(t),
 						validator.TypesystemChecker(postgres.ProviderType, func(colSchema abstract.ColSchema) string {
@@ -65,11 +65,11 @@ func TestCanonSource(t *testing.T) {
 						}),
 						counterSinkFactory,
 					),
-					Cleanup: server.DisabledCleanup,
+					Cleanup: model.DisabledCleanup,
 				},
 				abstract.TransferTypeSnapshotAndIncrement,
 			)
-			transfer.DataObjects = &server.DataObjects{IncludeObjects: []string{tableName}}
+			transfer.DataObjects = &model.DataObjects{IncludeObjects: []string{tableName}}
 			worker := helpers.Activate(t, transfer)
 
 			conn, err = postgres.MakeConnPoolFromSrc(Source, logger.Log)

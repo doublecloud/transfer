@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongocommon "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -38,7 +38,7 @@ func getSource(user, password string, collection ...mongocommon.MongoCollection)
 		Hosts:       []string{"localhost"},
 		Port:        port,
 		User:        user,
-		Password:    server.SecretString(password),
+		Password:    model.SecretString(password),
 		Collections: collection,
 	}
 }
@@ -148,14 +148,14 @@ func snapshotAndIncrement(t *testing.T, ctx context.Context, source *mongocommon
 	//------------------------------------------------------------------------------------
 	// start worker
 
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		Type: abstract.TransferTypeSnapshotAndIncrement,
 		Src:  source,
-		Dst: &server.MockDestination{
+		Dst: &model.MockDestination{
 			SinkerFactory: func() abstract.Sinker {
 				return permissionSinker
 			},
-			Cleanup: server.Drop,
+			Cleanup: model.Drop,
 		},
 		ID: helpers.TransferID,
 	}

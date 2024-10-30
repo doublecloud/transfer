@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/helpers"
 	yt_helpers "github.com/doublecloud/transfer/tests/helpers/yt"
 	"github.com/stretchr/testify/require"
@@ -44,7 +44,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -200,7 +200,7 @@ func newSource(collapseInheritTables bool, tables []string) postgres.PgSource {
 		Hosts:                 []string{"localhost"},
 		ClusterID:             os.Getenv("SOURCE_CLUSTER_ID"),
 		User:                  os.Getenv("PG_LOCAL_USER"),
-		Password:              server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:              model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:              os.Getenv("PG_LOCAL_DATABASE"),
 		Port:                  helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		UseFakePrimaryKey:     true, // we use PG receipe with outdated 10.5 version that doesn`t allow set primary or unique keys on virtual parent(declarative) tables

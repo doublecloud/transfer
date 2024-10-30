@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/pkg/xtls"
@@ -85,7 +85,7 @@ func TestAddColumnOnReplication(t *testing.T) {
 	tableName := "test_table"
 
 	source := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              dp_model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             []string{tableName},
@@ -110,7 +110,7 @@ func TestAddColumnOnReplication(t *testing.T) {
 		HTTPPort:                helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_HTTP_PORT"),
 		NativePort:              helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified:     true,
-		Cleanup:                 server.Drop,
+		Cleanup:                 dp_model.Drop,
 		UpsertAbsentToastedRows: true,
 	}
 	transferType := abstract.TransferTypeIncrementOnly

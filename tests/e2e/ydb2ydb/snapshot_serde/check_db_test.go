@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
@@ -48,7 +48,7 @@ func anyTablesUdf(table abstract.TableID, schema abstract.TableColumns) bool {
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -73,7 +73,7 @@ func TestGroup(t *testing.T) {
 	})
 
 	dst := &ydb.YdbDestination{
-		Token:    server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:    model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database: helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance: helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 	}
@@ -91,9 +91,9 @@ func TestGroup(t *testing.T) {
 	// check
 
 	sinkMock := &helpers.MockSink{}
-	targetMock := server.MockDestination{
+	targetMock := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinkMock },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	transferMock := helpers.MakeTransfer("fake", src, &targetMock, abstract.TransferTypeSnapshotOnly)
 	var extractedChangeItem abstract.ChangeItem

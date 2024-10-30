@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	_ "github.com/doublecloud/transfer/pkg/dataplane"
 	"github.com/stretchr/testify/require"
 )
@@ -12,7 +12,7 @@ import (
 //---------------------------------------------------------------------------------------------------------------------
 // useful addition of transformer to transfer
 
-func AddTransformer(t *testing.T, transfer *server.Transfer, transformer abstract.Transformer) {
+func AddTransformer(t *testing.T, transfer *model.Transfer, transformer abstract.Transformer) {
 	err := transfer.AddExtraTransformer(transformer)
 	require.NoError(t, err)
 }

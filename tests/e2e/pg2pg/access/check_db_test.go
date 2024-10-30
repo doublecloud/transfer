@@ -6,7 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -80,7 +80,7 @@ var (
 func init() {
 	_ = os.Setenv("YC", "1") // to not go to vanga
 
-	Target.Cleanup = server.DisabledCleanup
+	Target.Cleanup = model.DisabledCleanup
 	helpers.InitSrcDst(sourceATID, &SourceA, &Target, abstract.TransferTypeSnapshotOnly)
 	helpers.InitSrcDst(sourceIATID, &SourceIA, &Target, abstract.TransferTypeSnapshotOnly)
 	helpers.InitSrcDst(sourceIAForDumpTID, &SourceIAForDump, &Target, abstract.TransferTypeSnapshotOnly)

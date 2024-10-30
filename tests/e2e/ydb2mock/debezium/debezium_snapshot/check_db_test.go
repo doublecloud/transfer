@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
 	"github.com/doublecloud/transfer/pkg/debezium/testutil"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
@@ -22,7 +22,7 @@ import (
 
 func TestGroup(t *testing.T) {
 	src := &ydb.YdbSource{
-		Token:              server.SecretString(os.Getenv("YDB_TOKEN")),
+		Token:              model.SecretString(os.Getenv("YDB_TOKEN")),
 		Database:           helpers.GetEnvOfFail(t, "YDB_DATABASE"),
 		Instance:           helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 		Tables:             nil,
@@ -61,9 +61,9 @@ func TestGroup(t *testing.T) {
 	// activate
 
 	sinker := &helpers.MockSink{}
-	target := server.MockDestination{
+	target := model.MockDestination{
 		SinkerFactory: func() abstract.Sinker { return sinker },
-		Cleanup:       server.DisabledCleanup,
+		Cleanup:       model.DisabledCleanup,
 	}
 	transfer := helpers.MakeTransfer("fake", src, &target, abstract.TransferTypeSnapshotOnly)
 

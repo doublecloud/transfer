@@ -12,8 +12,8 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pg "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -37,12 +37,12 @@ func (s *mockSinker) Push(input []abstract.ChangeItem) error {
 func TestReplication(t *testing.T) {
 	_ = os.Setenv("YC", "1") // to not go to vanga
 	sinker := &mockSinker{}
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID: "test_id",
-		Src: pgrecipe.RecipeSource(pgrecipe.WithInitDir("init_source"), pgrecipe.WithEdit(func(pg *pg.PgSource) {
+		Src: pgrecipe.RecipeSource(pgrecipe.WithInitDir("init_source"), pgrecipe.WithEdit(func(pg *pg_provider.PgSource) {
 			pg.DBTables = []string{"public.__test1"}
 		})),
-		Dst: &server.MockDestination{SinkerFactory: func() abstract.Sinker {
+		Dst: &model.MockDestination{SinkerFactory: func() abstract.Sinker {
 			return sinker
 		}},
 	}
@@ -65,7 +65,7 @@ func TestReplication(t *testing.T) {
 	wg.Wait()
 	logger.Log.Info("pusher retries done")
 	storage := helpers.GetSampleableStorageByModel(t, transfer.Src)
-	pgStorage, ok := storage.(*pg.Storage)
+	pgStorage, ok := storage.(*pg_provider.Storage)
 	require.True(t, ok)
 	logger.Log.Info("local worker stop")
 	// wait all connection closed

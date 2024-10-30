@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/columntypes"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -71,15 +71,15 @@ func TestCanonSource(t *testing.T) {
 	transfer := helpers.MakeTransfer(
 		helpers.TransferID,
 		Source,
-		&server.MockDestination{
+		&dp_model.MockDestination{
 			SinkerFactory: validator.New(
-				server.IsStrictSource(Source),
+				dp_model.IsStrictSource(Source),
 				validator.InitDone(t),
 				validator.ValuesTypeChecker,
 				validator.Canonizator(t, sortItems),
 				validator.TypesystemChecker(clickhouse.ProviderType, getBaseType),
 			),
-			Cleanup: server.DisabledCleanup,
+			Cleanup: dp_model.DisabledCleanup,
 		},
 		abstract.TransferTypeSnapshotOnly,
 	)

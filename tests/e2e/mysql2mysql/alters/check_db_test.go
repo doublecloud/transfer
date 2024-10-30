@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -25,14 +25,14 @@ var (
 	Source       = mysql.MysqlSource{
 		Host:     os.Getenv("RECIPE_MYSQL_HOST"),
 		User:     os.Getenv("RECIPE_MYSQL_USER"),
-		Password: server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password: model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database: os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE"),
 		Port:     helpers.GetIntFromEnv("RECIPE_MYSQL_PORT"),
 	}
 	Target = mysql.MysqlDestination{
 		Host:          os.Getenv("RECIPE_MYSQL_HOST"),
 		User:          os.Getenv("RECIPE_MYSQL_USER"),
-		Password:      server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password:      model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database:      os.Getenv("RECIPE_MYSQL_TARGET_DATABASE"),
 		Port:          helpers.GetIntFromEnv("RECIPE_MYSQL_PORT"),
 		SkipKeyChecks: false,

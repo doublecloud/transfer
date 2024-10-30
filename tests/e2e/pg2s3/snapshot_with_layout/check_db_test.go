@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 	_ "github.com/doublecloud/transfer/pkg/providers/s3/provider"
@@ -34,13 +34,13 @@ var (
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		DBTables:  []string{"public.__test"},
 	}
 	Target = &s3_provider.S3Destination{
-		OutputFormat:   server.ParsingFormatJSON,
+		OutputFormat:   model.ParsingFormatJSON,
 		BufferSize:     1 * 1024 * 1024,
 		BufferInterval: time.Second * 5,
 		Bucket:         testBucket,

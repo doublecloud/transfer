@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/mysql"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/tests/e2e/mysql2ch"
 	"github.com/doublecloud/transfer/tests/helpers"
 	yt_helpers "github.com/doublecloud/transfer/tests/helpers/yt"
@@ -22,7 +22,7 @@ var (
 	Source = mysql.MysqlSource{
 		Host:                os.Getenv("RECIPE_MYSQL_HOST"),
 		User:                os.Getenv("RECIPE_MYSQL_USER"),
-		Password:            server.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
+		Password:            model.SecretString(os.Getenv("RECIPE_MYSQL_PASSWORD")),
 		Database:            os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE"),
 		Port:                helpers.GetIntFromEnv("RECIPE_MYSQL_PORT"),
 		AllowDecimalAsFloat: true,
@@ -36,7 +36,7 @@ func init() {
 }
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -61,7 +61,7 @@ func TestSnapshot(t *testing.T) {
 	}()
 	require.NoError(t, err)
 
-	targetForCompare, ok := Target.(*ytcommon.YtDestinationWrapper)
+	targetForCompare, ok := Target.(*yt_provider.YtDestinationWrapper)
 	require.True(t, ok)
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotOnly)

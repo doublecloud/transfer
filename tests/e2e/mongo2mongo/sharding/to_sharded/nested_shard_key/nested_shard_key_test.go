@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	mongodataagent "github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -53,7 +53,7 @@ var (
 		Hosts:      []string{os.Getenv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterHost)},
 		Port:       helpers.GetIntFromEnv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterPort),
 		User:       os.Getenv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterUsername),
-		Password:   server.SecretString(os.Getenv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterPassword)),
+		Password:   model.SecretString(os.Getenv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterPassword)),
 		AuthSource: os.Getenv("DB1_" + mongoshardedcluster.EnvMongoShardedClusterAuthSource),
 		Collections: []mongodataagent.MongoCollection{
 			{DatabaseName: DB, CollectionName: Collection1},
@@ -66,9 +66,9 @@ var (
 		Hosts:      []string{os.Getenv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterHost)},
 		Port:       helpers.GetIntFromEnv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterPort),
 		User:       os.Getenv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterUsername),
-		Password:   server.SecretString(os.Getenv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterPassword)),
+		Password:   model.SecretString(os.Getenv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterPassword)),
 		AuthSource: os.Getenv("DB2_" + mongoshardedcluster.EnvMongoShardedClusterAuthSource),
-		Cleanup:    server.DisabledCleanup,
+		Cleanup:    model.DisabledCleanup,
 	}
 )
 

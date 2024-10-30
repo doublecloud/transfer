@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/httpclient"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	ytprovider "github.com/doublecloud/transfer/pkg/providers/yt"
@@ -46,7 +46,7 @@ var (
 		HTTPPort:            helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_HTTP_PORT"),
 		NativePort:          helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT"),
 		ProtocolUnspecified: true,
-		Cleanup:             server.DisabledCleanup,
+		Cleanup:             dp_model.DisabledCleanup,
 	}
 	Timeout = 300 * time.Second
 )

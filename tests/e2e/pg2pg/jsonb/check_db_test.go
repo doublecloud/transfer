@@ -8,8 +8,8 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
-	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
+	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -41,14 +41,14 @@ func loadSnapshot(t *testing.T) {
 }
 
 func checkReplicationWorks(t *testing.T) {
-	transfer := server.Transfer{
+	transfer := model.Transfer{
 		ID:   "test_id",
 		Src:  &Source,
 		Dst:  &Target,
 		Type: abstract.TransferTypeSnapshotAndIncrement,
 	}
 
-	srcConn, err := pgcommon.MakeConnPoolFromSrc(&Source, logger.Log)
+	srcConn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
 	require.NoError(t, err)
 	defer srcConn.Close()
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
@@ -44,7 +44,7 @@ func TestSnapshot(t *testing.T) {
 	target.WithDefaults()
 	target.ProtocolUnspecified = true
 	target.UseSchemaInTableName = true
-	target.Cleanup = server.Drop
+	target.Cleanup = model.Drop
 	transfer := helpers.MakeTransfer("testtransfer", source, target, abstract.TransferTypeSnapshotOnly)
 	addTransformationToTransfer(transfer, dbt.Config{
 		GitRepositoryLink: fmt.Sprintf("https://%s@github.com/doublecloud/tests-clickhouse-dbt.git", githubPAT),
@@ -62,9 +62,9 @@ func TestSnapshot(t *testing.T) {
 	require.Contains(t, targetTables, *abstract.NewTableID("dbttest", "v3"))
 }
 
-func addTransformationToTransfer(transfer *server.Transfer, config dbt.Config) {
+func addTransformationToTransfer(transfer *model.Transfer, config dbt.Config) {
 	if transfer.Transformation == nil {
-		transfer.Transformation = &server.Transformation{
+		transfer.Transformation = &model.Transformation{
 			ExtraTransformers: nil,
 			Executor:          nil,
 		}

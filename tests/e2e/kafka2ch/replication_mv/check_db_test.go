@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	jsonparser "github.com/doublecloud/transfer/pkg/parsers/registry/json"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -52,7 +52,7 @@ func fixTimestampMiddleware(t *testing.T, items []abstract.ChangeItem) abstract.
 func TestReplication(t *testing.T) {
 	// prepare source
 
-	target.Cleanup = server.DisabledCleanup
+	target.Cleanup = dp_model.DisabledCleanup
 	target.InsertParams = model.InsertParams{MaterializedViewsIgnoreErrors: true}
 
 	parserConfigStruct := &jsonparser.ParserConfigJSONCommon{
@@ -79,9 +79,9 @@ func TestReplication(t *testing.T) {
 			Connection: source.Connection,
 			Auth:       source.Auth,
 			Topic:      source.Topic,
-			FormatSettings: server.SerializationFormat{
-				Name: server.SerializationFormatJSON,
-				BatchingSettings: &server.Batching{
+			FormatSettings: dp_model.SerializationFormat{
+				Name: dp_model.SerializationFormatJSON,
+				BatchingSettings: &dp_model.Batching{
 					Enabled:        false,
 					Interval:       0,
 					MaxChangeItems: 0,

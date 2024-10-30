@@ -15,9 +15,9 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	server "github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
-	ytcommon "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/runtime/local"
 	"github.com/doublecloud/transfer/pkg/terryid"
 	"github.com/doublecloud/transfer/pkg/worker/tasks"
@@ -32,7 +32,7 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	ytcommon.InitExe()
+	yt_provider.InitExe()
 	os.Exit(m.Run())
 }
 
@@ -62,7 +62,7 @@ func newPgSource(tableName string) postgres.PgSource {
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
 		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  server.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
+		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
 		Database:  os.Getenv("PG_LOCAL_DATABASE"),
 		Port:      helpers.GetIntFromEnv("PG_LOCAL_PORT"),
 		DBTables:  []string{os.Getenv("PG_LOCAL_DATABASE") + "." + tableName},
@@ -104,7 +104,7 @@ func teardown(env *yttest.Env, p string) {
 
 // initializes YT client and sinker config
 // do not forget to call testTeardown when resources are not needed anymore
-func initYt(t *testing.T) (testEnv *yttest.Env, testCfg ytcommon.YtDestinationModel, testTeardown func()) {
+func initYt(t *testing.T) (testEnv *yttest.Env, testCfg yt_provider.YtDestinationModel, testTeardown func()) {
 	env, cancel := yttest.NewEnv(t)
 	cypressPath := "//home/cdc/test/TM-1893"
 	cfg := yt_helpers.RecipeYtTarget(cypressPath)
@@ -228,7 +228,7 @@ func fillDatabaseWithJSONChangeItems(t *testing.T, source *postgres.PgSource, ta
 	}
 }
 
-func testFactoryPumpDatabaseToYt(ytDest ytcommon.YtDestinationModel, table string, generationRules GenerationRules) func(*testing.T) {
+func testFactoryPumpDatabaseToYt(ytDest yt_provider.YtDestinationModel, table string, generationRules GenerationRules) func(*testing.T) {
 	pgSource := newPgSource(table)
 
 	return func(t *testing.T) {
