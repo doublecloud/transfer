@@ -12,6 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -560,7 +561,7 @@ func checkTableAttrs(t *testing.T, env *yttest.Env, tablePath ypath.Path, expect
 }
 
 func initYt(t *testing.T, path string) (testEnv *yttest.Env, testCfg yt2.YtDestinationModel, testTeardown func()) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
 		Path:          path,
 		Cluster:       os.Getenv("YT_PROXY"),

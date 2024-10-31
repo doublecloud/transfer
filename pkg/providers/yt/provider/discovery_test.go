@@ -10,7 +10,8 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/base"
 	"github.com/doublecloud/transfer/pkg/base/filter"
-	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
@@ -30,7 +31,7 @@ func buildSchema(schema []abstract.ColumnSchema) []map[string]string {
 }
 
 func TestTablesDiscovery(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	ctx := context.Background()
@@ -55,7 +56,7 @@ func TestTablesDiscovery(t *testing.T) {
 	_, err = env.YT.CreateNode(ctx, rootPath.Child("some_dir").Child("sample_non_table_obj"), yt.NodeFile, &yt.CreateNodeOptions{Recursive: true})
 	require.NoError(t, err)
 	t.Run("all_tables", func(t *testing.T) {
-		cfg := &yt2.YtSource{
+		cfg := &yt_provider.YtSource{
 			Cluster: os.Getenv("YT_PROXY"),
 			Proxy:   os.Getenv("YT_PROXY"),
 			Paths:   []string{rootPath.String()},
@@ -75,7 +76,7 @@ func TestTablesDiscovery(t *testing.T) {
 		require.Len(t, objNames, 7)
 	})
 	t.Run("2_tables", func(t *testing.T) {
-		cfg := &yt2.YtSource{
+		cfg := &yt_provider.YtSource{
 			Cluster: os.Getenv("YT_PROXY"),
 			Proxy:   os.Getenv("YT_PROXY"),
 			Paths:   []string{rootPath.String()},
@@ -100,7 +101,7 @@ func TestTablesDiscovery(t *testing.T) {
 		require.Len(t, objNames, 2)
 	})
 	t.Run("error_for_non_tables", func(t *testing.T) {
-		cfg := &yt2.YtSource{
+		cfg := &yt_provider.YtSource{
 			Cluster: os.Getenv("YT_PROXY"),
 			Proxy:   os.Getenv("YT_PROXY"),
 			Paths:   []string{rootPath.String()},
@@ -124,7 +125,7 @@ func TestTablesDiscovery(t *testing.T) {
 		require.Error(t, err)
 	})
 	t.Run("error_for_none_table_path", func(t *testing.T) {
-		cfg := &yt2.YtSource{
+		cfg := &yt_provider.YtSource{
 			Cluster: os.Getenv("YT_PROXY"),
 			Proxy:   os.Getenv("YT_PROXY"),
 			Paths:   []string{rootPath.String()},
@@ -148,7 +149,7 @@ func TestTablesDiscovery(t *testing.T) {
 		require.Error(t, err)
 	})
 	t.Run("no_error_when_ask_dir", func(t *testing.T) {
-		cfg := &yt2.YtSource{
+		cfg := &yt_provider.YtSource{
 			Cluster: os.Getenv("YT_PROXY"),
 			Proxy:   os.Getenv("YT_PROXY"),
 			Paths:   []string{rootPath.String()},

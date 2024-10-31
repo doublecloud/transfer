@@ -13,12 +13,12 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	staticsink "github.com/doublecloud/transfer/pkg/providers/yt/sink/v2"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 var (
@@ -69,7 +69,7 @@ func TestYTStaticTableSink(t *testing.T) {
 }
 
 func singleSnapshotOneTable(t *testing.T) {
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	cp := coordinator.NewStatefulFakeClient()
@@ -213,7 +213,7 @@ func shardedSnapshotManyTables(t *testing.T) {
 }
 
 func retryingParts(t *testing.T) {
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	cp := coordinator.NewStatefulFakeClient()
@@ -257,7 +257,7 @@ func retryingParts(t *testing.T) {
 }
 
 func twoTablesInOne(t *testing.T) {
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	cp := coordinator.NewStatefulFakeClient()
@@ -312,7 +312,7 @@ func twoTablesInOne(t *testing.T) {
 }
 
 func withShuffledColumns(t *testing.T) {
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	cp := coordinator.NewStatefulFakeClient()

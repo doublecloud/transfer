@@ -15,15 +15,15 @@ import (
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
 	yt_schema "go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 func TestSnapshotToReplica(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, "//home/cdc/test/TM-1291")
 	schema_ := abstract.NewTableSchema([]abstract.ColSchema{{DataType: "int32", ColumnName: "id", PrimaryKey: true}, {DataType: "any", ColumnName: "val"}})
@@ -153,7 +153,7 @@ func TestSnapshotToReplica(t *testing.T) {
 
 func TestRotate(t *testing.T) {
 	dirPath := ypath.Path("//home/cdc/test/DTSUPPORT-786")
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, dirPath)
 	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
@@ -245,7 +245,7 @@ func TestPivotKeys(t *testing.T) {
 }
 
 func shardingTestHelper(t *testing.T, hashCol string, uid string, dirPath string, expected interface{}) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, ypath.Path(dirPath))
 	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
@@ -333,7 +333,7 @@ func TestLargeRowsWorkWithSpecialSinkOption(t *testing.T) {
 		//}),
 	}
 
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	for _, cfg := range configs {

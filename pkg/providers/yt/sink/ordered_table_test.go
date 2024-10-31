@@ -13,11 +13,11 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	ytsdk "go.ytsaurus.tech/yt/go/yt"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 var (
@@ -41,7 +41,7 @@ type testRow struct {
 }
 
 func TestOrderedTablet_Write(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testDirPath)
 	destination := yt.NewYtDestinationV1(yt.YtDestination{
@@ -87,7 +87,7 @@ func TestOrderedTablet_Write(t *testing.T) {
 }
 
 func TestOrderedTablet_ConcurrentWrite(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testDirPath)
 	destination := yt.NewYtDestinationV1(yt.YtDestination{
@@ -148,7 +148,7 @@ func TestOrderedTablet_ConcurrentWrite(t *testing.T) {
 }
 
 func TestOrderedTable_CustomAttributes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testDirPath)
 	cfg := yt.NewYtDestinationV1(yt.YtDestination{

@@ -11,13 +11,13 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 func teardown(client yt.Client, path ypath.Path) {
@@ -35,7 +35,7 @@ func teardown(client yt.Client, path ypath.Path) {
 }
 
 func TestInsertWithFloat(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, "//home/cdc/test/generic/temp")
 	schema_ := abstract.NewTableSchema([]abstract.ColSchema{
@@ -64,7 +64,7 @@ func TestInsertWithFloat(t *testing.T) {
 }
 
 func TestCustomAttributes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, "//home/cdc/test/generic/temp")
 	schema_ := abstract.NewTableSchema([]abstract.ColSchema{
@@ -100,7 +100,7 @@ func TestCustomAttributes(t *testing.T) {
 }
 
 func TestSortedTable_Write_With_Indexes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, "//home/cdc/test/generic/temp")
 	schema_ := abstract.NewTableSchema([]abstract.ColSchema{

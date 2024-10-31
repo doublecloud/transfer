@@ -11,13 +11,13 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/yt/sink"
 	ytstorage "github.com/doublecloud/transfer/pkg/providers/yt/storage"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
 	"go.ytsaurus.tech/yt/go/ypath"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 var (
@@ -55,7 +55,7 @@ func TestYTSnapshotWithShuffledColumns(t *testing.T) {
 			helpers.LabeledPort{Label: "YT DST", Port: targetPort}))
 	}()
 
-	ytEnv, cancel := yttest.NewEnv(t)
+	ytEnv, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	ok, err := ytEnv.YT.NodeExists(context.Background(), ypath.Path(fmt.Sprintf("%s/%s", Dst.Path(), TestTableName)), nil)

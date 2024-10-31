@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	client2 "github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	ytsdk "go.ytsaurus.tech/yt/go/yt"
@@ -42,7 +43,7 @@ type skippedVersionedRow struct {
 }
 
 func TestVersionedTable_Write(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testVersionedTablePath)
 	cfg := yt.NewYtDestinationV1(versionTableYtConfig())
@@ -60,7 +61,7 @@ func TestVersionedTable_Write(t *testing.T) {
 	}
 }
 func TestVersionedTable_Write_Newest_Than_Oldest(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testVersionedTablePath)
 	cfg := yt.NewYtDestinationV1(versionTableYtConfig())
@@ -84,7 +85,7 @@ func TestVersionedTable_Write_Newest_Than_Oldest(t *testing.T) {
 }
 
 func TestVersionedTable_Write_MissedOrder(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testVersionedTablePath)
 	cfg := yt.NewYtDestinationV1(versionTableYtConfig())
@@ -101,7 +102,7 @@ func TestVersionedTable_Write_MissedOrder(t *testing.T) {
 }
 
 func TestVersionedTable_CustomAttributes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 	defer teardown(env.YT, testVersionedTablePath)
 	cfg := yt.NewYtDestinationV1(versionTableYtConfig())

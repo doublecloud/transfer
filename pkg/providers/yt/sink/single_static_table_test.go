@@ -17,6 +17,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/cleanup"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
@@ -607,6 +608,9 @@ func tableWithOnlyPrimaryKeys(t *testing.T) {
 }
 
 func TestCustomAttributesSingleStaticTable(t *testing.T) {
+	if recipe.TestContainerEnabled() {
+		t.Skip()
+	}
 	schema_ := abstract.NewTableSchema([]abstract.ColSchema{
 		{
 			DataType:   "double",

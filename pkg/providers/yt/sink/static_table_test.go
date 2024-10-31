@@ -12,6 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -238,6 +239,9 @@ func wrongOrderOfValuesInChangeItem(t *testing.T) {
 }
 
 func TestCustomAttributesStaticTable(t *testing.T) {
+	_, cancel := recipe.NewEnv(t)
+	defer cancel()
+
 	path := ypath.Path("//home/cdc/test/static/test_table")
 	// create single static table for change item consumption
 	cfg, ytClient := initYt(t, path.String())

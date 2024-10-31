@@ -2,45 +2,29 @@ package replication
 
 import (
 	"context"
-	"os"
 	"testing"
 	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/abstract/model"
 	pg_provider "github.com/doublecloud/transfer/pkg/providers/postgres"
-	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
+	yt_recipe "github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/tests/helpers"
-	yt_helpers "github.com/doublecloud/transfer/tests/helpers/yt"
 	"github.com/stretchr/testify/require"
 )
 
-var (
-	srcPort = helpers.GetIntFromEnv("PG_LOCAL_PORT")
-	Source  = pg_provider.PgSource{
-		ClusterID: os.Getenv("PG_CLUSTER_ID"),
-		Hosts:     []string{"localhost"},
-		User:      os.Getenv("PG_LOCAL_USER"),
-		Password:  model.SecretString(os.Getenv("PG_LOCAL_PASSWORD")),
-		Database:  os.Getenv("PG_LOCAL_DATABASE"),
-		Port:      srcPort,
-		DBTables:  []string{"public.__test"},
-	}
-	Target = yt_helpers.RecipeYtTarget("//home/cdc/test/pg2yt_e2e")
-)
-
-func init() {
-	_ = os.Setenv("YC", "1") // to not go to vanga
-	Source.WithDefaults()
-}
-
-func TestMain(m *testing.M) {
-	yt_provider.InitExe()
-	os.Exit(m.Run())
-}
-
 func TestGroup(t *testing.T) {
+	var (
+		Source               = pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""), pgrecipe.WithDBTables("public.__test"))
+		Target, cleanup, err = yt_recipe.RecipeYtTarget("//home/cdc/test/pg2yt_e2e")
+	)
+	defer func() {
+		require.NoError(t, cleanup())
+	}()
+	require.NoError(t, err)
+	Source.WithDefaults()
+
 	targetPort, err := helpers.GetPortFromStr(Target.Cluster())
 	require.NoError(t, err)
 	defer func() {
@@ -50,17 +34,11 @@ func TestGroup(t *testing.T) {
 		))
 	}()
 
-	t.Run("Group after port check", func(t *testing.T) {
-		t.Run("Load", Load)
-	})
-}
-
-func Load(t *testing.T) {
-	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotAndIncrement)
+	transfer := helpers.MakeTransfer(helpers.TransferID, Source, Target, abstract.TransferTypeSnapshotAndIncrement)
 
 	worker := helpers.Activate(t, transfer)
 
-	conn, err := pg_provider.MakeConnPoolFromSrc(&Source, logger.Log)
+	conn, err := pg_provider.MakeConnPoolFromSrc(Source, logger.Log)
 	require.NoError(t, err)
 
 	_, err = conn.Exec(context.Background(), "insert into __test (str, id, da, i) values ('qqq', 111, '1999-09-16', 1)")
