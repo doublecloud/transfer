@@ -346,35 +346,15 @@ func (e *SchemaExtractor) tableToPKColumnsMapping(ctx context.Context, conn *pgx
 		return nil, xerrors.Errorf("failed to get next row from primary keys list query: %w", err)
 	}
 
-	inheritRows, err := conn.Query(ctx, "SELECT inhparent::regclass::TEXT, inhrelid::regclass::TEXT FROM pg_inherits;")
+	childParentMap, err := MakeChildParentMap(ctx, conn)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to execute SQL to list inherited tables: %w", err)
+		return nil, xerrors.Errorf("failed while reading pg_inherits: %w", err)
 	}
-	defer inheritRows.Close()
-	for inheritRows.Next() {
-		var parent, child abstract.TableID
-		err = inheritRows.Scan(&parent.Name, &child.Name)
-		if err != nil {
-			return nil, xerrors.Errorf("failed to scan from inherited tables list query: %w", err)
-		}
-		pp := strings.Split(parent.Name, ".")
-		if len(pp) > 1 {
-			parent.Namespace, parent.Name = pp[0], pp[1]
-		} else {
-			parent.Namespace = "public"
-		}
-		cc := strings.Split(child.Name, ".")
-		if len(cc) > 1 {
-			child.Namespace, child.Name = cc[0], cc[1]
-		} else {
-			child.Namespace = "public"
-		}
+
+	for child, parent := range childParentMap {
 		if len(result[child]) == 0 {
 			result[child] = result[parent]
 		}
-	}
-	if err := inheritRows.Err(); err != nil {
-		return nil, xerrors.Errorf("failed to get next row from inherited tables list query: %w", err)
 	}
 
 	return result, nil

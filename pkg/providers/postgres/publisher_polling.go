@@ -85,26 +85,14 @@ func (p *pollWindow) Empty() bool {
 }
 
 func (p *poller) fillAltNamesForInheritedTables(includedSchema abstract.DBSchema) (ignoredParentTables []abstract.TableID, err error) {
-	rows, err := p.conn.Query(context.TODO(), "select inhparent::regclass::text, inhrelid::regclass::text from pg_inherits;")
+	childParentMap, err := MakeChildParentMap(context.TODO(), p.conn)
 	if err != nil {
-		return nil, xerrors.Errorf("failed inherited tables query: %w", err)
+		return nil, xerrors.Errorf("failed while reading pg_inherits: %w", err)
 	}
-	defer rows.Close()
+
 	p.altNames = map[abstract.TableID]abstract.TableID{}
 	invertSch := map[abstract.TableID]abstract.TableID{}
-	for rows.Next() {
-		var from, to string
-		if err = rows.Scan(&to, &from); err != nil {
-			return nil, xerrors.Errorf("cannot parse inherited tables query result: %w", err)
-		}
-		fromID, ok := makeTableID(from)
-		if !ok {
-			return nil, xerrors.Errorf("cannot parse regclass text: %s", from)
-		}
-		toID, ok := makeTableID(to)
-		if !ok {
-			return nil, xerrors.Errorf("cannot parse regclass text: %s", to)
-		}
+	for fromID, toID := range childParentMap {
 		p.altNames[fromID] = toID
 		if _, ok := invertSch[toID]; !ok {
 			if _, ok := p.schema[fromID]; ok {

@@ -329,19 +329,6 @@ WHERE slot_name = '%v' AND active_pid IS NOT NULL;`, config.SlotID)
 	return NewPollingPublisher(version, connPool, slot, registry, config, objects, transferID, lgr, cp)
 }
 
-func makeTableID(regclassTextRepresentation string) (abstract.TableID, bool /* ok */) {
-	parts := strings.Split(regclassTextRepresentation, ".")
-	if len(parts) == 1 {
-		return abstract.TableID{Namespace: "public", Name: parts[0]}, true
-	} else if len(parts) == 2 {
-		return abstract.TableID{Namespace: parts[0], Name: parts[1]}, true
-	}
-	return abstract.TableID{
-		Namespace: "",
-		Name:      "",
-	}, false
-}
-
 func validateChangeItemsPtrs(wal2jsonItems []*Wal2JSONItem) error {
 	if wal2jsonItems == nil {
 		return nil

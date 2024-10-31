@@ -369,42 +369,21 @@ func loadIntoTableMapForTable(ctx context.Context, table tableIDWithInfo, extrac
 }
 
 func (s *Storage) GetInheritedTables(ctx context.Context) (map[abstract.TableID]abstract.TableID, error) {
-	rows, err := s.Conn.Query(ctx, `select c.relname::text AS c_name, cs.nspname::text as c_schema,
-       										   p.relname::text AS p_name, ps.nspname::text as  p_schema
-										from pg_inherits
-    									inner join pg_class as c on (pg_inherits.inhrelid=c.oid)
-                						inner join pg_class as p on (pg_inherits.inhparent=p.oid)
-										inner join pg_catalog.pg_namespace as ps on (p.relnamespace = ps.oid)
-                						inner join pg_catalog.pg_namespace as cs on (c.relnamespace = cs.oid);`)
+	tablesParents, err := MakeChildParentMap(ctx, s.Conn)
 
 	if err != nil {
 		logger.Log.Error("failed query for extraction pg inherits", log.Error(err))
 		return nil, xerrors.Errorf("failed query for extraction pg inherits: %w", err)
 	}
-	defer rows.Close()
+	if s.Config.TableFilter == nil {
+		return tablesParents, nil
+	}
+	for childID := range tablesParents {
+		if !s.Config.TableFilter.Include(childID) {
+			delete(tablesParents, childID)
+		}
+	}
 
-	tablesParents := map[abstract.TableID]abstract.TableID{}
-	for rows.Next() {
-		var child, childSchema, parent, parentSchema string
-		if err := rows.Scan(&child, &childSchema, &parent, &parentSchema); err != nil {
-			return nil, err
-		}
-		childID := abstract.TableID{
-			Namespace: childSchema,
-			Name:      child,
-		}
-		if s.Config.TableFilter != nil && !s.Config.TableFilter.Include(childID) {
-			continue
-		}
-		parentID := abstract.TableID{
-			Namespace: parentSchema,
-			Name:      parent,
-		}
-		tablesParents[childID] = parentID
-	}
-	if rows.Err() != nil {
-		return nil, xerrors.Errorf("Cannot extract all rows: %w", err)
-	}
 	return tablesParents, nil
 }
 
