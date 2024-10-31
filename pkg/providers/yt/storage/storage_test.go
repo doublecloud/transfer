@@ -12,21 +12,13 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	ytsink "github.com/doublecloud/transfer/pkg/providers/yt/sink"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
-
-var Target = yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
-	Path:          "//home/cdc/test/yt_storage_test",
-	CellBundle:    "default",
-	PrimaryMedium: "default",
-	Atomicity:     yt.AtomicityFull,
-	Cluster:       os.Getenv("YT_PROXY"),
-})
 
 func emptyRegistry() metrics.Registry {
 	return solomon.NewRegistry(nil).WithTags(map[string]string{"ts": time.Now().String()})
@@ -49,7 +41,7 @@ func buildDynamicSchema(schema []abstract.ColumnSchema) []map[string]string {
 }
 
 func TestYtStorage_TableList(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	ctx := context.Background()
@@ -81,6 +73,14 @@ func TestYtStorage_TableList(t *testing.T) {
 		},
 	})
 	require.NoError(t, err)
+
+	Target := yt_provider.NewYtDestinationV1(yt_provider.YtDestination{
+		Path:          "//home/cdc/test/yt_storage_test",
+		CellBundle:    "default",
+		PrimaryMedium: "default",
+		Atomicity:     yt.AtomicityFull,
+		Cluster:       os.Getenv("YT_PROXY"),
+	})
 
 	Target.WithDefaults()
 

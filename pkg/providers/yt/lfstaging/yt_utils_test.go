@@ -5,14 +5,14 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 func TestListNodes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	dirPath := ypath.Path("//yt-utils-test")
@@ -35,7 +35,7 @@ func TestListNodes(t *testing.T) {
 }
 
 func TestListLockedNodes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	config := defaultSinkConfig()
@@ -54,7 +54,7 @@ func TestListLockedNodes(t *testing.T) {
 }
 
 func TestListUnlockedNodes(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	config := defaultSinkConfig()

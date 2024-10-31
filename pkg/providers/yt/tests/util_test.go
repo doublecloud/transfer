@@ -9,7 +9,8 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
+	yt_provider "github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/randutil"
 	"github.com/stretchr/testify/require"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -79,10 +80,11 @@ func createTables(ctx context.Context, client yt.Client, path ypath.Path, name s
 }
 
 func TestMountUnmount(t *testing.T) {
-	config := new(yt.Config)
-	client, err := ytclient.NewYtClientWrapper(ytclient.HTTP, nil, config)
-	require.NoError(t, err)
+	env, cancel := recipe.NewEnv(t)
+	defer cancel()
+	client := env.YT
 	defer client.Stop()
+	var err error
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -111,12 +113,12 @@ func TestMountUnmount(t *testing.T) {
 	}, &dynamicTables, &staticTables)
 	require.NoError(t, err)
 
-	handleParams := NewHandleParams(5)
+	handleParams := yt_provider.NewHandleParams(5)
 
-	err = MountAndWaitRecursive(ctx, logger.Log, client, path, handleParams)
+	err = yt_provider.MountAndWaitRecursive(ctx, logger.Log, client, path, handleParams)
 	require.NoError(t, err)
 	for _, table := range dynamicTables {
-		attrs := new(NodeAttrs)
+		attrs := new(yt_provider.NodeAttrs)
 		err = client.GetNode(ctx, table.Attrs(), attrs, nil)
 		require.NoError(t, err)
 		require.Truef(t, attrs.Dynamic, "table '%v' must be dynamic", table)
@@ -124,16 +126,16 @@ func TestMountUnmount(t *testing.T) {
 	}
 
 	for _, table := range staticTables {
-		attrs := new(NodeAttrs)
+		attrs := new(yt_provider.NodeAttrs)
 		err = client.GetNode(ctx, table.Attrs(), attrs, nil)
 		require.NoError(t, err)
 		require.Falsef(t, attrs.Dynamic, "table '%v' must be static", table)
 	}
 
-	err = UnmountAndWaitRecursive(ctx, logger.Log, client, path, handleParams)
+	err = yt_provider.UnmountAndWaitRecursive(ctx, logger.Log, client, path, handleParams)
 	require.NoError(t, err)
 	for _, table := range dynamicTables {
-		attrs := new(NodeAttrs)
+		attrs := new(yt_provider.NodeAttrs)
 		err = client.GetNode(ctx, table.Attrs(), attrs, nil)
 		require.NoError(t, err)
 		require.Truef(t, attrs.Dynamic, "table '%v' must be dynamic", table)
@@ -141,7 +143,7 @@ func TestMountUnmount(t *testing.T) {
 	}
 
 	for _, table := range staticTables {
-		attrs := new(NodeAttrs)
+		attrs := new(yt_provider.NodeAttrs)
 		err = client.GetNode(ctx, table.Attrs(), attrs, nil)
 		require.NoError(t, err)
 		require.Falsef(t, attrs.Dynamic, "table '%v' must be static", table)

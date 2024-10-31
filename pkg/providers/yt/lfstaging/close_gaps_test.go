@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/stretchr/testify/require"
-	"go.ytsaurus.tech/yt/go/yttest"
 )
 
 func TestClosingGaps(t *testing.T) {
-	env, cancel := yttest.NewEnv(t)
+	env, cancel := recipe.NewEnv(t)
 	defer cancel()
 
 	ctx := context.Background()

@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/cleanup"
 	"github.com/doublecloud/transfer/pkg/providers/yt"
+	"github.com/doublecloud/transfer/pkg/providers/yt/recipe"
 	"github.com/doublecloud/transfer/pkg/providers/yt/sink"
 	"github.com/stretchr/testify/require"
 )
@@ -19,6 +20,9 @@ type TestObject struct {
 }
 
 func TestBigValue(t *testing.T) {
+	_, cancel := recipe.NewEnv(t)
+	defer cancel()
+
 	maxRetriesCount := sink.MaxRetriesCount
 	sink.MaxRetriesCount = 1
 	defer func() {
