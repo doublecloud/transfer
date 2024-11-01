@@ -195,7 +195,7 @@ jobs:
       - shell: bash
         name: start local YT
         run: |
-          docker-compose -f "pkg/providers/yt/recipe/docker-compose.yml" up -d --build
+          docker compose -f "pkg/providers/yt/recipe/docker-compose.yml" up -d --build
           export YT_PROXY=localhost:8180
       - shell: bash
         run: |
