@@ -1544,6 +1544,7 @@
   "pkg/providers/yt/provider/types/cast.go":"transfer_manager/go/pkg/providers/yt/provider/types/cast.go",
   "pkg/providers/yt/provider/types/resolve.go":"transfer_manager/go/pkg/providers/yt/provider/types/resolve.go",
   "pkg/providers/yt/recipe/README.md":"transfer_manager/go/pkg/providers/yt/recipe/README.md",
+  "pkg/providers/yt/recipe/docker-compose.yml":"transfer_manager/go/pkg/providers/yt/recipe/docker-compose.yml",
   "pkg/providers/yt/recipe/env.go":"transfer_manager/go/pkg/providers/yt/recipe/env.go",
   "pkg/providers/yt/recipe/main.go":"transfer_manager/go/pkg/providers/yt/recipe/main.go",
   "pkg/providers/yt/recipe/test_container.go":"transfer_manager/go/pkg/providers/yt/recipe/test_container.go",

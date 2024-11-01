@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  yt-backend:
+    image: ytsaurus/local:stable
+    ports:
+      - "${API_PORT:-8180}:80"
+      - "${RPC_PORT:-8102}:8002"
+    command:
+      - "--fqdn"
+      - "localhost"
+      - "--proxy-config"
+      - "{address_resolver={enable_ipv4=%true;enable_ipv6=%false;};coordinator={public_fqdn=\"localhost:${API_PORT:-8180}\"}}"
+      - "--rpc-proxy-count"
+      - "0"
+      - "--rpc-proxy-port"
+      - "8002"
+      - "--node-count"
+      - "1"
+      - "--wait-tablet-cell-initialization"
+    volumes:
+      - ./data:/var/lib/yt/local-cypress
+
+  yt-frontend:
+    image: ytsaurus/ui:stable
+    ports:
+      - "${UI_PORT:-8181}:80"
+    environment:
+      PROXY: "localhost:${API_PORT:-8180}"
+      PROXY_INTERNAL: yt-backend:80
+      APP_ENV: local
+      APP_INSTALLATION: ""
