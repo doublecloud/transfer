@@ -164,7 +164,7 @@ jobs:
       fail-fast: false
       matrix:
         suite: [
-          { group: "pkg/providers", name: "yt-sink", path: "yt/sink" },
+          { group: "pkg/providers", name: "yt", path: "yt" },
         ]
     steps:
       - name: Checkout
@@ -188,17 +188,16 @@ jobs:
         run: |
           pg_dump --version
       - shell: bash
-        name: build light-exe for YT jobs
+        name: prepare local YT
         run: |
-          go build -o  binaries/lightexe ./pkg/providers/yt/lightexe/*.go
-      - shell: bash
-        name: start local YT
-        run: |
+          go build -o binaries/lightexe ./pkg/providers/yt/lightexe/*.go
           docker compose -f "pkg/providers/yt/recipe/docker-compose.yml" up -d --build
           export YT_PROXY=localhost:8180
+          ls binaries
       - shell: bash
         name: 'run-tests SUITE_GROUP="${{ matrix.suite.group }}" SUITE_PATH="${{ matrix.suite.path }}" SUITE_NAME="${{ matrix.suite.name }}"'
         run: |
+          ls binaries
           export YT_PROXY=localhost:8180
           make run-tests SUITE_GROUP="${{ matrix.suite.group }}" SUITE_PATH="${{ matrix.suite.path }}" SUITE_NAME="${{ matrix.suite.name }}"
       - name: Upload Test Results
