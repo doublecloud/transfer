@@ -37,8 +37,6 @@ type Source struct {
 	memThrottler *throttler.MemoryThrottler
 	isSending    atomic.Bool
 	ydbClient    *ydb.Driver
-
-	storage abstract.Storage
 }
 
 func (s *Source) Run(sink abstract.AsyncSink) error {
@@ -146,7 +144,7 @@ func (s *Source) Stop() {
 }
 
 func (s *Source) updateLocalCacheTableSchema(tablePath string) error {
-	tableColumns, err := s.storage.TableSchema(s.ctx, abstract.TableID{Name: tablePath, Namespace: ""})
+	tableColumns, err := tableSchema(s.ctx, s.ydbClient, s.cfg.Database, abstract.TableID{Name: tablePath, Namespace: ""})
 	if err != nil {
 		return xerrors.Errorf("unable to get table schema, table: %s, err: %w", tablePath, err)
 	}
@@ -248,14 +246,7 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 		memThrottler: throttler.NewMemoryThrottler(uint64(cfg.BufferSize)),
 		isSending:    atomic.Bool{},
 		ydbClient:    ydbClient,
-		storage:      nil,
 	}
-
-	storage, err := NewStorage(cfg.ToStorageParams())
-	if err != nil {
-		return nil, xerrors.Errorf("unable to create storage, err: %w", err)
-	}
-	src.storage = storage
 
 	for _, tablePath := range cfg.Tables {
 		err = src.updateLocalCacheTableSchema(tablePath)

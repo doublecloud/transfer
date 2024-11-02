@@ -25,4 +25,15 @@ func TestTableSchemaWrapper(t *testing.T) {
 	require.False(t, currTableSchemaWrapper.IsAllColumnNamesKnown(&cdcEvent{
 		Update: map[string]interface{}{"b": 1},
 	}))
+
+	require.True(t, currTableSchemaWrapper.IsAllColumnNamesKnown(&cdcEvent{
+		NewImage: map[string]interface{}{"a": 1},
+	}))
+
+	require.False(t, currTableSchemaWrapper.IsAllColumnNamesKnown(&cdcEvent{
+		NewImage: map[string]interface{}{"a": 1, "b": 2},
+	}))
+	require.False(t, currTableSchemaWrapper.IsAllColumnNamesKnown(&cdcEvent{
+		NewImage: map[string]interface{}{"b": 1},
+	}))
 }

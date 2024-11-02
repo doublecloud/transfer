@@ -353,7 +353,7 @@ func convertToChangeItem(
 		// delete
 		result, err := makeDeleteChangeItem(tablePath, schema, event, writeTime, offset, partitionID, msgSize)
 		if err != nil {
-			return nil, xerrors.Errorf("unable to make update changeItem, err: %w", err)
+			return nil, xerrors.Errorf("unable to make delete changeItem, err: %w", err)
 		}
 		return result, nil
 	} else {

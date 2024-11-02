@@ -176,7 +176,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 	tableMap := make(abstract.TableMap)
 	for _, tableName := range allTables {
 		tablePath := path.Join(s.config.Database, tableName)
-		desc, err := s.describeTable(ctx, tablePath, options.WithTableStats())
+		desc, err := describeTable(ctx, s.db, tablePath, options.WithTableStats())
 		if err != nil {
 			if s.canSkipError(err) {
 				logger.Log.Warn("skip table", log.String("table", tablePath), log.Error(err))
@@ -194,28 +194,8 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 	return model.FilteredMap(tableMap, includeTableFilter), nil
 }
 
-func (s *Storage) describeTable(ctx context.Context, tablePath string, opts ...options.DescribeTableOption) (*options.Description, error) {
-	var desc options.Description
-	err := s.db.Table().Do(ctx, func(ctx context.Context, session table.Session) (err error) {
-		desc, err = session.DescribeTable(ctx, tablePath, opts...)
-		if err != nil {
-			return err
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &desc, nil
-}
-
 func (s *Storage) TableSchema(ctx context.Context, tableID abstract.TableID) (*abstract.TableSchema, error) {
-	tablePath := path.Join(s.config.Database, tableID.Namespace, tableID.Name)
-	desc, err := s.describeTable(ctx, tablePath)
-	if err != nil {
-		return nil, err
-	}
-	return abstract.NewTableSchema(FromYdbSchema(desc.Columns, desc.PrimaryKey)), nil
+	return tableSchema(ctx, s.db, s.config.Database, tableID)
 }
 
 func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescription, pusher abstract.Pusher) error {

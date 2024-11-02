@@ -23,7 +23,7 @@ func (s *Storage) GetIncrementalState(ctx context.Context, incremental []abstrac
 	res := make([]abstract.TableDescription, 0, len(incremental))
 	for _, tbl := range incremental {
 		fullPath := path.Join(s.config.Database, tbl.Name)
-		ydbTableDesc, err := s.describeTable(ctx, fullPath, options.WithShardKeyBounds())
+		ydbTableDesc, err := describeTable(ctx, s.db, fullPath, options.WithShardKeyBounds())
 		if err != nil {
 			return nil, xerrors.Errorf("error describing table %s: %w", tbl.Name, err)
 		}

@@ -8,13 +8,13 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	mockstorage "github.com/doublecloud/transfer/tests/helpers/mock_storage"
 	"github.com/stretchr/testify/require"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
@@ -24,54 +24,6 @@ import (
 )
 
 const partitionsCount = 3
-
-func TestGetUpToDateTableSchema(t *testing.T) {
-	// prepare
-
-	tableSchema0 := abstract.NewTableSchema([]abstract.ColSchema{
-		{ColumnName: "a"},
-	})
-	currSchemaWrapper := newSchemaObj()
-	currSchemaWrapper.Set("tableName0", tableSchema0)
-
-	newTableSchema0 := abstract.NewTableSchema([]abstract.ColSchema{
-		{ColumnName: "a"},
-		{ColumnName: "b"},
-	})
-
-	var tableNameAskedSchema *string = nil
-
-	mockedStorage := mockstorage.NewMockStorage()
-	mockedStorage.TableSchemaF = func(ctx context.Context, table abstract.TableID) (*abstract.TableSchema, error) {
-		tableNameAskedSchema = new(string)
-		*tableNameAskedSchema = table.Name
-		return newTableSchema0, nil
-	}
-
-	src := &Source{
-		cfg:     &YdbSource{},
-		storage: mockedStorage,
-	}
-	src.schema = currSchemaWrapper
-
-	// all columns are known
-
-	ev0 := &cdcEvent{
-		Update: map[string]interface{}{"a": 1},
-	}
-	_, err := src.getUpToDateTableSchema("tableName0", ev0)
-	require.NoError(t, err)
-	require.Nil(t, tableNameAskedSchema)
-
-	// one new column
-
-	ev1 := &cdcEvent{
-		Update: map[string]interface{}{"a": 1, "b": 2},
-	}
-	_, err = src.getUpToDateTableSchema("tableName0", ev1)
-	require.NoError(t, err)
-	require.Equal(t, "tableName0", *tableNameAskedSchema)
-}
 
 type asyncSinkMock struct {
 	PushCallback func(items []abstract.ChangeItem)
@@ -193,6 +145,12 @@ func TestSourceCDC(t *testing.T) {
 		// TODO - now it doesn't work
 	})
 
+	t.Run("Get up to date table schema", func(t *testing.T) {
+		checkSchemaUpdateWithMode(t, db, transferID, "UPDATES", srcCfgTemplate)
+		checkSchemaUpdateWithMode(t, db, transferID, "NEW_IMAGE", srcCfgTemplate)
+		checkSchemaUpdateWithMode(t, db, transferID, "NEW_AND_OLD_IMAGES", srcCfgTemplate)
+	})
+
 	t.Run("Canon", func(t *testing.T) {
 		tableName := "test_table_canon"
 		tablePath := formTablePath(tableName)
@@ -231,6 +189,66 @@ func TestSourceCDC(t *testing.T) {
 
 		canon.SaveJSON(t, pushedItems)
 	})
+}
+
+func checkSchemaUpdateWithMode(t *testing.T, db *ydb.Driver, transferID, mode string, srcCfgTemplate YdbSource) {
+	tableName := "schema_up_to_date_new_image" + "_" + mode
+	tablePath := formTablePath(tableName)
+	createTableAndFeedWithMode(t, db, transferID, tablePath, mode,
+		options.WithColumn("id", types.Optional(types.TypeUint64)),
+		options.WithColumn("val", types.Optional(types.TypeString)),
+		options.WithPrimaryKeyColumn("id"),
+	)
+
+	execQueries(t, db, []string{
+		fmt.Sprintf("UPSERT INTO `%s` (id, val) VALUES (%d, '%s');", tablePath, 1, "val_1"),
+	})
+
+	srcCfg := srcCfgTemplate
+	srcCfg.Tables = []string{tableName}
+	src, err := NewSource(transferID, &srcCfg, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+	require.NoError(t, err)
+
+	pushedItems := make([]abstract.ChangeItem, 0)
+	sink := &asyncSinkMock{
+		PushCallback: func(items []abstract.ChangeItem) {
+			pushedItems = append(pushedItems, items...)
+		},
+	}
+
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	errChan := make(chan error, 1)
+	go func() {
+		errChan <- src.Run(sink)
+		wg.Done()
+	}()
+
+	waitingStartTime := time.Now()
+	for len(pushedItems) != 1 {
+		require.False(t, time.Since(waitingStartTime) > time.Second*20)
+	}
+
+	require.NoError(t, db.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
+		return s.AlterTable(ctx, tablePath, options.WithAddColumn("new_val", types.Optional(types.TypeString)))
+	}))
+	execQueries(t, db, []string{
+		fmt.Sprintf("UPSERT INTO `%s` (id, val, new_val) VALUES (%d, '%s', '%s');", tablePath, 2, "val_2", "new_val_2"),
+	})
+
+	for len(pushedItems) != 2 {
+		require.False(t, time.Since(waitingStartTime) > time.Second*20)
+	}
+
+	src.Stop()
+	wg.Wait()
+	if err := <-errChan; err != nil {
+		require.ErrorIs(t, err, context.Canceled)
+	}
+
+	require.Len(t, pushedItems, 2)
+	require.Equal(t, []string{"id", "val"}, pushedItems[0].ColumnNames)
+	require.Equal(t, []string{"id", "new_val", "val"}, pushedItems[1].ColumnNames)
 }
 
 // events with the same primary keys are ordered,
@@ -277,8 +295,9 @@ func waitExpectedEvents(t *testing.T, src *Source, expectedItemsCount int) []abs
 
 	wg := sync.WaitGroup{}
 	wg.Add(1)
+	errChan := make(chan error, 1)
 	go func() {
-		require.ErrorIs(t, src.Run(sink), context.Canceled)
+		errChan <- src.Run(sink)
 		wg.Done()
 	}()
 
@@ -286,6 +305,9 @@ func waitExpectedEvents(t *testing.T, src *Source, expectedItemsCount int) []abs
 	}
 	src.Stop()
 	wg.Wait()
+	if err := <-errChan; err != nil {
+		require.ErrorIs(t, err, context.Canceled)
+	}
 
 	return pushedItems
 }
@@ -330,13 +352,17 @@ func execQueries(t *testing.T, db *ydb.Driver, queries []string) {
 }
 
 func createTableAndFeed(t *testing.T, db *ydb.Driver, feedName, tablePath string, opts ...options.CreateTableOption) {
+	createTableAndFeedWithMode(t, db, feedName, tablePath, "NEW_IMAGE", opts...)
+}
+
+func createTableAndFeedWithMode(t *testing.T, db *ydb.Driver, feedName, tablePath, mode string, opts ...options.CreateTableOption) {
 	opts = append(opts, options.WithPartitions(options.WithUniformPartitions(partitionsCount)))
 
 	require.NoError(t, db.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
-		return s.CreateTable(context.Background(), tablePath, opts...)
+		return s.CreateTable(ctx, tablePath, opts...)
 	}))
 
-	require.NoError(t, createChangeFeedOneTable(context.Background(), db, tablePath, feedName, "NEW_IMAGE"))
+	require.NoError(t, createChangeFeedOneTable(context.Background(), db, tablePath, feedName, mode))
 }
 
 func formTablePath(tableName string) string {

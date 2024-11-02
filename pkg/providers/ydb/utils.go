@@ -1,10 +1,14 @@
 package ydb
 
 import (
+	"context"
+	"path"
 	"regexp"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/ydb-platform/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 )
 
@@ -57,4 +61,28 @@ func flatten(batch [][]abstract.ChangeItem) []abstract.ChangeItem {
 		result = append(result, currArr...)
 	}
 	return result
+}
+
+func tableSchema(ctx context.Context, db *ydb.Driver, database string, tableID abstract.TableID) (*abstract.TableSchema, error) {
+	tablePath := path.Join(database, tableID.Namespace, tableID.Name)
+	desc, err := describeTable(ctx, db, tablePath)
+	if err != nil {
+		return nil, err
+	}
+	return abstract.NewTableSchema(FromYdbSchema(desc.Columns, desc.PrimaryKey)), nil
+}
+
+func describeTable(ctx context.Context, db *ydb.Driver, tablePath string, opts ...options.DescribeTableOption) (*options.Description, error) {
+	var desc options.Description
+	err := db.Table().Do(ctx, func(ctx context.Context, session table.Session) (err error) {
+		desc, err = session.DescribeTable(ctx, tablePath, opts...)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &desc, nil
 }

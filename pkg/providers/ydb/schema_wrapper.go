@@ -20,7 +20,12 @@ func (s *tableSchemaWrapper) Set(tableSchema *abstract.TableSchema) {
 }
 
 func (s *tableSchemaWrapper) IsAllColumnNamesKnown(event *cdcEvent) bool {
-	for k := range event.Update {
+	columnValues := event.Update
+	if len(columnValues) == 0 {
+		columnValues = event.NewImage
+	}
+
+	for k := range columnValues {
 		if _, ok := s.colNameToIdx[k]; !ok {
 			return false
 		}
