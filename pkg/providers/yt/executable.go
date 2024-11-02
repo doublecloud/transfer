@@ -62,7 +62,7 @@ func InitContainerExe() {
 // uploadContainerLightExe need to have transfer_manager/go/pkg/providers/yt/lightexe compiled as
 // `GOOS=linux GOARCH=arm64  go build  .`
 func uploadContainerLightExe() error {
-	lightExePath := "transfer_manager/go/pkg/providers/yt/lightexe/lightexe"
+	lightExePath := "binaries/lightexe"
 	binaryPath := yatest.SourcePath(lightExePath)
 	logger.Log.Info("starting light exe upload")
 	err := uploadExe("light_exe_", binaryPath)

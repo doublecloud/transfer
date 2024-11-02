@@ -190,8 +190,7 @@ jobs:
       - shell: bash
         name: build light-exe for YT jobs
         run: |
-          cd pkg/providers/yt/lightexe
-          go build .
+          go build -o  binaries/lightexe ./pkg/providers/yt/lightexe/*.go
       - shell: bash
         name: start local YT
         run: |
