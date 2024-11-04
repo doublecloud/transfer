@@ -42,39 +42,11 @@ func InitExe() {
 	}
 }
 
-func InitContainerExe() {
-	if !env.IsTest() {
-		return
-	}
-	for _, arg := range os.Args[1:] {
-		if arg == "-test.list" {
-			logger.Log.Infof("%q argument found, skipping initialization", arg)
-			return
-		}
-	}
-
-	if err := uploadContainerLightExe(); err != nil {
-		logger.Log.Error("unable to upload light exe", log.Error(err))
-		panic(err)
-	}
-}
-
-// uploadContainerLightExe need to have transfer_manager/go/pkg/providers/yt/lightexe compiled as
-// `GOOS=linux GOARCH=arm64  go build  .`
-func uploadContainerLightExe() error {
-	lightExePath := "binaries/lightexe"
-	binaryPath := yatest.SourcePath(lightExePath)
-	logger.Log.Info("starting light exe upload")
-	err := uploadExe("light_exe_", binaryPath)
-	if err != nil {
-		return xerrors.Errorf("unable to upload light exe: %w", err)
-	}
-	logger.Log.Infof("light exe was successfully uploaded to %q", ExePath)
-	return nil
-}
-
 func uploadLightExe() error {
 	lightExePath := "transfer_manager/go/pkg/providers/yt/lightexe/lightexe"
+	if path, ok := os.LookupEnv("BINARY_PATH"); ok {
+		lightExePath = path + "/lightexe"
+	}
 	binaryPath, err := yatest.BinaryPath(lightExePath)
 	if err != nil {
 		return xerrors.Errorf("unable to get light exe binary path %q: %w", lightExePath, err)

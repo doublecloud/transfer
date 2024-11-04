@@ -24,6 +24,7 @@ run-tests:
 	export USE_TESTCONTAINERS=1; \
 	export YA_TEST_RUNNER=1; \
 	export YT_PROXY=localhost:8180; \
+	export BINARY_PATH=binaries; \
 	for dir in $$(find ./$(SUITE_GROUP)/$(SUITE_PATH) -type d); do \
 	  if ls "$$dir"/*_test.go >/dev/null 2>&1; then \
 	    echo "::group::$$dir"; \
