@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"fmt"
+	"math"
 	"testing"
 	"time"
 
@@ -21,29 +23,38 @@ func TestNotMasterErrorWrapping(t *testing.T) {
 		return new(NotMasterError)
 	})
 }
-
 func TestTimezoneOffset(t *testing.T) {
-	loc, err := time.LoadLocation("UTC")
-	require.NoError(t, err)
-	require.Equal(t, "+00:00", timezoneOffset(loc))
+	tests := []struct {
+		name        string
+		location    string
+		timeToCheck time.Time
+		expectedUTC string
+	}{
+		{"UTC", "UTC", time.Now(), "+00:00"},
+		{"Empty location (defaults to UTC)", "", time.Now(), "+00:00"},
+		{"Europe/Moscow", "Europe/Moscow", time.Now(), "+03:00"},
+		// winter / summer times
+		{"America/Los_Angeles Summer", "America/Los_Angeles", time.Date(2023, time.July, 1, 0, 0, 0, 0, time.UTC), "-07:00"},
+		{"America/Los_Angeles Winter", "America/Los_Angeles", time.Date(2023, time.January, 1, 0, 0, 0, 0, time.UTC), "-08:00"},
+		{"Pacific/Marquesas", "Pacific/Marquesas", time.Now(), "-09:30"},
+		{"Pacific/Kiritimati", "Pacific/Kiritimati", time.Now(), "+14:00"},
+	}
 
-	loc, err = time.LoadLocation("")
-	require.NoError(t, err)
-	require.Equal(t, "+00:00", timezoneOffset(loc))
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			loc, err := time.LoadLocation(tt.location)
+			require.NoError(t, err)
 
-	loc, err = time.LoadLocation("Europe/Moscow")
-	require.NoError(t, err)
-	require.Equal(t, "+03:00", timezoneOffset(loc))
+			offset := timezoneOffsetAtTime(loc, tt.timeToCheck)
+			require.Equal(t, tt.expectedUTC, offset, "Unexpected timezone offset for %s at %v", tt.location, tt.timeToCheck)
+		})
+	}
+}
 
-	loc, err = time.LoadLocation("America/Los_Angeles")
-	require.NoError(t, err)
-	require.Equal(t, "-07:00", timezoneOffset(loc))
-
-	loc, err = time.LoadLocation("Pacific/Marquesas")
-	require.NoError(t, err)
-	require.Equal(t, "-09:30", timezoneOffset(loc))
-
-	loc, err = time.LoadLocation("Pacific/Kiritimati")
-	require.NoError(t, err)
-	require.Equal(t, "+14:00", timezoneOffset(loc))
+// timezoneOffsetAtTime returns the UTC offset for a specific time in a given location.
+func timezoneOffsetAtTime(loc *time.Location, t time.Time) string {
+	_, offsetSeconds := t.In(loc).Zone()
+	offsetHours := offsetSeconds / 3600
+	offsetMinutes := (offsetSeconds % 3600) / 60
+	return fmt.Sprintf("%+03d:%02d", offsetHours, int(math.Abs(float64(offsetMinutes))))
 }
