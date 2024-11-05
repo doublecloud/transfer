@@ -5,21 +5,25 @@ import (
 	"errors"
 	"fmt"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/format"
+	"github.com/doublecloud/transfer/pkg/parsequeue"
 	"github.com/doublecloud/transfer/pkg/util"
-	"github.com/doublecloud/transfer/pkg/util/ioreader"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"github.com/doublecloud/transfer/pkg/util/queues/sequencer"
 	"github.com/doublecloud/transfer/pkg/util/throttler"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicreader"
 	"go.ytsaurus.tech/library/go/core/log"
+)
+
+const (
+	parallelism            = 10
+	bufferFlushingInterval = time.Millisecond * 500
 )
 
 type Source struct {
@@ -30,23 +34,44 @@ type Source struct {
 	once       sync.Once
 	ctx        context.Context
 	cancelFunc context.CancelFunc
-	errCh      chan error
 
 	reader       *readerThreadSafe
 	schema       *schemaWrapper
 	memThrottler *throttler.MemoryThrottler
-	isSending    atomic.Bool
 	ydbClient    *ydb.Driver
+
+	errCh chan error
 }
 
 func (s *Source) Run(sink abstract.AsyncSink) error {
+	parseQ := parsequeue.NewWaitable(s.logger, parallelism, sink, s.parse, s.ack)
+	defer parseQ.Close()
+
+	return s.run(parseQ)
+}
+
+func (s *Source) Stop() {
+	s.once.Do(func() {
+		s.cancelFunc()
+		if err := s.reader.Close(context.Background()); err != nil {
+			s.logger.Warn("unable to close reader", log.Error(err))
+		}
+		if err := s.ydbClient.Close(context.Background()); err != nil {
+			s.logger.Warn("unable to close ydb client", log.Error(err))
+		}
+	})
+}
+
+func (s *Source) run(parseQ *parsequeue.WaitableParseQueue[[]batchWithSize]) error {
 	defer func() {
 		s.Stop()
 	}()
-	s.isSending.Store(false)
-	buffer := make([]*topicreader.Batch, 0)
-	bufferChangeItems := make([][]abstract.ChangeItem, 0)
-	bufSize := uint64(0)
+
+	var bufSize uint64
+	messagesCount := 0
+	var buffer []batchWithSize
+
+	lastPushTime := time.Now()
 	for {
 		select {
 		case <-s.ctx.Done():
@@ -60,7 +85,8 @@ func (s *Source) Run(sink abstract.AsyncSink) error {
 			time.Sleep(10 * time.Millisecond)
 			continue
 		}
-		batch, err := func() (*topicreader.Batch, error) {
+
+		ydbBatch, err := func() (*topicreader.Batch, error) {
 			cloudResolvingCtx, cancel := context.WithTimeout(s.ctx, 10*time.Millisecond)
 			defer cancel()
 			return s.reader.ReadMessageBatch(cloudResolvingCtx)
@@ -68,79 +94,99 @@ func (s *Source) Run(sink abstract.AsyncSink) error {
 		if err != nil && !errors.Is(err, context.DeadlineExceeded) {
 			return xerrors.Errorf("read returned error, err: %w", err)
 		}
-		if batch != nil {
-			changeItems, size, err := s.toChangeItems(batch)
+		if ydbBatch != nil {
+			batch, err := newBatchWithSize(ydbBatch)
 			if err != nil {
-				return xerrors.Errorf("unable to convert batch to changeItems, err: %w", err)
+				return xerrors.Errorf("unable to read message values: %w", err)
 			}
-
-			bufferChangeItems = append(bufferChangeItems, changeItems)
 			buffer = append(buffer, batch)
-			bufSize += size
 
-			s.memThrottler.AddInflight(size)
+			bufSize += batch.totalSize
+			s.memThrottler.AddInflight(batch.totalSize)
+			messagesCount += len(ydbBatch.Messages)
 		}
 
-		if s.isSending.Load() || len(bufferChangeItems) == 0 { // accumulate
+		if !s.memThrottler.ExceededLimits() && !(time.Since(lastPushTime) >= bufferFlushingInterval && bufSize > 0) {
 			continue
 		}
 
 		// send into sink
+		s.logger.Info(fmt.Sprintf("begin to process batch: %v items with %v", messagesCount, format.SizeInt(int(bufSize))),
+			log.String("offsets", sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))))
 
-		s.logger.Info(
-			fmt.Sprintf("begin to process batch: %v items with %v", len(bufferChangeItems), format.SizeInt(int(bufSize))),
-			log.String("offsets", sequencer.BuildLogMapPartitionToOffsetsRange(bufferChangeItems)),
-		)
+		if err := parseQ.Add(buffer); err != nil {
+			return xerrors.Errorf("unable to add buffer to parse queue: %w", err)
+		}
 
-		s.isSending.Store(true) // this should be upraised into this goroutine - if move it into processMessages - it's another goroutine, and lead to RC
-		go func(buffer [][]abstract.ChangeItem, batch []*topicreader.Batch, bufSize uint64) {
-			err := s.processMessages(sink, buffer, batch, bufSize)
-			if err != nil {
-				select {
-				case s.errCh <- xerrors.Errorf("unable to process messages: %w", err):
-				case <-s.ctx.Done():
-				}
-			}
-		}(bufferChangeItems, buffer, bufSize)
-
-		bufferChangeItems = make([][]abstract.ChangeItem, 0)
-		buffer = make([]*topicreader.Batch, 0)
 		bufSize = 0
+		messagesCount = 0
+		buffer = nil
+		lastPushTime = time.Now()
 	}
 }
 
-func (s *Source) processMessages(sink abstract.AsyncSink, buffer [][]abstract.ChangeItem, batch []*topicreader.Batch, bufSize uint64) error {
-	defer s.isSending.Store(false)
-	changeItems := flatten(buffer)
-	pushSt := time.Now()
-	if err := <-sink.AsyncPush(changeItems); err != nil {
-		s.logger.Error("failed to push changeitems", log.Error(err), log.String("offsets", sequencer.BuildLogMapPartitionToOffsetsRange(buffer)))
-		return xerrors.Errorf("failed to push changeitems: %w", err)
-	}
-	for _, currBatch := range batch {
-		err := s.reader.Commit(s.ctx, currBatch)
-		if err != nil {
-			return xerrors.Errorf("failed to commit changeitems: %w", err)
+func (s *Source) parse(buffer []batchWithSize) []abstract.ChangeItem {
+	rollbackOnError := util.Rollbacks{}
+	defer rollbackOnError.Do()
+
+	rollbackOnError.Add(func() {
+		s.memThrottler.ReduceInflight(batchesSize(buffer))
+	})
+
+	items := make([]abstract.ChangeItem, 0)
+	for _, batch := range buffer {
+		for i := range batch.messageValues {
+			var event cdcEvent
+			// https://st.yandex-team.ru/TM-5444. For type JSON and JSONDocument, YDB returns JSON as an object, not as a string.
+			// The CDC format description is somewhat ambiguous, its documentation is https://ydb.tech/en/docs/concepts/cdc#record-structure.
+			// The JSON format is described at https://ydb.tech/ru/docs/yql/reference/types/json#utf; however, it is apparently not used in the CDC protocol. As a result, YQL NULL and Json `null` value are represented by the same object in the YQL CDC protocol.
+			if err := jsonx.Unmarshal(batch.messageValues[i], &event); err != nil {
+				util.Send(s.ctx, s.errCh, xerrors.Errorf("unable to deserialize json, err: %w", err))
+				return nil
+			}
+
+			msgData := batch.ydbBatch.Messages[i]
+			topicPath := msgData.Topic()
+			tableName := makeTablePathFromTopicPath(topicPath, s.feedName, s.cfg.Database)
+			tableSchema, err := s.getUpToDateTableSchema(tableName, &event)
+			if err != nil {
+				util.Send(s.ctx, s.errCh, xerrors.Errorf("unable to check table schema, event: %s, err: %w", event.ToJSONString(), err))
+				return nil
+			}
+			item, err := convertToChangeItem(tableName, tableSchema, &event, msgData.WrittenAt, msgData.Offset, msgData.PartitionID(), uint64(len(batch.messageValues[i])), s.fillDefaults())
+			if err != nil {
+				util.Send(s.ctx, s.errCh, xerrors.Errorf("unable to convert ydb cdc event to changeItem, event: %s, err: %w", event.ToJSONString(), err))
+				return nil
+			}
+			items = append(items, *item)
 		}
 	}
+	rollbackOnError.Cancel()
+
+	return items
+}
+
+func (s *Source) ack(buffer []batchWithSize, pushSt time.Time, err error) {
+	defer s.memThrottler.ReduceInflight(batchesSize(buffer))
+
+	if err != nil {
+		s.logger.Error("failed to push change items", log.Error(err),
+			log.String("offsets", sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))))
+		util.Send(s.ctx, s.errCh, xerrors.Errorf("failed to push change items: %w", err))
+		return
+	}
+
+	for _, batch := range buffer {
+		if err := s.reader.Commit(s.ctx, batch.ydbBatch); err != nil {
+			util.Send(s.ctx, s.errCh, xerrors.Errorf("failed to commit change items: %w", err))
+			return
+		}
+	}
+
 	s.logger.Info(
 		fmt.Sprintf("Commit messages done in %v", time.Since(pushSt)),
-		log.String("pushed", sequencer.BuildLogMapPartitionToOffsetsRange(buffer)),
+		log.String("pushed", sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))),
 	)
-	s.memThrottler.ReduceInflight(bufSize)
-	return nil
-}
-
-func (s *Source) Stop() {
-	s.once.Do(func() {
-		s.cancelFunc()
-		if err := s.reader.Close(context.Background()); err != nil {
-			s.logger.Warn("unable to close reader", log.Error(err))
-		}
-		if err := s.ydbClient.Close(context.Background()); err != nil {
-			s.logger.Warn("unable to close ydb client", log.Error(err))
-		}
-	})
 }
 
 func (s *Source) updateLocalCacheTableSchema(tablePath string) error {
@@ -181,32 +227,27 @@ func (s *Source) fillDefaults() bool {
 	return false
 }
 
-func (s *Source) toChangeItems(batch *topicreader.Batch) ([]abstract.ChangeItem, uint64, error) {
-	items := make([]abstract.ChangeItem, 0, len(batch.Messages))
-	sumSize := uint64(0)
-	for _, msg := range batch.Messages {
-		ioReader := ioreader.NewCalcSizeWrapper(msg)
-		var event cdcEvent
-		// https://st.yandex-team.ru/TM-5444. For type JSON and JSONDocument, YDB returns JSON as an object, not as a string.
-		// The CDC format description is somewhat ambiguous, its documentation is https://ydb.tech/en/docs/concepts/cdc#record-structure.
-		// The JSON format is described at https://ydb.tech/ru/docs/yql/reference/types/json#utf; however, it is apparently not used in the CDC protocol. As a result, YQL NULL and Json `null` value are represented by the same object in the YQL CDC protocol.
-		if err := jsonx.NewDefaultDecoder(msg).Decode(&event); err != nil {
-			return nil, 0, xerrors.Errorf("unable to deserialize json, err: %w", err)
+func batchesToQueueMessages(batches []batchWithSize) []sequencer.QueueMessage {
+	messages := make([]sequencer.QueueMessage, 0)
+	for _, batch := range batches {
+		for _, msg := range batch.ydbBatch.Messages {
+			messages = append(messages, sequencer.QueueMessage{
+				Topic:     msg.Topic(),
+				Partition: int(msg.PartitionID()),
+				Offset:    msg.Offset,
+			})
 		}
-		sumSize += ioReader.Counter
-		topicPath := msg.Topic()
-		tableName := makeTablePathFromTopicPath(topicPath, s.feedName, s.cfg.Database)
-		tableSchema, err := s.getUpToDateTableSchema(tableName, &event)
-		if err != nil {
-			return nil, 0, xerrors.Errorf("unable to check table schema, event: %s, err: %w", event.ToJSONString(), err)
-		}
-		item, err := convertToChangeItem(tableName, tableSchema, &event, msg.WrittenAt, msg.Offset, msg.PartitionID(), ioReader.Counter, s.fillDefaults())
-		if err != nil {
-			return nil, 0, xerrors.Errorf("unable to convert ydb cdc event to changeItem, event: %s, err: %w", event.ToJSONString(), err)
-		}
-		items = append(items, *item)
 	}
-	return items, sumSize, nil
+	return messages
+}
+
+func batchesSize(buffer []batchWithSize) uint64 {
+	var size uint64
+	for _, batch := range buffer {
+		size += batch.totalSize
+	}
+
+	return size
 }
 
 func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.Registry) (*Source, error) {
@@ -244,7 +285,6 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 		reader:       reader,
 		schema:       schema,
 		memThrottler: throttler.NewMemoryThrottler(uint64(cfg.BufferSize)),
-		isSending:    atomic.Bool{},
 		ydbClient:    ydbClient,
 	}
 

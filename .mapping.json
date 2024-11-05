@@ -1457,6 +1457,7 @@
   "pkg/providers/ydb/logadapter/adapter.go":"transfer_manager/go/pkg/providers/ydb/logadapter/adapter.go",
   "pkg/providers/ydb/logadapter/fields.go":"transfer_manager/go/pkg/providers/ydb/logadapter/fields.go",
   "pkg/providers/ydb/logadapter/traces.go":"transfer_manager/go/pkg/providers/ydb/logadapter/traces.go",
+  "pkg/providers/ydb/messages_batch.go":"transfer_manager/go/pkg/providers/ydb/messages_batch.go",
   "pkg/providers/ydb/model_destination.go":"transfer_manager/go/pkg/providers/ydb/model_destination.go",
   "pkg/providers/ydb/model_source.go":"transfer_manager/go/pkg/providers/ydb/model_source.go",
   "pkg/providers/ydb/model_source_test.go":"transfer_manager/go/pkg/providers/ydb/model_source_test.go",
