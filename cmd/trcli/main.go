@@ -1,6 +1,9 @@
 package main
 
 import (
+	"net/http"
+	"os"
+
 	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/check"
 	"github.com/doublecloud/transfer/cmd/trcli/replicate"
@@ -22,8 +25,6 @@ import (
 	"go.uber.org/zap/zapcore"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/library/go/core/log/zap"
-	"net/http"
-	"os"
 )
 
 var (
