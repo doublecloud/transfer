@@ -109,7 +109,7 @@ func main() {
 				}
 			}
 
-			go serverutil.RunHealthCheckOnPort(3000)
+			go serverutil.RunHealthCheckOnPort(hcPort)
 			return nil
 		},
 	}
