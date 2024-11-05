@@ -36,8 +36,31 @@ func TestActivate(t *testing.T) {
 	transfer.Src = src
 	transfer.Dst = dst
 
-	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts())))
+	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), 0))
 
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t2", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 2))
 	require.NoError(t, helpers.WaitDestinationEqualRowsCount(dst.Database, "t3", helpers.GetSampleableStorageByModel(t, dst), 60*time.Second, 5))
+}
+
+func TestActivateWithDelay(t *testing.T) {
+	src := pgrecipe.RecipeSource(
+		pgrecipe.WithPrefix(""),
+		pgrecipe.WithFiles("dump/pg_init.sql"),
+	)
+
+	dst, err := chrecipe.Target(
+		chrecipe.WithInitFile("ch_init.sql"),
+		chrecipe.WithDatabase("trcli_activate_test_ch"),
+	)
+	require.NoError(t, err)
+
+	transfer, err := config.ParseTransfer(transferYaml)
+	require.NoError(t, err)
+
+	transfer.Src = src
+	transfer.Dst = dst
+
+	st := time.Now()
+	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), 10*time.Second))
+	require.Less(t, 10*time.Second, time.Since(st))
 }

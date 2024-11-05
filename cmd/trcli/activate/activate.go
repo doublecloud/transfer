@@ -17,29 +17,49 @@ import (
 
 func ActivateCommand(cp *coordinator.Coordinator, rt abstract.Runtime, registry metrics.Registry) *cobra.Command {
 	var transferParams string
+	var activateDelay time.Duration
 	activationCommand := &cobra.Command{
 		Use:   "activate",
 		Short: "Activate transfer locally",
 		Args:  cobra.MatchAll(cobra.ExactArgs(0)),
-		RunE:  activate(cp, rt, &transferParams, registry),
+		RunE:  activate(cp, rt, &transferParams, registry, activateDelay),
 	}
 	activationCommand.Flags().StringVar(&transferParams, "transfer", "./transfer.yaml", "path to yaml file with transfer configuration")
+	activationCommand.Flags().DurationVar(&activateDelay, "min-delay", 10*time.Second, "minial delay for activation, use to ensure metrics got scrapped, default 10s")
 	return activationCommand
 }
 
-func activate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string, registry metrics.Registry) func(cmd *cobra.Command, args []string) error {
+func activate(
+	cp *coordinator.Coordinator,
+	rt abstract.Runtime,
+	transferYaml *string,
+	registry metrics.Registry,
+	delay time.Duration,
+) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		transfer, err := config.TransferFromYaml(transferYaml)
 		if err != nil {
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
-		return RunActivate(*cp, transfer, registry)
+		return RunActivate(*cp, transfer, registry, delay)
 	}
 }
 
-func RunActivate(cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry) error {
+func RunActivate(
+	cp coordinator.Coordinator,
+	transfer *model.Transfer,
+	registry metrics.Registry,
+	delay time.Duration,
+) error {
 	st := time.Now()
+	defer func() {
+		if time.Since(st) < delay {
+			extraWait := delay.Truncate(time.Since(st))
+			logger.Log.Infof("activation done faster then minimal delay, wait for: %v", extraWait)
+			time.Sleep(extraWait)
+		}
+	}()
 	logger.Log.Infof("run activate with: %T", cp)
 	op := new(model.TransferOperation)
 	op.OperationID = transfer.ID + "/activation"

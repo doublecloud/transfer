@@ -35,7 +35,7 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 		}
 		transfer.Runtime = rt
 		if transfer.IncrementOnly() {
-			if err := activate.RunActivate(*cp, transfer, registry); err != nil {
+			if err := activate.RunActivate(*cp, transfer, registry, 0); err != nil {
 				return xerrors.Errorf("unable to activate transfer: %w", err)
 			}
 		}
