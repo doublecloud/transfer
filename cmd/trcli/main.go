@@ -136,7 +136,7 @@ func main() {
 
 func newLoggerConfig() zp.Config {
 	cfg := logger.DefaultLoggerConfig(zapcore.DebugLevel)
-	cfg.OutputPaths = []string{"stderr"}
+	cfg.OutputPaths = []string{"stdout"}
 	cfg.ErrorOutputPaths = []string{"stderr"}
 	return cfg
 }
