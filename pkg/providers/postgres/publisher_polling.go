@@ -37,7 +37,6 @@ type poller struct {
 	config          *PgSource
 	transferID      string
 	wal2jsonArgs    wal2jsonArguments
-	altNames        map[abstract.TableID]abstract.TableID
 	wg              sync.WaitGroup
 	slotMonitor     *SlotMonitor
 	slot            AbstractSlot
@@ -84,38 +83,6 @@ func (p *pollWindow) Empty() bool {
 	return p.Size == 0
 }
 
-func (p *poller) fillAltNamesForInheritedTables(includedSchema abstract.DBSchema) (ignoredParentTables []abstract.TableID, err error) {
-	childParentMap, err := MakeChildParentMap(context.TODO(), p.conn)
-	if err != nil {
-		return nil, xerrors.Errorf("failed while reading pg_inherits: %w", err)
-	}
-
-	p.altNames = map[abstract.TableID]abstract.TableID{}
-	invertSch := map[abstract.TableID]abstract.TableID{}
-	for fromID, toID := range childParentMap {
-		p.altNames[fromID] = toID
-		if _, ok := invertSch[toID]; !ok {
-			if _, ok := p.schema[fromID]; ok {
-				invertSch[toID] = fromID
-			}
-		}
-	}
-	ignoredParentTables = []abstract.TableID{}
-	for toID, fromID := range invertSch {
-		if s, ok := p.schema[toID]; !ok || !s.Columns().HasPrimaryKey() || s.Columns().HasFakeKeys() {
-			// 1. Inherit tables do not have any real schema, but it still need to be schemitezed
-			//    All child table must have same schema i.e. parent can be infered from any child
-			// 2. It`s impossible to define PK on parent(partitioned) tables in early PG versions
-			if _, included := includedSchema[toID]; included {
-				ignoredParentTables = append(ignoredParentTables, toID)
-				delete(includedSchema, toID)
-			}
-			p.schema[toID] = p.schema[fromID]
-		}
-	}
-	return ignoredParentTables, nil
-}
-
 func (p *poller) reloadSchema() error {
 	storage, err := NewStorage(p.config.ToStorageParams(nil)) // source includes all data transfer system tables
 	if err != nil {
@@ -137,16 +104,6 @@ func (p *poller) reloadSchema() error {
 		return xerrors.Errorf("failed to filter table list extracted from source by objects set in transfer: %w", err)
 	}
 
-	if p.config.CollapseInheritTables {
-		invalidParentTables, err := p.fillAltNamesForInheritedTables(dbSchemaToCheck)
-		if err != nil {
-			return xerrors.Errorf("failed to find all inherited tables: %w", err)
-		}
-		if err := coordinator.ReportFakePKey(p.cp, p.transferID, FakeParentPKeyStatusMessageCategory, invalidParentTables); err != nil {
-			return xerrors.Errorf("cannot report transfer warning: %w", err)
-		}
-	}
-
 	if err := dbSchemaToCheck.CheckPrimaryKeys(p.config); err != nil {
 		p.metrics.Fatal.Inc()
 		return xerrors.Errorf("primary key check failed: %w", abstract.NewFatalError(err))
@@ -161,7 +118,7 @@ func (p *poller) reloadSchema() error {
 	}
 	defer conn.Release()
 
-	changeProcessor, err := newChangeProcessor(conn.Conn(), p.schema, storage.sExTime, p.altNames, p.config)
+	changeProcessor, err := newChangeProcessor(conn.Conn(), p.schema, storage.sExTime, p.config)
 	if err != nil {
 		return xerrors.Errorf("unable to initialize change processor: %w", err)
 	}
@@ -615,7 +572,6 @@ func NewPollingPublisher(
 		config:          cfg,
 		transferID:      transferID,
 		wal2jsonArgs:    wal2jsonArgs,
-		altNames:        nil,
 		wg:              sync.WaitGroup{},
 		slotMonitor:     NewSlotMonitor(conn, cfg.SlotID, cfg.Database, registry, lgr),
 		slot:            slot,

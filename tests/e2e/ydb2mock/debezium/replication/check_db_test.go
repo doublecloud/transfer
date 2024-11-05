@@ -52,6 +52,7 @@ func Iteration(t *testing.T, currMode ydb.ChangeFeedModeType) map[string]interfa
 		Underlay:           false,
 		ServiceAccountID:   "",
 		ChangeFeedMode:     currMode,
+		UseFullPaths:       true,
 	}
 
 	sink := &helpers.MockSink{}

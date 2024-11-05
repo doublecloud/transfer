@@ -18,6 +18,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/source"
 	"github.com/doublecloud/transfer/pkg/source/eventsource"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/worker/tasks"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -125,6 +126,9 @@ func (w *LocalWorker) initialize() (err error) {
 	var rollbacks util.Rollbacks
 	defer rollbacks.Do()
 
+	if err := tasks.AddExtraTransformers(w.ctx, w.transfer, w.registry); err != nil {
+		return xerrors.Errorf("failed to set extra runtime transformations: %w", err)
+	}
 	w.sink, err = sink.MakeAsyncSink(w.transfer, w.logger, w.registry, w.cp, middlewares.MakeConfig(middlewares.AtReplicationStage))
 	if err != nil {
 		return errors.CategorizedErrorf(categories.Target, "failed to create sink: %w", err)

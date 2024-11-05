@@ -34,7 +34,6 @@ type changeProcessor struct {
 	// fastSchemas contain COPIES of the original schemas
 	fastSchemas map[abstract.TableID]abstract.FastTableSchema
 
-	altNames map[abstract.TableID]abstract.TableID
 	config   *PgSource
 	location *time.Location
 }
@@ -48,8 +47,7 @@ func defaultChangeProcessor() *changeProcessor {
 		schemasToEmit:   abstract.DBSchema{},
 		fastSchemas:     fastSchemasFromDBSchema(abstract.DBSchema{}),
 
-		altNames: map[abstract.TableID]abstract.TableID{},
-		config:   new(PgSource),
+		config: new(PgSource),
 	}
 }
 
@@ -57,7 +55,6 @@ func newChangeProcessor(
 	conn *pgx.Conn,
 	dbSchema abstract.DBSchema,
 	schemaTimestamp time.Time,
-	altNames map[abstract.TableID]abstract.TableID,
 	config *PgSource,
 ) (*changeProcessor, error) {
 	connTimezone := conn.PgConn().ParameterStatus(TimeZoneParameterStatusKey)
@@ -79,8 +76,7 @@ func newChangeProcessor(
 		schemaTimestamp: schemaTimestamp,
 		fastSchemas:     fastSchemasFromDBSchema(dbSchema),
 
-		altNames: altNames,
-		config:   config,
+		config: config,
 	}, nil
 }
 
@@ -93,9 +89,6 @@ func fastSchemasFromDBSchema(dbSchema abstract.DBSchema) map[abstract.TableID]ab
 }
 
 func (c *changeProcessor) hasSchemaForTable(id abstract.TableID) bool {
-	if newName, ok := c.altNames[id]; ok {
-		id = newName
-	}
 	_, ok := c.schemasToEmit[id]
 	return ok
 }
@@ -107,11 +100,6 @@ func (c *changeProcessor) fixupChange(
 	counter int,
 	lsn pglogrepl.LSN,
 ) error {
-	oldName := change.TableID()
-	if newName, ok := c.altNames[oldName]; ok {
-		change.Schema = newName.Namespace
-		change.Table = newName.Name
-	}
 	change.Counter = counter
 	change.LSN = uint64(lsn)
 

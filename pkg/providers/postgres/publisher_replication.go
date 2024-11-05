@@ -156,12 +156,17 @@ func (p *replication) WithIncludeFilter(items []abstract.ChangeItem) []abstract.
 	var changes []abstract.ChangeItem
 	for _, change := range items {
 		if _, ok := p.includeCache[change.TableID()]; !ok {
-			// while CollapseInheritTables rename items inplace replication, we have to check both names: original and new
-			p.includeCache[change.TableID()] = p.config.Include(change.TableID()) || p.config.Include(origTableID(&change))
+			p.includeCache[change.TableID()] = p.config.Include(change.TableID())
 		}
 		if len(p.objectsMap) > 0 { // if we have transfer include objects we should strictly push only them
-			_, ok := p.objectsMap[change.TableID()]
-			if !ok {
+			_, tablePresent := p.objectsMap[change.TableID()]
+			// Let's imagine that we work with partitioned tables and CollapseInheritTables is on
+			// How our code works: 1) we rename partitioned tables using transformers and this happens when we push ChangeItems
+			// 2) IncludeObjects may include name of parent table(this is how it worked previously so this behaviour should be preserved)
+			// 3) therefore when we check if table is present in IncludeObjects we should also check if it's parent is present
+			// otherwise we will just skip all partition tables during replication
+			_, parentPresent := p.objectsMap[p.altNames[change.TableID()]]
+			if !parentPresent && !tablePresent {
 				continue
 			}
 		}
@@ -170,49 +175,6 @@ func (p *replication) WithIncludeFilter(items []abstract.ChangeItem) []abstract.
 		}
 	}
 	return changes
-}
-
-// ChangeItem could be renamed(when Namespace and Name are overriden) by enabling CollapseInheritTables
-// For some reasons we need to know original Namespace and Name while final filtering change items before sending to sinker.
-// Original Namespace and Name are stored in TableSchema even after renaming.
-func origTableID(c *abstract.ChangeItem) abstract.TableID {
-	if len(c.TableSchema.Columns()) > 0 {
-		col := c.TableSchema.Columns()[0]
-		return abstract.TableID{Namespace: col.TableSchema, Name: col.TableName}
-	}
-	return c.TableID()
-}
-
-func (p *replication) fillAltNamesForInheritedTables(ctx context.Context, includedSchema abstract.DBSchema) (ignoredParentTables []abstract.TableID, err error) {
-	childParentMap, err := MakeChildParentMap(ctx, p.conn)
-	if err != nil {
-		return nil, xerrors.Errorf("failed while reading pg_inherits: %w", err)
-	}
-
-	p.altNames = map[abstract.TableID]abstract.TableID{}
-	invertSch := map[abstract.TableID]abstract.TableID{}
-	for fromID, toID := range childParentMap {
-		p.altNames[fromID] = toID
-		if _, ok := invertSch[toID]; !ok {
-			if _, ok := p.schema[fromID]; ok {
-				invertSch[toID] = fromID
-			}
-		}
-	}
-	ignoredParentTables = []abstract.TableID{}
-	for to, from := range invertSch {
-		if s, ok := p.schema[to]; !ok || !s.Columns().HasPrimaryKey() || s.Columns().HasFakeKeys() {
-			// 1. Inherit tables do not have any real schema, but it still need to be schemitezed
-			//    All child table must have same schema i.e. parent can be infered from any child
-			// 2. It`s impossible to define PK on parent(partitioned) tables in early PG versions
-			if _, included := includedSchema[to]; included {
-				ignoredParentTables = append(ignoredParentTables, to)
-				delete(includedSchema, to)
-			}
-			p.schema[to] = p.schema[from]
-		}
-	}
-	return ignoredParentTables, nil
 }
 
 func (p *replication) reloadSchema() error {
@@ -237,13 +199,11 @@ func (p *replication) reloadSchema() error {
 	}
 
 	if p.config.CollapseInheritTables {
-		invalidParentTables, err := p.fillAltNamesForInheritedTables(p.sharedCtx, dbSchema)
+		childParentMap, err := MakeChildParentMap(p.sharedCtx, p.conn)
 		if err != nil {
-			return xerrors.Errorf("failed to find all inherited tables: %w", err)
+			return xerrors.Errorf("failed while reading pg_inherits: %w", err)
 		}
-		if err := coordinator.ReportFakePKey(p.cp, p.transferID, FakeParentPKeyStatusMessageCategory, invalidParentTables); err != nil {
-			return xerrors.Errorf("cannot report transfer warning: %w", err)
-		}
+		p.altNames = childParentMap
 	}
 
 	if err := dbSchemaToCheck.CheckPrimaryKeys(p.config); err != nil {
@@ -260,7 +220,7 @@ func (p *replication) reloadSchema() error {
 	}
 	defer conn.Release()
 
-	changeProcessor, err := newChangeProcessor(conn.Conn(), p.schema, storage.sExTime, p.altNames, p.config)
+	changeProcessor, err := newChangeProcessor(conn.Conn(), p.schema, storage.sExTime, p.config)
 	if err != nil {
 		return xerrors.Errorf("unable to initialize change processor: %w", err)
 	}
