@@ -2,6 +2,7 @@ package serverutil
 
 import (
 	"encoding/json"
+	"fmt"
 	"net"
 	"net/http"
 	"net/http/pprof"
@@ -22,10 +23,14 @@ func PingFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func RunHealthCheck() {
+	RunHealthCheckOnPort(80)
+}
+
+func RunHealthCheckOnPort(port int) {
 	rootMux := http.NewServeMux()
 	rootMux.HandleFunc("/ping", PingFunc)
 	logger.Log.Infof("healthcheck is upraising on port 80")
-	if err := http.ListenAndServe(":80", rootMux); err != nil { // it must be on 80 port - bcs of dataplane instance-group
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", port), rootMux); err != nil { // it must be on 80 port - bcs of dataplane instance-group
 		logger.Log.Error("failed to serve health check", log.Error(err))
 	}
 }
