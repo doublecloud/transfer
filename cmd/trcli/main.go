@@ -39,6 +39,7 @@ func main() {
 
 	loggerConfig := newLoggerConfig()
 	logger.Log = zap.Must(loggerConfig)
+	hcPort := 0
 	logLevel := defaultLogLevel
 	logConfig := defaultLogConfig
 	coordinatorTyp := defaultCoordinator
@@ -51,6 +52,7 @@ func main() {
 		Example:      "./trcli help",
 		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+
 			if runProfiler {
 				go serverutil.RunPprof()
 			}
@@ -106,11 +108,11 @@ func main() {
 					return xerrors.Errorf("unable to load s3 coordinator: %w", err)
 				}
 			}
+
+			go serverutil.RunHealthCheckOnPort(hcPort)
 			return nil
 		},
 	}
-
-	go serverutil.RunHealthCheck()
 
 	registry := InitPrometheusMetrics()
 	cobraaux.RegisterCommand(rootCommand, activate.ActivateCommand(&cp, &rt, registry))
@@ -127,6 +129,7 @@ func main() {
 	rootCommand.PersistentFlags().IntVar(&rt.CurrentJob, "coordinator-job-index", 0, "Worker job index")
 	rootCommand.PersistentFlags().IntVar(&rt.ShardingUpload.JobCount, "coordinator-job-count", 0, "Worker job count, if more then 1 - run consider as sharded, coordinator is required to be non memory")
 	rootCommand.PersistentFlags().IntVar(&rt.ShardingUpload.ProcessCount, "coordinator-process-count", 1, "Worker process count, how many readers must be opened for each job, default is 1")
+	rootCommand.PersistentFlags().IntVar(&hcPort, "health-check-port", 3000, "Port to used as health-check API, default: 3000")
 
 	err := rootCommand.Execute()
 	if err != nil {
