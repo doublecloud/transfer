@@ -2,10 +2,12 @@ name: Release Helm Chart
 
 on:
   push:
-    branches:
-      - 'release-chart-*'
-    tags:
-      - "v*"
+    paths:
+      - 'helm/transfer/**'
+
+  pull_request:
+    paths:
+      - 'helm/transfer/**'
 
 jobs:
   publish:
