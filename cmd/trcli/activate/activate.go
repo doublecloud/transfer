@@ -68,7 +68,10 @@ func RunActivate(
 		op,
 		cp,
 		*transfer,
-		registry,
+		registry.WithTags(map[string]string{
+			"resource_id": transfer.ID,
+			"name":        transfer.TransferName,
+		}),
 	)
 
 	if err != nil {

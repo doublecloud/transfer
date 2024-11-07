@@ -54,6 +54,9 @@ func RunUpload(cp coordinator.Coordinator, transfer *model.Transfer, tables *con
 		*transfer,
 		nil,
 		tasks.UploadSpec{Tables: tables.Tables},
-		registry,
+		registry.WithTags(map[string]string{
+			"resource_id": transfer.ID,
+			"name":        transfer.TransferName,
+		}),
 	)
 }
