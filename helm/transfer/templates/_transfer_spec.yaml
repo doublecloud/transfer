@@ -23,6 +23,16 @@ containers:
       - name: config-volume
         mountPath: /var/config/config.yaml
         subPath: config.yaml
+    ports:
+      - name: prometheus
+        protocol: TCP
+        containerPort: 9091
+      - name: pprof
+        protocol: TCP
+        containerPort: 8080
+      - name: health
+        protocol: TCP
+        containerPort: 3000
     resources:
       requests:
         memory: {{ .Values.resources.requests.memory }}
