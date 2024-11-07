@@ -10,6 +10,10 @@ containers:
       - "{{.Values.coordinator.type}}"
       - "--coordinator-s3-bucket"
       - "{{.Values.coordinator.bucket}}"
+      - "--log-level"
+      - "{{.Values.log.level}}"
+      - "--log-config"
+      - "{{.Values.log.config}}"
     env:
       {{- range $name, $value := .Values.env }}
       - name: {{ $name }}
@@ -19,6 +23,16 @@ containers:
       - name: config-volume
         mountPath: /var/config/config.yaml
         subPath: config.yaml
+    ports:
+      - name: prometheus
+        protocol: TCP
+        containerPort: 9091
+      - name: pprof
+        protocol: TCP
+        containerPort: 8080
+      - name: health
+        protocol: TCP
+        containerPort: 3000
     resources:
       requests:
         memory: {{ .Values.resources.requests.memory }}
@@ -27,7 +41,6 @@ containers:
         memory: {{ .Values.resources.limits.memory }}
         cpu: {{ .Values.resources.limits.cpu }}
 
-restartPolicy: Never
 volumes:
   - name: config-volume
     configMap:

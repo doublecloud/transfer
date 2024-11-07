@@ -8,5 +8,11 @@ spec:
   completionMode: Indexed
   backoffLimit: 6
   template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '9091'
+        prometheus.io/scrape: 'true'
     spec:
+      restartPolicy: Never
     {{- include "transfer.spec" (dict "commandType" "activate" "Values" .Values) | nindent 6 }}

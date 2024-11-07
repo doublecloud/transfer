@@ -1,4 +1,4 @@
-image: ghcr.io/doublecloud/transfer:latest
+image: ghcr.io/doublecloud/transfer:v0.0.0-rc7
 
 resources:
   requests:
@@ -39,3 +39,7 @@ coordinator:
 
 env:
   NO_KEY: NO_VALUE
+
+log:
+  level: info # ("panic", "fatal", "error", "warning", "info", "debug")
+  config: minimal # ("console", "json", "minimal")
