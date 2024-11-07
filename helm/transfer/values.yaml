@@ -39,3 +39,7 @@ coordinator:
 
 env:
   NO_KEY: NO_VALUE
+
+log:
+  level: info # ("panic", "fatal", "error", "warning", "info", "debug")
+  config: minimal # ("console", "json", "minimal")

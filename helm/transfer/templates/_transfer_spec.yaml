@@ -10,6 +10,10 @@ containers:
       - "{{.Values.coordinator.type}}"
       - "--coordinator-s3-bucket"
       - "{{.Values.coordinator.bucket}}"
+      - "--log-level"
+      - "{{.Values.log.level}}"
+      - "--log-config"
+      - "{{.Values.log.config}}"
     env:
       {{- range $name, $value := .Values.env }}
       - name: {{ $name }}
