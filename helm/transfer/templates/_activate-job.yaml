@@ -9,4 +9,5 @@ spec:
   backoffLimit: 6
   template:
     spec:
+      restartPolicy: Never
     {{- include "transfer.spec" (dict "commandType" "activate" "Values" .Values) | nindent 6 }}

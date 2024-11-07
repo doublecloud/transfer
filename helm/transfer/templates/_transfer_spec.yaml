@@ -27,7 +27,6 @@ containers:
         memory: {{ .Values.resources.limits.memory }}
         cpu: {{ .Values.resources.limits.cpu }}
 
-restartPolicy: Never
 volumes:
   - name: config-volume
     configMap:
