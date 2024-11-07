@@ -63,5 +63,5 @@ helm-package:
 
 # Push the Helm chart as OCI artifact
 .PHONY: helm-push
-helm-push: helm-package
+helm-push: helm-package login-ghcr
 	helm push ./transfer-$(VERSION).tgz oci://$(IMAGE_NAME)
