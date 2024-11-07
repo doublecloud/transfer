@@ -218,11 +218,11 @@ func TestDifferentTimezones(t *testing.T) {
 		[]any{int32(2), t2},
 	})
 
-	timezone = "America/Los_Angeles"
+	timezone = "America/Buenos_Aires"
 	loc, err = time.LoadLocation(timezone)
 	require.NoError(t, err)
-	t1, _ = time.ParseInLocation(time.DateTime, "2020-12-31 03:00:00", loc)
-	t2, _ = time.ParseInLocation(time.DateTime, "2020-12-31 07:00:00", loc)
+	t1, _ = time.ParseInLocation(time.DateTime, "2020-12-31 07:00:00", loc)
+	t2, _ = time.ParseInLocation(time.DateTime, "2020-12-31 11:00:00", loc)
 	checkTimezoneVals(storageCfg, timezone, []any{
 		[]any{int32(1), t1},
 		[]any{int32(2), t2},
