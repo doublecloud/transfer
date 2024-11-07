@@ -49,7 +49,15 @@ func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer, regist
 		return xerrors.Errorf("unable to adapt transfer: %w", err)
 	}
 	for {
-		worker := local.NewLocalWorker(cp, transfer, registry, logger.Log)
+		worker := local.NewLocalWorker(
+			cp,
+			transfer,
+			registry.WithTags(map[string]string{
+				"resource_id": transfer.ID,
+				"name":        transfer.TransferName,
+			}),
+			logger.Log,
+		)
 		err := worker.Run()
 		if abstract.IsFatal(err) {
 			return err
