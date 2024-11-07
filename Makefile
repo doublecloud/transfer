@@ -1,8 +1,10 @@
 
 # removes static build artifacts
+.PHONY: clean
 clean:
 	@echo "--------------> Running 'make clean'"
 	@rm -rf binaries tmp
+	rm -f *.tgz
 
 build:
 	go build -o  binaries/$(API) ./cmd/trcli/*.go
@@ -43,3 +45,23 @@ run-tests:
 	    echo "No Go test files found in $$dir, skipping tests."; \
 	  fi \
 	done
+
+# Define variables
+HELM_CHART_PATH := ./helm/transfer
+IMAGE_NAME := ghcr.io/doublecloud/transfer-helm
+VERSION := $(shell grep '^version:' $(HELM_CHART_PATH)/Chart.yaml | awk '{print $$2}')
+
+# Login to GitHub Container Registry
+.PHONY: login-ghcr
+login-ghcr:
+	echo "${GHCR_TOKEN}" | docker login ghcr.io -u ${GITHUB_USERNAME} --password-stdin
+
+# Package the Helm chart
+.PHONY: helm-package
+helm-package:
+	helm package $(HELM_CHART_PATH) --destination .
+
+# Push the Helm chart as OCI artifact
+.PHONY: helm-push
+helm-push: helm-package login-ghcr
+	helm push ./transfer-$(VERSION).tgz oci://$(IMAGE_NAME)

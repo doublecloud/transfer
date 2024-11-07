@@ -1,4 +1,4 @@
-image: ghcr.io/doublecloud/transfer:v0.0.0-rc7
+image: ghcr.io/doublecloud/transfer:v0.0.0-rc8
 
 resources:
   requests:
