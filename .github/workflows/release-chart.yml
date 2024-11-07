@@ -20,8 +20,9 @@ jobs:
 
       - name: Package helm
         env:
-          GITHUB_USERNAME: ${{ github.actor }}
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: laskoviymishka
+          GH_HELM_PAT: ${{ secrets.GITHUB_TOKEN }}
+          HELM_EXPERIMENTAL_OCI: 1
         run: |
           make helm-push
           make clean
