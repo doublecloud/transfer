@@ -54,17 +54,18 @@ docker pull ghcr.io/doublecloud/transfer:dev
 
 ### 4. Deploy via helm-chart
 
-Deploy as helm-chart in your own k8s cluster:
+We strongly believe in cloud-native technologies, and see **transfer** as a driven power for open-source data-platforms build on top of clouds.
+
+Deploy as helm-chart in your own k8s cluster
 
 ```bash
-helm install transfer ./transfer \
-  --set transferSpec.id=my-custom-id \
-  --set transferSpec.src.params.host=my-postgres.awesome.cloud \
-  --set transferSpec.src.params.user="admin" \
-  --set transferSpec.src.params.password="password"
+helm upgrade NAME_OF_TRANSFER \
+  --namespace NAME_OF_NAMESPACE oci://ghcr.io/doublecloud/transfer-helm/transfer \
+  --values PATH_TO_VALUES_FILE \
+  --install
 ```
 
-More details [here](./helm).
+More details [here](./docs/deploy_k8s.md). 
 
 <div align="center">
 
