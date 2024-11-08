@@ -229,7 +229,7 @@ func (s *PgSource) fulfilledIncludesImpl(tID abstract.TableID, firstIncludeOnly 
 	}
 	if tID.Namespace == s.KeeperSchema {
 		switch tID.Name {
-		case TableConsumerKeeper, TableMoleFinder, TableLSN:
+		case TableConsumerKeeper, TableLSN:
 			result = append(result, abstract.PgName(s.KeeperSchema, tID.Name))
 		}
 	}
@@ -251,7 +251,6 @@ func (s *PgSource) AllIncludes() []string {
 func (s *PgSource) AuxTables() []string {
 	return []string{
 		abstract.PgName(s.KeeperSchema, TableConsumerKeeper),
-		abstract.PgName(s.KeeperSchema, TableMoleFinder),
 		abstract.PgName(s.KeeperSchema, TableLSN),
 	}
 }

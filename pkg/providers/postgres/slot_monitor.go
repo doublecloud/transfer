@@ -200,7 +200,7 @@ func (k *PostgresSlotKiller) KillSlot() error {
 	return k.Slot.Suicide()
 }
 
-func RunSlotMonitor(ctx context.Context, pgSrc *PgSource, registry metrics.Registry) (abstract.SlotKiller, <-chan error, error) {
+func RunSlotMonitor(ctx context.Context, pgSrc *PgSource, registry metrics.Registry, tracker ...*Tracker) (abstract.SlotKiller, <-chan error, error) {
 	rb := util.Rollbacks{}
 	defer rb.Do()
 
@@ -233,7 +233,7 @@ func RunSlotMonitor(ctx context.Context, pgSrc *PgSource, registry metrics.Regis
 
 	errChan := slotMonitor.StartSlotMonitoring(int64(pgSrc.SlotByteLagLimit))
 
-	slot, err := NewSlot(slotMonitor.conn, logger.Log, pgSrc)
+	slot, err := NewSlot(slotMonitor.conn, logger.Log, pgSrc, tracker...)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("unable to create new slot: %w", err)
 	}

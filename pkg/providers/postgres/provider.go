@@ -46,24 +46,13 @@ func init() {
 		"__data_transfer_lsn":
 			transfer_id TEXT, schema_name TEXT, table_name TEXT, lsn BIGINT
 			Table (in target) needed for resolving data overlapping during SNAPSHOT_AND_INCREMENT transfers.
-
-		"__data_transfer_mole_finder":
-			slot_id TEXT,
-			iterator INT,
-			replicated_iterator INT,
-			last_iterator_update TIMESTAMP,
-			last_replicated_update TIMESTAMP,
-			committed_lsn TEXT
-
-			Table for storing replication slot's progress (lsn position).
 	*/
-	abstract.RegisterSystemTables(TableConsumerKeeper, TableMoleFinder, TableLSN)
+	abstract.RegisterSystemTables(TableConsumerKeeper, TableLSN)
 }
 
 const (
 	TableConsumerKeeper = abstract.TableConsumerKeeper // "__consumer_keeper"
-	TableMoleFinder     = "__data_transfer_mole_finder"
-	TableLSN            = abstract.TableLSN // "__data_transfer_lsn"
+	TableLSN            = abstract.TableLSN            // "__data_transfer_lsn"
 )
 
 const ProviderType = abstract.ProviderType("pg")
@@ -97,7 +86,8 @@ func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) e
 		return nil
 	}
 	if !p.transfer.SnapshotOnly() {
-		if err := DropReplicationSlot(src); err != nil {
+		tracker := NewTracker(p.transfer.ID, p.cp)
+		if err := DropReplicationSlot(src, tracker); err != nil {
 			return xerrors.Errorf("Unable to drop replication slot: %w", err)
 		}
 	}
@@ -113,7 +103,8 @@ func (p *Provider) Deactivate(ctx context.Context, task *model.TransferOperation
 	if p.transfer.SnapshotOnly() {
 		return nil
 	}
-	if err := DropReplicationSlot(src); err != nil {
+	tracker := NewTracker(p.transfer.ID, p.cp)
+	if err := DropReplicationSlot(src, tracker); err != nil {
 		return xerrors.Errorf("Unable to drop replication slot: %w", err)
 	}
 
@@ -147,11 +138,12 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 	}
 	p.logger.Info("Preparing PostgreSQL source")
 	if !p.transfer.SnapshotOnly() {
-		if err := CreateReplicationSlot(src); err != nil {
+		tracker := NewTracker(p.transfer.ID, p.cp)
+		if err := CreateReplicationSlot(src, tracker); err != nil {
 			return xerrors.Errorf("failed to create a replication slot %q at source: %w", src.SlotID, err)
 		}
 		callbacks.Rollbacks.Add(func() {
-			if err := DropReplicationSlot(src); err != nil {
+			if err := DropReplicationSlot(src, tracker); err != nil {
 				logger.Log.Error("Unable to drop replication slot", log.Error(err), log.String("slot_name", src.SlotID))
 			}
 		})
@@ -214,8 +206,9 @@ func (p *Provider) Verify(ctx context.Context) error {
 		}
 	}
 	if !p.transfer.SnapshotOnly() {
-		if err := CreateReplicationSlot(src); err == nil {
-			if err := DropReplicationSlot(src); err != nil {
+		tracker := NewTracker(p.transfer.ID, p.cp)
+		if err := CreateReplicationSlot(src, tracker); err == nil {
+			if err := DropReplicationSlot(src, tracker); err != nil {
 				return xerrors.Errorf("unable to drop replication slot: %w", err)
 			}
 		} else {

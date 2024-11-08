@@ -9,13 +9,11 @@ import (
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type AbstractSlot interface {
-	Init(sinker abstract.AsyncSink) error
 	Exist() (bool, error)
 	Close()
 	Create() error
@@ -29,10 +27,6 @@ type Slot struct {
 	conn    *pgxpool.Pool
 	src     *PgSource
 	version PgVersion
-}
-
-func (slot *Slot) Init(sink abstract.AsyncSink) error {
-	return nil
 }
 
 func (slot *Slot) Exist() (bool, error) {
@@ -158,7 +152,7 @@ func NewNotTrackedSlot(pool *pgxpool.Pool, logger log.Logger, src *PgSource) Abs
 	}
 }
 
-func NewSlot(pool *pgxpool.Pool, logger log.Logger, src *PgSource) (AbstractSlot, error) {
+func NewSlot(pool *pgxpool.Pool, logger log.Logger, src *PgSource, tracker ...*Tracker) (AbstractSlot, error) {
 	hasLSNTrack := false
 	if err := pool.QueryRow(context.Background(), `
 SELECT EXISTS (
@@ -170,7 +164,10 @@ SELECT EXISTS (
 		return nil, err
 	}
 	if hasLSNTrack {
-		return NewLsnTrackedSlot(pool, logger, src), nil
+		if len(tracker) == 0 {
+			return nil, xerrors.Errorf("pg_tm_aux extension is present but no tracker was passed")
+		}
+		return NewLsnTrackedSlot(pool, logger, src, tracker[0]), nil
 	}
 	return NewNotTrackedSlot(pool, logger, src), nil
 }

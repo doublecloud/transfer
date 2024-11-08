@@ -7,7 +7,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util"
 )
 
-func CreateReplicationSlot(src *PgSource) error {
+func CreateReplicationSlot(src *PgSource, tracker ...*Tracker) error {
 	if err := backoff.RetryNotify(func() error {
 		defer func() {
 			if r := recover(); r != nil {
@@ -19,7 +19,7 @@ func CreateReplicationSlot(src *PgSource) error {
 			return xerrors.Errorf("failed to create a connection pool: %w", err)
 		}
 		defer conn.Close()
-		slot, err := NewSlot(conn, logger.Log, src)
+		slot, err := NewSlot(conn, logger.Log, src, tracker...)
 		if err != nil {
 			return xerrors.Errorf("failed to create a replication slot object: %w", err)
 		}

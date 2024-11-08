@@ -70,9 +70,6 @@ func (p *replication) Run(sink abstract.AsyncSink) error {
 	//level of parallelism combined with hardcoded buffer size in receiver(16mb) prevent OOM in parsequeue
 	p.parseQ = parsequeue.New(p.logger, 10, sink, p.WithIncludeFilter, p.ack)
 
-	if err = p.slot.Init(sink); err != nil {
-		return xerrors.Errorf("unable to init slot: %w", err)
-	}
 	if err = p.reloadSchema(); err != nil {
 		return xerrors.Errorf("failed to load schema: %w", err)
 	}
@@ -105,9 +102,6 @@ func (p *replication) Stop() {
 		p.sharedCtxCancel()
 		if err := p.replConn.Close(context.Background()); err != nil {
 			p.logger.Error("Cannot close replication connection", log.Error(err))
-		}
-		if tracker, ok := p.slot.(*LsnTrackedSlot); ok {
-			tracker.Close()
 		}
 		p.wg.Wait()
 		p.slotMonitor.Close()
@@ -489,13 +483,6 @@ func (p *replication) parseWal2JsonChanges(cp *changeProcessor, xld *pglogrepl.X
 
 func NewReplicationPublisher(version PgVersion, replConn *mutexedPgConn, connPool *pgxpool.Pool, slot AbstractSlot, stats *stats.SourceStats, source *PgSource, transferID string, lgr log.Logger, cp coordinator.Coordinator, objects *model.DataObjects) (abstract.Source, error) {
 	mutex := &sync.Mutex{}
-	if tracker, ok := slot.(*LsnTrackedSlot); ok {
-		// Start mole finder
-		go func() {
-			defer tracker.Close()
-			tracker.Run()
-		}()
-	}
 	ctx, cancel := context.WithCancel(context.Background())
 	return &replication{
 		logger:          lgr,

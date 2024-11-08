@@ -328,8 +328,6 @@ func TestBuildArgs(t *testing.T) {
 		`-t`,
 		`"cms"."__consumer_keeper"`,
 		`-t`,
-		`"cms"."__data_transfer_mole_finder"`,
-		`-t`,
 		`"cms"."__data_transfer_lsn"`,
 	}, args)
 

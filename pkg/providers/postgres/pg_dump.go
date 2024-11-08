@@ -351,7 +351,7 @@ func loadPgDumpSchema(ctx context.Context, src *PgSource, transfer *model.Transf
 
 	userDefinedItems, err := dumpDefinedItems(connString, secretPass, src)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to dump defined items")
+		return nil, xerrors.Errorf("failed to dump defined items: %w", err)
 	}
 
 	tablesSchemas := set.New[string]()

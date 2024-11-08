@@ -104,21 +104,13 @@ func addTablesList(config *PgSource, trackLSN bool, objects *model.DataObjects) 
 
 	consumerKeeperID := *abstract.NewTableID(config.KeeperSchema, TableConsumerKeeper)
 	mustAddConsumerKeeper := true
-	moleFinderID := *abstract.NewTableID(config.KeeperSchema, TableMoleFinder)
-	mustAddMoleFinder := trackLSN
 	for _, t := range result {
 		if mustAddConsumerKeeper && t.Equals(consumerKeeperID) {
 			mustAddConsumerKeeper = false
 		}
-		if mustAddMoleFinder && t.Equals(moleFinderID) {
-			mustAddMoleFinder = false
-		}
 	}
 	if mustAddConsumerKeeper {
 		result = append(result, consumerKeeperID)
-	}
-	if mustAddMoleFinder {
-		result = append(result, moleFinderID)
 	}
 
 	// since inherit table appear dynamically we need to filter tables on our side instead of push-list to postgres

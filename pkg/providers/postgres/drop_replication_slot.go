@@ -5,14 +5,14 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
-func DropReplicationSlot(src *PgSource) error {
+func DropReplicationSlot(src *PgSource, tracker ...*Tracker) error {
 	conn, err := MakeConnPoolFromSrc(src, logger.Log)
 	if err != nil {
 		return xerrors.Errorf("failed to create a connection pool: %w", err)
 	}
 	defer conn.Close()
 
-	slot, err := NewSlot(conn, logger.Log, src)
+	slot, err := NewSlot(conn, logger.Log, src, tracker...)
 	if err != nil {
 		return xerrors.Errorf("failed to create a replication slot object: %w", err)
 	}

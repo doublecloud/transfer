@@ -149,7 +149,8 @@ func NewSourceWrapper(src *PgSource, transferID string, objects *model.DataObjec
 		return nil, xerrors.Errorf("unable to contruct connection pool: %w", err)
 	}
 	worker.conn = conn
-	slot, err := NewSlot(worker.conn, worker.logger, worker.src)
+	tracker := NewTracker(transferID, cp)
+	slot, err := NewSlot(worker.conn, worker.logger, worker.src, tracker)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct slot watcher: %w", err)
 	}

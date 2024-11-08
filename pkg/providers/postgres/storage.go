@@ -1008,9 +1008,9 @@ func WithTypeMapping(typeMapping TypeNameToOIDMap) StorageOpt {
 	return TypeMapping{TypeNameToOIDMap: typeMapping}
 }
 
-func (s *Storage) RunSlotMonitor(ctx context.Context, serverSource interface{}, registry metrics.Registry) (abstract.SlotKiller, <-chan error, error) {
+func (s *Storage) RunSlotMonitor(ctx context.Context, serverSource interface{}, registry metrics.Registry, tracker ...*Tracker) (abstract.SlotKiller, <-chan error, error) {
 	if pgSrc, ok := serverSource.(*PgSource); ok {
-		return RunSlotMonitor(ctx, pgSrc, registry)
+		return RunSlotMonitor(ctx, pgSrc, registry, tracker...)
 	} else {
 		logger.Log.Error("pkg/storage/slot_monitor get not server.PgSource as server.Source")
 		return nil, nil, xerrors.Errorf("pkg/storage/slot_monitor get not server.PgSource as server.Source")

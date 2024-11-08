@@ -246,7 +246,8 @@ func (l *SnapshotLoader) beginSnapshot(
 		}
 		if !l.transfer.SnapshotOnly() {
 			var err error
-			l.slotKiller, l.slotKillerErrorChannel, err = specificStorage.RunSlotMonitor(ctx, l.transfer.Src, l.registry)
+			tracker := postgres.NewTracker(l.transfer.ID, l.cp)
+			l.slotKiller, l.slotKillerErrorChannel, err = specificStorage.RunSlotMonitor(ctx, l.transfer.Src, l.registry, tracker)
 			if err != nil {
 				return errors.CategorizedErrorf(categories.Source, "failed to start slot monitor: %w", err)
 			}
