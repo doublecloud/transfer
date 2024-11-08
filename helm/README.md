@@ -1,8 +1,4 @@
-Here’s the updated `README.md` file with a new section added to explain the `coordinator` properties and the `regular_snapshot` feature in `transferSpec`:
-
----
-
-# Data Upload Helm Chart
+# Transfer Helm Chart
 
 This Helm chart deploys a one-time data upload job or continuous replication service using Kubernetes. It supports three deployment types:
 
@@ -25,7 +21,7 @@ This Helm chart deploys a one-time data upload job or continuous replication ser
 To install the chart, run the following command:
 
 ```bash
-helm install <release-name> ./transfer
+helm pull oci://ghcr.io/doublecloud/transfer-helm/transfer
 ```
 
 For example:
@@ -80,49 +76,21 @@ resources:
     cpu: "500m"
 
 coordinator:
-  type: s3
-  bucket: my-s3-bucket
+  type: s3 # type of coordination, one of: s3 or memory
+  bucket: place_your_bucket # Bucket with write access, will be used to store state
 
 transferSpec:
-  id: dtttest
-  type: SNAPSHOT_AND_INCREMENT  # Options: SNAPSHOT_ONLY, INCREMENT_ONLY, SNAPSHOT_AND_INCREMENT
+  id: mytransfer # Unique ID of a transfer
+  name: awesome transfer # Human friendly name for a transfer
+  type: INCREMENT_ONLY # type of transfer, one of: INCREMENT_ONLY, SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
   src:
-    type: pg
+    type: source_type # for example: pg, s3, kafka ...
     params:
-      Hosts:
-        - YOUR_PG_HOST
-      Database: YOUR_PG_NAME
-      User: YOUR_PG_USER
-      Password: YOUR_PG_PASSWORD
-      Port: 5432
-      BatchSize: 1024
-      SlotByteLagLimit: 53687091200
-      EnableTLS: true
-      KeeperSchema: public
-      DesiredTableSize: 1073741824
-      SnapshotDegreeOfParallelism: 4
+      ... # source type params, all params can be founded in `model_source.go` for provider folder
   dst:
-    type: ch
+    type: target_type # for example: s3, ch, kafka ...
     params:
-      User: YOUR_CH_USER
-      Password: YOUR_CH_PASSWORD
-      ShardsList:
-        - Hosts:
-            - YOUR_CH_HOST
-      Database: default
-      HTTPPort: 8443
-      SSLEnabled: true
-      NativePort: 9440
-      MigrationOptions:
-        AddNewColumns: true
-      InsertParams:
-        MaterializedViewsIgnoreErrors: true
-      RetryCount: 20
-      UseSchemaInTableName: true
-      Interval: 1000000000
-      Cleanup: Drop
-      BufferTriggingSize: 536870912
-
+      ... # target type params, all params can be founded in `model_destination.go` for provider folder
   regular_snapshot:
     enabled: true
     incremental:
