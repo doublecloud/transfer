@@ -1,6 +1,7 @@
 package model
 
 import (
+	_ "embed"
 	"fmt"
 	"strings"
 	"time"
@@ -12,10 +13,22 @@ import (
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 )
 
+var (
+	//go:embed doc_destination_usage.md
+	destinationUsage []byte
+	//go:embed doc_destination_example.yaml
+	destinationExample []byte
+)
+
 type ClickHouseColumnValueToShardName struct {
 	ColumnValue string
 	ShardName   string
 }
+
+var (
+	_ model.Destination = (*ChDestination)(nil)
+	_ model.Describable = (*ChDestination)(nil)
+)
 
 // ChDestination - see description of fields in sink_params.go
 type ChDestination struct {
@@ -95,6 +108,13 @@ func (p InsertParams) AsQueryPart() string {
 		settingsQ = fmt.Sprintf("SETTINGS %s", strings.Join(settings, ","))
 	}
 	return settingsQ
+}
+
+func (d *ChDestination) Describe() model.Doc {
+	return model.Doc{
+		Usage:   string(destinationUsage),
+		Example: string(destinationExample),
+	}
 }
 
 func (d *ChDestination) MDBClusterID() string {

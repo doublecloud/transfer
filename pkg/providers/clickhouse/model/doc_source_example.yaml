@@ -1,0 +1,17 @@
+ShardsList:
+  - Name: s1
+    Hosts:
+      - HOST_NAME
+ChClusterName: ''
+HTTPPort: 8443
+NativePort: 9440
+User: admin
+Password: Password
+SSLEnabled: true
+PemFileContent: ''
+Database: default
+IncludeTables: null
+ExcludeTables: null
+IsHomo: false
+BufferSize: 52428800 # 50 mb
+IOHomoFormat: ''

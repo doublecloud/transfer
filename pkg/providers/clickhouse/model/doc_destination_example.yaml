@@ -1,0 +1,27 @@
+User: default
+Password: Password
+Database: default
+SSLEnabled: true
+PemFileContent: ''
+HTTPPort: 8443
+NativePort: 9440
+InferSchema: true
+MigrationOptions:
+  AddNewColumns: true
+ForceHTTP: false
+ProtocolUnspecified: true
+AnyAsString: true
+SystemColumnsFirst: false
+IsUpdateable: false
+UpsertAbsentToastedRows: false
+InsertParams:
+  MaterializedViewsIgnoreErrors: true
+RetryCount: 20
+UseSchemaInTableName: false
+Interval: 1000000000 # 1s
+ShardsList:
+  - Name: s1
+    Hosts:
+      - kbcs2ev78q.eu-central-1.aws.clickhouse.cloud
+Cleanup: Drop
+BufferTriggingSize: 268435456
