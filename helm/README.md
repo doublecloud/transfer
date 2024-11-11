@@ -44,25 +44,25 @@ The chart is highly configurable. You can specify various parameters in the `val
 
 ### Parameters
 
-| Parameter                                       | Description                                                                      | Default                  |
-|-------------------------------------------------|----------------------------------------------------------------------------------|--------------------------|
-| `transferSpec.id`                               | Unique ID for the data transfer job.                                             | `dtttest`                |
-| `transferSpec.type`                             | Type of deployment: `SNAPSHOT_ONLY`, `INCREMENT_ONLY`, `SNAPSHOT_AND_INCREMENT`. | `SNAPSHOT_ONLY`          |
-| `transferSpec.src.type`                         | Source type (e.g., `pg`).                                                        | `pg`                     |
-| `transferSpec.src.params`                       | Source parameters.                                                               | `{}`                     |
-| `transferSpec.dst.type`                         | Destination type (e.g., `ch`).                                                   | `ch`                     |
-| `transferSpec.dst.params`                       | Destination parameters.                                                          | `{}`                     |
-| `snapshot.worker_count`                         | Number of parallel instances for the snapshot job.                               | `1`                      |
-| `replication.worker_count`                      | Number of replicas for the continuous replication `StatefulSet`.                 | `1`                      |
-| `resources.requests.cpu`                        | CPU resource requests for the pods.                                              | `100m`                   |
-| `resources.requests.memory`                     | Memory resource requests for the pods.                                           | `128Mi`                  |
-| `resources.limits.cpu`                          | CPU resource limits for the pods.                                                | `500m`                   |
-| `resources.limits.memory`                       | Memory resource limits for the pods.                                             | `256Mi`                  |
-| `coordinator.type`                              | Type of external coordinator service, e.g., `s3`.                                | `s3`                     |
-| `coordinator.bucket`                            | Name of the S3 bucket for coordination.                                          | `place_your_bucket`      |
-| `transferSpec.regular_snapshot.incremental`     | List of objects defining incremental snapshot settings.                          | `[]`                     |
-| `transferSpec.regular_snapshot.enabled`         | Enable or disable the regular snapshot mechanism.                                | `false`                  |
-| `transferSpec.regular_snapshot.cron_expression` | Cron expression for scheduled cron job.                                          | `0 1 * * *`              |
+| Parameter                                       | Description                                                                      | Default             |
+|-------------------------------------------------|----------------------------------------------------------------------------------|---------------------|
+| `transferSpec.id`                               | Unique ID for the data transfer job.                                             | `dtttest`           |
+| `transferSpec.type`                             | Type of deployment: `SNAPSHOT_ONLY`, `INCREMENT_ONLY`, `SNAPSHOT_AND_INCREMENT`. | `SNAPSHOT_ONLY`     |
+| `transferSpec.src.type`                         | Source type (e.g., `pg`).                                                        | `pg`                |
+| `transferSpec.src.params`                       | Source parameters.                                                               | `{}`                |
+| `transferSpec.dst.type`                         | Destination type (e.g., `ch`).                                                   | `ch`                |
+| `transferSpec.dst.params`                       | Destination parameters.                                                          | `{}`                |
+| `resources.requests.cpu`                        | CPU resource requests for the pods.                                              | `100m`              |
+| `resources.requests.memory`                     | Memory resource requests for the pods.                                           | `128Mi`             |
+| `resources.limits.cpu`                          | CPU resource limits for the pods.                                                | `500m`              |
+| `resources.limits.memory`                       | Memory resource limits for the pods.                                             | `256Mi`             |
+| `coordinator.type`                              | Type of external coordinator service, e.g., `s3` or `memory`.                    | `s3`                |
+| `coordinator.job_count`                         | Number of parallel instances the workload.                                       | `1`                 |
+| `coordinator.process_count`                      | How many threads will be run inside each job.                                    | `4`                 |
+| `coordinator.bucket`                            | Name of the S3 bucket for coordination.                                          | `place_your_bucket` |
+| `transferSpec.regular_snapshot.incremental`     | List of objects defining incremental snapshot settings.                          | `[]`                |
+| `transferSpec.regular_snapshot.enabled`         | Enable or disable the regular snapshot mechanism.                                | `false`             |
+| `transferSpec.regular_snapshot.cron_expression` | Cron expression for scheduled cron job.                                          | `0 1 * * *`         |
 
 ### Example `values.yaml`
 
@@ -76,35 +76,29 @@ resources:
     cpu: "500m"
 
 coordinator:
-  type: s3 # type of coordination, one of: s3 or memory
+  job_count: 1              # set more than one means work would be sharded, coordinator must be non memory
+  process_count: 4          # default is 4, how many threads will be run inside each job
+  type: s3                  # type of coordination, one of: s3 or memory
   bucket: place_your_bucket # Bucket with write access, will be used to store state
 
 transferSpec:
-  id: mytransfer # Unique ID of a transfer
+  id: mytransfer         # Unique ID of a transfer
   name: awesome transfer # Human friendly name for a transfer
-  type: INCREMENT_ONLY # type of transfer, one of: INCREMENT_ONLY, SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
+  type: INCREMENT_ONLY   # type of transfer, one of: INCREMENT_ONLY, SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
   src:
     type: source_type # for example: pg, s3, kafka ...
     params:
-      ... # source type params, all params can be founded in `model_source.go` for provider folder
+      ...             # source type params, all params can be founded in `model_source.go` for provider folder
   dst:
     type: target_type # for example: s3, ch, kafka ...
     params:
-      ... # target type params, all params can be founded in `model_destination.go` for provider folder
+      ...             # target type params, all params can be founded in `model_destination.go` for provider folder
   regular_snapshot:
     enabled: true
     incremental:
       - namespace: public
         name: playing_with_neon
         cursor_field: id
-
-# snapshot specific configurations
-snapshot:
-  worker_count: 4  # Number of parallel job instances
-
-# replication specific configurations
-replication:
-  worker_count: 1  # Number of replicas
 ```
 
 ### Transfer Spec Configuration
