@@ -7,8 +7,8 @@ metadata:
     app.kubernetes.io/name: {{ .Release.Name }}-snapshot
     {{- include "common.labels" . | nindent 4 }}
 spec:
-  completions: {{ .Values.snapshot.worker_count }}
-  parallelism: {{ .Values.snapshot.worker_count }}
+  completions: {{ .Values.coordinator.job_count }}
+  parallelism: {{ .Values.coordinator.job_count }}
   completionMode: Indexed
   backoffLimit: 1
   template:
