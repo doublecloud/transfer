@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: transfer-{{ .Values.transferSpec.id }}-config
+  name: {{ .Release.Name }}-config
+  labels:
+    {{- include "common.labels" . | nindent 4 }}
 data:
   config.yaml: |
-    id: {{ .Values.transferSpec.id }}
+    id: {{ .Values.transferSpec.id | default .Release.Name | replace "-" "_" }}
     type: {{ .Values.transferSpec.type }}
     src:
       type: {{ .Values.transferSpec.src.type }}
@@ -15,11 +17,11 @@ data:
       params: |
         {{ .Values.transferSpec.dst.params | toJson }}
     {{if .Values.transferSpec.regular_snapshot}}
-    regular_snapshot: {{.Values.transferSpec.regular_snapshot | toJson }}
+    regular_snapshot: {{ .Values.transferSpec.regular_snapshot | toJson }}
     {{end}}
     {{if .Values.transferSpec.data_objects}}
-    data_objects: {{.Values.transferSpec.data_objects | toJson }}
+    data_objects: {{ .Values.transferSpec.data_objects | toJson }}
     {{end}}
     {{if .Values.transferSpec.transformation}}
-    transformation: {{.Values.transferSpec.transformation | toJson }}
+    transformation: {{ .Values.transferSpec.transformation | toJson }}
     {{end}}
