@@ -7,7 +7,7 @@ spec:
     matchLabels:
       name: transfer-{{ .Values.transferSpec.id }}-replication
   serviceName: transfer-{{ .Values.transferSpec.id }}-replication
-  replicas: {{ .Values.replication.worker_count }}
+  replicas: {{ .Values.coordinator.job_count }}
   template:
     metadata:
       annotations:

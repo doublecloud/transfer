@@ -7,8 +7,8 @@ spec:
   schedule: {{.Values.transferSpec.regular_snapshot.cron_expression}}
   jobTemplate:
     spec:
-      completions: {{ .Values.snapshot.worker_count }}
-      parallelism: {{ .Values.snapshot.worker_count }}
+      completions: {{ .Values.coordinator.job_count }}
+      parallelism: {{ .Values.coordinator.job_count }}
       completionMode: Indexed
       backoffLimit: 6
       template:

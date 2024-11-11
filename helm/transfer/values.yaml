@@ -25,15 +25,9 @@ transferSpec:
       {
       }
 
-# snapshot specific configurations
-snapshot:
-  worker_count: 1  # Number of parallel job instances
-
-# replication specific configurations
-replication:
-  worker_count: 1  # Number of replicas
-
 coordinator:
+  job_count: 1  # Number of parallel job instances
+  process_count: 4 # Number of in-worker threads to spawn
   type: memory
   bucket: NO_BUCKET
 
