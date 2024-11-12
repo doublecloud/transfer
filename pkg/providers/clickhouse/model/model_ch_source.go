@@ -1,11 +1,19 @@
 package model
 
 import (
+	_ "embed"
 	"strings"
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+)
+
+var (
+	//go:embed doc_source_usage.md
+	sourceUsage []byte
+	//go:embed doc_source_example.yaml
+	sourceExample []byte
 )
 
 type ClickhouseIOFormat string
@@ -20,6 +28,11 @@ type ClickHouseShard struct {
 	Name  string
 	Hosts []string
 }
+
+var (
+	_ model.Source      = (*ChSource)(nil)
+	_ model.Describable = (*ChSource)(nil)
+)
 
 type ChSource struct {
 	MdbClusterID     string `json:"ClusterID"`
@@ -42,7 +55,12 @@ type ChSource struct {
 	RootCACertPaths  []string
 }
 
-var _ model.Source = (*ChSource)(nil)
+func (s *ChSource) Describe() model.Doc {
+	return model.Doc{
+		Usage:   string(sourceUsage),
+		Example: string(sourceExample),
+	}
+}
 
 func (s *ChSource) MDBClusterID() string {
 	return s.MdbClusterID
