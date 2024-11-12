@@ -72,7 +72,7 @@ func main() {
 				}
 			}()
 
-			switch logConfig {
+			switch strings.ToLower(logConfig) {
 			case "json":
 				loggerConfig = zp.NewProductionConfig()
 			case "minimal":

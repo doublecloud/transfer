@@ -13,8 +13,6 @@
 {{- end }}
 
 {{- if eq .Values.transferSpec.type "SNAPSHOT_AND_INCREMENT" }}
-{{ include "snapshot-job" . }}
----
 {{ include "snapshot-regular-cronjob" . }}
 ---
 {{ include "replication-statefulset" . }}

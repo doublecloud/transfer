@@ -34,7 +34,7 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
-		if transfer.IncrementOnly() {
+		if !transfer.IncrementOnly() {
 			if err := activate.RunActivate(*cp, transfer, registry, 0); err != nil {
 				return xerrors.Errorf("unable to activate transfer: %w", err)
 			}
