@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/check"
@@ -18,6 +19,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/cobraaux"
 	"github.com/doublecloud/transfer/pkg/coordinator/s3coordinator"
 	_ "github.com/doublecloud/transfer/pkg/dataplane"
+	_ "github.com/doublecloud/transfer/pkg/providers/sample" // TODO: move it to main dataplane pkg-embed
 	"github.com/doublecloud/transfer/pkg/serverutil"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
@@ -57,7 +59,7 @@ func main() {
 				go serverutil.RunPprof()
 			}
 
-			switch logConfig {
+			switch strings.ToLower(logConfig) {
 			case "json":
 				loggerConfig = zp.NewProductionConfig()
 			case "minimal":
