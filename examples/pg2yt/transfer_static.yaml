@@ -1,0 +1,19 @@
+type: SNAPSHOT_ONLY
+src:
+  type: pg
+  params: |
+    {
+      "hosts": ["localhost"],
+      "user": "postgres",
+      "password": "password",
+      "database": "mydb",
+      "port": 5432
+    }
+dst:
+  type: yt
+  params: |
+    {
+      "path": "//home/snapshots",
+      "cluster": "localhost:9980",
+      "static": true
+    }

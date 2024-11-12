@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  yt-backend:
+    image: ytsaurus/local:stable
+    ports:
+      - "${API_PORT:-9980}:80"
+      - "${RPC_PORT:-9902}:8002"
+    command:
+      - "--fqdn"
+      - "localhost"
+      - "--proxy-config"
+      - "{address_resolver={enable_ipv4=%true;enable_ipv6=%false;};coordinator={public_fqdn=\"yt-backend:80\"}}"
+      - "--rpc-proxy-count"
+      - "0"
+      - "--rpc-proxy-port"
+      - "8002"
+      - "--node-count"
+      - "1"
+      - "--wait-tablet-cell-initialization"
+    volumes:
+      - ./data:/var/lib/yt/local-cypress
+
+  yt-frontend:
+    image: ytsaurus/ui:stable
+    ports:
+      - "${UI_PORT:-9981}:80"
+    environment:
+      PROXY: "localhost:${API_PORT:-9980}"
+      PROXY_INTERNAL: yt-backend:80
+      APP_ENV: local
+      APP_INSTALLATION: ""
+
+  postgres:
+    image: debezium/postgres:11-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the seed data script
+
+  # Golang-based load generator for MySQL CRUD operations
+  load_gen:
+    build: loadgen
+    depends_on:
+      - postgres
+    environment:
+      HOST: postgres
+      USER: postgres
+      PASSWORD: password
+      DB: mydb
+
+  transfer:
+    build: ../.. # build main transfer docker CLI
+    command:
+      - replicate
+      - --transfer
+      - /usr/local/bin/transfer.yaml
+      - --log-level
+      - info
+      - --log-config
+      - minimal
+    depends_on:
+      - postgres
+      - yt-backend
+    volumes:
+      - ./transfer_cdc_embed.yaml:/usr/local/bin/transfer.yaml
+
+volumes:
+  clickhouse_data:
+  postgres_data:
