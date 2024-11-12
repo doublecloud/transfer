@@ -7,12 +7,12 @@ import (
 
 	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/check"
+	"github.com/doublecloud/transfer/cmd/trcli/describe"
 	"github.com/doublecloud/transfer/cmd/trcli/replicate"
 	"github.com/doublecloud/transfer/cmd/trcli/upload"
 	"github.com/doublecloud/transfer/cmd/trcli/validate"
 	"github.com/doublecloud/transfer/internal/logger"
 	internal_metrics "github.com/doublecloud/transfer/internal/metrics"
-	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	coordinator "github.com/doublecloud/transfer/pkg/abstract/coordinator"
@@ -48,16 +48,30 @@ func main() {
 	coordinatorS3Bucket := ""
 	runProfiler := false
 
+	promRegistry, registry := internal_metrics.NewPrometheusRegistryWithNameProcessor()
 	rootCommand := &cobra.Command{
 		Use:          "trcli",
 		Short:        "Transfer cli",
 		Example:      "./trcli help",
 		SilenceUsage: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-
+			if strings.Contains(cmd.CommandPath(), "describe") {
+				return nil
+			}
 			if runProfiler {
 				go serverutil.RunPprof()
 			}
+
+			go func() {
+				rootMux := http.NewServeMux()
+				rootMux.Handle("/metrics", promhttp.HandlerFor(promRegistry, promhttp.HandlerOpts{
+					ErrorHandling: promhttp.PanicOnError,
+				}))
+				logger.Log.Infof("Prometheus is uprising on port %v", "9091")
+				if err := http.ListenAndServe(":9091", rootMux); err != nil {
+					logger.Log.Error("failed to serve metrics", log.Error(err))
+				}
+			}()
 
 			switch strings.ToLower(logConfig) {
 			case "json":
@@ -78,7 +92,7 @@ func main() {
 					EncodeDuration: nil,
 				}
 			}
-			switch logLevel {
+			switch strings.ToLower(logLevel) {
 			case "panic":
 				loggerConfig.Level.SetLevel(zapcore.PanicLevel)
 			case "fatal":
@@ -116,12 +130,12 @@ func main() {
 		},
 	}
 
-	registry := InitPrometheusMetrics()
 	cobraaux.RegisterCommand(rootCommand, activate.ActivateCommand(&cp, &rt, registry))
 	cobraaux.RegisterCommand(rootCommand, check.CheckCommand())
 	cobraaux.RegisterCommand(rootCommand, replicate.ReplicateCommand(&cp, &rt, registry))
 	cobraaux.RegisterCommand(rootCommand, upload.UploadCommand(&cp, &rt, registry))
 	cobraaux.RegisterCommand(rootCommand, validate.ValidateCommand())
+	cobraaux.RegisterCommand(rootCommand, describe.DescribeCommand())
 
 	rootCommand.PersistentFlags().StringVar(&logLevel, "log-level", defaultLogLevel, "Specifies logging level for output logs (\"panic\", \"fatal\", \"error\", \"warning\", \"info\", \"debug\")")
 	rootCommand.PersistentFlags().StringVar(&logConfig, "log-config", defaultLogConfig, "Specifies logging config for output logs (\"console\", \"json\", \"minimal\")")
@@ -144,21 +158,4 @@ func newLoggerConfig() zp.Config {
 	cfg.OutputPaths = []string{"stdout"}
 	cfg.ErrorOutputPaths = []string{"stderr"}
 	return cfg
-}
-
-func InitPrometheusMetrics() metrics.Registry {
-	promRegistry, m := internal_metrics.NewPrometheusRegistryWithNameProcessor()
-
-	go func() {
-		rootMux := http.NewServeMux()
-		rootMux.Handle("/metrics", promhttp.HandlerFor(promRegistry, promhttp.HandlerOpts{
-			ErrorHandling: promhttp.PanicOnError,
-		}))
-		logger.Log.Infof("Prometheus is uprising on port %v", "9091")
-		if err := http.ListenAndServe(":9091", rootMux); err != nil {
-			logger.Log.Error("failed to serve health check", log.Error(err))
-		}
-	}()
-
-	return m
 }

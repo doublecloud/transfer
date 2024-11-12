@@ -20,6 +20,16 @@ type Source interface {
 	IsSource()
 }
 
+type Describable interface {
+	EndpointParams
+	Describe() Doc
+}
+
+type Doc struct {
+	Usage   string `json:"usage,omitempty"`
+	Example string `json:"example,omitempty"`
+}
+
 type Destination interface {
 	EndpointParams
 	CleanupMode() CleanupType
