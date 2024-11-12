@@ -89,7 +89,7 @@ Also we will run end to end docker compose sample with CDC real-time replication
 
 Once docker compose up and running your will see main YT Saurus [page](http://localhost:9180):
 
-[main](./assets/main.png)
+![main](./assets/main.png)
 
 Based on cdc configuration:
 
@@ -107,7 +107,7 @@ dst:
 
 Transfer will create a folder inside `//home/cdc` directory:
 
-[tables](./assets/tables.png)
+![tables](./assets/tables.png)
 
 Here you can see 2 tables:
 
@@ -116,7 +116,7 @@ Here you can see 2 tables:
 
 Table consist all data automatically transfered and updated in real-time:
 
-[data](./assets/data.png)
+![data](./assets/data.png)
 
 
 ### Stopping the Application
