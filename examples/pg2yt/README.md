@@ -43,7 +43,7 @@ Also we will run end to end docker compose sample with CDC real-time replication
     - **Password**: `testpassword`
     - **Initialization**: Data is seeded using `init.sql`.
 
-3. **Transfer CLI**: A Go-based application that replicates changes from Postgres to Kafka.
+3. **Transfer CLI**: A Go-based application that replicates changes from Postgres to YT.
     - **Configuration**: Reads changes from Postgres and sends them to YTSaurus tables.
 
 4. **YTSaurus**: An open source big data platform for distributed storage and processing.
@@ -76,8 +76,8 @@ Also we will run end to end docker compose sample with CDC real-time replication
 ### Using the Application
 
 - Once the Docker containers are running, you can start performing CRUD operations on the Postgres database. The `load_gen` service will simulate these operations.
-- The `transfer` CLI will listen for changes in the Postgres database and replicate them to Kafka.
-- You can monitor the changes in Kafka using the Kafka UI.
+- The `transfer` CLI will listen for changes in the Postgres database and replicate them to YT.
+- You can monitor the changes in YT using the YT UI.
 
 ### Configuration Files
 
