@@ -1,0 +1,21 @@
+id: test
+type: SNAPSHOT_AND_INCREMENT
+src:
+  type: pg
+  params: |
+    {
+      "Hosts": ["postgres"],
+      "User": "postgres",
+      "Password": "password",
+      "Database": "mydb",
+      "Port": 5432
+    }
+dst:
+  type: yt
+  params: |
+    {
+      "path": "//home/cdc",
+      "cluster": "yt-backend:80",
+      "cellbundle": "default",
+      "primarymedium": "default"
+    }

@@ -80,6 +80,7 @@ More details [here](./docs/deploy_k8s.md).
 - [Replication MySQL Changes into Clickhouse](./examples/mysql2ch)
 - [Snapshot PostgreSQL Changes into Clickhouse](./examples/pg2ch)
 - [Replication MongoDB into Clickhouse with transformation](./docs/mongodb2ch)
+- [CDC From Postgres into YTSaurus](./examples/pg2yt)
 
 </details>
 
