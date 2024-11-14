@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -132,6 +133,10 @@ insert into "%s"."%s" (consumer, locked_till, locked_by) values (($1), now(), ($
 on conflict (consumer) do update set locked_till = EXCLUDED.locked_till, locked_by = EXCLUDED.locked_by
 ;
 `, k.schema, TableConsumerKeeper), consumer, k.instance); err != nil {
+			if strings.Contains(err.Error(), "in a read-only transaction") {
+				k.logger.Warn("unable to update consumer keeper table, source in read-only mode. If it is an anomaly please check you cluster", log.Error(err))
+				return nil
+			}
 			return xerrors.Errorf("unable update consumer keeper table: %w", err)
 		}
 
