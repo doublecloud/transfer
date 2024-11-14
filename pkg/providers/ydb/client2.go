@@ -63,7 +63,7 @@ func newClient2(ctx context.Context, cfg *YdbSource) (*ydb.Driver, error) {
 		options = append(options, logadapter.WithTraces(logger.Log, trace.DetailsAll))
 	}
 
-	db, err := ydb.Open(ctx, sugar.DSN(creds.instance, creds.database, creds.isSecure), options...)
+	db, err := ydb.Open(ctx, sugar.DSN(creds.instance, creds.database, sugar.WithSecure(creds.isSecure)), options...)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to create ydb client, err: %w", err)
 	}

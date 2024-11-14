@@ -376,7 +376,7 @@ func driver(t *testing.T) *ydb.Driver {
 
 	db, err := ydb.Open(
 		context.Background(),
-		sugar.DSN(instance, database, false),
+		sugar.DSN(instance, database),
 		ydb.WithAccessTokenCredentials(token),
 	)
 	require.NoError(t, err)

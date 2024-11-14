@@ -17,7 +17,7 @@ func NewYDBDriver(ctx context.Context, database, instance string, credentials cr
 	secure := tlsConfig != nil
 	driver, err := ydb3.Open(
 		ctx,
-		sugar.DSN(instance, database, secure),
+		sugar.DSN(instance, database, sugar.WithSecure(secure)),
 		ydb3.WithCredentials(credentials),
 		ydb3.WithTLSConfig(tlsConfig),
 		logadapter.WithTraces(logger.Log, trace.DriverEvents),
