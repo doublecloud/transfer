@@ -473,6 +473,7 @@ func isAllowedCast(createCastSQL string, excludedTypes *set.Set[string], tablesS
 	parts := splitSQLBySeparator(cleanedStatement, " AS ")
 
 	if len(parts) < 2 {
+		logger.Log.Warnf("unsupported definition for create cast : %v", createCastSQL)
 		return false
 	}
 
@@ -487,6 +488,9 @@ func isAllowedCast(createCastSQL string, excludedTypes *set.Set[string], tablesS
 		return false
 	}
 	// check if create cast with function
+	if len(partsByBracket) < 2 {
+		return false
+	}
 	partsByFunction := splitSQLBySeparator(partsByBracket[1], "FUNCTION ")
 	if len(partsByFunction) == 1 {
 		return true
@@ -543,42 +547,74 @@ func splitSQLBySeparator(SQL string, sep string) []string {
 		}
 	}
 
+	if cur != "" {
+		result = append(result, cur)
+	}
+
 	return result
 }
 
-// parse args in ... FUNCTION <functionName>([argName1] arg1, [argName2] arg2, ..., [argName] arg) ... argName is optional
-func extractFunctionArgsTypes(functionBody string) []string {
+func isArgMode(argPart string) bool {
+	return argPart == "IN" || argPart == "OUT" || argPart == "INOUT" || argPart == "VARIADIC"
+}
+
+// parse args in ... FUNCTION <functionName>([argMode1] [argName1] arg1, [argMode2] [argName2] arg2, ..., [argMode] [argName] arg) ... argMode and argName is optional
+func extractFunctionArgsTypes(functionBody string) ([]string, bool) {
 	nameWithoutCloseBracket := splitSQLBySeparator(functionBody, ")")
 	argsParts := splitSQLBySeparator(nameWithoutCloseBracket[0], "(")
+	if len(argsParts) < 2 {
+		return nil, false
+	}
 	argsWithNames := splitSQLBySeparator(argsParts[1], ", ")
 
 	result := make([]string, 0, len(argsWithNames))
 	for _, argWithName := range argsWithNames {
 		splitArg := splitSQLBySeparator(argWithName, " ")
-		if len(splitArg) == 1 {
-			result = append(result, splitArg[0])
-		} else {
-			result = append(result, splitArg[1])
+		if len(splitArg) == 0 {
+			return nil, false
 		}
+		if isArgMode(splitArg[0]) {
+			splitArg = splitArg[1:]
+		}
+		if len(splitArg) == 0 {
+			return nil, false
+		}
+
+		argType := splitArg[0]
+		if len(splitArg) == 2 {
+			argType = splitArg[1]
+		}
+		argType = strings.TrimSuffix(argType, "[]")
+		result = append(result, argType)
 	}
 
 	// return arg1, arg_2, ..., arg
-	return result
+	return result, true
 }
 
-// function is allowed if all types of args are allowed and
+// function is allowed if all types of args and the returned type are allowed
 func isAllowedFunction(function *pgDumpItem, excludedTypes *set.Set[string]) bool {
-	argsTypes := extractFunctionArgsTypes(function.Body)
+	argsTypes, isOk := extractFunctionArgsTypes(function.Body)
+	if !isOk {
+		logger.Log.Warnf("unable to extract function args types for %v", function.Body)
+		return false
+	}
 	for _, t := range argsTypes {
 		if excludedTypes.Contains(t) {
 			return false
 		}
 	}
 
-	parts := splitSQLBySeparator(function.Body, "RETURNS ")
-	partWithReturnedType := parts[1]
+	parts := splitSQLBySeparator(function.Body, "RETURNS")
+	if len(parts) < 2 {
+		logger.Log.Warnf("unsupported definition for create function : %v", function.Body)
+		return false
+	}
+
+	partWithReturnedType := strings.TrimSpace(parts[1])
 
 	returnedType := splitSQLBySeparator(partWithReturnedType, "\n")[0]
+	returnedType = strings.TrimSuffix(returnedType, "[]")
 
 	return !excludedTypes.Contains(returnedType)
 }

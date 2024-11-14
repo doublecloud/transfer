@@ -88,7 +88,7 @@ CREATE TYPE santa."my custom type" AS (
     field2 INT
 );
 
-CREATE OR REPLACE FUNCTION santa.process_my_custom_type(input santa."my custom type")
+CREATE OR REPLACE FUNCTION santa.process_my_custom_type(IN input santa."my custom type", VARIADIC arr INT[])
     RETURNS VARCHAR AS $$
 BEGIN
     RETURN 'Field 1: ' || input.field1 || ', Field 2: ' || input.field2;
@@ -150,3 +150,16 @@ CREATE INDEX ia_idx_part_1 ON ia.ia_part_1 USING btree (ia);
 CREATE INDEX ia_part_1_ia_idx ON ia.ia_part_1 USING btree (ia);
 
 ALTER INDEX ia.ia_idx ATTACH PARTITION ia.ia_part_1_ia_idx;
+
+-- functions with problems
+CREATE SCHEMA only_functions;
+CREATE TABLE only_functions.table_for_functions (id INT PRIMARY KEY);
+
+CREATE FUNCTION only_functions.regex_quote(_name character varying) 
+RETURNS character varying 
+LANGUAGE plpgsql IMMUTABLE 
+AS $$
+BEGIN
+    RETURN lower(regexp_replace(_name, '[\"'']', '','g'));
+END;
+$$;

@@ -160,6 +160,10 @@ func Snapshot(t *testing.T) {
 	require.Equal(t, 2, itemTypToCnt["INDEX"])
 	require.Equal(t, 0, itemTypToCnt["INDEX_ATTACH"])
 	require.Equal(t, 0, itemTypToCnt["TABLE_ATTACH"])
+
+	// check function with regex with quote
+	itemTypToCnt = extractPgDumpTypToCnt(t, []string{"only_functions.table_for_functions"}, []string{"only_functions"})
+	require.Equal(t, 1, itemTypToCnt["FUNCTION"])
 }
 
 func extractPgDumpTypToCnt(t *testing.T, DBTables []string, schemas []string) map[string]int {
