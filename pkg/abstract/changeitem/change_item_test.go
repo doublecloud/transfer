@@ -553,6 +553,47 @@ func TestCollapse(t *testing.T) {
 		assert.Equal(t, len(res), 1)
 		assert.Equal(t, res[0].Kind, DeleteKind)
 	})
+	t.Run("Update primary key and Delete", func(t *testing.T) {
+		changes := []ChangeItem{{
+			ID:          291975576,
+			CommitTime:  1601382119000000000,
+			Kind:        UpdateKind,
+			Schema:      "ppc",
+			Table:       "camp_options",
+			TableSchema: NewTableSchema([]ColSchema{{PrimaryKey: true, ColumnName: "cid"}}),
+			ColumnNames: []string{
+				"cid",
+				"meaningful_goals",
+			},
+			ColumnValues: []interface{}{
+				51615525,
+				"[{\"value\":500}]",
+			},
+			OldKeys: OldKeysType{
+				KeyNames:  []string{"cid"},
+				KeyValues: []interface{}{51615524},
+			},
+		}, {
+			ID:          291975576,
+			CommitTime:  1601382119000000000,
+			Kind:        DeleteKind,
+			Schema:      "ppc",
+			Table:       "camp_options",
+			TableSchema: NewTableSchema([]ColSchema{{PrimaryKey: true, ColumnName: "cid"}}),
+			ColumnNames: []string{
+				"cid",
+			},
+			ColumnValues: []interface{}{
+				51615525,
+			},
+		}}
+		Dump(changes)
+		res := Collapse(changes)
+		Dump(res)
+		assert.Equal(t, len(res), 1)
+		assert.Equal(t, res[0].Kind, DeleteKind)
+		assert.Equal(t, res[0].ColumnValues[0], 51615524)
+	})
 	t.Run("Insert Update Delete Insert", func(t *testing.T) {
 		changes := []ChangeItem{{
 			ID:          291971525,

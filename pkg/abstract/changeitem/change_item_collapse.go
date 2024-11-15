@@ -1,6 +1,8 @@
 package changeitem
 
-import "sort"
+import (
+	"sort"
+)
 
 func compareColumns(old, new []string) (bool, map[string]int, map[string]int, []string) {
 	if len(old) == len(new) {
@@ -93,6 +95,9 @@ func Collapse(input []ChangeItem) []ChangeItem {
 			hashKToIdx[newHashK] = i
 
 		case DeleteKind:
+			if current, ok := rows[hashK]; ok && len(current.OldKeys.KeyValues) > 0 {
+				c.ColumnValues = current.OldKeys.KeyValues
+			}
 			toDelete[hashK] = c
 			delete(rows, hashK)
 		default:

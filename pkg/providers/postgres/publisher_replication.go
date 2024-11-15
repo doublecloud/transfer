@@ -345,7 +345,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 			data = append(data, &xld)
 			if shouldFlush && parsed {
 				parsed = false
-				go func(data []*pglogrepl.XLogData) {
+				go func(data []*pglogrepl.XLogData, messageCounter int) {
 					defer func() {
 						parsed = true
 					}()
@@ -389,7 +389,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 						return
 					}
 					cTime = time.Unix(0, int64(res[0].CommitTime))
-				}(data)
+				}(data, messageCounter)
 				data = []*pglogrepl.XLogData{}
 				bufferSize = 0
 				messageCounter = 0
