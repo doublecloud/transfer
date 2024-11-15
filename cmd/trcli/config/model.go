@@ -1,11 +1,11 @@
 package config
 
 import (
-	"github.com/doublecloud/transfer/pkg/transformer"
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/transformer"
 )
 
 type Endpoint struct {
