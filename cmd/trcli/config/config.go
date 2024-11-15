@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"gopkg.in/yaml.v2"
+	sig_yaml "sigs.k8s.io/yaml"
 )
 
 func TransferFromYaml(params *string) (*model.Transfer, error) {
@@ -66,6 +67,14 @@ func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 		pair := strings.SplitN(v, "=", 2)
 		transfer.Src.Params = strings.ReplaceAll(transfer.Src.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
 		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
+	}
+	res, err := sig_yaml.YAMLToJSON([]byte(transfer.Src.Params))
+	if err == nil {
+		transfer.Src.Params = string(res)
+	}
+	res, err = sig_yaml.YAMLToJSON([]byte(transfer.Dst.Params))
+	if err == nil {
+		transfer.Dst.Params = string(res)
 	}
 	return &transfer, nil
 }
