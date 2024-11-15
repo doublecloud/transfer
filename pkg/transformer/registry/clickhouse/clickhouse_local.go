@@ -2,6 +2,7 @@ package clickhouse
 
 import (
 	"bytes"
+	_ "embed"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
@@ -50,9 +52,32 @@ func init() {
 	})
 }
 
+var (
+	//go:embed README.md
+	readme []byte
+	_      model.Describable = (*Config)(nil)
+)
+
 type Config struct {
-	Tables filter.Tables `json:"tables"`
-	Query  string        `json:"query"`
+	Tables filter.Tables `json:"tables" yaml:"tables"`
+	Query  string        `json:"query" yaml:"query,flow"`
+}
+
+func (c Config) Describe() model.Doc {
+	return model.Doc{
+		Usage: string(readme),
+		Example: `
+tables:                                                                       
+	include_tables:                                                             
+	- '"public"."included_data"'                                                
+	exclude_tables:                                                             
+	- '"public"."excluded_data"'                                                
+query: |
+	select
+		* 
+	from table
+`,
+	}
 }
 
 type ClickhouseTransformer struct {

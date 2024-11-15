@@ -50,9 +50,12 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 	transfer := transfer(source, target, tr)
 
 	transfer.FillDependentFields()
-	if tr.Transformation != "" {
-		if err := transfer.TransformationFromJSON(tr.Transformation); err != nil {
-			return nil, xerrors.Errorf("unable to load transformation: %w", err)
+	if len(tr.Transformation.Transformers) > 0 {
+		transfer.Transformation = &model.Transformation{
+			Transformers:      &tr.Transformation,
+			ExtraTransformers: nil,
+			Executor:          nil,
+			RuntimeJobIndex:   0,
 		}
 	}
 	return transfer, nil

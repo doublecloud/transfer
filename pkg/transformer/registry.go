@@ -14,6 +14,7 @@ type TransformerFactory func(protoConfig any, lgr log.Logger, runtime abstract.T
 
 var (
 	knownTransformer = map[abstract.TransformerType]TransformerFactory{}
+	knownConfigs     = map[abstract.TransformerType]func() Config{}
 )
 
 func KnownTransformerNames() []string {
@@ -39,6 +40,18 @@ func Register[TConfig Config](typ abstract.TransformerType, f func(cfg TConfig, 
 		}
 		return f(t, lgr, runtime)
 	}
+	knownConfigs[typ] = func() Config {
+		var t TConfig
+		return t
+	}
+}
+
+func NewConfig(typ abstract.TransformerType) (Config, error) {
+	fac, ok := knownConfigs[typ]
+	if !ok {
+		return nil, xerrors.Errorf("not supported transformer %s, known: %v", typ, util.MapKeysInOrder(knownTransformer))
+	}
+	return fac(), nil
 }
 
 func New(typ abstract.TransformerType, cfg Config, lgr log.Logger, rt abstract.TransformationRuntimeOpts) (abstract.Transformer, error) {

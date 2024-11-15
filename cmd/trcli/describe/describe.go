@@ -8,6 +8,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/cobraaux"
+	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -34,13 +35,49 @@ func DescribeCommand() *cobra.Command {
 	}
 	destination.Flags().StringVar(&targetType, "type", "ch", fmt.Sprintf("Type of destination to generate docs, one of: %v", model.KnownDestinations()))
 
+	var transformerType string
+	trsfmr := &cobra.Command{
+		Use:   "transformer",
+		Short: "Describe transformer",
+		Args:  cobra.MatchAll(cobra.ExactArgs(0)),
+		RunE: generateTransformer(func() (transformer.Config, error) {
+			return transformer.NewConfig(abstract.TransformerType(transformerType))
+		}),
+	}
+	trsfmr.Flags().StringVar(&transformerType, "type", "sql", fmt.Sprintf("Type of transformer to describe, one of: %v", transformer.KnownTransformerNames()))
+
 	describe := &cobra.Command{
 		Use:   "describe",
 		Short: "Describe endpoint type",
 	}
 	cobraaux.RegisterCommand(describe, source)
 	cobraaux.RegisterCommand(describe, destination)
+	cobraaux.RegisterCommand(describe, trsfmr)
 	return describe
+}
+
+func generateTransformer(f func() (transformer.Config, error)) func(cmd *cobra.Command, args []string) error {
+	return func(cmd *cobra.Command, args []string) error {
+		trConfig, err := f()
+		if err != nil {
+			return xerrors.Errorf("unable to describe transfer: %w", err)
+		}
+		if e, ok := trConfig.(model.Describable); ok {
+			printDescribable(e)
+			return nil
+		}
+
+		data, err := yaml.Marshal(trConfig)
+		if err != nil {
+			return xerrors.Errorf("unable to marshal transformer params: %w", err)
+		}
+		out, _ := glamour.RenderWithEnvironmentConfig(fmt.Sprintf(`
+# Default Config
+%s
+`, "```yaml\n"+string(data)+"```"))
+		fmt.Print(out)
+		return nil
+	}
 }
 
 func generate(f func() (model.EndpointParams, error)) func(cmd *cobra.Command, args []string) error {
@@ -55,13 +92,7 @@ func generate(f func() (model.EndpointParams, error)) func(cmd *cobra.Command, a
 
 func describeEndpoint(e model.EndpointParams) error {
 	if e, ok := e.(model.Describable); ok {
-		out, _ := glamour.RenderWithEnvironmentConfig(fmt.Sprintf(`
-%s
-
-# Example Config
-%s
-`, e.Describe().Usage, "```yaml\n"+e.Describe().Example+"```"))
-		fmt.Print(out)
+		printDescribable(e)
 		return nil
 	}
 	e.WithDefaults()
@@ -77,4 +108,14 @@ func describeEndpoint(e model.EndpointParams) error {
 `, e.GetProviderType().Name(), "```yaml\n"+string(data)+"```"))
 	fmt.Print(out)
 	return nil
+}
+
+func printDescribable(e model.Describable) {
+	out, _ := glamour.RenderWithEnvironmentConfig(fmt.Sprintf(`
+%s
+
+# Example Config
+%s
+`, e.Describe().Usage, "```yaml\n"+e.Describe().Example+"```"))
+	fmt.Print(out)
 }
