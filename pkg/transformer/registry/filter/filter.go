@@ -7,18 +7,18 @@ import (
 )
 
 type Tables struct {
-	IncludeTables []string `json:"includeTables"`
-	ExcludeTables []string `json:"excludeTables"`
+	IncludeTables []string `json:"includeTables" yaml:"include_tables"`
+	ExcludeTables []string `json:"excludeTables" yaml:"exclude_tables"`
 }
 
 type Columns struct {
-	IncludeColumns []string `json:"includeColumns"`
-	ExcludeColumns []string `json:"excludeColumns"`
+	IncludeColumns []string `json:"includeColumns" yaml:"include_columns"`
+	ExcludeColumns []string `json:"excludeColumns" yaml:"exclude_columns"`
 }
 
 type Filter struct {
-	IncludeRegexp []string `json:"includeRegexp"`
-	ExcludeRegexp []string `json:"excludeRegexp"`
+	IncludeRegexp []string `json:"includeRegexp" yaml:"include_regexp"`
+	ExcludeRegexp []string `json:"excludeRegexp" yaml:"exclude_regexp"`
 
 	compiledInclude []*regexp.Regexp
 	compiledExclude []*regexp.Regexp

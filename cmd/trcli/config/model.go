@@ -5,6 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/transformer"
 )
 
 type Endpoint struct {
@@ -36,7 +37,7 @@ type TransferYamlView struct {
 	Src               Endpoint
 	Dst               Endpoint
 	RegularSnapshot   *abstract.RegularSnapshot `yaml:"regular_snapshot"`
-	Transformation    string                    `yaml:"transformation"`
+	Transformation    transformer.Transformers  `yaml:"transformation"`
 	DataObjects       *model.DataObjects        `yaml:"data_objects"`
 	TypeSystemVersion int                       `yaml:"type_system_version"`
 }

@@ -21,7 +21,6 @@ type Source interface {
 }
 
 type Describable interface {
-	EndpointParams
 	Describe() Doc
 }
 
