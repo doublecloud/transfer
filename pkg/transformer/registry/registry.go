@@ -5,6 +5,7 @@ import (
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/custom"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/filter"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/filter_rows"
+	_ "github.com/doublecloud/transfer/pkg/transformer/registry/logger"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/mask"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/number_to_float"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/problem_item_detector"

@@ -1793,6 +1793,7 @@
   "pkg/transformer/registry/jsonparser/parser.go":"transfer_manager/go/pkg/transformer/registry/jsonparser/parser.go",
   "pkg/transformer/registry/lambda/lambda.go":"transfer_manager/go/pkg/transformer/registry/lambda/lambda.go",
   "pkg/transformer/registry/lambda/lambda_test.go":"transfer_manager/go/pkg/transformer/registry/lambda/lambda_test.go",
+  "pkg/transformer/registry/logger/logger.go":"transfer_manager/go/pkg/transformer/registry/logger/logger.go",
   "pkg/transformer/registry/mask/gotest/canondata/result.json":"transfer_manager/go/pkg/transformer/registry/mask/gotest/canondata/result.json",
   "pkg/transformer/registry/mask/hmac_hasher.go":"transfer_manager/go/pkg/transformer/registry/mask/hmac_hasher.go",
   "pkg/transformer/registry/mask/hmac_hasher_test.go":"transfer_manager/go/pkg/transformer/registry/mask/hmac_hasher_test.go",
