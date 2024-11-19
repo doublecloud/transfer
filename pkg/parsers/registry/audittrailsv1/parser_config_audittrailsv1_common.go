@@ -1,8 +1,8 @@
 package audittrailsv1
 
 type ParserConfigAuditTrailsV1Common struct {
-	UseElasticSchema       bool // Hidden parameter only for internal usage.
-	RemoveNestingInDetails bool // Convert details to map[string]string instead of map[string]any.
+	FieldsToRemoveNesting []string // Convert specified fields to map[string]string instead of map[string]any.
+	UseElasticSchema      bool     // Hidden parameter only for internal usage.
 }
 
 func (c *ParserConfigAuditTrailsV1Common) IsNewParserConfig() {}

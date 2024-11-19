@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/parsers"
@@ -16,9 +17,13 @@ import (
 var removeNestingNotSupportedError = xerrors.New("Nesting removal is not supported for non-elastic schema")
 
 type AuditTrailsV1ParserImpl struct {
-	useElasticSchema       bool
-	removeNestingInDetails bool
-	parser                 parsers.Parser
+	// fieldsToRemoveNesting contains names of message's fields that should be compacted to map[string]string.
+	// Example: `details` in AuditTrails events could have different types for nested values, with that option
+	//	whole field details would be compacted to map[string]string by using json.Marshal.
+	fieldsToRemoveNesting []string
+
+	useElasticSchema bool
+	parser           parsers.Parser
 }
 
 func (p *AuditTrailsV1ParserImpl) parseLine(line string) (map[string]any, error) {
@@ -32,27 +37,58 @@ func (p *AuditTrailsV1ParserImpl) parseLine(line string) (map[string]any, error)
 		return nil, xerrors.Errorf("unable to unmarshal line: %w", err)
 	}
 
-	if p.removeNestingInDetails {
-		asAny, found := dict["details"]
-		if !found {
-			return dict, nil
+	for _, field := range p.fieldsToRemoveNesting {
+		if err := removeNestingByKey(dict, field); err != nil {
+			return nil, xerrors.Errorf("unable to remove nesting for field '%s': %w", field, err)
 		}
-		details, ok := asAny.(map[string]any)
-		if !ok {
-			return nil, xerrors.Errorf("details expected to be map[string]any, got %T", details)
-		}
-
-		for key, value := range details {
-			bytes, err := json.Marshal(value)
-			if err != nil {
-				return nil, xerrors.Errorf("unable to marshal 'details.%s': %w", key, err)
-			}
-			details[key] = string(bytes)
-		}
-		dict["details"] = details
 	}
 
 	return dict, nil
+}
+
+func removeNestingByKey(dict map[string]any, key string) error {
+	asAny, found := dict[key]
+	if !found {
+		logger.Log.Warnf("field '%s' not found in message", key)
+		return nil
+	}
+
+	field, ok := asAny.(map[string]any)
+	if !ok {
+		return xerrors.Errorf("field '%s' expected to be map[string]any, got %T", key, field)
+	}
+
+	if curKey, nestedKey, isCut := strings.Cut(key, "."); isCut {
+		// Key contains '.'-symbol. Need to remove nesting for deeper level of `field`.
+		// Example: If key = "details.my_detail", then call removeNestingByKey(field["details"], "my_detail").
+
+		nextLevelField, found := dict[curKey]
+		if !found {
+			logger.Log.Warnf("nested field '%s' not found in message", key)
+			return nil
+		}
+
+		nextLevel, ok := nextLevelField.(map[string]any)
+		if !ok {
+			return xerrors.Errorf("nested field '%s' expected to be map[string]any, got %T", curKey, nextLevel)
+		}
+
+		if err := removeNestingByKey(nextLevel, nestedKey); err != nil {
+			return xerrors.Errorf("unable to remove nesting in subkey '%s' of key '%s': %w", nestedKey, key, err)
+		}
+		return nil
+	}
+
+	// Key do not contains '.'-symbol. Iterate over all nested parameters and cast them to strings.
+	for key, value := range field {
+		bytes, err := json.Marshal(value)
+		if err != nil {
+			return xerrors.Errorf("unable to marshal 'details.%s': %w", key, err)
+		}
+		field[key] = string(bytes)
+	}
+	dict[key] = field
+	return nil
 }
 
 func (p *AuditTrailsV1ParserImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
@@ -189,17 +225,17 @@ func getElasticFields() *abstract.TableSchema {
 }
 
 func NewAuditTrailsV1ParserImpl(
-	useElasticSchema, removeNestingInDetails, sniff bool, logger log.Logger, registry *stats.SourceStats,
+	fieldsToRemoveNesting []string, useElasticSchema, sniff bool, logger log.Logger, registry *stats.SourceStats,
 ) (*AuditTrailsV1ParserImpl, error) {
 
 	res := &AuditTrailsV1ParserImpl{
-		useElasticSchema:       useElasticSchema,
-		removeNestingInDetails: removeNestingInDetails,
-		parser:                 nil,
+		fieldsToRemoveNesting: fieldsToRemoveNesting,
+		useElasticSchema:      useElasticSchema,
+		parser:                nil,
 	}
 
 	if !useElasticSchema {
-		if removeNestingInDetails {
+		if len(fieldsToRemoveNesting) > 0 {
 			return nil, removeNestingNotSupportedError
 		}
 		config := &jsonparser.ParserConfigJSONCommon{

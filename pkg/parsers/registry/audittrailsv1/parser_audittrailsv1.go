@@ -10,8 +10,8 @@ import (
 func NewParserAuditTrailsV1(inWrapped any, sniff bool, logger log.Logger, registry *stats.SourceStats) (parsers.Parser, error) {
 	in := inWrapped.(*ParserConfigAuditTrailsV1Common)
 	return audittrailsv1engine.NewAuditTrailsV1ParserImpl(
+		in.FieldsToRemoveNesting,
 		in.UseElasticSchema,
-		in.RemoveNestingInDetails,
 		sniff,
 		logger,
 		registry,

@@ -61,7 +61,13 @@ func TestNotElastic(t *testing.T) {
 		if line == "" {
 			continue
 		}
-		parser, err := NewAuditTrailsV1ParserImpl(false, false, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := NewAuditTrailsV1ParserImpl(
+			nil,
+			false,
+			false,
+			logger.Log,
+			stats.NewSourceStats(metrics.NewRegistry()),
+		)
 		require.NoError(t, err)
 		msg := makePersqueueReadMessage(0, line)
 		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
@@ -80,7 +86,13 @@ func TestElastic(t *testing.T) {
 		if line == "" {
 			continue
 		}
-		parser, err := NewAuditTrailsV1ParserImpl(true, false, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := NewAuditTrailsV1ParserImpl(
+			nil,
+			true,
+			false,
+			logger.Log,
+			stats.NewSourceStats(metrics.NewRegistry()),
+		)
 		require.NoError(t, err)
 		msg := makePersqueueReadMessage(0, line)
 		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
@@ -99,7 +111,13 @@ func TestRemoveNestingElastic(t *testing.T) {
 		if line == "" {
 			continue
 		}
-		parser, err := NewAuditTrailsV1ParserImpl(true, true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := NewAuditTrailsV1ParserImpl(
+			[]string{"details", "request_parameters.rule_specs"},
+			true,
+			false,
+			logger.Log,
+			stats.NewSourceStats(metrics.NewRegistry()),
+		)
 		require.NoError(t, err)
 		msg := makePersqueueReadMessage(0, line)
 		result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: "my-topic-name"})
@@ -111,6 +129,12 @@ func TestRemoveNestingElastic(t *testing.T) {
 }
 
 func TestRemoveNestingNotElastic(t *testing.T) {
-	_, err := NewAuditTrailsV1ParserImpl(false, true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+	_, err := NewAuditTrailsV1ParserImpl(
+		[]string{"details", "request_parameters.rule_specs"},
+		false,
+		false,
+		logger.Log,
+		stats.NewSourceStats(metrics.NewRegistry()),
+	)
 	require.ErrorIs(t, err, removeNestingNotSupportedError)
 }
