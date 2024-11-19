@@ -68,14 +68,14 @@ func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 	}
 	for _, v := range os.Environ() {
 		pair := strings.SplitN(v, "=", 2)
-		transfer.Src.Params = strings.ReplaceAll(transfer.Src.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
-		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.Params, fmt.Sprintf("${%v}", pair[0]), pair[1])
+		transfer.Src.Params = strings.ReplaceAll(transfer.Src.JsonParams(), fmt.Sprintf("${%v}", pair[0]), pair[1])
+		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.JsonParams(), fmt.Sprintf("${%v}", pair[0]), pair[1])
 	}
-	res, err := sig_yaml.YAMLToJSON([]byte(transfer.Src.Params))
+	res, err := sig_yaml.YAMLToJSON([]byte(transfer.Src.JsonParams()))
 	if err == nil {
 		transfer.Src.Params = string(res)
 	}
-	res, err = sig_yaml.YAMLToJSON([]byte(transfer.Dst.Params))
+	res, err = sig_yaml.YAMLToJSON([]byte(transfer.Dst.JsonParams()))
 	if err == nil {
 		transfer.Dst.Params = string(res)
 	}
@@ -103,11 +103,11 @@ func ParseTablesYaml(rawData []byte) (*UploadTables, error) {
 }
 
 func source(tr *TransferYamlView) (model.Source, error) {
-	return model.NewSource(tr.Src.Type, tr.Src.Params)
+	return model.NewSource(tr.Src.Type, tr.Src.JsonParams())
 }
 
 func target(tr *TransferYamlView) (model.Destination, error) {
-	return model.NewDestination(tr.Dst.Type, tr.Dst.Params)
+	return model.NewDestination(tr.Dst.Type, tr.Dst.JsonParams())
 }
 
 func transfer(source model.Source, target model.Destination, tr *TransferYamlView) *model.Transfer {

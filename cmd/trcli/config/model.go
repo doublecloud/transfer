@@ -1,6 +1,7 @@
 package config
 
 import (
+	"gopkg.in/yaml.v2"
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -11,7 +12,19 @@ import (
 type Endpoint struct {
 	ID, Name string
 	Type     abstract.ProviderType
-	Params   string
+	Params   any
+}
+
+func (e Endpoint) JsonParams() string {
+	switch p := e.Params.(type) {
+	case []byte:
+		return string(p)
+	case string:
+		return p
+	default:
+		data, _ := yaml.Marshal(p)
+		return string(data)
+	}
 }
 
 type Runtime struct {
