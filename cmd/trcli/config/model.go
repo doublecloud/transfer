@@ -6,12 +6,25 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/transformer"
+	"gopkg.in/yaml.v2"
 )
 
 type Endpoint struct {
 	ID, Name string
 	Type     abstract.ProviderType
-	Params   string
+	Params   any
+}
+
+func (e Endpoint) RawParams() string {
+	switch p := e.Params.(type) {
+	case []byte:
+		return string(p)
+	case string:
+		return p
+	default:
+		data, _ := yaml.Marshal(p)
+		return string(data)
+	}
 }
 
 type Runtime struct {
