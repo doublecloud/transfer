@@ -1,22 +1,21 @@
-type: SNAPSHOT_ONLY
+id: test
+type: SNAPSHOT_AND_INCREMENT
 src:
   type: mysql
-  params: |
-    {
-      "Hosts": ["localhost"],
-      "User": "postgres",
-      "Password": "password",
-      "Database": "mydb",
-      "Port": 5432
-    }
+  params:
+    Host: mysql
+    User: myuser
+    Password: mypassword
+    Database: mydb
+    Port: 3306
 dst:
   type: ch
-  params: |
-    {
-      "ShardsList": [{"Hosts": ["localhost"]}],
-      "HTTPPort": 8123,
-      "NativePort": 9000,
-      "Database": "default",
-      "User": "default",
-      "Password": "ch_password"
-    }
+  params:
+    ShardsList:
+      - Hosts:
+          - clickhouse
+    HTTPPort: 8123
+    NativePort: 9000
+    Database: default
+    User: default
+    Password: "ch_password"

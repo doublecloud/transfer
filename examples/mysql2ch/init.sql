@@ -1,3 +1,9 @@
+-- grant replication to mysql user
+GRANT REPLICATION CLIENT ON *.* TO 'myuser'@'%';
+GRANT REPLICATION SLAVE ON *.* TO 'myuser'@'%';
+
+FLUSH PRIVILEGES;
+
 -- Create a demo table for Gachi-muchi reference personas
 CREATE TABLE IF NOT EXISTS gachi_muchi_personas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,3 +21,14 @@ INSERT INTO gachi_muchi_personas (name, description, strength_level, special_mov
 ('Ricardo Milos', 'A viral dancer with unmatched energy and meme status.', 90, 'Twerk of Power'),
 ('Mark Wolff', 'One of the strong and bold Gachi-muchi personas.', 85, 'Wolf Howl Slam'),
 ('Kazuhiko', 'An energetic character with a playful spirit, popular in certain circles.', 80, 'Smiling Slam');
+
+CREATE TABLE users (
+   id INT AUTO_INCREMENT PRIMARY KEY,
+   name VARCHAR(100),
+   email VARCHAR(100)
+);
+
+INSERT INTO users (name, email) VALUES
+('Alice', 'alice@example.com'),
+('Bob', 'bob@example.com'),
+('Charlie', 'charlie@example.com');
