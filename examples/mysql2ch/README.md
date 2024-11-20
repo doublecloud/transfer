@@ -30,7 +30,7 @@ Also, we will run end to end docker compose sample with CDC real-time replicatio
          v
 +--------+---------+
 |                  |
-|    Clickhouse    | <------ Store data in with realtime updats
+|    Clickhouse    | <------ Store data in with realtime updates
 |                  |
 +--------+---------+
 ```
@@ -70,7 +70,8 @@ Also, we will run end to end docker compose sample with CDC real-time replicatio
    ```
 
 3. **Access to Clickhouse**:
-   Access to ClickHouse via CLI: ``
+   Access to ClickHouse via CLI: 
+   `clickhouse-client --host localhost --port 9000 --user default --password 'ch_password'`
 
 ### Using the Application
 
