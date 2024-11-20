@@ -7,15 +7,13 @@ services:
     ports:
       - "8123:8123"   # HTTP interface
       - "9000:9000"   # Native TCP interface
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
     environment:
       CLICKHOUSE_USER: default
       CLICKHOUSE_DB: default
-      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_PASSWORD: "ch_password"
 
   mysql:
-    image: mysql:latest
+    image: mysql:8.4
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
@@ -25,9 +23,30 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./custom_my.cnf:/etc/mysql/my.cnf
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the seed data script
 
-volumes:
-  clickhouse_data:
-  mysql_data:
+  # Golang-based load generator for MySQL CRUD operations
+  crud_load_gen:
+    build: ../mysql2kafka/loadgen
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_DB: mydb
+
+  transfer:
+    build: ../.. # build main transfer docker CLI
+    command:
+      - replicate
+      - --transfer
+      - /usr/local/bin/transfer.yaml
+      - --log-level
+      - info
+    depends_on:
+      - mysql
+      - clickhouse
+    volumes:
+      - ./transfer.yaml:/usr/local/bin/transfer.yaml
