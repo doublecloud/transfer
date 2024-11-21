@@ -44,7 +44,7 @@ containers:
         mountPath: /volume-mounts/datatransfer/config
     {{- with .Values.resources }}
     resources:
-    {{ toYaml . | nindent 4 }}
+      {{- toYaml . | nindent 6 }}
     {{- end }}
 volumes:
   - name: config
