@@ -10,24 +10,19 @@ resources:
     cpu: "2000m"
 
 transferSpec:
-  id: dtttesthelm
-  type: SNAPSHOT_ONLY  # Options: SNAPSHOT_ONLY, INCREMENT_ONLY, SNAPSHOT_AND_INCREMENT
+  type: SNAPSHOT_ONLY # Options: SNAPSHOT_ONLY, INCREMENT_ONLY, SNAPSHOT_AND_INCREMENT
   regular_snapshot:
     enabled: false
     cron_expression: "0 1 * * *"
   src:
     type: pg
-    params:
-      {
-      }
+    params: {}
   dst:
     type: stdout
-    params:
-      {
-      }
+    params: {}
 
 coordinator:
-  job_count: 1  # Number of parallel job instances
+  job_count: 1 # Number of parallel job instances
   process_count: 4 # Number of in-worker threads to spawn
   type: memory
   bucket: NO_BUCKET
