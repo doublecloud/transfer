@@ -30,5 +30,5 @@ spec:
           {{- end }}
         spec:
           restartPolicy: Never
-          {{- include "transfer.spec" (dict "commandType" "activate" "Values" .Values "Release" .Release) | nindent 10 }}
+          {{- include "transfer.spec" (dict "commandType" "activate" "Values" .Values "Release" .Release "Chart" .Chart) | nindent 10 }}
 {{- end }}

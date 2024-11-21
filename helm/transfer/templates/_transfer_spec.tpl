@@ -2,7 +2,7 @@
 serviceAccountName: {{ .Values.serviceAccount.externalName | default $.Release.Name }}
 containers:
   - name: transfer
-    image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default $.Chart.AppVersion }}"
     command:
       - "/usr/local/bin/trcli"
       - "{{ .commandType }}"

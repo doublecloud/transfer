@@ -22,5 +22,5 @@ spec:
         {{- .Values.podAnnotations | toYaml | nindent 8 }}
       {{- end }}
     spec:
-      {{- include "transfer.spec" (dict "commandType" "replicate" "Values" .Values "Release" .Release) | nindent 6 }}
+      {{- include "transfer.spec" (dict "commandType" "replicate" "Values" .Values "Release" .Release "Chart" .Chart) | nindent 6 }}
 {{- end }}
