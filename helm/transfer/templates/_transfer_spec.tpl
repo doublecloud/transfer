@@ -17,9 +17,9 @@ containers:
       - "--log-config"
       - "{{ .Values.log.config }}"
       - "--coordinator-job-count"
-      - {{.Values.coordinator.job_count}}
+      - "{{.Values.coordinator.job_count}}"
       - "--coordinator-process-count"
-      - {{.Values.coordinator.process_count}}
+      - "{{.Values.coordinator.process_count}}"
     {{- if .Values.env }}
     env:
       {{- range $name, $value := .Values.env }}
