@@ -1,0 +1,50 @@
+id: test
+type: INCREMENT_ONLY
+src:
+  type: s3
+  params:
+    Bucket: ${BUCKET}
+    ConnectionConfig:
+      AccessKey: ${ACCESS_KEY} # YOUR ACCESS_KEY
+      S3ForcePathStyle: true
+      SecretKey: ${SECRET_KEY} # YOUR SECRET_KEY
+      UseSSL: true
+    ReadBatchSize: 1000999900
+    InflightLimit: 100000000
+    TableName: my_table
+    InputFormat: JSON
+    OutputSchema: # Schema format, each item here will be resulted in clickhouse column
+      - name: id
+        type: int64
+        key: true # Will be included in clickhouse primary key
+      - name: value
+        type: string
+    AirbyteFormat: ''
+    PathPattern: '*.json'
+    Concurrency: 10
+    Format:
+      JSONLSetting:
+        BlockSize: 100000000
+    EventSource:
+      SQS:
+        QueueName: ${QUEUE}
+        OwnerAccountID: ${ACCOUNT}
+        ConnectionConfig:
+          AccessKey: ${ACCESS_KEY} # YOUR ACCESS_KEY
+          SecretKey: ${SECRET_KEY} # YOUR SECRET_KEY
+          UseSSL: true
+          Region: ${REGION}
+    UnparsedPolicy: continue
+dst:
+  type: ch
+  params:
+    ShardsList:
+      - Hosts:
+          - clickhouse
+    HTTPPort: 8123
+    NativePort: 9000
+    Database: default
+    User: default
+    Password: ch_password
+transformation: {}
+type_system_version: 8
