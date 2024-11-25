@@ -102,9 +102,10 @@ More details [here](./docs/deploy_k8s.md).
 <details>
 <summary>Semi-structured Ingestion</summary>
 
-- [Parquet file to Clickhouse](./examples/s32ch/parquet.md)
-- [CSV file to Clickhouse](./examples/s32ch/csv.md)
-- [NDJSON file to Clickhouse](./examples/s32ch/json.md)
+- [S3 with SQS ingestion to Clickhouse](./examples/s3sqs2ch/README.md)
+
+[//]: # (- [Parquet file to Clickhouse]&#40;./examples/s32ch/parquet.md&#41;)
+[//]: # (- [CSV file to Clickhouse]&#40;./examples/s32ch/csv.md&#41;)
 
 </details>
 
