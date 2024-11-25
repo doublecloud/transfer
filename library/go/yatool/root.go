@@ -11,6 +11,10 @@ var (
 	arcadiaRoot     string
 	arcadiaRootErr  error
 	arcadiaRootOnce sync.Once
+
+	arcInstanceRoot     string
+	arcInstanceRootErr  error
+	arcInstanceRootOnce sync.Once
 )
 
 // FindArcadiaRoot searches Arcadia root for the target path
@@ -56,4 +60,42 @@ func ArcadiaRoot() (string, error) {
 	})
 
 	return arcadiaRoot, arcadiaRootErr
+}
+
+func FindArcInstanceRoot(arcPath string, arcRootFiles []string) (string, error) {
+	isRoot := func(arcPath string) bool {
+		for _, rootFile := range arcRootFiles {
+			if _, err := os.Stat(filepath.Join(arcPath, rootFile)); err == nil {
+				return true
+			}
+		}
+		return false
+	}
+
+	arcPath, err := filepath.Abs(arcPath)
+	if err != nil {
+		return "", err
+	}
+
+	current := filepath.Clean(arcPath)
+	for {
+		if isRoot(current) {
+			return current, nil
+		}
+
+		next := filepath.Dir(current)
+		if next == current {
+			return "", errors.New("can't find arcadia root")
+		}
+
+		current = next
+	}
+}
+
+func ArcInstanceRoot() (string, error) {
+	arcInstanceRootOnce.Do(func() {
+		arcInstanceRoot, arcInstanceRootErr = FindArcInstanceRoot(".", []string{".arcadia.root", ".cloudia.root"})
+	})
+
+	return arcInstanceRoot, arcInstanceRootErr
 }
