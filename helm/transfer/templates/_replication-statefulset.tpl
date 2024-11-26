@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: {{ .Release.Name }}-replication
     {{- include "common.labels" . | nindent 4 }}
 spec:
-  serviceName: {{ .Release.Name }}-replication
+  serviceName: {{ .Release.Name }}
   replicas: {{ .Values.coordinator.job_count }}
   selector:
     matchLabels:

@@ -27,6 +27,12 @@ coordinator:
   type: memory
   bucket: NO_BUCKET
 
+serviceAccount:
+  create: true
+
+podMonitor:
+  enabled: false
+
 log:
   level: info # ("panic", "fatal", "error", "warning", "info", "debug")
   config: minimal # ("console", "json", "minimal")
