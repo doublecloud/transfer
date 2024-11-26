@@ -53,7 +53,7 @@ containers:
 volumes:
   - name: config
     configMap:
-      name: {{ $.Release.Name }}-config
+      name: {{ $.Release.Name }}
       items:
         - key: config.yaml
           path: config.yaml

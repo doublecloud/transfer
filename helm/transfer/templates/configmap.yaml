@@ -1,9 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-config
-  labels:
-    {{- include "common.labels" . | nindent 4 }}
+  name: { { .Release.Name } }
+  labels: { { - include "common.labels" . | nindent 4 } }
 data:
   config.yaml: |
     id: {{ .Values.transferSpec.id | default .Release.Name | replace "-" "_" }}
