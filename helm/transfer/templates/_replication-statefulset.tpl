@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ .Release.Name }}-replication
+  name: {{ .Release.Name }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}-replication
     {{- include "common.labels" . | nindent 4 }}

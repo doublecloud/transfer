@@ -20,8 +20,12 @@ containers:
       - "{{.Values.coordinator.job_count}}"
       - "--coordinator-process-count"
       - "{{.Values.coordinator.process_count}}"
-    {{- if .Values.env }}
     env:
+    - name: GOMEMLIMIT
+      valueFrom:
+        resourceFieldRef:
+          resource: limits.memory
+    {{- if .Values.env }}
       {{- range $name, $value := .Values.env }}
       - name: {{ $name }}
         value: {{ $value }}

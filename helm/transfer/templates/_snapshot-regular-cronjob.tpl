@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-snapshot-regular
+  name: {{ .Release.Name }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}-snapshot-regular
     {{- include "common.labels" . | nindent 4 }}

@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ .Release.Name }}-snapshot"
+  name: {{ .Release.Name }}
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}-snapshot
     {{- include "common.labels" . | nindent 4 }}
