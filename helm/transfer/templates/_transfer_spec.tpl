@@ -25,12 +25,12 @@ containers:
       valueFrom:
         resourceFieldRef:
           resource: limits.memory
-    {{- if .Values.env }}
-      {{- range $name, $value := .Values.env }}
-      - name: {{ $name }}
-        value: {{ $value }}
-      {{- end }}
+  {{- if .Values.env }}
+    {{- range $name, $value := .Values.env }}
+    - name: {{ $name }}
+      value: {{ $value }}
     {{- end }}
+  {{- end }}
     ports:
       - name: pprof
         protocol: TCP
