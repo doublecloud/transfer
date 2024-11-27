@@ -35,26 +35,28 @@ type sqsSource struct {
 	mu          sync.Mutex
 }
 
+// DTO struct is used for unmarshalling SQS messages in the FetchObjects method.
+type DTO struct {
+	Type    string `json:"Type"`
+	Message string `json:"Message"`
+	Records []struct {
+		S3 struct {
+			Bucket struct {
+				Name string `json:"name"`
+			} `json:"bucket"`
+			Object struct {
+				Key  string `json:"key"`
+				Size int64  `json:"size"`
+			} `json:"object"`
+			ConfigurationID string `json:"configurationId"`
+		} `json:"s3"`
+
+		EventName string    `json:"eventName"`
+		EventTime time.Time `json:"eventTime"`
+	} `json:"Records"`
+}
+
 func (s *sqsSource) fetchMessages() ([]Object, error) {
-	// records struct is used for unmarshalling SQS messages in the FetchObjects method.
-	type records struct {
-		Records []struct {
-			S3 struct {
-				Bucket struct {
-					Name string `json:"name"`
-				} `json:"bucket"`
-				Object struct {
-					Key  string `json:"key"`
-					Size int64  `json:"size"`
-				} `json:"object"`
-				ConfigurationID string `json:"configurationId"`
-			} `json:"s3"`
-
-			EventName string    `json:"eventName"`
-			EventTime time.Time `json:"eventTime"`
-		} `json:"Records"`
-	}
-
 	messages, err := s.client.ReceiveMessageWithContext(s.ctx, &sqs.ReceiveMessageInput{
 		QueueUrl:            s.queueURL,
 		MaxNumberOfMessages: aws.Int64(10),  // maximum is 10, but fewer  msg can be delivered
@@ -73,11 +75,17 @@ func (s *sqsSource) fetchMessages() ([]Object, error) {
 			ReceiptHandle: message.ReceiptHandle,
 		}
 		if !strings.Contains(*message.Body, TestEvent) && strings.Contains(*message.Body, CreationEvent) {
-			var records records
-			if err := json.Unmarshal([]byte(*message.Body), &records); err != nil {
+			var dto DTO
+			if err := json.Unmarshal([]byte(*message.Body), &dto); err != nil {
 				return nil, xerrors.Errorf("failed to unmarshal message records: %w", err)
 			}
-			for _, record := range records.Records {
+			if len(dto.Records) == 0 && len(dto.Message) > 0 {
+				// we receive wrapped message, need to unwrap it, actual records are inside `Message` field.
+				if err := json.Unmarshal([]byte(dto.Message), &dto); err != nil {
+					return nil, xerrors.Errorf("failed to unmarshal message records: %w", err)
+				}
+			}
+			for _, record := range dto.Records {
 				if strings.Contains(record.EventName, CreationEvent) {
 					// SQS escapes path strings, we need to invert the operation here, from simple%3D1234.jsonl to simple=1234.jsonl for example
 					unescapedKey, err := url.QueryUnescape(record.S3.Object.Key)
@@ -268,16 +276,6 @@ func (s *sqsSource) batchDelete() error {
 	}
 
 	return nil
-}
-
-func containsCreationEventConfig(events []*string) bool {
-	for _, event := range events {
-		if strings.Contains(*event, CreationEvent) {
-			return true
-		}
-	}
-
-	return false
 }
 
 func NewSQSSource(ctx context.Context, logger log.Logger, reader reader.Reader,
