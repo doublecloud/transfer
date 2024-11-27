@@ -20,13 +20,17 @@ containers:
       - "{{.Values.coordinator.job_count}}"
       - "--coordinator-process-count"
       - "{{.Values.coordinator.process_count}}"
-    {{- if .Values.env }}
     env:
-      {{- range $name, $value := .Values.env }}
-      - name: {{ $name }}
-        value: {{ $value }}
-      {{- end }}
+    - name: GOMEMLIMIT
+      valueFrom:
+        resourceFieldRef:
+          resource: limits.memory
+  {{- if .Values.env }}
+    {{- range $name, $value := .Values.env }}
+    - name: {{ $name }}
+      value: {{ $value }}
     {{- end }}
+  {{- end }}
     ports:
       - name: pprof
         protocol: TCP
@@ -49,7 +53,7 @@ containers:
 volumes:
   - name: config
     configMap:
-      name: {{ $.Release.Name }}-config
+      name: {{ $.Release.Name }}
       items:
         - key: config.yaml
           path: config.yaml
