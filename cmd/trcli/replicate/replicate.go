@@ -1,9 +1,9 @@
 package replicate
 
 import (
-	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"time"
 
+	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
