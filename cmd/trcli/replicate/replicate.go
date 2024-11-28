@@ -34,9 +34,25 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
-		if !transfer.IncrementOnly() {
+		st, err := (*cp).GetTransferState(transfer.ID)
+		if err != nil {
+			return xerrors.Errorf("unable to get transfer state: %w", err)
+		}
+		if st["status"].Generic != nil {
 			if err := activate.RunActivate(*cp, transfer, registry, 0); err != nil {
 				return xerrors.Errorf("unable to activate transfer: %w", err)
+			}
+			if err := (*cp).SetTransferState(transfer.ID, map[string]*coordinator.TransferStateData{
+				"status": {
+					Generic:             "activated",
+					IncrementalTables:   nil,
+					OraclePosition:      nil,
+					MysqlGtid:           nil,
+					MysqlBinlogPosition: nil,
+					YtStaticPart:        nil,
+				},
+			}); err != nil {
+				return xerrors.Errorf("unable to set transfer state: %w", err)
 			}
 		}
 
