@@ -55,8 +55,9 @@ type sink struct {
 
 	handledSystemItems map[abstract.Kind]*set.Set[string]
 
-	metrics *stats.SinkerStats
-	logger  log.Logger
+	metrics    *stats.SinkerStats
+	logger     log.Logger
+	tableNamer func(id abstract.TableID) string
 }
 
 func (s *sink) Push(items []abstract.ChangeItem) error {
@@ -206,21 +207,35 @@ func (s *sink) commitTable(tablePath ypath.Path, scheme abstract.TableColumns) e
 }
 
 func (s *sink) getTablePath(item abstract.ChangeItem) ypath.Path {
-	tableName := getNameFromTableID(item.TableID())
+	tableName := s.tableNamer(item.TableID())
 	if s.config == nil {
 		return yt2.SafeChild(s.dir, tableName)
 	}
 	return yt2.SafeChild(s.dir, s.config.GetTableAltName(tableName))
 }
 
-func getNameFromTableID(id abstract.TableID) string {
+func OldStaticTableNamer(id abstract.TableID) string {
 	if id.Namespace == "public" {
 		return id.Name
 	}
 	return fmt.Sprintf("%s_%s", id.Namespace, id.Name)
 }
 
-func NewStaticSink(cfg yt2.YtDestinationModel, cp coordinator.Coordinator, transferID string, registry metrics.Registry, logger log.Logger) (abstract.Sinker, error) {
+func DefaultStaticTableNamer(id abstract.TableID) string {
+	if id.Namespace == "public" || id.Namespace == "" {
+		return id.Name
+	}
+	return fmt.Sprintf("%s_%s", id.Namespace, id.Name)
+}
+
+func NewStaticSink(
+	cfg yt2.YtDestinationModel,
+	cp coordinator.Coordinator,
+	transferID string,
+	registry metrics.Registry,
+	logger log.Logger,
+	tableNamer func(id abstract.TableID) string,
+) (abstract.Sinker, error) {
 	ytClient, err := ytclient.FromConnParams(cfg, logger)
 	if err != nil {
 		return nil, err
@@ -240,5 +255,7 @@ func NewStaticSink(cfg yt2.YtDestinationModel, cp coordinator.Coordinator, trans
 		},
 		metrics: stats.NewSinkerStats(registry),
 		logger:  logger,
+
+		tableNamer: DefaultStaticTableNamer,
 	}, nil
 }

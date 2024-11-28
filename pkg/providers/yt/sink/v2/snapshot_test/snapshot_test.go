@@ -140,7 +140,7 @@ func singleSnapshotOneTable(t *testing.T) {
 
 	// push unsorted table to existent sorted
 	dst = newYTDstModel(dstSample, false)
-	sink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	sink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	require.NoError(t, sink.Push(itemsBuilder.InitShardedTableLoad()))
@@ -166,14 +166,14 @@ func shardedSnapshotManyTables(t *testing.T) {
 	secondItemsBuilder := helpers.NewChangeItemsBuilder("public", secondTableName, reducedDstSchema)
 
 	// push InitShTableLoad items
-	primarySink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	primarySink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	require.NoError(t, primarySink.Push(firstItemsBuilder.InitShardedTableLoad()))
 	require.NoError(t, primarySink.Push(secondItemsBuilder.InitShardedTableLoad()))
 
 	// push Inserts to sinks on secondary workers
-	secondarySink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	secondarySink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	require.NoError(t, secondarySink.Push(firstItemsBuilder.InitTableLoad()))
@@ -181,7 +181,7 @@ func shardedSnapshotManyTables(t *testing.T) {
 	require.NoError(t, secondarySink.Push(firstItemsBuilder.Inserts(t, []map[string]interface{}{{"id": 1, "author_id": "111", "is_deleted": false}})))
 	require.NoError(t, secondarySink.Push(firstItemsBuilder.DoneTableLoad()))
 
-	secondarySink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	secondarySink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	require.NoError(t, secondarySink.Push(secondItemsBuilder.InitTableLoad()))
@@ -190,7 +190,7 @@ func shardedSnapshotManyTables(t *testing.T) {
 	require.NoError(t, secondarySink.Push(secondItemsBuilder.DoneTableLoad()))
 
 	// push DoneShTableLoad items and complete snapshot
-	primarySink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	primarySink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	require.NoError(t, primarySink.Push(firstItemsBuilder.DoneShardedTableLoad()))
@@ -227,23 +227,23 @@ func retryingParts(t *testing.T) {
 
 	itemsBuilder := helpers.NewChangeItemsBuilder("public", tableName, testDstSchema)
 
-	currentSink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 	require.NoError(t, currentSink.Push(itemsBuilder.InitShardedTableLoad()))
 
-	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 	require.NoError(t, currentSink.Push(itemsBuilder.InitTableLoad()))
 	require.NoError(t, currentSink.Push(itemsBuilder.Inserts(t, []map[string]interface{}{{"author_id": 123, "is_deleted": 15}})))
 	require.Error(t, currentSink.Push(itemsBuilder.DoneTableLoad()))
 
-	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 	require.NoError(t, currentSink.Push(itemsBuilder.InitTableLoad()))
 	require.NoError(t, currentSink.Push(itemsBuilder.Inserts(t, []map[string]interface{}{{"id": 0, "author_id": "a", "is_deleted": true}})))
 	require.NoError(t, currentSink.Push(itemsBuilder.DoneTableLoad()))
 
-	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err = staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 	require.NoError(t, currentSink.Push(itemsBuilder.DoneShardedTableLoad()))
 
@@ -354,7 +354,7 @@ func withShuffledColumns(t *testing.T) {
 }
 
 func pushItemsWithoutCommit(t *testing.T, cp coordinator.Coordinator, transferID string, dst yt.YtDestinationModel, input [][]abstract.ChangeItem) {
-	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	for _, items := range input {
@@ -363,7 +363,7 @@ func pushItemsWithoutCommit(t *testing.T, cp coordinator.Coordinator, transferID
 }
 
 func commit(t *testing.T, cp coordinator.Coordinator, transferID string, dst yt.YtDestinationModel) {
-	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err := staticsink.NewStaticSink(dst, cp, transferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	completable, ok := currentSink.(abstract.Committable)
@@ -372,7 +372,7 @@ func commit(t *testing.T, cp coordinator.Coordinator, transferID string, dst yt.
 }
 
 func pushItems(t *testing.T, cp coordinator.Coordinator, dst yt.YtDestinationModel, input [][]abstract.ChangeItem) {
-	currentSink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log)
+	currentSink, err := staticsink.NewStaticSink(dst, cp, helpers.TransferID, helpers.EmptyRegistry(), logger.Log, staticsink.DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	for _, items := range input {

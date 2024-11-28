@@ -130,7 +130,11 @@ func (p *Provider) Sink(middlewares.Config) (abstract.Sinker, error) {
 				return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
 			}
 		} else {
-			if s, err = staticsink.NewStaticSink(dst, p.cp, p.transfer.ID, p.registry, p.logger); err != nil {
+			namer := staticsink.DefaultStaticTableNamer
+			if p.transfer.TypeSystemVersion < 9 {
+				namer = staticsink.OldStaticTableNamer
+			}
+			if s, err = staticsink.NewStaticSink(dst, p.cp, p.transfer.ID, p.registry, p.logger, namer); err != nil {
 				return nil, xerrors.Errorf("failed to create YT (static) sinker: %w", err)
 			}
 		}

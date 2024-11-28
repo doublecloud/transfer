@@ -111,7 +111,7 @@ func staticTableSimple(t *testing.T) {
 		Namespace: "ns",
 		Name:      "weird_table",
 	}
-	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log)
+	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log, DefaultStaticTableNamer)
 	require.NoError(t, err)
 
 	// generate some amount of random change items
@@ -207,7 +207,7 @@ func wrongOrderOfValuesInChangeItem(t *testing.T) {
 		Namespace: "ns",
 		Name:      "weird_table_2",
 	}
-	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log)
+	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log, DefaultStaticTableNamer)
 	defer require.NoError(t, statTable.Close())
 	require.NoError(t, err)
 
@@ -268,7 +268,7 @@ func customAttributesStaticTable(t *testing.T) {
 		Name:      "weird_table_2",
 	}
 
-	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log)
+	statTable, err := NewStaticSink(cfg, cp, "dtt", metrics.NewRegistry(), logger.Log, DefaultStaticTableNamer)
 	require.NoError(t, err)
 	// generate some amount of random change items
 	var items []abstract.ChangeItem
