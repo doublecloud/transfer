@@ -38,7 +38,7 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 		if err != nil {
 			return xerrors.Errorf("unable to get transfer state: %w", err)
 		}
-		if st["status"].Generic != nil {
+		if stt, ok := st["status"]; !ok || stt.Generic == nil {
 			if err := activate.RunActivate(*cp, transfer, registry, 0); err != nil {
 				return xerrors.Errorf("unable to activate transfer: %w", err)
 			}
