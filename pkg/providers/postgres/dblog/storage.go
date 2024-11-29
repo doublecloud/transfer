@@ -3,15 +3,17 @@ package dblog
 import (
 	"context"
 
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/dblog"
 	"github.com/doublecloud/transfer/pkg/dblog/tablequery"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type Storage struct {
+	logger log.Logger
+
 	src       abstract.Source
 	pgStorage tablequery.StorageTableQueryable
 	conn      *pgxpool.Pool
@@ -20,24 +22,29 @@ type Storage struct {
 
 	transferID       string
 	represent        dblog.ChangeItemConverter
+	keeperSchema     string
 	betweenMarksOpts []func()
 }
 
 func NewStorage(
+	logger log.Logger,
 	src abstract.Source,
 	pgStorage tablequery.StorageTableQueryable,
 	conn *pgxpool.Pool,
 	chunkSize uint64,
 	transferID string,
+	keeperSchema string,
 	represent dblog.ChangeItemConverter,
 	betweenMarksOpts ...func(),
 ) (abstract.Storage, error) {
 	return &Storage{
+		logger:           log.With(logger, log.Any("component", "dblog")),
 		src:              src,
 		pgStorage:        pgStorage,
 		conn:             conn,
 		chunkSize:        chunkSize,
 		transferID:       transferID,
+		keeperSchema:     keeperSchema,
 		represent:        represent,
 		betweenMarksOpts: betweenMarksOpts,
 	}, nil
@@ -64,16 +71,23 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		if err != nil {
 			return xerrors.Errorf("unable to generate chunk size: %w", err)
 		}
+		s.logger.Infof("Storage::LoadTable - inferred chunkSize: %d", chunkSize)
+	} else {
+		s.logger.Infof("Storage::LoadTable - from config chunkSize: %d", chunkSize)
 	}
 
-	pgSignalTable, err := newPgSignalTable(ctx, s.conn, logger.Log, s.transferID)
+	pgSignalTable, err := NewPgSignalTable(ctx, s.conn, s.logger, s.transferID, s.keeperSchema)
 	if err != nil {
 		return xerrors.Errorf("unable to create signal table: %w", err)
 	}
 
 	tableQuery := tablequery.NewTableQuery(tableDescr.ID(), true, "", 0, chunkSize)
+	s.logger.Infof("Storage::LoadTable - tableQuery: %v", tableQuery)
 	lowBound := pgSignalTable.resolveLowBound(ctx, tableDescr.ID())
+	s.logger.Infof("Storage::LoadTable - lowBound: %v", lowBound)
+
 	iterator, err := dblog.NewIncrementalIterator(
+		s.logger,
 		s.pgStorage,
 		tableQuery,
 		pgSignalTable,
@@ -92,6 +106,8 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		return xerrors.Errorf("failed to do initial iteration: %w", err)
 	}
 
+	s.logger.Infof("Storage::LoadTable - first iteration done, extacted items: %d", len(items))
+
 	chunk, err := dblog.ResolveChunkMapFromArr(items, pkColNames, s.represent)
 	if err != nil {
 		return xerrors.Errorf("failed to resolve chunk: %w", err)
@@ -99,6 +115,7 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 
 	asyncSink := dblog.NewIncrementalAsyncSink(
 		ctx,
+		s.logger,
 		pgSignalTable,
 		tableDescr.ID(),
 		iterator,

@@ -66,7 +66,7 @@ func TestIncrementalSnapshotFaultTolerance(t *testing.T) {
 		coordinator.NewFakeClient())
 	require.NoError(t, err)
 
-	storage, err := dblog.NewStorage(src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, pgsink.Represent)
+	storage, err := dblog.NewStorage(logger.Log, src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, "public", pgsink.Represent)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)
@@ -108,7 +108,7 @@ func TestIncrementalSnapshotFaultTolerance(t *testing.T) {
 		coordinator.NewFakeClient())
 	require.NoError(t, err)
 
-	storage, err = dblog.NewStorage(src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, pgsink.Represent)
+	storage, err = dblog.NewStorage(logger.Log, src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, "public", pgsink.Represent)
 	require.NoError(t, err)
 
 	err = storage.LoadTable(context.Background(), *numTable, pusher)

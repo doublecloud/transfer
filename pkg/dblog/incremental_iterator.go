@@ -7,9 +7,12 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/dblog/tablequery"
 	"github.com/google/uuid"
+	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type IncrementalIterator struct {
+	logger log.Logger
+
 	storage     tablequery.StorageTableQueryable
 	tableQuery  *tablequery.TableQuery
 	signalTable SignalTable
@@ -26,6 +29,7 @@ type IncrementalIterator struct {
 }
 
 func NewIncrementalIterator(
+	logger log.Logger,
 	storage tablequery.StorageTableQueryable,
 	tableQuery *tablequery.TableQuery,
 	signalTable SignalTable,
@@ -36,6 +40,7 @@ func NewIncrementalIterator(
 	betweenMarksOpts ...func(),
 ) (*IncrementalIterator, error) {
 	iter := &IncrementalIterator{
+		logger:            logger,
 		storage:           storage,
 		tableQuery:        tableQuery,
 		signalTable:       signalTable,
@@ -53,7 +58,7 @@ func NewIncrementalIterator(
 
 func (i *IncrementalIterator) Next(ctx context.Context) ([]abstract.ChangeItem, error) {
 	i.tableQuery.Filter = MakeNextWhereStatement(i.pkColNames, i.lowBound)
-
+	i.logger.Infof("IncrementalIterator::Next - i.tableQuery.Filter: %s", i.tableQuery.Filter)
 	return i.loadTablePart(ctx)
 }
 
@@ -62,6 +67,8 @@ func (i *IncrementalIterator) loadTablePart(ctx context.Context) ([]abstract.Cha
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create watermark when selecting chunk: %w", err)
 	}
+
+	i.logger.Infof("created low watermark, uuid: %s", lowWatermarkUUID.String())
 
 	i.LowWatermarkUUID = lowWatermarkUUID
 
@@ -97,6 +104,8 @@ func (i *IncrementalIterator) loadTablePart(ctx context.Context) ([]abstract.Cha
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to create watermark when selecting chunk")
 	}
+
+	i.logger.Infof("created high watermark, uuid: %s", highWatermarkUUID.String())
 
 	i.HighWatermarkUUID = highWatermarkUUID
 

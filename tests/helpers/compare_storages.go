@@ -22,11 +22,12 @@ import (
 )
 
 var technicalTables = map[string]bool{
-	"__consumer_keeper":         true, // pg
-	"__dt_cluster_time":         true, // mongodb
-	"__table_transfer_progress": true, // mysql
-	"__tm_gtid_keeper":          true, // mysql
-	"__tm_keeper":               true, // mysql
+	"__data_transfer_signal_table": true, // dblog signal table
+	"__consumer_keeper":            true, // pg
+	"__dt_cluster_time":            true, // mongodb
+	"__table_transfer_progress":    true, // mysql
+	"__tm_gtid_keeper":             true, // mysql
+	"__tm_keeper":                  true, // mysql
 }
 
 func withTextSerialization(storageParams *pgStorage.PgStorageParams) *pgStorage.PgStorageParams {

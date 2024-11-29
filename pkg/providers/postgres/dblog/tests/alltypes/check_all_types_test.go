@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/dblog"
 	"github.com/doublecloud/transfer/pkg/dblog/tablequery"
@@ -199,13 +200,15 @@ func TestIncrementalSnapshot(t *testing.T) {
 		tableQuery := tablequery.NewTableQuery(tableDescription.ID(), true, "", 0, defaultLimit)
 
 		iterator, err := dblog.NewIncrementalIterator(
+			logger.Log,
 			storage,
 			tableQuery,
 			signalTable,
 			postgres.Represent,
 			primaryKey,
 			nil,
-			defaultLimit)
+			defaultLimit,
+		)
 
 		require.NoError(t, err)
 

@@ -3,6 +3,7 @@ package dblog
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -19,7 +20,7 @@ type (
 )
 
 const (
-	signalTableName        = "__data_transfer_signal_table"
+	SignalTableName        = "__data_transfer_signal_table"
 	tableSchemaColumnIndex = 0
 	tableNameColumnIndex   = 1
 	tableTransferIDIndex   = 2
@@ -27,14 +28,19 @@ const (
 	markTypeColumnIndex    = 4
 )
 
+func SignalTableTableID(schemaName string) *abstract.TableID {
+	return abstract.NewTableID(schemaName, SignalTableName)
+}
+
 type signalTable struct {
 	conn       *pgxpool.Pool
 	logger     log.Logger
 	transferID string
+	schemaName string
 }
 
-func buildSignalTableDDL() string {
-	query := `CREATE TABLE IF NOT EXISTS %s
+func buildSignalTableDDL(schemaName string) string {
+	query := `CREATE TABLE IF NOT EXISTS "%s"."%s"
 			  (
 				  table_schema TEXT,
 				  table_name TEXT,
@@ -45,20 +51,21 @@ func buildSignalTableDDL() string {
 				  PRIMARY KEY (table_schema, table_name, transfer_id, mark_type)
 			  );`
 
-	return fmt.Sprintf(query, signalTableName)
+	return fmt.Sprintf(query, schemaName, SignalTableName)
 }
 
-func newPgSignalTable(
+func NewPgSignalTable(
 	ctx context.Context,
 	conn *pgxpool.Pool,
 	logger log.Logger,
 	transferID string,
+	schemaName string,
 ) (*signalTable, error) {
-
 	pgSignalTable := &signalTable{
 		conn:       conn,
 		logger:     logger,
 		transferID: transferID,
+		schemaName: schemaName,
 	}
 
 	if err := pgSignalTable.init(ctx); err != nil {
@@ -70,7 +77,7 @@ func newPgSignalTable(
 
 func (s *signalTable) init(ctx context.Context) error {
 	return s.tx(ctx, func(tx pgx.Tx) error {
-		if _, err := tx.Exec(ctx, buildSignalTableDDL()); err != nil {
+		if _, err := tx.Exec(ctx, buildSignalTableDDL(s.schemaName)); err != nil {
 			return xerrors.Errorf("failed to ensure existence of the signal table service table: %w", err)
 		}
 		return nil
@@ -125,9 +132,20 @@ func (s *signalTable) CreateWatermark(
 			return xerrors.Errorf("unable to convert low bound array to string")
 		}
 
+		query := s.makeWatermarkQuery()
+		s.logger.Info(
+			fmt.Sprintf("CreateWatermark - query: %s", strings.ReplaceAll(query, "\n", "")),
+			log.String("tableID.Namespace", tableID.Namespace),
+			log.String("tableID.Name", tableID.Name),
+			log.String("s.transferID", s.transferID),
+			log.String("newUUID", newUUID.String()),
+			log.String("watermarkType", string(watermarkType)),
+			log.String("lowBoundStr", lowBoundStr),
+		)
+
 		_, err = tx.Exec(
 			ctx,
-			s.makeWatermarkQuery(),
+			query,
 			tableID.Namespace,
 			tableID.Name,
 			s.transferID,
@@ -151,7 +169,7 @@ func (s *signalTable) CreateWatermark(
 }
 
 func (s *signalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.TableID, markUUID uuid.UUID) (bool, dblog.WatermarkType) {
-	isWatermark := item.Table == signalTableName
+	isWatermark := item.Table == SignalTableName
 	if !isWatermark {
 		return false, dblog.BadWatermarkType
 	}
@@ -183,14 +201,14 @@ func (s *signalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.Ta
 }
 
 func (s *signalTable) makeWatermarkQuery() string {
-	query := `INSERT INTO %s (table_schema, table_name, transfer_id, mark, mark_type, low_bound)
+	query := `INSERT INTO "%s"."%s" (table_schema, table_name, transfer_id, mark, mark_type, low_bound)
 			  VALUES (($1), ($2), ($3), ($4), ($5), ($6))
 			  ON CONFLICT (table_schema, table_name, transfer_id, mark_type)
 			  DO UPDATE
 			  SET mark = EXCLUDED.mark,
 				  low_bound = EXCLUDED.low_bound;`
 
-	return fmt.Sprintf(query, signalTableName)
+	return fmt.Sprintf(query, s.schemaName, SignalTableName)
 }
 
 func (s *signalTable) resolveLowBound(ctx context.Context, tableID abstract.TableID) []string {
@@ -220,11 +238,11 @@ func (s *signalTable) resolveLowBound(ctx context.Context, tableID abstract.Tabl
 }
 
 func (s *signalTable) resolveLowBoundQuery() string {
-	query := `SELECT low_bound FROM %s
+	query := `SELECT low_bound FROM "%s"."%s"
               WHERE table_schema = ($1)
               	AND table_name = ($2)
                 AND transfer_id = ($3)
               	AND mark_type = ($4);`
 
-	return fmt.Sprintf(query, signalTableName)
+	return fmt.Sprintf(query, s.schemaName, SignalTableName)
 }

@@ -1165,6 +1165,8 @@ func (s *Storage) LoadQueryTable(ctx context.Context, tableQuery tablequery.Tabl
 
 	query := s.queryFromQueryTable(&tableQuery, schema, SortAsc, abstract.NoFilter, All, excludeDescendants)
 
+	logger.Log.Infof("Storage::LoadQueryTable - built query: %s", query)
+
 	if err = s.loadTable(ctx, tableDescription, pusher, query, conn.Conn(), loadMode, schema, time.Now()); err != nil {
 		return xerrors.Errorf("unable to load table : %w", err)
 	}

@@ -47,7 +47,7 @@ func init() {
 			transfer_id TEXT, schema_name TEXT, table_name TEXT, lsn BIGINT
 			Table (in target) needed for resolving data overlapping during SNAPSHOT_AND_INCREMENT transfers.
 	*/
-	abstract.RegisterSystemTables(TableConsumerKeeper, TableLSN)
+	abstract.RegisterSystemTables(TableConsumerKeeper, TableLSN, dblog.SignalTableName)
 }
 
 const (
@@ -168,7 +168,8 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 		}
 
 		if src.DBLogEnabled {
-			if err := p.DBLogUpload(src, tables); err != nil {
+			logger.Log.Info("DBLog enabled")
+			if err := p.DBLogUpload(ctx, tables); err != nil {
 				return xerrors.Errorf("DBLog snapshot loading failed: %w", err)
 			}
 		} else {
@@ -334,7 +335,7 @@ func (p *Provider) SourceSampleableStorage() (abstract.SampleableStorage, []abst
 	}
 	var tables []abstract.TableDescription
 	for tID, tInfo := range all {
-		if tID.Name == TableConsumerKeeper {
+		if tID.Name == TableConsumerKeeper || tID.Name == dblog.SignalTableName {
 			continue
 		}
 		if src.Include(tID) {
@@ -362,26 +363,34 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
-func (p *Provider) DBLogUpload(src *PgSource, tables abstract.TableMap) error {
-
+func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) error {
+	src, ok := p.transfer.Src.(*PgSource)
+	if !ok {
+		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
+	}
 	pgStorage, err := NewStorage(src.ToStorageParams(p.transfer))
 	if err != nil {
 		return xerrors.Errorf("failed to create postgres storage: %w", err)
 	}
 
-	sourceWrapper, err := NewSourceWrapper(src, src.SlotID, nil, p.logger, stats.NewSourceStats(p.registry), p.cp)
+	// ensure SignalTable exists
+	_, err = dblog.NewPgSignalTable(ctx, pgStorage.Conn, logger.Log, p.transfer.ID, src.KeeperSchema)
+	if err != nil {
+		return xerrors.Errorf("unable to create signal table: %w", err)
+	}
+
+	sourceWrapper, err := NewSourceWrapper(src, src.SlotID, p.transfer.DataObjects, p.logger, stats.NewSourceStats(p.registry), p.cp)
 	if err != nil {
 		return xerrors.Errorf("failed to create source wrapper: %w", err)
 	}
 
-	dblogStorage, err := dblog.NewStorage(sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, src.SlotID, Represent)
+	dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, src.SlotID, src.KeeperSchema, Represent)
 	if err != nil {
 		return xerrors.Errorf("failed to create DBLog storage: %w", err)
 	}
 
 	tableDescs := tables.ConvertToTableDescriptions()
 	for _, table := range tableDescs {
-
 		asyncSink, err := abstract_sink.MakeAsyncSink(
 			p.transfer,
 			logger.Log,
@@ -397,7 +406,13 @@ func (p *Provider) DBLogUpload(src *PgSource, tables abstract.TableMap) error {
 		}
 
 		if err = backoff.Retry(func() error {
-			return dblogStorage.LoadTable(context.Background(), table, pusher)
+			logger.Log.Infof("Starting upload table: %s", table.String())
+
+			err := dblogStorage.LoadTable(ctx, table, pusher)
+			if err == nil {
+				logger.Log.Infof("Upload table %s successfully", table.String())
+			}
+			return err
 		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10)); err != nil {
 			return xerrors.Errorf("failed to load table: %w", err)
 		}

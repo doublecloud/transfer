@@ -3,16 +3,17 @@ package dblog
 import (
 	"context"
 
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/google/uuid"
+	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/exp/maps"
 )
 
 type IncrementalAsyncSink struct {
-	ctx context.Context
+	ctx    context.Context
+	logger log.Logger
 
 	signalTable SignalTable
 
@@ -32,6 +33,7 @@ type IncrementalAsyncSink struct {
 
 func NewIncrementalAsyncSink(
 	ctx context.Context,
+	logger log.Logger,
 	signalTable SignalTable,
 	table abstract.TableID,
 	tableIterator *IncrementalIterator,
@@ -43,6 +45,7 @@ func NewIncrementalAsyncSink(
 ) *IncrementalAsyncSink {
 	asyncSink := &IncrementalAsyncSink{
 		ctx:             ctx,
+		logger:          logger,
 		signalTable:     signalTable,
 		tableID:         table,
 		tableIterator:   tableIterator,
@@ -87,10 +90,10 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 		}
 
 		if ok, watermarkType := s.signalTable.IsWatermark(&item, s.tableID, s.expectedUUID()); ok {
-			logger.Log.Info("watermark found")
+			s.logger.Info("watermark found")
 
 			if !s.isExpectedWatermarkOfType(watermarkType) {
-				logger.Log.Info("wrong watermark found")
+				s.logger.Info("wrong watermark found")
 				continue
 			}
 
@@ -143,7 +146,7 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 			encodedKey := stringArrToString(keyValue, defaultSeparator)
 
 			if _, ok = s.chunk[encodedKey]; ok {
-				logger.Log.Infof("found primary key from chunk: %s", keyValue)
+				s.logger.Infof("found primary key from chunk: %s", keyValue)
 				delete(s.chunk, encodedKey)
 			}
 		}

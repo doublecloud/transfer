@@ -71,7 +71,7 @@ func TestIncrementalSnapshot(t *testing.T) {
 		coordinator.NewFakeClient())
 	require.NoError(t, err)
 
-	storage, err := dblog.NewStorage(src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, pgsink.Represent, opt)
+	storage, err := dblog.NewStorage(logger.Log, src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, "public", pgsink.Represent, opt)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)

@@ -2605,6 +2605,8 @@
   "tests/e2e/pg2pg/bytea_key/check_db_test.go":"transfer_manager/go/tests/e2e/pg2pg/bytea_key/check_db_test.go",
   "tests/e2e/pg2pg/bytea_key/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2pg/bytea_key/init_source/dump.sql",
   "tests/e2e/pg2pg/bytea_key/init_target/dump.sql":"transfer_manager/go/tests/e2e/pg2pg/bytea_key/init_target/dump.sql",
+  "tests/e2e/pg2pg/dblog/dblog_test.go":"transfer_manager/go/tests/e2e/pg2pg/dblog/dblog_test.go",
+  "tests/e2e/pg2pg/dblog/dump/dump.sql":"transfer_manager/go/tests/e2e/pg2pg/dblog/dump/dump.sql",
   "tests/e2e/pg2pg/debezium/all_datatypes/check_db_test.go":"transfer_manager/go/tests/e2e/pg2pg/debezium/all_datatypes/check_db_test.go",
   "tests/e2e/pg2pg/debezium/all_datatypes/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2pg/debezium/all_datatypes/init_source/dump.sql",
   "tests/e2e/pg2pg/debezium/all_datatypes/init_target/init.sql":"transfer_manager/go/tests/e2e/pg2pg/debezium/all_datatypes/init_target/init.sql",

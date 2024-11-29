@@ -329,6 +329,8 @@ func TestBuildArgs(t *testing.T) {
 		`"cms"."__consumer_keeper"`,
 		`-t`,
 		`"cms"."__data_transfer_lsn"`,
+		`-t`,
+		`"cms"."__data_transfer_signal_table"`,
 	}, args)
 
 	// without DBTables

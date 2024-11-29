@@ -11,6 +11,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/dblog"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jackc/pgconn"
@@ -104,13 +105,22 @@ func addTablesList(config *PgSource, trackLSN bool, objects *model.DataObjects) 
 
 	consumerKeeperID := *abstract.NewTableID(config.KeeperSchema, TableConsumerKeeper)
 	mustAddConsumerKeeper := true
+	signalTableID := *dblog.SignalTableTableID(config.KeeperSchema)
+	mustAddsignalTable := config.DBLogEnabled
+
 	for _, t := range result {
 		if mustAddConsumerKeeper && t.Equals(consumerKeeperID) {
 			mustAddConsumerKeeper = false
 		}
+		if mustAddsignalTable && t.Equals(signalTableID) {
+			mustAddsignalTable = false
+		}
 	}
 	if mustAddConsumerKeeper {
 		result = append(result, consumerKeeperID)
+	}
+	if mustAddsignalTable {
+		result = append(result, signalTableID)
 	}
 
 	// since inherit table appear dynamically we need to filter tables on our side instead of push-list to postgres

@@ -14,6 +14,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/errors"
 	"github.com/doublecloud/transfer/pkg/errors/categories"
+	"github.com/doublecloud/transfer/pkg/providers/postgres/dblog"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/utils"
 	"github.com/doublecloud/transfer/pkg/storage"
 	"github.com/doublecloud/transfer/pkg/transformer/registry/rename"
@@ -229,7 +230,7 @@ func (s *PgSource) fulfilledIncludesImpl(tID abstract.TableID, firstIncludeOnly 
 	}
 	if tID.Namespace == s.KeeperSchema {
 		switch tID.Name {
-		case TableConsumerKeeper, TableLSN:
+		case TableConsumerKeeper, TableLSN, dblog.SignalTableName:
 			result = append(result, abstract.PgName(s.KeeperSchema, tID.Name))
 		}
 	}
@@ -252,6 +253,7 @@ func (s *PgSource) AuxTables() []string {
 	return []string{
 		abstract.PgName(s.KeeperSchema, TableConsumerKeeper),
 		abstract.PgName(s.KeeperSchema, TableLSN),
+		abstract.PgName(s.KeeperSchema, dblog.SignalTableName),
 	}
 }
 
