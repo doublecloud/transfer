@@ -6,10 +6,12 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
 // Contract for parameters: all possible keys are present
 
+// Parameters names.
 const (
 	// automatically filled settings, user can override it, if user wants:
 
@@ -50,9 +52,10 @@ const (
 
 	KeySubjectNameStrategy   = "key.converter.key.subject.name.strategy"
 	ValueSubjectNameStrategy = "value.converter.value.subject.name.strategy"
+)
 
-	// values
-
+// Values of parameters.
+const (
 	BoolTrue  = "true"
 	BoolFalse = "false"
 
@@ -84,13 +87,35 @@ const (
 	BinaryHandlingModeBase64 = "base64"
 	BinaryHandlingModeHex    = "hex"
 
-	ConverterApacheKafkaJSON = "org.apache.kafka.connect.json.JsonConverter"
-	ConverterConfluentJSON   = "io.confluent.connect.json.JsonSchemaConverter"
+	ConverterApacheKafkaJSON   = "org.apache.kafka.connect.json.JsonConverter"
+	ConverterConfluentAvro     = "io.confluent.connect.avro.AvroConverter"
+	ConverterConfluentJSON     = "io.confluent.connect.json.JsonSchemaConverter"
+	ConverterConfluentProtobuf = "io.confluent.connect.protobuf.ProtobufConverter"
 
 	SubjectTopicNameStrategy       = "io.confluent.kafka.serializers.subject.TopicNameStrategy"
 	SubjectRecordNameStrategy      = "io.confluent.kafka.serializers.subject.RecordNameStrategy"
 	SubjectTopicRecordNameStrategy = "io.confluent.kafka.serializers.subject.TopicRecordNameStrategy"
 )
+
+var converterParams = set.New([]string{
+	KeyConverter,
+	KeyConverterSchemasEnable,
+	KeyConverterSchemaRegistryURL,
+	KeyConverterBasicAuthCredentialsSource,
+	KeyConverterBasicAuthUserInfo,
+	KeyConverterSslCa,
+
+	ValueConverter,
+	ValueConverterSchemasEnable,
+	ValueConverterSchemaRegistryURL,
+	ValueConverterBasicAuthCredentialsSource,
+	ValueConverterBasicAuthUserInfo,
+	ValueConverterSslCa,
+}...)
+
+func IsConverterParam(param string) bool {
+	return converterParams.Contains(param)
+}
 
 type connectorSetting struct {
 	name           string

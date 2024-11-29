@@ -21,7 +21,7 @@ func NewKeyPackerFromDebeziumParameters(connectorParameters map[string]string, l
 			userAndPassword := strings.SplitN(authData, ":", 2)
 			if len(userAndPassword) != 2 {
 				return nil, xerrors.Errorf("invalid auth data format. Param %v must be in `user:password` format or empty",
-					debeziumparameters.KeyConverterBasicAuthCredentialsSource)
+					debeziumparameters.KeyConverterBasicAuthUserInfo)
 			}
 			srClient.SetCredentials(userAndPassword[0], userAndPassword[1])
 		}
@@ -52,7 +52,7 @@ func NewValuePackerFromDebeziumParameters(connectorParameters map[string]string,
 			userAndPassword := strings.SplitN(authData, ":", 2)
 			if len(userAndPassword) != 2 {
 				return nil, xerrors.Errorf("invalid auth data format. Param %v must be in `user:password` format or empty",
-					debeziumparameters.ValueConverterBasicAuthCredentialsSource)
+					debeziumparameters.ValueConverterBasicAuthUserInfo)
 			}
 			srClient.SetCredentials(userAndPassword[0], userAndPassword[1])
 		}
