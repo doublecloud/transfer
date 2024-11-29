@@ -33,23 +33,23 @@ func init() {
 
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           2,
-			ProviderType: ProviderType,
-			Function:     postgres.FallbackNotNullAsNull,
+			To:       2,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: postgres.FallbackNotNullAsNull,
 		}
 	})
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           3,
-			ProviderType: ProviderType,
-			Function:     postgres.FallbackTimestampToUTC,
+			To:       3,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: postgres.FallbackTimestampToUTC,
 		}
 	})
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           5,
-			ProviderType: ProviderType,
-			Function:     postgres.FallbackBitAsBytes,
+			To:       5,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: postgres.FallbackBitAsBytes,
 		}
 	})
 }

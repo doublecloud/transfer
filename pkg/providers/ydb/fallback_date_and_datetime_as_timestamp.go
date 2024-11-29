@@ -9,8 +9,8 @@ import (
 func init() {
 	typesystem.AddFallbackTargetFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           8,
-			ProviderType: ProviderType,
+			To:     8,
+			Picker: typesystem.ProviderType(ProviderType),
 			Function: func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error) {
 				if !ci.IsRowEvent() {
 					switch ci.Kind {

@@ -66,9 +66,9 @@ func extractTimeFromColumnValue(columnValue interface{}) (time.Time, bool) {
 func init() {
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           3,
-			ProviderType: ProviderType,
-			Function:     FallbackTimestampToUTC,
+			To:       3,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: FallbackTimestampToUTC,
 		}
 	})
 }

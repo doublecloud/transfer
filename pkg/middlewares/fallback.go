@@ -5,6 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -12,9 +13,9 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func SourceFallbacks(version int, typ abstract.ProviderType, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
+func SourceFallbacks(version int, typ model.EndpointParams, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
 	sourceFallbacks := buildFallbacks(typesystem.SourceFallbackFactories)
-	lgr.Info("Prepare source fallbacks", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.Name()), log.Any("registry", fallbacksString(sourceFallbacks)))
+	lgr.Info("Prepare source fallbacks", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.GetProviderType().Name()), log.Any("registry", fallbacksString(sourceFallbacks)))
 	if result := prepareFallbacker(version, typ, sourceFallbacks, lgr, stat); result == nil {
 		return func(sinker abstract.Sinker) abstract.Sinker {
 			return sinker
@@ -24,9 +25,9 @@ func SourceFallbacks(version int, typ abstract.ProviderType, lgr log.Logger, sta
 	}
 }
 
-func TargetFallbacks(version int, typ abstract.ProviderType, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
+func TargetFallbacks(version int, typ model.EndpointParams, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
 	targetFallbacks := buildFallbacks(typesystem.TargetFallbackFactories)
-	lgr.Info("Prepare target fallbacks", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.Name()), log.Any("registry", fallbacksString(targetFallbacks)))
+	lgr.Info("Prepare target fallbacks", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.GetProviderType().Name()), log.Any("registry", fallbacksString(targetFallbacks)))
 	if result := prepareFallbacker(version, typ, targetFallbacks, lgr, stat); result == nil {
 		return func(sinker abstract.Sinker) abstract.Sinker {
 			return sinker
@@ -45,15 +46,15 @@ func buildFallbacks(factories []typesystem.FallbackFactory) []typesystem.Fallbac
 	return fallbacks
 }
 
-func prepareFallbacker(version int, providerTyp abstract.ProviderType, registry []typesystem.Fallback, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
+func prepareFallbacker(version int, typ model.EndpointParams, registry []typesystem.Fallback, lgr log.Logger, stat *stats.FallbackStats) abstract.SinkOption {
 	var applicableFallbacks []typesystem.Fallback
 	for _, fb := range registry {
-		if fb.Applies(version, providerTyp) {
+		if fb.Applies(version, typ) {
 			applicableFallbacks = append(applicableFallbacks, fb)
 		}
 	}
 	if len(applicableFallbacks) == 0 {
-		lgr.Info("No applicable typesystem fallbacks found", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", providerTyp.Name()), log.String("fallbacks", fallbacksString(applicableFallbacks)))
+		lgr.Info("No applicable typesystem fallbacks found", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.GetProviderType().Name()), log.String("fallbacks", fallbacksString(applicableFallbacks)))
 		return nil
 	}
 
@@ -65,7 +66,7 @@ func prepareFallbacker(version int, providerTyp abstract.ProviderType, registry 
 		}
 		return 0
 	})
-	lgr.Info("Applicable typesystem fallbacks found", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", providerTyp.Name()), log.String("fallbacks", fallbacksString(applicableFallbacks)))
+	lgr.Info("Applicable typesystem fallbacks found", log.Int("latest_typesystem_version", typesystem.LatestVersion), log.Int("typesystem_version", version), log.String("provider", typ.GetProviderType().Name()), log.String("fallbacks", fallbacksString(applicableFallbacks)))
 	stat.Deepness.Set(float64(len(applicableFallbacks)))
 	return func(sinker abstract.Sinker) abstract.Sinker {
 		return newFallbacker(sinker, applicableFallbacks, lgr, stat)

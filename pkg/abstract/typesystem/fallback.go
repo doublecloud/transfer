@@ -5,24 +5,12 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-// LatestVersion is the current (most recent) version of the typesystem. Increment this when adding a new fallback.
-//
-// At any moment, fallbacks can only be "to" any version preceding the latest.
-//
-// Zero value is reserved and MUST NOT be used.
-//
-// When incrementing this value, DO ADD a link to the function(s) implementing this fallback to CHANGELOG.md in the current directory
-const LatestVersion int = 9
+const LatestVersion int = model.LatestVersion
 
-// NewTransfersVersion is the version of the typesystem set for new transfers. It must be less or equal to the LatestVersion.
-//
-// To upgrade typesystem version, the following process should be applied:
-// 1. LatestVersion is increased & fallbacks are introduced in the first PR. NewTransfersVersion stays the same!
-// 2. Controlplane and dataplane are deployed and dataplane now contains the fallbacks for a new version.
-// 3. The second PR increases NewTransfersVersion. When a controlplane with this change is deployed, dataplanes already have the required fallbacks.
-const NewTransfersVersion int = 9
+const NewTransfersVersion int = model.NewTransfersVersion
 
 var FallbackDoesNotApplyErr = xerrors.NewSentinel("this fallback does not apply")
 
@@ -32,24 +20,26 @@ type FallbackFactory func() Fallback
 type Fallback struct {
 	// To is the target typesystem version of this fallback
 	To int
-	// ProviderType limits the providers to which this fallback applies
-	ProviderType abstract.ProviderType
+	// Picker limits the endpoints to which this fallback applies
+	Picker func(m model.EndpointParams) bool
 	// Function defines the transformation. Input is an item of any kind.
 	//
 	// If a fallback does not apply, this method MUST return an error containing FallbackDoesNotApplyErr
 	Function func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error)
 }
 
-func (f Fallback) Applies(version int, providerType abstract.ProviderType) bool {
-	return f.ProviderType == providerType && f.To >= version
+func ProviderType(typ abstract.ProviderType) func(m model.EndpointParams) bool {
+	return func(m model.EndpointParams) bool {
+		return m.GetProviderType() == typ
+	}
+}
+
+func (f Fallback) Applies(version int, provider model.EndpointParams) bool {
+	return f.Picker(provider) && f.To >= version
 }
 
 func (f Fallback) String() string {
-	return fmt.Sprintf("fallback [%q->%d, %p]", f.ProviderType.Name(), f.To, f.Function)
-}
-
-func (f Fallback) Equals(other Fallback) bool {
-	return f.ProviderType == other.ProviderType && f.To == other.To
+	return fmt.Sprintf("fallback [%d, %p]", f.To, f.Function)
 }
 
 // AddFallbackSourceFactory registers a fallbacks for a source of some type

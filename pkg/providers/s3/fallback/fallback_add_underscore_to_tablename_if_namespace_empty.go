@@ -9,8 +9,8 @@ import (
 func init() {
 	typesystem.AddFallbackTargetFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           8,
-			ProviderType: s3.ProviderType,
+			To:     8,
+			Picker: typesystem.ProviderType(s3.ProviderType),
 			Function: func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error) {
 				if ci.Schema == "" {
 					ci.Table = "_" + ci.Table

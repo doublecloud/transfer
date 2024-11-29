@@ -57,8 +57,8 @@ func syncMiddleware(transfer *model.Transfer, lgr log.Logger, mtrcs metrics.Regi
 	}
 	return func(pipeline abstract.Sinker) abstract.Sinker {
 		fallbackStats := stats.NewFallbackStatsCombination(mtrcs)
-		pipeline = middlewares.TargetFallbacks(transfer.TypeSystemVersion, transfer.DstType(), lgr, fallbackStats.Target)(pipeline)
-		pipeline = middlewares.SourceFallbacks(transfer.TypeSystemVersion, transfer.SrcType(), lgr, fallbackStats.Source)(pipeline)
+		pipeline = middlewares.TargetFallbacks(transfer.TypeSystemVersion, transfer.Dst, lgr, fallbackStats.Target)(pipeline)
+		pipeline = middlewares.SourceFallbacks(transfer.TypeSystemVersion, transfer.Src, lgr, fallbackStats.Source)(pipeline)
 
 		pipeline = middlewares.OutputDataMetering()(pipeline)
 
