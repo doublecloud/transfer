@@ -34,11 +34,6 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
-		if !transfer.IncrementOnly() {
-			if err := activate.RunActivate(*cp, transfer, registry, 0); err != nil {
-				return xerrors.Errorf("unable to activate transfer: %w", err)
-			}
-		}
 
 		return RunReplication(*cp, transfer, registry)
 	}
@@ -48,6 +43,28 @@ func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer, regist
 	if err := provideradapter.ApplyForTransfer(transfer); err != nil {
 		return xerrors.Errorf("unable to adapt transfer: %w", err)
 	}
+	st, err := cp.GetTransferState(transfer.ID)
+	if err != nil {
+		return xerrors.Errorf("unable to get transfer state: %w", err)
+	}
+	if stt, ok := st["status"]; !ok || stt.Generic == nil {
+		if err := activate.RunActivate(cp, transfer, registry, 0); err != nil {
+			return xerrors.Errorf("unable to activate transfer: %w", err)
+		}
+		if err := cp.SetTransferState(transfer.ID, map[string]*coordinator.TransferStateData{
+			"status": {
+				Generic:             "activated",
+				IncrementalTables:   nil,
+				OraclePosition:      nil,
+				MysqlGtid:           nil,
+				MysqlBinlogPosition: nil,
+				YtStaticPart:        nil,
+			},
+		}); err != nil {
+			return xerrors.Errorf("unable to set transfer state: %w", err)
+		}
+	}
+
 	for {
 		worker := local.NewLocalWorker(
 			cp,
@@ -60,6 +77,9 @@ func RunReplication(cp coordinator.Coordinator, transfer *model.Transfer, regist
 		)
 		err := worker.Run()
 		if abstract.IsFatal(err) {
+			if err := (cp).RemoveTransferState(transfer.ID, []string{"status"}); err != nil {
+				return xerrors.Errorf("unable to cleanup status state: %w", err)
+			}
 			return err
 		}
 		if err := worker.Stop(); err != nil {

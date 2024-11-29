@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/doublecloud/transfer/cmd/trcli/activate"
 	"github.com/doublecloud/transfer/cmd/trcli/config"
 	"github.com/doublecloud/transfer/cmd/trcli/replicate"
 	"github.com/doublecloud/transfer/internal/logger"
@@ -39,8 +38,6 @@ func TestReplicate(t *testing.T) {
 	src.SlotID = transfer.ID
 	transfer.Src = src
 	transfer.Dst = dst
-
-	require.NoError(t, activate.RunActivate(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts()), 0)) // so that a replication slot is created for source
 
 	go func() {
 		require.NoError(t, replicate.RunReplication(coordinator.NewStatefulFakeClient(), transfer, solomon.NewRegistry(solomon.NewRegistryOpts())))
