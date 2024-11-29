@@ -29,9 +29,9 @@ func FallbackBitAsBytes(item *abstract.ChangeItem) (*abstract.ChangeItem, error)
 func init() {
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           5,
-			ProviderType: ProviderType,
-			Function:     FallbackBitAsBytes,
+			To:       5,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: FallbackBitAsBytes,
 		}
 	})
 }

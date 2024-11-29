@@ -26,9 +26,9 @@ func FallbackNotNullAsNull(ci *abstract.ChangeItem) (*abstract.ChangeItem, error
 func init() {
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           2,
-			ProviderType: ProviderType,
-			Function:     FallbackNotNullAsNull,
+			To:       2,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: FallbackNotNullAsNull,
 		}
 	})
 }

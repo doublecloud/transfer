@@ -8,9 +8,9 @@ import (
 func init() {
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		return typesystem.Fallback{
-			To:           4,
-			ProviderType: ProviderType,
-			Function:     jsonengine.GenericParserTimestampFallback,
+			To:       4,
+			Picker:   typesystem.ProviderType(ProviderType),
+			Function: jsonengine.GenericParserTimestampFallback,
 		}
 	})
 }

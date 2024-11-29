@@ -5,7 +5,6 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
 	transformers_registry "github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/doublecloud/transfer/pkg/util"
 )
@@ -31,6 +30,24 @@ type Transfer struct {
 	CloudID  string
 	Author   string
 }
+
+const (
+	// LatestVersion is the current (most recent) version of the typesystem. Increment this when adding a new fallback.
+	//
+	// At any moment, fallbacks can only be "to" any version preceding the latest.
+	//
+	// Zero value is reserved and MUST NOT be used.
+	//
+	// When incrementing this value, DO ADD a link to the function(s) implementing this fallback to CHANGELOG.md in the current directory
+	LatestVersion int = 9
+	// NewTransfersVersion is the version of the typesystem set for new transfers. It must be less or equal to the LatestVersion.
+	//
+	// To upgrade typesystem version, the following process should be applied:
+	// 1. LatestVersion is increased & fallbacks are introduced in the first PR. NewTransfersVersion stays the same!
+	// 2. Controlplane and dataplane are deployed and dataplane now contains the fallbacks for a new version.
+	// 3. The second PR increases NewTransfersVersion. When a controlplane with this change is deployed, dataplanes already have the required fallbacks.
+	NewTransfersVersion int = 9
+)
 
 func (f *Transfer) SnapshotOnly() bool {
 	return f.Type == abstract.TransferTypeSnapshotOnly
@@ -99,7 +116,7 @@ func (f *Transfer) WithDefault() {
 func (f *Transfer) FillDependentFields() {
 	if f.TypeSystemVersion == 0 {
 		// the LatestVersion is used here instead of the NewTransfersVersion for test purposes
-		f.TypeSystemVersion = typesystem.LatestVersion
+		f.TypeSystemVersion = LatestVersion
 	}
 	if schmegacy, ok := f.Src.(LegacyFillDependentFields); ok {
 		schmegacy.FillDependentFields(f)

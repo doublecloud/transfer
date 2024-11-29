@@ -76,8 +76,8 @@ func init() {
 	typesystem.AddFallbackSourceFactory(func() typesystem.Fallback {
 		tableSchemaCache := map[string]*abstract.TableSchema{}
 		return typesystem.Fallback{
-			To:           7,
-			ProviderType: ProviderType,
+			To:     7,
+			Picker: typesystem.ProviderType(ProviderType),
 			Function: func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error) {
 				return FallbackBytesAsStringGoType(ci, tableSchemaCache)
 			},
