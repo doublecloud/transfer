@@ -100,21 +100,21 @@ INSERT INTO customers3 VALUES (
   '2020-01-01 18:10:10.123',    -- DATETIME(3)
   '2020-01-01 18:10:10.1234',   -- DATETIME(4)
   '2020-01-01 18:10:10.12345',  -- DATETIME(5)
-  '2020-01-01 18:10:10.123456'  -- DATETIME(6)
+  '2020-01-01 18:10:10.123456',  -- DATETIME(6)
 
   -- DECIMAL TYPES
 
---   1234567890, -- NUMERIC -- See TM-4581
---   12345,      -- NUMERIC(5) -- See TM-4581
---   123.45,     -- NUMERIC(5,2) -- See TM-4581
---
---   2345678901, -- DECIMAL -- See TM-4581
---   23451,      -- DECIMAL(5) -- See TM-4581
---   231.45      -- DECIMAL(5,2) -- See TM-4581
+  1234567890, -- NUMERIC -- See TM-4581
+  12345,      -- NUMERIC(5) -- See TM-4581
+  123.45,     -- NUMERIC(5,2) -- See TM-4581
+
+  2345678901, -- DECIMAL -- See TM-4581
+  23451,      -- DECIMAL(5) -- See TM-4581
+  231.45      -- DECIMAL(5,2) -- See TM-4581
 
   -- SPATIAL TYPES
 
-      #     ST_GeomFromText('LINESTRING(0 0,1 2,2 4)'),                                          -- LINESTRING_         GEOMETRY,
+  #     ST_GeomFromText('LINESTRING(0 0,1 2,2 4)'),                                          -- LINESTRING_         GEOMETRY,
   #     ST_GeomFromText('POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))'),        -- POLYGON_            GEOMETRY,
   #     ST_GeomFromText('MULTIPOINT(0 0, 15 25, 45 65)'),                                    -- MULTIPOINT_         GEOMETRY,
   #     ST_GeomFromText('MULTILINESTRING((12 12, 22 22), (19 19, 32 18))'),                  -- MULTILINESTRING_    GEOMETRY,

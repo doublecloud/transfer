@@ -101,15 +101,25 @@ func LoadMysqlSchema(transfer *model.Transfer, registry metrics.Registry, isAfte
 	return nil
 }
 
-// See TM-4581
-func checkRestrictedColumnTypes(transfer *model.Transfer, tables abstract.TableMap) error {
+func isFailOnDecimal(transfer *model.Transfer) bool {
 	if transfer.SrcType() != ProviderType {
-		return nil // Only MySQL sources affected by the decimal bug
+		return false // Only MySQL sources affected by the decimal bug
 	}
 	if transfer.DstType() == ProviderType {
-		return nil // Only heterogeneous transfers from MySQL are affected by the decimal bug
+		return false // Only heterogeneous transfers from MySQL are affected by the decimal bug
+	}
+	if _, ok := transfer.Dst.(model.Serializable); ok {
+		return false // Destinations, which serializes events - doesn't suffer from this problem
 	}
 	if transfer.Src.(*MysqlSource).AllowDecimalAsFloat {
+		return false
+	}
+	return true
+}
+
+// See TM-4581
+func checkRestrictedColumnTypes(transfer *model.Transfer, tables abstract.TableMap) error {
+	if !isFailOnDecimal(transfer) {
 		return nil
 	}
 	for tableID, table := range tables {

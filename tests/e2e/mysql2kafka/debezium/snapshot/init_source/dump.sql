@@ -93,13 +93,13 @@ CREATE TABLE customers3 (
 
     -- DECIMAL TYPES
 
---     NUMERIC_ NUMERIC, -- See TM-4581
---     NUMERIC_5 NUMERIC(5), -- See TM-4581
---     NUMERIC_5_2 NUMERIC(5,2), -- See TM-4581
+    NUMERIC_ NUMERIC, -- See TM-4581 & TM-8198
+    NUMERIC_5 NUMERIC(5), -- See TM-4581 & TM-8198
+    NUMERIC_5_2 NUMERIC(5,2), -- See TM-4581 & TM-8198
 
---     DECIMAL_ DECIMAL, -- See TM-4581
---     DECIMAL_5 DECIMAL(5), -- See TM-4581
---     DECIMAL_5_2 DECIMAL(5,2), -- See TM-4581
+    DECIMAL_ DECIMAL, -- See TM-4581 & TM-8198
+    DECIMAL_5 DECIMAL(5), -- See TM-4581 & TM-8198
+    DECIMAL_5_2 DECIMAL(5,2), -- See TM-4581 & TM-8198
 
     -- SPATIAL TYPES
 
@@ -113,13 +113,13 @@ CREATE TABLE customers3 (
     --
 
     primary key (pk)
-    ) engine=innodb default charset=utf8;
+) engine=innodb default charset=utf8;
 
 
 
 
 
-    INSERT INTO customers3 VALUES (
+INSERT INTO customers3 VALUES (
     1,
 
     0,     -- BOOLEAN
@@ -212,24 +212,24 @@ CREATE TABLE customers3 (
     '2020-01-01 15:10:10.123',    -- DATETIME(3)
     '2020-01-01 15:10:10.1234',   -- DATETIME(4)
     '2020-01-01 15:10:10.12345',  -- DATETIME(5)
-    '2020-01-01 15:10:10.123456' -- DATETIME(6)
+    '2020-01-01 15:10:10.123456', -- DATETIME(6)
 
     -- DECIMAL TYPES
 
---     1234567890, -- NUMERIC -- See TM-4581
---     12345,      -- NUMERIC(5) -- See TM-4581
---     123.45,     -- NUMERIC(5,2) -- See TM-4581
+    1234567890, -- NUMERIC -- See TM-4581
+    12345,      -- NUMERIC(5) -- See TM-4581
+    123.45,     -- NUMERIC(5,2) -- See TM-4581
 
---     2345678901, -- DECIMAL -- See TM-4581
---     23451,      -- DECIMAL(5) -- See TM-4581
---     231.45      -- DECIMAL(5,2) -- See TM-4581
+    2345678901, -- DECIMAL -- See TM-4581
+    23451,      -- DECIMAL(5) -- See TM-4581
+    231.45      -- DECIMAL(5,2) -- See TM-4581
 
     -- SPATIAL TYPES
 
-      #     ST_GeomFromText('LINESTRING(0 0,1 2,2 4)'),                                          -- LINESTRING_         GEOMETRY,
+    #     ST_GeomFromText('LINESTRING(0 0,1 2,2 4)'),                                          -- LINESTRING_         GEOMETRY,
     #     ST_GeomFromText('POLYGON((0 0,10 0,10 10,0 10,0 0),(5 5,7 5,7 7,5 7, 5 5))'),        -- POLYGON_            GEOMETRY,
     #     ST_GeomFromText('MULTIPOINT(0 0, 15 25, 45 65)'),                                    -- MULTIPOINT_         GEOMETRY,
     #     ST_GeomFromText('MULTILINESTRING((12 12, 22 22), (19 19, 32 18))'),                  -- MULTILINESTRING_    GEOMETRY,
     #     ST_GeomFromText('MULTIPOLYGON(((0 0,11 0,12 11,0 9,0 0)),((3 5,7 4,4 7,7 7,3 5)))'), -- MULTIPOLYGON_       GEOMETRY,
     #     ST_GeomFromText('GEOMETRYCOLLECTION(POINT(3 2),LINESTRING(0 0,1 3,2 5,3 5,4 7))')    -- GEOMETRYCOLLECTION_ GEOMETRY,
- );
+);

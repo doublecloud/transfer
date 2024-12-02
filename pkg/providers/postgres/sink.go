@@ -946,7 +946,7 @@ func (s *sink) insert(ctx context.Context, table string, schema []abstract.ColSc
 		return xerrors.Errorf("failed to build queries to process items at sink: %w", err)
 	}
 
-	// s.logger.Infof("Prepare query %v rows %v in %v for table %v", len(items), format.SizeInt(len(query)), time.Since(start), table)
+	//s.logger.Infof("Prepare query %v rows %v for table %v", len(items), format.SizeInt(len(queries)), table)
 	execStart := time.Now()
 	processedQueries := 0
 	for processedQueries < len(queries) {

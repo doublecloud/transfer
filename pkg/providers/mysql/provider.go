@@ -167,7 +167,7 @@ func (p *Provider) Source() (abstract.Source, error) {
 	}
 	src.InitServerID(p.transfer.ID)
 	// See TM-4581
-	failOnDecimal := !src.IsHomo && !src.AllowDecimalAsFloat
+	failOnDecimal := isFailOnDecimal(p.transfer)
 	if serializer, ok := p.transfer.Dst.(model.Serializable); ok {
 		serializationFormat, _ := serializer.Serializer()
 		if serializationFormat.Name == model.SerializationFormatDebezium {

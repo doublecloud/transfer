@@ -102,13 +102,13 @@ CREATE TABLE customers3 (
 
     -- DECIMAL TYPES
 
---     NUMERIC_ NUMERIC, -- See TM-4581
---     NUMERIC_5 NUMERIC(5), -- See TM-4581
---     NUMERIC_5_2 NUMERIC(5,2), -- See TM-4581
+    NUMERIC_ NUMERIC, -- See TM-4581
+    NUMERIC_5 NUMERIC(5), -- See TM-4581
+    NUMERIC_5_2 NUMERIC(5,2), -- See TM-4581
 
---     DECIMAL_ DECIMAL, -- See TM-4581
---     DECIMAL_5 DECIMAL(5), -- See TM-4581
---     DECIMAL_5_2 DECIMAL(5,2), -- See TM-4581
+    DECIMAL_ DECIMAL, -- See TM-4581
+    DECIMAL_5 DECIMAL(5), -- See TM-4581
+    DECIMAL_5_2 DECIMAL(5,2), -- See TM-4581
 
     primary key (pk)
 ) engine=innodb default charset=utf8;
