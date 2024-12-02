@@ -207,7 +207,7 @@ func findCorrespondingIndex(cols []abstract.ColSchema, name string) int {
 }
 
 func getNameFromTableID(tID abstract.TableID) string {
-	if tID.Namespace == "public" {
+	if tID.Namespace == "public" || len(tID.Namespace) == 0 {
 		return tID.Name
 	}
 	return fmt.Sprintf("%s_%s", tID.Namespace, tID.Name)

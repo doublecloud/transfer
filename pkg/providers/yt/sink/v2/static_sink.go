@@ -214,7 +214,7 @@ func (s *sink) getTablePath(item abstract.ChangeItem) ypath.Path {
 }
 
 func getNameFromTableID(id abstract.TableID) string {
-	if id.Namespace == "public" {
+	if id.Namespace == "public" || len(id.Namespace) == 0 {
 		return id.Name
 	}
 	return fmt.Sprintf("%s_%s", id.Namespace, id.Name)

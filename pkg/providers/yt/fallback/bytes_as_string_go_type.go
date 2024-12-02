@@ -1,9 +1,10 @@
-package yt
+package fallback
 
 import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/typesystem"
+	"github.com/doublecloud/transfer/pkg/providers/yt"
 	"go.ytsaurus.tech/yt/go/schema"
 )
 
@@ -77,7 +78,7 @@ func init() {
 		tableSchemaCache := map[string]*abstract.TableSchema{}
 		return typesystem.Fallback{
 			To:     7,
-			Picker: typesystem.ProviderType(ProviderType),
+			Picker: typesystem.ProviderType(yt.ProviderType),
 			Function: func(ci *abstract.ChangeItem) (*abstract.ChangeItem, error) {
 				return FallbackBytesAsStringGoType(ci, tableSchemaCache)
 			},

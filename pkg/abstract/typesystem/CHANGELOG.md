@@ -16,6 +16,8 @@
 * `7` to `6`:
     * [pkg/providers/mongo/fallback_dvalue_json_repack.go](../../../pkg/providers/mongo/fallback_dvalue_json_repack.go)
 * `8` to `7`:
-    * [pkg/providers/yt/fallback_bytes_as_string_go_type.go](../../../pkg/providers/yt/fallback_bytes_as_string_go_type.go)
+    * [pkg/providers/yt/fallback/bytes_as_string_go_type.go](../../../pkg/providers/yt/fallback/bytes_as_string_go_type.go)
 * `9` to `8`:
     * [pkg/providers/ydb/fallback_date_and_datetime_as_timestamp.go](../../../pkg/providers/ydb/fallback_date_and_datetime_as_timestamp.go)
+* `10` to `9`:
+    * [pkg/providers/yt/fallback/add_underscore_to_tablename_with_empty_namespace.go](../../../pkg/providers/yt/fallback/add_underscore_to_tablename_with_empty_namespace.go)

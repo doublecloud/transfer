@@ -15,6 +15,7 @@ import (
 	ytclient "github.com/doublecloud/transfer/pkg/providers/yt/client"
 	ytcopysrc "github.com/doublecloud/transfer/pkg/providers/yt/copy/source"
 	"github.com/doublecloud/transfer/pkg/providers/yt/copy/target"
+	_ "github.com/doublecloud/transfer/pkg/providers/yt/fallback"
 	"github.com/doublecloud/transfer/pkg/providers/yt/lfstaging"
 	yt_abstract2 "github.com/doublecloud/transfer/pkg/providers/yt/provider"
 	ytsink "github.com/doublecloud/transfer/pkg/providers/yt/sink"

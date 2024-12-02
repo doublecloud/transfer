@@ -80,6 +80,7 @@ func TestGroup(t *testing.T) {
 
 	// activate transfer
 	transfer := helpers.MakeTransfer(helpers.TransferID, src, dst, abstract.TransferTypeSnapshotOnly)
+	transfer.TypeSystemVersion = 9
 	helpers.Activate(t, transfer)
 
 	// check data
