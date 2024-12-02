@@ -103,7 +103,7 @@ func (c *sinkCluster) DropTable(tableName string) error {
 func (c *sinkCluster) execDDL(executor func(distributed bool) error) error {
 	c.distributedDDLMu.Lock()
 
-	if c.distributedDDLEnabled == nil && c.topology.ClusterName() == "" {
+	if c.distributedDDLEnabled == nil && (c.topology.ClusterName() == "" || c.topology.SingleNode()) {
 		if !c.topology.SingleNode() {
 			return xerrors.Errorf("resolved empty cluster name for non-single-node cluster")
 		}

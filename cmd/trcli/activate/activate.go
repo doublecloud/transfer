@@ -60,6 +60,9 @@ func RunActivate(
 			time.Sleep(extraWait)
 		}
 	}()
+	if err := cp.RemoveTransferState(transfer.ID, []string{"status"}); err != nil {
+		return xerrors.Errorf("unable to cleanup status state: %w", err)
+	}
 	logger.Log.Infof("run activate with: %T", cp)
 	op := new(model.TransferOperation)
 	op.OperationID = transfer.ID + "/activation"
@@ -86,6 +89,18 @@ func RunActivate(
 	logger.Log.Infof("Activation completed, upload: %v parts", len(pcp.Progress()))
 	for _, p := range pcp.Progress() {
 		logger.Log.Infof("	part: %s 👌 %v rows in %v", p.String(), p.CompletedRows, time.Since(st))
+	}
+	if err := cp.SetTransferState(transfer.ID, map[string]*coordinator.TransferStateData{
+		"status": {
+			Generic:             "activated",
+			IncrementalTables:   nil,
+			OraclePosition:      nil,
+			MysqlGtid:           nil,
+			MysqlBinlogPosition: nil,
+			YtStaticPart:        nil,
+		},
+	}); err != nil {
+		return xerrors.Errorf("unable to set transfer state: %w", err)
 	}
 	return nil
 }
