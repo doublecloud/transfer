@@ -12,9 +12,9 @@ var (
 	arcadiaRootErr  error
 	arcadiaRootOnce sync.Once
 
-	arcInstanceRoot     string
-	arcInstanceRootErr  error
-	arcInstanceRootOnce sync.Once
+	goModDir     string
+	goModDirErr  error
+	goModDirOnce sync.Once
 )
 
 // FindArcadiaRoot searches Arcadia root for the target path
@@ -62,14 +62,18 @@ func ArcadiaRoot() (string, error) {
 	return arcadiaRoot, arcadiaRootErr
 }
 
-func FindArcInstanceRoot(arcPath string, arcRootFiles []string) (string, error) {
-	isRoot := func(arcPath string) bool {
-		for _, rootFile := range arcRootFiles {
-			if _, err := os.Stat(filepath.Join(arcPath, rootFile)); err == nil {
-				return true
-			}
+func isGoModDir(arcPath string) (string, error) {
+	isRoot := func(arcPath string) (bool, string) {
+		if _, err := os.Stat(filepath.Join(arcPath, ".arcadia.root")); err == nil {
+			return true, arcPath
 		}
-		return false
+
+		// Checking for cloudia/cloud/cloud-go monorepo
+		if _, err := os.Stat(filepath.Join(arcPath, ".cloudia.root")); err == nil {
+			return true, filepath.Join(arcPath, "cloud", "cloud-go")
+		}
+
+		return false, ""
 	}
 
 	arcPath, err := filepath.Abs(arcPath)
@@ -79,8 +83,9 @@ func FindArcInstanceRoot(arcPath string, arcRootFiles []string) (string, error) 
 
 	current := filepath.Clean(arcPath)
 	for {
-		if isRoot(current) {
-			return current, nil
+		root, goModPath := isRoot(current)
+		if root {
+			return goModPath, nil
 		}
 
 		next := filepath.Dir(current)
@@ -92,10 +97,10 @@ func FindArcInstanceRoot(arcPath string, arcRootFiles []string) (string, error) 
 	}
 }
 
-func ArcInstanceRoot() (string, error) {
-	arcInstanceRootOnce.Do(func() {
-		arcInstanceRoot, arcInstanceRootErr = FindArcInstanceRoot(".", []string{".arcadia.root", ".cloudia.root"})
+func FindRepositoryGoModDir() (string, error) {
+	goModDirOnce.Do(func() {
+		goModDir, goModDirErr = isGoModDir(".")
 	})
 
-	return arcInstanceRoot, arcInstanceRootErr
+	return goModDir, goModDirErr
 }
