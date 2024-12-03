@@ -38,7 +38,7 @@ func (r *readerThreadSafe) Close(ctx context.Context) error {
 	return r.readerImpl.Close(ctx)
 }
 
-func newReader(feedName string, dbname string, tables []string, ydbClient *ydb.Driver, logger log.Logger) (*readerThreadSafe, error) {
+func newReader(feedName, consumerName, dbname string, tables []string, ydbClient *ydb.Driver, logger log.Logger) (*readerThreadSafe, error) {
 	dbname = strings.TrimLeft(dbname, "/")
 	selectors := make([]topicoptions.ReadSelector, len(tables))
 	for i, table := range tables {
@@ -49,7 +49,7 @@ func newReader(feedName string, dbname string, tables []string, ydbClient *ydb.D
 	}
 
 	readerImpl, err := ydbClient.Topic().StartReader(
-		dataTransferConsumerName,
+		consumerName,
 		selectors,
 		topicoptions.WithReaderCommitTimeLagTrigger(0),
 		topicoptions.WithReaderCommitMode(topicoptions.CommitModeSync),

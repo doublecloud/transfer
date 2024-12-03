@@ -45,10 +45,11 @@ type YdbSource struct {
 	RootCAFiles []string
 
 	// replication stuff:
-	ChangeFeedMode       ChangeFeedModeType
-	ChangeFeedCustomName string          // user can specify pre-created feed's name, otherwise it will created with name == transferID
-	BufferSize           model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
-	VerboseSDKLogs       bool
+	ChangeFeedMode               ChangeFeedModeType
+	ChangeFeedCustomName         string // user can specify pre-created feed's name, otherwise it will created with name == transferID
+	ChangeFeedCustomConsumerName string
+	BufferSize                   model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
+	VerboseSDKLogs               bool
 
 	// auth stuff:
 	Token            model.SecretString
