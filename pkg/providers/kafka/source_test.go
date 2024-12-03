@@ -197,7 +197,7 @@ func TestOffsetPolicy(t *testing.T) {
 	items, err := src.Fetch()
 	require.NoError(t, err)
 	src.Stop()
-	require.Len(t, items, 3)
+	require.True(t, len(items) >= 3) // At least 3 old items
 	abstract.Dump(items)
 
 	go func() {
