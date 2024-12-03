@@ -160,3 +160,59 @@ func TestNonExistsTopic(t *testing.T) {
 	_, err = NewSource("asd", kafkaSource, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.Error(t, err)
 }
+
+func TestOffsetPolicy(t *testing.T) {
+	parserConfigMap, err := parsers.ParserConfigStructToMap(&jsonparser.ParserConfigJSONCommon{
+		Fields:        []abstract.ColSchema{{ColumnName: "ts", DataType: "DateTime"}, {ColumnName: "msg", DataType: "string"}},
+		AddRest:       false,
+		AddDedupeKeys: true,
+	})
+	require.NoError(t, err)
+	kafkaSource, err := SourceRecipe()
+	require.NoError(t, err)
+	kafkaSource.Topic = "topic1"
+	kafkaSource.ParserConfig = parserConfigMap
+
+	kafkaClient, err := client.NewClient(kafkaSource.Connection.Brokers, nil, nil)
+	require.NoError(t, err)
+	require.NoError(t, kafkaClient.CreateTopicIfNotExist(logger.Log, kafkaSource.Topic, nil))
+
+	lgr, closer, err := logger.NewKafkaLogger(&logger.KafkaConfig{
+		Broker:   kafkaSource.Connection.Brokers[0],
+		Topic:    kafkaSource.Topic,
+		User:     kafkaSource.Auth.User,
+		Password: kafkaSource.Auth.Password,
+	})
+	require.NoError(t, err)
+
+	defer closer.Close()
+	for i := 0; i < 3; i++ {
+		lgr.Infof("log item: %v", i)
+	}
+	time.Sleep(time.Second) // just in case
+
+	kafkaSource.OffsetPolicy = AtStartOffsetPolicy // Will read old item (1, 2 and 3)
+	src, err := NewSource("asd", kafkaSource, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+	require.NoError(t, err)
+	items, err := src.Fetch()
+	require.NoError(t, err)
+	src.Stop()
+	require.Len(t, items, 3)
+	abstract.Dump(items)
+
+	go func() {
+		time.Sleep(time.Second)
+		for i := 3; i < 5; i++ {
+			lgr.Infof("log item: %v", i)
+		}
+	}()
+
+	kafkaSource.OffsetPolicy = AtEndOffsetPolicy // Will read only new items (3 and 4)
+	src, err = NewSource("asd", kafkaSource, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
+	require.NoError(t, err)
+	items, err = src.Fetch()
+	require.NoError(t, err)
+	src.Stop()
+	abstract.Dump(items)
+	require.Len(t, items, 2)
+}

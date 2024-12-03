@@ -524,7 +524,6 @@ func newSourceWithCallbacks(cfg *KafkaSource, logger log.Logger, registry metric
 			source.partitionReleased = true
 		}),
 		kgo.ConsumeTopics(topics...),
-		kgo.ConsumeResetOffset(kgo.NewOffset()),
 	)
 	if cfg.OffsetPolicy == AtStartOffsetPolicy {
 		opts = append(opts, kgo.ConsumeResetOffset(kgo.NewOffset().AtStart()))
