@@ -9,7 +9,7 @@ require (
 	github.com/Azure/azure-amqp-common-go/v3 v3.2.3
 	github.com/Azure/azure-event-hubs-go/v3 v3.3.20
 	github.com/ClickHouse/clickhouse-go/v2 v2.18.0
-	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/DataDog/datadog-api-client-go/v2 v2.17.0
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/participle v0.4.1
