@@ -23,7 +23,17 @@ type KafkaSource struct {
 	ParserConfig        map[string]interface{}
 	IsHomo              bool // enabled kafka mirror protocol which can work only with kafka target
 	SynchronizeIsNeeded bool // true, if we need to send synchronize events on releasing partitions
+
+	OffsetPolicy OffsetPolicy // specify from what topic part start message consumption
 }
+
+type OffsetPolicy string
+
+const (
+	NoOffsetPolicy      = OffsetPolicy("") // Not specified
+	AtStartOffsetPolicy = OffsetPolicy("at_start")
+	AtEndOffsetPolicy   = OffsetPolicy("at_end")
+)
 
 var _ model.Source = (*KafkaSource)(nil)
 
