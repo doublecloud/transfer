@@ -2909,6 +2909,7 @@
   "tests/helpers/utils.go":"transfer_manager/go/tests/helpers/utils.go",
   "tests/helpers/utils/test_read_closer.go":"transfer_manager/go/tests/helpers/utils/test_read_closer.go",
   "tests/helpers/ydb.go":"transfer_manager/go/tests/helpers/ydb.go",
+  "tests/helpers/ydb_topics/recipe.go":"transfer_manager/go/tests/helpers/ydb_topics/recipe.go",
   "tests/helpers/yt/yt_helpers.go":"transfer_manager/go/tests/helpers/yt/yt_helpers.go",
   "tests/large/docker-compose/README.md":"transfer_manager/go/tests/large/docker-compose/README.md",
   "tests/large/docker-compose/canondata/docker-compose.docker-compose.TestElasticToPgSnapshot/extracted":"transfer_manager/go/tests/large/docker-compose/canondata/docker-compose.docker-compose.TestElasticToPgSnapshot/extracted",

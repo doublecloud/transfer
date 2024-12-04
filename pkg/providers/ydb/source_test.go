@@ -15,9 +15,9 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	recipe "github.com/doublecloud/transfer/tests/helpers/ydb_topics"
 	"github.com/stretchr/testify/require"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
-	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/types"
@@ -41,7 +41,7 @@ func (s asyncSinkMock) Close() error {
 }
 
 func TestSourceCDC(t *testing.T) {
-	db := driver(t)
+	db := recipe.Driver(t)
 	transferID := "test_transfer"
 
 	srcCfgTemplate := YdbSource{
@@ -313,7 +313,7 @@ func waitExpectedEvents(t *testing.T, src *Source, expectedItemsCount int) []abs
 }
 
 func prepareTableAndFeed(t *testing.T, feedName, tableName string, differentKeysCount, updatesPerKey int) int {
-	db := driver(t)
+	db := recipe.Driver(t)
 	tablePath := formTablePath(tableName)
 	createTableAndFeed(t, db, feedName, tablePath,
 		options.WithColumn("id", types.Optional(types.TypeUint64)),
@@ -367,19 +367,4 @@ func createTableAndFeedWithMode(t *testing.T, db *ydb.Driver, feedName, tablePat
 
 func formTablePath(tableName string) string {
 	return "/" + path.Join(os.Getenv("YDB_DATABASE"), tableName)
-}
-
-func driver(t *testing.T) *ydb.Driver {
-	instance := os.Getenv("YDB_ENDPOINT")
-	database := os.Getenv("YDB_DATABASE")
-	token := os.Getenv("YDB_TOKEN")
-
-	db, err := ydb.Open(
-		context.Background(),
-		sugar.DSN(instance, database),
-		ydb.WithAccessTokenCredentials(token),
-	)
-	require.NoError(t, err)
-
-	return db
 }
