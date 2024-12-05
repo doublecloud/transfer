@@ -62,7 +62,7 @@ func ArcadiaRoot() (string, error) {
 	return arcadiaRoot, arcadiaRootErr
 }
 
-func isGoModDir(arcPath string) (string, error) {
+func findGoModDir(arcPath string) (string, error) {
 	isRoot := func(arcPath string) (bool, string) {
 		if _, err := os.Stat(filepath.Join(arcPath, ".arcadia.root")); err == nil {
 			return true, arcPath
@@ -99,7 +99,7 @@ func isGoModDir(arcPath string) (string, error) {
 
 func FindRepositoryGoModDir() (string, error) {
 	goModDirOnce.Do(func() {
-		goModDir, goModDirErr = isGoModDir(".")
+		goModDir, goModDirErr = findGoModDir(".")
 	})
 
 	return goModDir, goModDirErr
