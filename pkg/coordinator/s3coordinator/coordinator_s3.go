@@ -51,6 +51,10 @@ func (c *CoordinatorS3) GetTransferState(transferID string) (map[string]*coordin
 
 	// Fetch each object and deserialize the JSON
 	for _, obj := range listResp.Contents {
+		if obj.Size == nil || *obj.Size == 0 {
+			// see: https://stackoverflow.com/questions/75620230/aws-s3-listobjectsv2-returns-folder-as-an-object
+			continue
+		}
 		key := strings.TrimPrefix(*obj.Key, prefix)
 		getInput := &s3.GetObjectInput{
 			Bucket: aws.String(c.bucket),
