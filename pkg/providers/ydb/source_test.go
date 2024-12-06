@@ -15,7 +15,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/canon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	recipe "github.com/doublecloud/transfer/tests/helpers/ydb_topics"
+	"github.com/doublecloud/transfer/tests/helpers/ydb_recipe"
 	"github.com/stretchr/testify/require"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table"
@@ -41,7 +41,7 @@ func (s asyncSinkMock) Close() error {
 }
 
 func TestSourceCDC(t *testing.T) {
-	db := recipe.Driver(t)
+	db := ydbrecipe.Driver(t)
 	transferID := "test_transfer"
 
 	srcCfgTemplate := YdbSource{
@@ -313,7 +313,7 @@ func waitExpectedEvents(t *testing.T, src *Source, expectedItemsCount int) []abs
 }
 
 func prepareTableAndFeed(t *testing.T, feedName, tableName string, differentKeysCount, updatesPerKey int) int {
-	db := recipe.Driver(t)
+	db := ydbrecipe.Driver(t)
 	tablePath := formTablePath(tableName)
 	createTableAndFeed(t, db, feedName, tablePath,
 		options.WithColumn("id", types.Optional(types.TypeUint64)),

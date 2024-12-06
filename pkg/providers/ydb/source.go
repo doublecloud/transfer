@@ -256,7 +256,7 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 	defer rb.Do()
 	rb.Add(cancelFunc)
 
-	ydbClient, err := newClient2(clientCtx, cfg)
+	ydbClient, err := newYDBSourceDriver(clientCtx, cfg)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to create ydb, err: %w", err)
 	}

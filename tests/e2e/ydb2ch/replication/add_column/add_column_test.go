@@ -2,7 +2,6 @@ package addcolumn
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"os"
 	"strings"
@@ -10,54 +9,17 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
-	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
-	"github.com/doublecloud/transfer/pkg/xtls"
 	"github.com/doublecloud/transfer/tests/helpers"
+	ydbrecipe "github.com/doublecloud/transfer/tests/helpers/ydb_recipe"
 	"github.com/stretchr/testify/require"
 	ydb3 "github.com/ydb-platform/ydb-go-sdk/v3"
-	"github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"go.ytsaurus.tech/library/go/core/log"
 )
-
-func NewYDBConnection(cfg *ydb.YdbSource) (*ydb3.Driver, error) {
-	var err error
-	var tlsConfig *tls.Config
-	if cfg.TLSEnabled {
-		tlsConfig, err = xtls.FromPath(cfg.RootCAFiles)
-		if err != nil {
-			return nil, xerrors.Errorf("could not create TLS config: %w", err)
-		}
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	var creds credentials.Credentials
-	creds, err = ydb.ResolveCredentials(
-		cfg.UserdataAuth,
-		string(cfg.Token),
-		ydb.JWTAuthParams{
-			KeyContent:      cfg.SAKeyContent,
-			TokenServiceURL: cfg.TokenServiceURL,
-		},
-		cfg.ServiceAccountID,
-		logger.Log,
-	)
-	if err != nil {
-		return nil, xerrors.Errorf("Cannot create YDB credentials: %w", err)
-	}
-
-	ydbDriver, err := ydb.NewYDBDriver(ctx, cfg.Database, cfg.Instance, creds, tlsConfig)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to init ydb driver: %w", err)
-	}
-
-	return ydbDriver, nil
-}
 
 func execDDL(t *testing.T, ydbConn *ydb3.Driver, query string) {
 	err := ydbConn.Table().Do(context.Background(), func(ctx context.Context, session table.Session) (err error) {
@@ -116,8 +78,7 @@ func TestAddColumnOnReplication(t *testing.T) {
 	transferType := abstract.TransferTypeIncrementOnly
 	helpers.InitSrcDst(helpers.TransferID, source, &target, transferType) // to WithDefaults() & FillDependentFields(): IsHomo, helpers.TransferID, IsUpdateable
 
-	ydbConn, err := NewYDBConnection(source)
-	require.NoError(t, err)
+	ydbConn := ydbrecipe.Driver(t)
 
 	// defer port checking
 	defer func() {

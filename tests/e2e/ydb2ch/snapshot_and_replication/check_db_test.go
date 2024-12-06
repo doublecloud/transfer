@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"os"
 	"testing"
@@ -10,54 +9,16 @@ import (
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
-	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/providers/ydb"
-	"github.com/doublecloud/transfer/pkg/xtls"
 	"github.com/doublecloud/transfer/tests/helpers"
+	"github.com/doublecloud/transfer/tests/helpers/ydb_recipe"
 	"github.com/stretchr/testify/require"
-	ydb3 "github.com/ydb-platform/ydb-go-sdk/v3"
-	"github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"go.ytsaurus.tech/yt/go/schema"
 )
-
-func NewYDBConnection(cfg *ydb.YdbDestination) (*ydb3.Driver, error) {
-	var err error
-	var tlsConfig *tls.Config
-	if cfg.TLSEnabled {
-		tlsConfig, err = xtls.FromPath(cfg.RootCAFiles)
-		if err != nil {
-			return nil, xerrors.Errorf("could not create TLS config: %w", err)
-		}
-	}
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	var creds credentials.Credentials
-	creds, err = ydb.ResolveCredentials(
-		cfg.UserdataAuth,
-		string(cfg.Token),
-		ydb.JWTAuthParams{
-			KeyContent:      cfg.SAKeyContent,
-			TokenServiceURL: cfg.TokenServiceURL,
-		},
-		cfg.ServiceAccountID,
-		logger.Log,
-	)
-	if err != nil {
-		return nil, xerrors.Errorf("cannot create YDB credentials: %w", err)
-	}
-
-	ydbDriver, err := ydb.NewYDBDriver(ctx, cfg.Database, cfg.Instance, creds, tlsConfig)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to init ydb driver: %w", err)
-	}
-
-	return ydbDriver, nil
-}
 
 func customYDBInsertItem(t *testing.T, tablePath string, id int) *abstract.ChangeItem {
 	res := helpers.YDBStmtInsert(t, tablePath, id)
@@ -158,8 +119,7 @@ func testSnapshotAndReplicationWithChangeFeedMode(t *testing.T, tableName string
 	}))
 
 	if mode == ydb.ChangeFeedModeNewImage || mode == ydb.ChangeFeedModeNewAndOldImages {
-		ydbConn, err := NewYDBConnection(Target)
-		require.NoError(t, err)
+		ydbConn := ydbrecipe.Driver(t)
 		err = ydbConn.Table().Do(context.Background(), func(ctx context.Context, session table.Session) (err error) {
 			return session.ExecuteSchemeQuery(ctx, fmt.Sprintf(`
 --!syntax_v1

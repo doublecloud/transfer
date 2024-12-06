@@ -109,7 +109,7 @@ func CreateChangeFeed(cfg *YdbSource, transferID string) error {
 	clientCtx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
 
-	ydbClient, err := newClient2(clientCtx, cfg)
+	ydbClient, err := newYDBSourceDriver(clientCtx, cfg)
 	if err != nil {
 		return xerrors.Errorf("unable to create ydb, err: %w", err)
 	}
@@ -131,7 +131,7 @@ func CreateChangeFeedIfNotExists(cfg *YdbSource, transferID string) error {
 	clientCtx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
 
-	ydbClient, err := newClient2(clientCtx, cfg)
+	ydbClient, err := newYDBSourceDriver(clientCtx, cfg)
 	if err != nil {
 		return xerrors.Errorf("unable to create ydb, err: %w", err)
 	}
@@ -160,7 +160,7 @@ func DropChangeFeed(cfg *YdbSource, transferID string) error {
 	clientCtx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
 
-	ydbClient, err := newClient2(clientCtx, cfg)
+	ydbClient, err := newYDBSourceDriver(clientCtx, cfg)
 	if err != nil {
 		return xerrors.Errorf("unable to create ydb, err: %w", err)
 	}

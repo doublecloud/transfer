@@ -62,7 +62,7 @@ func NewStorage(cfg *YdbStorageParams) (*Storage, error) {
 		return nil, xerrors.Errorf("Cannot create YDB credentials: %w", err)
 	}
 
-	ydbDriver, err := NewYDBDriver(clientCtx, cfg.Database, cfg.Instance, ydbCreds, tlsConfig)
+	ydbDriver, err := newYDBDriver(clientCtx, cfg.Database, cfg.Instance, ydbCreds, tlsConfig)
 	if err != nil {
 		return nil, xerrors.Errorf("Cannot create YDB driver: %w", err)
 	}
