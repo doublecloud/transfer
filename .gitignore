@@ -5,3 +5,4 @@ report
 /yt/
 **/ya.make
 **/*.secret.yaml
+.idea
