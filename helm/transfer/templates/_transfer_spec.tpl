@@ -1,5 +1,11 @@
 {{- define "transfer.spec" -}}
 serviceAccountName: {{ .Values.serviceAccount.externalName | default $.Release.Name }}
+{{- if .Values.image.imagePullSecrets }}
+imagePullSecrets:
+  {{- range .Values.image.imagePullSecrets }}
+    {{- printf "- name: %s" .name | nindent 2 }}
+  {{- end }}
+{{- end }}
 containers:
   - name: transfer
     image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default $.Chart.AppVersion }}"
