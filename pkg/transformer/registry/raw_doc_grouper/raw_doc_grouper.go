@@ -179,7 +179,7 @@ func (r *RawDocGroupTransformer) collectParsedData(colNames []string, colValues 
 func NewRawDocGroupTransformer(config RawDocGrouperConfig) (*RawDocGroupTransformer, error) {
 	keys := config.Keys
 	var fields []string
-	if config.Fields != nil && len(config.Fields) > 0 {
+	if len(config.Fields) > 0 {
 		fields = config.Fields
 	}
 
