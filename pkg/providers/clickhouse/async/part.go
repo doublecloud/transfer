@@ -80,14 +80,30 @@ func (p *part) Append(rows []abstract.ChangeItem) error {
 }
 
 func (p *part) Commit() error {
-	var err error
+	// Prepare all tmp tables for merge.
 	for shardID, shard := range p.shards {
-		if shardErr := shard.Commit(); shardErr != nil {
-			err = multierr.Append(err, xerrors.Errorf("error commiting part %s of table %s for shard %d: %w", p.id.PartID, p.id.Name, shardID, shardErr))
+		if err := shard.Finish(); err != nil {
+			// Error on Finish() marks that data was not inserted in tmp table.
+			// Since that part wasn't merged to the dst yet, retry whole part.
+			return xerrors.Errorf("error finishing part %s loading of table %s for shard %d: %w",
+				p.id.PartID, p.id.Name, shardID, err)
 		}
 	}
+
+	// Merge tmp tables to dst since all of them are ready.
+	for shardID, shard := range p.shards {
+		if err := shard.Merge(); err != nil {
+			// Error on Merge() marks that tmp table was not attached (merged) with dst.
+			// Since now, retry of part could cause data duplication, because some of data was
+			// already merged with dst in previous iterations of that cycle.
+			// That's why fatal error is returned.
+			return abstract.NewFatalError(xerrors.Errorf("error merging part %s of table %s for shard %d: %w",
+				p.id.PartID, p.id.Name, shardID, err))
+		}
+	}
+
 	p.shards = nil
-	return err
+	return nil
 }
 
 func (p *part) Close() error {

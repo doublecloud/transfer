@@ -7,7 +7,7 @@ import (
 
 type Streamer interface {
 	Append(row abstract.ChangeItem) error
-	Commit() error
+	Finish() error // Finish commits all awaiting data and closes Streamer.
 	Close() error
 }
 
