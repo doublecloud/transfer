@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/dustin/go-humanize"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/ypath"
 	"go.ytsaurus.tech/yt/go/yt"
@@ -35,7 +36,7 @@ func ListTables(ctx context.Context, y yt.CypressClient, cluster string, paths [
 			nodeRelPath := path + "/" + node.Name
 			switch node.Type {
 			case "table":
-				logger.Infof("Adding table %s from %s", nodeRelPath, prefix)
+				logger.Infof("Found table %s from %s, %d rows weighting %s", nodeRelPath, prefix, node.RowCount, humanize.Bytes(uint64(node.DataWeight)))
 				result = append(result, NewYtTableMeta(cluster, prefix, nodeRelPath, node.RowCount, node.DataWeight))
 			case "map_node":
 				logger.Debugf("Traversing node %s from %s", nodeRelPath, prefix)

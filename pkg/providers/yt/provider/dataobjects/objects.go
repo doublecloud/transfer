@@ -138,7 +138,7 @@ type tableWeightPair struct {
 
 // uniformParts uniforms parts in the way, where bigger tables have more parts than little one. Every table gets at least
 // 1 part. If there are more than 1024 tables, method will return error.
-func uniformParts(objs *YTDataObjects) (map[int]int, error) {
+func (objs *YTDataObjects) uniformParts() (map[int]int, error) {
 	if len(objs.tbls) > grpcShardLimit {
 		return nil, xerrors.Errorf("%v tables. Can not be more than 1024 tables", len(objs.tbls))
 	}
@@ -168,16 +168,21 @@ func uniformParts(objs *YTDataObjects) (map[int]int, error) {
 
 	for _, pair := range tablesWeightArr {
 		var shards int
-		if objs.tbls[pair.TableIndex].DataWeight < objs.cfg.DesiredPartSizeBytes {
+		var logReason string
+		if pair.TableWeight < objs.cfg.DesiredPartSizeBytes {
 			shards = 1
+			logReason = "being less than desired part size"
 		} else {
 			rawShards := float64(restParts) * (float64(pair.TableWeight) / float64(totalWeight))
 			if rawShards == 0 {
 				shards = 1
+				logReason = "being proportionally too small"
 			} else if (float64(objs.tbls[pair.TableIndex].DataWeight) / rawShards) < float64(objs.cfg.DesiredPartSizeBytes) {
 				shards = int(math.Floor(float64(objs.tbls[pair.TableIndex].DataWeight) / float64(objs.cfg.DesiredPartSizeBytes)))
+				logReason = "using desired part size"
 			} else {
 				shards = int(rawShards)
+				logReason = "keeping proportional parts distribution"
 			}
 		}
 		if shards == 0 {
@@ -186,6 +191,8 @@ func uniformParts(objs *YTDataObjects) (map[int]int, error) {
 		restParts -= shards
 		totalWeight -= pair.TableWeight
 		res[pair.TableIndex] = shards
+		objs.lgr.Infof("Table %s split into %d parts due to %s", objs.tbls[pair.TableIndex].OriginalPath(), shards, logReason)
+
 	}
 	return res, nil
 }
@@ -198,7 +205,7 @@ func (objs *YTDataObjects) ToTableParts() ([]abstract.TableDescription, error) {
 		}
 	}
 
-	partsMapping, err := uniformParts(objs)
+	partsMapping, err := objs.uniformParts()
 	if err != nil {
 		return nil, err
 	}
