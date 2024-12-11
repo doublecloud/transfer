@@ -13,8 +13,8 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// RotationLocal -- rotation is happened in preconfigured timezone, by default - Europe/Moscow
-var RotationLocal *time.Location
+// RotationTZ -- rotation is happened in preconfigured timezone, by default - Europe/Moscow
+var RotationTZ *time.Location
 
 func init() {
 	var err error
@@ -22,9 +22,9 @@ func init() {
 	if ttz, ok := os.LookupEnv("ROTATION_TZ"); ok {
 		tz = ttz
 	}
-	if RotationLocal, err = time.LoadLocation(tz); err != nil {
-		RotationLocal = time.Local
-		logger.Log.Errorf("Couldn't initialize %s timezone. Using '%s' instead", tz, RotationLocal.String())
+	if RotationTZ, err = time.LoadLocation(tz); err != nil {
+		RotationTZ = time.Local
+		logger.Log.Errorf("Couldn't initialize %s timezone. Using '%s' instead", tz, RotationTZ.String())
 	}
 }
 
@@ -171,7 +171,7 @@ func (p *RotatorConfig) baseTime(now time.Time) time.Time {
 			return p.offsetDate(now, -p.KeepPartCount)
 		}
 	}
-	return time.Date(0, 0, 0, 0, 0, 0, 0, RotationLocal)
+	return time.Date(0, 0, 0, 0, 0, 0, 0, RotationTZ)
 }
 
 // AnnotateWithTime produces rotated name with custom time `v` provided as argument
@@ -179,8 +179,8 @@ func (p *RotatorConfig) AnnotateWithTime(name string, v time.Time) string {
 	if p == nil {
 		return name
 	}
-	// force use of time in RotationLocal
-	rotationalTime := v.In(RotationLocal)
+	// force use of time in RotationTZ
+	rotationalTime := v.In(RotationTZ)
 	// first of all, put date to it's bin
 	reprDate := p.getPartitionBin(rotationalTime)
 	// then convert the bin to rotated name
@@ -260,25 +260,25 @@ func (p *RotatorConfig) ParseTime(rotationTime string) (time.Time, error) {
 	switch p.PartType {
 	case RotatorPartHour:
 		if len(rotationTime) == len(HourFormat) {
-			t, err := time.ParseInLocation(HourFormat, rotationTime, RotationLocal)
+			t, err := time.ParseInLocation(HourFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationLocal.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}
 	case RotatorPartDay:
 		if len(rotationTime) == len(DayFormat) {
-			t, err := time.ParseInLocation(DayFormat, rotationTime, RotationLocal)
+			t, err := time.ParseInLocation(DayFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationLocal.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}
 	case RotatorPartMonth:
 		if len(rotationTime) == len(MonthFormat) {
-			t, err := time.ParseInLocation(MonthFormat, rotationTime, RotationLocal)
+			t, err := time.ParseInLocation(MonthFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parser time %s in location %s: %w", rotationTime, RotationLocal.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parser time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}
