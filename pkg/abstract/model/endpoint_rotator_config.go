@@ -18,16 +18,13 @@ var RotationLocal *time.Location
 
 func init() {
 	var err error
-	if tz, ok := os.LookupEnv("ROTATION_TZ"); ok {
-		if RotationLocal, err = time.LoadLocation(tz); err != nil {
-			RotationLocal = time.Local
-			logger.Log.Errorf("Couldn't initialize %s timezone. Using '%s' instead", tz, RotationLocal.String())
-		}
-		return
+	tz := "Europe/Moscow"
+	if ttz, ok := os.LookupEnv("ROTATION_TZ"); ok {
+		tz = ttz
 	}
-	if RotationLocal, err = time.LoadLocation("Europe/Moscow"); err != nil {
+	if RotationLocal, err = time.LoadLocation(tz); err != nil {
 		RotationLocal = time.Local
-		logger.Log.Errorf("Couldn't initialize Europe/Moscow timezone. Using '%s' instead", RotationLocal.String())
+		logger.Log.Errorf("Couldn't initialize %s timezone. Using '%s' instead", tz, RotationLocal.String())
 	}
 }
 
