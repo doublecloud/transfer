@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -12,14 +13,18 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// LocationEuropeMoscow -- all time in rotator considered as Moscow time
-var LocationEuropeMoscow *time.Location
+// RotationTZ -- rotation is happened in preconfigured timezone, by default - Europe/Moscow
+var RotationTZ *time.Location
 
 func init() {
 	var err error
-	if LocationEuropeMoscow, err = time.LoadLocation("Europe/Moscow"); err != nil {
-		LocationEuropeMoscow = time.Local
-		logger.Log.Errorf("Couldn't initialize Europe/Moscow timezone. Using '%s' instead", LocationEuropeMoscow.String())
+	tz := "Europe/Moscow"
+	if ttz, ok := os.LookupEnv("ROTATION_TZ"); ok {
+		tz = ttz
+	}
+	if RotationTZ, err = time.LoadLocation(tz); err != nil {
+		RotationTZ = time.Local
+		logger.Log.Errorf("Couldn't initialize %s timezone. Using '%s' instead", tz, RotationTZ.String())
 	}
 }
 
@@ -166,7 +171,7 @@ func (p *RotatorConfig) baseTime(now time.Time) time.Time {
 			return p.offsetDate(now, -p.KeepPartCount)
 		}
 	}
-	return time.Date(0, 0, 0, 0, 0, 0, 0, LocationEuropeMoscow)
+	return time.Date(0, 0, 0, 0, 0, 0, 0, RotationTZ)
 }
 
 // AnnotateWithTime produces rotated name with custom time `v` provided as argument
@@ -174,10 +179,10 @@ func (p *RotatorConfig) AnnotateWithTime(name string, v time.Time) string {
 	if p == nil {
 		return name
 	}
-	// force use of Moscow time
-	moscowTime := v.In(LocationEuropeMoscow)
+	// force use of time in RotationTZ
+	rotationalTime := v.In(RotationTZ)
 	// first of all, put date to it's bin
-	reprDate := p.getPartitionBin(moscowTime)
+	reprDate := p.getPartitionBin(rotationalTime)
 	// then convert the bin to rotated name
 	partition := p.dateBinToPartitionName(reprDate)
 	// format text according to user expectations
@@ -190,7 +195,7 @@ func (p *RotatorConfig) Annotate(name string) string {
 	return p.AnnotateWithTime(name, time.Now())
 }
 
-// Next returns next rotated name with respect to current date
+// Next returns rotated name with respect to current date
 func (p *RotatorConfig) Next(name string) string {
 	return p.AnnotateWithTime(name, p.offsetDate(time.Now(), 1))
 }
@@ -248,32 +253,32 @@ func ExtractTimeCol(item abstract.ChangeItem, timeColumn string) time.Time {
 	return partKey
 }
 
-func (p *RotatorConfig) ParseTime(moscowTimeString string) (time.Time, error) {
+func (p *RotatorConfig) ParseTime(rotationTime string) (time.Time, error) {
 	if p == nil {
 		return time.Now(), xerrors.New("nil rotator in time parsing")
 	}
 	switch p.PartType {
 	case RotatorPartHour:
-		if len(moscowTimeString) == len(HourFormat) {
-			t, err := time.ParseInLocation(HourFormat, moscowTimeString, LocationEuropeMoscow)
+		if len(rotationTime) == len(HourFormat) {
+			t, err := time.ParseInLocation(HourFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", moscowTimeString, LocationEuropeMoscow.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}
 	case RotatorPartDay:
-		if len(moscowTimeString) == len(DayFormat) {
-			t, err := time.ParseInLocation(DayFormat, moscowTimeString, LocationEuropeMoscow)
+		if len(rotationTime) == len(DayFormat) {
+			t, err := time.ParseInLocation(DayFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", moscowTimeString, LocationEuropeMoscow.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parse time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}
 	case RotatorPartMonth:
-		if len(moscowTimeString) == len(MonthFormat) {
-			t, err := time.ParseInLocation(MonthFormat, moscowTimeString, LocationEuropeMoscow)
+		if len(rotationTime) == len(MonthFormat) {
+			t, err := time.ParseInLocation(MonthFormat, rotationTime, RotationTZ)
 			if err != nil {
-				return time.Now(), xerrors.Errorf("cannot parser time %s in location %s: %w", moscowTimeString, LocationEuropeMoscow.String(), err)
+				return time.Now(), xerrors.Errorf("cannot parser time %s in location %s: %w", rotationTime, RotationTZ.String(), err)
 			}
 			return t, nil
 		}

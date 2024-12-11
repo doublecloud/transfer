@@ -553,6 +553,7 @@ func (l *SnapshotLoader) doUploadTablesV2(ctx context.Context, snapshotProvider 
 			return errors.CategorizedErrorf(categories.Internal, "unable to get next table to upload: %w", err)
 		}
 		if nextTablePart == nil {
+			logger.Log.Info("There are no more parts to transfer", log.Int("worker_index", l.workerIndex))
 			waitToComplete.Done()
 			parallelismSemaphore.Release(1)
 			break // No more tables to transfer
@@ -631,9 +632,15 @@ func (l *SnapshotLoader) doUploadTablesV2(ctx context.Context, snapshotProvider 
 
 			defer waitToComplete.Done()
 			defer parallelismSemaphore.Release(1)
-			expBackoff := backoff.NewExponentialBackOff()
-			expBackoff.MaxElapsedTime = 0
-			if err := backoff.Retry(upload, backoff.WithMaxRetries(expBackoff, 3)); err != nil {
+			b := backoff.WithMaxRetries(backoff.NewExponentialBackOff(backoff.WithMaxElapsedTime(0)), 3)
+			operation := func() error {
+				uploadErr := upload()
+				if abstract.IsFatal(uploadErr) {
+					return xerrors.Errorf("fatal error on part upload: %w", backoff.Permanent(uploadErr))
+				}
+				return uploadErr
+			}
+			if err := backoff.Retry(operation, b); err != nil {
 				logger.Log.Error(
 					fmt.Sprintf("Upload table '%v' max retries exceeded", nextTablePart),
 					log.Any("table_part", nextTablePart), log.Int("worker_index", l.workerIndex), log.Error(err))
