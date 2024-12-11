@@ -3,7 +3,7 @@ src:
   type: pg
   params: |
     {
-      "hosts": ["localhost"],
+      "hosts": ["postgres"],
       "user": "postgres",
       "password": "password",
       "database": "mydb",
@@ -14,6 +14,6 @@ dst:
   params: |
     {
       "path": "//home/snapshots",
-      "cluster": "localhost:9980",
+      "cluster": "yt-backend:80",
       "static": true
     }

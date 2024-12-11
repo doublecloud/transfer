@@ -4,7 +4,7 @@ src:
   type: pg
   params: |
     {
-      "Hosts": ["localhost"],
+      "Hosts": ["postgres"],
       "User": "postgres",
       "Password": "password",
       "Database": "mydb",
@@ -15,7 +15,7 @@ dst:
   params: |
     {
       "path": "//home/cdc",
-      "cluster": "localhost:9980",
+      "cluster": "yt-backend:80",
       "cellbundle": "default",
       "primarymedium": "default"
     }
