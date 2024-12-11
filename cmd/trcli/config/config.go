@@ -3,14 +3,14 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/doublecloud/transfer/internal/logger"
-	"github.com/mitchellh/mapstructure"
 	"os"
 	"strings"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 	sig_yaml "sigs.k8s.io/yaml"
 )
