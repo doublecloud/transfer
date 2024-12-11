@@ -26,6 +26,8 @@ FROM ubuntu:jammy
 
 ENV TZ=Etc/UTC
 
+ENV ROTATION_TZ=Etc/UTC
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN echo $TZ > /etc/timezone && \
