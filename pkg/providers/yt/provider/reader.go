@@ -40,6 +40,7 @@ func (r *readerWrapper) init() error {
 
 func (r *readerWrapper) Close() {
 	if r.reader != nil {
+		r.reader.Next() // Closing reader without exhausting it causes errors in logs
 		_ = r.reader.Close()
 		r.reader = nil
 	}

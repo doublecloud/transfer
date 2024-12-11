@@ -119,7 +119,8 @@ func (c *chV2Streamer) Close() error {
 	return errs
 }
 
-func (c *chV2Streamer) Commit() error {
+// Finish commits all awaiting data and closes Streamer.
+func (c *chV2Streamer) Finish() error {
 	c.lgr.Infof("Commiting streaming batch")
 	if err := c.checkClosed(); err != nil {
 		return err

@@ -64,7 +64,13 @@ func (s *shardPart) Append(row abstract.ChangeItem) error {
 	return s.streamer.Append(row)
 }
 
-func (s *shardPart) Commit() error {
+// Finish loads all data to temporary table and make it ready for Merge.
+func (s *shardPart) Finish() error {
+	return s.streamer.Finish()
+}
+
+// Merge merges temporary table to destination table.
+func (s *shardPart) Merge() error {
 	defer func() {
 		logger.Log.Debug("shardPart closing itself after Commit")
 		err := s.Close()
@@ -72,9 +78,6 @@ func (s *shardPart) Commit() error {
 			logger.Log.Error("error closing shardPart", log.Error(err))
 		}
 	}()
-	if err := s.streamer.Commit(); err != nil {
-		return xerrors.Errorf("error commiting streaming batch: %w", err)
-	}
 	if err := s.partsDao.AttachTablePartsTo(s.baseDB, s.baseTable, s.tmpDB, s.tmpTable); err != nil {
 		return xerrors.Errorf("error attaching parts from tmp table: %w", err)
 	}

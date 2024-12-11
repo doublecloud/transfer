@@ -294,7 +294,7 @@ func offsetDateTestMonthHeavy(t *testing.T) {
 		nowTimestamp := time.Now()
 		for offset := 1; offset < 15; offset++ {
 			for monthID, month := range monthList {
-				// NOTE UTC parameter in tests! This test will not work for LocationEuropeMoscow timezone with +1 and -1 correction hours
+				// NOTE UTC parameter in tests! This test will not work for RotationTZ timezone with +1 and -1 correction hours
 				ts := time.Date(year, month, nowTimestamp.Day(), nowTimestamp.Hour(), nowTimestamp.Minute(), nowTimestamp.Second(), nowTimestamp.Nanosecond(), time.UTC)
 				offTimestamp := rcMonths.offsetDate(ts, offset)
 
@@ -339,7 +339,7 @@ func getPartitionBin(t *testing.T) {
 
 func dateBinToPartitionNameTest(t *testing.T) {
 	t.Parallel()
-	date := time.Date(2006, time.January, 2, 15, 04, 05, 0, LocationEuropeMoscow)
+	date := time.Date(2006, time.January, 2, 15, 04, 05, 0, RotationTZ)
 	hourRotator := RotatorConfig{PartType: RotatorPartHour}
 	dayRotator := RotatorConfig{PartType: RotatorPartDay}
 	monthRotator := RotatorConfig{PartType: RotatorPartMonth}
@@ -380,7 +380,7 @@ func annotateWithTimeFromColumnTestWithoutFormatHours(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn}
-	timestamp = time.Date(1987, time.July, 14, 23, 21, 45, 0, LocationEuropeMoscow)
+	timestamp = time.Date(1987, time.July, 14, 23, 21, 45, 0, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -428,7 +428,7 @@ func annotateWithTimeFromColumnTestWithoutFormatDays(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn}
-	timestamp = time.Date(1997, time.May, 31, 8, 12, 03, 1337, LocationEuropeMoscow)
+	timestamp = time.Date(1997, time.May, 31, 8, 12, 03, 1337, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -484,7 +484,7 @@ func annotateWithTimeFromColumnTestWithoutFormatMonths(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn}
-	timestamp = time.Date(2002, time.December, 13, 16, 47, 00, 691832, LocationEuropeMoscow)
+	timestamp = time.Date(2002, time.December, 13, 16, 47, 00, 691832, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -521,7 +521,7 @@ func annotateWithTimeFromColumnTestWithTemplateHours(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn, TableNameTemplate: format}
-	timestamp = time.Date(1430, time.January, 10, 23, 8, 30, 143721739, LocationEuropeMoscow)
+	timestamp = time.Date(1430, time.January, 10, 23, 8, 30, 143721739, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -570,7 +570,7 @@ func annotateWithTimeFromColumnTestWithFormatDays(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn, TableNameTemplate: format}
-	timestamp = time.Date(2400, time.February, 29, 3, 56, 28, 7005194, LocationEuropeMoscow)
+	timestamp = time.Date(2400, time.February, 29, 3, 56, 28, 7005194, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -627,7 +627,7 @@ func annotateWithTimeFromColumnTestWithFormatMonths(t *testing.T) {
 	var timestamp time.Time
 
 	rc = RotatorConfig{PartType: partType, TimeColumn: timeColumn, TableNameTemplate: format}
-	timestamp = time.Date(2021, time.July, 1, 19, 27, 52, 7005194, LocationEuropeMoscow)
+	timestamp = time.Date(2021, time.July, 1, 19, 27, 52, 7005194, RotationTZ)
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{timeColumn},
 		ColumnValues: []interface{}{timestamp},
@@ -660,7 +660,7 @@ func annotateWithTimeFromColumnTestNoTimeColumnInRawData(t *testing.T) {
 	rc := RotatorConfig{PartType: RotatorPartHour, TimeColumn: timeColumn, PartSize: 1}
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{"top", "kek", "che", "bu", "rek", "rime_column"},
-		ColumnValues: []interface{}{"yehal", "greka", "che", "rez", "reku", time.Date(1909, time.May, 3, 12, 17, 32, 0, LocationEuropeMoscow)},
+		ColumnValues: []interface{}{"yehal", "greka", "che", "rez", "reku", time.Date(1909, time.May, 3, 12, 17, 32, 0, RotationTZ)},
 	}
 	annotate1 := rc.Annotate("Roga-I-Kopyta")
 	annotate2 := rc.AnnotateWithTimeFromColumn("Roga-I-Kopyta", changeItem)
@@ -677,7 +677,7 @@ func annotateWithTimeFromColumnTestNoTimeColumnInConfig(t *testing.T) {
 	rc := RotatorConfig{PartType: RotatorPartHour, PartSize: 1}
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{"time_column"},
-		ColumnValues: []interface{}{time.Date(1927, time.August, 15, 19, 12, 38, 0, LocationEuropeMoscow)},
+		ColumnValues: []interface{}{time.Date(1927, time.August, 15, 19, 12, 38, 0, RotationTZ)},
 	}
 	annotate1 := rc.Annotate("KostyaLososInc")
 	annotate2 := rc.AnnotateWithTimeFromColumn("KostyaLososInc", changeItem)
@@ -694,7 +694,7 @@ func annotateWithTimeFromColumnTestNilReceiver(t *testing.T) {
 	var nilRotator *RotatorConfig
 	changeItem := abstract.ChangeItem{
 		ColumnNames:  []string{"time_column"},
-		ColumnValues: []interface{}{time.Date(1927, time.April, 16, 13, 22, 5, 0, LocationEuropeMoscow)},
+		ColumnValues: []interface{}{time.Date(1927, time.April, 16, 13, 22, 5, 0, RotationTZ)},
 	}
 
 	annotate1 := nilRotator.Annotate("ElonMusksTable")
@@ -749,12 +749,12 @@ func testTimeParsingHours(t *testing.T) {
 	t.Parallel()
 	rotator := RotatorConfig{PartType: RotatorPartHour}
 
-	for timeAsMoscowString, expected := range map[string]time.Time{
-		"1575-01-14T17:17:29": time.Date(1575, time.January, 14, 17, 17, 29, 0, LocationEuropeMoscow),
-		"2021-08-06T01:29:43": time.Date(2021, time.August, 06, 01, 29, 43, 0, LocationEuropeMoscow),
-		"2004-02-29T06:11:58": time.Date(2004, time.February, 29, 06, 11, 58, 0, LocationEuropeMoscow),
+	for rotationalTime, expected := range map[string]time.Time{
+		"1575-01-14T17:17:29": time.Date(1575, time.January, 14, 17, 17, 29, 0, RotationTZ),
+		"2021-08-06T01:29:43": time.Date(2021, time.August, 06, 01, 29, 43, 0, RotationTZ),
+		"2004-02-29T06:11:58": time.Date(2004, time.February, 29, 06, 11, 58, 0, RotationTZ),
 	} {
-		actual, err := rotator.ParseTime(timeAsMoscowString)
+		actual, err := rotator.ParseTime(rotationalTime)
 		require.NoError(t, err)
 		require.Equal(t, expected, actual)
 	}
@@ -764,12 +764,12 @@ func testTimeParsingDays(t *testing.T) {
 	t.Parallel()
 	rotator := RotatorConfig{PartType: RotatorPartDay}
 
-	for timeAsMoscowString, expected := range map[string]time.Time{
-		"1575-01-14": time.Date(1575, time.January, 14, 0, 0, 0, 0, LocationEuropeMoscow),
-		"2021-08-06": time.Date(2021, time.August, 06, 0, 0, 0, 0, LocationEuropeMoscow),
-		"2004-02-29": time.Date(2004, time.February, 29, 0, 0, 0, 0, LocationEuropeMoscow),
+	for rotationTime, expected := range map[string]time.Time{
+		"1575-01-14": time.Date(1575, time.January, 14, 0, 0, 0, 0, RotationTZ),
+		"2021-08-06": time.Date(2021, time.August, 06, 0, 0, 0, 0, RotationTZ),
+		"2004-02-29": time.Date(2004, time.February, 29, 0, 0, 0, 0, RotationTZ),
 	} {
-		actual, err := rotator.ParseTime(timeAsMoscowString)
+		actual, err := rotator.ParseTime(rotationTime)
 		require.NoError(t, err)
 		require.Equal(t, expected, actual)
 	}
@@ -779,12 +779,12 @@ func testTimeParsingMonths(t *testing.T) {
 	t.Parallel()
 	rotator := RotatorConfig{PartType: RotatorPartMonth}
 
-	for timeAsMoscowString, expected := range map[string]time.Time{
-		"1575-01": time.Date(1575, time.January, 1, 0, 0, 0, 0, LocationEuropeMoscow),
-		"2021-08": time.Date(2021, time.August, 1, 0, 0, 0, 0, LocationEuropeMoscow),
-		"2004-02": time.Date(2004, time.February, 1, 0, 0, 0, 0, LocationEuropeMoscow),
+	for rotationTime, expected := range map[string]time.Time{
+		"1575-01": time.Date(1575, time.January, 1, 0, 0, 0, 0, RotationTZ),
+		"2021-08": time.Date(2021, time.August, 1, 0, 0, 0, 0, RotationTZ),
+		"2004-02": time.Date(2004, time.February, 1, 0, 0, 0, 0, RotationTZ),
 	} {
-		actual, err := rotator.ParseTime(timeAsMoscowString)
+		actual, err := rotator.ParseTime(rotationTime)
 		require.NoError(t, err)
 		require.Equal(t, expected, actual)
 	}

@@ -202,6 +202,9 @@ func (s *sinker) prepareInputPerTables(input []abstract.ChangeItem) (map[abstrac
 				continue
 			}
 			ddlQ := EnableFKQuery
+			if s.config.SkipKeyChecks {
+				ddlQ = DisableFKQuery
+			}
 			ddlQ += fmt.Sprintf("DROP TABLE IF EXISTS `%v`.`%v`", db, row.Table)
 			if _, err := s.db.Exec(ddlQ); err != nil {
 				s.logger.Warn("Unable to exec DDL:\n"+util.Sample(ddlQ, maxSampleLen), log.Error(err))

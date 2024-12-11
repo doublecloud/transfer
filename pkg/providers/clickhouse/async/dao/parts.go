@@ -3,7 +3,10 @@ package dao
 import (
 	"context"
 	"fmt"
+	"time"
 
+	"github.com/cenkalti/backoff/v4"
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/async/model/db"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -22,10 +25,21 @@ func (d *PartsDAO) AttachTablePartsTo(dstDB, dstTable, srcDB, srcTable string) e
 		return xerrors.Errorf("error getting table partitions: %w", err)
 	}
 	for _, p := range partitions {
-		d.lgr.Infof("Attaching partition '%s' from table %s", p, srcTable)
 		q := fmt.Sprintf(`ALTER TABLE "%s"."%s" ATTACH PARTITION ID '%s' FROM "%s"."%s"`,
 			dstDB, dstTable, p, srcDB, srcTable)
-		if _, err := d.db.ExecContext(context.Background(), q); err != nil {
+		d.lgr.Info("Attaching partition", log.String("sql", q))
+
+		err := backoff.RetryNotify(
+			func() error {
+				_, err := d.db.ExecContext(context.Background(), q)
+				return err
+			},
+			backoff.NewExponentialBackOff(backoff.WithMaxElapsedTime(10*time.Minute)),
+			func(err error, d time.Duration) {
+				logger.Log.Error(fmt.Sprintf("Got Attach Partition error, retrying after %v", d), log.Error(err))
+			},
+		)
+		if err != nil {
 			return xerrors.Errorf("error attaching table partition: %w", err)
 		}
 	}

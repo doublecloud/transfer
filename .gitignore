@@ -6,4 +6,3 @@ report
 **/ya.make
 **/*.secret.yaml
 .idea
-helm/values.yaml

@@ -183,7 +183,7 @@ func NewCdcHistoryGroupTransformer(config RawCDCDocGrouperConfig) (*CdcHistoryGr
 
 	keys := config.Keys
 	var fields []string
-	if config.Fields != nil && len(config.Fields) > 0 {
+	if len(config.Fields) > 0 {
 		fields = config.Fields
 	}
 
