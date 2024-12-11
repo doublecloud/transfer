@@ -63,7 +63,7 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 	return transfer, nil
 }
 
-func printFieldsMismatch(params []byte, dummy model.EndpointParams) ([]string, []string, error) {
+func fieldsMismatch(params []byte, dummy model.EndpointParams) ([]string, []string, error) {
 	foomap := make(map[string]interface{})
 	err := json.Unmarshal(params, &foomap)
 	if err != nil {
@@ -136,7 +136,7 @@ func source(tr *TransferYamlView) (model.Source, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Src.Type, err)
 	}
-	unused, unset, err := printFieldsMismatch([]byte(tr.Src.RawParams()), dummy)
+	unused, unset, err := fieldsMismatch([]byte(tr.Src.RawParams()), dummy)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
 	}
@@ -154,15 +154,15 @@ func target(tr *TransferYamlView) (model.Destination, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Dst.Type, err)
 	}
-	unused, unset, err := printFieldsMismatch([]byte(tr.Dst.RawParams()), dummy)
+	unused, unset, err := fieldsMismatch([]byte(tr.Dst.RawParams()), dummy)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
 	}
 	if len(unused) > 0 {
-		logger.Log.Infof("config for: %s source has %v unused fields", tr.Dst.Type, unused)
+		logger.Log.Infof("config for: %s destination has %v unused fields", tr.Dst.Type, unused)
 	}
 	if len(unset) > 0 {
-		logger.Log.Infof("config for: %s source has %v unset fields", tr.Dst.Type, unset)
+		logger.Log.Infof("config for: %s destination has %v unset fields", tr.Dst.Type, unset)
 	}
 	return model.NewDestination(tr.Dst.Type, tr.Dst.RawParams())
 }
