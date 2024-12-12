@@ -86,7 +86,7 @@ func TestUnparsed(t *testing.T) {
 	//---
 
 	t.Run("audittrailsv1", func(t *testing.T) {
-		parser, err := audittrailsv1engine.NewAuditTrailsV1ParserImpl(nil, true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+		parser, err := audittrailsv1engine.NewAuditTrailsV1ParserImpl(true, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
 		require.NoError(t, err)
 		checkEx(t, parser, parsers.Message{Value: []byte("{]")})
 	})
