@@ -63,6 +63,7 @@ var RawMessageWriteTime = changeitem.RawMessageWriteTime
 var NewTableSchema = changeitem.NewTableSchema
 var Dump = changeitem.Dump
 var Collapse = changeitem.Collapse
+var CollapseNoKeysChanged = changeitem.CollapseNoKeysChanged
 var SplitByID = changeitem.SplitByID
 var SplitUpdatedPKeys = changeitem.SplitUpdatedPKeys
 var NewPartition = changeitem.NewPartition

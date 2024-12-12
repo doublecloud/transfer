@@ -590,6 +590,7 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 			}
 		case abstract.InsertKind, abstract.UpdateKind, abstract.DeleteKind:
 			tableName := Fqtn(item.TableID())
+
 			if altName, ok := s.config.AltNames[item.Fqtn()]; ok {
 				tableName = altName
 			} else if altName, ok = s.config.AltNames[tableName]; ok {
@@ -619,6 +620,11 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 				s.logger.Error("Check table error", log.Error(err))
 				errs = append(errs, err)
 			}
+		}
+
+		batch, err := abstract.CollapseNoKeysChanged(batch)
+		if err != nil {
+			return xerrors.Errorf("was unable to collapse received changeitems: %w", errs)
 		}
 		for i := 0; i < len(batch); i += batchSize {
 			end := i + batchSize

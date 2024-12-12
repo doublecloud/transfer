@@ -2,6 +2,8 @@ package changeitem
 
 import (
 	"sort"
+
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
 func compareColumns(old, new []string) (bool, map[string]int, map[string]int, []string) {
@@ -31,6 +33,19 @@ func compareColumns(old, new []string) (bool, map[string]int, map[string]int, []
 		}
 	}
 	return false, oldM, newM, total
+}
+
+// Demo of what was described in https://st.yandex-team.ru/TM-8239
+// The most fragile part of Collape is processing PK changing events.
+// This temporary solution(for ydb exclusively) does not allow such changes
+// TODO: Remove and replace with Collapse when the idea from previously mentioned ticket is realised
+func CollapseNoKeysChanged(input []ChangeItem) ([]ChangeItem, error) {
+	for _, ci := range input {
+		if ci.KeysChanged() {
+			return nil, xerrors.Errorf("Attempt to update primary keys is detected")
+		}
+	}
+	return Collapse(input), nil
 }
 
 // Collapse collapses (possible) multiple items in the input into a single (or none) items in the output.
