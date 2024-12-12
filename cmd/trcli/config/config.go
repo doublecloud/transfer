@@ -1,13 +1,16 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 	sig_yaml "sigs.k8s.io/yaml"
 )
@@ -41,7 +44,6 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("failed to construct source: %w", err)
 	}
-
 	target, err := target(tr)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to construct target: %w", err)
@@ -59,6 +61,33 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 		}
 	}
 	return transfer, nil
+}
+
+func fieldsMismatch(params []byte, dummy model.EndpointParams) ([]string, []string, error) {
+	foomap := make(map[string]interface{})
+	err := json.Unmarshal(params, &foomap)
+	if err != nil {
+		return nil, nil, xerrors.Errorf("failed to remap model: %w", err)
+	}
+
+	// create a mapstructure decoder
+	var md mapstructure.Metadata
+	decoder, err := mapstructure.NewDecoder(
+		&mapstructure.DecoderConfig{
+			Metadata: &md,
+			Result:   &dummy,
+			TagName:  "json",
+		})
+	if err != nil {
+		return nil, nil, xerrors.Errorf("failed to prepare decoder: %w", err)
+	}
+
+	// decode the unmarshalled map into the given struct
+	if err := decoder.Decode(foomap); err != nil {
+		return nil, nil, xerrors.Errorf("failed to decode: %w", err)
+	}
+
+	return md.Unused, md.Unset, nil
 }
 
 func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
@@ -103,10 +132,38 @@ func ParseTablesYaml(rawData []byte) (*UploadTables, error) {
 }
 
 func source(tr *TransferYamlView) (model.Source, error) {
+	dummy, err := model.NewSource(tr.Src.Type, "{}")
+	if err != nil {
+		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Src.Type, err)
+	}
+	unused, unset, err := fieldsMismatch([]byte(tr.Src.RawParams()), dummy)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
+	}
+	if len(unused) > 0 {
+		logger.Log.Infof("config for: %s source has %v unused fields", tr.Src.Type, unused)
+	}
+	if len(unset) > 0 {
+		logger.Log.Infof("config for: %s source has %v unset fields", tr.Src.Type, unset)
+	}
 	return model.NewSource(tr.Src.Type, tr.Src.RawParams())
 }
 
 func target(tr *TransferYamlView) (model.Destination, error) {
+	dummy, err := model.NewDestination(tr.Dst.Type, "{}")
+	if err != nil {
+		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Dst.Type, err)
+	}
+	unused, unset, err := fieldsMismatch([]byte(tr.Dst.RawParams()), dummy)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
+	}
+	if len(unused) > 0 {
+		logger.Log.Infof("config for: %s destination has %v unused fields", tr.Dst.Type, unused)
+	}
+	if len(unset) > 0 {
+		logger.Log.Infof("config for: %s destination has %v unset fields", tr.Dst.Type, unset)
+	}
 	return model.NewDestination(tr.Dst.Type, tr.Dst.RawParams())
 }
 
