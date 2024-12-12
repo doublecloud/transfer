@@ -34,14 +34,14 @@ Static: false
 - **Path** (`string`): The path to the destination folder where the data will be written.
 - **Cluster** (`string`): The address of the YTsaurus cluster. Default "hahn".
 - **Token** (`string`): The token for the YTsaurus cluster.
-- **PushWal** (`bool`): TODO
-- **NeedArchive** (`bool`): Whether to archive the data in the YTsaurus cluster. ??
+- **PushWal** (`bool`): Storing the raw data stream in a separate table(__wal).
+- **NeedArchive** (`bool`): An archive table will be created for each transfer table.
 - **CellBundle** (`string`): [The tablet cell bundle](https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/concepts) to use for dynamic tables quota in the YTsaurus cluster.
-- **TTL** (`int64`): The time-to-live in milliseconds for the data in the YTsaurus cluster.
+- **TTL** (`int64`): After specified time-to-live in milliseconds, the data will be deleted.
 - **OptimizeFor** (`string`): Data in YTsaurus tables can be stored both in row-based `OptimizeFor=scan`, and columnar `OptimizeFor=lookup`. Defaults `OptimizeFor=scan`.
-- **CanAlter** (`bool`): Can be altered table schema?
+- **CanAlter** (`bool`): Change the data schema in tables when the schema in the source changes. Not all schema changes can be applied.
 - **TimeShardCount** (`int`): TODO
-- **Index** (`[]string`): TODO
+- **Index** (`[]string`): For each specified column, a separate table will be created, where the specified column will be the primary key.
 - **HashColumn** (`string`): The hash column to use for the data in the YTsaurus cluster.
 - **PrimaryMedium** (`string`): [The primary medium](https://ytsaurus.tech/docs/en/user-guide/storage/media#primary) to use for the data in the YTsaurus cluster. Default "ssd_blobs" ??
 - **Pool** (`string`): The pool to use for running merge and sort operations for static tables. Default "transfer_manager"
@@ -51,19 +51,19 @@ Static: false
 - **DiscardBigValues** (`bool`): If data is too long, batch will be discarded
 - **TabletCount** (`int`): DEPRECATED - remove in March.
 - **Rotation** (`*dp_model.RotatorConfig`): Use for partitioning tables.
-  - **KeepPartCount** (`int`): Number of partitions to keep.
-  - **PartType** (`RotatorPartType`): Type of partitioning: by hour `h`, by day `d`, by month `m`. 
-  - **PartSize** (`int`): Max size of partition.
-  - **TimeColumn** (`string`): Time column for partitioning.
-  - **TableNameTemplate** (`string`): Template for table name.
+  - **KeepPartCount** (`int`): The number of tables to be used by the rotator. The rotator will delete tables when the specified number of tables is exceeded.
+  - **PartType** (`RotatorPartType`): Granularity of partitioning: by hour `h`, by day `d`, by month `m`. 
+  - **PartSize** (`int`): Each table, created by the rotator, will contain a given number of partitions of the selected type.
+  - **TimeColumn** (`string`): The column whose value will be used to split rows into time partitions. Leave blank to rotate by insertion time.
+  - **TableNameTemplate** (`string`): Template for table name. Default template is "{{name}}/{{partition}}", where {{name}} is table name and {{partition}} is partition name based on timestamp.
 - **VersionColumn** (`string`): TODO
 - **AutoFlushPeriod** (`int`): Frequency of forced flushes [dynamic_store_auto_flush_period](https://ytsaurus.tech/docs/en/user-guide/dynamic-tables/compaction#flush_attributes), when the dynamic store is flushed to the disk straight away, even if it hasn't reached its overflow threshold yet.
 - **Ordered** (`bool`): Will table be ordered?
 - **TransformerConfig** (`map[string]string`): TOD
-- **UseStaticTableOnSnapshot** (`bool`): If true, use static tables on snapshot.
+- **UseStaticTableOnSnapshot** (`bool`): Copy operations will be done with temporary static tables. For Drop cleanup policy existing data will be removed after finishing coping. With no cleanup policy merge of new and existing data will be done.
 - **AltNames** (`map[string]string`): Rename tables
-- **Cleanup** (`dp_model.CleanupType`): Policy for cleanup data: "Drop", "Truncate", "Disabled". Default "Drop".
-- **Spec** (`YTSpec`): TODO
+- **Cleanup** (`dp_model.CleanupType`): Cleanup policy for activate, reactivate and reupload processes: "Drop", "Truncate", "Disabled". Default "Drop".
+- **Spec** (`YTSpec`): Overrides table settings. The file must contain a JSON object. Its properties will be included in the specification of each table created by the transfer.
 - **TolerateKeyChanges** (`bool`): TODO
 - **InitialTabletCount** (`uint32`): TODO
 - **WriteTimeoutSec** (`uint32`): Timeout for write operations in seconds. Default 60 seconds.
@@ -73,7 +73,7 @@ Static: false
 - **CompressionCodec** (`yt.ClientCompressionCodec`): [Compression codec](https://ytsaurus.tech/docs/en/user-guide/storage/compression#compression_codecs) for data.
 - **DisableDatetimeHack** (`bool`): This disable old hack for inverting time. Time columns as int64 timestamp for LF>YTsaurus. ??
 - **Connection** (`ConnectionData`): TODO
-- **CustomAttributes** (`map[string]string`): TODO
+- **CustomAttributes** (`map[string]string`): Custom attributes for tables created in YSON format.
 - **Static** (`bool`): Is table static?
 - **SortedStatic** (`bool`): true, if we need to sort static tables.
 - **StaticChunkSize** (`int`): desired size of static table chunk in bytes. Default 100 * 1024 * 1024 bytes
