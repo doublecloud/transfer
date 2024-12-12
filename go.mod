@@ -151,6 +151,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
+	github.com/google/martian/v3 v3.3.3 // indirect
 	github.com/google/s2a-go v0.1.7 // indirect
 	github.com/google/tink/go v1.7.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.2 // indirect
@@ -230,7 +231,7 @@ require (
 	golang.org/x/oauth2 v0.24.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/term v0.25.0 // indirect
-	golang.org/x/time v0.6.0 // indirect
+	golang.org/x/time v0.8.0 // indirect
 	golang.org/x/tools v0.22.1-0.20240829175637-39126e24d653 // indirect
 	gonum.org/v1/gonum v0.14.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
