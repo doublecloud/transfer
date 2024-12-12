@@ -794,12 +794,18 @@ func (s *sinker) checkTable(tableID abstract.TableID, changeItem abstract.Change
 			_ = r.Close()
 		}
 	}
+
+	return s.createTable(tableID, changeItem)
+}
+
+func (s *sinker) createTable(tableID abstract.TableID, changeItem abstract.ChangeItem) error {
 	q := s.prepareDDL(tableID, changeItem)
-	if _, err := s.db.Exec(q); err == nil {
-		s.cache[changeItem.Fqtn()] = true
-	} else {
+	if _, err := s.db.Exec(q); err != nil {
 		s.logger.Warnf("Unable to push DDL (%v):\n%v\n", err, util.Sample(q, maxSampleLen))
+		return abstract.NewFatalError(xerrors.Errorf("unable to execute ddl: %w", err))
 	}
+	s.cache[changeItem.Fqtn()] = true
+
 	return nil
 }
 
