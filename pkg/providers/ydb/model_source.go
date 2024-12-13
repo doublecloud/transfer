@@ -25,6 +25,15 @@ const (
 	ChangeFeedModeNewAndOldImages ChangeFeedModeType = "NEW_AND_OLD_IMAGES"
 )
 
+type CommitMode string
+
+const (
+	CommitModeUnspecified CommitMode = ""
+	CommitModeAsync       CommitMode = "ASYNC"
+	CommitModeNone        CommitMode = "NONE"
+	CommitModeSync        CommitMode = "SYNC"
+)
+
 type YdbColumnsFilter struct {
 	TableNamesRegexp  string
 	ColumnNamesRegexp string
@@ -50,6 +59,7 @@ type YdbSource struct {
 	ChangeFeedCustomConsumerName string
 	BufferSize                   model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 	VerboseSDKLogs               bool
+	CommitMode                   CommitMode
 
 	// auth stuff:
 	Token            model.SecretString

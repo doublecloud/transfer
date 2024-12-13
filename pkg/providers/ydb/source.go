@@ -17,6 +17,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util/queues/sequencer"
 	"github.com/doublecloud/transfer/pkg/util/throttler"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicoptions"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicreader"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -274,7 +275,17 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 		consumerName = cfg.ChangeFeedCustomConsumerName
 	}
 
-	reader, err := newReader(feedName, consumerName, cfg.Database, cfg.Tables, ydbClient, logger)
+	commitMode := topicoptions.CommitModeSync
+	switch cfg.CommitMode {
+	case CommitModeAsync:
+		commitMode = topicoptions.CommitModeAsync
+	case CommitModeNone:
+		commitMode = topicoptions.CommitModeNone
+	case CommitModeSync:
+		commitMode = topicoptions.CommitModeSync
+	}
+
+	reader, err := newReader(feedName, consumerName, cfg.Database, cfg.Tables, ydbClient, commitMode, logger)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to create stream reader: %w", err)
 	}
