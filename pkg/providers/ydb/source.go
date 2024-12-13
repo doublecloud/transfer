@@ -176,6 +176,9 @@ func (s *Source) ack(buffer []batchWithSize, pushSt time.Time, err error) {
 		return
 	}
 
+	pushed := sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))
+	s.logger.Info("Got ACK from sink; commiting read messages to the source", log.Duration("delay", time.Since(pushSt)), log.String("pushed", pushed))
+
 	for _, batch := range buffer {
 		if err := s.reader.Commit(s.ctx, batch.ydbBatch); err != nil {
 			util.Send(s.ctx, s.errCh, xerrors.Errorf("failed to commit change items: %w", err))
@@ -185,7 +188,7 @@ func (s *Source) ack(buffer []batchWithSize, pushSt time.Time, err error) {
 
 	s.logger.Info(
 		fmt.Sprintf("Commit messages done in %v", time.Since(pushSt)),
-		log.String("pushed", sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))),
+		log.String("pushed", pushed),
 	)
 }
 
