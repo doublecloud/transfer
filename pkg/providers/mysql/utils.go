@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -321,31 +322,42 @@ func IsGtidModeEnabled(storage *Storage, flavor string) (bool, error) {
 	return strings.ToLower(gtidMode) == "on", nil
 }
 
-func CheckMySQLVersion(storage *Storage) (string, string) {
+func CheckMySQLVersion(storage *Storage) (string, string, error) {
 	flavor := mysql.MySQLFlavor
 	var version string
 
-	rows, err := storage.DB.Query("SHOW VARIABLES LIKE '%version%';")
+	var rows *sql.Rows
+	err := backoff.RetryNotify(
+		func() error {
+			var err error
+			rows, err = storage.DB.Query("SHOW VARIABLES LIKE '%version%';")
+			return err
+		},
+		backoff.NewExponentialBackOff(backoff.WithMaxElapsedTime(time.Minute)),
+		func(err error, d time.Duration) {
+			msg := fmt.Sprintf("Unable to check version, will retry after %s", d.String())
+			logger.Log.Warn(msg, log.Error(err))
+		},
+	)
 	if err != nil {
-		logger.Log.Warnf("Unable to check version: %v", err)
+		return "", "", xerrors.Errorf("unable to check version: %w", err)
 	}
+
 	defer rows.Close()
 	for rows.Next() {
 		var name, val string
 		if err := rows.Scan(&name, &val); err != nil {
-			logger.Log.Warnf("Unable to parse version variable: %v", err)
-			continue
+			return "", "", xerrors.Errorf("unable to parse version variable: %w", err)
 		}
 		if name == "version" {
 			logger.Log.Infof("MySQL version is %v", val)
-
 			val = strings.ToLower(val)
 			if strings.Contains(strings.ToLower(val), "mariadb") {
-				return mysql.MariaDBFlavor, val
+				return mysql.MariaDBFlavor, val, nil
 			}
 			version = val
 			break
 		}
 	}
-	return flavor, version
+	return flavor, version, nil
 }
