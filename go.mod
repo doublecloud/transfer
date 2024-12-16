@@ -66,7 +66,7 @@ require (
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.92.1
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.92.5
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.17.1
 	go.uber.org/atomic v1.11.0
@@ -210,7 +210,7 @@ require (
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
-	github.com/ydb-platform/ydb-go-genproto v0.0.0-20241022174402-dd276c7f197b // indirect
+	github.com/ydb-platform/ydb-go-genproto v0.0.0-20241112172322-ea1f63298f77 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	github.com/yuin/goldmark v1.7.4 // indirect
 	github.com/yuin/goldmark-emoji v1.0.3 // indirect
