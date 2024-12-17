@@ -4,6 +4,7 @@ import (
 	"context"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -55,7 +56,8 @@ type YdbSource struct {
 
 	// replication stuff:
 	ChangeFeedMode               ChangeFeedModeType
-	ChangeFeedCustomName         string // user can specify pre-created feed's name, otherwise it will created with name == transferID
+	ChangeFeedRetentionPeriod    *time.Duration // not suitable for pre-created (custom) changefeed
+	ChangeFeedCustomName         string         // user can specify pre-created feed's name, otherwise it will created with name == transferID
 	ChangeFeedCustomConsumerName string
 	BufferSize                   model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 	VerboseSDKLogs               bool

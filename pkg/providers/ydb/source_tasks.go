@@ -9,6 +9,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/castx"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicoptions"
@@ -50,8 +51,18 @@ func dropChangeFeedIfExistsOneTable(ctx context.Context, ydbClient *ydb.Driver, 
 	return true, nil
 }
 
-func createChangeFeedOneTable(ctx context.Context, ydbClient *ydb.Driver, tablePath, transferID, changeFeedMode string) error {
-	query := fmt.Sprintf(ydbV1+"ALTER TABLE `%s` ADD CHANGEFEED %s WITH (FORMAT = 'JSON', MODE = '%s')", tablePath, transferID, changeFeedMode)
+func createChangeFeedOneTable(ctx context.Context, ydbClient *ydb.Driver, tablePath, transferID string, cfg *YdbSource) error {
+	queryParams := fmt.Sprintf("FORMAT = 'JSON', MODE = '%s'", string(cfg.ChangeFeedMode))
+
+	if period := cfg.ChangeFeedRetentionPeriod; period != nil {
+		asIso, err := castx.DurationToIso8601(*period)
+		if err != nil {
+			return xerrors.Errorf("unable to represent retention period as ISO 8601: %w", err)
+		}
+		queryParams += fmt.Sprintf(", RETENTION_PERIOD = Interval('%s')", asIso)
+	}
+
+	query := fmt.Sprintf(ydbV1+"ALTER TABLE `%s` ADD CHANGEFEED %s WITH (%s)", tablePath, transferID, queryParams)
 	err := execQuery(ctx, ydbClient, query)
 	if err != nil {
 		return xerrors.Errorf("unable to add changefeed, err: %w", err)
@@ -106,16 +117,16 @@ func CreateChangeFeed(cfg *YdbSource, transferID string) error {
 		return nil // User already created changefeed and specified its name.
 	}
 
-	clientCtx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*3)
 	defer cancel()
 
-	ydbClient, err := newYDBSourceDriver(clientCtx, cfg)
+	ydbClient, err := newYDBSourceDriver(ctx, cfg)
 	if err != nil {
 		return xerrors.Errorf("unable to create ydb, err: %w", err)
 	}
 
 	for _, tablePath := range cfg.Tables {
-		err = createChangeFeedOneTable(clientCtx, ydbClient, tablePath, transferID, string(cfg.ChangeFeedMode))
+		err = createChangeFeedOneTable(ctx, ydbClient, tablePath, transferID, cfg)
 		if err != nil {
 			return xerrors.Errorf("unable to create changeFeed for table %s, err: %w", tablePath, err)
 		}
@@ -144,7 +155,7 @@ func CreateChangeFeedIfNotExists(cfg *YdbSource, transferID string) error {
 		if isOnline {
 			continue
 		}
-		err = createChangeFeedOneTable(clientCtx, ydbClient, tablePath, transferID, string(cfg.ChangeFeedMode))
+		err = createChangeFeedOneTable(clientCtx, ydbClient, tablePath, transferID, cfg)
 		if err != nil {
 			return xerrors.Errorf("unable to create changeFeed for table %s, err: %w", tablePath, err)
 		}

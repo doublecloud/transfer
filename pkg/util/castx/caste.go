@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"strconv"
+	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/goccy/go-json"
@@ -102,4 +103,34 @@ func ToStringE(i interface{}) (string, error) {
 	default:
 		return cast.ToStringE(i)
 	}
+}
+
+// DurationToIso8601 extracts Days, Hours, Minutes and Seconds from provided duration and casts to ISO 8601 standart.
+// E.g. P750DT23H59M59S, more on https://en.wikipedia.org/wiki/ISO_8601#Durations.
+func DurationToIso8601(duration time.Duration) (string, error) {
+	if duration.Nanoseconds() < 0 {
+		return "", xerrors.Errorf("unable to cast negative duration '%s' to ISO 8601", duration.String())
+	}
+	time := "T"
+	if h := int(duration.Hours()) % 24; h > 0 {
+		time += fmt.Sprint(h) + "H"
+	}
+	if m := int(duration.Minutes()) % 60; m > 0 {
+		time += fmt.Sprint(m) + "M"
+	}
+	if s := int(duration.Seconds()) % 60; s > 0 {
+		time += fmt.Sprint(s) + "S"
+	}
+
+	res := "P"
+	if d := int(duration.Hours()) / 24; d > 0 {
+		res += fmt.Sprint(d) + "D"
+	}
+	if time != "T" {
+		res += time
+	}
+	if res == "P" {
+		res = "P0D"
+	}
+	return res, nil
 }

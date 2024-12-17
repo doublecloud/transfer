@@ -191,8 +191,8 @@ func TestSourceCDC(t *testing.T) {
 	})
 }
 
-func checkSchemaUpdateWithMode(t *testing.T, db *ydb.Driver, transferID, mode string, srcCfgTemplate YdbSource) {
-	tableName := "schema_up_to_date_new_image" + "_" + mode
+func checkSchemaUpdateWithMode(t *testing.T, db *ydb.Driver, transferID string, mode ChangeFeedModeType, srcCfgTemplate YdbSource) {
+	tableName := "schema_up_to_date_new_image" + "_" + string(mode)
 	tablePath := formTablePath(tableName)
 	createTableAndFeedWithMode(t, db, transferID, tablePath, mode,
 		options.WithColumn("id", types.Optional(types.TypeUint64)),
@@ -352,17 +352,17 @@ func execQueries(t *testing.T, db *ydb.Driver, queries []string) {
 }
 
 func createTableAndFeed(t *testing.T, db *ydb.Driver, feedName, tablePath string, opts ...options.CreateTableOption) {
-	createTableAndFeedWithMode(t, db, feedName, tablePath, "NEW_IMAGE", opts...)
+	createTableAndFeedWithMode(t, db, feedName, tablePath, ChangeFeedModeNewImage, opts...)
 }
 
-func createTableAndFeedWithMode(t *testing.T, db *ydb.Driver, feedName, tablePath, mode string, opts ...options.CreateTableOption) {
+func createTableAndFeedWithMode(t *testing.T, db *ydb.Driver, feedName, tablePath string, mode ChangeFeedModeType, opts ...options.CreateTableOption) {
 	opts = append(opts, options.WithPartitions(options.WithUniformPartitions(partitionsCount)))
 
 	require.NoError(t, db.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
 		return s.CreateTable(ctx, tablePath, opts...)
 	}))
 
-	require.NoError(t, createChangeFeedOneTable(context.Background(), db, tablePath, feedName, mode))
+	require.NoError(t, createChangeFeedOneTable(context.Background(), db, tablePath, feedName, &YdbSource{ChangeFeedMode: mode}))
 }
 
 func formTablePath(tableName string) string {
