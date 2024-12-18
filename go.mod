@@ -66,7 +66,7 @@ require (
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.92.5
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.95.3
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.17.1
 	go.uber.org/atomic v1.11.0
