@@ -174,7 +174,8 @@ func (s *signalTable) IsWatermark(item *abstract.ChangeItem, tableID abstract.Ta
 		return false, dblog.BadWatermarkType
 	}
 
-	if item.ColumnValues[tableSchemaColumnIndex].(string) != tableID.Namespace ||
+	if item.Kind == abstract.DeleteKind ||
+		item.ColumnValues[tableSchemaColumnIndex].(string) != tableID.Namespace ||
 		item.ColumnValues[tableNameColumnIndex].(string) != tableID.Name ||
 		item.ColumnValues[tableTransferIDIndex].(string) != s.transferID {
 		return false, dblog.BadWatermarkType
@@ -245,4 +246,41 @@ func (s *signalTable) resolveLowBoundQuery() string {
               	AND mark_type = ($4);`
 
 	return fmt.Sprintf(query, s.schemaName, SignalTableName)
+}
+
+func DeleteWatermarks(ctx context.Context, conn *pgxpool.Pool, schemaName string, transferID string) error {
+	signalTableExist, err := signalTableExist(ctx, conn, schemaName)
+	if err != nil {
+		return xerrors.Errorf("signal table check query failed err: %w", err)
+	}
+	if signalTableExist {
+		query := deleteWatermarksQuery(schemaName)
+		_, err := conn.Exec(ctx, query, transferID)
+		if err != nil {
+			return xerrors.Errorf("failed to delete watermarks err: %w", err)
+		}
+	}
+
+	return err
+}
+
+func deleteWatermarksQuery(schemaName string) string {
+	query := `DELETE FROM "%s"."%s" WHERE transfer_id = ($1);`
+	return fmt.Sprintf(query, schemaName, SignalTableName)
+}
+
+func signalTableExist(ctx context.Context, conn *pgxpool.Pool, schemaName string) (bool, error) {
+	query := `SELECT EXISTS (
+		SELECT 1 
+		FROM information_schema.tables 
+		WHERE table_schema = $1 
+		AND table_name = $2
+	   );`
+
+	var exist bool
+	if err := conn.QueryRow(ctx, query, schemaName, SignalTableName).Scan(&exist); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

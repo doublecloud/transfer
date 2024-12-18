@@ -91,6 +91,11 @@ func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) e
 			return xerrors.Errorf("Unable to drop replication slot: %w", err)
 		}
 	}
+	if src.DBLogEnabled {
+		if err := p.DBLogCleanup(ctx, src); err != nil {
+			return xerrors.Errorf("unable to cleenup dblog resourses")
+		}
+	}
 	return nil
 }
 
@@ -378,13 +383,17 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 	if err != nil {
 		return xerrors.Errorf("unable to create signal table: %w", err)
 	}
+	// delete previous watermarks
+	if err := dblog.DeleteWatermarks(ctx, pgStorage.Conn, src.KeeperSchema, p.transfer.ID); err != nil {
+		return xerrors.Errorf("unable to delete watermarks: %w", err)
+	}
 
 	sourceWrapper, err := NewSourceWrapper(src, src.SlotID, p.transfer.DataObjects, p.logger, stats.NewSourceStats(p.registry), p.cp)
 	if err != nil {
 		return xerrors.Errorf("failed to create source wrapper: %w", err)
 	}
 
-	dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, src.SlotID, src.KeeperSchema, Represent)
+	dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, p.transfer.ID, src.KeeperSchema, Represent)
 	if err != nil {
 		return xerrors.Errorf("failed to create DBLog storage: %w", err)
 	}
@@ -419,6 +428,16 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 	}
 
 	return nil
+}
+
+func (p *Provider) DBLogCleanup(ctx context.Context, src *PgSource) error {
+	conn, err := MakeConnPoolFromSrc(src, p.logger)
+	if err != nil {
+		return xerrors.Errorf("failed to create a connection pool: %w", err)
+	}
+	defer conn.Close()
+
+	return dblog.DeleteWatermarks(ctx, conn, src.KeeperSchema, p.transfer.ID)
 }
 
 func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {

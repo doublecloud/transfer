@@ -53,9 +53,7 @@ func TestDBLog(t *testing.T) {
 	defer srcConn.Close()
 
 	// after all the data has been copied from the source code, all kinds of watermarks are expected
-	checkWatermarkExist(t, dblogcommon.LowWatermarkType, srcConn)
-	checkWatermarkExist(t, dblogcommon.HighWatermarkType, srcConn)
-	checkWatermarkExist(t, dblogcommon.SuccessWatermarkType, srcConn)
+	checkAllWatermarks(t, srcConn, true)
 
 	dstConn, err := pgcommon.MakeConnPoolFromDst(&Target, logger.Log)
 	require.NoError(t, err)
@@ -68,11 +66,29 @@ func TestDBLog(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, helpers.WaitEqualRowsCount(t, "public", "__test", helpers.GetSampleableStorageByModel(t, Source), helpers.GetSampleableStorageByModel(t, Target), 240*time.Second))
 	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams()))
+	worker.Close(t)
+
+	// if success watermark is not removed this row will not be transfered after the restart
+	_, err = srcConn.Exec(ctx, "INSERT INTO __test VALUES('-1', '-1');")
+	require.NoError(t, err)
+
+	worker.Restart(t, transfer)
+	require.NoError(t, helpers.WaitEqualRowsCount(t, "public", "__test", helpers.GetSampleableStorageByModel(t, Source), helpers.GetSampleableStorageByModel(t, Target), 30*time.Second))
+	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams()))
+
+	require.NoError(t, dblog.DeleteWatermarks(ctx, srcConn, Source.KeeperSchema, helpers.TransferID))
+	checkAllWatermarks(t, srcConn, false)
 }
 
-func checkWatermarkExist(t *testing.T, mark dblogcommon.WatermarkType, srcConn *pgxpool.Pool) {
+func checkWatermarkExist(t *testing.T, mark dblogcommon.WatermarkType, srcConn *pgxpool.Pool, expectedExist bool) {
 	var hasWatermark bool
-	err := srcConn.QueryRow(ctx, fmt.Sprintf("SELECT true FROM %s WHERE mark_type = $1;", dblog.SignalTableName), dblogcommon.SuccessWatermarkType).Scan(&hasWatermark)
-	require.True(t, hasWatermark)
+	err := srcConn.QueryRow(ctx, fmt.Sprintf("SELECT EXISTS (SELECT true FROM %s WHERE mark_type = ($1));", dblog.SignalTableName), mark).Scan(&hasWatermark)
+	require.Equal(t, expectedExist, hasWatermark)
 	require.NoError(t, err)
+}
+
+func checkAllWatermarks(t *testing.T, srcConn *pgxpool.Pool, expectedExist bool) {
+	checkWatermarkExist(t, dblogcommon.LowWatermarkType, srcConn, expectedExist)
+	checkWatermarkExist(t, dblogcommon.HighWatermarkType, srcConn, expectedExist)
+	checkWatermarkExist(t, dblogcommon.SuccessWatermarkType, srcConn, expectedExist)
 }
