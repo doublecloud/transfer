@@ -332,7 +332,11 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 
 func (s *Storage) getBinlogPosition(ctx context.Context, tx Queryable) (string, uint32, error) {
 	masterStatusQuery := "show master status;"
-	_, version := CheckMySQLVersion(s)
+	_, version, err := CheckMySQLVersion(s)
+	if err != nil {
+		return "", 0, xerrors.Errorf("unable to check MySQL version: %w", err)
+	}
+
 	if strings.HasPrefix(version, "8.4") {
 		masterStatusQuery = " SHOW BINARY LOG STATUS;"
 	}

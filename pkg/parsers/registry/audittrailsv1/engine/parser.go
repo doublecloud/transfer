@@ -2,26 +2,20 @@ package engine
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/generic"
 	jsonparser "github.com/doublecloud/transfer/pkg/parsers/registry/json"
 	"github.com/doublecloud/transfer/pkg/stats"
+	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var removeNestingNotSupportedError = xerrors.New("Nesting removal is not supported for non-elastic schema")
-
 type AuditTrailsV1ParserImpl struct {
-	// fieldsToRemoveNesting contains names of message's fields that should be compacted to map[string]string.
-	// Example: `details` in AuditTrails events could have different types for nested values, with that option
-	//	whole field details would be compacted to map[string]string by using json.Marshal.
-	fieldsToRemoveNesting []string
-
 	useElasticSchema bool
 	parser           parsers.Parser
 }
@@ -31,64 +25,112 @@ func (p *AuditTrailsV1ParserImpl) parseLine(line string) (map[string]any, error)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to exec pipeline program: %w", err)
 	}
-
-	var dict map[string]any
-	if err := json.Unmarshal([]byte(finalLine), &dict); err != nil {
-		return nil, xerrors.Errorf("unable to unmarshal line: %w", err)
+	result, err := makeHungarianNotation(finalLine)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to make hungarian notation, err: %w", err)
 	}
-
-	for _, field := range p.fieldsToRemoveNesting {
-		if err := removeNestingByKey(dict, field); err != nil {
-			return nil, xerrors.Errorf("unable to remove nesting for field '%s': %w", field, err)
-		}
-	}
-
-	return dict, nil
+	return result, nil
 }
 
-func removeNestingByKey(dict map[string]any, key string) error {
-	asAny, found := dict[key]
-	if !found {
-		logger.Log.Warnf("field '%s' not found in message", key)
-		return nil
+var knownProblemPaths = map[string]bool{
+	"details.backup": true,
+	"details.cluster.config.disk_size_autoscaling.disk_size_limit":           true,
+	"details.cluster.config.disk_size_autoscaling.emergency_usage_threshold": true,
+	"details.cluster.config.disk_size_autoscaling.planned_usage_threshold":   true,
+	"details.database":           true,
+	"details.domain_id":          true,
+	"details.enabled":            true,
+	"details.endpoint":           true,
+	"details.hosts.priority":     true,
+	"details.id":                 true,
+	"details.interface_id":       true,
+	"details.maintenance_policy": true,
+	"details.options":            true,
+	"details.origin":             true,
+	"details.origin_group_id":    true,
+	"details.tags":               true,
+	"details.verdict":            true,
+	"details.version":            true,
+	"request_parameters.backup":  true,
+	"request_parameters.config_spec.disk_size_autoscaling.disk_size_limit":           true,
+	"request_parameters.config_spec.disk_size_autoscaling.emergency_usage_threshold": true,
+	"request_parameters.config_spec.disk_size_autoscaling.planned_usage_threshold":   true,
+	"request_parameters.deletion_protection":                                         true,
+	"request_parameters.enabled":                                                     true,
+	"request_parameters.group_name":                                                  true,
+	"request_parameters.host_specs.priority":                                         true,
+	"request_parameters.host_specs.priority.value":                                   true,
+	"request_parameters.id":                                                          true,
+	"request_parameters.login":                                                       true,
+	"request_parameters.maintenance_policy":                                          true,
+	"request_parameters.master_spec.version":                                         true,
+	"request_parameters.metadata":                                                    true,
+	"request_parameters.origin_group_id":                                             true,
+	"request_parameters.pinned":                                                      true,
+	"request_parameters.position":                                                    true,
+	"request_parameters.runtime":                                                     true,
+	"request_parameters.tags":                                                        true,
+	"request_parameters.target":                                                      true,
+	"request_parameters.update_host_specs.assign_public_ip":                          true,
+	"request_parameters.update_host_specs.priority":                                  true,
+	"request_parameters.update_host_specs.priority.value":                            true,
+	"request_parameters.version":                                                     true,
+	"response.id":                                                                    true,
+}
+
+func determineSuffix(in any) string {
+	valueOf := reflect.ValueOf(in)
+	valType := valueOf.Kind()
+	if valType == reflect.Map {
+		return "obj"
 	}
 
-	field, ok := asAny.(map[string]any)
-	if !ok {
-		return xerrors.Errorf("field '%s' expected to be map[string]any, got %T", key, field)
+	if valType == reflect.Array || valType == reflect.Slice {
+		if valueOf.Len() == 0 {
+			return ""
+		}
+		return "arr__" + determineSuffix(valueOf.Index(0).Interface())
 	}
 
-	if curKey, nestedKey, isCut := strings.Cut(key, "."); isCut {
-		// Key contains '.'-symbol. Need to remove nesting for deeper level of `field`.
-		// Example: If key = "details.my_detail", then call removeNestingByKey(field["details"], "my_detail").
-
-		nextLevelField, found := dict[curKey]
-		if !found {
-			logger.Log.Warnf("nested field '%s' not found in message", key)
-			return nil
-		}
-
-		nextLevel, ok := nextLevelField.(map[string]any)
-		if !ok {
-			return xerrors.Errorf("nested field '%s' expected to be map[string]any, got %T", curKey, nextLevel)
-		}
-
-		if err := removeNestingByKey(nextLevel, nestedKey); err != nil {
-			return xerrors.Errorf("unable to remove nesting in subkey '%s' of key '%s': %w", nestedKey, key, err)
-		}
-		return nil
+	switch in.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint32, uint64, float32, float64, json.Number:
+		return "num"
+	case string:
+		return "str"
+	case bool:
+		return "bool"
 	}
+	return ""
+}
 
-	// Key do not contains '.'-symbol. Iterate over all nested parameters and cast them to strings.
-	for key, value := range field {
-		bytes, err := json.Marshal(value)
-		if err != nil {
-			return xerrors.Errorf("unable to marshal 'details.%s': %w", key, err)
-		}
-		field[key] = string(bytes)
+func makeHungarianNotation(in string) (map[string]any, error) {
+	var myMap map[string]any
+	err := jsonx.NewDefaultDecoder(strings.NewReader(in)).Decode(&myMap)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to decode json, err:%w, json:%s", err, in)
 	}
-	dict[key] = field
-	return nil
+	resultDict, err := jsonx.RecursiveTraverseUnmarshalledJSON("", myMap, func(path, k string, v any) (string, any, bool) {
+		handleKnownProblemPaths := func(path, k string, v any) (string, any) {
+			if _, ok := knownProblemPaths[path]; !ok {
+				return k, v
+			}
+			suffix := determineSuffix(v)
+			return k + "__" + suffix, v
+		}
+		newK, newV := handleKnownProblemPaths(path, k, v)
+		newK = strings.ReplaceAll(newK, ".", "_")
+		if newVStr, ok := newV.(string); ok && newVStr == "*** hidden ***" {
+			return "", nil, false
+		}
+		return newK, newV, true
+	})
+	if err != nil {
+		return nil, xerrors.Errorf("unable to traverse recursive unmarshalled json, err:%w, json:%s", err, in)
+	}
+	if result, ok := resultDict.(map[string]any); ok {
+		return result, nil
+	}
+	return nil, xerrors.Errorf("unknown type of resultDict: %T", resultDict)
 }
 
 func (p *AuditTrailsV1ParserImpl) Do(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
@@ -225,19 +267,15 @@ func getElasticFields() *abstract.TableSchema {
 }
 
 func NewAuditTrailsV1ParserImpl(
-	fieldsToRemoveNesting []string, useElasticSchema, sniff bool, logger log.Logger, registry *stats.SourceStats,
+	useElasticSchema, sniff bool, logger log.Logger, registry *stats.SourceStats,
 ) (*AuditTrailsV1ParserImpl, error) {
 
 	res := &AuditTrailsV1ParserImpl{
-		fieldsToRemoveNesting: fieldsToRemoveNesting,
-		useElasticSchema:      useElasticSchema,
-		parser:                nil,
+		useElasticSchema: useElasticSchema,
+		parser:           nil,
 	}
 
 	if !useElasticSchema {
-		if len(fieldsToRemoveNesting) > 0 {
-			return nil, removeNestingNotSupportedError
-		}
 		config := &jsonparser.ParserConfigJSONCommon{
 			Fields:               getNotElasticFields(),
 			SchemaResourceName:   "",

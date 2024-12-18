@@ -49,7 +49,11 @@ func SyncBinlogPosition(src *MysqlSource, id string, cp coordinator.Coordinator)
 		return xerrors.Errorf("failed to get log file position: %w", err)
 	}
 
-	flavor, _ := CheckMySQLVersion(storage)
+	flavor, _, err := CheckMySQLVersion(storage)
+	if err != nil {
+		return xerrors.Errorf("unable to check MySQL version: %w", err)
+	}
+
 	gtidModeEnabled, err := IsGtidModeEnabled(storage, flavor)
 	if err != nil {
 		return xerrors.Errorf("Unable to check gtid mode: %w", err)

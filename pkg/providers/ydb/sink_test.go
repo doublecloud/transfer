@@ -1,6 +1,8 @@
 package ydb
 
 import (
+	"context"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -10,6 +12,9 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/stretchr/testify/require"
+	"github.com/ydb-platform/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk/v3/sugar"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/types"
 	"go.ytsaurus.tech/yt/go/schema"
 )
@@ -69,6 +74,33 @@ func TestSinker_Push(t *testing.T) {
 		{ColumnName: "id1", DataType: string(schema.TypeInt32), PrimaryKey: true},
 		{ColumnName: "id2", DataType: string(schema.TypeInt32), PrimaryKey: true},
 		{ColumnName: "val", DataType: string(schema.TypeString)},
+	})
+	t.Run("many upserts", func(t *testing.T) {
+		data := make([]abstract.ChangeItem, batchSize*2)
+		for i := range batchSize * 2 {
+			data[i] = abstract.ChangeItem{
+				Kind:         abstract.InsertKind,
+				Schema:       "foo",
+				Table:        "many_upserts_test",
+				ColumnNames:  []string{"id", "val"},
+				ColumnValues: []interface{}{1, fmt.Sprint(i)},
+				TableSchema:  testSchema,
+			}
+		}
+		require.NoError(t, sinker.Push(data))
+
+		db, err := ydb.Open(
+			context.Background(),
+			sugar.DSN(endpoint, prefix),
+			ydb.WithAccessTokenCredentials(token),
+		)
+		require.NoError(t, err)
+
+		expectedVal := fmt.Sprint(batchSize*2 - 1)
+		selectQuery(t, db, `
+		--!syntax_v1
+		SELECT val FROM foo_many_upserts_test WHERE id = 1;
+		`, types.NullableUTF8Value(&expectedVal))
 	})
 	t.Run("inserts+delete", func(t *testing.T) {
 		require.NoError(t, sinker.Push([]abstract.ChangeItem{{
@@ -214,6 +246,11 @@ func TestSinker_Push(t *testing.T) {
 			Kind:   abstract.DropTableKind,
 			Schema: "foo",
 			Table:  "inserts_test",
+		},
+		{
+			Kind:   abstract.DropTableKind,
+			Schema: "foo",
+			Table:  "many_upserts_test",
 		},
 	}))
 }
@@ -396,4 +433,30 @@ func TestCreateTableQuery(t *testing.T) {
 		"\tUNIFORM_PARTITIONS = 1\n);\n"
 
 	require.Equal(t, expected, query.String())
+}
+
+func selectQuery(t *testing.T, ydbConn *ydb.Driver, query string, expected types.Value) {
+	var val types.Value
+	err := ydbConn.Table().Do(context.Background(), func(ctx context.Context, session table.Session) (err error) {
+		writeTx := table.TxControl(
+			table.BeginTx(
+				table.WithSerializableReadWrite(),
+			),
+			table.CommitTx(),
+		)
+
+		_, res, err := session.Execute(ctx, writeTx, query, nil)
+		require.NoError(t, err)
+
+		for res.NextResultSet(ctx) {
+			for res.NextRow() {
+				err = res.Scan(&val)
+				require.NoError(t, err)
+			}
+		}
+
+		require.Equal(t, expected, val)
+		return err
+	})
+	require.NoError(t, err)
 }

@@ -590,6 +590,7 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 			}
 		case abstract.InsertKind, abstract.UpdateKind, abstract.DeleteKind:
 			tableName := Fqtn(item.TableID())
+
 			if altName, ok := s.config.AltNames[item.Fqtn()]; ok {
 				tableName = altName
 			} else if altName, ok = s.config.AltNames[tableName]; ok {
@@ -620,6 +621,11 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 				errs = append(errs, err)
 			}
 		}
+		// The most fragile part of Collape is processing PK changing events.
+		// Here we transform these changes into Delete + Insert pair and only then send batch to Collapse
+		// As a result potentially dangerous part of Collapse is avoided + PK updates are processed correctly(it is imposible to update pk in YDB explicitly)
+		// Ticket about rewriting Collapse https://st.yandex-team.ru/TM-8239
+		batch = abstract.Collapse(s.processPKUpdate(batch))
 		for i := 0; i < len(batch); i += batchSize {
 			end := i + batchSize
 			if end > len(batch) {
@@ -640,6 +646,15 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 	}
 
 	return nil
+}
+
+func (s *sinker) processPKUpdate(batch []abstract.ChangeItem) []abstract.ChangeItem {
+	parts := abstract.SplitUpdatedPKeys(batch)
+	result := make([]abstract.ChangeItem, 0)
+	for _, part := range parts {
+		result = append(result, part...)
+	}
+	return result
 }
 
 func (s *sinker) pushBatch(tablePath ydbPath, batch []abstract.ChangeItem) error {

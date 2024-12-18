@@ -2,14 +2,17 @@ package mysql
 
 import (
 	"math/rand"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/stretchr/testify/require"
@@ -433,4 +436,30 @@ func Test_generatedBounds(t *testing.T) {
 		{Left: 3, Right: 4},
 		{Left: 4, Right: 5},
 	}, bounds)
+}
+
+// checking that if the table cannot be created, a fatal error is returned
+func Test_create_table(t *testing.T) {
+	db, mock, err := sqlmock.New()
+	require.NoError(t, err)
+	defer db.Close()
+
+	// error on any Exec
+	mock.ExpectExec(regexp.QuoteMeta(".")).
+		WillReturnError(xerrors.New("an exec error occurred"))
+	sink := &sinker{
+		cache:  map[string]bool{},
+		db:     db,
+		logger: logger.Log,
+	}
+	tableSchema := abstract.NewTableSchema([]abstract.ColSchema{{ColumnName: "columnName", OriginalType: "utf8"}})
+	err = sink.createTable(
+		changeitem.TableID{
+			Namespace: "namespace",
+			Name:      "name",
+		},
+		changeitem.ChangeItem{
+			TableSchema: tableSchema,
+		})
+	require.True(t, abstract.IsFatal(err))
 }

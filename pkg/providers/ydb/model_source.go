@@ -4,10 +4,12 @@ import (
 	"context"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 )
 
 type YdbColumnsFilterType string
@@ -23,6 +25,15 @@ const (
 	ChangeFeedModeUpdates         ChangeFeedModeType = "UPDATES"
 	ChangeFeedModeNewImage        ChangeFeedModeType = "NEW_IMAGE"
 	ChangeFeedModeNewAndOldImages ChangeFeedModeType = "NEW_AND_OLD_IMAGES"
+)
+
+type CommitMode string
+
+const (
+	CommitModeUnspecified CommitMode = ""
+	CommitModeAsync       CommitMode = "ASYNC"
+	CommitModeNone        CommitMode = "NONE"
+	CommitModeSync        CommitMode = "SYNC"
 )
 
 type YdbColumnsFilter struct {
@@ -46,10 +57,12 @@ type YdbSource struct {
 
 	// replication stuff:
 	ChangeFeedMode               ChangeFeedModeType
-	ChangeFeedCustomName         string // user can specify pre-created feed's name, otherwise it will created with name == transferID
+	ChangeFeedRetentionPeriod    *time.Duration // not suitable for pre-created (custom) changefeed
+	ChangeFeedCustomName         string         // user can specify pre-created feed's name, otherwise it will created with name == transferID
 	ChangeFeedCustomConsumerName string
 	BufferSize                   model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 	VerboseSDKLogs               bool
+	CommitMode                   CommitMode
 
 	// auth stuff:
 	Token            model.SecretString
@@ -106,6 +119,19 @@ func MakeYDBRelPath(useFullPaths bool, paths []string, tableName string) string 
 		}
 	}
 	return tableName
+}
+
+func MatchchangeFeedMode(ydbMode options.ChangefeedMode) ChangeFeedModeType {
+	switch ydbMode {
+	case options.ChangefeedModeUpdates:
+		return ChangeFeedModeUpdates
+	case options.ChangefeedModeNewAndOldImages:
+		return ChangeFeedModeNewAndOldImages
+	case options.ChangefeedModeNewImage:
+		return ChangeFeedModeNewImage
+	default:
+		return ""
+	}
 }
 
 func ConvertTableMapToYDBRelPath(params *YdbStorageParams, tableMap abstract.TableMap) abstract.TableMap {

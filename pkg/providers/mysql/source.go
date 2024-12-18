@@ -609,7 +609,10 @@ func NewSource(src *MysqlSource, transferID string, objects *model.DataObjects, 
 	}
 	rollbacks.Add(storage.Close)
 
-	flavor, _ := CheckMySQLVersion(storage)
+	flavor, _, err := CheckMySQLVersion(storage)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to check MySQL version: %w", err)
+	}
 
 	config := new(Config)
 
