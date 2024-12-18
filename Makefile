@@ -6,9 +6,14 @@ clean:
 	@rm -rf binaries tmp
 	rm -f *.tgz
 
+# Define the `build` target
+API ?= trcli
+
+.PHONY: build
 build:
 	go build -o  binaries/$(API) ./cmd/trcli/*.go
 
+.PHONY: test
 test:
 	USE_TESTCONTAINERS=1 gotestsum --rerun-fails --format github-actions --packages="./cmd/..." -- -timeout=30m
 
@@ -20,6 +25,7 @@ SUITE_NAME ?= 'e2e-pg2pg'
 SHELL := /bin/bash
 
 # Define the `run-tests` target
+.PHONY: run-tests
 run-tests:
 	@echo "Running $(SUITE_GROUP) suite $(SUITE_NAME)"
 	@export RECIPE_CLICKHOUSE_BIN=clickhouse; \
