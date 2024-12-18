@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"path"
 	"sync"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util/queues/sequencer"
 	"github.com/doublecloud/transfer/pkg/util/throttler"
 	"github.com/ydb-platform/ydb-go-sdk/v3"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicoptions"
 	"github.com/ydb-platform/ydb-go-sdk/v3/topic/topicreader"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -254,6 +256,31 @@ func batchesSize(buffer []batchWithSize) uint64 {
 	return size
 }
 
+func discoverChangeFeedMode(ydbClient *ydb.Driver, tablePath, changeFeedName string) (ChangeFeedModeType, error) {
+	var result ChangeFeedModeType
+	err := ydbClient.Table().Do(context.Background(), func(ctx context.Context, s table.Session) error {
+		desc, err := s.DescribeTable(ctx, tablePath)
+		if err != nil {
+			return xerrors.Errorf("failed to describe table '%s': %w", tablePath, err)
+		}
+		for _, feed := range desc.Changefeeds {
+			if feed.Name == changeFeedName {
+				result = MatchchangeFeedMode(feed.Mode)
+				break
+			}
+		}
+		if result == "" {
+			return xerrors.Errorf("failed to find customFeed '%s' for table '%s'", changeFeedName, tablePath)
+		}
+		return nil
+	}, table.WithIdempotent()) // User already created changefeed and specified its name, so we only try to get it's mode.
+
+	if err != nil {
+		return "", xerrors.Errorf("failed to define ChangeFeed Mode: %w", err)
+	}
+	return result, nil
+}
+
 func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.Registry) (*Source, error) {
 	clientCtx, cancelFunc := context.WithCancel(context.Background())
 	var rb util.Rollbacks
@@ -311,6 +338,13 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 		err = src.updateLocalCacheTableSchema(tablePath)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to get table schema, tablePath: %s, err: %w", tablePath, err)
+		}
+	}
+
+	if cfg.ChangeFeedCustomName != "" {
+		src.cfg.ChangeFeedMode, err = discoverChangeFeedMode(ydbClient, path.Join(cfg.Database, cfg.Tables[0]), cfg.ChangeFeedCustomName)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to define ChangeFeed Mode: %w", err)
 		}
 	}
 

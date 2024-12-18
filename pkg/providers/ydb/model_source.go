@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 )
 
 type YdbColumnsFilterType string
@@ -118,6 +119,19 @@ func MakeYDBRelPath(useFullPaths bool, paths []string, tableName string) string 
 		}
 	}
 	return tableName
+}
+
+func MatchchangeFeedMode(ydbMode options.ChangefeedMode) ChangeFeedModeType {
+	switch ydbMode {
+	case options.ChangefeedModeUpdates:
+		return ChangeFeedModeUpdates
+	case options.ChangefeedModeNewAndOldImages:
+		return ChangeFeedModeNewAndOldImages
+	case options.ChangefeedModeNewImage:
+		return ChangeFeedModeNewImage
+	default:
+		return ""
+	}
 }
 
 func ConvertTableMapToYDBRelPath(params *YdbStorageParams, tableMap abstract.TableMap) abstract.TableMap {
