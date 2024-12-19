@@ -1472,6 +1472,7 @@ func NewSinker(lgr log.Logger, cfg *YdbDestination, mtrcs metrics.Registry) (abs
 			TokenServiceURL: cfg.TokenServiceURL,
 		},
 		cfg.ServiceAccountID,
+		cfg.OAuth2Config,
 		logger.Log,
 	)
 	if err != nil {

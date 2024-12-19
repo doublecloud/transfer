@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	v3credential "github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/options"
 )
 
@@ -70,6 +71,7 @@ type YdbSource struct {
 	ServiceAccountID string
 	TokenServiceURL  string
 	SAKeyContent     string
+	OAuth2Config     *v3credential.OAuth2Config
 }
 
 var _ model.Source = (*YdbSource)(nil)
@@ -192,6 +194,7 @@ func (s *YdbSource) ToStorageParams() *YdbStorageParams {
 		UserdataAuth:       s.UserdataAuth,
 		SAKeyContent:       s.SAKeyContent,
 		TokenServiceURL:    s.TokenServiceURL,
+		OAuth2Config:       s.OAuth2Config,
 		RootCAFiles:        s.RootCAFiles,
 		TLSEnabled:         s.TLSEnabled,
 	}
