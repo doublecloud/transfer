@@ -5,6 +5,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/credentials"
+	v3credential "github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -41,6 +42,7 @@ func ResolveCredentials(
 	oauthToken string,
 	jwt JWTAuthParams,
 	serviceAccountID string,
+	oauthConfig *v3credential.OAuth2Config,
 	logger log.Logger,
 ) (TokenCredentials, error) {
 	if serviceAccountID != "" {
@@ -65,6 +67,17 @@ func ResolveCredentials(
 		cc, err := JWTCredentials(jwt.KeyContent, jwt.TokenServiceURL)
 		if err != nil {
 			return nil, xerrors.Errorf("cannot create jwt token: %w", err)
+		}
+		return cc, nil
+	}
+	if oauthConfig != nil {
+		opts, err := oauthConfig.AsOptions()
+		if err != nil {
+			return nil, xerrors.Errorf("connot extract oauth2 options: %w", err)
+		}
+		cc, err := v3credential.NewOauth2TokenExchangeCredentials(opts...)
+		if err != nil {
+			return nil, xerrors.Errorf("cannot create oauth credentials: %w", err)
 		}
 		return cc, nil
 	}

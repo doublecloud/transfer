@@ -56,6 +56,7 @@ func NewStorage(cfg *YdbStorageParams) (*Storage, error) {
 			TokenServiceURL: cfg.TokenServiceURL,
 		},
 		cfg.ServiceAccountID,
+		cfg.OAuth2Config,
 		logger.Log,
 	)
 	if err != nil {
