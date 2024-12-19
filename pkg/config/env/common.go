@@ -19,6 +19,9 @@ func IsTest() bool {
 }
 
 func Get() Environment {
+	if environmentProvider == nil {
+		return EnvironmentUnknown
+	}
 	return environmentProvider.Get()
 }
 
@@ -28,9 +31,6 @@ func Set(env Environment) {
 
 func In(allowedEnvironments ...Environment) bool {
 	environment := Get()
-	if environment == nil {
-		return false
-	}
 	for _, allowedEnvironment := range allowedEnvironments {
 		if allowedEnvironment == environment {
 			return true
