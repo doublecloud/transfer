@@ -51,14 +51,14 @@ func NewKeeperBlockStore(
 	db *sql.DB,
 ) (*KeeperBlockStore, error) {
 	ddl := fmt.Sprintf(`
-CREATE TABLE IF NOT EXISTS %s
+CREATE TABLE IF NOT EXISTS %[1]s
 (
     part_id    String,
     min_offset UInt64,
     max_offset UInt64,
     status     String
 )
-ENGINE = KeeperMap('/%s', 128)
+ENGINE = KeeperMap('/%[1]s', 128)
 PRIMARY KEY part_id
 `, table)
 	_, err := db.Exec(ddl)
