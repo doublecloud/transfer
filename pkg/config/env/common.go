@@ -19,6 +19,9 @@ func IsTest() bool {
 }
 
 func Get() Environment {
+	if environmentProvider == nil {
+		return EnvironmentUnknown
+	}
 	return environmentProvider.Get()
 }
 
