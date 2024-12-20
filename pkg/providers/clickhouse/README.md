@@ -1,14 +1,24 @@
-## Exactly Once Support
+## **Exactly Once Support**
+
+The `ExactlyOnceSink` is a wrapper layer that provides exactly-once delivery semantics for a data pipeline. This ensures that each batch of data is processed and delivered to the destination exactly once, even in the presence of retries or failures.
+
+The core components of this implementation are:
+- **Deduper**: Manages deduplication and state transitions for each data partition.
+- **InsertBlockStore**: Tracks the state of processed data blocks (e.g., "before" and "after" states).
+- **Sink**: Responsible for pushing the actual data to the destination.
+- **Batch**: Represents incoming data to be processed.
+
+The diagrams below explain the flow, structure, and interactions within the system.
+
+---
 
 ### **1. Sequence Diagram**
+**Purpose:** The sequence diagram illustrates the interaction between components (`deduper`, `store`, `sink`, and `batch`) over time. It focuses on the sequence of operations performed to achieve exactly-once semantics.
 
-A sequence diagram illustrate the interaction between components (`deduper`, `store`, `sink`, and `batch`) over time. It focuses on the order of operations.
-
-Key Steps to Include:
-- `deduper` interacts with `store` to retrieve the last block.
-- `deduper` evaluates the current `batch` and decides actions (skip, retry, insert).
-- `deduper` pushes valid items to sink.
-- `State` transitions (`before` → `after`) occur in `store`.
+Key Highlights:
+- The `deduper` retrieves the last processed block and evaluates the current batch to determine actions.
+- Possible actions include skipping already processed items, retrying partially processed blocks, or inserting new data.
+- State transitions in the `store` occur before and after data is pushed to the sink.
 
 ```mermaid
 sequenceDiagram
@@ -38,53 +48,13 @@ sequenceDiagram
 
 ---
 
-### **2. Activity Diagram**
-An activity diagram focuses on the flow of decisions and actions in the `deduper.Process` method. It maps the logic's flow to identify branches and repetitive operations.
+### **2. Class Diagram**
+**Purpose:** This diagram shows the relationships and dependencies between the key components (`deduper`, `sink`, `store`, and `batch`).
 
-Here's the corrected version of the **Activity Diagram** in Mermaid syntax:
-
-```mermaid
-flowchart TD
-    Start --> CheckLastBlock
-    CheckLastBlock -->|No Last Block| SetBefore
-    CheckLastBlock -->|Last Block Exists| SplitBatch
-
-    SetBefore --> PushBatch
-    PushBatch --> SetAfter
-    SetAfter --> End
-
-    SplitBatch -->|Skip| SkipItems
-    SplitBatch -->|Retry| RetryBlock
-    SplitBatch -->|Insert| InsertBlock
-
-    RetryBlock --> RetryAfter
-    RetryAfter --> SetAfter
-
-    InsertBlock --> SetBefore2
-    SetBefore2 --> PushBatch2
-    PushBatch2 --> SetAfter2
-    SetAfter2 --> End
-
-    %% Labels for steps
-    CheckLastBlock[Check Last Block]
-    SetBefore[Set Block to Before]
-    PushBatch[Push Batch to Sink]
-    SetAfter[Set Block to After]
-    SplitBatch[Split Batch]
-    SkipItems[Log Skipped Items]
-    RetryBlock[Retry Last Block]
-    RetryAfter[Set Last Block to After]
-    InsertBlock[Insert New Block]
-    SetBefore2[Set New Block to Before]
-    PushBatch2[Push Insert Batch to Sink]
-    SetAfter2[Set New Block to After]
-    End[End]
-```
-
----
-
-### **3. Component Diagram**
-**Class Diagram**: diagram shows the relationships and dependencies between the key components in the system (e.g., `deduper`, `sink`, `store`, and `batch`).
+Key Highlights:
+- The `Deduper` is the central orchestrator, responsible for processing batches and coordinating actions.
+- The `InsertBlockStore` is used to store the state of data blocks to support deduplication.
+- The `Sink` is the final destination for processed data.
 
 ```mermaid
 classDiagram
@@ -114,35 +84,41 @@ classDiagram
     Deduper --> Batch : processes
 ```
 
-**Component Diagram**: highlights the `ExactlyOnceSink` as a new component and shows how it interacts with the existing components (`sink`, `store`, and `deduper`).
+---
 
+### **3. Component Diagram**
+**Purpose:** The component diagram highlights the interaction between the `ExactlyOnceSink` wrapper and the existing system components.
+
+Key Highlights:
+- The `ExactlyOnceSink` manages the deduplication and state tracking for incoming batches.
+- It wraps a non-exactly-once sink and uses the `deduper` and `InsertBlockStore` to ensure exactly-once delivery.
+- The `deduper` performs the actual processing for each data partition.
 
 ```mermaid
 graph TD
     subgraph "Exactly Once"
         direction LR
-        A --> D[deduper]
-        A[ExactlyOnceSink] -->|Uses| C[InsertBlockStore]
-        D[deduper] -->|Split| F[InsertBlock]
+        A[ExactlyOnceSink] -->|Uses| D[deduper]
+        A -->|Uses| C[InsertBlockStore]
+        D -->|Split| F[InsertBlock]
     end
 
+    subgraph "Sink System"
+        direction LR
+        G[Non-Exactly Once Sink abstract.Sinker]
+    end
 
-    D[deduper] -->|Push| G[Non-Exactly Once Sink abstract.Sinker]
-
-    %% Labels
-    A[ExactlyOnceSink]
-    C[InsertBlockStore]
-    D[deduper]
-    F[InsertBlock]
-
-    %% Style
-    classDef highlighted fill:#f9f,stroke:#333,stroke-width:2px;
+    D -->|Push| G
 ```
 
 ---
 
 ### **4. Data Flow Diagram**
-A data flow diagram shows how data (e.g., blocks and batches) moves through the system.
+**Purpose:** The data flow diagram visualizes how data (e.g., batches and blocks) flows through the system and is processed.
+
+Key Highlights:
+- Data is split into different actions (skip, retry, or insert) based on its offset and the state of the last processed block.
+- State transitions (`before` and `after`) are stored in the `InsertBlockStore` to track progress.
 
 ```mermaid
 flowchart TD
@@ -157,7 +133,11 @@ flowchart TD
 ---
 
 ### **5. Decision Tree Diagram**
-A decision tree diagram is useful for showing the branching logic in `splitBatch`.
+**Purpose:** The decision tree diagram outlines the branching logic of the `splitBatch` function, which determines how items in the batch are categorized.
+
+Key Highlights:
+- Each item in the batch is evaluated to decide whether it should be skipped, retried, or inserted.
+- The decision is based on the offset of the item compared to the range of the last processed block.
 
 ```mermaid
 graph TD
@@ -171,3 +151,7 @@ graph TD
     Next -->|More Items| OffsetCheck
     Next -->|No More Items| End[Split Complete]
 ```
+
+---
+
+Let me know if further refinements are needed!
