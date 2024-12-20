@@ -8,6 +8,14 @@ The core components of this implementation are:
 - **Sink**: Responsible for pushing the actual data to the destination.
 - **Batch**: Represents incoming data to be processed.
 
+Key assumptions to support for exactly once in Clickhouse:
+
+- Clickhouse is replicated, i.e. contains either Zookeeper or CHKeeper. 
+- `KeeperMap` table engine is enabled at target database.
+- Source provide `PartID`-metadata, to split logical table into sequence of related changes
+- Source provide `_offset`-column, each offset should be consistently growing.
+- Source provide at-least-once delivery semantic.
+
 The diagrams below explain the flow, structure, and interactions within the system.
 
 ---
