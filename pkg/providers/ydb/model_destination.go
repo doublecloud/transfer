@@ -6,6 +6,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
+	v3credential "github.com/ydb-platform/ydb-go-sdk/v3/credentials"
 )
 
 type YdbDestination struct {
@@ -40,6 +41,7 @@ type YdbDestination struct {
 	RootCAFiles     []string
 	TokenServiceURL string
 	UserdataAuth    bool // allow fallback to Instance metadata Auth
+	OAuth2Config    *v3credential.OAuth2Config
 }
 
 var _ model.Destination = (*YdbDestination)(nil)
@@ -100,6 +102,7 @@ func (d *YdbDestination) ToStorageParams() *YdbStorageParams {
 		UserdataAuth:       d.UserdataAuth,
 		SAKeyContent:       d.SAKeyContent,
 		TokenServiceURL:    d.TokenServiceURL,
+		OAuth2Config:       d.OAuth2Config,
 		RootCAFiles:        d.RootCAFiles,
 		TLSEnabled:         false,
 	}
