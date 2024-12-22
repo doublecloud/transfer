@@ -113,8 +113,11 @@ Be caution: in template you must replace **<Your-Prometheus-source-ID>** before 
 
 For secrets management we recommend to use env-vars in paar with secret operator, for example [Hashicorp Vault](https://developer.hashicorp.com/vault/docs/platform/k8s/injector/examples)
 
-Use ENV-vars substitute for src and dst params, you may specify:
+#### specify secrets in transferSpec
+Use ENV-vars substitute for src and dst params, you may specify
 
+##### Hashicorp Vault
+[Hashicorp Vault](https://developer.hashicorp.com/vault/docs/platform/k8s/injector/examples)
 ```yaml
 transferSpec:
     dst:
@@ -124,9 +127,25 @@ transferSpec:
 
 env:
   FOO: "/vault/secret"
-
 ```
 
+##### K8s secret
+[k8s secret](https://kubernetes.io/docs/concepts/configuration/secret/)
+```yaml
+secret_env:
+  - env_name: FOO
+    secret_name: k8s_secret_name
+    secret_key: k8s_secret_key
+```
+
+##### ENV-vars
+Don't recommend to use this way, but you may specify env-vars directly in values.yaml
+```yaml
+env:
+  FOO: "secret"
+```
+
+#### After load 
 After load this transfer yaml would be:
 
 ```yaml
@@ -135,4 +154,3 @@ dst:
   params:
       Password: "secret"
 ```
-
