@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v2"
 	sig_yaml "sigs.k8s.io/yaml"
@@ -52,9 +53,9 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 	transfer := transfer(source, target, tr)
 
 	transfer.FillDependentFields()
-	if len(tr.Transformation.Transformers) > 0 {
+	if tr.Transformation != nil && len(tr.Transformation.Transformers) > 0 {
 		transfer.Transformation = &model.Transformation{
-			Transformers:      &tr.Transformation,
+			Transformers:      tr.Transformation,
 			ExtraTransformers: nil,
 			Executor:          nil,
 			RuntimeJobIndex:   0,
@@ -186,4 +187,27 @@ func transfer(source model.Source, target model.Destination, tr *TransferYamlVie
 	transfer.DataObjects = tr.DataObjects
 	transfer.TypeSystemVersion = tr.TypeSystemVersion
 	return transfer
+}
+
+func NewYamlView(tr *model.Transfer) *TransferYamlView {
+	var transformations *transformer.Transformers
+	if tr.Transformation != nil {
+		transformations = tr.Transformation.Transformers
+	}
+	return &TransferYamlView{
+		ID:                tr.ID,
+		TransferName:      tr.TransferName,
+		Description:       tr.Description,
+		Labels:            tr.LabelsRaw(),
+		Status:            tr.Status,
+		Type:              tr.Type,
+		FolderID:          tr.FolderID,
+		CloudID:           tr.CloudID,
+		Src:               Endpoint{Type: tr.SrcType(), Params: tr.Src},
+		Dst:               Endpoint{Type: tr.DstType(), Params: tr.Dst},
+		RegularSnapshot:   tr.RegularSnapshot,
+		Transformation:    transformations,
+		DataObjects:       tr.DataObjects,
+		TypeSystemVersion: tr.TypeSystemVersion,
+	}
 }
