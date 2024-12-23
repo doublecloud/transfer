@@ -1,8 +1,6 @@
 package config
 
 import (
-	"time"
-
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/transformer"
@@ -10,9 +8,8 @@ import (
 )
 
 type Endpoint struct {
-	ID, Name string
-	Type     abstract.ProviderType
-	Params   any
+	Type   abstract.ProviderType
+	Params any
 }
 
 func (e Endpoint) RawParams() string {
@@ -45,12 +42,10 @@ type TransferYamlView struct {
 	Type              abstract.TransferType
 	FolderID          string
 	CloudID           string
-	CreatedAt         time.Time `db:"created_at"`
-	Runtime           Runtime
 	Src               Endpoint
 	Dst               Endpoint
 	RegularSnapshot   *abstract.RegularSnapshot `yaml:"regular_snapshot"`
-	Transformation    transformer.Transformers  `yaml:"transformation"`
+	Transformation    *transformer.Transformers `yaml:"transformation"`
 	DataObjects       *model.DataObjects        `yaml:"data_objects"`
 	TypeSystemVersion int                       `yaml:"type_system_version"`
 }
