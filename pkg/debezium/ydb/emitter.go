@@ -1,11 +1,13 @@
 package ydb
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
+	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/debezium/typeutil"
 	"github.com/doublecloud/transfer/pkg/util"
 )
@@ -46,11 +48,7 @@ var mapYDBTypeToKafkaType = map[string]*debeziumcommon.KafkaTypeDescr{
 	"ydb:Double": {KafkaTypeAndDebeziumNameAndExtra: func(*abstract.ColSchema, bool, bool, map[string]string) (string, string, map[string]interface{}) {
 		return string(debeziumcommon.KafkaTypeFloat64), "", nil
 	}},
-	"ydb:Decimal": {KafkaTypeAndDebeziumNameAndExtra: func(*abstract.ColSchema, bool, bool, map[string]string) (string, string, map[string]interface{}) {
-		return string(debeziumcommon.KafkaTypeBytes), "org.apache.kafka.connect.data.Decimal", map[string]interface{}{"parameters": map[string]string{"scale": "9"}}
-	}},
-	"ydb:DyNumber": {KafkaTypeAndDebeziumNameAndExtra: ydbNumericExtra},
-
+	"ydb:DyNumber": {KafkaTypeAndDebeziumNameAndExtra: ydbDyNumberExtra},
 	"ydb:String": {KafkaTypeAndDebeziumNameAndExtra: func(*abstract.ColSchema, bool, bool, map[string]string) (string, string, map[string]interface{}) {
 		return string(debeziumcommon.KafkaTypeBytes), "", nil
 	}},
@@ -78,7 +76,20 @@ var mapYDBTypeToKafkaType = map[string]*debeziumcommon.KafkaTypeDescr{
 	}},
 }
 
-func ydbNumericExtra(_ *abstract.ColSchema, _, _ bool, _ map[string]string) (string, string, map[string]interface{}) {
+func decimalExtra(colSchema *abstract.ColSchema, _, _ bool, connectorParameters map[string]string) (string, string, map[string]interface{}) {
+	switch debeziumparameters.GetDecimalHandlingMode(connectorParameters) {
+	case debeziumparameters.DecimalHandlingModePrecise:
+		return typeutil.FieldDescrDecimal(22, 9)
+	case debeziumparameters.DecimalHandlingModeDouble:
+		return "double", "", nil
+	case debeziumparameters.DecimalHandlingModeString:
+		return "string", "", nil
+	default:
+		return "", "", nil
+	}
+}
+
+func ydbDyNumberExtra(_ *abstract.ColSchema, _, _ bool, _ map[string]string) (string, string, map[string]interface{}) {
 	result := make(map[string]interface{})
 	result["doc"] = "Variable scaled decimal"
 	fields := []map[string]interface{}{
@@ -98,6 +109,9 @@ func ydbNumericExtra(_ *abstract.ColSchema, _, _ bool, _ map[string]string) (str
 }
 
 func GetKafkaTypeDescrByYDBType(typeName string) (*debeziumcommon.KafkaTypeDescr, error) {
+	if typeName == "ydb:Decimal" {
+		return &debeziumcommon.KafkaTypeDescr{KafkaTypeAndDebeziumNameAndExtra: decimalExtra}, nil
+	}
 	typeDescr, ok := mapYDBTypeToKafkaType[typeName]
 	if !ok {
 		return nil, debeziumcommon.NewUnknownTypeError(xerrors.Errorf("unknown ydbType: %s", typeName))
@@ -149,7 +163,16 @@ func AddYDB(v *debeziumcommon.Values, colName string, colVal interface{}, colTyp
 		}
 		v.AddVal(colName, result)
 	case "ydb:DyNumber":
-		result, err := typeutil.DecimalToDebezium(colVal.(string), "numeric", connectorParameters)
+		var unpVal string
+		switch vv := colVal.(type) {
+		case string:
+			unpVal = vv
+		case json.Number:
+			unpVal = vv.String()
+		default:
+			return xerrors.Errorf("unknown type of value for ydb:DyNumber: %T", colVal)
+		}
+		result, err := typeutil.DecimalToDebeziumHandlingModePrecise(unpVal, "numeric")
 		if err != nil {
 			return xerrors.Errorf("ydb - unable to build numeric value, err: %w", err)
 		}

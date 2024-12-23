@@ -22,14 +22,14 @@ func wipeOriginalTypeInfo(changeItem *abstract.ChangeItem) *abstract.ChangeItem 
 	return changeItem
 }
 
-func emit(t *testing.T, originalChangeItem *abstract.ChangeItem) []debeziumcommon.KeyValue {
+func emit(t *testing.T, originalChangeItem *abstract.ChangeItem, setIgnoreUnknownSources bool) []debeziumcommon.KeyValue {
 	emitter, err := debezium.NewMessagesEmitter(map[string]string{
 		debeziumparameters.TopicPrefix:      "my_topic",
 		debeziumparameters.AddOriginalTypes: "true",
 		debeziumparameters.SourceType:       "mysql",
 	}, "1.1.2.Final", false, logger.Log)
 	require.NoError(t, err)
-	emitter.TestSetIgnoreUnknownSources(true)
+	emitter.TestSetIgnoreUnknownSources(setIgnoreUnknownSources)
 	currDebeziumKV, err := emitter.EmitKV(originalChangeItem, time.Time{}, true, nil)
 	require.NoError(t, err)
 	require.Equal(t, 1, len(currDebeziumKV))
@@ -40,7 +40,7 @@ func runTwoConversions(t *testing.T, mysqlSnapshotChangeItem []byte, isWipeOrigi
 	originalChangeItem, err := abstract.UnmarshalChangeItem(mysqlSnapshotChangeItem)
 	require.NoError(t, err)
 
-	currDebeziumKV := emit(t, originalChangeItem)
+	currDebeziumKV := emit(t, originalChangeItem, false)
 
 	originalTypes := map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
 		{Namespace: "", Name: "customers3"}: {"json_": {OriginalType: "mysql:json"}},
@@ -55,7 +55,7 @@ func runTwoConversions(t *testing.T, mysqlSnapshotChangeItem []byte, isWipeOrigi
 		fmt.Printf("recovered changeItem dump (without original_types info): %s\n", recoveredChangeItem.ToJSONString())
 	}
 
-	finalDebeziumKV := emit(t, recoveredChangeItem)
+	finalDebeziumKV := emit(t, recoveredChangeItem, true)
 	require.Equal(t, 1, len(finalDebeziumKV))
 	fmt.Printf("final debezium msg: %s\n", *finalDebeziumKV[0].DebeziumVal)
 

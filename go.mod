@@ -52,6 +52,7 @@ require (
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.48.0
 	github.com/prometheus/procfs v0.12.0
+	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/segmentio/kafka-go v0.4.47
 	github.com/segmentio/parquet-go v0.0.0-20230427215636-d483faba23a5
 	github.com/shirou/gopsutil/v3 v3.24.2

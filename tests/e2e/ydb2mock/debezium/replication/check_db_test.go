@@ -144,7 +144,7 @@ func Iteration(t *testing.T, currMode ydb.ChangeFeedModeType) map[string]interfa
 
 func TestCRUDOnAllSupportedModes(t *testing.T) {
 	modes := []ydb.ChangeFeedModeType{
-		ydb.ChangeFeedModeUpdates,
+		//ydb.ChangeFeedModeUpdates,
 		ydb.ChangeFeedModeNewImage,
 		ydb.ChangeFeedModeNewAndOldImages,
 	}

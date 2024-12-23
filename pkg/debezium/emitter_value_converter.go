@@ -17,6 +17,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/debezium/ydb"
 	"github.com/doublecloud/transfer/pkg/schemaregistry/format"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/tests/helpers/testsflag"
 	"go.ytsaurus.tech/library/go/core/log"
 	ytschema "go.ytsaurus.tech/yt/go/schema"
 )
@@ -28,6 +29,8 @@ type Emitter struct {
 	version              string
 	dropKeys             bool
 	ignoreUnknownSources bool // set in 'true' only in tests!
+
+	logger log.Logger
 
 	keyPacker   packer.Packer
 	valuePacker packer.Packer
@@ -620,7 +623,7 @@ func (m *Emitter) emitOneDebeziumMessage(
 }
 
 // EmitKV - main exported method - generates kafka key & kafka value
-func (m *Emitter) EmitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, sessionPackers packer.SessionPackers) ([]debeziumcommon.KeyValue, error) {
+func (m *Emitter) emitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, sessionPackers packer.SessionPackers) ([]debeziumcommon.KeyValue, error) {
 	if changeItem.Kind != abstract.InsertKind && changeItem.Kind != abstract.UpdateKind && changeItem.Kind != abstract.DeleteKind {
 		return []debeziumcommon.KeyValue{}, nil
 	}
@@ -670,6 +673,23 @@ func (m *Emitter) EmitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time,
 	return []debeziumcommon.KeyValue{{DebeziumKey: key, DebeziumVal: val}}, nil
 }
 
+// EmitKV - main exported method - generates kafka key & kafka value
+func (m *Emitter) EmitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, sessionPackers packer.SessionPackers) ([]debeziumcommon.KeyValue, error) {
+	result, err := m.emitKV(changeItem, payloadTSMS, snapshot, sessionPackers)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to emitKV, err: %w", err)
+	}
+	if testsflag.IsTest() { // in tests add extra validation
+		m.logger.Info("EXTRA_VALIDATION_ON_TESTS__DEBEZIUM CALLED")
+		if m.ignoreUnknownSources {
+			m.logger.Info("EXTRA VALIDATION SKIPPED BCS OF 'ignoreUnknownSources'")
+		} else {
+			validateOnTests(m.connectorParameters, changeItem)
+		}
+	}
+	return result, nil
+}
+
 func (m *Emitter) TestSetIgnoreUnknownSources(ignoreUnknownSources bool) {
 	m.ignoreUnknownSources = ignoreUnknownSources
 }
@@ -694,6 +714,7 @@ func NewMessagesEmitter(connectorParameters map[string]string, version string, d
 		version:              version,
 		ignoreUnknownSources: false,
 		keyPacker:            keyPacker,
+		logger:               logger,
 		valuePacker:          valuePacker,
 		dropKeys:             dropKeys,
 	}, nil

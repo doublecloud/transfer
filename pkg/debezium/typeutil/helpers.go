@@ -243,34 +243,46 @@ func MysqlDecimalFloatToValue(val float64, colType string) (string, error) {
 	return arr[0] + arr[1], nil
 }
 
+func DecimalToDebeziumHandlingModePrecise(decimal, decimalWithoutProvider string) (interface{}, error) {
+	normalizedDecimal, err := ExponentialFloatFormToNumeric(decimal)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to convert exponential form to numeric. dataTypeVerbose: %s, err: %w", decimalWithoutProvider, err)
+	}
+	putScaleToValue, _, _, err := DecimalGetPrecisionAndScale(decimalWithoutProvider)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to determine - should we put scale to value. dataTypeVerbose: %s, err: %w", decimalWithoutProvider, err)
+	}
+
+	value, scale, err := DecimalToDebeziumPrimitivesImpl(normalizedDecimal)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to extract debezium primitives from number, err: %w", err)
+	}
+
+	if putScaleToValue {
+		result := make(map[string]interface{})
+		result["scale"] = scale
+		result["value"] = value
+		return result, nil
+	} else {
+		return value, nil
+	}
+}
+
 func DecimalToDebezium(decimal, decimalWithoutProvider string, connectorParameters map[string]string) (interface{}, error) {
 	decimalHandlingMode := debeziumparameters.GetDecimalHandlingMode(connectorParameters)
 	switch decimalHandlingMode {
 	case debeziumparameters.DecimalHandlingModePrecise:
-		normalizedDecimal, err := ExponentialFloatFormToNumeric(decimal)
+		result, err := DecimalToDebeziumHandlingModePrecise(decimal, decimalWithoutProvider)
 		if err != nil {
-			return nil, xerrors.Errorf("unable to convert exponential form to numeric. dataTypeVerbose: %s, err: %w", decimalWithoutProvider, err)
+			return nil, xerrors.Errorf("unable to convert decimal to debezium in precise handling mode, decimal: %s, err: %w", decimal, err)
 		}
-		putScaleToValue, _, _, err := DecimalGetPrecisionAndScale(decimalWithoutProvider)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to determine - should we put scale to value. dataTypeVerbose: %s, err: %w", decimalWithoutProvider, err)
-		}
-
-		value, scale, err := DecimalToDebeziumPrimitivesImpl(normalizedDecimal)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to extract debezium primitives from number, err: %w", err)
-		}
-
-		if putScaleToValue {
-			result := make(map[string]interface{})
-			result["scale"] = scale
-			result["value"] = value
-			return result, nil
-		} else {
-			return value, nil
-		}
+		return result, nil
 	case debeziumparameters.DecimalHandlingModeDouble:
-		return strconv.ParseFloat(decimal, 64)
+		result, err := strconv.ParseFloat(decimal, 64)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to parse float %s, err: %w", decimal, err)
+		}
+		return result, nil
 	case debeziumparameters.DecimalHandlingModeString:
 		return decimal, nil
 	default:

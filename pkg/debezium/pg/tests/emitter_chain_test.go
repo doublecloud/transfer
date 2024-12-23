@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/debezium"
+	debeziumcommon "github.com/doublecloud/transfer/pkg/debezium/common"
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/stretchr/testify/require"
 )
@@ -21,10 +22,7 @@ func wipeOriginalTypeInfo(changeItem *abstract.ChangeItem) *abstract.ChangeItem 
 	return changeItem
 }
 
-func runTwoConversions(t *testing.T, pgSnapshotChangeItem []byte, isWipeOriginalTypeInfo bool) (string, string) {
-	originalChangeItem, err := abstract.UnmarshalChangeItem(pgSnapshotChangeItem)
-	require.NoError(t, err)
-
+func emit(t *testing.T, originalChangeItem *abstract.ChangeItem, setIgnoreUnknownSources bool) []debeziumcommon.KeyValue {
 	emitter, err := debezium.NewMessagesEmitter(map[string]string{
 		debeziumparameters.DatabaseDBName:   "public",
 		debeziumparameters.TopicPrefix:      "my_topic",
@@ -32,10 +30,18 @@ func runTwoConversions(t *testing.T, pgSnapshotChangeItem []byte, isWipeOriginal
 		debeziumparameters.SourceType:       "pg",
 	}, "1.1.2.Final", false, logger.Log)
 	require.NoError(t, err)
-	emitter.TestSetIgnoreUnknownSources(true)
+	emitter.TestSetIgnoreUnknownSources(setIgnoreUnknownSources)
 	currDebeziumKV, err := emitter.EmitKV(originalChangeItem, time.Time{}, true, nil)
 	require.NoError(t, err)
 	require.Equal(t, 1, len(currDebeziumKV))
+	return currDebeziumKV
+}
+
+func runTwoConversions(t *testing.T, pgSnapshotChangeItem []byte, isWipeOriginalTypeInfo bool) (string, string) {
+	originalChangeItem, err := abstract.UnmarshalChangeItem(pgSnapshotChangeItem)
+	require.NoError(t, err)
+
+	currDebeziumKV := emit(t, originalChangeItem, false)
 
 	receiver := debezium.NewReceiver(nil, nil)
 	recoveredChangeItem, err := receiver.Receive(*currDebeziumKV[0].DebeziumVal)
@@ -47,8 +53,10 @@ func runTwoConversions(t *testing.T, pgSnapshotChangeItem []byte, isWipeOriginal
 		fmt.Printf("recovered changeItem dump (without original_types info): %s\n", recoveredChangeItem.ToJSONString())
 	}
 
-	finalDebeziumKV, err := emitter.EmitKV(recoveredChangeItem, time.Time{}, true, nil)
-	require.NoError(t, err)
+	finalDebeziumKV := emit(t, recoveredChangeItem, true)
+	require.Equal(t, 1, len(finalDebeziumKV))
+	fmt.Printf("final debezium msg: %s\n", *finalDebeziumKV[0].DebeziumVal)
+
 	require.Equal(t, 1, len(finalDebeziumKV))
 	fmt.Printf("final debezium msg: %s\n", *finalDebeziumKV[0].DebeziumVal)
 

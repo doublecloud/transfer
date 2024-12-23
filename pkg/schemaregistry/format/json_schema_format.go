@@ -2,7 +2,6 @@ package format
 
 import (
 	"sort"
-	"strings"
 )
 
 const (
@@ -109,9 +108,6 @@ func kafkaTypeToConfluent(fieldType string, name string) (jsonType string, optio
 	case structType:
 		return objectType, ""
 	case bytesType:
-		if strings.Contains(name, "Decimal") {
-			return numberType, bytesType
-		}
 		return stringType, bytesType
 	case boolType:
 		return boolType, ""

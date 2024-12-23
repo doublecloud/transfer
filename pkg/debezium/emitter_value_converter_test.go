@@ -90,7 +90,7 @@ func TestTombstonesOnDelete(t *testing.T) {
 		connectorParams := debeziumparameters.EnrichedWithDefaults(map[string]string{
 			debeziumparameters.TombstonesOnDelete: debeziumparameters.BoolTrue,
 		})
-		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, nil)
+		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, logger.Log)
 		require.NoError(t, err)
 		messages, err := emitter.EmitKV(deleteItem, time.Now(), false, nil)
 		require.NoError(t, err)
@@ -107,7 +107,7 @@ func TestTombstonesOnDelete(t *testing.T) {
 		connectorParams := debeziumparameters.EnrichedWithDefaults(map[string]string{
 			debeziumparameters.TombstonesOnDelete: debeziumparameters.BoolFalse,
 		})
-		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, nil)
+		emitter, err := NewMessagesEmitter(connectorParams, "1.0", false, logger.Log)
 		require.NoError(t, err)
 		messages, err := emitter.EmitKV(deleteItem, time.Now(), false, nil)
 		require.NoError(t, err)

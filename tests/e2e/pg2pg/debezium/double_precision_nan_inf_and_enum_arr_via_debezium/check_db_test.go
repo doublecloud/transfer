@@ -14,6 +14,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/doublecloud/transfer/tests/helpers/serde"
+	"github.com/doublecloud/transfer/tests/helpers/testsflag"
 	simple_transformer "github.com/doublecloud/transfer/tests/helpers/transformer"
 	"github.com/stretchr/testify/require"
 )
@@ -49,6 +50,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	//---
 
+	testsflag.TurnOff()
 	emitter, err := debezium.NewMessagesEmitter(map[string]string{
 		debeziumparameters.DatabaseDBName:   "public",
 		debeziumparameters.TopicPrefix:      "my_topic",
