@@ -125,11 +125,9 @@ end
 
    c. **Data Stream Processing**:
    - In a loop that runs until the stream provides data:
-      - `AirbyteDocker` sends a `Data Chunk` to `TransferAdapter`.
       - `TransferAdapter` parses the data chunk and pushes the parsed data to the `Sink`.
       - If the data chunk contains state information:
          - `TransferAdapter` acknowledges the state by sending `Acknowledge State` to `AirbyteDocker`.
-         - `AirbyteDocker` confirms the state update by responding to `TransferAdapter`.
 
    d. **Table Load Completion**:
    - Once all data for the stream has been processed, `TransferAdapter` notifies `ActivateFlow` with `LoadTable Done`.
