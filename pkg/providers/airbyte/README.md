@@ -1,6 +1,7 @@
 ## Airbyte provider
 
 This is a bridge between native transfer and airbyte connector.
+This adapter is ideal for scenarios where you need to synchronize data from an Airbyte-compatible source to a Transfer-compatible sink with minimal configuration.
 
 We support source airbyte [connectors](https://docs.airbyte.com/category/sources)
 
