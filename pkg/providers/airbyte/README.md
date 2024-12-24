@@ -102,154 +102,48 @@ end
 
 ### Steps Explained
 
-### Steps Explained
-
 1. **Table List Retrieval**:
-    - `ActivateFlow` requests the list of tables by sending a `TableList` command to the `TransferAdapter`.
+   - `ActivateFlow` requests the list of tables by sending a `TableList` command to the `TransferAdapter`.
 
 2. **Source Configuration**:
-    - `TransferAdapter` sends a `Configure Source` command to `AirbyteDocker` to configure the source.
-    - `AirbyteDocker` validates the configuration and responds with the result.
+   - `TransferAdapter` sends a `Configure Source` command to `AirbyteDocker` to configure the source.
+   - `AirbyteDocker` validates the configuration and responds with the result.
 
 3. **Schema Discovery**:
-    - `TransferAdapter` invokes the `Discover Schema` command on `AirbyteDocker` to fetch the schema for the configured source.
-    - `AirbyteDocker` returns the discovered schema to `TransferAdapter`.
-    - `TransferAdapter` maps the schema to tables and sends it back to `ActivateFlow` as `TableList(TableMap)`.
+   - `TransferAdapter` invokes the `Discover Schema` command on `AirbyteDocker` to fetch the schema for the configured source.
+   - `AirbyteDocker` returns the discovered schema to `TransferAdapter`.
+   - `TransferAdapter` maps the schema to tables and sends it back to `ActivateFlow` as `TableList(TableMap)`.
 
 4. **Table Loading**:
-    - For each stream in the schema, the following steps are executed in a loop:
+   - For each stream in the schema, the following steps are executed in a loop:
 
    a. **Load Table Request**:
-    - `ActivateFlow` sends a `LoadTable` command to `TransferAdapter` to initiate loading for a specific table.
+   - `ActivateFlow` sends a `LoadTable` command to `TransferAdapter` to initiate loading for a specific table.
 
    b. **Stream Opening**:
-    - `TransferAdapter` requests `AirbyteDocker` to `Open Stream` for the corresponding table.
+   - `TransferAdapter` requests `AirbyteDocker` to `Open Stream` for the corresponding table.
 
    c. **Data Stream Processing**:
-    - In a loop that runs until the stream provides data:
-        - `AirbyteDocker` sends a `Data Chunk` to `TransferAdapter`.
-        - `TransferAdapter` parses the data chunk and pushes the parsed data to the `Sink`.
-        - If the data chunk contains state information:
-            - `TransferAdapter` acknowledges the state by sending `Acknowledge State` to `AirbyteDocker`.
-            - `AirbyteDocker` confirms the state update by responding to `TransferAdapter`.
+   - In a loop that runs until the stream provides data:
+      - `AirbyteDocker` sends a `Data Chunk` to `TransferAdapter`.
+      - `TransferAdapter` parses the data chunk and pushes the parsed data to the `Sink`.
+      - If the data chunk contains state information:
+         - `TransferAdapter` acknowledges the state by sending `Acknowledge State` to `AirbyteDocker`.
+         - `AirbyteDocker` confirms the state update by responding to `TransferAdapter`.
 
    d. **Table Load Completion**:
-    - Once all data for the stream has been processed, `TransferAdapter` notifies `ActivateFlow` with `LoadTable Done`.
+   - Once all data for the stream has been processed, `TransferAdapter` notifies `ActivateFlow` with `LoadTable Done`.
 
 5. **Activation Completion**:
-    - After all streams have been processed:
-        - `TransferAdapter` sends an `Activate Completed` message to `ActivateFlow`.
-        - `ActivateFlow` stores progress for all tables using `Store Table Progress`.
-
-
-
-# Airbyte Adapter for Transfer
-
-This adapter enables integration between [Airbyte](https://docs.airbyte.com/using-airbyte/core-concepts/) and [Transfer](https://github.com/doublecloud/transfer), facilitating the translation of Airbyte's core concepts into Transfer-compatible constructs for streamlined data movement and transformations.
-
-## Configuration
-
-The Airbyte adapter supports only source configuration. To configure an Airbyte source, use the `spec` method from the [Airbyte Protocol](https://docs.airbyte.com/understanding-airbyte/airbyte-protocol#spec) to retrieve the schema for the required parameters. Then, create a configuration YAML file as follows:
-
-### Example Source Configuration
-
-```yaml
-sourceType: postgres
-connectionConfig:
-  host: localhost
-  port: 5432
-  database: example_db
-  user: user
-  password: password
-```
-
-Save this configuration to a file and provide it to the Transfer system when setting up the Airbyte source.
-
-## Sequence Diagram
-
-The following sequence diagram illustrates the interaction between Transfer and Airbyte based on the [Airbyte Protocol](https://docs.airbyte.com/understanding-airbyte/airbyte-protocol):
-
-```mermaid
-sequenceDiagram
-    participant ActivateFlow
-    participant TransferAdapter
-    participant AirbytDocker
-    participant Sink
-
-    ActivateFlow->>TransferAdapter: TableList
-
-    TransferAdapter->>AirbyteDocker: Configure Source
-    AirbyteDocker-->>TransferAdapter: Validate Config
-
-    TransferAdapter->>AirbyteDocker: Discover Schema
-    AirbyteDocker-->>TransferAdapter: Return Schema
-    TransferAdapter->>ActivateFlow: TableList(TableMap)
-
-loop Every Stream
-    ActivateFlow->>TransferAdapter: LoadTable
-    TransferAdapter->>AirbyteDocker: Open Stream
-
-    loop Until Stream Has Data
-        AirbyteDocker-->>TransferAdapter: Data Chunk
-        TransferAdapter->>TransferAdapter: Parse Data
-        TransferAdapter-->>Sink: Push
-        alt Chunk has State
-            TransferAdapter->>AirbyteDocker: Acknowledge State
-            AirbyteDocker-->>TransferAdapter: Confirm State Update
-        end
-    end
-
-    TransferAdapter->>ActivateFlow: LoadTable Done
-
-end
-    TransferAdapter->>ActivateFlow: Activate Completed
-    ActivateFlow-->>ActivateFlow: Store Table Progress
-```
-
-### Steps Explained
-
-1. **Table List Retrieval**:
-    - `ActivateFlow` requests the list of tables by sending a `TableList` command to the `TransferAdapter`.
-
-2. **Source Configuration**:
-    - `TransferAdapter` sends a `Configure Source` command to `AirbyteDocker` to configure the source.
-    - `AirbyteDocker` validates the configuration and responds with the result.
-
-3. **Schema Discovery**:
-    - `TransferAdapter` invokes the `Discover Schema` command on `AirbyteDocker` to fetch the schema for the configured source.
-    - `AirbyteDocker` returns the discovered schema to `TransferAdapter`.
-    - `TransferAdapter` maps the schema to tables and sends it back to `ActivateFlow` as `TableList(TableMap)`.
-
-4. **Table Loading**:
-    - For each stream in the schema, the following steps are executed in a loop:
-
-   a. **Load Table Request**:
-    - `ActivateFlow` sends a `LoadTable` command to `TransferAdapter` to initiate loading for a specific table.
-
-   b. **Stream Opening**:
-    - `TransferAdapter` requests `AirbyteDocker` to `Open Stream` for the corresponding table.
-
-   c. **Data Stream Processing**:
-    - In a loop that runs until the stream provides data:
-        - `AirbyteDocker` sends a `Data Chunk` to `TransferAdapter`.
-        - `TransferAdapter` parses the data chunk and pushes the parsed data to the `Sink`.
-        - If the data chunk contains state information:
-            - `TransferAdapter` acknowledges the state by sending `Acknowledge State` to `AirbyteDocker`.
-            - `AirbyteDocker` confirms the state update by responding to `TransferAdapter`.
-
-   d. **Table Load Completion**:
-    - Once all data for the stream has been processed, `TransferAdapter` notifies `ActivateFlow` with `LoadTable Done`.
-
-5. **Activation Completion**:
-    - After all streams have been processed:
-        - `TransferAdapter` sends an `Activate Completed` message to `ActivateFlow`.
-        - `ActivateFlow` stores progress for all tables using `Store Table Progress`.
+   - After all streams have been processed:
+      - `TransferAdapter` sends an `Activate Completed` message to `ActivateFlow`.
+      - `ActivateFlow` stores progress for all tables using `Store Table Progress`.
 
 ## Known Limitations
 
 - **Performance**: Data export performance is limited by Airbyte itself and typically does not exceed 10 MB/s per table.
 - **Parallelism**:
-    - Parallelism is supported at the table level, allowing multiple tables to be processed concurrently.
-    - However, within a single table, there is no internal parallelism, which may limit performance for large tables.
+   - Parallelism is supported at the table level, allowing multiple tables to be processed concurrently.
+   - However, within a single table, there is no internal parallelism, which may limit performance for large tables.
 - **Preconfigured Connectors**: Requires Airbyte connectors to be set up and preconfigured before use.
 
