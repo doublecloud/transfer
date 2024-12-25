@@ -2529,6 +2529,8 @@
   "tests/e2e/pg2mock/conn_amount/conn_amount_snap_and_replica/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/conn_amount/conn_amount_snap_and_replica/init_source/dump.sql",
   "tests/e2e/pg2mock/conn_amount/conn_amount_snap_only/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mock/conn_amount/conn_amount_snap_only/check_db_test.go",
   "tests/e2e/pg2mock/conn_amount/conn_amount_snap_only/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/conn_amount/conn_amount_snap_only/init_source/dump.sql",
+  "tests/e2e/pg2mock/copy_from/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mock/copy_from/check_db_test.go",
+  "tests/e2e/pg2mock/copy_from/source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/copy_from/source/dump.sql",
   "tests/e2e/pg2mock/debezium/debezium_replication/canondata/result.json":"transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_replication/canondata/result.json",
   "tests/e2e/pg2mock/debezium/debezium_replication/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_replication/check_db_test.go",
   "tests/e2e/pg2mock/debezium/debezium_replication/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_replication/init_source/dump.sql",
