@@ -826,34 +826,18 @@ func (s *sinker) insert(tablePath ydbPath, batch []abstract.ChangeItem) error {
 		return nil
 	}
 
-	err := s.db.Table().Do(ctx, func(ctx context.Context, session table.Session) (err error) {
-		tableFullPath := s.getFullPath(tablePath)
-		err = session.BulkUpsert(ctx, tableFullPath, batchList)
-		if err != nil {
-			s.logger.Warn("unable to upload rows", log.Error(err), log.String("table", tableFullPath))
-			if s.config.IgnoreRowTooLargeErrors && rowTooLargeRegexp.MatchString(err.Error()) {
-				s.logger.Warn("ignoring row too large error as per IgnoreRowTooLargeErrors option")
-				return nil
-			}
-			return xerrors.Errorf("unable to bulk upsert table %v: %w", tableFullPath, err)
+	tableFullPath := s.getFullPath(tablePath)
+	bulkUpsertBatch := table.BulkUpsertDataRows(batchList)
+	if err := s.db.Table().BulkUpsert(ctx, tableFullPath, bulkUpsertBatch); err != nil {
+		s.logger.Warn("unable to upload rows", log.Error(err), log.String("table", tableFullPath))
+		if s.config.IgnoreRowTooLargeErrors && rowTooLargeRegexp.MatchString(err.Error()) {
+			s.logger.Warn("ignoring row too large error as per IgnoreRowTooLargeErrors option")
+			return nil
 		}
-		return nil
-	})
-
-	if err != nil {
-		return xerrors.Errorf("unable to bulk upsert:\n %w", err)
+		return xerrors.Errorf("unable to bulk upsert table %v: %w", tableFullPath, err)
 	}
 
 	return nil
-}
-
-// timeToTimestamp converts time to YDB-timestamp in microseconds
-func timeToTimestamp(dt time.Time) uint64 {
-	mcs := dt.UTC().UnixNano() / 1000
-	if mcs < 0 {
-		return 0
-	}
-	return uint64(mcs)
 }
 
 func (s *sinker) fitTime(t time.Time) (time.Time, error) {

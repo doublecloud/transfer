@@ -22,4 +22,7 @@ type YdbStorageParams struct {
 
 	RootCAFiles []string
 	TLSEnabled  bool
+
+	IsSnapshotSharded bool
+	CopyFolder        string
 }

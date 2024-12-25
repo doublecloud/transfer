@@ -7,6 +7,7 @@ import (
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	chModel "github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
@@ -89,13 +90,13 @@ func GetSampleableStorageByModel(t *testing.T, serverModel interface{}) abstract
 		result, err = ytStorage.NewStorage(model.ToStorageParams())
 	// ydb for now only works for small tables
 	case ydb.YdbDestination:
-		result, err = ydb.NewStorage(model.ToStorageParams())
+		result, err = ydb.NewStorage(model.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	case *ydb.YdbDestination:
-		result, err = ydb.NewStorage(model.ToStorageParams())
+		result, err = ydb.NewStorage(model.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	case ydb.YdbSource:
-		result, err = ydb.NewStorage(model.ToStorageParams())
+		result, err = ydb.NewStorage(model.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	case *ydb.YdbSource:
-		result, err = ydb.NewStorage(model.ToStorageParams())
+		result, err = ydb.NewStorage(model.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	default:
 		require.Fail(t, fmt.Sprintf("unknown type of serverModel: %T", serverModel))
 	}

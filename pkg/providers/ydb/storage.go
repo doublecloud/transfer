@@ -10,10 +10,12 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"github.com/doublecloud/transfer/pkg/xtls"
@@ -31,11 +33,12 @@ import (
 )
 
 type Storage struct {
-	config *YdbStorageParams
-	db     *ydb.Driver
+	config  *YdbStorageParams
+	db      *ydb.Driver
+	metrics *stats.SourceStats
 }
 
-func NewStorage(cfg *YdbStorageParams) (*Storage, error) {
+func NewStorage(cfg *YdbStorageParams, mtrcs metrics.Registry) (*Storage, error) {
 	var err error
 	var tlsConfig *tls.Config
 	if cfg.TLSEnabled {
@@ -69,8 +72,9 @@ func NewStorage(cfg *YdbStorageParams) (*Storage, error) {
 	}
 
 	return &Storage{
-		config: cfg,
-		db:     ydbDriver,
+		config:  cfg,
+		db:      ydbDriver,
+		metrics: stats.NewSourceStats(mtrcs),
 	}, nil
 }
 
@@ -129,12 +133,7 @@ func validateTableList(params *YdbStorageParams, paths []string) error {
 	return nil
 }
 
-func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstract.TableMap, error) {
-	ctx, cancel := context.WithTimeout(context.TODO(), time.Minute*3)
-	defer cancel()
-
-	// collect tables entries
-
+func (s *Storage) listaAllTablesToTransfer(ctx context.Context) ([]string, error) {
 	allTables := []string{}
 	if len(s.config.Tables) == 0 {
 		result, err := s.traverse("/")
@@ -169,7 +168,21 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 	allTables = slices.Map(allTables, func(from string) string {
 		return strings.TrimLeft(from, "/")
 	})
-	err := validateTableList(s.config, allTables)
+	return allTables, nil
+}
+
+func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstract.TableMap, error) {
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Minute*3)
+	defer cancel()
+
+	// collect tables entries
+
+	allTables, err := s.listaAllTablesToTransfer(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("Failed to list tables that will be transfered: %w", err)
+	}
+
+	err = validateTableList(s.config, allTables)
 	if err != nil {
 		return nil, xerrors.Errorf("vaildation of TableList failed: %w", err)
 	}
@@ -202,7 +215,7 @@ func (s *Storage) TableSchema(ctx context.Context, tableID abstract.TableID) (*a
 func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescription, pusher abstract.Pusher) error {
 	st := util.GetTimestampFromContextOrNow(ctx)
 
-	tablePath := path.Join(s.config.Database, tableDescr.Schema, tableDescr.Name)
+	tablePath := s.makeTablePath(tableDescr.Schema, tableDescr.Name)
 	partID := tableDescr.PartID()
 
 	var res result.StreamResult
@@ -210,9 +223,14 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 
 	err := s.db.Table().Do(ctx, func(ctx context.Context, session table.Session) (err error) {
 		readTableOptions := []options.ReadTableOption{options.ReadOrdered()}
-		tableDescription, err := session.DescribeTable(ctx, tablePath)
+
+		tableDescription, err := session.DescribeTable(ctx, tablePath, options.WithShardKeyBounds())
 		if err != nil {
 			return xerrors.Errorf("unable to describe table: %w", err)
+		}
+		if s.config.IsSnapshotSharded {
+			keyRange := tableDescription.KeyRanges[tableDescr.Offset]
+			readTableOptions = append(readTableOptions, options.ReadKeyRange(keyRange))
 		}
 
 		tableColumns, err := filterYdbTableColumns(s.config.TableColumnsFilter, tableDescription)
@@ -298,6 +316,8 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 				Query:        "",
 				Size:         abstract.RawEventSize(util.DeepSizeof(vals)),
 			})
+			s.metrics.ChangeItems.Inc()
+			s.metrics.Size.Add(int64(changes[len(changes)-1].Size.Read))
 			if wrapAroundIdx == 10000 {
 				if err := pusher(changes); err != nil {
 					return xerrors.Errorf("unable to push: %w", err)

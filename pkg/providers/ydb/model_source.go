@@ -72,6 +72,10 @@ type YdbSource struct {
 	TokenServiceURL  string
 	SAKeyContent     string
 	OAuth2Config     *v3credential.OAuth2Config
+
+	// storage
+	IsSnapshotSharded bool
+	CopyFolder        string
 }
 
 var _ model.Source = (*YdbSource)(nil)
@@ -197,6 +201,8 @@ func (s *YdbSource) ToStorageParams() *YdbStorageParams {
 		OAuth2Config:       s.OAuth2Config,
 		RootCAFiles:        s.RootCAFiles,
 		TLSEnabled:         s.TLSEnabled,
+		IsSnapshotSharded:  s.IsSnapshotSharded,
+		CopyFolder:         s.CopyFolder,
 	}
 }
 

@@ -105,5 +105,7 @@ func (d *YdbDestination) ToStorageParams() *YdbStorageParams {
 		OAuth2Config:       d.OAuth2Config,
 		RootCAFiles:        d.RootCAFiles,
 		TLSEnabled:         false,
+		IsSnapshotSharded:  false,
+		CopyFolder:         "",
 	}
 }

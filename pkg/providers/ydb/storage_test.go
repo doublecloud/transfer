@@ -69,7 +69,7 @@ func TestYdbStorage_TableLoad(t *testing.T) {
 		ServiceAccountID: "",
 	}
 
-	st, err := NewStorage(src.ToStorageParams())
+	st, err := NewStorage(src.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 
 	require.NoError(t, err)
 
@@ -144,7 +144,7 @@ func TestYdbStorage_TableList(t *testing.T) {
 		ServiceAccountID:   "",
 	}
 
-	st, err := NewStorage(src.ToStorageParams())
+	st, err := NewStorage(src.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 
 	require.NoError(t, err)
 

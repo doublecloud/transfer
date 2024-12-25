@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
@@ -137,7 +138,7 @@ func Load(t *testing.T) {
 	//------------------------------------------------------------------------------------
 	// check results
 
-	result, err := ydbStorage.NewStorage(Target.ToStorageParams())
+	result, err := ydbStorage.NewStorage(Target.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.NoError(t, err)
 
 	require.NoError(t, helpers.WaitEqualRowsCount(

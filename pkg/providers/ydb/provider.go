@@ -54,7 +54,7 @@ func (p *Provider) Storage() (abstract.Storage, error) {
 		return nil, xerrors.Errorf("unexpected target type: %T", p.transfer.Dst)
 	}
 	p.fillIncludedTables(src)
-	return NewStorage(src.ToStorageParams())
+	return NewStorage(src.ToStorageParams(), p.registry)
 }
 
 func (p *Provider) fillIncludedTables(src *YdbSource) {

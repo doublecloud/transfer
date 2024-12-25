@@ -124,7 +124,7 @@ func runTestCase(t *testing.T, caseName string, src *ydb.YdbSource, dst *ydb.Ydb
 
 func checkTables(t *testing.T, caseName string, src *ydb.YdbSource, expectedPaths []string) {
 	src.Tables = nil
-	storage, err := ydb.NewStorage(src.ToStorageParams())
+	storage, err := ydb.NewStorage(src.ToStorageParams(), solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.NoError(t, err)
 
 	tableMap, err := storage.TableList(nil)
