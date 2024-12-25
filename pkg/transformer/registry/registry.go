@@ -1,6 +1,7 @@
 package registry
 
 import (
+	_ "github.com/doublecloud/transfer/pkg/transformer/registry/batch_splitter"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/clickhouse"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/custom"
 	_ "github.com/doublecloud/transfer/pkg/transformer/registry/filter"
