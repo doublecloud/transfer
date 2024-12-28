@@ -16,7 +16,7 @@ This example showcase how to integrate data from [Github](https://airbyte.com/co
     - **PAM**: Personal access token to access to transfer opensource repo
 
 3. **Transfer CLI**: A Go-based application that load API data from github to Clickhouse.
-    - **DinD**: Airbyte connectors are used through docker, so env must allowed by docker-in-docker
+    - **DinD**: Airbyte connectors are used through docker, so env must allowed by docker-in-docker, in this case - priviliged container run in docker compose
 
 4. **Clickhouse**: An open source big data platform for distributed storage and processing.
 
@@ -58,24 +58,54 @@ Once docker compose up and running your can explore results via clickhouse-cli
 
 ```sql
 
-SELECT *
-FROM users
-WHERE __data_transfer_delete_time = 0
-   LIMIT 10
+SELECT
+   JSONExtractString(committer, 'login') AS committer_name,
+   count(*)
+FROM commits
+WHERE NOT (JSONExtractString(committer, 'login') LIKE '%robot%')
+GROUP BY committer_name
+ORDER BY
+   2 DESC,
+   1 ASC
 
+   Query id: ec30abc0-6bff-4946-ac36-cf89b318baf2
 
-┌───id─┬─email──────────────────┬─name────┬─__data_transfer_commit_time─┬─__data_transfer_delete_time─┐
-│ 3269 │ updated760@example.com │ User451 │         1732118484000000000 │                           0 │
-│ 3281 │ updated646@example.com │ User91  │         1732118486000000000 │                           0 │
-│ 3303 │ updated89@example.com  │ User107 │         1732118485000000000 │                           0 │
-│ 3332 │ updated907@example.com │ User7   │         1732118485000000000 │                           0 │
-│ 3336 │ updated712@example.com │ User473 │         1732118485000000000 │                           0 │
-│ 3338 │ updated993@example.com │ User894 │         1732118485000000000 │                           0 │
-│ 3340 │ updated373@example.com │ User313 │         1732118484000000000 │                           0 │
-│ 3347 │ updated994@example.com │ User589 │         1732118484000000000 │                           0 │
-│ 3348 │ updated515@example.com │ User96  │         1732118484000000000 │                           0 │
-│ 3354 │ updated35@example.com  │ User267 │         1732118485000000000 │                           0 │
-└──────┴────────────────────────┴─────────┴─────────────────────────────┴─────────────────────────────┘
+┌─committer_name─┬─count()─┐
+│ laskoviymishka │      61 │
+│ boooec         │      32 │
+│ KosovGrigorii  │      21 │
+│ DenisEvd       │      16 │
+│ sssix6ix6ix    │      13 │
+│ insomnioz      │       9 │
+│ ovandriyanov   │       7 │
+│ timmyb32r      │       6 │
+│ asmyasnikov    │       1 │
+│ hdnpth         │       1 │
+│ torkve         │       1 │
+│ wo1f           │       1 │
+└────────────────┴─────────┘
+
+12 rows in set. Elapsed: 0.036 sec.
+
+SELECT
+   title,
+   created_at,
+   closed_at,
+   dateDiff('second', created_at, closed_at) AS time_to_close_seconds
+FROM issues
+WHERE closed_at IS NOT NULL
+ORDER BY time_to_close_seconds DESC
+   LIMIT 5
+
+   Query id: b255473e-da9d-474a-8090-b9b67b85ab16
+
+┌─title────────────────────────────────────────────┬──────────created_at─┬───────────closed_at─┬─time_to_close_seconds─┐
+│ helm: add PodMonitor/ServiceMonitor section      │ 2024-10-21 11:17:48 │ 2024-11-28 17:04:02 │               3303974 │
+│ NOTICKET: draft pq                               │ 2024-08-11 10:47:37 │ 2024-09-12 08:43:42 │               2757365 │
+│ TRANSFER-638: Demo dumb perf boost               │ 2024-08-12 20:07:13 │ 2024-09-12 08:43:50 │               2637397 │
+│ TRANSFER-783: Use generic parser for JSON-s      │ 2024-08-15 13:09:17 │ 2024-09-12 08:43:29 │               2403252 │
+│ TRANSFER-786: Fill optTypes for missed col-names │ 2024-08-14 17:00:18 │ 2024-09-03 21:44:52 │               1745074 │
+└──────────────────────────────────────────────────┴─────────────────────┴─────────────────────┴───────────────────────┘
 ```
 
 ### Stopping the Application

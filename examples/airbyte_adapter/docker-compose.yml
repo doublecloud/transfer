@@ -16,7 +16,7 @@ services:
     build: ../.. # build main transfer docker CLI
     privileged: true
     command:
-      - replicate
+      - activate
       - --transfer
       - /usr/local/bin/transfer.yaml
       - --log-level
