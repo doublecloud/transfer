@@ -455,6 +455,9 @@ func (a *Storage) storeState(id abstract.TableID, state json.RawMessage) error {
 func ensureDocker(lgr log.Logger, supervisorConfigPath string, timeout time.Duration) error {
 	if supervisorConfigPath == "" {
 		// no supervisor, assume docker is already running.
+		if !isDockerReady(lgr) {
+			return xerrors.New("docker is not ready")
+		}
 		return nil
 	}
 	// Command to start supervisord
