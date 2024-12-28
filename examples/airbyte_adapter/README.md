@@ -5,17 +5,17 @@ This adapter is ideal for scenarios where you need to synchronize data from an A
 
 We support source airbyte [connectors](https://docs.airbyte.com/category/sources)
 
-This adapter enables integration between [Airbyte](https://docs.airbyte.com/using-airbyte/core-concepts/) and [Transfer](https://github.com/doublecloud/transfer), facilitating the translation of Airbyte's core concepts into Transfer-compatible constructs for streamlined data movement and transformations.
+This adapter enables integration between [Airbyte](https://docs.airbyte.com/using-airbyte/core-concepts/) and [Transfer](https://GitHub.com/doublecloud/transfer), facilitating the translation of Airbyte's core concepts into Transfer-compatible constructs for streamlined data movement and transformations.
 
 
-This example showcase how to integrate data from [Github](https://airbyte.com/connectors/github) to Clickhouse via Airbyte Connector.
+This example showcase how to integrate data from [GitHub](https://airbyte.com/connectors/GitHub) to Clickhouse via Airbyte Connector.
 
 ## Overview
 
-1. **Github Connector**: An [airbyte](https://docs.airbyte.com/integrations/sources/github) github api connector.
+1. **GitHub Connector**: An [airbyte](https://docs.airbyte.com/integrations/sources/GitHub) GitHub api connector.
     - **PAM**: Personal access token to access to transfer opensource repo
 
-3. **Transfer CLI**: A Go-based application that load API data from github to Clickhouse.
+3. **Transfer CLI**: A Go-based application that load API data from GitHub to Clickhouse.
     - **DinD**: Airbyte connectors are used through docker, so env must allowed by docker-in-docker, in this case - priviliged container run in docker compose
 
 4. **Clickhouse**: An open source big data platform for distributed storage and processing.
@@ -25,14 +25,14 @@ This example showcase how to integrate data from [Github](https://airbyte.com/co
 ### Prerequisites
 
 - Docker and Docker Compose installed on your machine.
-- Personal access token, see [here](https://github.com/settings/tokens)
+- Personal access token, see [here](https://GitHub.com/settings/tokens)
 
 ### Setup Instructions
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/doublecloud/transfer
-   cd transfer/examples/mysql2ch
+   git clone https://GitHub.com/doublecloud/transfer
+   cd transfer/examples/airbyte_adapter
    ```
    
 2. **Build and Run the Docker Compose**:
@@ -49,7 +49,7 @@ This example showcase how to integrate data from [Github](https://airbyte.com/co
 
 ### Configuration Files
 
-- **`transfer.yaml`**: Specifies the source (Github Airbyte) and destination (CH) settings inside docker-compose
+- **`transfer.yaml`**: Specifies the source (GitHub Airbyte) and destination (CH) settings inside docker-compose
 
 ### Exploring results
 
@@ -118,4 +118,4 @@ docker-compose down
 
 ## Conclusion
 
-This example provides a complete end-to-end Ingestion Solution using Github API, Clickhouse, and a Transfer application. You can use it to demonstrate how data can be replicated from Unstructured API Source to a Clickhouse data platform for real-time processing.
+This example provides a complete end-to-end Ingestion Solution using GitHub API, Clickhouse, and a Transfer application. You can use it to demonstrate how data can be replicated from Unstructured API Source to a Clickhouse data platform for real-time processing.
