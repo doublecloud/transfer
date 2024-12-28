@@ -7,9 +7,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -319,11 +321,12 @@ func (a *Storage) parse(data []byte) (*Message, []string) {
 
 func (a *Storage) writeFile(fileName, fileData string) error {
 	fullPath := fmt.Sprintf("%v/%v", a.config.DataDir(), fileName)
+	a.logger.Debugf("%s -> \n%s", fileName, fileData)
 	defer a.logger.Infof("file(%s) %s written", format.SizeInt(len(fileData)), fullPath)
 	return ioutil.WriteFile(
 		fullPath,
 		[]byte(fileData),
-		0644,
+		0664,
 	)
 }
 
@@ -449,6 +452,74 @@ func (a *Storage) storeState(id abstract.TableID, state json.RawMessage) error {
 	return nil
 }
 
+func ensureDocker(lgr log.Logger, supervisorConfigPath string, timeout time.Duration) error {
+	if supervisorConfigPath == "" {
+		// no supervisor, assume docker is already running.
+		if !isDockerReady(lgr) {
+			return xerrors.New("docker is not ready")
+		}
+		return nil
+	}
+	// Command to start supervisord
+	st := time.Now()
+	var stdoutBuf, stderrBuf bytes.Buffer
+
+	supervisorCmd := exec.Command("supervisord", "-n", "-c", supervisorConfigPath)
+	supervisorCmd.Stdout = &stdoutBuf
+	supervisorCmd.Stderr = &stderrBuf
+
+	// Start supervisord in a separate goroutine
+	errCh := make(chan error, 1)
+	go func() {
+		errCh <- supervisorCmd.Run()
+		lgr.Infof("supervisord: output: \n%s", stdoutBuf.String())
+		if stderrBuf.Len() > 0 {
+			lgr.Warnf("supervidord: stderr: \n%s", stderrBuf.String())
+		}
+	}()
+
+	// Wait for dockerd to be ready
+	dockerReady := make(chan bool)
+	go func() {
+		for {
+			if isDockerReady(lgr) {
+				close(dockerReady)
+				return
+			}
+			time.Sleep(1 * time.Second)
+		}
+	}()
+
+	select {
+	case <-dockerReady:
+		lgr.Infof("Docker is ready in %v!", time.Since(st))
+		return nil
+	case err := <-errCh:
+		return xerrors.Errorf("supervisord exited unexpectedly: %w", err)
+	case <-time.After(timeout):
+		return xerrors.Errorf("timeout: %v waiting for Docker to be ready", timeout)
+	}
+}
+
+func isDockerReady(lgr log.Logger) bool {
+	cmd := exec.Command("docker", "info")
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		lgr.Debug("Docker check failed: "+string(output), log.Error(err))
+		return false
+	}
+
+	// Check for a key string that indicates Docker is operational
+	scanner := bufio.NewScanner(strings.NewReader(string(output)))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "Server Version:") {
+			return true
+		}
+	}
+	return false
+}
+
 func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *model.Transfer) (*Storage, error) {
 	state, err := cp.GetTransferState(transfer.ID)
 	if err != nil {
@@ -457,6 +528,10 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 	if len(state) > 0 {
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
+	if err := ensureDocker(lgr, os.Getenv("SUPERVISORD_PATH"), 30*time.Second); err != nil {
+		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
+	}
+
 	return &Storage{
 		registry: registry,
 		cp:       cp,
