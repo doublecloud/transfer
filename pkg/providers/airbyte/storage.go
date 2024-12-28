@@ -326,7 +326,7 @@ func (a *Storage) writeFile(fileName, fileData string) error {
 	return ioutil.WriteFile(
 		fullPath,
 		[]byte(fileData),
-		0644,
+		0664,
 	)
 }
 

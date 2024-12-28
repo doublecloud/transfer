@@ -20,7 +20,7 @@ services:
       - --transfer
       - /usr/local/bin/transfer.yaml
       - --log-level
-      - debug
+      - info
     depends_on:
       - clickhouse
     volumes:
