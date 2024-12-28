@@ -14,12 +14,13 @@ services:
 
   transfer:
     build: ../.. # build main transfer docker CLI
+    privileged: true
     command:
       - replicate
       - --transfer
       - /usr/local/bin/transfer.yaml
       - --log-level
-      - info
+      - debug
     depends_on:
       - clickhouse
     volumes:

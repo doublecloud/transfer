@@ -16,6 +16,7 @@ This example showcase how to integrate data from [Github](https://airbyte.com/co
     - **PAM**: Personal access token to access to transfer opensource repo
 
 3. **Transfer CLI**: A Go-based application that load API data from github to Clickhouse.
+    - **DinD**: Airbyte connectors are used through docker, so env must allowed by docker-in-docker
 
 4. **Clickhouse**: An open source big data platform for distributed storage and processing.
 
