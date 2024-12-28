@@ -321,7 +321,7 @@ func (a *Storage) parse(data []byte) (*Message, []string) {
 
 func (a *Storage) writeFile(fileName, fileData string) error {
 	fullPath := fmt.Sprintf("%v/%v", a.config.DataDir(), fileName)
-	a.logger.Infof("%s -> \n %s", fileName, fileData)
+	a.logger.Debugf("%s -> \n%s", fileName, fileData)
 	defer a.logger.Infof("file(%s) %s written", format.SizeInt(len(fileData)), fullPath)
 	return ioutil.WriteFile(
 		fullPath,
