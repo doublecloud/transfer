@@ -5,7 +5,7 @@
 <h4 align="center">
   <a href="https://double.cloud/services/doublecloud-transfer/">Double Cloud Transfer</a>  |
   <a href="./docs/getting_started.md">Documentation</a>  |
-  <a href="./docs/benchmarking.md">Benchmarking</a>  |
+  <a href="./docs/benchmarks.md">Benchmarking</a>  |
   <a href="./roadmap/roadmap_2024.md">Roadmap</a>
 </h4>
 
