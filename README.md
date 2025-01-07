@@ -155,7 +155,7 @@ More details [here](./docs/deploy_k8s.md).
 <details>
 <summary>Performance</summary>
 
-- [Ingestion from Clickbench](./docs/clickbench.md)
+- [Measuring benchmarks with clickbench](./docs/benchmarks.md)
 
 </details>
 
