@@ -57,6 +57,29 @@ RUN DEBIAN_FRONTEND=noninteractive apt-key adv --keyserver hkp://keyserver.ubunt
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+ENV DOCKER_CHANNEL=stable \
+    DOCKER_VERSION=23.0.6 \
+    DOCKER_COMPOSE_VERSION=1.29.2 \
+    DEBUG=false
+
+# Docker installation
+RUN set -eux; \
+    arch="$(uname -m)"; \
+    case "$arch" in \
+        x86_64) dockerArch='x86_64';; \
+        armhf) dockerArch='armel';; \
+        armv7) dockerArch='armhf';; \
+        aarch64) dockerArch='aarch64';; \
+        *) echo >&2 "error: unsupported architecture ($arch)"; exit 1;; \
+    esac; \
+    curl -fsSL "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz" -o docker.tgz; \
+    tar --extract --file docker.tgz --strip-components 1 --directory /usr/local/bin/; \
+    rm docker.tgz; \
+    dockerd --version; \
+    docker --version
+
+VOLUME /var/lib/docker
+
 # Create a non-root user and group
 RUN addgroup --system trcligroup && adduser --system --ingroup trcligroup trcliuser
 
@@ -65,10 +88,24 @@ COPY --from=builder /app/trcli /usr/local/bin/trcli
 
 RUN chmod +x /usr/local/bin/trcli
 
-# Set ownership of the binary to the non-root user
-RUN chown trcliuser:trcligroup /usr/local/bin/trcli
-
 # Switch to the non-root user
 USER trcliuser
+
+# Supervisor configuration to start Docker daemon and application
+USER root
+RUN apt-get install -y supervisor
+
+RUN echo "[supervisord]\n\
+nodaemon=true\n\
+\n\
+[program:dockerd]\n\
+command=/usr/local/bin/dockerd --host=unix:///var/run/docker.sock\n\
+autostart=true\n\
+autorestart=true\n\
+stdout_logfile=/var/log/dockerd.out.log\n\
+stderr_logfile=/var/log/dockerd.err.log\n" \
+> /etc/supervisor/supervisord.conf
+
+ENV SUPERVISORD_PATH=/etc/supervisor/supervisord.conf
 
 ENTRYPOINT ["/usr/local/bin/trcli"]
