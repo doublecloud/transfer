@@ -209,7 +209,7 @@ This error is the result of insufficient rights on the source. To fix it:
 
 This error is caused by the insufficient number of slots in the target database.
 
-Increase the number of [max_replication_slots ![external link](../_assets/external-link.svg)](https://postgresqlco.nf/doc/en/param/max_replication_slots/).
+Increase the number of [max_replication_slots](https://postgresqlco.nf/doc/en/param/max_replication_slots/).
 
 ### Snapshot loading failed - snapshot tasks failed - main uploader failed - errors detected on secondary workers {#snapshot-loading-failed-secondary-workers}
 
@@ -242,7 +242,7 @@ Use the following workaround to speed up the transfer:
 
 ### Number of requested standby connections exceeds max_wal_senders
 
-This message indicates that the number of concurrent connections from standby servers or streaming backup clients exceeds the number set in the [max_wal_senders ![external link](../_assets/external-link.svg)] parameter for your source {{ PG }} database.
+This message indicates that the number of concurrent connections from standby servers or streaming backup clients exceeds the number set in the [max_wal_senders] parameter for your source {{ PG }} database.
 
 By default, this parameter equals `10`.
 
