@@ -88,7 +88,7 @@ Warn(Activate): Unable to apply DDL of type 'TABLE', name '<schema_name>'.'<tabl
 ERROR: type "<table_name>.<type_name>" does not exist (SQLSTATE 42704)
 ```
 
-The above behavior is an operational aspect of the [pg_dump ![external link](./_assets/external-link.svg)](https://www.postgresql.org/docs/current/app-pgdump.html) utility used for schema transfer.
+The above behavior is an operational aspect of the [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html) utility used for schema transfer.
 
 When specifying the schema in the **Included tables** section, {{ data-transfer-name }} will only copy the tables, not the {{ PG }} types from the schema. The exception are the types automatically set up upon creating a table at the target.
 
@@ -140,7 +140,7 @@ There are multiple ways to fix this issue:
 
 1. Reading concurrency of snapshot tables.
 
-   Its primary key must be [serial ![external link](../_assets/external-link.svg)](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-SERIAL) to read the data from a single table concurrently.
+   Its primary key must be [serial](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-SERIAL) to read the data from a single table concurrently.
 
    If your table's primary key fits the above requirement:
 
@@ -209,7 +209,7 @@ This error is the result of insufficient rights on the source. To fix it:
 
 This error is caused by the insufficient number of slots in the target database.
 
-Increase the number of [max_replication_slots ![external link](../_assets/external-link.svg)](https://postgresqlco.nf/doc/en/param/max_replication_slots/).
+Increase the number of [max_replication_slots](https://postgresqlco.nf/doc/en/param/max_replication_slots/).
 
 ### Snapshot loading failed - snapshot tasks failed - main uploader failed - errors detected on secondary workers {#snapshot-loading-failed-secondary-workers}
 
@@ -242,7 +242,7 @@ Use the following workaround to speed up the transfer:
 
 ### Number of requested standby connections exceeds max_wal_senders
 
-This message indicates that the number of concurrent connections from standby servers or streaming backup clients exceeds the number set in the [max_wal_senders ![external link](../_assets/external-link.svg)] parameter for your source {{ PG }} database.
+This message indicates that the number of concurrent connections from standby servers or streaming backup clients exceeds the number set in the [max_wal_senders] parameter for your source {{ PG }} database.
 
 By default, this parameter equals `10`.
 
