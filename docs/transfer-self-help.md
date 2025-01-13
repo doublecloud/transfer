@@ -140,7 +140,7 @@ There are multiple ways to fix this issue:
 
 1. Reading concurrency of snapshot tables.
 
-   Its primary key must be [serial ![external link](../_assets/external-link.svg)](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-SERIAL) to read the data from a single table concurrently.
+   Its primary key must be [serial](https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-SERIAL) to read the data from a single table concurrently.
 
    If your table's primary key fits the above requirement:
 

@@ -6,9 +6,15 @@ name: Docs
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    paths:
+      - "docs/**"
+    branches:
+      - "main"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+    paths:
+      - "docs/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,5 +33,5 @@ jobs:
       - name: Build docs
         uses: diplodoc-platform/docs-build-action@v3
         with:
-          src-root: './docs'
-          build-root: './docs-html'
+          src-root: "./docs"
+          build-root: "./docs-html"
