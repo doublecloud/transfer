@@ -1,0 +1,30 @@
+title: "{{product-name}}"
+description:
+  - >-
+    Transfer is a tool designed for the logical transferring of data between storages. 
+    The service helps you quickly and safely perform logical migrations of your databases 
+    between other cloud platforms or local databases, and API source.
+  - >-
+    It supports several data transfer scenarios, with every scenario run at the logical level. This allows you to keep your source database running and
+    minimize the downtime of applications that use the service.
+meta:
+  title: "{{product-name}}"
+links:
+  - title: Get started
+    description: Create and configure your first transfer. Learn how to replicate data from an S3 bucket to ClickHouse
+    href: getting_started.md
+  - title: Connectors
+    description: See the list of all available connectors for {{product-name}}.
+    href: connectors/index.md
+  - title: Concepts
+    description: Familiarize yourself with {{product-name}} concepts.
+    href: concepts/index.md
+  - title: Integrations
+    description: See how to integrate {{product-name}} with other services
+    href: integrations/index.md
+  - title: Resolve issues with {{product-name}}
+    description: Follow these instructions to resolve the most common issues yourself
+    href: transfer-self-help.md
+  - title: Questions and answers
+    description: Find the answers to frequently asked questions
+    href: transfer-faq.md

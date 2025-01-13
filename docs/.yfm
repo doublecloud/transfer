@@ -1,0 +1,30 @@
+allowHTML: true
+apply-presets: true
+varsPreset: public
+
+docs-viewer:
+  project-name: Transfer
+  metrika: 0
+  show-revision: true
+  themes: ['light', 'dark']
+  github-url-prefix: https://github.com/doublecloud/transfer/tree/main/docs
+  logo-options:
+    title: Transfer
+    url:
+      en: https://github.com/doublecloud/transfer
+      default: https://ytsaurus.tech/{lang}
+    img-has:
+      offset: true
+      height: 34px
+
+  index-page:
+    hidden: true
+    title: Transfer
+    description: "Transfer public docs"
+
+  gtm:
+    id: GTM-TODO
+
+# This configuration parameter is used to directly control the Edit button behaviour.
+vcs:
+  remoteBase: https://github.com/doublecloud/transfer/tree/main/docs

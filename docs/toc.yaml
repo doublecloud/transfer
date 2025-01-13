@@ -1,0 +1,60 @@
+title: "{{product-name}}"
+items:
+  - name: Overview
+    href: index.yaml
+  - name: Get started
+    href: getting_started.md
+  - name: Connectors
+    items:
+      - name: Overview
+        href: connectors/index.md
+      - name: ClickHouse
+        href: connectors/clickhouse.md
+      - name: Apache Kafka
+        href: connectors/kafka.md
+      - name: PostgreSQL
+        href: connectors/postgresql.md
+      - name: MySQL
+        href: connectors/mysql.md
+      - name: S3-compatible Object Storage
+        href: connectors/object-storage.md
+      - name: MongoDB
+        href: connectors/mongodb.md
+      - name: ElasticSearch
+        href: connectors/elasticsearch.md
+      - name: OpenSearch
+        href: connectors/opensearch.md
+      - name: Kinesis Data Streams
+        href: connectors/kinesis.md
+  - name: Step-by-step instructions
+    items:
+      - name: All instructions
+        href: step-by-step/index.md
+      - name: Airbyte compatibility
+        href: step-by-step/airbyte.md
+      - name: Postgres to YTsaurus
+        href: step-by-step/pg2yt.md
+  - name: Concepts
+    items:
+      - name: All concepts
+        href: concepts/index.md
+      - name: Transfer types
+        href: concepts/transfer-types.md
+      - name: Data type system
+        href: concepts/data-type-system.md
+      - name: Transformations
+        href: concepts/transformations.md
+      - name: Runtimes
+        href: concepts/runtimes.md
+      - name: Logs
+        href: concepts/logs.md
+  - name: Integrations
+    items:
+      - name: All integrations
+        href: integrations/index.md
+      - name: Connect Prometheus to Transfer
+        href: integrations/connect-prometheus-to-transfer.md
+  - name: Resolve issues with Transfer
+    href: transfer-self-help.md
+  - name: Questions and answers
+    href: transfer-faq.md
