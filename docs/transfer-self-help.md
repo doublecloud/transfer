@@ -88,7 +88,7 @@ Warn(Activate): Unable to apply DDL of type 'TABLE', name '<schema_name>'.'<tabl
 ERROR: type "<table_name>.<type_name>" does not exist (SQLSTATE 42704)
 ```
 
-The above behavior is an operational aspect of the [pg_dump ![external link](_assets/external-link.svg)](https://www.postgresql.org/docs/current/app-pgdump.html) utility used for schema transfer.
+The above behavior is an operational aspect of the [pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html) utility used for schema transfer.
 
 When specifying the schema in the **Included tables** section, {{ data-transfer-name }} will only copy the tables, not the {{ PG }} types from the schema. The exception are the types automatically set up upon creating a table at the target.
 
