@@ -126,8 +126,13 @@ func isFilterEmpty(filter abstract.WhereStatement) bool {
 }
 
 func WhereClause(filter abstract.WhereStatement) string {
-	if partitionFilterTable(filter) != "" {
-		return "1 = 1"
+	if partitionFilterTableName(filter) != "" {
+		partitionFilter := partitionFilterTableFilter(filter)
+		if partitionFilter != "" {
+			return partitionFilter
+		} else {
+			return "1 = 1"
+		}
 	}
 	if !isFilterEmpty(filter) {
 		return string(filter)
@@ -136,9 +141,16 @@ func WhereClause(filter abstract.WhereStatement) string {
 	return "1 = 1"
 }
 
-func partitionFilterTable(filter abstract.WhereStatement) string {
+func partitionFilterTableFilter(filter abstract.WhereStatement) string {
+	index := strings.Index(string(filter), "|")
+	return string(filter)[index+1:]
+}
+
+func partitionFilterTableName(filter abstract.WhereStatement) string {
 	if strings.HasPrefix(string(filter), PartitionsFilterPrefix) {
-		return strings.ReplaceAll(string(filter), PartitionsFilterPrefix, "")
+		result := strings.ReplaceAll(string(filter), PartitionsFilterPrefix, "")
+		index := strings.Index(result, "|")
+		return result[0:index]
 	}
 	return ""
 }
@@ -148,8 +160,8 @@ func exactCountQuery(t *abstract.TableDescription) string {
 }
 
 func TableName(t *abstract.TableDescription) string {
-	if partitionFilterTable(t.Filter) != "" {
-		return partitionFilterTable(t.Filter)
+	if partitionFilterTableName(t.Filter) != "" {
+		return partitionFilterTableName(t.Filter)
 	}
 	return t.Fqtn()
 }

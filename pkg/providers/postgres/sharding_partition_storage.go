@@ -37,7 +37,7 @@ WHERE
 		res = append(res, abstract.TableDescription{
 			Name:   table.Name,
 			Schema: table.Schema,
-			Filter: abstract.WhereStatement(fmt.Sprintf("%s%s", PartitionsFilterPrefix, tid.Fqtn())),
+			Filter: abstract.WhereStatement(fmt.Sprintf("%s%s|%s", PartitionsFilterPrefix, tid.Fqtn(), table.Filter)),
 			EtaRow: etaRow,
 			Offset: 0,
 		})
