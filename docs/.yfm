@@ -1,29 +1,41 @@
 allowHTML: true
 apply-presets: true
+breaks: false
 varsPreset: public
 
 docs-viewer:
+  logo-src: https://static.double.tech/site-assets/logo/dc-logo-light.svg
+  logo-dark-src: https://static.double.tech/site-assets/logo/dc-logo-dark.svg
+  logo-link-preview: https://static.double.tech/site-assets/sharing/sharing_docs.png
+  logo-options:
+    img-has:
+         width: 190
+         offset: true
+  favicon-src: https://static.double.tech/site-assets/favicon/favicon.ico
   project-name: Transfer
-  metrika: 0
+  logo-title: Transfer
   show-revision: true
   themes: ['light', 'dark']
   github-url-prefix: https://github.com/doublecloud/transfer/tree/main/docs
-  logo-options:
-    title: Transfer
-    url:
-      en: https://github.com/doublecloud/transfer
-      default: https://ytsaurus.tech/{lang}
-    img-has:
-      offset: true
-      height: 34px
 
   index-page:
     hidden: true
     title: Transfer
     description: "Transfer public docs"
 
-  gtm:
-    id: GTM-TODO
+connector:
+    type: github
+    github:
+        endpoint: https://api.github.com
+        owner: doublecloud
+        repo: transfer
+
+resources:
+  style:
+    - _assets/style/fonts.css
+    - _assets/style/theme.css
+    - _assets/style/yfm.css
+    - _assets/style/consent-popup.css
 
 # This configuration parameter is used to directly control the Edit button behaviour.
 vcs:

@@ -20,15 +20,17 @@ Other connectors are based on [Airbyte](https://docs.airbyte.com/integrations/).
 
 ## Available Transfer connectors
 
-| **Name**                    | **Type**              |
-|:----------------------------|:----------------------|
-| [{#T}](object-storage.md) | {{ DC }} custom-built |
-| [{#T}](kafka.md)          | {{ DC }} custom-built |
-| [{#T}](clickhouse.md)     | {{ DC }} custom-built |
-| [{#T}](elasticsearch.md)  | {{ DC }} custom-built |
-| [{#T}](mongodb.md)        | {{ DC }} custom-built |
-| [{#T}](mysql.md)          | {{ DC }} custom-built |
-| [{#T}](opensearch.md)     | {{ DC }} custom-built |
-| [{#T}](postgresql.md)     | {{ DC }} custom-built |
-| [{#T}](kinesis.md)        | {{ DC }} custom-built |
-
+| **Name**                  | **Type**                                      |
+|:--------------------------|:----------------------------------------------|
+| [{#T}](airbyte.md)        | Snapshot                                      |
+| [{#T}](postgresql.md)     | CDC / Snapshot / target                       |
+| [{#T}](mongodb.md)        | CDC / Snapshot / target                       |
+| [{#T}](mysql.md)          | CDC / Snapshot / target                       |
+| [{#T}](kafka.md)          | streaming / target                            |
+| [{#T}](object-storage.md) | Snapshot / target / replication / append-only |
+| [{#T}](clickhouse.md)     | Snapshot / incremental / target / sharding    |
+| [{#T}](ytsaurus.md)       | Snapshot / incremental / target / sharding    |
+| [{#T}](kinesis.md)        | streaming                                     |
+| [{#T}](elasticsearch.md)  | Snapshot / target                             |
+| [{#T}](opensearch.md)     | Snapshot / target                             |
+| [{#T}](delta.md)          | Snapshot                                      |

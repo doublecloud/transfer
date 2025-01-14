@@ -36,7 +36,7 @@ fi
 echo
 echo Starting HTTP server, open the links in your browser:
 echo
-echo "- http://localhost:8888/en (English)"
+echo "- http://localhost:8888"
 echo
 echo Press Ctrl+C in this window to stop the HTTP server.
 echo

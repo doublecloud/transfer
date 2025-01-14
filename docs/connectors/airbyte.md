@@ -1,4 +1,9 @@
-# Airbyte Source Connector Documentation
+---
+title: "Airbyte connector"
+description: "Compatibility layer between {{ data-transfer-name }} and Airbyte"
+---
+
+# Airbyte connector
 
 ## Overview
 

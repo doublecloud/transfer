@@ -105,7 +105,7 @@ This will expose metrics scrapper for k8s scrapper. You can re-use our grafana d
 
 This template will generate for you something like this:
 
-![demo_grafana_dashboard.png](../assets/demo_grafana_dashboard.png)
+![demo_grafana_dashboard.png](_assets/demo_grafana_dashboard.png)
 
 Be caution: in template you must replace **<Your-Prometheus-source-ID>** before deployement to grafana.
 
