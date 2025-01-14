@@ -307,8 +307,6 @@ replace github.com/temporalio/features/harness/go => github.com/temporalio/featu
 
 replace github.com/temporalio/omes => github.com/temporalio/omes v0.0.0-20240429210145-5fa5c107b7a8
 
-replace go.temporal.io/server => go.temporal.io/server v1.23.1
-
 replace github.com/goccy/go-yaml => github.com/goccy/go-yaml v1.9.5
 
 replace github.com/aleroyer/rsyslog_exporter => github.com/prometheus-community/rsyslog_exporter v1.1.0
@@ -324,3 +322,5 @@ replace github.com/distribution/reference => github.com/distribution/reference v
 replace github.com/jackc/pgconn => github.com/jackc/pgconn v1.14.0
 
 replace github.com/jackc/pgproto3/v2 => github.com/jackc/pgproto3/v2 v2.3.2
+
+replace github.com/nexus-rpc/sdk-go => github.com/nexus-rpc/sdk-go v0.0.7
