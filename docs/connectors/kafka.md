@@ -16,22 +16,6 @@ You can use this connector both for **source** and **target** endpoints.
 
    1. Under **Connection settings**, select the **Connection type**:
 
-      {% cut "Managed cluster" %}
-
-      1. Select your **Managed cluster** from the drop-down list.
-
-      1. Select the **Authentication** method:
-
-         * To verify your identity with **SASL**, click **+ SASL**, and specify the credentials:
-
-            * Your **User Name**,
-
-            * **Password** for this user name,
-
-         * Set this property to **No Authentication** if you don't need authentication.
-
-      {% endcut %}
-
       {% cut "On-premise" %}
 
       1. Under **Broker URLs**, click **+ URL** to add brokers.
@@ -321,22 +305,6 @@ You can use this connector both for **source** and **target** endpoints.
 * Configuration
 
    1. Under **Connection settings**, select the **Connection type**:
-
-      {% cut "Managed cluster" %}
-
-      1. Select your **Managed {{ KF }} cluster** from the drop-down list.
-
-      1. Select the **Authentication** method:
-
-         * To verify your identity with SASL, click **+ SASL**, and specify the credentials:
-
-            * Your **User Name**,
-
-            * **Password** for this user name.
-
-         * Set this property to **No Authentication** if you don't need to provide credentials.
-
-      {% endcut %}
 
       {% cut "On-premise cluster" %}
 

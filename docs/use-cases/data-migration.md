@@ -4,7 +4,7 @@ Migrating data between systems is a common challenge. {{ data-transfer-name }}  
 
 ## Example: Service to ClickHouse
 - Source: High-load on-premise ClickHouse clusters with terabytes of data.
-- Target: DoubleCloud-managed ClickHouse.
+- Target: ClickHouse Cluster.
 
 ### Approach
 1. Gradual migration with parallel tasks for large datasets.

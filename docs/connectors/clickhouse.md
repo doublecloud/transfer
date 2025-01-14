@@ -21,18 +21,6 @@ In target endpoints, it inserts data to {{ CH }} databases.
 
     1. Configure the connection:
 
-        {% cut "Managed cluster" %}
-
-        Connect to a {{ CH }} cluster deployed in {{ DC }}.
-
-        1. In **Managed Cluster**, select the cluster you want to connect to.
-
-        1. In **Authentication**, select **Default** if you want to connect as the `admin` user.
-
-            If you want to connect as a different user, select **Password** and enter user credentials.
-
-        {% endcut %}
-
         {% cut "On-premise" %}
 
         Connect to an on-premise {{ CH }} installation.
@@ -110,18 +98,6 @@ In target endpoints, it inserts data to {{ CH }} databases.
     1. In **Connection type**, select the type of the {{ CH }} cluster you want to connect to.
 
     1. Configure the connection:
-
-        {% cut "Managed cluster" %}
-
-        Connect to a {{ CH }} cluster deployed in {{ DC }}.
-
-        1. In **Managed Cluster**, select the cluster you want to connect to.
-
-        1. In **Authentication**, select **Default** if you want to connect as the `admin` user.
-
-            If you want to connect as a different user, select **Password** and enter user credentials.
-
-        {% endcut %}
 
         {% cut "On-premise" %}
 
