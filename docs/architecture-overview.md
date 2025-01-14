@@ -748,7 +748,7 @@ For some storages, we have the following approximate matrix:
 
 ## Type system
 
-We need to unify all database types, so we implemented the **Common Type System** across data storage and processing in DoubleCloud. This system must cover all supported databases.
+We need to unify all database types, so we implemented the **Common Type System** across data storage and processing in {{ data-transfer-name }}. This system must cover all supported databases.
 
 The Type System provides classes and conversion rules representing common Type System types. It allows for constructing in-memory representations of types, inspecting said representations, combining them to derive new types, and serializing and deserializing them. For those familiar with [Protobuf](https://protobuf.dev/), Type Info implements the concept of message descriptors for the type system.
 
@@ -986,7 +986,7 @@ To solve this problem, we used the transfer manager and reduced the delivery lag
 
 ### Log delivery
 
-In DoubleCloud, all logs are delivered and processed by **{{ data-transfer-name }}**. For this purpose, all applications write their logs in a structured (JSON) form to an Apache Kafka topic and then configure the process of delivering logs from these topics to the repositories. **{{ data-transfer-name }}** can parse such topics into structured tables and deliver them to the target (e.g., S3 and ClickHouse).
+In YandexCloud, most of the logs are delivered and processed by **{{ data-transfer-name }}**. For this purpose, all applications write their logs in a structured (JSON) form to an Apache Kafka topic and then configure the process of delivering logs from these topics to the repositories. **{{ data-transfer-name }}** can parse such topics into structured tables and deliver them to the target (e.g., S3 and ClickHouse).
 
 This approach scales well horizontally since each partition can be read by an independent transfer process (worker) for delivery. Thus, **{{ data-transfer-name }}** can transparently transfer both single lines per second and hundreds of thousands of lines per second with a delivery lag of: 0.5 / 1 / 5 (50 / 95 / 99 percentile.
 
@@ -997,11 +997,11 @@ With **{{ data-transfer-name }}**, any size log delivery pipelines are easily sc
 
 ### Data migration
 
-Another important use case is migration from one storage system to the same storage system type but in a different location (e.g., from a hardware host to a managed database). **{{ data-transfer-name }}** allows you to configure migrations between systems of the same type.
+Another important use case is migration from one storage system to the same storage system type but in a different location (e.g., from a hardware host to a cloud database). **{{ data-transfer-name }}** allows you to configure migrations between systems of the same type.
 
 Let us consider an example of a service migration to ClickHouse.
 
-As a source, the service has two large (several terabytes) and loaded (thousands of reading and hundreds of writing transactions per second) hardware ClickHouse clusters for services. All these clusters must migrate to a ClickHouse cluster managed by DoubleCloud, with the migration happening gradually. First, the code starts reading from the hardware and cloud cluster, and after a few weeks, the writing switches. We created a set of transfers for each cluster to copy the data. Since these large clusters work under high loads, we must run tasks in parallel (sharded).
+As a source, the service has two large (several terabytes) and loaded (thousands of reading and hundreds of writing transactions per second) hardware ClickHouse clusters for services. All these clusters must migrate to a ClickHouse cluster managed by some cloud, with the migration happening gradually. First, the code starts reading from the hardware and cloud cluster, and after a few weeks, the writing switches. We created a set of transfers for each cluster to copy the data. Since these large clusters work under high loads, we must run tasks in parallel (sharded).
 
 ![alt_text](_assets/snapshot_replica_sequence.png "image_tooltip")
 
@@ -1049,7 +1049,7 @@ Data integrity is critical for most modern companies. As our industry is speedin
 * **Security**: We provide our service in a managed and secure manner; we try not to store any unnecessary intermediate data and keep data in the user’s secure perimeter, and we do not keep any personal data on our side.
 * **Cost**: We try to keep our pricing policy customer-friendly, transparent, reasonable and human-readable.
 * **Manageability**: The system operates in a cloud, and the user is not concerned about maintenance or deployment.
-* **Compatibility: **Integration with well-known open-source formats (Parquet, Debezium) and protocols (Airbyte, SQL) enables easy integration with existing toolkits.
-* **User-friendliness: **Managed service provides an easy-to-use UI, so it can be consumed by engineers and by solving and keeping most of the complexity under the hood.
+* **Compatibility**: Integration with well-known open-source formats (Parquet, Debezium) and protocols (Airbyte, SQL) enables easy integration with existing toolkits.
+* **User-friendliness**: Managed service provides an easy-to-use UI, so it can be consumed by engineers and by solving and keeping most of the complexity under the hood.
 
 Discover the power of our new, meticulously tested, and optimized **{{ data-transfer-name }}**. It is the data migration tool tailored to meet your needs.
