@@ -1,4 +1,9 @@
-# Delta Lake Source Connector Documentation
+---
+title: "Delta lake connector"
+description: "Connector from delta-lake s3 compatible storage"
+---
+
+# Delta lake connector
 
 ## Overview
 
