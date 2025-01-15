@@ -36,7 +36,6 @@
     "url": false
   },
   "devDependencies": {
-    "yaml-to-json": "^0.3.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@gravity-ui/browserslist-config": "^4.1.0",
     "@gravity-ui/eslint-config": "^3.1.1",
@@ -70,7 +69,6 @@
     "node": ">=18"
   },
   "overrides": {
-    "typescript": "^5.3.2",
-    "yaml-to-json/graceful-fs": "^4.2.0"
+    "typescript": "^5.3.2"
   }
 }
