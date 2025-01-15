@@ -20,7 +20,7 @@ blocks:
   - type: header-block
     title: Data Transfer
     description: >-
-      DoubleCloud gives you a simple, no-code data integration solution to
+      Transfer gives you a simple, no-code, cloud-native data integration solution to
       extract, load, and transform your data. Whether you want to migrate to a
       cloud, replicate your data or optimize it for real-time analytics, we have
       just the tool for that.

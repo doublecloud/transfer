@@ -57,7 +57,7 @@ jobs:
       - name: Build landing page
         run: |
           cd docs/website
-          npm run build
+          PUBLIC_URL=transfer npm run build
       # Upload the landing page build artifact
       - name: Upload landing page artifact
         uses: actions/upload-pages-artifact@v3
