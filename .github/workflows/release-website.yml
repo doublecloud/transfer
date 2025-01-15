@@ -51,7 +51,7 @@ jobs:
       - name: Install dependencies for landing page
         run: |
           cd docs/website
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Build landing page
         run: |
