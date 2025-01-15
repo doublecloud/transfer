@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Docs
+name: Website
 
 # Controls when the workflow will run
 on:
@@ -42,11 +42,31 @@ jobs:
         with:
           src-root: "./docs"
           build-root: "./docs-html"
+      # Build the landing page
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Укажите подходящую версию Node.js
+
+      - name: Install dependencies for landing page
+        run: |
+          cd docs/website
+          npm install
+
+      - name: Build landing page
+        run: |
+          cd docs/website
+          npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: './_docs-lint'
+      # Upload the landing page build artifact
+      - name: Upload landing page artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs/website/build'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
