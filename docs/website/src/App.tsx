@@ -22,7 +22,7 @@ const App = () => {
                                     arrow: true,
                                     text: 'Documentations',
                                     type: NavigationItemType.Link,
-                                    url: '/docs',
+                                    url: 'docs',
                                     urlTitle: 'External website. Opens in a new window',
                                 },
                             ],
@@ -41,7 +41,7 @@ const App = () => {
                             ],
                         },
                         logo: {
-                            icon: '/assets/logo-cropped.svg',
+                            icon: 'assets/logo-cropped.svg',
                             text: 'Transfer',
                             urlTitle: 'Transfer',
                         },
