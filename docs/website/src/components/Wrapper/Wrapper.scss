@@ -35,29 +35,6 @@ $block: '.wrapper';
         margin-bottom: 20px;
     }
 
-    &__gravity-logo {
-        width: 260px;
-        height: 55px;
-        background-image: url('../../assets/gravity-logo-light.svg');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-
-        &_dark {
-            background-image: url('../../assets/gravity-logo-dark.svg');
-        }
-    }
-
-    &__cra-logo {
-        width: 160px;
-        height: 50px;
-        margin-top: 12px;
-        background-image: url('../../assets/cra-logo.svg');
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
     &__content {
         display: flex;
         flex-direction: column;
