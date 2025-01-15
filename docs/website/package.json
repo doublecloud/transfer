@@ -16,7 +16,7 @@
     "url": "^0.11.4"
   },
   "scripts": {
-    "prepare-content": "js-yaml ./src/content.yaml > ./src/content.json",
+    "prebuild": "js-yaml ./src/content.yaml > ./src/content.json",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
