@@ -52,7 +52,7 @@ func NewPackerSchemaRegistryMocked(t *testing.T, packer Packer) *PackerSchemaReg
 //---
 
 func TestPackerSchemaRegistry(t *testing.T) {
-	packerSchemaRegistry := NewPackerSchemaRegistry(nil, debeziumparameters.SubjectTopicRecordNameStrategy, true, true, "my_topic_name")
+	packerSchemaRegistry := NewPackerSchemaRegistry(nil, debeziumparameters.SubjectTopicRecordNameStrategy, true, true, "my_topic_name", false)
 	packerSchemaRegistryMocked := NewPackerSchemaRegistryMocked(t, packerSchemaRegistry)
 	result, err := packerSchemaRegistryMocked.Pack(
 		getTestChangeItem(),

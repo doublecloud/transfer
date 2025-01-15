@@ -32,6 +32,7 @@ func NewKeyPackerFromDebeziumParameters(connectorParameters map[string]string, l
 			true,
 			debeziumparameters.UseWriteIntoOneFullTopicName(connectorParameters),
 			debeziumparameters.GetTopicPrefix(connectorParameters),
+			debeziumparameters.GetKeyConverterDTJSONGenerateClosedContentSchema(connectorParameters),
 		)), nil
 	}
 	if debeziumparameters.IsKeySchemaDisabled(connectorParameters) {
@@ -62,6 +63,7 @@ func NewValuePackerFromDebeziumParameters(connectorParameters map[string]string,
 			false,
 			debeziumparameters.UseWriteIntoOneFullTopicName(connectorParameters),
 			debeziumparameters.GetTopicPrefix(connectorParameters),
+			debeziumparameters.GetValueConverterDTJSONGenerateClosedContentSchema(connectorParameters),
 		)), nil
 	}
 

@@ -511,12 +511,12 @@ func (m *Emitter) valPayload(changeItem *abstract.ChangeItem, payloadTSMS time.T
 	}, nil
 }
 
-func (m *Emitter) toConfluentSchema(schemaArr []byte) ([]byte, error) {
+func (m *Emitter) toConfluentSchema(schemaArr []byte, makeClosedContentModel bool) ([]byte, error) {
 	kafkaSchema, err := format.KafkaJSONSchemaFromArr(schemaArr)
 	if err != nil {
 		return nil, xerrors.Errorf("can't convert map into kafka json schema: %w", err)
 	}
-	rawSchema, err := util.JSONMarshalUnescape(kafkaSchema.ToConfluentSchema())
+	rawSchema, err := util.JSONMarshalUnescape(kafkaSchema.ToConfluentSchema(makeClosedContentModel))
 	if err != nil {
 		return nil, xerrors.Errorf("unable to marshal schema in confluent json format: %w", err)
 	}
@@ -528,7 +528,7 @@ func (m *Emitter) ToConfluentSchemaKey(changeItem *abstract.ChangeItem, snapshot
 	if err != nil {
 		return nil, xerrors.Errorf("can't build key schema: %w", err)
 	}
-	result, err := m.toConfluentSchema(keySchema)
+	result, err := m.toConfluentSchema(keySchema, debeziumparameters.GetKeyConverterDTJSONGenerateClosedContentSchema(m.connectorParameters))
 	if err != nil {
 		return nil, xerrors.Errorf("can't convert key schema into confluent: %w", err)
 	}
@@ -540,7 +540,7 @@ func (m *Emitter) ToConfluentSchemaVal(changeItem *abstract.ChangeItem, snapshot
 	if err != nil {
 		return nil, xerrors.Errorf("can't build val schema: %w", err)
 	}
-	result, err := m.toConfluentSchema(valSchema)
+	result, err := m.toConfluentSchema(valSchema, debeziumparameters.GetValueConverterDTJSONGenerateClosedContentSchema(m.connectorParameters))
 	if err != nil {
 		return nil, xerrors.Errorf("can't convert val schema into confluent: %w", err)
 	}

@@ -56,16 +56,17 @@ type ConfluentJSONSchema struct {
 
 	ConnectParameters *JSONSchemaParameters `json:"connect.parameters,omitempty"`
 
-	ConnectType     string                         `json:"connect.type,omitempty"`
-	ConnectVersion  int                            `json:"connect.version,omitempty"`
-	Default         interface{}                    `json:"default,omitempty"`
-	Description     string                         `json:"description,omitempty"`
-	Items           *ConfluentJSONSchema           `json:"items,omitempty"`
-	OneOf           []ConfluentJSONSchema          `json:"oneOf,omitempty"`
-	Properties      map[string]ConfluentJSONSchema `json:"properties,omitempty"`
-	Title           string                         `json:"title,omitempty"`
-	Type            string                         `json:"type,omitempty"`
-	DtOriginalTypes interface{}                    `json:"__dt_original_type_info,omitempty"`
+	ConnectType          string                         `json:"connect.type,omitempty"`
+	ConnectVersion       int                            `json:"connect.version,omitempty"`
+	Default              interface{}                    `json:"default,omitempty"`
+	Description          string                         `json:"description,omitempty"`
+	Items                *ConfluentJSONSchema           `json:"items,omitempty"`
+	OneOf                []ConfluentJSONSchema          `json:"oneOf,omitempty"`
+	Properties           map[string]ConfluentJSONSchema `json:"properties,omitempty"`
+	Title                string                         `json:"title,omitempty"`
+	Type                 string                         `json:"type,omitempty"`
+	DtOriginalTypes      interface{}                    `json:"__dt_original_type_info,omitempty"`
+	AdditionalProperties *bool                          `json:"additionalProperties,omitempty"`
 }
 
 func confluentTypeToKafka(jsonType string, optionalType string) string {
@@ -95,7 +96,7 @@ func confluentTypeToKafka(jsonType string, optionalType string) string {
 	return ""
 }
 
-func kafkaTypeToConfluent(fieldType string, name string) (jsonType string, optionalType string) {
+func kafkaTypeToConfluent(fieldType string) (jsonType string, optionalType string) {
 	switch fieldType {
 	case int8Type, int16Type, int32Type, int64Type, uint8Type, uint16Type, uint32Type, uint64Type:
 		return integerType, fieldType
@@ -166,76 +167,90 @@ func (p ConfluentJSONSchema) ToKafkaSchema() KafkaJSONSchema {
 	}
 }
 
-func (p KafkaJSONSchema) ToConfluentSchema() ConfluentJSONSchema {
+func (p KafkaJSONSchema) ToConfluentSchema(makeClosedContentModel bool) ConfluentJSONSchema {
 	if p.Optional {
-		return makeOneOfConfluentSchema(p)
+		return makeOneOfConfluentSchema(p, makeClosedContentModel)
 	}
 
 	var properties map[string]ConfluentJSONSchema
 	if len(p.Fields) > 0 {
 		properties = make(map[string]ConfluentJSONSchema, len(p.Fields))
 		for i, field := range p.Fields {
-			property := field.ToConfluentSchema()
+			property := field.ToConfluentSchema(makeClosedContentModel)
 			property.ConnectIndex = new(int)
 			*property.ConnectIndex = i
 			properties[field.Field] = property
 		}
 	}
-	fieldType, connectType := kafkaTypeToConfluent(p.Type, p.Name)
+	fieldType, connectType := kafkaTypeToConfluent(p.Type)
 	var items *ConfluentJSONSchema
 	if p.Items != nil {
 		originalItems := *p.Items
-		confluentItems := originalItems.ToConfluentSchema()
+		confluentItems := originalItems.ToConfluentSchema(makeClosedContentModel)
 		items = &confluentItems
 	}
+	var additionalProperties *bool
+	if makeClosedContentModel {
+		additionalProperties = new(bool)
+		*additionalProperties = false
+	}
 	return ConfluentJSONSchema{
-		ConnectIndex:      nil,
-		ConnectParameters: p.Parameters,
-		ConnectType:       connectType,
-		ConnectVersion:    p.Version,
-		Default:           p.Default,
-		Description:       p.Doc,
-		Items:             items,
-		OneOf:             nil,
-		Properties:        properties,
-		Title:             p.Name,
-		Type:              fieldType,
-		DtOriginalTypes:   p.DtOriginalTypes,
+		ConnectIndex:         nil,
+		ConnectParameters:    p.Parameters,
+		ConnectType:          connectType,
+		ConnectVersion:       p.Version,
+		Default:              p.Default,
+		Description:          p.Doc,
+		Items:                items,
+		OneOf:                nil,
+		Properties:           properties,
+		Title:                p.Name,
+		Type:                 fieldType,
+		DtOriginalTypes:      p.DtOriginalTypes,
+		AdditionalProperties: additionalProperties,
 	}
 }
 
-func makeOneOfConfluentSchema(p KafkaJSONSchema) ConfluentJSONSchema {
+func makeOneOfConfluentSchema(p KafkaJSONSchema, makeClosedContentModel bool) ConfluentJSONSchema {
+	var additionalProperties *bool = nil
+	if makeClosedContentModel {
+		additionalProperties = new(bool)
+		*additionalProperties = false
+	}
+
 	var oneOf []ConfluentJSONSchema
 	oneOf = append(oneOf,
 		ConfluentJSONSchema{
-			ConnectIndex:      nil,
-			ConnectParameters: nil,
-			ConnectType:       "",
-			ConnectVersion:    0,
-			Default:           nil,
-			Description:       "",
-			Items:             nil,
-			OneOf:             nil,
-			Properties:        nil,
-			Title:             "",
-			Type:              nullType,
-			DtOriginalTypes:   nil,
+			ConnectIndex:         nil,
+			ConnectParameters:    nil,
+			ConnectType:          "",
+			ConnectVersion:       0,
+			Default:              nil,
+			Description:          "",
+			Items:                nil,
+			OneOf:                nil,
+			Properties:           nil,
+			Title:                "",
+			Type:                 nullType,
+			DtOriginalTypes:      nil,
+			AdditionalProperties: additionalProperties,
 		},
 	)
 	p.Optional = false
-	oneOf = append(oneOf, p.ToConfluentSchema())
+	oneOf = append(oneOf, p.ToConfluentSchema(makeClosedContentModel))
 	return ConfluentJSONSchema{
-		ConnectIndex:      nil,
-		ConnectParameters: nil,
-		ConnectType:       "",
-		ConnectVersion:    0,
-		Default:           nil,
-		Description:       "",
-		Items:             nil,
-		OneOf:             oneOf,
-		Properties:        nil,
-		Title:             "",
-		Type:              "",
-		DtOriginalTypes:   nil,
+		ConnectIndex:         nil,
+		ConnectParameters:    nil,
+		ConnectType:          "",
+		ConnectVersion:       0,
+		Default:              nil,
+		Description:          "",
+		Items:                nil,
+		OneOf:                oneOf,
+		Properties:           nil,
+		Title:                "",
+		Type:                 "",
+		DtOriginalTypes:      nil,
+		AdditionalProperties: additionalProperties,
 	}
 }

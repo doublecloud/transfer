@@ -12,11 +12,12 @@ import (
 )
 
 type PackerSchemaRegistry struct {
-	schemaRegistryClient *confluent.SchemaRegistryClient
-	isKeyProcessor       bool
-	subjectNameStrategy  string
-	writeIntoOneTopic    bool
-	topic                string // full topic name of prefix
+	schemaRegistryClient   *confluent.SchemaRegistryClient
+	isKeyProcessor         bool
+	subjectNameStrategy    string
+	writeIntoOneTopic      bool
+	topic                  string // full topic name or prefix
+	makeClosedContentModel bool
 }
 
 func (s *PackerSchemaRegistry) Pack(
@@ -51,7 +52,7 @@ func (s *PackerSchemaRegistry) BuildFinalSchema(changeItem *abstract.ChangeItem,
 	if err != nil {
 		return nil, xerrors.Errorf("can't convert map into kafka json schema: %w", err)
 	}
-	rawSchema, err := json.Marshal(kafkaSchema.ToConfluentSchema())
+	rawSchema, err := json.Marshal(kafkaSchema.ToConfluentSchema(s.makeClosedContentModel))
 	if err != nil {
 		return nil, xerrors.Errorf("unable to marshal schema in confluent json format: %w", err)
 	}
@@ -91,12 +92,14 @@ func NewPackerSchemaRegistry(
 	isKeyProcessor bool,
 	writeIntoOneTopic bool,
 	topic string,
+	makeClosedContentModel bool,
 ) *PackerSchemaRegistry {
 	return &PackerSchemaRegistry{
-		schemaRegistryClient: srClient,
-		isKeyProcessor:       isKeyProcessor,
-		subjectNameStrategy:  subjectNameStrategy,
-		writeIntoOneTopic:    writeIntoOneTopic,
-		topic:                topic,
+		schemaRegistryClient:   srClient,
+		isKeyProcessor:         isKeyProcessor,
+		subjectNameStrategy:    subjectNameStrategy,
+		writeIntoOneTopic:      writeIntoOneTopic,
+		topic:                  topic,
+		makeClosedContentModel: makeClosedContentModel,
 	}
 }
