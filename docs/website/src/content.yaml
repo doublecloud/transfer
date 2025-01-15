@@ -37,7 +37,7 @@ blocks:
       - text: Documentation
         theme: normal
         size: promo
-        url: /docs/getting_started.html
+        url: docs/getting_started.html
   - type: media-block
     indent:
       top: xs
@@ -220,6 +220,22 @@ blocks:
       - type: layout-item
         controlPosition: footer
         content:
+          title: >-
+            CDC From MySQL to ClickHouse
+          text: 'Written by: Andrei Tserakhau'
+          buttons:
+            - text: Read more
+              theme: normal
+              url: https://medium.com/@laskoviymishka/cdc-from-mysql-to-clickhouse-c791fe414fe1
+        media:
+          image: >-
+            assets/cdc-into-mysql.png
+        fullScreen: false
+        metaInfo:
+          - Insights
+      - type: layout-item
+        controlPosition: footer
+        content:
           title: Transfer S3 connector vs. Airbyte S3 connector
           text: 'Written by: Eraldo Jaku'
           buttons:
@@ -246,22 +262,6 @@ blocks:
         media:
           image: >-
             assets/migrate-from-elasticsearch-to-clickhouse-index.png
-        fullScreen: false
-        metaInfo:
-          - Insights
-      - type: layout-item
-        controlPosition: footer
-        content:
-          title: >-
-            CDC From MySQL to ClickHouse
-          text: 'Written by: Andrei Tserakhau'
-          buttons:
-            - text: Read more
-              theme: normal
-              url: https://medium.com/@laskoviymishka/cdc-from-mysql-to-clickhouse-c791fe414fe1
-        media:
-          image: >-
-            assets/cdc-into-mysql.png
         fullScreen: false
         metaInfo:
           - Insights
