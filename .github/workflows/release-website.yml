@@ -52,7 +52,7 @@ jobs:
         run: |
           cd docs/website
           npm install -g js-yaml
-          npm install
+          npm install --legacy-peer-deps
 
       - name: Build landing page
         run: |
