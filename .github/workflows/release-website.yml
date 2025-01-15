@@ -58,11 +58,6 @@ jobs:
         run: |
           cd docs/website
           npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: './_docs-lint'
       # Upload the landing page build artifact
       - name: Upload landing page artifact
         uses: actions/upload-pages-artifact@v3
