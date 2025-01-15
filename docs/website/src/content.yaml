@@ -268,16 +268,13 @@ blocks:
   - type: questions-block
     title: Frequently asked questions
     items:
-      - title: What's the difference between serverless and dedicated mode?
+      - title: How it's different to debezium
         text: >-
-          In serverless mode, you don't need to pay attention to how many worker
-          nodes are working and you don't need to adjust that number manually.
-          Transfer will automatically scale up and scale out the
-          mode depending on the amount of data you have at your source.
-          Dedicated mode is when you need extra security and isolation from
-          other customers. Also, in that mode, you can establish VPC peering
-          with other AWS accounts. You will have dedicated virtual machines
-          under the hood for use only for you in that mode.
+          Empower debezium visible interface, especially for queue like target (kafka / kinesis).
+          Support for seamless snapshots into replication transition.
+          More connectors (in snapshot mode).
+          Compatibility with Airbyte connectors. </br>
+          Sink + Source connection in one place, no need to intermidiate storage.
       - title: What type of synchronization/transfer do you support?
         text: |
           Transfer supports three modes of synchronization:
