@@ -152,32 +152,43 @@ blocks:
       title: Predictable, transparent pricing
       text: >-
         It's opensource, so your charges only for the number of
-        compute used by your infra. We estimated savings up to 85% per million
+        compute used by your infra. We estimated savings up to 95% per million
         rows, which makes our prices pretty spectacular, especially for larger
-        tables.
+        data-sets.
+  - type: tabs-block
+    indent:
+      top: s
+      bottom: s
+    title: |-
+      Add best-in-class open-source services <br>
+      to make your <b>own</b> data platform
+    description: >-
+      Transfer has everything you need to build modern, powerful, scalable ingestion at
+      scale. Combine Transfer with other fully opensource data services
+      to build a truly powerful solution that covers typical scenarios of
+      working with data.
     items:
       - tabName: Data warehouse
         title: Data warehouse
         text: >-
-          Ingest and transform your data with Data Transfer, use Managed Service
-          for ClickHouse to integrate or aggregate data, and build charts
-          quickly with our free Data Visualization service.
+          Ingest and transform your data with Transfer, use
+          for ClickHouse to store or aggregate data, and build charts
+          quickly with Visualization tools like data-lens or Apache Superset.
         media:
           image: assets/doublecloud-transfer-clickhouse-1-3.png
       - tabName: CDC streaming
         title: CDC streaming
         text: >-
-          Build an event-driven architecture using our Managed Service for
-          Apache Kafka. Our Data Transfer tool has a variety of source and
-          target connectors that allow you to set up CDC event streaming to
-          deliver changes in your data wherever you need them in real time.
+          Build an event-driven architecture using Apache Kafka for landing real-time data. 
+          Transfer engine has a variety of source and target connectors that allow you to set up CDC event streaming to
+          deliver changes in your kafka, and various configurable parsers read and structure data from kafka to you need them in real time.
         media:
           image: assets/doublecloud-transfer-kafka-2-3.png
       - tabName: Extract, Load, Transform
         title: Extract, Load, Transform
         text: >-
-          Set up your data pipeline powered by Data Transfer’s data extraction
-          and transformation capabilities. Use our fully managed ClickHouse as a
+          Set up your data pipeline powered by Transfer’s data extraction
+          and transformation capabilities. Use ClickHouse or YTsaurus as a
           storage and utilize Apache Airflow to automate and manage all your
           workflows.
         media:
@@ -188,14 +199,14 @@ blocks:
           The data platform is built for creating efficient real-time
           analytics. Use Transfer to connect your Kafka-like event streams to
           DWH, for example clickhouse, one of the fastest databases for analytics. Top it up with
-          Data Visualization tool to create dashboards in an instant,
+          Visualization tools (data-lens or Apache Superset) to create dashboards in an instant,
           and use embedded analytics to integrate charts into your application
           easily.
         media:
           image: assets/doublecloud-transfer-viz-4-3.png
   - type: slider-block
     title: Go deeper in our blog
-    description: Check out the latest insights from our Data Transfer team
+    description: Check out the latest insights from our Transfer team
     colSizes:
       all: 6
       md: 3
