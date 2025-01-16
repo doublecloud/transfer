@@ -15,7 +15,7 @@ docs-viewer:
   project-name: Transfer
   logo-title: Transfer
   show-revision: true
-  themes: ['light', 'dark']
+  themes: ['dark']
   github-url-prefix: https://github.com/doublecloud/transfer/tree/main/docs
 
   index-page:
