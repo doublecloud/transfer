@@ -1,11 +1,11 @@
 meta:
-  title: Data Transfer - no-code data integration solution | DoubleCloud
+  title: Transfer - no-code data integration solution | DoubleCloud
   description: >-
     A simple and efficient solution will help you build end-to-end analytics
     based on data from the most popular advertisement platforms like Facebook
     ads, Google ads, Linkedin ads, and many others
   sharing:
-    title: Data Transfer - no-code data integration solution | DoubleCloud
+    title: Transfer - no-code data integration solution | DoubleCloud
     description: >-
       A simple and efficient solution will help you build end-to-end analytics
       based on data from the most popular advertisement platforms like Facebook
@@ -18,7 +18,7 @@ meta:
       - dmbs
 blocks:
   - type: header-block
-    title: Data Transfer
+    title: Transfer
     description: >-
       Transfer gives you a simple, no-code, cloud-native data integration solution to
       extract, load, and transform your data. Whether you want to migrate to a
@@ -91,7 +91,7 @@ blocks:
   - type: card-layout-block
     title: Features and benefits
     description: >-
-      We ensure quick and efficient data transferring with speeds 
+      We ensure quick and efficient data transferring with <b>speeds</b> 
       <a href="https://medium.com/@laskoviymishka/transfer-s3-connector-vs-airbyte-s3-connector-360a0da084ae"><b>9x faster than Airbyte</b></a>
       and smooth integration with your existing infrastructure. More of what
       Transfers offers:
