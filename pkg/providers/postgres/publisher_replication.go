@@ -297,7 +297,7 @@ func (p *replication) receiver(slotTroubleCh <-chan error) {
 		}
 		p.metrics.Master.Set(1)
 
-		backendMessage, err := p.replConn.ReceiveMessage(p.sharedCtx)
+		backendMessage, err := p.replConn.ReceiveMessage(p.sharedCtx, p.slotMonitor)
 		if err != nil {
 			if xerrors.Is(err, context.Canceled) {
 				return

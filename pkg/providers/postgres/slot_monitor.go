@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
@@ -14,6 +15,8 @@ import (
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/dustin/go-humanize"
+	"github.com/jackc/pgconn"
+	"github.com/jackc/pgtype/pgxtype"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -29,7 +32,7 @@ const (
 )
 
 type SlotMonitor struct {
-	conn   *pgxpool.Pool
+	conn   pgxtype.Querier
 	stopCh chan struct{}
 
 	slotName         string
@@ -110,11 +113,6 @@ func (m *SlotMonitor) checkSlot(version PgVersion, maxSlotByteLag int64) error {
 	if !slotExists {
 		return abstract.NewFatalError(xerrors.Errorf("slot %q has disappeared", m.slotName))
 	}
-
-	if err := m.validateSlot(context.TODO()); err != nil {
-		return xerrors.Errorf("slot %q has become invalid: %w", m.slotName, err)
-	}
-
 	var slotByteLag int64
 	var slotByteLagErr error
 	if version.Is9x {
@@ -154,29 +152,25 @@ func (m *SlotMonitor) slotExists(ctx context.Context) (bool, error) {
 }
 
 func (m *SlotMonitor) validateSlot(ctx context.Context) error {
-	return nil
-	// Disabled for now: https://st.yandex-team.ru/TM-4783
-	/*
-		validateSlot := func() error {
-			rows, err := m.conn.Query(ctx, peekFromSlotQuery, m.slotName)
-			if err != nil {
-				if !util.IsOpen(m.stopCh) {
-					return nil
-				}
-				// We need to check error code here and return FatalError only when the slot is invalid
-				if IsPgError(err, ErrcObjectNotInPrerequisiteState) {
-					return abstract.NewFatalError(xerrors.Errorf("replication slot %q is no longer readable: %w", m.slotName, err))
-				}
-				return xerrors.Errorf("slot validity check failed: %w", err)
+	// Was disabled: https://st.yandex-team.ru/TM-4783
+	// Enabled for now https://st.yandex-team.ru/TM-7938, it is only used to check removed WAL segment
+	validateSlot := func() error {
+		rows, _ := m.conn.Query(ctx, peekFromSlotQuery, m.slotName)
+		for rows.Next() {
+		}
+		if err := rows.Err(); err != nil {
+			if pgErr, ok := err.(*pgconn.PgError); ok && pgFatalCode[pgErr.Code] && strings.Contains(err.Error(), "has already been removed") {
+				return abstract.NewFatalError(err)
 			}
-			rows.Close()
-			return nil
 		}
-		if err := backoff.Retry(validateSlot, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5)); err != nil {
-			return err
-		}
+		rows.Close()
 		return nil
-	*/
+	}
+	if err := backoff.Retry(validateSlot, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5)); err != nil {
+		return err
+	}
+	return nil
+
 }
 
 func (m *SlotMonitor) getLag(monitorQ string) (int64, error) {
@@ -233,7 +227,11 @@ func RunSlotMonitor(ctx context.Context, pgSrc *PgSource, registry metrics.Regis
 
 	errChan := slotMonitor.StartSlotMonitoring(int64(pgSrc.SlotByteLagLimit))
 
-	slot, err := NewSlot(slotMonitor.conn, logger.Log, pgSrc, tracker...)
+	pool, ok := slotMonitor.conn.(*pgxpool.Pool)
+	if !ok {
+		return nil, nil, xerrors.Errorf("unexpected type: %T", slotMonitor.conn)
+	}
+	slot, err := NewSlot(pool, logger.Log, pgSrc, tracker...)
 	if err != nil {
 		return nil, nil, xerrors.Errorf("unable to create new slot: %w", err)
 	}
