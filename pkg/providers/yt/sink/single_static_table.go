@@ -281,7 +281,7 @@ func (t *SingleStaticTable) commit(ctx context.Context) error {
 		t.logger.Info("commit static table [step 3] -- sort table", log.String("src_table", t.tmpTableName),
 			log.String("dst_table", t.tmpTableName))
 		sortOperationID, err := t.tx.StartOperation(ctx, yt.OperationSort, map[string]interface{}{
-			"pool":                  "transfer_manager",
+			"pool":                  t.config.Pool(),
 			"input_table_paths":     []ypath.Path{tmpTableYPath},
 			"output_table_path":     mergedTableYPath,
 			"sort_by":               t.schemaKeys(),
