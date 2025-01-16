@@ -25,6 +25,17 @@ const SelectCurrentLsnDelay = `select pg_wal_lsn_diff(pg_last_wal_replay_lsn(), 
 
 // replica specific stuff
 func getHostPreferablyReplica(lgr log.Logger, conn *connection.ConnectionPG, slotID string) (*connection.Host, error) {
+	if conn.ClusterID == "" {
+		replHost, err := getReplicaOnPrem(conn)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to resolve replica for on-prem: %w", err)
+		}
+		return replHost, nil
+	}
+	return getReplicaManaged(lgr, conn, slotID)
+}
+
+func getReplicaManaged(lgr log.Logger, conn *connection.ConnectionPG, slotID string) (*connection.Host, error) {
 	master, aliveAsyncReplicas, aliveSyncReplicas, err := detectHostsByRoles(lgr, conn)
 	if err != nil {
 		return nil, xerrors.Errorf("Failed to resolve cluster hosts roles:  %w", err)
@@ -66,6 +77,44 @@ func getHostPreferablyReplica(lgr log.Logger, conn *connection.ConnectionPG, slo
 	}
 
 	return nil, xerrors.Errorf("Could not find replica with Lsn greater than %v", lsn)
+}
+
+func getReplicaOnPrem(conn *connection.ConnectionPG) (*connection.Host, error) {
+	pg, err := pgha.NewFromConnection(conn)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to create postgres service client for resolving replica from hosts: %w", err)
+	}
+	defer pg.Close()
+
+	// If there is a master, then it is better to choose him. If there is no master among
+	// the hosts, then we take any replica, because lsn cannot be checked anyway.
+	_, err = pg.MasterHost()
+	if err != nil && !xerrors.Is(err, context.DeadlineExceeded) {
+		return nil, xerrors.Errorf("unable to check master in cluster before resolving replica: %w", err)
+	}
+	if err == nil {
+		return nil, xerrors.New("there is master, unable to check replica's lsn for on-prem")
+	}
+
+	replicaNode, err := pg.ReplicaHost()
+	if err != nil {
+		return nil, xerrors.Errorf("unable to get replica host: %w", err)
+	}
+	if replicaNode == nil {
+		return nil, xerrors.Errorf("ReplicaHost() returned nil")
+	}
+
+	replHost, replPort, err := getHostPortFromMDBHostname(*replicaNode, conn)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to parse replica host, err: %w", err)
+	}
+
+	return &connection.Host{
+		Name:        replHost,
+		Port:        int(replPort),
+		Role:        connection.Replica,
+		ReplicaType: connection.ReplicaUndefined,
+	}, nil
 }
 
 func detectHostsByRoles(lgr log.Logger, conn *connection.ConnectionPG) (master *connection.Host, aliveAsyncReplicas []*connection.Host, aliveSyncReplicas []*connection.Host, err error) {
@@ -262,6 +311,7 @@ func resolveMasterHostImpl(conn *connection.ConnectionPG) (string, uint16, error
 	}
 	return resultHost, resultPort, nil
 }
+
 func makeConnConfigFromParams(connParams *ConnectionParams) (*pgx.ConnConfig, error) {
 	return makeConnConfig(connParams, "", false)
 }
@@ -369,18 +419,21 @@ func MakeConnConfigFromStorage(lgr log.Logger, storage *PgStorageParams) (*pgx.C
 	// - if on_prem one host - master is this host
 	// - if on_prem >1 hosts - pgHA determines master
 	// - if managed installation - master is determined via mdb api
-	if storage.PreferReplica && conn.ClusterID != "" {
-		host, err := getHostPreferablyReplica(lgr, conn, storage.SlotID)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to resolve replica host: %w", err)
+	if storage.PreferReplica {
+		if host, err := getHostPreferablyReplica(lgr, conn, storage.SlotID); err != nil {
+			lgr.Warn("unable to resolve replica host, will try to resolve master", log.Error(err))
+		} else {
+			connParams = toConnParams(host, conn)
 		}
-		connParams = toConnParams(host, conn)
-	} else {
+	}
+
+	if connParams == nil {
 		connParams, err = getMasterConnectionParams(lgr, conn)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to resolve master host: %w", err)
 		}
 	}
+
 	return makeConnConfig(connParams, storage.ConnString, storage.TryHostCACertificates)
 }
 
