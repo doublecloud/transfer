@@ -12,6 +12,16 @@ description:
   - >-
     It supports several data transfer scenarios, with every scenario run at the logical level. This allows you to keep your source database running and
     minimize the downtime of applications that use the service.
+
+  - >-
+    At its heart, the application follows a <strong>plugin-based architecture</strong>, enabling extensibility and modularity.
+    <img style="width: 100%" src="_assets/architecture.png" alt="alt_text" title="image_tooltip">
+    <br/>
+    The system is built around a <strong>core module</strong> that acts as the central part of the application, 
+    managing its internal logic and facilitating communication between components.
+    Users can interact with the system through either a <strong>Command-Line Interface (CLI)</strong> or via a 
+    <strong>Component Development Kit (CDK)</strong>, 
+    which serves as a library of interfaces for embedding functionality into external systems.
 meta:
   title: "{{product-name}}"
 links:

@@ -14,7 +14,8 @@ The white paper is structured as follows:
 
 1. **Introduction**: An overview of the purpose and goals of the system.
 2. **Systems Overview**: A brief overview of current systems that require different approaches for data synchronization.
-3. **Replication Techniques**: Description of the main replication techniques and application scenarios.
+3. **Architecture Overviw**: High level principles around {{ data-transfer-name }} architecture.
+4. **Replication Techniques**: Description of the main replication techniques and application scenarios.
 4. **Data Integrity**: Discussion of how to achieve data integrity across different types of storages and possible design decisions.
 5. **Challenges**: Description of the main challenges encountered while building the system as a service.
 6. **Case Studies**: In-depth analysis of some case studies where the system was used and how it helped.
@@ -82,8 +83,6 @@ The first step in overcoming the above challenges was to formulate the requireme
 
 After careful analysis, we crystallized our requirements for the future **{{ data-transfer-name }}** product as follows:
 
-
-
 * **Minimize Delivery Lag**: The system must guarantee that data is delivered with a freshness lag of only a few seconds to be considered useful.
 * **Guarantee Quality of Data**: The system must provide data with inferred schema from source tables and guarantee consistency between storages, with eventual consistency being acceptable.
 * **Serializable Intermediate Format**: The system must provide a uniform intermediate format to transport data, with the option to route traffic through a persistent queue.
@@ -108,10 +107,31 @@ To minimize development efforts and system complexity, we must have some univers
 
 Many middlewares exist between the source and sink for metrics collection, transformers application and logging.
 
+Here’s a draft for your architecture overview in the same style as the linked article:
+
+---
+
+## Architecture Overview
+
+The system is built around a **core module** that acts as the central part of the application, managing its internal logic and facilitating communication between components. Users can interact with the system through either a **Command-Line Interface (CLI)** or via a **Component Development Kit (CDK)**, which serves as a library of interfaces for embedding functionality into external systems.
+
+*Architecture*:
+![alt_text](_assets/architecture.png "image_tooltip")
+
+
+At its heart, the application follows a **plugin-based architecture**, enabling extensibility and modularity. 
+Plugins are integrated at **compile time** as Go dependencies, ensuring tight integration and optimal performance. 
+The system is implemented as a **Go monolith**, providing a streamlined and cohesive runtime environment.
+
+The core connects to **plugins** in various domains, such as **connectors** (e.g., S3, PostgreSQL, ClickHouse), or **transformers** (e.g., renaming or SQL transformations). 
+These plugins are further glued together by **middlewares**, enabling data processing and transformations to be seamlessly chained. 
+A shared **data model** ensures consistent communication between components, while **connectors** handle all database specific logic, **transformers** do computations based on shared **data model** and a **coordinator** manage and state tracking and coordination between nodes of **{{data-transfer-name}}** deployments.
+
+This modular approach allows the system to remain flexible, robust, and scalable while adhering to Go's principles of simplicity and high performance.
+
 *Dataplane overview*:
 
 ![alt_text](_assets/dp_architecture.png "image_tooltip")
-
 
 We must handle each delivery as a separate entity or resource to be able to configure it in a centralized way. This realization led us to make the runtime engine pluggable to use any IAS cloud provider or container management service (like <span style="text-decoration:underline;">k8s</span>). Each runtime here is a simple stateless worker executor running a job binary with provided options.
 

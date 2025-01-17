@@ -3,10 +3,10 @@
 <div align="center">
 
 <h4 align="center">
-  <a href="https://double.cloud/services/doublecloud-transfer/">Double Cloud Transfer</a>  |
-  <a href="./docs/getting_started.md">Documentation</a>  |
-  <a href="./docs/benchmarks.md">Benchmarking</a>  |
-  <a href="./roadmap/roadmap_2024.md">Roadmap</a>
+  <a href="https://doublecloud.github.io/transfer/">Double Cloud Transfer</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/getting_started.html">Documentation</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/benchmarks.html">Benchmarking</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/roadmap">Roadmap</a>
 </h4>
 
 

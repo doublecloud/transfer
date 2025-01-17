@@ -94,7 +94,17 @@ items:
       - name: Connect Prometheus to Transfer
         href: integrations/connect-prometheus-to-transfer.md
 
+  - name: Plans
+    items:
+      - name: Overview
+        href: roadmap/index.md
+      - name: "Roadmap 2024"
+        href: roadmap/roadmap_2024.md
+      - name: "Roadmap 2025"
+        href: roadmap/roadmap_2025.md
   - name: Resolve issues with Transfer
     href: transfer-self-help.md
   - name: Questions and answers
     href: transfer-faq.md
+  - name: Benchmarking
+    href: benchmarks.md
