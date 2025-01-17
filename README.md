@@ -197,7 +197,7 @@ More details [here](./docs/deploy_k8s.md).
 ## 📐 Architecture
 
 
-<img src="./assets/logo.png" alt="transfer" />
+<img src="./docs/_assets/architecture.png" alt="transfer" />
 
 </div>
 
