@@ -415,6 +415,13 @@ func (s *sinker) Push(input []abstract.ChangeItem) error {
 				s.logger.Info("static table snapshot is initiated because policy UseStaticTableOnSnapshot is on")
 				// delay handler application until schema is unknown
 				s.staticSnapshotState[rotatedName] = StaticTableSnapshotInitialized
+
+				if s.config.CreateEmptyTables() {
+					s.logger.Info("create empty table", log.String("name", name))
+					if err := s.checkTable(item.TableSchema.Columns(), name); err != nil {
+						return xerrors.Errorf("unable to create table on init table load (CreateEmptyTables is true): %w", err)
+					}
+				}
 			} else {
 				s.logger.Info("static table snapshot is not initiated because policy UseStaticTableOnSnapshot is off")
 			}
