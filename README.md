@@ -3,10 +3,10 @@
 <div align="center">
 
 <h4 align="center">
-  <a href="https://double.cloud/services/doublecloud-transfer/">Double Cloud Transfer</a>  |
-  <a href="./docs/getting_started.md">Documentation</a>  |
-  <a href="./docs/benchmarks.md">Benchmarking</a>  |
-  <a href="./roadmap/roadmap_2024.md">Roadmap</a>
+  <a href="https://doublecloud.github.io/transfer/">Double Cloud Transfer</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/getting_started.html">Documentation</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/benchmarks.html">Benchmarking</a>  |
+  <a href="https://doublecloud.github.io/transfer/docs/roadmap">Roadmap</a>
 </h4>
 
 
@@ -186,18 +186,18 @@ More details [here](./docs/deploy_k8s.md).
 ## ⚡ Performance
 
 
-[Naive-s3-vs-airbyte](./docs/benchmark_vs_airbyte.md)
+[Naive-s3-vs-airbyte](https://medium.com/@laskoviymishka/transfer-s3-connector-vs-airbyte-s3-connector-360a0da084ae)
 
 </div>
 
-![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
+![Naive-s3-vs-airbyte](./docs/_assets/bench_s3_vs_airbyte.png)
 
 <div align="center">
 
 ## 📐 Architecture
 
 
-<img src="./assets/logo.png" alt="transfer" />
+<img src="./docs/_assets/architecture.png" alt="transfer" />
 
 </div>
 
