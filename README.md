@@ -190,7 +190,7 @@ More details [here](./docs/deploy_k8s.md).
 
 </div>
 
-![Naive-s3-vs-airbyte](./assets/bench_s3_vs_airbyte.png)
+![Naive-s3-vs-airbyte](./docs/_assets/bench_s3_vs_airbyte.png)
 
 <div align="center">
 
