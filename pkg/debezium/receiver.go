@@ -126,7 +126,7 @@ func (r *Receiver) convertSchemaFormat(schema []byte) ([]byte, error) {
 		if err := json.Unmarshal(schema, &confluentSchema); err != nil {
 			return nil, xerrors.Errorf("can't unmarshal confluent schema: %w", err)
 		}
-		rawSchema, err := json.Marshal(confluentSchema.ToKafkaSchema())
+		rawSchema, err := json.Marshal(confluentSchema.ToKafkaJSONSchema())
 		if err != nil {
 			return nil, xerrors.Errorf("unable to marshal schema in confluent json format: %w", err)
 		}

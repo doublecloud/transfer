@@ -1,0 +1,16 @@
+{
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.client_id.title": "Client ID",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.client_id.usage": "The Client ID of the LinkedIn Ads developer application",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.client_secret.title": "Client Secret",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.client_secret.usage": "The Client Secret for the LinkedIn Ads developer application",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.refresh_token.title": "Refresh Token",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.OAuth.refresh_token.usage": "The key to refresh the expired access token",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.access_token.title": "Access Token",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.Credentials.oauth.title": "OAuth 2.0",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.account_ids.title": "Account IDs",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.account_ids.usage": "Specify the Account IDs separated by space, to pull the data from. Leave empty, if you want to pull the data from all associated accounts.",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.credentials.title": "Authorization method",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.start_date.title": "Start date",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.start_date.usage": "UTC date in the format YYYY-MM-DD. Any data before this date will not be replicated. Example: 2021-05-17",
+    "endpoint.airbyte.linkedin_ads_source.LinkedinAdsSource.title": "Endpoint parameters"
+}

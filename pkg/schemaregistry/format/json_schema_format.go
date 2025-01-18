@@ -118,13 +118,13 @@ func kafkaTypeToConfluent(fieldType string) (jsonType string, optionalType strin
 	return "", ""
 }
 
-func (p ConfluentJSONSchema) ToKafkaSchema() KafkaJSONSchema {
+func (p ConfluentJSONSchema) ToKafkaJSONSchema() KafkaJSONSchema {
 	// 'oneOf' can contain only "null" type ane one property
 	for _, oneOfProperty := range p.OneOf {
 		if oneOfProperty.Type == nullType {
 			continue
 		}
-		optionalField := oneOfProperty.ToKafkaSchema()
+		optionalField := oneOfProperty.ToKafkaJSONSchema()
 		optionalField.Optional = true
 		return optionalField
 	}
@@ -142,14 +142,14 @@ func (p ConfluentJSONSchema) ToKafkaSchema() KafkaJSONSchema {
 	})
 	var internalFields []KafkaJSONSchema
 	for _, propertyWithName := range propertiesWithName {
-		field := propertyWithName.property.ToKafkaSchema()
+		field := propertyWithName.property.ToKafkaJSONSchema()
 		field.Field = propertyWithName.name
 		internalFields = append(internalFields, field)
 	}
 	var items *KafkaJSONSchema
 	if p.Items != nil {
 		originalItems := *p.Items
-		confluentItems := originalItems.ToKafkaSchema()
+		confluentItems := originalItems.ToKafkaJSONSchema()
 		items = &confluentItems
 	}
 	return KafkaJSONSchema{
@@ -168,15 +168,23 @@ func (p ConfluentJSONSchema) ToKafkaSchema() KafkaJSONSchema {
 }
 
 func (p KafkaJSONSchema) ToConfluentSchema(makeClosedContentModel bool) ConfluentJSONSchema {
+	return p.toConfluentSchema(0, makeClosedContentModel, false)
+}
+
+func (p KafkaJSONSchema) toConfluentSchema(depth int, makeClosedContentModel, intoAfterOrBefore bool) ConfluentJSONSchema {
 	if p.Optional {
-		return makeOneOfConfluentSchema(p, makeClosedContentModel)
+		return makeOneOfConfluentSchema(p, depth+1, makeClosedContentModel, intoAfterOrBefore)
 	}
 
 	var properties map[string]ConfluentJSONSchema
 	if len(p.Fields) > 0 {
 		properties = make(map[string]ConfluentJSONSchema, len(p.Fields))
 		for i, field := range p.Fields {
-			property := field.ToConfluentSchema(makeClosedContentModel)
+			fieldAfterOrBefore := false
+			if field.Field == "before" || field.Field == "after" {
+				fieldAfterOrBefore = true
+			}
+			property := field.toConfluentSchema(depth+1, makeClosedContentModel, fieldAfterOrBefore)
 			property.ConnectIndex = new(int)
 			*property.ConnectIndex = i
 			properties[field.Field] = property
@@ -186,11 +194,11 @@ func (p KafkaJSONSchema) ToConfluentSchema(makeClosedContentModel bool) Confluen
 	var items *ConfluentJSONSchema
 	if p.Items != nil {
 		originalItems := *p.Items
-		confluentItems := originalItems.ToConfluentSchema(makeClosedContentModel)
+		confluentItems := originalItems.toConfluentSchema(depth+1, makeClosedContentModel, intoAfterOrBefore)
 		items = &confluentItems
 	}
 	var additionalProperties *bool
-	if makeClosedContentModel {
+	if makeClosedContentModel && depth == 2 && intoAfterOrBefore {
 		additionalProperties = new(bool)
 		*additionalProperties = false
 	}
@@ -211,13 +219,7 @@ func (p KafkaJSONSchema) ToConfluentSchema(makeClosedContentModel bool) Confluen
 	}
 }
 
-func makeOneOfConfluentSchema(p KafkaJSONSchema, makeClosedContentModel bool) ConfluentJSONSchema {
-	var additionalProperties *bool = nil
-	if makeClosedContentModel {
-		additionalProperties = new(bool)
-		*additionalProperties = false
-	}
-
+func makeOneOfConfluentSchema(p KafkaJSONSchema, depth int, makeClosedContentModel, intoAfterOrBefore bool) ConfluentJSONSchema {
 	var oneOf []ConfluentJSONSchema
 	oneOf = append(oneOf,
 		ConfluentJSONSchema{
@@ -233,11 +235,11 @@ func makeOneOfConfluentSchema(p KafkaJSONSchema, makeClosedContentModel bool) Co
 			Title:                "",
 			Type:                 nullType,
 			DtOriginalTypes:      nil,
-			AdditionalProperties: additionalProperties,
+			AdditionalProperties: nil,
 		},
 	)
 	p.Optional = false
-	oneOf = append(oneOf, p.ToConfluentSchema(makeClosedContentModel))
+	oneOf = append(oneOf, p.toConfluentSchema(depth, makeClosedContentModel, intoAfterOrBefore))
 	return ConfluentJSONSchema{
 		ConnectIndex:         nil,
 		ConnectParameters:    nil,
@@ -251,6 +253,6 @@ func makeOneOfConfluentSchema(p KafkaJSONSchema, makeClosedContentModel bool) Co
 		Title:                "",
 		Type:                 "",
 		DtOriginalTypes:      nil,
-		AdditionalProperties: additionalProperties,
+		AdditionalProperties: nil,
 	}
 }

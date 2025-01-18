@@ -1,0 +1,15 @@
+{
+    "endpoint.airbyte.redshift_source.RedshiftSource.database.title": "Database",
+    "endpoint.airbyte.redshift_source.RedshiftSource.database.usage": "Name of the database. Example: master.",
+    "endpoint.airbyte.redshift_source.RedshiftSource.host.title": "Host",
+    "endpoint.airbyte.redshift_source.RedshiftSource.host.usage": "Host Endpoint of the Redshift Cluster (must include the cluster-id, region and end with .redshift.amazonaws.com).",
+    "endpoint.airbyte.redshift_source.RedshiftSource.password.title": "Password",
+    "endpoint.airbyte.redshift_source.RedshiftSource.password.usage": "Password associated with the username",
+    "endpoint.airbyte.redshift_source.RedshiftSource.port.title": "Port",
+    "endpoint.airbyte.redshift_source.RedshiftSource.port.usage": "Port of the database.",
+    "endpoint.airbyte.redshift_source.RedshiftSource.schemas.title": "Schemas",
+    "endpoint.airbyte.redshift_source.RedshiftSource.schemas.usage": "The list of schemas to sync from. Specify one or more explicitly or keep empty to process all schemas. Schema names are case sensitive.",
+    "endpoint.airbyte.redshift_source.RedshiftSource.title": "Endpoint parameters",
+    "endpoint.airbyte.redshift_source.RedshiftSource.username.title": "Username",
+    "endpoint.airbyte.redshift_source.RedshiftSource.username.usage": "Username to access the database"
+}

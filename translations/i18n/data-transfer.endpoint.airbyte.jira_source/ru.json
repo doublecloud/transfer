@@ -1,0 +1,16 @@
+{
+    "endpoint.airbyte.jira_source.JiraSource.api_token.title": "API-токен",
+    "endpoint.airbyte.jira_source.JiraSource.api_token.usage": "API-токен используется для авторизации в вашей учетной записи Jira с помощью BasicAuth.",
+    "endpoint.airbyte.jira_source.JiraSource.domain.title": "Домен",
+    "endpoint.airbyte.jira_source.JiraSource.domain.usage": "Домен для вашей учетной записи Jira, например: your-domain.atlassian.net, your-domain.jira.com, jira.your-domain.com.",
+    "endpoint.airbyte.jira_source.JiraSource.email.title": "Email",
+    "endpoint.airbyte.jira_source.JiraSource.email.usage": "Адрес электронной почты пользователя вашей учетной записи Jira, который вы использовали для создания токена API. Это поле используется для авторизации вашей учетной записи с помощью BasicAuth.",
+    "endpoint.airbyte.jira_source.JiraSource.enable_experimental_streams.title": "Включить экспериментальные потоки",
+    "endpoint.airbyte.jira_source.JiraSource.enable_experimental_streams.usage": "Разрешить использование экспериментальных потоков, основанных на недокументированных эндпоинтах API Jira. Дополнительную информацию см. на https://docs.airbyte.com/integrations/sources/jira#experimental-tables.",
+    "endpoint.airbyte.jira_source.JiraSource.issues_stream_expand_with.title": "Раскрыть поток задач",
+    "endpoint.airbyte.jira_source.JiraSource.issues_stream_expand_with.usage": "Выберите поля для раскрытия потока «Задачи» при репликации.",
+    "endpoint.airbyte.jira_source.JiraSource.projects.title": "Проекты",
+    "endpoint.airbyte.jira_source.JiraSource.projects.usage": "Список ключей проекта Jira для репликации данных. Оставьте это поле пустым, если вы хотите реплицировать данные для всех проектов.",
+    "endpoint.airbyte.jira_source.JiraSource.start_date.title": "Начальная дата",
+    "endpoint.airbyte.jira_source.JiraSource.start_date.usage": "Дата, начиная с которой вы хотите реплицировать данные из Jira, используйте в формате ГГГГ-ММ-ДДТ00:00:00Z. Обратите внимание, что это поле применяется только к определенным потокам. Будут реплицироваться только данные, созданные на дату начала или после нее. Оставьте это поле пустым, если вы хотите реплицировать все данные."
+}
