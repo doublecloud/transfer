@@ -1,4 +1,5 @@
 {
+    "transfer.BatchSplitterTransformer.max_items_per_batch.title": "Максимальное количество строк в батче",
     "transfer.ColumnsFilter.exclude_columns.array_item_label": "Колонка",
     "transfer.ColumnsFilter.exclude_columns.title": "Список исключённых колонок (регулярные выражения)",
     "transfer.ColumnsFilter.exclude_columns.usage": "Если необходимо перечислить имена колонок, лучше начинать с символа ^ и завершать символом $ — это поможет избежать нежелательных побочных эффектов.",
@@ -84,6 +85,7 @@
     "transfer.Transformation.errors_output.title": "Вывод ошибок",
     "transfer.Transformation.transformers.array_item_label": "Преобразование",
     "transfer.Transformation.transformers.title": "Список преобразований",
+    "transfer.Transformer.batch_splitter.title": "Измельчитель батчей",
     "transfer.Transformer.convert_to_string.title": "Преобразовать значения в строки",
     "transfer.Transformer.dbt.title": "DBT (применяется после снапшота)",
     "transfer.Transformer.filter_columns.title": "Фильтр колонок",

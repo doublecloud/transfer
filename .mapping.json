@@ -3288,6 +3288,8 @@
   "translations/i18n/data-transfer.console.form.logfeller/ru.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.logfeller/ru.json",
   "translations/i18n/data-transfer.console.form.metrika/en.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.metrika/en.json",
   "translations/i18n/data-transfer.console.form.metrika/ru.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.metrika/ru.json",
+  "translations/i18n/data-transfer.console.form.migration/en.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.migration/en.json",
+  "translations/i18n/data-transfer.console.form.migration/ru.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.migration/ru.json",
   "translations/i18n/data-transfer.console.form.mongo/en.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.mongo/en.json",
   "translations/i18n/data-transfer.console.form.mongo/ru.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.mongo/ru.json",
   "translations/i18n/data-transfer.console.form.mysql/en.json":"transfer_manager/go/translations/i18n/data-transfer.console.form.mysql/en.json",

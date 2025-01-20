@@ -121,6 +121,6 @@
     "console.form.transfer.YTRuntimePrivatePool.pool.usage": "YT pool where the transfer operations will be started.",
     "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_ARNOLD.title": "ARNOLD",
     "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_HAHN.title": "HAHN",
-    "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_VANGA.title": "",
-    "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_KOLMOGOROV.title" : "KOLMOGOROV"
+    "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_KOLMOGOROV.title": "KOLMOGOROV",
+    "console.form.transfer.YtRuntimeCluster.YT_RUNTIME_CLUSTER_VANGA.title": ""
 }

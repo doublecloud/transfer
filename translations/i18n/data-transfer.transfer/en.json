@@ -1,4 +1,5 @@
 {
+    "transfer.BatchSplitterTransformer.max_items_per_batch.title": "Max items per batch",
     "transfer.ColumnsFilter.exclude_columns.array_item_label": "Column",
     "transfer.ColumnsFilter.exclude_columns.title": "Excluded columns (regular expressions)",
     "transfer.ColumnsFilter.exclude_columns.usage": "If you need to list column names, it is better to start with the ^ character and end with the $ character — this will help avoid unwanted side effects.",
@@ -84,6 +85,7 @@
     "transfer.Transformation.errors_output.title": "Errors output",
     "transfer.Transformation.transformers.array_item_label": "Transformation",
     "transfer.Transformation.transformers.title": "Transformation list",
+    "transfer.Transformer.batch_splitter.title": "Batch Splitter",
     "transfer.Transformer.convert_to_string.title": "Convert values to string",
     "transfer.Transformer.dbt.title": "DBT (applied after snapshot)",
     "transfer.Transformer.filter_columns.title": "Column filter",
