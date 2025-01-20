@@ -20,8 +20,8 @@
                     "value": 1
                 },
                 {
-                    "type": "int64",
-                    "value": 100
+                    "type": "nil",
+                    "value": null
                 }
             ]
         },
@@ -64,8 +64,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 130,
-                "Values": 130
+                "Read": 122,
+                "Values": 122
             }
         },
         "Table": {
@@ -104,12 +104,12 @@
                     "table_name": "",
                     "path": "",
                     "name": "value",
-                    "type": "int64",
+                    "type": "double",
                     "key": false,
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:INT64"
+                    "original_type": "parquet:DECIMAL(10,2)"
                 }
             ]
         },
@@ -139,8 +139,8 @@
                     "value": 2
                 },
                 {
-                    "type": "int64",
-                    "value": 200
+                    "type": "nil",
+                    "value": null
                 }
             ]
         },
@@ -183,8 +183,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 130,
-                "Values": 130
+                "Read": 122,
+                "Values": 122
             }
         },
         "Table": {
@@ -223,12 +223,12 @@
                     "table_name": "",
                     "path": "",
                     "name": "value",
-                    "type": "int64",
+                    "type": "double",
                     "key": false,
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:INT64"
+                    "original_type": "parquet:DECIMAL(10,2)"
                 }
             ]
         },
@@ -258,8 +258,8 @@
                     "value": 3
                 },
                 {
-                    "type": "int64",
-                    "value": 300
+                    "type": "nil",
+                    "value": null
                 }
             ]
         },
@@ -302,8 +302,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 130,
-                "Values": 130
+                "Read": 122,
+                "Values": 122
             }
         },
         "Table": {
@@ -342,12 +342,12 @@
                     "table_name": "",
                     "path": "",
                     "name": "value",
-                    "type": "int64",
+                    "type": "double",
                     "key": false,
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:INT64"
+                    "original_type": "parquet:DECIMAL(10,2)"
                 }
             ]
         },

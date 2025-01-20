@@ -46,6 +46,7 @@ require (
 	github.com/montanaflynn/stats v0.7.1
 	github.com/ohler55/ojg v1.15.0
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/parquet-go/parquet-go v0.17.0
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/pingcap/parser v0.0.0-20210415081931-48e7f467fd74
 	github.com/prometheus/client_golang v1.19.1
@@ -54,7 +55,6 @@ require (
 	github.com/prometheus/procfs v0.14.0
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/segmentio/kafka-go v0.4.47
-	github.com/segmentio/parquet-go v0.0.0-20230427215636-d483faba23a5
 	github.com/shirou/gopsutil/v3 v3.24.2
 	github.com/shopspring/decimal v1.3.1
 	github.com/siddontang/go-log v0.0.0-20190221022429-1e957dd83bed

@@ -18,7 +18,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/s3/pusher"
 	s3_reader "github.com/doublecloud/transfer/pkg/providers/s3/reader"
 	"github.com/doublecloud/transfer/pkg/stats"
-	"github.com/segmentio/parquet-go"
+	"github.com/parquet-go/parquet-go"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 )

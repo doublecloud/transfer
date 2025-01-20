@@ -17,9 +17,9 @@ import (
 	chunk_pusher "github.com/doublecloud/transfer/pkg/providers/s3/pusher"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
-	"github.com/segmentio/parquet-go"
-	"github.com/segmentio/parquet-go/deprecated"
-	"github.com/segmentio/parquet-go/format"
+	"github.com/parquet-go/parquet-go"
+	"github.com/parquet-go/parquet-go/deprecated"
+	"github.com/parquet-go/parquet-go/format"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/schema"
 )
