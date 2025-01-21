@@ -1973,6 +1973,8 @@
   "pkg/serializer/queue/factory.go":"transfer_manager/go/pkg/serializer/queue/factory.go",
   "pkg/serializer/queue/gotest/canondata/gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted":"transfer_manager/go/pkg/serializer/queue/gotest/canondata/gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted",
   "pkg/serializer/queue/gotest/canondata/gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted.0":"transfer_manager/go/pkg/serializer/queue/gotest/canondata/gotest.gotest.TestJSONSerializerTopicNameAllTypes/extracted.0",
+  "pkg/serializer/queue/gotest/canondata/gotest.gotest.TestNativeSerializerTopicName_saveTxOrder-disabled/extracted":"transfer_manager/go/pkg/serializer/queue/gotest/canondata/gotest.gotest.TestNativeSerializerTopicName_saveTxOrder-disabled/extracted",
+  "pkg/serializer/queue/gotest/canondata/gotest.gotest.TestNativeSerializerTopicName_saveTxOrder-enabled/extracted":"transfer_manager/go/pkg/serializer/queue/gotest/canondata/gotest.gotest.TestNativeSerializerTopicName_saveTxOrder-enabled/extracted",
   "pkg/serializer/queue/gotest/canondata/result.json":"transfer_manager/go/pkg/serializer/queue/gotest/canondata/result.json",
   "pkg/serializer/queue/infer_test.go":"transfer_manager/go/pkg/serializer/queue/infer_test.go",
   "pkg/serializer/queue/json_batcher.go":"transfer_manager/go/pkg/serializer/queue/json_batcher.go",

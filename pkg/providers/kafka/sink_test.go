@@ -49,7 +49,7 @@ func TestNative(t *testing.T) {
 	}
 	dst.WithDefaults()
 
-	value, err := json.Marshal(sinkTestTypicalChangeItem)
+	value, err := json.Marshal([]*abstract.ChangeItem{sinkTestTypicalChangeItem})
 	require.NoError(t, err)
 
 	currWriter := writer.NewMockAbstractWriter(ctrl)

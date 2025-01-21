@@ -17,7 +17,8 @@ func (s *NativeSerializer) serializeOneTableID(input []abstract.ChangeItem) []Se
 		result = append(result, BatchNative(s.batchingSettings, input)...)
 	} else {
 		for _, changeItem := range input {
-			group := []SerializedMessage{{Key: []byte(changeItem.Fqtn()), Value: []byte(changeItem.ToJSONString())}}
+			// Native parser can handle only array of ChangeItems, that's why we wrap changeItem to "[", "]".
+			group := []SerializedMessage{{Key: []byte(changeItem.Fqtn()), Value: []byte("[" + changeItem.ToJSONString() + "]")}}
 			result = append(result, group...)
 		}
 	}
