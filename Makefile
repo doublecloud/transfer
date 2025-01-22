@@ -13,6 +13,9 @@ API ?= trcli
 build:
 	go build -o  binaries/$(API) ./cmd/trcli/*.go
 
+docker: build
+	cp binaries/$(API) . && docker build -t transfer
+
 .PHONY: test
 test:
 	USE_TESTCONTAINERS=1 gotestsum --rerun-fails --format github-actions --packages="./cmd/..." -- -timeout=30m
