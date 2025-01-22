@@ -224,13 +224,10 @@ func (p *Provider) Verify(ctx context.Context) error {
 	return nil
 }
 
-func (p *Provider) Sink(config middlewares.Config) (abstract.Sinker, error) {
+func (p *Provider) Sink(mwConfig middlewares.Config) (abstract.Sinker, error) {
 	dst, ok := p.transfer.Dst.(*PgDestination)
 	if !ok {
-		return nil, xerrors.Errorf("unexpected type: %T", p.transfer.Src)
-	}
-	if p.transfer.Type == abstract.TransferTypeSnapshotOnly {
-		dst.PerTransactionPush = false
+		return nil, xerrors.Errorf("unexpected type: %T", p.transfer.Dst)
 	}
 
 	isHomo := p.transfer.SrcType() == ProviderType
@@ -242,6 +239,16 @@ func (p *Provider) Sink(config middlewares.Config) (abstract.Sinker, error) {
 		return nil, xerrors.Errorf("failed to create PostgreSQL sinker: %w", err)
 	}
 	return s, nil
+}
+
+func (p *Provider) SnapshotSink(mwConfig middlewares.Config) (abstract.Sinker, error) {
+	dst, ok := p.transfer.Dst.(*PgDestination)
+	if !ok {
+		return nil, xerrors.Errorf("unexpected type: %T", p.transfer.Dst)
+	}
+
+	dst.PerTransactionPush = false
+	return p.Sink(mwConfig)
 }
 
 func (p *Provider) Source() (abstract.Source, error) {
