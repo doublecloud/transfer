@@ -21,78 +21,38 @@
                     "value": 1
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": [
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "int64",
-                                            "value": 1
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "int64",
-                                            "value": 2
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "int64",
-                                            "value": 3
-                                        }
-                                    }
-                                }
-                            ]
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 1
+                        },
+                        {
+                            "type": "int64",
+                            "value": 2
+                        },
+                        {
+                            "type": "int64",
+                            "value": 3
                         }
-                    }
+                    ]
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": [
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "abc"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "efg"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "hij"
-                                        }
-                                    }
-                                }
-                            ]
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "abc"
+                        },
+                        {
+                            "type": "string",
+                            "value": "efg"
+                        },
+                        {
+                            "type": "string",
+                            "value": "hij"
                         }
-                    }
+                    ]
                 }
             ]
         },
@@ -135,8 +95,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 714,
-                "Values": 714
+                "Read": 362,
+                "Values": 362
             }
         },
         "Table": {
@@ -180,7 +140,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 },
                 {
                     "table_schema": "",
@@ -192,7 +152,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 }
             ]
         },
@@ -223,32 +183,17 @@
                     "value": 2
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": [
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "nil",
-                                            "value": null
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "int64",
-                                            "value": 1
-                                        }
-                                    }
-                                }
-                            ]
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 0
+                        },
+                        {
+                            "type": "int64",
+                            "value": 1
                         }
-                    }
+                    ]
                 },
                 {
                     "type": "nil",
@@ -295,8 +240,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 333,
-                "Values": 333
+                "Read": 209,
+                "Values": 209
             }
         },
         "Table": {
@@ -340,7 +285,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 },
                 {
                     "table_schema": "",
@@ -352,7 +297,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 }
             ]
         },
@@ -383,69 +328,34 @@
                     "value": 3
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": [
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "int64",
-                                            "value": 4
-                                        }
-                                    }
-                                }
-                            ]
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "int64",
+                            "value": 4
                         }
-                    }
+                    ]
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": [
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "efg"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "nil",
-                                            "value": null
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "hij"
-                                        }
-                                    }
-                                },
-                                {
-                                    "type": "map[string]interface {}",
-                                    "value": {
-                                        "item": {
-                                            "type": "string",
-                                            "value": "xyz"
-                                        }
-                                    }
-                                }
-                            ]
+                    "type": "[]interface {}",
+                    "value": [
+                        {
+                            "type": "string",
+                            "value": "efg"
+                        },
+                        {
+                            "type": "string",
+                            "value": ""
+                        },
+                        {
+                            "type": "string",
+                            "value": "hij"
+                        },
+                        {
+                            "type": "string",
+                            "value": "xyz"
                         }
-                    }
+                    ]
                 }
             ]
         },
@@ -488,8 +398,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 638,
-                "Values": 638
+                "Read": 346,
+                "Values": 346
             }
         },
         "Table": {
@@ -533,7 +443,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 },
                 {
                     "table_schema": "",
@@ -545,7 +455,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 }
             ]
         },

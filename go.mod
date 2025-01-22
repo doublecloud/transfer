@@ -46,7 +46,7 @@ require (
 	github.com/montanaflynn/stats v0.7.1
 	github.com/ohler55/ojg v1.15.0
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/parquet-go/parquet-go v0.17.0
+	github.com/parquet-go/parquet-go v0.24.0
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/pingcap/parser v0.0.0-20210415081931-48e7f467fd74
 	github.com/prometheus/client_golang v1.19.1
@@ -204,7 +204,6 @@ require (
 	github.com/rekby/fixenv v0.7.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/segmentio/encoding v0.3.6 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect

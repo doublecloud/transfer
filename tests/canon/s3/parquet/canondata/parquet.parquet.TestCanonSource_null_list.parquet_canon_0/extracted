@@ -20,13 +20,8 @@
                     "value": 1
                 },
                 {
-                    "type": "map[string]interface {}",
-                    "value": {
-                        "list": {
-                            "type": "[]interface {}",
-                            "value": null
-                        }
-                    }
+                    "type": "[]interface {}",
+                    "value": null
                 }
             ]
         },
@@ -69,8 +64,8 @@
         "Size": {
             "type": "changeitem.EventSize",
             "value": {
-                "Read": 186,
-                "Values": 186
+                "Read": 142,
+                "Values": 142
             }
         },
         "Table": {
@@ -114,7 +109,7 @@
                     "fake_key": false,
                     "required": false,
                     "expression": "",
-                    "original_type": "parquet:group"
+                    "original_type": "parquet:LIST"
                 }
             ]
         },
