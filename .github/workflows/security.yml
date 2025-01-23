@@ -23,18 +23,6 @@ jobs:
         with:
           go-version: ${{ env.GO_VERSION }}
 
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v3
-
-      - name: Install protoc-gen-go
-        run: go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
-
-      - name: Install protoc-gen-go-grpc
-        run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
-
-      - name: Generate
-        run: go generate ./...
-
       - name: Run SAST (golangci-lint)
         uses: golangci/golangci-lint-action@v4
         with:
@@ -56,18 +44,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ env.GO_VERSION }}
-
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v3
-
-      - name: Install protoc-gen-go
-        run: go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
-
-      - name: Install protoc-gen-go-grpc
-        run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
-
-      - name: Generate
-        run: go generate ./...
 
       - name: Run SCA (govulncheck)
         uses: golang/govulncheck-action@v1
