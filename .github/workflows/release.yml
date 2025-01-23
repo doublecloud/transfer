@@ -6,6 +6,9 @@ on:
         required: true
         type: string
 permissions: {}
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: doublecloud/transfer
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
