@@ -1,0 +1,77 @@
+name: Security Testing
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  GO_VERSION: "1.22.5"
+
+jobs:
+  SAST:
+    name: Perform SAST analysis (golangci-lint)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+
+      - name: Install protoc-gen-go
+        run: go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+
+      - name: Install protoc-gen-go-grpc
+        run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+
+      - name: Generate
+        run: go generate ./...
+
+      - name: Run SAST (golangci-lint)
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: "latest"
+          only-new-issues: true
+          args: --timeout=10m
+          skip-pkg-cache: true
+          skip-build-cache: true
+
+  SCA:
+    name: Perform SCA analysis (govulncheck)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v3
+
+      - name: Install protoc-gen-go
+        run: go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+
+      - name: Install protoc-gen-go-grpc
+        run: go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+
+      - name: Generate
+        run: go generate ./...
+
+      - name: Run SCA (govulncheck)
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: ${{ env.GO_VERSION }}
+          go-package: ./...
+          cache: false

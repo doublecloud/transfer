@@ -1,6 +1,6 @@
 module github.com/doublecloud/transfer
 
-go 1.22.5
+go 1.22.11
 
 require (
 	cloud.google.com/go v0.112.2
