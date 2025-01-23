@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/mitchellh/mapstructure"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 	sig_yaml "sigs.k8s.io/yaml"
 )
 
