@@ -184,6 +184,10 @@ func (s *Source) ack(buffer []batchWithSize, pushSt time.Time, err error) {
 
 	for _, batch := range buffer {
 		if err := s.reader.Commit(s.ctx, batch.ydbBatch); err != nil {
+			if xerrors.Is(err, topicreader.ErrCommitToExpiredSession) {
+				s.logger.Warn("failed to commit change items", log.Error(err))
+				continue
+			}
 			util.Send(s.ctx, s.errCh, xerrors.Errorf("failed to commit change items: %w", err))
 			return
 		}
