@@ -3,7 +3,7 @@
 <div align="center">
 
 <h4 align="center">
-  <a href="https://doublecloud.github.io/transfer/">Double Cloud Transfer</a>  |
+  <a href="https://doublecloud.github.io/transfer/">Transfer</a>  |
   <a href="https://doublecloud.github.io/transfer/docs/getting_started.html">Documentation</a>  |
   <a href="https://doublecloud.github.io/transfer/docs/benchmarks.html">Benchmarking</a>  |
   <a href="https://doublecloud.github.io/transfer/docs/roadmap">Roadmap</a>
@@ -30,12 +30,7 @@ Our ultimate mission is to help you move data from any source to any destination
 
 </div>
 
-
-### 1. Transfer Serverless Cloud
-
-The fastest way to try Transfer, [Double Cloud](https://double.cloud/services/doublecloud-transfer/)
-
-### 2. Using CLI
+### 1. Using CLI
 
 Build from souces:
 
@@ -46,13 +41,13 @@ make build
 ![Made with VHS](https://vhs.charm.sh/vhs-3ETIytnxDtBmrgkcOX3ZBf.gif)
 
 
-### 3. Using docker container
+### 2. Using docker container
 
 ```shell
 docker pull ghcr.io/doublecloud/transfer:dev
 ```
 
-### 4. Deploy via helm-chart
+### 3. Deploy via helm-chart
 
 We strongly believe in cloud-native technologies, and see **transfer** as a driven power for open-source data-platforms build on top of clouds.
 
