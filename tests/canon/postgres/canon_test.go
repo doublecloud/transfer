@@ -24,7 +24,7 @@ func TestCanonSource(t *testing.T) {
 	if tcrecipes.Enabled() {
 		_ = pgrecipe.RecipeSource(pgrecipe.WithPrefix(""), pgrecipe.WithInitDir("dump"))
 	}
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	srcPort := helpers.GetIntFromEnv("PG_LOCAL_PORT")
 	Source := &postgres.PgSource{
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),

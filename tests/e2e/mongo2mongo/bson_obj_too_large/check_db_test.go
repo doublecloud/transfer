@@ -193,8 +193,8 @@ func LoadFromchangestream(t *testing.T) {
 	time.Sleep(time.Second)
 
 	tryingsCount := 30
-	tries := 0
-	var dstTableSize uint64 = 0
+	var tries int
+	var dstTableSize uint64
 	for tries = 0; tries < tryingsCount; tries++ {
 		allOk := true
 		for _, td := range []abstract.TableDescription{
@@ -283,7 +283,7 @@ func LoadFrompurecursor(t *testing.T) {
 	time.Sleep(time.Second)
 
 	const tryingsCount int = 30
-	var dstTableSize uint64 = 0
+	var dstTableSize uint64
 	for tries := 0; tries < tryingsCount; tries++ {
 		allOk := true
 		for _, td := range []abstract.TableDescription{

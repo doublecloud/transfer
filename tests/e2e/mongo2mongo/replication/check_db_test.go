@@ -158,7 +158,7 @@ func Load(t *testing.T) {
 	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams()))
 }
 
-// define mock sinker to report error
+// define mock sinker to report error.
 var MockSinkerError = xerrors.New("You picked the wrong house, fool!")
 
 type mockSinker struct {

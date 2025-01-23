@@ -3,7 +3,6 @@ package replication
 import (
 	"context"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 
@@ -21,7 +20,6 @@ import (
 var (
 	TransferType = abstract.TransferTypeSnapshotAndIncrement
 	Source       = *pgrecipe.RecipeSource(pgrecipe.WithInitDir("dump"), pgrecipe.WithPrefix(""))
-	dstPort, _   = strconv.Atoi(os.Getenv("DB0_PG_LOCAL_PORT"))
 	Target       = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
 )
 

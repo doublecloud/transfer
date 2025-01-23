@@ -3,6 +3,7 @@ package azure
 import (
 	"context"
 	"fmt"
+	"net"
 
 	"github.com/docker/go-connections/nat"
 	"github.com/testcontainers/testcontainers-go"
@@ -10,13 +11,13 @@ import (
 )
 
 const (
-	// Default ports used by Azurite
+	// Default ports used by Azurite.
 	BlobPort  = "10000/tcp"
 	QueuePort = "10001/tcp"
 	TablePort = "10002/tcp"
 )
 
-// AzuriteContainer represents the Azurite container type used in the module
+// AzuriteContainer represents the Azurite container type used in the module.
 type AzuriteContainer struct {
 	testcontainers.Container
 	Settings options
@@ -45,7 +46,7 @@ func (c *AzuriteContainer) ServiceURL(ctx context.Context, srv Service) (string,
 		return "", err
 	}
 
-	return fmt.Sprintf("http://%s:%d", hostname, mappedPort.Int()), nil
+	return fmt.Sprintf("http://%s", net.JoinHostPort(hostname, mappedPort.Port())), nil
 }
 
 func (c *AzuriteContainer) MustServiceURL(ctx context.Context, srv Service) string {
@@ -57,7 +58,7 @@ func (c *AzuriteContainer) MustServiceURL(ctx context.Context, srv Service) stri
 	return url
 }
 
-// Run creates an instance of the Azurite container type
+// Run creates an instance of the Azurite container type.
 func RunAzurite(ctx context.Context, img string, opts ...testcontainers.ContainerCustomizer) (*AzuriteContainer, error) {
 	req := testcontainers.ContainerRequest{
 		Image:        img,

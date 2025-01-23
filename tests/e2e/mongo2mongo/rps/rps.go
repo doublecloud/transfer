@@ -18,7 +18,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// KV is Key-Document object for key-value database (Mongo or in-memory)
+// KV is Key-Document object for key-value database (Mongo or in-memory).
 type KV struct {
 	Key      string      `bson:"_id"`
 	Document interface{} `bson:"document"`
@@ -37,7 +37,7 @@ func (k *KV) String() string {
 }
 
 // GenerateKV produces random Key-Document object with key and value as
-// string of `keysize` and `valsize` length respectfully
+// string of `keysize` and `valsize` length respectfully.
 func GenerateKV(keysize, valsize int) KV {
 	return KV{
 		Key:      randutil.GenerateAlphanumericString(keysize),
@@ -46,14 +46,14 @@ func GenerateKV(keysize, valsize int) KV {
 }
 
 // RpsSpec defines specification of requests count per Delay
-// applied in order: delete, create, update
+// applied in order: delete, create, update.
 type RpsSpec struct {
 	DeleteCount, CreateCount, UpdateCount, ReplaceCount uint
 	KVConstructor                                       func() KV `json:"-"`
 	Delay                                               time.Duration
 }
 
-// RpsNotifier  contains callbacks for different events of RPS generator
+// RpsNotifier  contains callbacks for different events of RPS generator.
 type RpsCallbacks struct {
 	Tick      func(ctx context.Context, index int, rps *RpsModel) bool
 	OnDelete  func(ctx context.Context, key string)
@@ -63,7 +63,7 @@ type RpsCallbacks struct {
 }
 
 var (
-	// default spec immediately gives control to user
+	// default spec immediately gives control to user.
 	defaultRpsSpec = RpsSpec{
 		KVConstructor: func() KV {
 			return GenerateKV(10, 10)
@@ -110,7 +110,7 @@ func HistoryToString(history []historyDescription) string {
 //  1. rate-limiter for requests
 //  2. in-mem KV storage
 //
-// Anyone can access in-memory Persistent state, NonPersistent(deleted) state, and change history as ModelHistory
+// Anyone can access in-memory Persistent state, NonPersistent(deleted) state, and change history as ModelHistory.
 type RpsModel struct {
 	// we will use this for generating RPS: every 'period' milliseconds the 'timer' hits
 	timer         *time.Timer
@@ -129,7 +129,7 @@ func (r *RpsModel) Close() {
 	r.timer.Stop()
 }
 
-// SetSpec sets RPS specification
+// SetSpec sets RPS specification.
 func (r *RpsModel) SetSpec(spec *RpsSpec) {
 	if spec == nil {
 		spec = &defaultRpsSpec
@@ -285,7 +285,7 @@ func (r *RpsModel) Start() {
 // NewRpsModel creates RPS model
 // use initialSpec to set frequency and value of operations
 // use onCreate, onDelete and onUpdate from RpsCallbacks to make actions (e.g. with database)
-// use Delay in RpsCallbacks to reconfigure RPS in time
+// use Delay in RpsCallbacks to reconfigure RPS in time.
 func NewRpsModel(ctx context.Context, notifiers *RpsCallbacks) *RpsModel {
 	newCtx, newCtxCancel := context.WithCancel(ctx)
 

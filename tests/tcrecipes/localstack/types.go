@@ -4,14 +4,14 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 )
 
-// Container represents the LocalStack container type used in the module
+// Container represents the LocalStack container type used in the module.
 type Container struct {
 	testcontainers.Container
 	host string
 }
 
 // LocalStackContainerRequest represents the LocalStack container request type used in the module
-// to configure the container
+// to configure the container.
 type LocalStackContainerRequest struct {
 	testcontainers.GenericContainerRequest
 }
@@ -21,12 +21,12 @@ type LocalStackContainerRequest struct {
 type OverrideContainerRequestOption func(req testcontainers.ContainerRequest) (testcontainers.ContainerRequest, error)
 
 // Deprecated: use testcontainers.ContainerCustomizer instead
-// NoopOverrideContainerRequest returns a helper function that does not override the container request
+// NoopOverrideContainerRequest returns a helper function that does not override the container request.
 var NoopOverrideContainerRequest = func(req testcontainers.ContainerRequest) (testcontainers.ContainerRequest, error) {
 	return req, nil
 }
 
-// Deprecated: use testcontainers.ContainerCustomizer instead
+// Deprecated: use testcontainers.ContainerCustomizer instead.
 func (opt OverrideContainerRequestOption) Customize(req *testcontainers.GenericContainerRequest) error {
 	r, err := opt(req.ContainerRequest)
 	if err != nil {
@@ -39,7 +39,7 @@ func (opt OverrideContainerRequestOption) Customize(req *testcontainers.GenericC
 }
 
 // Deprecated: use testcontainers.CustomizeRequest instead
-// OverrideContainerRequest returns a function that can be used to merge the passed container request with one that is created by the LocalStack container
+// OverrideContainerRequest returns a function that can be used to merge the passed container request with one that is created by the LocalStack container.
 func OverrideContainerRequest(r testcontainers.ContainerRequest) func(req testcontainers.ContainerRequest) (testcontainers.ContainerRequest, error) {
 	destContainerReq := testcontainers.GenericContainerRequest{
 		ContainerRequest: r,

@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// SequenceTestCases contains a list of all sequence test cases. Each new case must be added here
+// SequenceTestCases contains a list of all sequence test cases. Each new case must be added here.
 var SequenceTestCases = []string{
 	"insert_update_delete",
 	"updatepk",

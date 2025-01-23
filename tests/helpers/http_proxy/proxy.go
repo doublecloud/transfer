@@ -65,6 +65,7 @@ func (p *HTTPProxy) handleHTTP(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
 	}
+	defer resp.Body.Close()
 
 	// save 'resp'
 	respBody, err := io.ReadAll(resp.Body)

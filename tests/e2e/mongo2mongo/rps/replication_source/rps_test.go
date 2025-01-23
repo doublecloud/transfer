@@ -326,7 +326,7 @@ func RpsTestFactory(testParameters RpsTestParameters) func(t *testing.T) {
 		// wait for replication to catch up lag
 		rowCount := uint64(len(rpsModel.Persistent))
 		tryingsCount := 30
-		tries := 0
+		var tries int
 		for tries = 0; tries < tryingsCount; tries++ {
 			td := abstract.TableID{Namespace: DB, Name: Collection}
 			dstTableSize, err := dstStorage.ExactTableRowsCount(td) // TODO(@kry127;@timmyb32r) TM2409 change on GetRowsCount()

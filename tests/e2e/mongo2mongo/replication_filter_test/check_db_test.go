@@ -23,7 +23,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// creates source from environment settings/recipe
+// creates source from environment settings/recipe.
 func sourceFromConfig() (*mongodataagent.MongoSource, error) {
 	srcPort, err := strconv.Atoi(os.Getenv("MONGO_LOCAL_PORT"))
 	if err != nil {
@@ -66,16 +66,17 @@ func makeTransfer(id string, source *mongodataagent.MongoSource, target *mongoda
 }
 
 func TestGroup(t *testing.T) {
+	t.Parallel()
 	sourcePort, err := strconv.Atoi(os.Getenv("MONGO_LOCAL_PORT"))
 	require.NoError(t, err)
 	targetPort, err := strconv.Atoi(os.Getenv("DB0_MONGO_LOCAL_PORT"))
 	require.NoError(t, err)
-	defer func() {
+	t.Cleanup(func() {
 		require.NoError(t, helpers.CheckConnections(
 			helpers.LabeledPort{Label: "Mongo source", Port: sourcePort},
 			helpers.LabeledPort{Label: "Mongo target", Port: targetPort},
 		))
-	}()
+	})
 
 	t.Run("Empty Collection List Means Include All", testEmptyCollectionListIncludesAll)
 	t.Run("Include All Collections Test", testCollectionFilterIncludeWholeDB)

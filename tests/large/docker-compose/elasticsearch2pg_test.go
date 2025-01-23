@@ -160,6 +160,9 @@ func deleteAllElasticIndexes(t *testing.T) {
 	require.NoError(t, err)
 
 	res, err := http.DefaultClient.Do(req)
+	if err == nil {
+		defer res.Body.Close()
+	}
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, res.StatusCode)
 }

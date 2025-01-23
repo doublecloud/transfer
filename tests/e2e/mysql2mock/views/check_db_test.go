@@ -108,7 +108,6 @@ func TestMySQLHeteroViewsInteraction(t *testing.T) {
 						require.NoError(t, err)
 						require.NoError(t, rows.Close())
 					}
-					notesPerTable = 3
 				}
 				notesPerTable = 2
 				require.Equal(t, params.checkTableLength, func() int {
@@ -126,5 +125,4 @@ func TestMySQLHeteroViewsInteraction(t *testing.T) {
 			})
 		}(testCase)
 	}
-
 }

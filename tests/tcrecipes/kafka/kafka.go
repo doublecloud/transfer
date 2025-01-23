@@ -19,13 +19,13 @@ const (
 //go:embed kafka_starter.sh
 var starterScriptContent []byte
 
-// KafkaContainer represents the Kafka container type used in the module
+// KafkaContainer represents the Kafka container type used in the module.
 type KafkaContainer struct {
 	testcontainers.Container
 	ClusterID string
 }
 
-// RunContainer creates an instance of the Kafka container type
+// RunContainer creates an instance of the Kafka container type.
 func RunContainer(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*KafkaContainer, error) {
 	req := testcontainers.ContainerRequest{
 		Image:        "confluentinc/confluent-local:7.5.0",

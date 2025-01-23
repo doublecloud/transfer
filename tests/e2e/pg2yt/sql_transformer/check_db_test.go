@@ -56,7 +56,7 @@ func TestGroup(t *testing.T) {
 }
 
 func Load(t *testing.T) {
-	_ = os.Setenv("CH_LOCAL_PATH", os.Getenv("RECIPE_CLICKHOUSE_BIN"))
+	t.Setenv("CH_LOCAL_PATH", os.Getenv("RECIPE_CLICKHOUSE_BIN"))
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotOnly)
 	require.NoError(t, transfer.TransformationFromJSON(`

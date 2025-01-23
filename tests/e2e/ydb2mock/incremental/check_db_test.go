@@ -122,7 +122,7 @@ func TestYDBIncrementalSnapshot(t *testing.T) {
 	}
 }
 
-// checkRows checks whether rows contain unique rows numbered from expectedFrom to expectedTo
+// checkRows checks whether rows contain unique rows numbered from expectedFrom to expectedTo.
 func checkRows(t *testing.T, rows []abstract.ChangeItem, expectedFrom, expectedTo int64) {
 	require.Len(t, rows, int(expectedTo-expectedFrom))
 

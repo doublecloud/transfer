@@ -40,7 +40,7 @@ func PgDebeziumIgnoreTemporalAccuracyForArraysComparator(lVal interface{}, lSche
 	return false, false, nil
 }
 
-// TimeWithPrecision takes the time in format `01:02:03[.123456]` and returns it with the given precision
+// TimeWithPrecision takes the time in format `01:02:03[.123456]` and returns it with the given precision.
 func TimeWithPrecision(t string, precision int) string {
 	withoutFractions := t[:8]
 	fractions := t[8:]

@@ -40,7 +40,7 @@ func TestTableListFilter(t *testing.T) {
 	require.Contains(t, tl, abstract.TableID{Namespace: "public", Name: "t_accessible"})
 }
 
-// TestTableListFilterIncludeTables checks include directives do not affect `TableList` output
+// TestTableListFilterIncludeTables checks include directives do not affect `TableList` output.
 func TestTableListFilterIncludeTables(t *testing.T) {
 	source := prepareSource()
 	source.DBTables = []string{"\"public\".\"does_not_exist\""}

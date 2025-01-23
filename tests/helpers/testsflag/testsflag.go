@@ -11,7 +11,7 @@ func IsTest() bool {
 	return isTest
 }
 
-// for cases, when in tests want to turn-off extra validations - for example, in benchmarks
+// for cases, when in tests want to turn-off extra validations - for example, in benchmarks.
 func TurnOff() {
 	isTest = false
 }

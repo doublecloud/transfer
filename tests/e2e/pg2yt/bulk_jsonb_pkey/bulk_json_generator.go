@@ -8,15 +8,15 @@ import (
 // FCoalgebra is one JSON node builder.
 // F-coalgeras accepting zero amount of childs are primitive JSONs (constructors)
 // arbitrary F-coalgebra may constructs JSON with N childs passed as strings
-// if it unable to do it, it should panic
+// if it unable to do it, it should panic.
 type FCoalgebra func([]string) string
 
 // GenerationRules is just a map of child count to F-coalgebras which accepts that count of childs
-// you should care about arity of F-coalgebras
+// you should care about arity of F-coalgebras.
 type GenerationRules map[uint][]FCoalgebra
 
 var (
-	// see example of default generation rules
+	// see example of default generation rules.
 	DefaultGenerationRules GenerationRules = map[uint][]FCoalgebra{
 		0: {numberConstructor, stringConstructor, arrayConstructor},
 		1: {fCoalgebraJSONA, fCoalgebraJSONB, arrayConstructor},
@@ -24,7 +24,7 @@ var (
 		3: {arrayConstructor},
 	}
 
-	// this rules do not generate collisions like 0 == "0"
+	// this rules do not generate collisions like 0 == "0".
 	WithoutCollisionGenerationRules GenerationRules = map[uint][]FCoalgebra{
 		0: {numberConstructor, arrayConstructor},
 		1: {fCoalgebraJSONB, arrayConstructor},
@@ -43,7 +43,7 @@ func checkLength(ch []string, l int) {
 	}
 }
 
-// F-coalgebras
+// F-coalgebras.
 func numberConstructor(nest []string) string {
 	checkLength(nest, 0)
 	return "0"
@@ -76,7 +76,7 @@ func fCoalgebraJSONC(nest []string) string {
 //
 // note, that result length of array may differ with 'count' parameter, because of not having zero-arity constructors,
 // or not having non-zero-arity constructors
-// the algorithm is deterministic with no side effects
+// the algorithm is deterministic with no side effects.
 func (j *JSONGenerator) generateSequence(count int) []string {
 	rules := j.generationRules
 	if rules == nil {
@@ -161,7 +161,7 @@ func (j *JSONGenerator) generateSequence(count int) []string {
 }
 
 // NewJSONGenerator creates JSONGenerator with generation rules
-// if generationRules rules are nil, default will be used
+// if generationRules rules are nil, default will be used.
 func NewJSONGenerator(generationRules GenerationRules) *JSONGenerator {
 	return &JSONGenerator{
 		generationRules: generationRules,

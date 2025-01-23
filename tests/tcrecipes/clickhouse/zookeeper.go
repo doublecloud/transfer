@@ -12,7 +12,7 @@ const defaultZKImage = "zookeeper:3.7"
 
 const zkPort = nat.Port("2181/tcp")
 
-// ClickHouseContainer represents the ClickHouse container type used in the module
+// ClickHouseContainer represents the ClickHouse container type used in the module.
 type ZookeeperContainer struct {
 	testcontainers.Container
 	exposedPort nat.Port

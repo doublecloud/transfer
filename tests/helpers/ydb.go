@@ -47,15 +47,15 @@ func YDBInitChangeItem(tablePath string) *abstract.ChangeItem {
 			{PrimaryKey: false, Required: false, ColumnName: "Utf8_", DataType: string(schema.TypeString), OriginalType: "ydb:Utf8"},
 			{PrimaryKey: false, Required: false, ColumnName: "Json_", DataType: string(schema.TypeAny), OriginalType: "ydb:Json"},
 			{PrimaryKey: false, Required: false, ColumnName: "JsonDocument_", DataType: string(schema.TypeAny), OriginalType: "ydb:JsonDocument"},
-			//{PrimaryKey: false, Required: false, ColumnName: "Yson_", DataType: "", OriginalType: "ydb:Yson"}, // can't find any acceptable value
-			//{PrimaryKey: false, Required: false, ColumnName: "Uuid_", DataType: "", OriginalType: "ydb:Uuid"}, // Не поддержан для столбцов таблиц
+			// {PrimaryKey: false, Required: false, ColumnName: "Yson_", DataType: "", OriginalType: "ydb:Yson"}, // can't find any acceptable value
+			// {PrimaryKey: false, Required: false, ColumnName: "Uuid_", DataType: "", OriginalType: "ydb:Uuid"}, // Не поддержан для столбцов таблиц
 
 			{PrimaryKey: false, Required: false, ColumnName: "Date_", DataType: string(schema.TypeDate), OriginalType: "ydb:Date"},
 			{PrimaryKey: false, Required: false, ColumnName: "Datetime_", DataType: string(schema.TypeDatetime), OriginalType: "ydb:Datetime"},
 			{PrimaryKey: false, Required: false, ColumnName: "Timestamp_", DataType: string(schema.TypeTimestamp), OriginalType: "ydb:Timestamp"},
 			{PrimaryKey: false, Required: false, ColumnName: "Interval_", DataType: string(schema.TypeInterval), OriginalType: "ydb:Interval"},
-			//{PrimaryKey: false, Required: false, ColumnName: "TzDate_", DataType: "", OriginalType: "ydb:TzDate"}, // Не поддержан для столбцов таблиц
-			//{PrimaryKey: false, Required: false, ColumnName: "TzDateTime_", DataType: "", OriginalType: "ydb:TzDateTime"}, // Не поддержан для столбцов таблиц
+			// {PrimaryKey: false, Required: false, ColumnName: "TzDate_", DataType: "", OriginalType: "ydb:TzDate"}, // Не поддержан для столбцов таблиц
+			// {PrimaryKey: false, Required: false, ColumnName: "TzDateTime_", DataType: "", OriginalType: "ydb:TzDateTime"}, // Не поддержан для столбцов таблиц
 			//{PrimaryKey: false, Required: false, ColumnName: "TzTimestamp_", DataType: "", OriginalType: "ydb:TzTimestamp"}, // Не поддержан для столбцов таблиц
 		}),
 		ColumnNames: []string{
@@ -77,43 +77,43 @@ func YDBInitChangeItem(tablePath string) *abstract.ChangeItem {
 			"Utf8_",
 			"Json_",
 			"JsonDocument_",
-			//"Yson_", // can't find any acceptable value
-			//"Uuid_", // Не поддержан для столбцов таблиц
+			// "Yson_", // can't find any acceptable value
+			// "Uuid_", // Не поддержан для столбцов таблиц
 			"Date_",
 			"Datetime_",
 			"Timestamp_",
 			"Interval_",
-			//"TzDate_", // Не поддержан для столбцов таблиц
-			//"TzDateTime_", // Не поддержан для столбцов таблиц
+			// "TzDate_", // Не поддержан для столбцов таблиц
+			// "TzDateTime_", // Не поддержан для столбцов таблиц
 			//"TzTimestamp_", // Не поддержан для столбцов таблиц
 		},
 		ColumnValues: []interface{}{
-			1,                //"id",
-			true,             //"Bool_",
-			int8(1),          //"Int8_",
-			int16(2),         //"Int16_",
-			int32(3),         //"Int32_",
-			int64(4),         //"Int64_",
-			uint8(5),         //"Uint8_",
-			uint16(6),        //"Uint16_",
-			uint32(7),        //"Uint32_",
-			uint64(8),        //"Uint64_",
-			float32(1.1),     //"Float_",
-			2.2,              //"Double_",
-			"234.000000000",  //"Decimal_",
-			".123e3",         //"DyNumber_",
-			[]byte{1},        //"String_",
-			"my_utf8_string", //"Utf8_",
-			"{}",             //"Json_",
-			"{}",             //"JsonDocument_",
-			//"Yson_", // can't find any acceptable value
-			//"Uuid_", // Не поддержан для столбцов таблиц
-			time.Date(2020, 2, 2, 0, 0, 0, 0, time.UTC),   //"Date_",
-			time.Date(2020, 2, 2, 10, 2, 22, 0, time.UTC), //"Datetime_",
-			time.Date(2020, 2, 2, 10, 2, 22, 0, time.UTC), //"Timestamp_",
-			time.Duration(123000),                         //"Interval_",
-			//"TzDate_", // Не поддержан для столбцов таблиц
-			//"TzDateTime_", // Не поддержан для столбцов таблиц
+			1,                // "id",
+			true,             // "Bool_",
+			int8(1),          // "Int8_",
+			int16(2),         // "Int16_",
+			int32(3),         // "Int32_",
+			int64(4),         // "Int64_",
+			uint8(5),         // "Uint8_",
+			uint16(6),        // "Uint16_",
+			uint32(7),        // "Uint32_",
+			uint64(8),        // "Uint64_",
+			float32(1.1),     // "Float_",
+			2.2,              // "Double_",
+			"234.000000000",  // "Decimal_",
+			".123e3",         // "DyNumber_",
+			[]byte{1},        // "String_",
+			"my_utf8_string", // "Utf8_",
+			"{}",             // "Json_",
+			"{}",             // "JsonDocument_",
+			// "Yson_", // can't find any acceptable value
+			// "Uuid_", // Не поддержан для столбцов таблиц
+			time.Date(2020, 2, 2, 0, 0, 0, 0, time.UTC),   // "Date_",
+			time.Date(2020, 2, 2, 10, 2, 22, 0, time.UTC), // "Datetime_",
+			time.Date(2020, 2, 2, 10, 2, 22, 0, time.UTC), // "Timestamp_",
+			time.Duration(123000),                         // "Interval_",
+			// "TzDate_", // Не поддержан для столбцов таблиц
+			// "TzDateTime_", // Не поддержан для столбцов таблиц
 			//"TzTimestamp_", // Не поддержан для столбцов таблиц
 		},
 	}
@@ -290,7 +290,7 @@ func YDBPullDataFromTable(t *testing.T, token, database, instance, table string)
 	return extracted
 }
 
-// Test values
+// Test values.
 func YDBStmtInsertValues(t *testing.T, tablePath string, values []interface{}, id int) *abstract.ChangeItem {
 	result := YDBInitChangeItem(tablePath)
 	result.ColumnValues = values

@@ -19,12 +19,12 @@ var (
 	defaultKubeConfigK3sPath  = "/etc/rancher/k3s/k3s.yaml"
 )
 
-// K3sContainer represents the K3s container type used in the module
+// K3sContainer represents the K3s container type used in the module.
 type K3sContainer struct {
 	testcontainers.Container
 }
 
-// Prepare creates an instance of the K3s container type
+// Prepare creates an instance of the K3s container type.
 func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*K3sContainer, error) {
 	host, err := getContainerHost(ctx, opts...)
 	if err != nil {
@@ -98,7 +98,7 @@ func getContainerHost(ctx context.Context, opts ...testcontainers.ContainerCusto
 	return "localhost", nil
 }
 
-// GetKubeConfig returns the modified kubeconfig with server url
+// GetKubeConfig returns the modified kubeconfig with server url.
 func (c *K3sContainer) GetKubeConfig(ctx context.Context) ([]byte, error) {
 	hostIP, err := c.Host(ctx)
 	if err != nil {

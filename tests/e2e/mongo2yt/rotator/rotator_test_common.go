@@ -22,7 +22,7 @@ import (
 	"go.ytsaurus.tech/yt/go/yttest"
 )
 
-// constants (begin)
+// constants (begin).
 const (
 	TimeColumnName = "partition_time"
 )

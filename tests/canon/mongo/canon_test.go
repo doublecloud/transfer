@@ -16,7 +16,7 @@ import (
 )
 
 func TestCanonSource(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	databaseName := "canondb"
 	t.Run("vanilla hetero case", func(t *testing.T) {
 		snapshotPlusIncrementScenario(t, databaseName, "hetero_repack", false, false)

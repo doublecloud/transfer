@@ -22,7 +22,7 @@ const defaultImage = "clickhouse/clickhouse-server:23.3.8.21-alpine"
 const HTTPPort = nat.Port("8123/tcp")
 const NativePort = nat.Port("9000/tcp")
 
-// ClickHouseContainer represents the ClickHouse container type used in the module
+// ClickHouseContainer represents the ClickHouse container type used in the module.
 type ClickHouseContainer struct {
 	testcontainers.Container
 	dbName   string
@@ -47,7 +47,7 @@ func (c *ClickHouseContainer) ConnectionHost(ctx context.Context) (string, error
 // ConnectionString returns the dsn string for the clickhouse container, using the default 9000 port, and
 // obtaining the host and exposed port from the container. It also accepts a variadic list of extra arguments
 // which will be appended to the dsn string. The format of the extra arguments is the same as the
-// connection string format, e.g. "dial_timeout=300ms" or "skip_verify=false"
+// connection string format, e.g. "dial_timeout=300ms" or "skip_verify=false".
 func (c *ClickHouseContainer) ConnectionString(ctx context.Context, args ...string) (string, error) {
 	host, err := c.ConnectionHost(ctx)
 	if err != nil {
@@ -66,7 +66,7 @@ func (c *ClickHouseContainer) ConnectionString(ctx context.Context, args ...stri
 	return connectionString, nil
 }
 
-// WithInitScripts sets the init scripts to be run when the container starts
+// WithInitScripts sets the init scripts to be run when the container starts.
 func WithInitScripts(scripts ...string) testcontainers.CustomizeRequestOption {
 	return func(req *testcontainers.GenericContainerRequest) error {
 		initScripts := []testcontainers.ContainerFile{}
@@ -109,7 +109,7 @@ func WithConfigData(data string) testcontainers.CustomizeRequestOption {
 	defer f.Close()
 
 	// write data to the temporary file
-	if _, err := f.Write([]byte(data)); err != nil {
+	if _, err := f.WriteString(data); err != nil {
 		panic(err)
 	}
 
@@ -219,7 +219,7 @@ func WithZookeeper(container *ZookeeperContainer) testcontainers.CustomizeReques
 	`, container.IP()))
 }
 
-// Prepare creates an instance of the ClickHouse container type
+// Prepare creates an instance of the ClickHouse container type.
 func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*ClickHouseContainer, error) {
 	req := testcontainers.ContainerRequest{
 		Image: defaultImage,

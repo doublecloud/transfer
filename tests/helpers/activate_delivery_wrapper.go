@@ -21,7 +21,7 @@ type Worker struct {
 	cp     coordinator.Coordinator
 }
 
-// controlplane that catches replication failure
+// controlplane that catches replication failure.
 type fakeCpErrRepl struct {
 	coordinator.Coordinator
 	onErrorCallback []func(err error)
@@ -44,7 +44,7 @@ func (q *Worker) Close(t *testing.T) {
 	}
 }
 
-// Restart replication worker with updated transfer
+// Restart replication worker with updated transfer.
 func (q *Worker) Restart(t *testing.T, transfer *model.Transfer) {
 	q.Close(t)
 	q.initLocalWorker(transfer)

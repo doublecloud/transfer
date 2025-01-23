@@ -20,7 +20,7 @@ const defaultPassword = "postgres"
 const defaultPostgresImage = "docker.io/postgres:16-alpine"
 const defaultPort = nat.Port("5432/tcp")
 
-// PostgresContainer represents the postgres container type used in the module
+// PostgresContainer represents the postgres container type used in the module.
 type PostgresContainer struct {
 	testcontainers.Container
 	dbName      string
@@ -32,7 +32,7 @@ type PostgresContainer struct {
 // ConnectionString returns the connection string for the postgres container, using the default 5432 port, and
 // obtaining the host and exposed port from the container. It also accepts a variadic list of extra arguments
 // which will be appended to the connection string. The format of the extra arguments is the same as the
-// connection string format, e.g. "connect_timeout=10" or "application_name=myapp"
+// connection string format, e.g. "connect_timeout=10" or "application_name=myapp".
 func (c *PostgresContainer) ConnectionString(ctx context.Context, args ...string) (string, error) {
 	containerPort, err := c.MappedPort(ctx, "5432/tcp")
 	if err != nil {
@@ -63,7 +63,7 @@ func WithConfigFile(cfg string) testcontainers.CustomizeRequestOption {
 
 		defer f.Close()
 
-		if _, err := f.Write([]byte(cfg)); err != nil {
+		if _, err := f.WriteString(cfg); err != nil {
 			panic(err)
 		}
 		cfgFile := testcontainers.ContainerFile{
@@ -100,7 +100,7 @@ func WithInitDir(dir string) testcontainers.CustomizeRequestOption {
 	})...)
 }
 
-// WithInitScripts sets the init scripts to be run when the container starts
+// WithInitScripts sets the init scripts to be run when the container starts.
 func WithInitScripts(scripts ...string) testcontainers.CustomizeRequestOption {
 	return func(req *testcontainers.GenericContainerRequest) error {
 		initScripts := []testcontainers.ContainerFile{}
@@ -118,7 +118,7 @@ func WithInitScripts(scripts ...string) testcontainers.CustomizeRequestOption {
 	}
 }
 
-// WithInitScripts sets the init scripts to be run when the container starts
+// WithInitScripts sets the init scripts to be run when the container starts.
 func WithInitScript(script string, containerName string) testcontainers.CustomizeRequestOption {
 	return func(req *testcontainers.GenericContainerRequest) error {
 		initScripts := []testcontainers.ContainerFile{}
@@ -185,7 +185,7 @@ func WithImage(image string) testcontainers.CustomizeRequestOption {
 	}
 }
 
-// Prepare creates an instance of the postgres container type
+// Prepare creates an instance of the postgres container type.
 func Prepare(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*PostgresContainer, error) {
 	req := testcontainers.ContainerRequest{
 		Image: defaultPostgresImage,

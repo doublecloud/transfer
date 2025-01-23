@@ -39,7 +39,7 @@ func GetIntFromEnv(varName string) int {
 	return val
 }
 
-// StrictEquality - default callback for checksum - just compare typeNames
+// StrictEquality - default callback for checksum - just compare typeNames.
 func StrictEquality(l, r string) bool {
 	return l == r
 }
@@ -121,7 +121,7 @@ func MakeTransferForIncrementalSnapshot(transferID string, src model.Source, dst
 	return transfer
 }
 
-// GetPortFromStr - works when the port is in the end of the string, preceded by a colon
+// GetPortFromStr - works when the port is in the end of the string, preceded by a colon.
 func GetPortFromStr(s string) (int, error) {
 	tokens := strings.Split(s, ":")
 	if tokens[0] == s {

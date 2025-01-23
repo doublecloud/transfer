@@ -48,7 +48,7 @@ var (
 		}}},
 		bson.D{{Key: "_id", Value: oid("62e98ebcb28dbd2fffdf12c4")}, {Key: "nil", Value: nil}},
 	}
-	// this piece is valid only for repackable hetero transfer
+	// this piece is valid only for repackable hetero transfer.
 	ExtraSnapshotDocuments = []interface{}{
 		bson.D{{Key: "_id", Value: oid("62e98ebcb28dbd2fffdf12b4")}, {Key: "nan", Value: math.NaN()}, {Key: "inf+", Value: math.Inf(1)}, {Key: "inf-", Value: math.Inf(-1)}},
 	}
@@ -79,7 +79,7 @@ var (
 		}}},
 		bson.D{{Key: "_id", Value: oid("62e98ebcb28dbd2fffdf12cf")}, {Key: "nil", Value: primitive.Null{}}}, // primitive.Null is the same as nil
 	}
-	// Update existing
+	// Update existing.
 	IncrementUpdates = []IncrementUpdate{
 		{
 			Filter: bson.D{{Key: "_id", Value: "omg"}},

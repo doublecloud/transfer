@@ -62,7 +62,7 @@ func Snapshot(t *testing.T) {
 	require.False(t, exists)
 }
 
-// CheckTableExistence is a helper function for PostgreSQL to check existence of the given table
+// CheckTableExistence is a helper function for PostgreSQL to check existence of the given table.
 func CheckTableExistence(ctx context.Context, conn *pgxpool.Pool, tableSchema string, tableName string) (bool, error) {
 	var result bool
 	err := conn.QueryRow(context.Background(), `

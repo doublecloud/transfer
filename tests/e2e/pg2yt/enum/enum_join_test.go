@@ -60,7 +60,7 @@ func teardown(env *yttest.Env, p string) {
 }
 
 // initializes YT client and sinker config
-// do not forget to call testTeardown when resources are not needed anymore
+// do not forget to call testTeardown when resources are not needed anymore.
 func initYt(t *testing.T, cypressPath string) (testEnv *yttest.Env, testCfg yt_provider.YtDestinationModel, testTeardown func()) {
 	env, cancel := yttest.NewEnv(t)
 	cfg := yt_helpers.RecipeYtTarget(cypressPath)

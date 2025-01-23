@@ -83,19 +83,19 @@ func setOplogSize(ctx context.Context, client *mongo.MongoClientWrapper, sizeInS
 	return nil
 }
 
-// just mock sinker
+// just mock sinker.
 type mockSinker struct{}
 
 func (m mockSinker) Close() error                           { return nil }
 func (m mockSinker) Push(items []abstract.ChangeItem) error { return nil }
 
-// controlplane that catches replication failure
+// controlplane that catches replication failure.
 type mockCPFailRepl struct {
 	cpclient.CoordinatorNoOp
 	err error
 }
 
-// test data structure
+// test data structure.
 type Pepe struct {
 	DayOfTheWeek   string
 	DayOfTheWeekID int

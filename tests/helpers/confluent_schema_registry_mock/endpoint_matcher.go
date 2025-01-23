@@ -29,5 +29,5 @@ type schema struct {
 var reSchema = regexp.MustCompile(`^/subjects/(.*)/versions/([0-9]+)$`)
 
 func (s schema) IsMatched(url string) bool {
-	return reSchema.Match([]byte(url))
+	return reSchema.MatchString(url)
 }

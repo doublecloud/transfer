@@ -39,7 +39,7 @@ type Row struct {
 	Date      time.Time `yson:"t_date"`
 	DateTime  time.Time `yson:"t_datetime"`
 	Timestamp time.Time `yson:"t_timestamp"`
-	//Interval  int64     `yson:"t_interval"`
+	// Interval  int64     `yson:"t_interval"`
 	Yson string `yson:"t_yson"`
 
 	Decimal   string            `yson:"t_decimal"`
@@ -73,7 +73,7 @@ func Table() []abstract.ChangeItem {
 		{ColumnName: "t_date", DataType: string(schema.TypeDate)},
 		{ColumnName: "t_datetime", DataType: string(schema.TypeDatetime)},
 		{ColumnName: "t_timestamp", DataType: string(schema.TypeTimestamp)},
-		//{ColumnName: "t_interval", DataType: schema.TypeInterval},
+		// {ColumnName: "t_interval", DataType: schema.TypeInterval},
 		{ColumnName: "t_list", DataType: string(schema.TypeAny)},
 		{ColumnName: "t_struct", DataType: string(schema.TypeAny)},
 		{ColumnName: "t_tuple", DataType: string(schema.TypeAny)},
@@ -82,8 +82,8 @@ func Table() []abstract.ChangeItem {
 		{ColumnName: "t_dict", DataType: string(schema.TypeAny)},
 		{ColumnName: "t_tagged", DataType: string(schema.TypeAny)},
 		// Complex types
-		//{ColumnName: "t_yson", DataType: schema.Optional{Item: schema.TypeAny}},
-		//{ ColumnName: "t_decimal"},
+		// {ColumnName: "t_yson", DataType: schema.Optional{Item: schema.TypeAny}},
+		// { ColumnName: "t_decimal"},
 	})
 	colNames := slices.Map(cols.Columns(), func(colSchema abstract.ColSchema) string {
 		return colSchema.ColumnName
@@ -148,7 +148,7 @@ func Table() []abstract.ChangeItem {
 			inRow.Date,
 			inRow.DateTime,
 			inRow.Timestamp,
-			//inRow.Interval,
+			// inRow.Interval,
 			inRow.List,
 			inRow.Struct,
 			inRow.Tuple,

@@ -29,7 +29,7 @@ var (
 )
 
 func TestCanonizeSequences(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	Source := &pgcommon.PgSource{
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
@@ -82,7 +82,7 @@ func TestCanonizeSequences(t *testing.T) {
 	// new cases should be added here. The name of the cases MUST be placed in canon.SequenceTestCases so that the change in the set of cases is automatically propagated to all sinks under test
 }
 
-// DropNonRowKindsExceptRowMiddleware drops all non-row items except the ones whose kind is among the given kinds
+// DropNonRowKindsExceptRowMiddleware drops all non-row items except the ones whose kind is among the given kinds.
 func DropNonRowKindsExceptRowMiddleware(preserveKinds ...abstract.Kind) func([]abstract.ChangeItem) []abstract.ChangeItem {
 	preserveKindsMap := make(map[abstract.Kind]bool)
 	for _, k := range preserveKinds {
@@ -100,7 +100,7 @@ func DropNonRowKindsExceptRowMiddleware(preserveKinds ...abstract.Kind) func([]a
 	}
 }
 
-// SynthesizeCommitTimeRowMiddleware sets synthetic sequential CommitTime for all items that it processes
+// SynthesizeCommitTimeRowMiddleware sets synthetic sequential CommitTime for all items that it processes.
 func SynthesizeCommitTimeRowMiddleware() func([]abstract.ChangeItem) []abstract.ChangeItem {
 	return func(items []abstract.ChangeItem) []abstract.ChangeItem {
 		for i := range items {

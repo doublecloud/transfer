@@ -21,9 +21,11 @@ import (
 	"github.com/ydb-platform/ydb-go-sdk/v3/table/result/named"
 )
 
-var path = "dectest/timmyb32r-test"
-var pathOut = "dectest/timmyb32r-test-out"
-var sourceChangeItem abstract.ChangeItem
+var (
+	path             = "dectest/timmyb32r-test"
+	pathOut          = "dectest/timmyb32r-test-out"
+	sourceChangeItem abstract.ChangeItem
+)
 
 func TestSnapshotSerDeViaDebeziumEmbeddedOLAP(t *testing.T) {
 	src := &ydb.YdbSource{
@@ -97,7 +99,7 @@ func TestSnapshotSerDeViaDebeziumEmbeddedOLAP(t *testing.T) {
 			}
 			var count uint64
 			for res.NextRow() {
-				err = res.ScanNamed(named.Required("co", &count), named.Required("bo", &foundInOlap))
+				_ = res.ScanNamed(named.Required("co", &count), named.Required("bo", &foundInOlap))
 			}
 			require.Equal(t, uint64(1), count)
 			return res.Err()

@@ -37,6 +37,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestRunner(t *testing.T) {
+	t.Parallel()
 	t.Run("CheckSimpleValidity", checkSimpleValidity)
 	t.Run("CheckGeneratorSequenceUniqueness", checkGeneratorSequenceUniqueness)
 	t.Run("CheckGeneratorIsDeterministic", checkGeneratorIsDeterministic)
@@ -44,11 +45,11 @@ func TestRunner(t *testing.T) {
 
 	targetPort, err := helpers.GetPortFromStr(ytDest.Cluster())
 	require.NoError(t, err)
-	defer func() {
+	t.Cleanup(func() {
 		require.NoError(t, helpers.CheckConnections(
 			helpers.LabeledPort{Label: "YT target", Port: targetPort},
 		))
-	}()
+	})
 
 	defer cancel()
 	t.Run("PumpDatabaseToYt_NoCollisions", testFactoryPumpDatabaseToYt(ytDest, "bulk_jsonb_no_collision", WithoutCollisionGenerationRules))
@@ -77,7 +78,7 @@ type ValuesWithKind struct {
 	kind abstract.Kind
 }
 
-// Haskell-like map :: (a -> b) -> [a] -> [b]
+// Haskell-like map :: (a -> b) -> [a] -> [b].
 func mapValuesToChangeItems(f func(ValuesWithKind) abstract.ChangeItem) func([]ValuesWithKind) []abstract.ChangeItem {
 	return func(vwk []ValuesWithKind) []abstract.ChangeItem {
 		var result []abstract.ChangeItem
@@ -103,7 +104,7 @@ func teardown(env *yttest.Env, p string) {
 }
 
 // initializes YT client and sinker config
-// do not forget to call testTeardown when resources are not needed anymore
+// do not forget to call testTeardown when resources are not needed anymore.
 func initYt(t *testing.T) (testEnv *yttest.Env, testCfg yt_provider.YtDestinationModel, testTeardown func()) {
 	env, cancel := yttest.NewEnv(t)
 	cypressPath := "//home/cdc/test/TM-1893"
@@ -120,7 +121,7 @@ var whoMakesJSONbAsKeyQuestionMarkSchema = abstract.NewTableSchema([]abstract.Co
 	{DataType: ytschema.TypeInt32.String(), ColumnName: "value"},
 })
 
-// absolutely unreadable..... but this thing is a factory depending on pgSource that generates function that accepts only values and kinds and returns appropriate change items
+// absolutely unreadable..... but this thing is a factory depending on pgSource that generates function that accepts only values and kinds and returns appropriate change items.
 func whoMakesJSONbAsKeyQuestionMarkItemGenerator(schema, table string) func([]ValuesWithKind) []abstract.ChangeItem {
 	return mapValuesToChangeItems(func(vwk ValuesWithKind) abstract.ChangeItem {
 		return abstract.ChangeItem{
