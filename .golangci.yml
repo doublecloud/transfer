@@ -1,0 +1,70 @@
+linters:
+  disable-all: true
+  enable:
+    #- goimports
+    #- gosec
+    - unused
+    #- asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - decorder
+    #- dogsled
+    #- durationcheck
+    #- errcheck
+    #- errname
+    #- errorlint
+    #- exhaustive
+    #- exportloopref
+    #- funlen
+    #- goconst
+    #- gocritic
+    - godot
+    #- gofmt
+    - gosimple
+    - govet
+    - ineffassign
+    - mirror
+    #- musttag
+    #- nestif
+    - nosprintfhostport
+    #- prealloc
+    #- predeclared
+    - staticcheck
+    - tenv
+    - tparallel
+    - typecheck
+    - unconvert
+    - usestdlibvars
+    - wastedassign
+
+issues:
+  exclude-rules:
+    - linters:
+        - govet
+      text: "printf: non-constant format string in call"
+    - linters:
+        - staticcheck
+      text: "SA1019"
+    - path: '(.+)_test\.go'
+      linters:
+        - gosec
+        - funlen
+        - goconst
+        - gocritic
+        - staticcheck
+        - ineffassign
+    - linters:
+        - gosimple
+      text: "S1000"
+    - path: "tests/.*"
+      linters:
+        - gosec
+        - funlen
+        - goconst
+        - gocritic
+        - staticcheck
+        - ineffassign
+    - linters:
+        - gosimple
+      text: "S1000"
