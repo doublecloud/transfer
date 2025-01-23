@@ -170,7 +170,6 @@ func (m *SlotMonitor) validateSlot(ctx context.Context) error {
 		return err
 	}
 	return nil
-
 }
 
 func (m *SlotMonitor) getLag(monitorQ string) (int64, error) {
@@ -225,7 +224,7 @@ func RunSlotMonitor(ctx context.Context, pgSrc *PgSource, registry metrics.Regis
 		return abstract.MakeStubSlotKiller(), nil, nil
 	}
 
-	errChan := slotMonitor.StartSlotMonitoring(int64(pgSrc.SlotByteLagLimit))
+	errChan := slotMonitor.StartSlotMonitoring(pgSrc.SlotByteLagLimit)
 
 	pool, ok := slotMonitor.conn.(*pgxpool.Pool)
 	if !ok {

@@ -195,7 +195,7 @@ func (l legacyColumnAdapter) Value(val interface{}) (base.Value, error) {
 			return types.NewDefaultIntervalValue(&v, l), nil
 		case int64:
 			// value must be in microseconds
-			duration := time.Duration(int64(v) * 1000)
+			duration := time.Duration(v * 1000)
 			return types.NewDefaultIntervalValue(&duration, l), nil
 		}
 	case *types.StringType:

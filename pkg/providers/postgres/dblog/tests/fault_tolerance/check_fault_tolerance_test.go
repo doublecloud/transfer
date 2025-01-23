@@ -49,7 +49,7 @@ func TestIncrementalSnapshotFaultTolerance(t *testing.T) {
 	})
 	changeItemBuilder := helpers.NewChangeItemsBuilder("public", testTableName, arrColSchema)
 
-	helpers.CheckRowsCount(t, Source, "public", testTableName, uint64(initialRowsNumber))
+	helpers.CheckRowsCount(t, Source, "public", testTableName, initialRowsNumber)
 
 	pgStorage, err := pgsink.NewStorage(Source.ToStorageParams(nil))
 	require.NoError(t, err)

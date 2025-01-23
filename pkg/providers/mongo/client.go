@@ -235,7 +235,7 @@ func DriverConnectionSrvOptions(mongoConnectionOptions *MongoConnectionOptions) 
 	clientOptions.SetAuth(options.Credential{
 		AuthSource: authSource,
 		Username:   mongoConnectionOptions.User,
-		Password:   string(mongoConnectionOptions.Password),
+		Password:   mongoConnectionOptions.Password,
 	})
 
 	if len(mongoConnectionOptions.ReplicaSet) > 0 {
@@ -270,7 +270,7 @@ func DriverConnectionOptions(mongoConnectionOptions *MongoConnectionOptions) (*o
 		AuthSource: authSource,
 		// AuthMechanism: "SCRAM-SHA-256",
 		Username: mongoConnectionOptions.User,
-		Password: string(mongoConnectionOptions.Password),
+		Password: mongoConnectionOptions.Password,
 	})
 	if mongoConnectionOptions.ClusterID != "" && !sharded {
 		opts.SetReplicaSet("rs01")
@@ -304,7 +304,7 @@ func newTLSConfig(caCert TrustedCACertificate) (*tls.Config, error) {
 	case CACertificatePEMFilePaths:
 		caFilePaths := downcasted
 		for _, cert := range caFilePaths {
-			pemFileContent, err := os.ReadFile(string(cert))
+			pemFileContent, err := os.ReadFile(cert)
 			if err != nil {
 				return nil, xerrors.Errorf("Cannot read file %s: %w", cert, err)
 			}

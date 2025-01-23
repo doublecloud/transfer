@@ -95,9 +95,9 @@ func emitAndValidate(connectorParameters map[string]string, changeItem *abstract
 
 	check := func(inStr string) {
 		in := []byte(inStr)
-		schemaID := binary.BigEndian.Uint32([]byte(in)[1:5])
+		schemaID := binary.BigEndian.Uint32(in[1:5])
 		schema := idToSchemaBody[int(schemaID)]
-		docBytes := []byte(in)[5:]
+		docBytes := in[5:]
 
 		fmt.Println("EXTRA_VALIDATION_ON_TESTS__DEBEZIUM:schema:", schema)
 		fmt.Println("EXTRA_VALIDATION_ON_TESTS__DEBEZIUM:doc:", string(docBytes))

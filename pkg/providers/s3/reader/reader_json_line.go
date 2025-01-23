@@ -419,7 +419,7 @@ func readAllLines(content []byte) ([]string, int, error) {
 				break
 			}
 		}
-		lines = append(lines, string(line))
+		lines = append(lines, line)
 		bytesRead += (len(line) + len("\n"))
 	}
 	return lines, bytesRead, nil

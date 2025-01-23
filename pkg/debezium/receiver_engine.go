@@ -347,7 +347,7 @@ func arrayReceive(s *debeziumcommon.Schema, v interface{}, originalType *debeziu
 	}
 	resultVal := make([]interface{}, 0)
 	vArr := v.([]interface{})
-	items := debeziumcommon.Schema(*s.Items)
+	items := *s.Items
 	for _, el := range vArr {
 		elVal, isAbsent, err := receiveField(&items, el, originalType.GetArrElemTypeDescr(), true)
 		if err != nil {

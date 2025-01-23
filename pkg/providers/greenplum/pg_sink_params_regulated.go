@@ -46,7 +46,7 @@ func (p PgSinkParamsRegulated) User() string {
 }
 
 func (p PgSinkParamsRegulated) Password() string {
-	return string(p.FPassword)
+	return p.FPassword
 }
 
 func (p PgSinkParamsRegulated) HasTLS() bool {

@@ -182,7 +182,7 @@ func (l *SnapshotLoader) SetShardedStateToCP(logger log.Logger) error {
 	if err := l.cp.SetOperationState(l.operationID, l.shardedState); err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "unable to store upload shards: %w", err)
 	}
-	logger.Info("sharded state uploaded", log.Any("state", string(l.shardedState)))
+	logger.Info("sharded state uploaded", log.Any("state", l.shardedState))
 	return nil
 }
 
@@ -234,7 +234,7 @@ func (l *SnapshotLoader) WaitWorkersCompleted(ctx context.Context, workersCount 
 			completedWorkersCountPercent = (float64(completedWorkersCount) / float64(workersCount)) * 100
 		}
 
-		completed := (int(completedWorkersCount) == workersCount)
+		completed := (completedWorkersCount == workersCount)
 
 		status := "running"
 		if completed {

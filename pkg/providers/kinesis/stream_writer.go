@@ -15,12 +15,13 @@ func PutRecord(src *KinesisSource, data []byte, key string) error {
 	if _, err = client.
 		DescribeStream(
 			&kinesis.DescribeStreamInput{
-				StreamName: &src.Stream}); err != nil {
+				StreamName: &src.Stream,
+			}); err != nil {
 		return xerrors.Errorf("No stream exists with the provided name: %w", err)
 	}
 	// put data to stream
 	_, err = client.PutRecord(&kinesis.PutRecordInput{
-		Data:         []byte(data),
+		Data:         data,
 		StreamName:   &src.Stream,
 		PartitionKey: aws.String(key),
 	})

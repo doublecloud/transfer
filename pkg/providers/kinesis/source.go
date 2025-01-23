@@ -71,7 +71,7 @@ func (s *Source) Fetch() ([]abstract.ChangeItem, error) {
 func (s *Source) inLimits() bool {
 	s.inflightMutex.Lock()
 	defer s.inflightMutex.Unlock()
-	return s.config.BufferSize == 0 || int(s.config.BufferSize) > s.inflightBytes
+	return s.config.BufferSize == 0 || s.config.BufferSize > s.inflightBytes
 }
 
 func (s *Source) addInflight(size int) {
@@ -245,7 +245,7 @@ func (s *Source) waitLimits() {
 				"reader throttled for %v, limits: %v / %v",
 				backoffTimer.GetElapsedTime(),
 				format.SizeInt(s.inflightBytes),
-				format.SizeInt(int(s.config.BufferSize)),
+				format.SizeInt(s.config.BufferSize),
 			)
 		}
 	}

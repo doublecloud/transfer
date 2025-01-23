@@ -950,21 +950,21 @@ func (s *sinker) ydbVal(dataType, originalType string, val interface{}) (types.V
 		case "ydb:Int8":
 			switch vv := val.(type) {
 			case int8:
-				return types.Int8Value(int8(vv)), false, nil
+				return types.Int8Value(vv), false, nil
 			default:
 				return nil, true, xerrors.Errorf("Unable to convert %s value: %v with type: %T", originalType, vv, vv)
 			}
 		case "ydb:Int16":
 			switch vv := val.(type) {
 			case int16:
-				return types.Int16Value(int16(vv)), false, nil
+				return types.Int16Value(vv), false, nil
 			default:
 				return nil, true, xerrors.Errorf("Unable to convert %s value: %v with type: %T", originalType, vv, vv)
 			}
 		case "ydb:Uint16":
 			switch vv := val.(type) {
 			case uint16:
-				return types.Uint16Value(uint16(vv)), false, nil
+				return types.Uint16Value(vv), false, nil
 			default:
 				return nil, true, xerrors.Errorf("Unable to convert %s value: %v with type: %T", originalType, vv, vv)
 			}

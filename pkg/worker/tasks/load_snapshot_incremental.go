@@ -58,7 +58,7 @@ func (l *SnapshotLoader) mergeWithNextIncrement(currentState []abstract.TableDes
 	}
 	nextFilters := map[abstract.TableID]abstract.WhereStatement{}
 	for _, nextTbl := range nextState {
-		nextFilters[abstract.TableID{Namespace: nextTbl.Schema, Name: nextTbl.Name}] = abstract.WhereStatement(nextTbl.Filter)
+		nextFilters[abstract.TableID{Namespace: nextTbl.Schema, Name: nextTbl.Name}] = nextTbl.Filter
 	}
 	for i, table := range currentState {
 		if filter, ok := nextFilters[table.ID()]; ok && filter != abstract.NoFilter {
