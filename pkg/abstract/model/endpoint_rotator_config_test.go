@@ -10,6 +10,7 @@ import (
 
 // test runner.
 func TestRotatorConfig(t *testing.T) {
+	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
 	t.Parallel()
 	t.Run("ScenarioTesting", scenarioTesting)
 	t.Run("NilWorkaround", nilWorkaround) // temporary test
@@ -206,7 +207,6 @@ func offsetDateTestHours(t *testing.T) {
 
 func offsetDateTestDays(t *testing.T) {
 	t.Parallel()
-	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
 	rcDays := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartDay, PartSize: 1, TimeColumn: ""}
 	rcDaysTimestamp := time.Now()
 
