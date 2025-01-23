@@ -204,7 +204,6 @@ require (
 	github.com/rekby/fixenv v0.7.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
-	github.com/segmentio/encoding v0.3.6 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/siddontang/go v0.0.0-20180604090527-bdc77568d726 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
