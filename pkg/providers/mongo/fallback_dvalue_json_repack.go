@@ -32,7 +32,7 @@ func init() {
 						}
 						val, ok := ci.ColumnValues[i].(DValue)
 						if !ok {
-							return ci, xerrors.Errorf("expected column value of type %T, actual type: %T", *new(DValue), val)
+							return ci, xerrors.Errorf("expected column value of type %T, actual type: %T", DValue{}, val)
 						}
 						fallbackApplied = true
 						newVal, err := val.RepackValue()

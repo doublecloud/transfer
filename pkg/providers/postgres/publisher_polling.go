@@ -252,7 +252,7 @@ func (p *poller) Stop() {
 }
 
 func (p *poller) Run(sink abstract.AsyncSink) error {
-	slotTroubleCh := p.slotMonitor.StartSlotMonitoring(int64(p.config.SlotByteLagLimit))
+	slotTroubleCh := p.slotMonitor.StartSlotMonitoring(p.config.SlotByteLagLimit)
 	go p.monitorStuckQueries()
 	defer p.wg.Done()
 	ticker := time.NewTicker(500 * time.Millisecond)

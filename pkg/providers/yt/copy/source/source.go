@@ -27,7 +27,7 @@ type source struct {
 	metrics           metrics.Registry
 }
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ base.SnapshotProvider = (*source)(nil)
 )

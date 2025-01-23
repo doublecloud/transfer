@@ -25,7 +25,7 @@ func NewMiddlewareTransformerStats(r metrics.Registry) *MiddlewareTransformerSta
 	}
 }
 
-// MillisecondDurationBuckets returns buckets adapted for durations between 1 millisecond and 1 second
+// MillisecondDurationBuckets returns buckets adapted for durations between 1 millisecond and 1 second.
 func MillisecondDurationBuckets() metrics.DurationBuckets {
 	return metrics.NewDurationBuckets(
 		500*time.Microsecond,

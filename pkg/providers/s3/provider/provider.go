@@ -22,7 +22,7 @@ func init() {
 	providers.Register(s3.ProviderType, New)
 }
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Sinker      = (*Provider)(nil)
 	_ providers.Snapshot    = (*Provider)(nil)

@@ -31,7 +31,7 @@ func DisableStackTraces() {
 	modes.SetStackTraceMode(modes.StackTraceModeNothing)
 }
 
-// newStackTrace returns stacktrace based on current mode and frames count
+// newStackTrace returns stacktrace based on current mode and frames count.
 func newStackTrace(skip int, err error) *xruntime.StackTrace {
 	skip++
 	m := modes.GetStackTraceMode()

@@ -6,7 +6,7 @@ import (
 	s3_provider "github.com/doublecloud/transfer/pkg/providers/s3"
 )
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ model.Source = (*DeltaSource)(nil)
 )

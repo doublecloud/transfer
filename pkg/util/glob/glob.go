@@ -2,7 +2,6 @@ package glob
 
 import (
 	"bytes"
-	"reflect"
 	"strings"
 	"unsafe"
 )
@@ -45,20 +44,10 @@ func Match(pattern, subj string) bool {
 	}
 
 	// get underlying bytes of pattern
-	patternBytes := unsafe.Slice(
-		(*byte)(unsafe.Pointer(
-			(*reflect.StringHeader)(unsafe.Pointer(&pattern)).Data),
-		),
-		len(pattern),
-	)
+	patternBytes := unsafe.Slice(unsafe.StringData(pattern), len(pattern))
 
 	// get underlying bytes of subject
-	subjBytes := unsafe.Slice(
-		(*byte)(unsafe.Pointer(
-			(*reflect.StringHeader)(unsafe.Pointer(&subj)).Data),
-		),
-		len(subj),
-	)
+	subjBytes := unsafe.Slice(unsafe.StringData(subj), len(subj))
 
 	for {
 		// find first glob index

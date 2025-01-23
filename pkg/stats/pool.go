@@ -26,7 +26,7 @@ func (s PoolStats) SetStatusCount(status string, count int) {
 	_, ok := s.StatusCount[status]
 	if !ok {
 		s.StatusCount[status] = s.pm.WithTags(map[string]string{
-			"status": string(status),
+			"status": status,
 		}).Gauge("transfers.status")
 	}
 	s.StatusCount[status].Set(float64(count))

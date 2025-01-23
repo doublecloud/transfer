@@ -114,7 +114,7 @@ func transformAndCheckFields(t *testing.T, transformResult []abstract.ChangeItem
 	columns := transformResult[0].TableSchema.Columns()
 	require.Equal(t, len(columns), len(keys)+len(fields), "Wrong number of columns in result!")
 
-	//checking all pkeys and order
+	// checking all pkeys and order
 	for i := range keys {
 		require.Equal(t, keys[i], columns[i].ColumnName, "%d column should be key %s", i, keys[i])
 		require.True(t, columns[i].PrimaryKey, "Key column should be PK!")

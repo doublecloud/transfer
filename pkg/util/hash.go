@@ -29,7 +29,7 @@ func HashSha256(data []byte) string {
 	return hex.EncodeToString(hasher.Sum(data))
 }
 
-// use hasher with once allocated slice [sha256.Size]byte for result instead of sha256.Sum256() function to avoid extra memory allocations
+// use hasher with once allocated slice [sha256.Size]byte for result instead of sha256.Sum256() function to avoid extra memory allocations.
 type HasherSha256 struct {
 	hasher hash.Hash
 	result [sha256.Size]byte

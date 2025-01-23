@@ -27,7 +27,7 @@ func (f *FileCache) Add(item *abstract.ChangeItem) error {
 	return nil
 }
 
-// extra copy, but works fine with range, useful for tests
+// extra copy, but works fine with range, useful for tests.
 func (f *FileCache) AddCopy(item abstract.ChangeItem) error {
 	return f.Add(&item)
 }
@@ -35,7 +35,7 @@ func (f *FileCache) AddCopy(item abstract.ChangeItem) error {
 // Split file cache into file cache parts. Each cache part
 // has items that contain in one of then given intervals
 // and with consecutive LSNs and size that le than maxCacheSize
-// NB intervals range is expected to be sorted
+// NB intervals range is expected to be sorted.
 func (f *FileCache) Split(intervals []ObjectRange, maxCacheSize uint64) []*FileCache {
 	var parts = make([]*FileCache, 0)
 	if len(intervals) == 0 {

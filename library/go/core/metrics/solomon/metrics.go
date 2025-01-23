@@ -198,7 +198,7 @@ func (s Metrics) SplitToChunks(maxChunkSize int) []Metrics {
 	return chunks
 }
 
-// List return list of metrics
+// List return list of metrics.
 func (s Metrics) List() []Metric {
 	return slices.Clone(s.metrics)
 }

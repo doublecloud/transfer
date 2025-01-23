@@ -39,7 +39,7 @@ type chV2Streamer struct {
 
 // BlockMarshallingError is a wrapper for clickhouse-go/v2 *proto.BlockError
 // *proto.BlockError occurs if the driver failed to build clickhouse native proto block.
-// Usually it happens due to incorrect input types or values
+// Usually it happens due to incorrect input types or values.
 type BlockMarshallingError struct {
 	err  *proto.BlockError
 	code coded.Code

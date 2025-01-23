@@ -19,7 +19,7 @@ type AsyncSink interface {
 // AsyncPushConcurrencyErr indicates a Push has been called on an already closed AsyncSink. This must not happen and means there are concurrency issues in the implementation of a source.
 var AsyncPushConcurrencyErr = xerrors.NewSentinel("AsyncPush is called after Close")
 
-// PusherFromAsyncSink wraps the given sink into a (synchronous) pusher interface
+// PusherFromAsyncSink wraps the given sink into a (synchronous) pusher interface.
 func PusherFromAsyncSink(asink AsyncSink) Pusher {
 	return func(items []ChangeItem) error {
 		return <-asink.AsyncPush(items)

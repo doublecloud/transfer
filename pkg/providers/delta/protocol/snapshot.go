@@ -152,36 +152,14 @@ func (s *Snapshot) Metadata() (*action.Metadata, error) {
 	return s.metadata, nil
 }
 
-// Version returns the version of this Snapshot
+// Version returns the version of this Snapshot.
 func (s *Snapshot) Version() int64 {
 	return s.version
 }
 
-// CommitTS returns the time of commit for this Snapshot
+// CommitTS returns the time of commit for this Snapshot.
 func (s *Snapshot) CommitTS() time.Time {
 	return time.Unix(0, s.commitTS*int64(time.Millisecond)).UTC()
-}
-
-func (s *Snapshot) tombstones() ([]*action.RemoveFile, error) {
-	return iter.ToSlice(s.state.tombstones)
-}
-
-func (s *Snapshot) setTransactions() []*action.SetTransaction {
-	return s.state.setTransactions
-}
-
-func (s *Snapshot) transactions() map[string]int64 {
-	// appID to version
-	trxs := s.setTransactions()
-	res := make(map[string]int64, len(trxs))
-	for _, trx := range trxs {
-		res[trx.AppID] = int64(trx.Version)
-	}
-	return res
-}
-
-func (s *Snapshot) numOfFiles() (int64, error) {
-	return s.state.numOfFiles, nil
 }
 
 func (s *Snapshot) files() []string {

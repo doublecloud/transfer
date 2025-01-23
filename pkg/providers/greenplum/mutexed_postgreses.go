@@ -40,7 +40,7 @@ func (s *mutexedPostgreses) Close() {
 	}
 }
 
-// PGStorage returns a live PG storage or an error
+// PGStorage returns a live PG storage or an error.
 func (s *Storage) PGStorage(ctx context.Context, sp GPSegPointer) (*postgres.Storage, error) {
 	s.postgreses.mutex.Lock()
 	defer s.postgreses.mutex.Unlock()
@@ -124,7 +124,7 @@ func (s *Storage) ensureCompleteClusterData(ctx context.Context) error {
 	return nil
 }
 
-// TotalSegments returns the actual total number of segments in Greenplum cluster. Never returns `0`
+// TotalSegments returns the actual total number of segments in Greenplum cluster. Never returns `0`.
 func (s *Storage) TotalSegments(ctx context.Context) (int, error) {
 	s.postgreses.mutex.Lock()
 	defer s.postgreses.mutex.Unlock()

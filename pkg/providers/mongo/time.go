@@ -51,7 +51,7 @@ func GetLocalOplogInterval(ctx context.Context, client *MongoClientWrapper) (fro
 	return fromTimestampHolder.Timestamp, toTimestampHolder.Timestamp, nil
 }
 
-// SyncClusterTime is mongo version dependent code
+// SyncClusterTime is mongo version dependent code.
 func SyncClusterTime(ctx context.Context, src *MongoSource, defaultCACertPaths []string) error {
 	client, err := Connect(ctx, src.ConnectionOptions(defaultCACertPaths), nil)
 	if err != nil {

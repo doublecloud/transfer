@@ -27,7 +27,7 @@ var _ GenericTable = new(SingleStaticTable)
 // SingleStaticTable is a specialization of StaticTable but for single table
 // which behaves like GenericTable for dynamic sinker.
 // Assumed that only one goroutine works with SingleStaticTable at moment,
-// otherwise all methods should be protected with primitives in future
+// otherwise all methods should be protected with primitives in future.
 type SingleStaticTable struct {
 	ytClient        yt.Client
 	tableName       string
@@ -148,7 +148,7 @@ func (t *SingleStaticTable) init() error {
 
 // Write writes change items to table
 // Note: after calling this method object is still usable, but if
-// error returned: object is NOT usable
+// error returned: object is NOT usable.
 func (t *SingleStaticTable) Write(input []abstract.ChangeItem) error {
 	var rollbacks util.Rollbacks
 	defer rollbacks.Do()
@@ -202,7 +202,7 @@ func (t *SingleStaticTable) write(input []abstract.ChangeItem) error {
 }
 
 // Commit tries to commit the transaction and performs some sorting and moving operations
-// After commit object is not usable
+// After commit object is not usable.
 func (t *SingleStaticTable) Commit(ctx context.Context) error {
 	defer func() {
 		err := t.tx.Abort()

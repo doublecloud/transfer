@@ -77,7 +77,7 @@ func (r *CdcHistoryGroupTransformer) Apply(input []abstract.ChangeItem) abstract
 			cols, values := r.collectParsedData(changeItem)
 			changeItem.ColumnNames = cols
 			changeItem.ColumnValues = values
-			//only insert new lines for cdc history
+			// only insert new lines for cdc history
 			changeItem.Kind = abstract.InsertKind
 		}
 
@@ -97,10 +97,6 @@ func (r *CdcHistoryGroupTransformer) Apply(input []abstract.ChangeItem) abstract
 		Transformed: transformed,
 		Errors:      errors,
 	}
-}
-
-func (r *CdcHistoryGroupTransformer) containsAllKeys(colNames []string) bool {
-	return allFieldsPresent(colNames, rawCdcDocFields, r.Keys)
 }
 
 func (r *CdcHistoryGroupTransformer) containsAllFields(colNames []string) bool {
@@ -140,7 +136,6 @@ func (r *CdcHistoryGroupTransformer) Description() string {
 }
 
 func (r *CdcHistoryGroupTransformer) collectParsedData(changeItem abstract.ChangeItem) ([]string, []interface{}) {
-
 	newCols := make([]string, 0, len(r.Keys)+len(r.Fields))
 	newValues := make([]interface{}, 0, len(r.Keys)+len(r.Fields))
 	docData := make(map[string]interface{}, len(changeItem.ColumnNames))
@@ -157,7 +152,7 @@ func (r *CdcHistoryGroupTransformer) collectParsedData(changeItem abstract.Chang
 		columnValues = changeItem.ColumnValues
 	}
 
-	//firstly adding data from original columns and collecting doc
+	// firstly adding data from original columns and collecting doc
 	for idx, colName := range columnNames {
 		colValue := columnValues[idx]
 		docData[colName] = colValue
@@ -166,7 +161,7 @@ func (r *CdcHistoryGroupTransformer) collectParsedData(changeItem abstract.Chang
 			newValues = append(newValues, colValue)
 		}
 	}
-	//adding system columns
+	// adding system columns
 	newCols = append(newCols, etlUpdatedField)
 	newValues = append(newValues, time.Unix(0, int64(changeItem.CommitTime)))
 
@@ -180,7 +175,6 @@ func (r *CdcHistoryGroupTransformer) collectParsedData(changeItem abstract.Chang
 }
 
 func NewCdcHistoryGroupTransformer(config RawCDCDocGrouperConfig) (*CdcHistoryGroupTransformer, error) {
-
 	keys := config.Keys
 	var fields []string
 	if len(config.Fields) > 0 {
@@ -190,7 +184,7 @@ func NewCdcHistoryGroupTransformer(config RawCDCDocGrouperConfig) (*CdcHistoryGr
 	for _, name := range []string{etlUpdatedField, deletedField, rawDataField} {
 		if !slices.Contains(keys, name) && !slices.Contains(fields, name) {
 			if name == etlUpdatedField {
-				//by default to the beginning
+				// by default to the beginning
 				keys = append([]string{etlUpdatedField}, keys...)
 			} else {
 				fields = append(fields, name)
@@ -224,5 +218,4 @@ func NewCdcHistoryGroupTransformer(config RawCDCDocGrouperConfig) (*CdcHistoryGr
 		targetSchemas: make(map[string]*abstract.TableSchema),
 		schemasLock:   sync.RWMutex{},
 	}, nil
-
 }

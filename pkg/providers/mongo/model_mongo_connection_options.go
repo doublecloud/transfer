@@ -15,7 +15,7 @@ type MongoConnectionOptions struct {
 	SRVMode    bool
 }
 
-// IsDocDB check if we connect to amazon doc DB
+// IsDocDB check if we connect to amazon doc DB.
 func (o MongoConnectionOptions) IsDocDB() bool {
 	for _, h := range o.Hosts {
 		if strings.Contains(h, "docdb.amazonaws.com") {

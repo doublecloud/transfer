@@ -12,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/s3/reader"
 )
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ abstract.ShardingStorage = (*Storage)(nil)
 )

@@ -1,16 +1,13 @@
 package abstract
 
 type LocalRuntime struct {
-	Host           string
-	CurrentJob     int
-	ShardingUpload ShardUploadParams
+	Host           string            `json:"host"`
+	CurrentJob     int               `json:"current_job"`
+	ShardingUpload ShardUploadParams `json:"sharding_upload"`
 }
 
 func (*LocalRuntime) Type() RuntimeType {
 	return LocalRuntimeType
-}
-
-func (l *LocalRuntime) isRuntime() {
 }
 
 func (l *LocalRuntime) NeedRestart(runtime Runtime) bool {
@@ -24,7 +21,6 @@ func (l *LocalRuntime) Validate() error {
 	return nil
 }
 
-func (l *LocalRuntime) isShardingEnabled()       {}
 func (l *LocalRuntime) WorkersNum() int          { return l.ShardingUpload.JobCount }
 func (l *LocalRuntime) ThreadsNumPerWorker() int { return l.ShardingUpload.ProcessCount }
 func (l *LocalRuntime) CurrentJobIndex() int     { return l.CurrentJob }

@@ -49,7 +49,7 @@ func (t *defaultPool) worker() {
 }
 
 // NewDefaultPool creates simple task pool.
-// taskFn is called to process each task. Capacity sets maximum number of tasks to be processed simultaneously
+// taskFn is called to process each task. Capacity sets maximum number of tasks to be processed simultaneously.
 func NewDefaultPool(taskFn TaskFn, capacity uint64) Pool {
 	return &defaultPool{
 		taskCh:   make(chan interface{}),

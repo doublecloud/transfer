@@ -89,7 +89,7 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	}
 
 	coll := s.Client.Database(table.Schema).Collection(table.Name)
-	tableRowsCount, err := s.Client.Database(table.Schema).Collection(table.Name).EstimatedDocumentCount(ctx)
+	_, err := s.Client.Database(table.Schema).Collection(table.Name).EstimatedDocumentCount(ctx)
 	if err != nil {
 		logger.Log.Warn("Cannot estimate total count", log.Error(err))
 	}
@@ -100,7 +100,6 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 
 	if table.Offset > 0 {
 		findOptions.SetSkip(int64(table.Offset))
-		tableRowsCount -= int64(table.Offset)
 	}
 
 	filter, err := filterFromTable(table)
@@ -111,7 +110,6 @@ func (s *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	var cursor *mongo.Cursor
 	if err := backoff.Retry(func() error {
 		cursor, err = coll.Find(ctx, filter, findOptions)
-
 		if err != nil {
 			return xerrors.Errorf("Cannot create document cursor: %w", err)
 		}

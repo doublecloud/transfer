@@ -16,10 +16,10 @@ var _ TextDecoderAndValuerWithHomo = (*Timestamptz)(nil)
 
 // NewTimestamptz constructs a TIMESTAMP WITH TIME ZONE representation which supports BC years
 //
-// TODO: remove this when https://st.yandex-team.ru/TM-5127 is done
+// TODO: remove this when https://st.yandex-team.ru/TM-5127 is done.
 func NewTimestamptz() *Timestamptz {
 	return &Timestamptz{
-		Timestamptz: *new(pgtype.Timestamptz),
+		Timestamptz: pgtype.Timestamptz{},
 	}
 }
 

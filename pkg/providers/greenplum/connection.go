@@ -51,7 +51,7 @@ func Segment(index int) GPSegPointer {
 }
 
 // openPGStorage is a specification of a constructor of PostgreSQL storage for Greenplum.
-// May modify the passed storage parameters
+// May modify the passed storage parameters.
 func openPGStorage(ctx context.Context, config *postgres.PgStorageParams) (*postgres.Storage, error) {
 	// this creates a TCP connection to the segment!
 	var errs util.Errors
@@ -111,7 +111,7 @@ func (s *Storage) getPgStorageParams(role GPRole) *postgres.PgStorageParams {
 	return result
 }
 
-// openPGStorageForAnyInPair connects to the current primary of the given high-availability pair AND checks it can execute SQL
+// openPGStorageForAnyInPair connects to the current primary of the given high-availability pair AND checks it can execute SQL.
 func (s *Storage) openPGStorageForAnyInPair(ctx context.Context, sp GPSegPointer) (*postgres.Storage, error) {
 	cfg := s.getPgStorageParams(sp.role)
 	hap := s.config.Connection.OnPremises.SegByID(sp.seg)
@@ -148,7 +148,7 @@ func (s *Storage) openPGStorageForAnyInPair(ctx context.Context, sp GPSegPointer
 	return nil, xerrors.Errorf("failed to connect to any host in a highly-availabile pair:\t\t(primary): %v\t\t(mirror): %v", errs[0], errs[1])
 }
 
-// checkConnection checks whether the connection in `pgs` is valid (working)
+// checkConnection checks whether the connection in `pgs` is valid (working).
 func checkConnection(ctx context.Context, pgs *postgres.Storage, expectedSP GPSegPointer) error {
 	conn, err := pgs.Conn.Acquire(ctx)
 	if err != nil {
@@ -218,7 +218,7 @@ func segmentsFromGP(ctx context.Context, cpgs *postgres.Storage) ([]*GpHAP, erro
 	return result, nil
 }
 
-// isGPMirrorErr checks if the given `err` is due to a connection to a Greenplum instance in recovery mode
+// isGPMirrorErr checks if the given `err` is due to a connection to a Greenplum instance in recovery mode.
 func isGPMirrorErr(err error, instanceNameForLog string) bool {
 	var pgErr *pgconn.PgError
 	if xerrors.As(err, &pgErr) {

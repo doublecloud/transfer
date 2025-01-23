@@ -18,9 +18,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var (
-	FatalAWSCodes = set.New("InvalidAccessKeyId")
-)
+var FatalAWSCodes = set.New("InvalidAccessKeyId")
 
 type replicationUploader struct {
 	cfg      *s3_provider.S3Destination
@@ -36,7 +34,7 @@ func (u *replicationUploader) Upload(name string, lsns []uint64, data []byte) er
 		fileName = fmt.Sprintf("%v-%v_%v.%v", name, lsns[0], lsns[len(lsns)-1], strings.ToLower(string(u.cfg.OutputFormat)))
 	}
 	if u.cfg.OutputEncoding == s3_provider.GzipEncoding {
-		fileName = fileName + ".gz"
+		fileName += ".gz"
 		gzWriter := gzip.NewWriter(buf)
 		if _, err := gzWriter.Write(data); err != nil {
 			return err

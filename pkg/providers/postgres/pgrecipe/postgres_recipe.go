@@ -145,7 +145,7 @@ func WithoutPgDump() RecipeOption {
 
 type RecipeOption func(pg *RecipeParams)
 
-// no need to recreate same postgres recipe prefix over and over again
+// no need to recreate same postgres recipe prefix over and over again.
 var postgresContainers = map[string]bool{}
 
 func ManagedConnection(opts ...RecipeOption) *connection.ConnectionPG {
@@ -302,7 +302,7 @@ max_replication_slots = 64       # max number of replication slots (change requi
 // PgDump dumps all tables in the PostgreSQL database specified in the connString.
 // Use the specified pgDumpExecutable for dumping schemas, and the given
 // psqlExecutable for dumping table data.
-// You can specify tableLikePattern to filter tables in the dump, for example, 'public.my%table'
+// You can specify tableLikePattern to filter tables in the dump, for example, 'public.my%table'.
 func PgDump(t *testing.T, pgDumpExecutable []string, psqlExecutable []string, connString string, tableLikePattern string) string {
 	pgDumpArgs := append(pgDumpExecutable, "--no-publications", "--no-subscriptions", "--format=plain", "--no-owner", "--schema-only", connString)
 	pgDumpCommand := exec.Command(pgDumpArgs[0], pgDumpArgs[1:]...)

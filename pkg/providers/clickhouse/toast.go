@@ -69,7 +69,7 @@ func buildPkeysDistinct(cols []abstract.ColSchema) string {
 	return "(" + strings.Join(q, ",") + ")"
 }
 
-// primaryKeyValuesFlattened returns a list of (old) primary key values for all items in the given list
+// primaryKeyValuesFlattened returns a list of (old) primary key values for all items in the given list.
 func primaryKeyValuesFlattened(items []abstract.ChangeItem, colSchemas []abstract.ColSchema) ([]interface{}, error) {
 	colSchemaByName := make(map[string]*abstract.ColSchema)
 	for i := range colSchemas {
@@ -139,7 +139,7 @@ func getColumns(cols []abstract.ColSchema, changeItems []abstract.ChangeItem) ([
 	return result, nil
 }
 
-// convertToastedToNormal converts toasted items (if any are present) to their complete versions using values ofbtained from the target CH
+// convertToastedToNormal converts toasted items (if any are present) to their complete versions using values ofbtained from the target CH.
 func convertToastedToNormal(t *sinkTable, items []abstract.ChangeItem) ([]abstract.ChangeItem, error) {
 	toastedItems, err := getToastedChangeItems(t, items)
 	if err != nil {

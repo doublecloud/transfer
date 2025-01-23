@@ -9,7 +9,7 @@ import (
 
 const OplogProtocolVersion = 2
 
-// protocol is actual for oplog v2, mongo v3.6.23
+// protocol is actual for oplog v2, mongo v3.6.23.
 type oplogRsChangeEventV2 struct {
 	Timestamp     primitive.Timestamp `bson:"ts"`
 	Hash          int64               `bson:"h"`
@@ -66,7 +66,7 @@ func newNoopChangeEvent(clusterTime primitive.Timestamp) *KeyChangeEvent {
 }
 
 // Note: this function DOES NOT extract full document for one reason:
-// update commands do not contain full documents, but mongo commands to modify existing document
+// update commands do not contain full documents, but mongo commands to modify existing document.
 func (e oplogRsChangeEventV2) toMongoKeyChangeEvent(log log.Logger) (*KeyChangeEvent, error) {
 	if e.Version != OplogProtocolVersion {
 		return nil, xerrors.Errorf("version %d of oplog protocol is not supported. Oplog keyEvent: %v", e.Version, e)

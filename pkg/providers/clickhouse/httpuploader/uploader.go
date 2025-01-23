@@ -48,7 +48,7 @@ type UploadStats struct {
 	UploadStartTime time.Time
 }
 
-// Insert row buffers should be pooled by tables as different tables may have different row size
+// Insert row buffers should be pooled by tables as different tables may have different row size.
 func getPoolForTable(table string) *sync.Pool {
 	tableBufMu.Lock()
 	defer tableBufMu.Unlock()

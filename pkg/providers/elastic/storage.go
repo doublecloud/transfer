@@ -182,7 +182,7 @@ func (s *Storage) TableList(includeTableFilter abstract.IncludeTableList) (abstr
 
 		tableID := abstract.TableID{Namespace: "", Name: index}
 		tables[tableID] = abstract.TableInfo{
-			EtaRow: uint64(etaRow),
+			EtaRow: etaRow,
 			IsView: false,
 			Schema: abstract.NewTableSchema(schema.Columns),
 		}

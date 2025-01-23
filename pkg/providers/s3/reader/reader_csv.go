@@ -158,7 +158,7 @@ func (r *CSVReader) Read(ctx context.Context, filePath string, pusher chunk_push
 			return xerrors.Errorf("failed to read fom S3 file: %w", err)
 		}
 
-		currentOffset := int64(0)
+		var currentOffset int64
 		for {
 			buff, err := r.ParseCSVRows(csvReader, filePath, s3Reader.LastModified(), &lineCounter)
 			if err != nil {

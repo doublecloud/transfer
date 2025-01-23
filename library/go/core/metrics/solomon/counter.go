@@ -67,10 +67,6 @@ func (c *Counter) isMemOnly() bool {
 	return c.memOnly
 }
 
-func (c *Counter) setMemOnly() {
-	c.memOnly = true
-}
-
 // MarshalJSON implements json.Marshaler.
 func (c *Counter) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {

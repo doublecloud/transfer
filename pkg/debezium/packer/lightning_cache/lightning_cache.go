@@ -58,7 +58,7 @@ func handleChangeItems(input []abstract.ChangeItem, schemaIDCache *SessionPacker
 }
 
 // NewLightningCache
-// after NewLightningCache there are all schemaID/finalSchemas should be known
+// after NewLightningCache there are all schemaID/finalSchemas should be known.
 func NewLightningCache(emitter *debezium.Emitter, input []abstract.ChangeItem, isSnapshot bool) (packer.SessionPackers, error) {
 	schemaIDCache, err := NewSessionPackersSchemaIDCache(emitter.GetPackers())
 	if err != nil {

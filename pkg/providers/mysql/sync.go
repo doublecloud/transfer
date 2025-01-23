@@ -43,8 +43,7 @@ func (c *Canal) runSyncBinlog() error {
 		return xerrors.Errorf("failed to start syncer: %w", err)
 	}
 
-	savePos := false
-	force := false
+	var savePos, force bool
 
 	// The name of the binlog file received in the fake rotate event.
 	// It must be preserved until the new position is saved.
@@ -349,7 +348,7 @@ func (c *Canal) GetMasterPos() (mysql.Position, error) {
 }
 
 func (c *Canal) GetMasterGTIDSet() (mysql.GTIDSet, error) {
-	query := ""
+	var query string
 	switch c.cfg.Flavor {
 	case mysql.MariaDBFlavor:
 		query = "SELECT @@GLOBAL.gtid_current_pos"

@@ -7,7 +7,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var _ ydbLog.Logger = *new(adapter)
+var _ ydbLog.Logger = adapter{}
 
 type adapter struct {
 	l log.Logger

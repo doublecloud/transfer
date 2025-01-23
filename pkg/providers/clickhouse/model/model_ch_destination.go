@@ -30,7 +30,7 @@ var (
 	_ model.Describable = (*ChDestination)(nil)
 )
 
-// ChDestination - see description of fields in sink_params.go
+// ChDestination - see description of fields in sink_params.go.
 type ChDestination struct {
 	// ChSinkServerParams
 	MdbClusterID     string `json:"Cluster"`
@@ -213,14 +213,14 @@ func (d *ChDestination) shallUseJSON(transfer *model.Transfer) bool {
 	return model.IsAppendOnlySource(transfer.Src)
 }
 
-// ToSinkParams converts the model into sink properties object, which contains extra information which depends on transfer type
+// ToSinkParams converts the model into sink properties object, which contains extra information which depends on transfer type.
 func (d *ChDestination) ToSinkParams(transfer *model.Transfer) ChDestinationWrapper {
 	wrapper := newChDestinationWrapper(*d)
 	wrapper.useJSON = d.shallUseJSON(transfer)
 	return *wrapper
 }
 
-// ToReplicationFromPGSinkParams converts the model into sink properties object that would be constructed for a replication from PostgreSQL
+// ToReplicationFromPGSinkParams converts the model into sink properties object that would be constructed for a replication from PostgreSQL.
 func (d *ChDestination) ToReplicationFromPGSinkParams() ChDestinationWrapper {
 	return *newChDestinationWrapper(*d)
 }
@@ -235,7 +235,7 @@ func (d *ChDestination) FillDependentFields(transfer *model.Transfer) {
 	}
 }
 
-// ChDestinationWrapper implements ChSinkParams
+// ChDestinationWrapper implements ChSinkParams.
 type ChDestinationWrapper struct {
 	Model *ChDestination
 	host  string // host is here, bcs it needed only in SinkServer/SinkTable
@@ -248,7 +248,7 @@ func (d ChDestinationWrapper) InsertSettings() InsertParams {
 	return d.Model.InsertParams
 }
 
-// newChDestinationWrapper copies the model provided to it in order to be able to modify the fields in it
+// newChDestinationWrapper copies the model provided to it in order to be able to modify the fields in it.
 func newChDestinationWrapper(model ChDestination) *ChDestinationWrapper {
 	return &ChDestinationWrapper{
 		Model:         &model,
@@ -423,7 +423,7 @@ func (d ChDestinationWrapper) MakeChildShardParams(altHosts []string) ChSinkShar
 }
 
 // SetShards
-// we can set model variables, bcs we make copy of ChDestination in NewChDestinationV1
+// we can set model variables, bcs we make copy of ChDestination in NewChDestinationV1.
 func (d ChDestinationWrapper) SetShards(shards map[string][]string) {
 	d.Model.ShardsList = []ClickHouseShard{}
 	for shardName, hosts := range shards {

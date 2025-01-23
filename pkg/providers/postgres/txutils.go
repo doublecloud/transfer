@@ -24,7 +24,7 @@ func BeginTx(ctx context.Context, conn *pgx.Conn, options pgx.TxOptions, lgr log
 	return tx, &rollbacks, nil
 }
 
-// RollbackFuncForPgxTx returns a function which ROLLBACKs the given `pgx.Tx` and if an error happens, logs it with the given logger at WARNING level
+// RollbackFuncForPgxTx returns a function which ROLLBACKs the given `pgx.Tx` and if an error happens, logs it with the given logger at WARNING level.
 func RollbackFuncForPgxTx(ctx context.Context, tx pgx.Tx, lgr log.Logger) func() {
 	return func() {
 		if err := tx.Rollback(ctx); err != nil {

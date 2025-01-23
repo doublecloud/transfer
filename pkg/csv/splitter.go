@@ -13,15 +13,15 @@ import (
 type splitterState int
 
 const (
-	// Normal state, the default one upon initialization
+	// Normal state, the default one upon initialization.
 	outsideQuote = splitterState(iota)
 
-	// We are inside double quotes and did not find the closing quote yet
+	// We are inside double quotes and did not find the closing quote yet.
 	quoteOpen
 
 	// We are inside double quotes, found the closing quote and we are yet to
 	// decide whether it is the closing double quote or an escape sequence
-	// (i.e. "", two double quotes inside double quotes)
+	// (i.e. "", two double quotes inside double quotes).
 	closingQuote
 )
 

@@ -2,7 +2,7 @@ package sequencer
 
 import "github.com/doublecloud/transfer/library/go/core/xerrors"
 
-// lsnTransaction contains all message lsns and ensures correct order
+// lsnTransaction contains all message lsns and ensures correct order.
 type lsnTransaction struct {
 	lastLsn uint64   // last message lsn that was received
 	lsns    []uint64 // all the message lsns that were added, must go in increasing order
@@ -10,7 +10,7 @@ type lsnTransaction struct {
 
 // appendLsn checks that we append lsns in nondecreasing order only.
 // same lsn may appear in a transaction when COPY TO/FROM is used
-// This is required because we read messages from server synchronously
+// This is required because we read messages from server synchronously.
 func (p *lsnTransaction) appendLsn(newLsn uint64) error {
 	if p.lastLsn > newLsn {
 		return xerrors.Errorf("tried to add lsns in decreasing order. Last lsn: %v, new lsn: %v", p.lastLsn, newLsn)
@@ -23,7 +23,7 @@ func (p *lsnTransaction) appendLsn(newLsn uint64) error {
 
 // here we go through lsns and add to the new slice those that were not found in pushedLsns
 // we also check that we only try to remove lsns that were previously added
-// objects in pushedLsns must go in increasing order
+// objects in pushedLsns must go in increasing order.
 func (p *lsnTransaction) removeLsn(pushedLsns []uint64) error {
 	if err := checkOrder(pushedLsns); err != nil {
 		return err
@@ -38,7 +38,7 @@ func (p *lsnTransaction) removeLsn(pushedLsns []uint64) error {
 		}
 
 		if lsn == pushedLsns[pointer] {
-			pointer++ //found lsn to remove, don't add it to new slice
+			pointer++ // found lsn to remove, don't add it to new slice
 		} else {
 			newLsns = append(newLsns, lsn)
 		}

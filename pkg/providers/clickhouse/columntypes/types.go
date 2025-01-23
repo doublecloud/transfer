@@ -114,7 +114,7 @@ func Restore(column abstract.ColSchema, val interface{}) interface{} {
 	}
 }
 
-// BaseType strips modifiers from the given ClickHouse type, if possible
+// BaseType strips modifiers from the given ClickHouse type, if possible.
 func BaseType(chType string) string {
 	extType, intType := divideTypeToExtAndInt(chType)
 	if extType == "Nullable" {
@@ -148,7 +148,7 @@ var chTypeWithModifierRe *regexp.Regexp = regexp.MustCompile(`(\w*)\((.*)\)`)
 
 // ToYtType converts the given ClickHouse type to YT type and a requiredness flag.
 //
-// XXX: support all types from system.data_type_families, such as Decimal, Tuple, Array, Nested, Array(Array(...))
+// XXX: support all types from system.data_type_families, such as Decimal, Tuple, Array, Nested, Array(Array(...)).
 func ToYtType(chType string) (ytType string, required bool) {
 	var result schema.Type
 	switch BaseType(chType) {

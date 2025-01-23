@@ -10,7 +10,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// TableTemporator provides support for temporary policy
+// TableTemporator provides support for temporary policy.
 func TableTemporator(logger log.Logger, transferID string, config model.TmpPolicyConfig) func(abstract.Movable) abstract.Sinker {
 	return func(m abstract.Movable) abstract.Sinker {
 		return newTemporator(m, logger, transferID, config)

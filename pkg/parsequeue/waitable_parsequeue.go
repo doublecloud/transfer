@@ -21,7 +21,7 @@ func (p *WaitableParseQueue[TData]) Add(message TData) error {
 
 // Wait waits when all messages, added via .Add() will be acked
 //
-// Should be called mutually exclusive with Add()/Close()
+// Should be called mutually exclusive with Add()/Close().
 func (p *WaitableParseQueue[TData]) Wait() {
 	p.inflightWG.Wait()
 }

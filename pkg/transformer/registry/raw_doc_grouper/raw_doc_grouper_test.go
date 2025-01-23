@@ -14,6 +14,7 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	t.Parallel()
 
 	t.Run("duplicate keys fail", func(t *testing.T) {
+		t.Parallel()
 		_, err := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Keys: []string{"key1", "key1"},
 		})
@@ -21,6 +22,7 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("different keys ok", func(t *testing.T) {
+		t.Parallel()
 		_, err := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Keys: []string{"key3", "key2"},
 		})
@@ -28,6 +30,7 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Suitable check by table and fields", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Tables: filter.Tables{IncludeTables: []string{"table1"}},
 			Keys:   []string{"col1", "col2"},
@@ -54,6 +57,7 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Wrong columns fail transfer", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Tables: filter.Tables{IncludeTables: []string{"table1"}},
 			Keys:   []string{"col1", "col2"},
@@ -74,14 +78,15 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Values are parsed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Keys:   []string{"col1", "col2"},
 			Fields: []string{"col3"},
 		})
 
 		testChangeItems := []abstract.ChangeItem{
-			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),  //schema 1
-			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), //same schema 1, diff values
+			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),  // schema 1
+			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), // same schema 1, diff values
 			dummyItem([]colParams{col2Key, col1NotKey, col3Key, restCol}),                                // schema 2
 		}
 
@@ -105,17 +110,18 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Different schemas are processed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Keys:   []string{"col1", "col2"},
 			Fields: []string{"col3"},
 		})
 
 		testChangeItems := []abstract.ChangeItem{
-			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),   //schema 1
-			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}),  //schema 1, diff values
-			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey2, col5NotKey, restCol}), //schema 1, diff values
-			dummyItem([]colParams{col1NotKey2, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), //schema 2 - diff type of col2
-			dummyItem([]colParams{col2Key, col1NotKey, col3Key, restCol}),                                 //schema 3
+			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),   // schema 1
+			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}),  // schema 1, diff values
+			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey2, col5NotKey, restCol}), // schema 1, diff values
+			dummyItem([]colParams{col1NotKey2, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), // schema 2 - diff type of col2
+			dummyItem([]colParams{col2Key, col1NotKey, col3Key, restCol}),                                 // schema 3
 		}
 
 		differentSchemas := make([]string, 0)
@@ -138,6 +144,7 @@ func TestRawDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("System events schema fixed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewRawDocGroupTransformer(RawDocGrouperConfig{
 			Keys: []string{"col1", "col2"},
 		})
@@ -161,12 +168,11 @@ func TestRawDocGroupTransformer(t *testing.T) {
 				[]string{"col1", "col2", "etl_updated_at", "doc"}, "Changed schema chItems columns be returned!!")
 		}
 	})
-
 }
 
 func getExpectedValues(changeItem abstract.ChangeItem) map[string]interface{} {
-	var valuesByColName = make(map[string]interface{})
-	var docField = make(map[string]interface{})
+	valuesByColName := make(map[string]interface{})
+	docField := make(map[string]interface{})
 
 	for i, name := range changeItem.ColumnNames {
 		if name == restField {

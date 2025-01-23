@@ -155,7 +155,7 @@ func (r registryWrapper) DurationHistogramVec(name string, buckets metrics.Durat
 	return r.registry.DurationHistogramVec(r.nameProcessor(name), buckets, labels)
 }
 
-// DTSUPPORT-1013
+// DTSUPPORT-1013.
 func refineValue(original string) string {
 	filteredCharacters := []rune(original)
 	reqLen := len(filteredCharacters)

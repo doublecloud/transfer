@@ -24,7 +24,7 @@ type S3Reader struct {
 	reader  io.ReaderAt
 }
 
-// ReadAt is a proxy call to the underlying reader implementation
+// ReadAt is a proxy call to the underlying reader implementation.
 func (r *S3Reader) ReadAt(p []byte, off int64) (int, error) {
 	read, err := r.reader.ReadAt(p, off)
 	if err != nil && !xerrors.Is(err, io.EOF) {
@@ -33,12 +33,12 @@ func (r *S3Reader) ReadAt(p []byte, off int64) (int, error) {
 	return read, err
 }
 
-// Size is a proxy call to the underlying fetcher method
+// Size is a proxy call to the underlying fetcher method.
 func (r *S3Reader) Size() int64 {
 	return r.fetcher.size()
 }
 
-// Size is a proxy call to the underlying fetcher method
+// Size is a proxy call to the underlying fetcher method.
 func (r *S3Reader) LastModified() time.Time {
 	return r.fetcher.lastModified()
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/postgres/sqltimestamp"
 )
 
-// Temporal enables to scan any temporal value with a date from []byte
+// Temporal enables to scan any temporal value with a date from []byte.
 type Temporal struct {
 	location *time.Location
 	isNull   bool

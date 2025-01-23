@@ -87,7 +87,7 @@ func (e *SchemaExtractor) WithLogger(logger log.Logger) *SchemaExtractor {
 	return e
 }
 
-// LoadSchema returns a settings-customized schema(s) of table(s) in PostgreSQL
+// LoadSchema returns a settings-customized schema(s) of table(s) in PostgreSQL.
 func (e *SchemaExtractor) LoadSchema(ctx context.Context, conn *pgx.Conn, specificTable *abstract.TableID) (abstract.DBSchema, error) {
 	tableColumns, err := e.tableToColumnsMapping(ctx, conn, specificTable)
 	if err != nil {
@@ -126,7 +126,7 @@ func (e *SchemaExtractor) LoadSchema(ctx context.Context, conn *pgx.Conn, specif
 	return result, nil
 }
 
-// listSchemaQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise
+// listSchemaQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise.
 func (e *SchemaExtractor) listSchemaQuery(specificTable *abstract.TableID) string {
 	return e.flavour.ListSchemaQuery(e.excludeViews, specificTable != nil, e.forbiddenSchemas, e.forbiddenTables)
 }
@@ -229,7 +229,7 @@ func (e *SchemaExtractor) tableToColumnsMapping(ctx context.Context, conn *pgx.C
 	return result, nil
 }
 
-// listPKeysQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise
+// listPKeysQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise.
 func (e *SchemaExtractor) listPKeysQuery(specificTable *abstract.TableID) string {
 	// See documentation on PostgreSQL service relations and views used in this query:
 	// https://www.postgresql.org/docs/9.4/catalog-pg-class.html
@@ -360,7 +360,7 @@ func (e *SchemaExtractor) tableToPKColumnsMapping(ctx context.Context, conn *pgx
 	return result, nil
 }
 
-// replicaIdentityFullListTablesQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise
+// replicaIdentityFullListTablesQuery returns a SQL query without placeholders when the given table is `nil`, or with two placeholders otherwise.
 func (e *SchemaExtractor) replicaIdentityFullListTablesQuery(specificTable *abstract.TableID) string {
 	// See documentation on PostgreSQL service relations and views used in this query:
 	// https://www.postgresql.org/docs/9.4/catalog-pg-class.html
@@ -433,7 +433,7 @@ func (s tableIDWithInfos) String() string {
 	return strings.Join(result, ", ")
 }
 
-// TablesList returns a list of basic information pieces about all tables in the given schema
+// TablesList returns a list of basic information pieces about all tables in the given schema.
 func (e *SchemaExtractor) TablesList(ctx context.Context, conn *pgx.Conn) ([]tableIDWithInfo, time.Time, error) {
 	var ts time.Time
 	query := e.listTablesQuery()

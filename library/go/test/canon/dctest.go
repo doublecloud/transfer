@@ -4,5 +4,5 @@
 package canon
 
 func init() {
-	isRunningUnderGotest = true
+	isRunningUnderGoTest = true
 }

@@ -134,10 +134,6 @@ func (h *Histogram) isMemOnly() bool {
 	return h.memOnly
 }
 
-func (h *Histogram) setMemOnly() {
-	h.memOnly = true
-}
-
 // MarshalJSON implements json.Marshaler.
 func (h *Histogram) MarshalJSON() ([]byte, error) {
 	valuesCopy := make([]int64, len(h.bucketValues))

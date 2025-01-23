@@ -460,7 +460,7 @@ func (t *VersionedTable) buildTargetTable(schemas []abstract.ColSchema) (migrate
 }
 
 // less will check whether left *less* than right
-// it will give asc order for standard slices sort
+// it will give asc order for standard slices sort.
 func (t *VersionedTable) less(left, right interface{}) bool {
 	switch schema.Type(t.versionCol.DataType) {
 	case schema.TypeFloat64, schema.TypeFloat32:

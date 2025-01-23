@@ -76,7 +76,7 @@ func generatedBounds(queries []string, maxSize int) []abstract.TxBound {
 			left = i + 1
 			size = 0
 		} else {
-			size = size + len(q)
+			size += len(q)
 		}
 	}
 	if len(queries) != left {

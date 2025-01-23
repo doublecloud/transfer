@@ -7,7 +7,7 @@ import (
 
 var FieldNotFoundError = xerrors.New("Can't find field")
 
-// Value get single one-of value. Extract actual one-of message instead of `IsOneOfFoo` interface wrapper
+// Value get single one-of value. Extract actual one-of message instead of `IsOneOfFoo` interface wrapper.
 func Value(root protoreflect.Message) (protoreflect.ProtoMessage, error) {
 	fields := root.Descriptor().Fields()
 	for i := 0; i < fields.Len(); i++ {
@@ -22,7 +22,7 @@ func Value(root protoreflect.Message) (protoreflect.ProtoMessage, error) {
 	return nil, FieldNotFoundError
 }
 
-// SetValue will assign one-of value to a container with corresponding one-of
+// SetValue will assign one-of value to a container with corresponding one-of.
 func SetValue(container protoreflect.Message, value protoreflect.Message) error {
 	fields := container.Descriptor().Fields()
 	for i := 0; i < fields.Len(); i++ {

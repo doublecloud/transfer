@@ -141,7 +141,7 @@ type Int16ToInt8 interface {
 }
 
 // IntToInt32
-// special case - generalization Int*ToInt32
+// special case - generalization Int*ToInt32.
 type IntToInt32 interface {
 	Do(int64, *OriginalTypeInfo, *Schema, bool) (int32, error)
 }
@@ -155,7 +155,7 @@ type IntToUint16 interface {
 }
 
 // IntToString
-// special case - generalization Int*ToString
+// special case - generalization Int*ToString.
 type IntToString interface {
 	Do(int64, *OriginalTypeInfo, *Schema, bool) (string, error)
 }
@@ -235,19 +235,19 @@ type StructToString interface {
 // two workarounds
 
 // AnyToDouble
-// special for io.debezium.data.VariableScaleDecimal
+// special for io.debezium.data.VariableScaleDecimal.
 type AnyToDouble interface {
 	Do(interface{}, *OriginalTypeInfo, *Schema, bool) (json.Number, error)
 }
 
 // AnyToAny
-// it's: ArrayToAny & StructToAny
+// it's: ArrayToAny & StructToAny.
 type AnyToAny interface {
 	Do(interface{}, *OriginalTypeInfo, *Schema, bool) (interface{}, error) // string ret_val: result_type
 }
 
 // ContainsColSchemaAdditionalInfo
-// modifies ColSchema, adds special parameters
+// modifies ColSchema, adds special parameters.
 type ContainsColSchemaAdditionalInfo interface {
 	AddInfo(*Schema, *abstract.ColSchema)
 }

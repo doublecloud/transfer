@@ -1,7 +1,7 @@
 package jsonx
 
 // JSONNull denotes a JSON 'null' value.
-// It represents pure 'null' JSON value, not a value inside a JSON object or array. A value inside a JSON object is just golang's 'nil'
+// It represents pure 'null' JSON value, not a value inside a JSON object or array. A value inside a JSON object is just golang's 'nil'.
 type JSONNull struct{}
 
 func (n JSONNull) MarshalJSON() ([]byte, error) {

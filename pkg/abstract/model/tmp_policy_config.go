@@ -38,11 +38,11 @@ const (
 )
 
 type TmpPolicyProvider interface {
-	//Common naive tmp policy: implemented via middleware which one just rename change items during snapshot and call sink method Move(tmp_table -> orig_table) on DoneLoadTable event.
-	//Sharded snapshots are not supported in this mode.
+	// Common naive tmp policy: implemented via middleware which one just rename change items during snapshot and call sink method Move(tmp_table -> orig_table) on DoneLoadTable event.
+	// Sharded snapshots are not supported in this mode.
 	EnsureTmpPolicySupported() error
-	//Some destinations have their own custom implementations with tmp policy logic (e.g. YT dynamic tables sink - UseStaticTablesOnSnapshot).
-	//Custom policy is more preferable than common tmp policy.
+	// Some destinations have their own custom implementations with tmp policy logic (e.g. YT dynamic tables sink - UseStaticTablesOnSnapshot).
+	// Custom policy is more preferable than common tmp policy.
 	//If custom tmp policy is enabled we won`t drop tables on a destination on cleanup sinker stage.
 	EnsureCustomTmpPolicySupported() error
 }

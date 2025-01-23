@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"math"
+	"os"
 	"os/exec"
 	"path"
 	"runtime"
@@ -78,7 +78,7 @@ func stat(pid int, statType string) (*SysInfo, error) {
 		var clkTck float64 = 100
 		var pageSize float64 = 4096
 
-		uptimeFileBytes, _ := ioutil.ReadFile(path.Join("/proc", "uptime"))
+		uptimeFileBytes, _ := os.ReadFile(path.Join("/proc", "uptime"))
 		uptime := parseFloat(strings.Split(string(uptimeFileBytes), " ")[0])
 
 		clkTckStdout, err := exec.Command("getconf", "CLK_TCK").Output()
@@ -91,7 +91,7 @@ func stat(pid int, statType string) (*SysInfo, error) {
 			pageSize = parseFloat(formatStdOut(pageSizeStdout, 0)[0])
 		}
 
-		procStatFileBytes, _ := ioutil.ReadFile(path.Join("/proc", strconv.Itoa(pid), "stat"))
+		procStatFileBytes, _ := os.ReadFile(path.Join("/proc", strconv.Itoa(pid), "stat"))
 		splitAfter := strings.SplitAfter(string(procStatFileBytes), ")")
 
 		if len(splitAfter) == 0 || len(splitAfter) == 1 {
@@ -118,7 +118,7 @@ func stat(pid int, statType string) (*SysInfo, error) {
 			_utime = _history.utime
 		}
 		total := stat.stime - _stime + stat.utime - _utime
-		total = total / clkTck
+		total /= clkTck
 
 		seconds := stat.start - uptime
 		if _history.uptime != 0 {
@@ -154,7 +154,7 @@ func getOpenFilesCount(pid int, platform string) (float64, error) {
 	return float64(bytes.Count(stdout, []byte(eol)) - 1), nil
 }
 
-// GetStat may return incomplete result (with some fields unfilled)
+// GetStat may return incomplete result (with some fields unfilled).
 func GetStat(pid int) (*SysInfo, error) {
 	platform = runtime.GOOS
 	if eol = "\n"; strings.Index(platform, "win") == 0 {

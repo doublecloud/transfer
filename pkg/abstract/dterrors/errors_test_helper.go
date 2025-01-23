@@ -27,7 +27,7 @@ func CheckErrorWrapping(t *testing.T, comment string,
 }
 
 // CheckOpaqueErrorWrapping is the same as CheckErrorWrapping, but for opaque errors
-// can be used for checking new errors as well
+// can be used for checking new errors as well.
 func CheckOpaqueErrorWrapping(t *testing.T, comment string,
 	predicate func(error) bool,
 	newError func(error) error) {

@@ -30,7 +30,7 @@ func init() {
 
 const ProviderType = abstract.ProviderType("ydb")
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Snapshot    = (*Provider)(nil)
 	_ providers.Replication = (*Provider)(nil)

@@ -51,10 +51,6 @@ const (
 	bucketg10Mb = SizeBucket(10*1024*1024 + 1)
 )
 
-func (*RowsMetricState) isMetricState() {}
-
-func (*RowsMetric) isMetric() {}
-
 func (rm *RowsMetric) Reset() *RowsMetricState {
 	rm.statsMu.Lock()
 	prevIntervalFinishTS := time.Now()
@@ -292,7 +288,7 @@ func getPreview(baseOpts *MeteringOpts) bool {
 	if tagPresent {
 		return preview.(bool)
 	}
-	//should never happen, but may for some freezed transfers
+	// should never happen, but may for some freezed transfers
 	return true
 }
 

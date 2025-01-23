@@ -115,7 +115,7 @@ func newClusterTablesFromDescription(storage ClickhouseStorage, config *model.Ch
 	return objs, nil
 }
 
-// Hack: convert base.DataObjectFilter to abstract.IncludeTableList to CH storage
+// Hack: convert base.DataObjectFilter to abstract.IncludeTableList to CH storage.
 type filterWrapper struct {
 	baseFilter base.DataObjectFilter
 }

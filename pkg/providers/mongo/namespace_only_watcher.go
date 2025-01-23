@@ -14,14 +14,14 @@ import (
 // oneshotNamespaceRetriever subscribes for namespace changes ONLY in database
 // it is used when oplog on database is no longer operational (does not goes further, i.e. BSONObjTooLarge)
 // For example, use when server-side mongo cannot pack change keyEvent into single BSON because it is too large
-// Assumed, that it reads the same failed keyEvent from previously failed change stream
+// Assumed, that it reads the same failed keyEvent from previously failed change stream.
 type oneshotNamespaceRetriever struct {
 	logger       log.Logger
 	database     *mongo.Database
 	changeStream *mongo.ChangeStream
 }
 
-// TODO can be used for skipping bad documents
+// TODO can be used for skipping bad documents.
 func (f *oneshotNamespaceRetriever) GetResumeToken() bson.Raw {
 	return f.changeStream.ResumeToken()
 }
@@ -55,7 +55,7 @@ func (f *oneshotNamespaceRetriever) GetNamespace(ctx context.Context) (*Namespac
 }
 
 // NewOneshotNamespaceRetriever creates namespace-only watcher
-// recovery point (resume token) should be specified precisely, or current time will be used
+// recovery point (resume token) should be specified precisely, or current time will be used.
 func NewOneshotNamespaceRetriever(s *mongoSource, resumeToken bson.Raw, dbName string) (*oneshotNamespaceRetriever, error) {
 	rollbacks := util.Rollbacks{}
 	defer rollbacks.Do()

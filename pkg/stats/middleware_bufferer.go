@@ -28,7 +28,7 @@ type MiddlewareBuffererStats struct {
 	CountToFlush metrics.Histogram
 }
 
-// ShortEvenDurationBuckets returns buckets adapted for short durations and distributed approximately evenly
+// ShortEvenDurationBuckets returns buckets adapted for short durations and distributed approximately evenly.
 func ShortEvenDurationBuckets() metrics.DurationBuckets {
 	return metrics.NewDurationBuckets(
 		500*time.Millisecond,
@@ -73,7 +73,7 @@ func ShortEvenDurationBuckets() metrics.DurationBuckets {
 	)
 }
 
-// Exponential10Buckets returns a set of buckets with borders at 10^[1..10]
+// Exponential10Buckets returns a set of buckets with borders at 10^[1..10].
 func Exponential10Buckets() metrics.Buckets {
 	return metrics.MakeExponentialBuckets(10, 10, 10)
 }

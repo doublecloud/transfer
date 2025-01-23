@@ -419,7 +419,7 @@ func columnNameToIndex(tableSchema *[]abstract.ColSchema) map[string]int {
 //	changeItem.Kind passed to function input - should be "delete"
 //
 // If there are present primary key - condition includes only primaryKey: "(`pKey0`=pVal0 AND `pKey1`=pVal1, ...)"
-// If there are no primary key - condition includes all keys&values in changeItem: "(`key0`=val0 AND `key1`=val1, ...)"
+// If there are no primary key - condition includes all keys&values in changeItem: "(`key0`=val0 AND `key1`=val1, ...)".
 func buildPartOfQueryDeleteCondition(tableSchema *[]abstract.ColSchema, changeItem *abstract.ChangeItem, colNameToIndexInTableSchema *map[string]int) string {
 	currentConditions := make([]string, len(changeItem.OldKeys.KeyNames))
 	for i, column := range changeItem.OldKeys.KeyNames {
@@ -479,7 +479,7 @@ func buildQueryUpdate(table abstract.TableID, tableSchema *[]abstract.ColSchema,
 	return "", false
 }
 
-// When we are here, guaranteed len(tableSchema)==len(ColumnNames)
+// When we are here, guaranteed len(tableSchema)==len(ColumnNames).
 func buildPartOfQueryInsert(tableSchema *[]abstract.ColSchema, changeItem *abstract.ChangeItem, colNameToIndexInTableSchema *map[string]int) string {
 	vals := make([]string, len(changeItem.ColumnNames))
 	for i, n := range changeItem.ColumnNames {

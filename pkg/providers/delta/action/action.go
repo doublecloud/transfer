@@ -46,21 +46,22 @@ type Single struct {
 }
 
 func (s *Single) Unwrap() Container {
-	if s.Add != nil {
+	switch {
+	case s.Add != nil:
 		return s.Add
-	} else if s.Remove != nil {
+	case s.Remove != nil:
 		return s.Remove
-	} else if s.MetaData != nil {
+	case s.MetaData != nil:
 		return s.MetaData
-	} else if s.Txn != nil {
+	case s.Txn != nil:
 		return s.Txn
-	} else if s.Protocol != nil {
+	case s.Protocol != nil:
 		return s.Protocol
-	} else if s.Cdc != nil {
+	case s.Cdc != nil:
 		return s.Cdc
-	} else if s.CommitInfo != nil {
+	case s.CommitInfo != nil:
 		return s.CommitInfo
-	} else {
+	default:
 		return nil
 	}
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/stats"
 )
 
-// ErrorTracker do nothing except tracking error / success pushes into metrics
+// ErrorTracker do nothing except tracking error / success pushes into metrics.
 func ErrorTracker(mtrcs metrics.Registry) func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newErrorTracker(s, mtrcs)

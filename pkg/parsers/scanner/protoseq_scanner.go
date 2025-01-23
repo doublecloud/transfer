@@ -10,14 +10,14 @@ import (
 )
 
 var (
-	// magic protoseq sequence: 1FF7F77EBEA65E9E37A6F62EFEAE47A7B76EBFAF169E9F37F657F766A706AFF7
+	// magic protoseq sequence: 1FF7F77EBEA65E9E37A6F62EFEAE47A7B76EBFAF169E9F37F657F766A706AFF7.
 	magicSeq = []byte{
 		31, 247, 247, 126, 190, 166, 94, 158, 55, 166, 246, 46, 254,
 		174, 71, 167, 183, 110, 191, 175, 22, 158, 159, 55, 246, 87,
 		247, 102, 167, 6, 175, 247,
 	}
 
-	// 64mb - const from push-client
+	// 64mb - const from push-client.
 	maxRecordSize uint32 = 64 * 1024 * 1024
 )
 

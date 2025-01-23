@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Join joins slice of any types
+// Join joins slice of any types.
 func Join(s interface{}, glue string) string {
 	if t, ok := s.([]string); ok {
 		return strings.Join(t, glue)

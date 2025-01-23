@@ -82,10 +82,6 @@ func (g *IntGauge) isMemOnly() bool {
 	return g.memOnly
 }
 
-func (g *IntGauge) setMemOnly() {
-	g.memOnly = true
-}
-
 // MarshalJSON implements json.Marshaler.
 func (g *IntGauge) MarshalJSON() ([]byte, error) {
 	metricType := g.metricType.String()

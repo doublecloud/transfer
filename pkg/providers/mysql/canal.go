@@ -32,7 +32,7 @@ var globalExclude = []*regexp.Regexp{
 }
 
 // Canal can sync your MySQL data into everywhere, like Elasticsearch, Redis, etc...
-// MySQL must open row format for binlog
+// MySQL must open row format for binlog.
 type Canal struct {
 	cfg *Config
 
@@ -58,7 +58,7 @@ type Canal struct {
 	cancel context.CancelFunc
 }
 
-// canal will retry fetching unknown table's meta after UnknownTableRetryPeriod
+// canal will retry fetching unknown table's meta after UnknownTableRetryPeriod.
 var (
 	UnknownTableRetryPeriod = time.Second * time.Duration(10)
 	ErrExcludedTable        = xerrors.New("table is excluded")
@@ -364,7 +364,7 @@ func (c *Canal) loadTableConstraints(db, table string) (map[string][]string, err
 	return LoadTableConstraints(dbConn, abstract.TableID{Namespace: db, Name: table})
 }
 
-// ClearTableCache clear table cache
+// ClearTableCache clear table cache.
 func (c *Canal) ClearTableCache(db []byte, table []byte) {
 	key := fmt.Sprintf("%s.%s", db, table)
 	c.tableLock.Lock()
@@ -375,7 +375,7 @@ func (c *Canal) ClearTableCache(db []byte, table []byte) {
 	c.tableLock.Unlock()
 }
 
-// CheckBinlogRowImage checks MySQL binlog row image, must be in FULL, MINIMAL, NOBLOB
+// CheckBinlogRowImage checks MySQL binlog row image, must be in FULL, MINIMAL, NOBLOB.
 func (c *Canal) CheckBinlogRowImage(image string) error {
 	// need to check MySQL binlog row image? full, minimal or noblob?
 	// now only log
@@ -452,7 +452,7 @@ func (c *Canal) prepareSyncer() error {
 	return nil
 }
 
-// Execute a SQL
+// Execute a SQL.
 func (c *Canal) Execute(cmd string, args ...interface{}) (*mysql.Result, error) {
 	c.connLock.Lock()
 	defer c.connLock.Unlock()

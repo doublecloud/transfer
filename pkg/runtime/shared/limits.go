@@ -18,7 +18,7 @@ const (
 // Some amount of memory is reserved for unaccounted memory (e.g. CGO) and system needs
 // and for algorithmic imperfections of the limiter implementation.
 // The reserve amounts to memLimitReservePerc * 100 percents of RAM but at least memLimitReserveBytes
-// See https://go.dev/doc/gc-guide#Memory_limit for futher details
+// See https://go.dev/doc/gc-guide#Memory_limit for futher details.
 func calcMemLimit(ram uint64) uint64 {
 	if int(float64(ram)*memLimitReservePerc) < memLimitReserveBytes {
 		// Reserve nothing for extremely low RAM values

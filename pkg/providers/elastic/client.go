@@ -2,7 +2,8 @@ package elastic
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
+	"net"
 	"reflect"
 	"unsafe"
 
@@ -29,7 +30,7 @@ func openSearchResolveHosts(clusterID string) ([]string, error) {
 	result := make([]string, 0)
 	for _, currHost := range hosts {
 		if currHost.Type == "OPENSEARCH" {
-			result = append(result, fmt.Sprintf("https://%s:%d", currHost.Name, 9200))
+			result = append(result, fmt.Sprintf("https://%s", net.JoinHostPort(currHost.Name, "9200")))
 		}
 	}
 	return result, nil
@@ -43,7 +44,7 @@ func elasticSearchResolveHosts(clusterID string) ([]string, error) {
 	result := make([]string, 0)
 	for _, currHost := range hosts {
 		if currHost.Type == "DATA_NODE" {
-			result = append(result, fmt.Sprintf("https://%s:%d", currHost.Name, 9200))
+			result = append(result, fmt.Sprintf("https://%s", net.JoinHostPort(currHost.Name, "9200")))
 		}
 	}
 	return result, nil
@@ -78,7 +79,7 @@ func ConfigFromDestination(logger log.Logger, cfg *ElasticSearchDestination, ser
 	}
 
 	if cfg.ClusterID == "" {
-		var protocol = "http"
+		protocol := "http"
 		if cfg.SSLEnabled {
 			protocol = "https"
 		}
@@ -103,7 +104,7 @@ func ConfigFromDestination(logger log.Logger, cfg *ElasticSearchDestination, ser
 }
 
 // setProductCheckSuccess
-// cures client from working-only-with-elastic
+// cures client from working-only-with-elastic.
 func setProductCheckSuccess(client *elasticsearch.Client) error {
 	value := reflect.ValueOf(&client)
 	elem := value.Elem()
@@ -125,7 +126,7 @@ func getResponseBody(res *esapi.Response, err error) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to read response body: %w", err)
 	}

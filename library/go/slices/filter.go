@@ -5,7 +5,7 @@ import (
 )
 
 // Filter reduces slice values using given function.
-// It operates with a copy of given slice
+// It operates with a copy of given slice.
 func Filter[S ~[]T, T any](s S, fn func(T) bool) S {
 	if len(s) == 0 {
 		return s

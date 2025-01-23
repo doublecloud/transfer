@@ -5,7 +5,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// NonRowSeparator separates non-row items and pushes each of them in a distinct call to Push (which will contain just one item)
+// NonRowSeparator separates non-row items and pushes each of them in a distinct call to Push (which will contain just one item).
 func NonRowSeparator() func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newNonRowSeparator(s)

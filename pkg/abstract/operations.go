@@ -40,13 +40,13 @@ type TimeoutableTask interface {
 	HasTimedOut(createdAt time.Time, pingedAt time.Time) bool
 }
 
-// Any task is either runnable or fake; embed one of these two types in a new task
+// Any task is either runnable or fake; embed one of these two types in a new task.
 type (
 	runnable struct{}
 	fake     struct{}
 )
 
-// Runnable tasks {{{
+// Runnable tasks {{{.
 type (
 	Activate struct {
 		runnable
@@ -106,7 +106,7 @@ var RunnableTasks []RunnableTask = makeRunnableTasks()
 
 // }}}
 
-// Fake tasks {{{
+// Fake tasks {{{.
 type (
 	Replication             struct{ fake }
 	Termination             struct{ fake }
@@ -172,7 +172,7 @@ func (p UpdateTransferParams) AddedTables() ([]TableDescription, error) {
 
 var AllTasks []Task = makeAllTasks()
 
-// Visitors {{{
+// Visitors {{{.
 type TaskVisitor interface {
 	RunnableVisitor
 	FakeVisitor
@@ -208,7 +208,7 @@ type FakeVisitor interface {
 
 // }}}
 
-// Method implementations {{{
+// Method implementations {{{.
 func (t runnable) isTaskType() {}
 func (t runnable) isRunnable() {}
 func (t fake) isTaskType()     {}

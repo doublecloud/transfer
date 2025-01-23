@@ -8,7 +8,7 @@ type BuilderFunc = func(changeItem *abstract.ChangeItem) ([]byte, error)
 
 // SchemaIDResolver
 // If there are packer with schemaRegistry and wrapped into schemaID resolver
-// It would be called ResolveSchemaID+PackWithSchemaID except 'Pack'
+// It would be called ResolveSchemaID+PackWithSchemaID except 'Pack'.
 type SchemaIDResolver interface {
 	ResolveSchemaID(schema []byte, table abstract.TableID) (uint32, error)
 	PackWithSchemaID(schemaID uint32, payload []byte) ([]byte, error)

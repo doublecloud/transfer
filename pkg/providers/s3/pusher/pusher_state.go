@@ -87,7 +87,7 @@ func (s *PusherState) removeOffset(toRemove any, offsets []any) []any {
 	return remaining
 }
 
-// DeleteDone delete's a processed files form state if the read process is completed
+// DeleteDone delete's a processed files form state if the read process is completed.
 func (s *PusherState) deleteDone(filePath string) {
 	// to be called on commit of state to, to keep map as small as possible
 	progress, ok := s.PushProgress[filePath]
@@ -137,5 +137,5 @@ func (s *PusherState) addInflight(size int64) {
 func (s *PusherState) reduceInflight(size int64) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.inflightBytes = s.inflightBytes - size
+	s.inflightBytes -= size
 }

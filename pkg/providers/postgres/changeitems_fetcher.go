@@ -15,7 +15,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// ChangeItemsFetcher consolidates multiple objects (of which most important is pgx.Rows) into a single one, providing bufferized fetching and parsing of rows from a postgres source
+// ChangeItemsFetcher consolidates multiple objects (of which most important is pgx.Rows) into a single one, providing bufferized fetching and parsing of rows from a postgres source.
 type ChangeItemsFetcher struct {
 	rows             pgx.Rows
 	connInfo         *pgtype.ConnInfo
@@ -57,7 +57,7 @@ func (f *ChangeItemsFetcher) WithLimitCount(limitCount int) *ChangeItemsFetcher 
 	return f
 }
 
-// WithLimitBytes accepts 0 to disable limit
+// WithLimitBytes accepts 0 to disable limit.
 func (f *ChangeItemsFetcher) WithLimitBytes(limitBytes model.BytesSize) *ChangeItemsFetcher {
 	f.limitBytes = limitBytes
 	return f

@@ -23,7 +23,7 @@ const (
 	TargetDB        = "target"
 )
 
-// MySQLContainer represents the MySQL container type used in the module
+// MySQLContainer represents the MySQL container type used in the module.
 type MySQLContainer struct {
 	testcontainers.Container
 	username string
@@ -61,7 +61,7 @@ func PrepareContainer(ctx context.Context) {
 	}
 }
 
-// Run creates an instance of the MySQL container type
+// Run creates an instance of the MySQL container type.
 func Run(ctx context.Context, img string, opts ...testcontainers.ContainerCustomizer) (*MySQLContainer, error) {
 	tz, _ := time.Now().Zone()
 
@@ -95,7 +95,7 @@ CREATE USER '%[3]s'@'%%' IDENTIFIED BY '%[4]s';
 GRANT ALL PRIVILEGES ON *.* TO '%[3]s'@'%%';
 SET GLOBAL time_zone = "%[5]s";
 `, SourceDB, TargetDB, defaultUser, defaultPassword, tz)
-	if _, err := f.Write([]byte(initSQL)); err != nil {
+	if _, err := f.WriteString(initSQL); err != nil {
 		return nil, xerrors.Errorf("unable to write init script: %w", err)
 	}
 

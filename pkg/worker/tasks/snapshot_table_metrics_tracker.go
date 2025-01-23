@@ -138,7 +138,7 @@ func (t *SnapshotTableMetricsTracker) run() {
 
 // Close
 // Safe to close few time, not thread safe;
-// But safe to use with defer and standalone call in same time;
+// But safe to use with defer and standalone call in same time;.
 func (t *SnapshotTableMetricsTracker) Close() {
 	if t.closed {
 		return

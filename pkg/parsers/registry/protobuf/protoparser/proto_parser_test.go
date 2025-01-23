@@ -397,7 +397,7 @@ func TestDoStdDataTypesEqualValues(t *testing.T) {
 	checkEqualStdValues(t, got[0], stdDataTypesFilled.ProtoReflect())
 }
 
-// not deep equal: don't check embedded complicated types
+// not deep equal: don't check embedded complicated types.
 func checkEqualStdValues(t *testing.T, ci abstract.ChangeItem, msg protoreflect.Message) {
 	fields := msg.Descriptor().Fields()
 

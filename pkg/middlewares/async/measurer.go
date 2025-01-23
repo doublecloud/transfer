@@ -10,7 +10,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// Measurer calculate the size of items passing through it
+// Measurer calculate the size of items passing through it.
 func Measurer(logger log.Logger) func(abstract.AsyncSink) abstract.AsyncSink {
 	return func(s abstract.AsyncSink) abstract.AsyncSink {
 		return newMeasurer(s, logger)

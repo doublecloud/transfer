@@ -262,10 +262,8 @@ func validateTerm(f grammar.Term, op OperatorType) error {
 		if op != In && op != NotIn {
 			return newSyntaxError(f.Pos, "list values require [ NOT ] IN operator")
 		}
-	} else {
-		if op == In || op == NotIn {
-			return newSyntaxErrorf(f.Pos, "%s operator expect list value, got %s", f.Operator, f.Value.TypeOf())
-		}
+	} else if op == In || op == NotIn {
+		return newSyntaxErrorf(f.Pos, "%s operator expect list value, got %s", f.Operator, f.Value.TypeOf())
 	}
 	if f.Value.Null != nil && op != Equals && op != NotEquals {
 		return newSyntaxErrorf(f.Pos, "NULL expects \"=\" or \"!=\" operator, got %s", f.Operator)
@@ -289,7 +287,7 @@ func fromParsed(f grammar.Term) (Term, error) {
 	}, nil
 }
 
-// Parse filter string and returns list of Term
+// Parse filter string and returns list of Term.
 func Parse(filtersString string) ([]Term, error) {
 	parsed, err := grammar.Parse(filtersString)
 	if err != nil {

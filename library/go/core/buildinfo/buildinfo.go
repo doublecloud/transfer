@@ -50,7 +50,7 @@ var Info BuildInfo
 
 // InitBuildInfo is internal, but exported API.
 //
-// This function is called from the main package by the code generated in build/scripts/vcs_info.py
+// This function is called from the main package by the code generated in build/scripts/vcs_info.py.
 func InitBuildInfo(buildinfo map[string]string) {
 	Info.ProgramVersion = strings.TrimRight(buildinfo["PROGRAM_VERSION"], " ")
 	Info.CustomVersion = strings.TrimRight(buildinfo["CUSTOM_VERSION"], " ")

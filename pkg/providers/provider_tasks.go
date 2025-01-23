@@ -50,7 +50,7 @@ type Tester interface {
 	Test(ctx context.Context) *abstract.TestResult
 }
 
-// Peeker is a thing that allow to sniff data replication sample
+// Peeker is a thing that allow to sniff data replication sample.
 type Sniffer interface {
 	Provider
 	Sniffer(ctx context.Context) (abstract.Fetchable, error)

@@ -13,7 +13,7 @@ type FallbackStats struct {
 	Errors metrics.Counter
 }
 
-// FallbackStatsCombination is an object unifying stats for source and target fallbacks
+// FallbackStatsCombination is an object unifying stats for source and target fallbacks.
 type FallbackStatsCombination struct {
 	registry metrics.Registry
 

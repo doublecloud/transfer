@@ -64,7 +64,7 @@ WHERE seq.relkind = 'S'`
 	getSequenceDataQuery = `SELECT last_value, is_called FROM %s`
 )
 
-// SequenceInfo is a description of a PostgreSQL sequence
+// SequenceInfo is a description of a PostgreSQL sequence.
 type SequenceInfo struct {
 	SequenceID      abstract.TableID
 	DependentTables []abstract.TableID
@@ -77,7 +77,7 @@ func newSequenceInfo(sequenceID abstract.TableID) *SequenceInfo {
 	}
 }
 
-// SequenceMap is a mapping of sequence identifiers to their descriptions
+// SequenceMap is a mapping of sequence identifiers to their descriptions.
 type SequenceMap map[abstract.TableID]*SequenceInfo
 
 // ListSequencesWithDependants returns a mapping with sequence information.

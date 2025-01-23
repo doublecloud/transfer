@@ -1014,7 +1014,7 @@ func compareSlices(lVal []interface{}, lSchema abstract.ColSchema, rVal []interf
 	return equal, nil
 }
 
-// colSchemaForSliceElement transforms the given schema in such a way that it is suitable for comparison of an individual slice element
+// colSchemaForSliceElement transforms the given schema in such a way that it is suitable for comparison of an individual slice element.
 func colSchemaForSliceElement(s abstract.ColSchema) abstract.ColSchema {
 	s.OriginalType = strings.TrimSuffix(s.OriginalType, "[]")
 	return s

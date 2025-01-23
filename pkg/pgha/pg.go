@@ -93,7 +93,7 @@ func (pg *PgHA) ConnStringByHost(host string) string {
 		pg.user,
 		pg.password)
 	if pg.ssl {
-		q = q + " sslmode=verify-full"
+		q += " sslmode=verify-full"
 	}
 	return q
 }
@@ -216,7 +216,7 @@ func NewFromHosts(dbName, user, password string, hosts []string, port int, ssl b
 			password,
 		)
 		if ssl {
-			connStr = connStr + " sslmode=verify-full"
+			connStr += " sslmode=verify-full"
 		}
 		dsn, err := pgx.ParseConfig(connStr)
 		if err != nil {

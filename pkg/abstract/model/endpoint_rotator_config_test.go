@@ -1,7 +1,6 @@
 package model
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -9,8 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// test runner
+// test runner.
 func TestRotatorConfig(t *testing.T) {
+	t.Parallel()
 	t.Run("ScenarioTesting", scenarioTesting)
 	t.Run("NilWorkaround", nilWorkaround) // temporary test
 	t.Run("Validate", validate)
@@ -25,15 +25,18 @@ func TestRotatorConfig(t *testing.T) {
 	t.Run("TestTimeParsing", testTimeParsing)
 }
 
-// some month utility
-var monthIds = map[time.Month]int{time.January: 0, time.February: 1, time.March: 2, time.April: 3, time.May: 4,
-	time.June: 5, time.July: 6, time.August: 7, time.September: 8, time.October: 9, time.November: 10, time.December: 11}
-var monthList = []time.Month{time.January, time.February, time.March, time.April, time.May,
-	time.June, time.July, time.August, time.September, time.October, time.November, time.December}
-var monthDayCount = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-var monthDayCountLeap = []int{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+// some month utility.
+var monthIds = map[time.Month]int{
+	time.January: 0, time.February: 1, time.March: 2, time.April: 3, time.May: 4,
+	time.June: 5, time.July: 6, time.August: 7, time.September: 8, time.October: 9, time.November: 10, time.December: 11,
+}
 
-// scenario tests
+var monthList = []time.Month{
+	time.January, time.February, time.March, time.April, time.May,
+	time.June, time.July, time.August, time.September, time.October, time.November, time.December,
+}
+
+// scenario tests.
 func scenarioTesting(t *testing.T) {
 	// this tests based on real user scenarios
 	t.Parallel()
@@ -83,10 +86,9 @@ func scenarioTestingDTSUPPORT693(t *testing.T) {
 		timestamp = timestamp.Add(time.Hour)
 		require.Equal(t, rotator.KeepPartCount, len(rotationTables), "Check that there is always window of six tables")
 	}
-
 }
 
-// tests
+// tests.
 func nilWorkaround(t *testing.T) {
 	// TODO delete this test when workaround is not necessary anymore
 	t.Parallel()
@@ -120,7 +122,6 @@ func validate(t *testing.T) {
 	require.Error(t, (&RotatorConfig{KeepPartCount: 1, PartType: RotatorPartHour, PartSize: -1, TimeColumn: ""}).Validate(), "PartSize should be positive")
 	require.Error(t, (&RotatorConfig{KeepPartCount: 0, PartType: RotatorPartHour, PartSize: 1, TimeColumn: ""}).Validate(), "KeepPartCount should be positive")
 	require.Error(t, (&RotatorConfig{KeepPartCount: 1, PartType: "kek", PartSize: 1, TimeColumn: ""}).Validate(), "wrong enum value of PartType")
-
 }
 
 func getMonthPartitionedTestLight(t *testing.T) {
@@ -174,14 +175,13 @@ func getMonthPartitionedTestHeavy(t *testing.T) {
 			require.Equal(t, monthList[i-(i%partSize)], rc.getMonthPartitioned(month))
 		}
 	}
-
 }
 
 func offsetDateTest(t *testing.T) {
 	t.Parallel()
 	t.Run("Hours", offsetDateTestHours)
 	t.Run("Days", offsetDateTestDays)
-	//t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
+	// t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
 	t.Run("NilReceiver", offsetDateTestNilReceiver)
 }
 
@@ -206,8 +206,7 @@ func offsetDateTestHours(t *testing.T) {
 
 func offsetDateTestDays(t *testing.T) {
 	t.Parallel()
-	_ = os.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
-	defer os.Unsetenv("TZ")
+	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
 	rcDays := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartDay, PartSize: 1, TimeColumn: ""}
 	rcDaysTimestamp := time.Now()
 
@@ -231,103 +230,6 @@ func offsetDateTestNilReceiver(t *testing.T) {
 		ts := time.Now()
 		require.Equal(t, ts, nilPtrRotator.offsetDate(ts, offset), "nil receiver preserves month rotation")
 	}
-}
-
-func isLeap(year int) bool {
-	if year%400 == 0 {
-		return true // 3. but every four hundredth year is and exception again
-	}
-	if year%100 == 0 {
-		return false // 2. except for every hundredth year
-	}
-	if year%4 == 0 {
-		return true // 1. every fourth year is leap
-	}
-	return false
-}
-
-func countDaysForYearAcc(year, month, offset int, acc int64) int64 {
-	switch {
-	case offset > 0:
-		dayDiff := 0
-		if isLeap(year) {
-			dayDiff = monthDayCountLeap[month]
-		} else {
-			dayDiff = monthDayCount[month]
-		}
-		nextMonth := month + 1
-		nextYear := year
-		if nextMonth == len(monthList) {
-			nextMonth = 0
-			nextYear++
-		}
-		return countDaysForYearAcc(nextYear, nextMonth, offset-1, acc+int64(dayDiff))
-	case offset < 0:
-		prevMonth := month - 1
-		prevYear := year
-		if prevMonth < 0 {
-			prevMonth = len(monthList) - 1
-			prevYear--
-		}
-
-		dayDiff := 0
-		if isLeap(prevYear) {
-			dayDiff = monthDayCountLeap[prevMonth]
-		} else {
-			dayDiff = monthDayCount[prevMonth]
-		}
-		return countDaysForYearAcc(prevYear, prevMonth, offset-1, acc-int64(dayDiff))
-	default:
-		return acc
-	}
-}
-func countDaysForYear(year, month, offset int) int64 {
-	return countDaysForYearAcc(year, month, offset, 0)
-}
-
-func offsetDateTestMonthHeavy(t *testing.T) {
-	t.Parallel()
-	checkYear := func(t *testing.T, year, partSize int) {
-		t.Helper()
-		t.Parallel()
-		rcMonths := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartMonth, PartSize: partSize, TimeColumn: ""}
-		nowTimestamp := time.Now()
-		for offset := 1; offset < 15; offset++ {
-			for monthID, month := range monthList {
-				// NOTE UTC parameter in tests! This test will not work for RotationTZ timezone with +1 and -1 correction hours
-				ts := time.Date(year, month, nowTimestamp.Day(), nowTimestamp.Hour(), nowTimestamp.Minute(), nowTimestamp.Second(), nowTimestamp.Nanosecond(), time.UTC)
-				offTimestamp := rcMonths.offsetDate(ts, offset)
-
-				expectedHoursOffset := 24 * countDaysForYear(year, monthID, offset*partSize)
-				require.Equal(t, time.Duration(expectedHoursOffset)*time.Hour, offTimestamp.Sub(ts), "offset=%d for year=%d, month=%v should be %d hours with PartSize=%d", offset, year, month, expectedHoursOffset, partSize)
-
-			}
-		}
-	}
-
-	// check some juicy years
-	// leap years
-	t.Run("check year 2000 part size 1", func(t *testing.T) { checkYear(t, 2000, 1) })
-	t.Run("check year 2000 part size 2", func(t *testing.T) { checkYear(t, 2000, 2) })
-	t.Run("check year 2004 part size 3", func(t *testing.T) { checkYear(t, 2004, 3) })
-	t.Run("check year 2005 part size 4", func(t *testing.T) { checkYear(t, 2005, 4) })
-	t.Run("check year 2024 part size 1", func(t *testing.T) { checkYear(t, 2024, 1) })
-	t.Run("check year 2028 part size 1", func(t *testing.T) { checkYear(t, 2028, 1) })
-	t.Run("check year 2400 part size 1", func(t *testing.T) { checkYear(t, 2005, 1) })
-	t.Run("check year 2400 part size 2", func(t *testing.T) { checkYear(t, 2024, 2) })
-	t.Run("check year 2400 part size 3", func(t *testing.T) { checkYear(t, 2028, 3) })
-
-	// not leap years
-	t.Run("check year 2021 part size 1", func(t *testing.T) { checkYear(t, 2021, 1) })
-	t.Run("check year 2021 part size 2", func(t *testing.T) { checkYear(t, 2021, 2) })
-	t.Run("check year 2021 part size 3", func(t *testing.T) { checkYear(t, 2021, 3) })
-	t.Run("check year 2021 part size 5", func(t *testing.T) { checkYear(t, 2021, 5) })
-	t.Run("check year 2021 part size 6", func(t *testing.T) { checkYear(t, 2021, 6) })
-	t.Run("check year 2021 part size 7", func(t *testing.T) { checkYear(t, 2021, 7) })
-	t.Run("check year 2100 part size 1", func(t *testing.T) { checkYear(t, 2100, 1) })
-	t.Run("check year 2100 part size 5", func(t *testing.T) { checkYear(t, 2100, 5) })
-	t.Run("check year 2100 part size 12", func(t *testing.T) { checkYear(t, 2100, 12) })
-
 }
 
 func getPartitionBin(t *testing.T) {
@@ -358,12 +260,14 @@ func annotateWithTimeFromColumnTest(t *testing.T) {
 	t.Run("NoTimeColumnInConfig", annotateWithTimeFromColumnTestNoTimeColumnInConfig)
 	t.Run("NilReceiver", annotateWithTimeFromColumnTestNilReceiver)
 }
+
 func annotateWithTimeFromColumnTestWithoutFormat(t *testing.T) {
 	t.Parallel()
 	t.Run("Hours", annotateWithTimeFromColumnTestWithoutFormatHours)
 	t.Run("Days", annotateWithTimeFromColumnTestWithoutFormatDays)
 	t.Run("Months", annotateWithTimeFromColumnTestWithoutFormatMonths)
 }
+
 func annotateWithTimeFromColumnTestWithFormat(t *testing.T) {
 	t.Parallel()
 	t.Run("Hours", annotateWithTimeFromColumnTestWithTemplateHours)

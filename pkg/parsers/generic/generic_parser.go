@@ -790,7 +790,7 @@ func ElemIDX(columns []string) int {
 	return len(columns) - 1
 }
 
-// can return in moment: valid value & error
+// can return in moment: valid value & error.
 func (p *GenericParser) extractTimestamp(row map[string]interface{}, defaultTime time.Time) (time.Time, error) {
 	if p.auxOpts.TimeField != nil && row[p.auxOpts.TimeField.Col] != nil {
 		resultTime, done, err := p.extractTimeValue(row[p.auxOpts.TimeField.Col], defaultTime)

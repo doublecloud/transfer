@@ -23,7 +23,7 @@ func (a *Storage) GetIncrementalState(ctx context.Context, incremental []abstrac
 	}), nil
 }
 
-// SetInitialState should have done nothing, since state handled inside loadTable method
+// SetInitialState should have done nothing, since state handled inside loadTable method.
 func (a *Storage) SetInitialState(tables []abstract.TableDescription, incrementalTables []abstract.IncrementalTable) {
 	for i, table := range tables {
 		for _, incremental := range incrementalTables {

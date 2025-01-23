@@ -12,7 +12,7 @@ import (
 )
 
 // badGoldenTest it's a set of cases that doomed to fail
-// that was designed that way
+// that was designed that way.
 var badGoldenTest = set.New(
 	"versions-not-contiguous",
 	"deltalog-state-reconstruction-without-protocol",

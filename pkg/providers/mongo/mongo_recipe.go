@@ -131,7 +131,7 @@ func GetIntFromEnv(varName string) int {
 	return val
 }
 
-// PostgresContainer represents the postgres container type used in the module
+// PostgresContainer represents the postgres container type used in the module.
 type MongoContainer struct {
 	testcontainers.Container
 	user        string

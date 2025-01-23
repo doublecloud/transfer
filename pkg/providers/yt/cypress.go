@@ -31,7 +31,7 @@ func NewNodeInfo(name string, path ypath.Path, attrs *NodeAttrs) *NodeInfo {
 	return &NodeInfo{Name: name, Path: path, Attrs: attrs}
 }
 
-// ListNodesWithAttrs returns name-sorted list of nodes with attributes based on specified arguments
+// ListNodesWithAttrs returns name-sorted list of nodes with attributes based on specified arguments.
 func ListNodesWithAttrs(ctx context.Context, client yt.CypressClient, path ypath.Path, prefix string, recursive bool) ([]*NodeInfo, error) {
 	var nodes []string
 	var err error

@@ -136,7 +136,7 @@ func prepareOriginalTypes(schema []abstract.ColSchema) error {
 	return nil
 }
 
-// CreateSchemaQuery returns a CREATE SCHEMA IF NOT EXISTS query for the given schema
+// CreateSchemaQuery returns a CREATE SCHEMA IF NOT EXISTS query for the given schema.
 func createSchemaQuery(schemaName string) string {
 	return fmt.Sprintf(`CREATE SCHEMA IF NOT EXISTS "%v"; `, schemaName)
 }
@@ -537,13 +537,13 @@ func Represent(val interface{}, colSchema abstract.ColSchema) (string, error) {
 
 		if strings.HasPrefix(colSchema.OriginalType, "pg:time") &&
 			!strings.HasPrefix(colSchema.OriginalType, "pg:timestamp") {
-			//by default Value of time always returns as array of bytes which can not be processed in plain insert
-			//however if we cast decoder to pgtype.Time while unmarshalling it will lead to errors in tests because
+			// by default Value of time always returns as array of bytes which can not be processed in plain insert
+			// however if we cast decoder to pgtype.Time while unmarshalling it will lead to errors in tests because
 			//pgtype.Time doesn't store the precision and always uses the maximum(6)
 			if vvv, ok := vv.([]byte); ok && vv != nil {
 				coder := new(pgtype.Time)
 
-				//we only use binary->binary (de)serialization in homogeneous pg->pg
+				// we only use binary->binary (de)serialization in homogeneous pg->pg
 				if err := coder.DecodeBinary(nil, vvv); err == nil {
 					//nolint:descriptiveerrors
 					return Represent(coder, colSchema)
@@ -876,7 +876,7 @@ func (s *sink) buildDeleteQuery(table string, schema []abstract.ColSchema, row a
 }
 
 // buildQueries constructs a list of SQL queries to push the given items into PostgreSQL.
-// Each query in non-nil output strictly corresponds to an item in the given items
+// Each query in non-nil output strictly corresponds to an item in the given items.
 func (s *sink) buildQueries(table string, schema []abstract.ColSchema, items []abstract.ChangeItem) ([]string, error) {
 	rev := abstract.MakeMapColNameToIndex(schema)
 
@@ -901,7 +901,7 @@ func (s *sink) buildQueries(table string, schema []abstract.ColSchema, items []a
 	return result, nil
 }
 
-// buildQuery is a wrapper around buildQueries which makes sure the output contains exactly one query
+// buildQuery is a wrapper around buildQueries which makes sure the output contains exactly one query.
 func (s *sink) buildQuery(table string, schema []abstract.ColSchema, items []abstract.ChangeItem) (string, error) {
 	queries, err := s.buildQueries(table, schema, items)
 	if err != nil {
@@ -946,7 +946,7 @@ func (s *sink) insert(ctx context.Context, table string, schema []abstract.ColSc
 		return xerrors.Errorf("failed to build queries to process items at sink: %w", err)
 	}
 
-	//s.logger.Infof("Prepare query %v rows %v for table %v", len(items), format.SizeInt(len(queries)), table)
+	// s.logger.Infof("Prepare query %v rows %v for table %v", len(items), format.SizeInt(len(queries)), table)
 	execStart := time.Now()
 	processedQueries := 0
 	for processedQueries < len(queries) {

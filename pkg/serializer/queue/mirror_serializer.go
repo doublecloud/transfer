@@ -25,7 +25,7 @@ func (s *MirrorSerializer) serialize(changeItem *abstract.ChangeItem) ([]Seriali
 }
 
 // Serialize
-// naive implementation - can be boosted by multi-threading
+// naive implementation - can be boosted by multi-threading.
 func (s *MirrorSerializer) Serialize(input []abstract.ChangeItem) (map[abstract.TablePartID][]SerializedMessage, error) {
 	if len(input) == 0 {
 		return nil, nil
@@ -65,7 +65,7 @@ func (s *MirrorSerializer) SerializeLB(changeItem *abstract.ChangeItem) ([]Seria
 // GroupAndSerializeLB
 // For logbroker-destination logic should be absolute another!
 // ChangeItems should be grouped by Key (it's ProducerID)
-// And for every Key should be extracted extras (extras - unique for every producer)
+// And for every Key should be extracted extras (extras - unique for every producer).
 func (s *MirrorSerializer) GroupAndSerializeLB(input []abstract.ChangeItem) (map[abstract.TablePartID][]SerializedMessage, map[abstract.TablePartID]map[string]string, error) {
 	idToGroup := make(map[abstract.TablePartID][]SerializedMessage)
 	extras := make(map[abstract.TablePartID]map[string]string)

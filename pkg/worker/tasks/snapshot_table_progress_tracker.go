@@ -72,7 +72,7 @@ func (t *SnapshotTableProgressTracker) run() {
 
 // Close
 // Safe to close few time, not thread safe;
-// But safe to use with defer and standalone call in same time;
+// But safe to use with defer and standalone call in same time;.
 func (t *SnapshotTableProgressTracker) Close() {
 	if t.closed {
 		return
@@ -137,14 +137,14 @@ func (t *SnapshotTableProgressTracker) Flush() {
 	t.pushProgress()
 }
 
-// AddGetProgress TODO: Remove, A2 thing
+// AddGetProgress TODO: Remove, A2 thing.
 func (t *SnapshotTableProgressTracker) AddGetProgress(part *model.OperationTablePart, progressFunc func()) {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()
 	t.progressFuncs[part.Key()] = progressFunc
 }
 
-// RemoveGetProgress TODO: Remove, A2 thing
+// RemoveGetProgress TODO: Remove, A2 thing.
 func (t *SnapshotTableProgressTracker) RemoveGetProgress(part *model.OperationTablePart) {
 	t.progressUpdateMutex.Lock()
 	defer t.progressUpdateMutex.Unlock()

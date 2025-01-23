@@ -12,7 +12,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// ensure that Storage is indeed incremental
+// ensure that Storage is indeed incremental.
 var _ abstract.IncrementalStorage = new(Storage)
 
 var repeatableReadReadOnlyTxOptions pgx.TxOptions = pgx.TxOptions{IsoLevel: pgx.RepeatableRead, AccessMode: pgx.ReadOnly, DeferrableMode: pgx.NotDeferrable}

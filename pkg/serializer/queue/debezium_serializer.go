@@ -84,7 +84,7 @@ func (s *DebeziumSerializer) SerializeImpl(input []abstract.ChangeItem, threadsN
 }
 
 // Serialize - serializes []abstract.ChangeItem into map: topic->[]SerializedMessage via debezium emitter
-// It's optimized version - with multithreading and caches optimizations
+// It's optimized version - with multithreading and caches optimizations.
 func (s *DebeziumSerializer) Serialize(input []abstract.ChangeItem) (map[abstract.TablePartID][]SerializedMessage, error) {
 	// runtime.NumCPU()*4 showed the best performance in benchmark (pkg/debezium/bench)
 	// chunkSize==16 showed one of the best performance (with dropKeys:false)

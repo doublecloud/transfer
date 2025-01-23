@@ -4,12 +4,12 @@ import (
 	"strings"
 )
 
-// HasPrefixCI checks if string has prefix in case-insensitive mode
+// HasPrefixCI checks if string has prefix in case-insensitive mode.
 func HasPrefixCI(s, prefix string) bool {
 	return len(s) >= len(prefix) && strings.EqualFold(s[0:len(prefix)], prefix)
 }
 
-// TrimPrefixCI trims first found prefix in case-insensitive mode
+// TrimPrefixCI trims first found prefix in case-insensitive mode.
 func TrimPrefixCI(s string, prefixes ...string) (string, bool) {
 	for _, prefix := range prefixes {
 		if HasPrefixCI(s, prefix) {
@@ -23,7 +23,7 @@ type UTF8String interface {
 	string | []byte
 }
 
-// TruncateUTF8 truncates utf-8 string
+// TruncateUTF8 truncates utf-8 string.
 func TruncateUTF8[T UTF8String](s T, limit int) T {
 	if len(s) <= limit {
 		return s

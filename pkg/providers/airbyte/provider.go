@@ -16,7 +16,7 @@ func init() {
 	providers.Register(ProviderType, New)
 }
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Activator   = (*Provider)(nil)
 	_ providers.Snapshot    = (*Provider)(nil)

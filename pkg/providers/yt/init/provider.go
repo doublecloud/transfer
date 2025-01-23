@@ -32,7 +32,7 @@ func init() {
 	providers.Register(yt_provider.CopyType, New(yt_provider.CopyType))
 }
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Snapshot          = (*Provider)(nil)
 	_ providers.Sinker            = (*Provider)(nil)

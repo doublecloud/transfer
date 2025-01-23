@@ -839,7 +839,7 @@ func (s *sinker) commitSnapshot(tableName string) error {
 	return nil
 }
 
-// private wrapper function with receiver
+// private wrapper function with receiver.
 func (s *sinker) newGenericTable(schema []abstract.ColSchema, table string) (GenericTable, error) {
 	return NewGenericTable(s.ytClient, yt2.SafeChild(s.dir, table), schema, s.config, s.metrics, s.logger)
 }

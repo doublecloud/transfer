@@ -42,7 +42,7 @@ func TestRoundRobinLoadBalancer(t *testing.T) {
 		urls = append(urls, parsedURL)
 	}
 
-	//stop one server
+	// stop one server
 	servers[0].Close()
 
 	balancedClient := newBalancedClient(newRoundRobinLoadBalancer(urls), http.DefaultClient)
@@ -51,7 +51,10 @@ func TestRoundRobinLoadBalancer(t *testing.T) {
 			body := fmt.Sprintf("iteration: %d, subiteration %d", i, j)
 			req, err := http.NewRequest(http.MethodPost, "http://it-will-be-replaced-anyway.com", strings.NewReader(body))
 			require.NoError(t, err)
-			_, err = balancedClient.Do(req)
+			resp, err := balancedClient.Do(req)
+			if err == nil {
+				defer resp.Body.Close()
+			}
 			if j == 0 {
 				require.Error(t, err)
 			} else {

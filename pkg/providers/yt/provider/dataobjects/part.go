@@ -112,7 +112,7 @@ func rangeToLegacyWhere(rng ypath.Range) abstract.WhereStatement {
 
 var condPattern = "($row_index %s %d)"
 
-// LegacyWhereToRange is now unused pair to rangeToLegacyWhere. May be needed later for incremental transfers, etc
+// LegacyWhereToRange is now unused pair to rangeToLegacyWhere. May be needed later for incremental transfers, etc.
 func LegacyWhereToRange(where abstract.WhereStatement) (ypath.Range, error) {
 	rng := ypath.Full()
 

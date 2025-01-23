@@ -52,7 +52,7 @@ type replication struct {
 	objects         *model.DataObjects
 	sequencer       *sequencer2.Sequencer
 	parseQ          *parsequeue.ParseQueue[[]abstract.ChangeItem]
-	objectsMap      map[abstract.TableID]bool //tables to include in transfer
+	objectsMap      map[abstract.TableID]bool // tables to include in transfer
 
 	skippedTables map[abstract.TableID]bool
 }
@@ -67,7 +67,7 @@ const BufferLimit = 16 * humanize.MiByte
 
 func (p *replication) Run(sink abstract.AsyncSink) error {
 	var err error
-	//level of parallelism combined with hardcoded buffer size in receiver(16mb) prevent OOM in parsequeue
+	// level of parallelism combined with hardcoded buffer size in receiver(16mb) prevent OOM in parsequeue
 	p.parseQ = parsequeue.New(p.logger, 10, sink, p.WithIncludeFilter, p.ack)
 
 	if err = p.reloadSchema(); err != nil {
@@ -83,7 +83,7 @@ func (p *replication) Run(sink abstract.AsyncSink) error {
 		return xerrors.Errorf("unable to build transfer data-objects: %w", err)
 	}
 
-	slotTroubleCh := p.slotMonitor.StartSlotMonitoring(int64(p.config.SlotByteLagLimit))
+	slotTroubleCh := p.slotMonitor.StartSlotMonitoring(p.config.SlotByteLagLimit)
 
 	p.wg.Add(2)
 	go p.receiver(slotTroubleCh)
@@ -225,7 +225,7 @@ func (p *replication) reloadSchema() error {
 
 const FakeParentPKeyStatusMessageCategory string = "fake_primary_key_parent"
 
-// tableMapToDBSchemaForTables converts one type of schema to another ONLY for tables (dropping VIEWs)
+// tableMapToDBSchemaForTables converts one type of schema to another ONLY for tables (dropping VIEWs).
 func tableMapToDBSchemaForTables(tableMap abstract.TableMap) abstract.DBSchema {
 	result := make(abstract.DBSchema)
 	for id, info := range tableMap {

@@ -54,7 +54,7 @@ func (s *ytStateStorage) SetState(tx yt.TxID) error {
 	return nil
 }
 
-// RemoveState removes state and return deleted tx id
+// RemoveState removes state and return deleted tx id.
 func (s *ytStateStorage) RemoveState() (*yt.TxID, error) {
 	id, err := s.getState()
 	if err != nil {

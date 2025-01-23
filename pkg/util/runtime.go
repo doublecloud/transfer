@@ -19,7 +19,7 @@ func GetMiniCallstack(depth int) []string {
 	for offset := 1; offset <= depth; offset++ {
 		_, file, no, ok := runtime.Caller(offset)
 		if ok {
-			caller := ""
+			var caller string
 			callerPath := strings.Split(fmt.Sprintf("%s:%d", file, no), "/")
 			if len(callerPath) > 1 {
 				caller = strings.Join(callerPath[len(callerPath)-2:], "/")

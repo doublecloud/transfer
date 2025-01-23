@@ -4,7 +4,7 @@ import "github.com/doublecloud/transfer/pkg/abstract/model"
 
 // Editor is obsolete interface to update entities on coordinator
 //
-// Deprecated: do not rely on it anymore
+// Deprecated: do not rely on it anymore.
 type Editor interface {
 	// GetEndpointTransfers get all *other* linked transfer to either source or target of provider *transferID*
 	GetEndpointTransfers(transferID string, isSource bool) ([]*model.Transfer, error)

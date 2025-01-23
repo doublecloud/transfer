@@ -23,7 +23,7 @@ import (
 )
 
 // badGoldenTest it's a set of cases that doomed to fail
-// that was designed that way
+// that was designed that way.
 var badGoldenTest = set.New(
 	// todo: special character, s3 client fail them
 	"deltatbl-special-chars-in-partition-column",
@@ -130,7 +130,7 @@ func uploadOne(t *testing.T, cfg *DeltaSource, fname string, uploader *s3manager
 	require.NoError(t, err)
 }
 
-// this only works for local use
+// this only works for local use.
 func TestGoldenDataSet(t *testing.T) {
 	if os.Getenv("S3MDS_PORT") != "" {
 		t.Skip() // only works with premade s3 bucket for now

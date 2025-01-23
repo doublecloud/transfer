@@ -10,21 +10,21 @@ import (
 const DefaultAuth = "admin"
 
 type KafkaSource struct {
-	Connection  *KafkaConnectionOptions
-	Auth        *KafkaAuth
-	Topic       string
-	GroupTopics []string
-	Transformer *model.DataTransformOptions
+	Connection  *KafkaConnectionOptions     `json:"connection"`
+	Auth        *KafkaAuth                  `json:"auth"`
+	Topic       string                      `json:"topic"`
+	GroupTopics []string                    `json:"group_topics"`
+	Transformer *model.DataTransformOptions `json:"transformer"`
 
-	BufferSize model.BytesSize // it's not some real buffer size - see comments to waitLimits() method in kafka-source
+	BufferSize model.BytesSize `json:"buffer_size"` // it's not some real buffer size - see comments to waitLimits() method in kafka-source
 
-	SecurityGroupIDs []string
+	SecurityGroupIDs []string `json:"security_group_ids"`
 
-	ParserConfig        map[string]interface{}
-	IsHomo              bool // enabled kafka mirror protocol which can work only with kafka target
-	SynchronizeIsNeeded bool // true, if we need to send synchronize events on releasing partitions
+	ParserConfig        map[string]interface{} `json:"parser_config"`
+	IsHomo              bool                   `json:"is_homo"`               // enabled kafka mirror protocol which can work only with kafka target
+	SynchronizeIsNeeded bool                   `json:"synchronize_is_needed"` // true, if we need to send synchronize events on releasing partitions
 
-	OffsetPolicy OffsetPolicy // specify from what topic part start message consumption
+	OffsetPolicy OffsetPolicy `json:"offset_policy"` // specify from what topic part start message consumption
 }
 
 type OffsetPolicy string

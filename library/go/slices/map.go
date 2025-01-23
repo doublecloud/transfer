@@ -1,6 +1,6 @@
 package slices
 
-// MapP applies given function to every pointer to element of slice
+// MapP applies given function to every pointer to element of slice.
 func MapP[S ~[]T, T, M any](s S, fn func(*T) M) []M {
 	if s == nil {
 		return []M(nil)
@@ -15,7 +15,7 @@ func MapP[S ~[]T, T, M any](s S, fn func(*T) M) []M {
 	return res
 }
 
-// Map applies given function to every value of slice
+// Map applies given function to every value of slice.
 func Map[S ~[]T, T, M any](s S, fn func(T) M) []M {
 	if s == nil {
 		return []M(nil)
@@ -30,7 +30,7 @@ func Map[S ~[]T, T, M any](s S, fn func(T) M) []M {
 	return res
 }
 
-// MapE applies given function to every value of slice and return slice or first error
+// MapE applies given function to every value of slice and return slice or first error.
 func MapE[S ~[]T, T, M any](s S, fn func(T) (M, error)) ([]M, error) {
 	if s == nil {
 		return []M(nil), nil

@@ -9,7 +9,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// Statistician tracks the traffic of sinker
+// Statistician tracks the traffic of sinker.
 func Statistician(logger log.Logger, stats *stats.WrapperStats) func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newStatistician(s, logger, stats)

@@ -45,7 +45,7 @@ func MustGet(key string) []byte {
 	return r
 }
 
-// Keys returns sorted keys of all registered resources inside the binary
+// Keys returns sorted keys of all registered resources inside the binary.
 func Keys() []string {
 	keys := make([]string, 0, len(resources))
 	for k := range resources {

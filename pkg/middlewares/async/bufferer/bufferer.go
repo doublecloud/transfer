@@ -68,7 +68,7 @@ func newBufferer(sink abstract.Sinker, logger log.Logger, r metrics.Registry, tr
 	return result
 }
 
-// apiState contains the state connecting an asynchronously running goroutine which actually performs Push and callers of the middleware
+// apiState contains the state connecting an asynchronously running goroutine which actually performs Push and callers of the middleware.
 type apiState struct {
 	sync.RWMutex
 	sync.WaitGroup
@@ -138,7 +138,7 @@ func (b *bufferer) AsyncPush(items []abstract.ChangeItem) chan error {
 	return result
 }
 
-// bufferFlushState inherits sync.WaitGroup and contains all the information to do and control flush
+// bufferFlushState inherits sync.WaitGroup and contains all the information to do and control flush.
 type buffererFlushState struct {
 	sync.WaitGroup
 

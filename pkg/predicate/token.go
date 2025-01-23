@@ -4,12 +4,12 @@ package predicate
 type Token int
 
 const (
-	// ILLEGAL token represent illegal token found in the statement
+	// ILLEGAL token represent illegal token found in the statement.
 	ILLEGAL Token = iota
-	// EOF token represents end of statement
+	// EOF token represents end of statement.
 	EOF
 
-	// Literals
+	// Literals.
 	NUMBER // 12345.67
 	STRING // "abc"
 	TRUE   // true
@@ -80,11 +80,3 @@ func (tok Token) Precedence() int {
 
 // isOperator returns true for operator tokens.
 func (tok Token) isOperator() bool { return tok > operatorBegin && tok < operatorEnd }
-
-// tokstr returns a literal if provided, otherwise returns the token string.
-func tokstr(tok Token, lit string) string {
-	if lit != "" {
-		return lit
-	}
-	return tok.String()
-}

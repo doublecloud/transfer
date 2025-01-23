@@ -125,7 +125,7 @@ type replayTuple struct {
 type MemoryOptimizedLogReplay struct {
 	files    []string
 	logStore store.Store
-	//timezone      time.Location
+	// timezone      time.Location
 	checkpointReader CheckpointReader
 }
 

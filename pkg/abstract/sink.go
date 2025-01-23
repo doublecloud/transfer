@@ -10,7 +10,7 @@ type (
 //
 // All its methods are guaranteed to be called non-concurrently (synchronously).
 //
-// TODO: rename to Sink
+// TODO: rename to Sink.
 type Sinker interface {
 	io.Closer
 	// Push writes the given items into destination synchronously. If its result is nil, the items are considered to be successfully written to the destination.
@@ -18,5 +18,5 @@ type Sinker interface {
 	Push(items []ChangeItem) error
 }
 
-// TODO: Drop by making transformers a common middleware
+// TODO: Drop by making transformers a common middleware.
 type SinkOption func(sinker Sinker) Sinker

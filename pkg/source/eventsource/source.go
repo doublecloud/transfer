@@ -19,7 +19,7 @@ type eventSourceSource struct {
 	logger log.Logger
 }
 
-// NewSource constructs a wrapper over the given base.EventSource with the abstract.Source interface
+// NewSource constructs a wrapper over the given base.EventSource with the abstract.Source interface.
 func NewSource(logger log.Logger, source base.EventSource, cleanupPolicy model.CleanupType, tmpPolicy *model.TmpPolicyConfig) abstract.Source {
 	return &eventSourceSource{
 		source:        source,

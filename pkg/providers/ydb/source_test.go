@@ -252,7 +252,7 @@ func checkSchemaUpdateWithMode(t *testing.T, db *ydb.Driver, transferID string, 
 }
 
 // events with the same primary keys are ordered,
-// but not ordered relative to events for records with other keys
+// but not ordered relative to events for records with other keys.
 func checkEventsOrder(t *testing.T, events []abstract.ChangeItem, expectedVal int) {
 	if len(events) == 0 {
 		return

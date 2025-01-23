@@ -20,7 +20,7 @@ func TestDo(t *testing.T) {
 	}
 	stringAndByteData = append(stringAndByteData, 0xC0, 0xC1, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9)
 
-	tu := time.Unix(0, int64(time.Now().Unix()))
+	tu := time.Unix(0, time.Now().Unix())
 
 	testCases := []struct {
 		testCaseName   string

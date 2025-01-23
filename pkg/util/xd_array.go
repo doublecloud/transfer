@@ -2,7 +2,7 @@ package util
 
 import "github.com/doublecloud/transfer/library/go/core/xerrors"
 
-// XDArray Multidimensional array with arbitrary item type
+// XDArray Multidimensional array with arbitrary item type.
 type XDArray struct {
 	Data []interface{}
 }
@@ -80,7 +80,7 @@ func XDIndex(i int, fullSize []int) []int {
 	index := make([]int, len(fullSize))
 	for d, l := range fullSize {
 		index[d] = i / l
-		i = i % l
+		i %= l
 	}
 	return index
 }

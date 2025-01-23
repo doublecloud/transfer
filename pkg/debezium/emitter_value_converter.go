@@ -76,7 +76,7 @@ type emitType int
 const (
 	// It's when 1 changeItem generates 1 debezium event, for example:
 	// - insert
-	// - update (with updating non-pkey)
+	// - update (with updating non-pkey).
 
 	regularEmitType = emitType(0)
 
@@ -89,7 +89,7 @@ const (
 	//
 	// Delete generates 2 debezium events:
 	// - delete row
-	// - tombstone event
+	// - tombstone event.
 
 	deleteEventEmitType    = emitType(1)
 	tombstoneEventEmitType = emitType(2)
@@ -135,7 +135,7 @@ func arrColSchemaToFieldsDescrKeys(arrColSchema []abstract.ColSchema, snapshot b
 	return fields, nil
 }
 
-// add - function for adding (with conversion) one field
+// add - function for adding (with conversion) one field.
 func add(colSchema *abstract.ColSchema, colName string, colVal interface{}, originalType string, ignoreUnknownSources, snapshot bool, connectorParameters map[string]string, result *debeziumcommon.Values) error {
 	if strings.HasPrefix(originalType, "pg:") {
 		if strings.HasSuffix(originalType, "[]") {
@@ -204,7 +204,7 @@ func makeValuesWithUnpack(tableSchema []abstract.ColSchema, connectorParameters 
 	return result, nil
 }
 
-// makeValues - is used for build dict for both: 'after' and 'before'
+// makeValues - is used for build dict for both: 'after' and 'before'.
 func makeValues(tableSchema []abstract.ColSchema, connectorParameters map[string]string, names []string, vals []interface{}, keysOnly, ignoreUnknownSources, snapshot bool) (*debeziumcommon.Values, error) {
 	mapColToIndex := make(map[string]int)
 	for i, col := range tableSchema {
@@ -255,7 +255,7 @@ func (m *Emitter) GetPackers() (packer.Packer, packer.Packer) {
 
 // makeKey - builds 'key' for kafka
 // for inserts/updates(without pkey changing) - just pkeys from 'after'
-// for deletes/update(with pkey changing) - extracts pkeys from OldKeys
+// for deletes/update(with pkey changing) - extracts pkeys from OldKeys.
 func (m *Emitter) makeKey(changeItem *abstract.ChangeItem, useAfter bool, ignoreUnknownSources, snapshot bool) (*debeziumcommon.Values, error) {
 	if useAfter || changeItem.OldKeys.KeyNames == nil {
 		return buildKV(changeItem, m.connectorParameters, true, ignoreUnknownSources, snapshot)
@@ -273,7 +273,7 @@ func (m *Emitter) makeKey(changeItem *abstract.ChangeItem, useAfter bool, ignore
 	return result, nil
 }
 
-// hasPreviousValues - happens when replica_identity=full (for pg), and same things for other databases
+// hasPreviousValues - happens when replica_identity=full (for pg), and same things for other databases.
 func hasPreviousValues(changeItem *abstract.ChangeItem) bool {
 	pkeysNum := 0
 	for _, el := range changeItem.TableSchema.Columns() {
@@ -284,7 +284,7 @@ func hasPreviousValues(changeItem *abstract.ChangeItem) bool {
 	return len(changeItem.OldKeys.KeyNames) > pkeysNum
 }
 
-// BuildKVMap - builds 'after' k-v map
+// BuildKVMap - builds 'after' k-v map.
 func BuildKVMap(changeItem *abstract.ChangeItem, connectorParameters map[string]string, snapshot bool) (map[string]interface{}, error) {
 	values, err := buildKV(changeItem, connectorParameters, false, true, snapshot)
 	if err != nil {
@@ -293,7 +293,7 @@ func BuildKVMap(changeItem *abstract.ChangeItem, connectorParameters map[string]
 	return values.V, nil
 }
 
-// buildKV - builds 'after' k-v map
+// buildKV - builds 'after' k-v map.
 func buildKV(changeItem *abstract.ChangeItem, connectorParameters map[string]string, keysOnly, ignoreUnknownSources, snapshot bool) (*debeziumcommon.Values, error) {
 	mapColNameToIndex := make(map[string]int)
 	for i, col := range changeItem.TableSchema.Columns() {
@@ -389,7 +389,7 @@ func (m *Emitter) ToKafkaSchemaKey(changeItem *abstract.ChangeItem, snapshot boo
 	return result, nil
 }
 
-// ToKafkaPayloadKey - generate schema for a key message
+// ToKafkaPayloadKey - generate schema for a key message.
 func (m *Emitter) ToKafkaPayloadKey(changeItem *abstract.ChangeItem, snapshot bool, emitType emitType) ([]byte, error) {
 	afterKey, err := m.makeKey(changeItem, emitType == insertEventEmitType, m.ignoreUnknownSources, snapshot)
 	if err != nil {
@@ -398,7 +398,7 @@ func (m *Emitter) ToKafkaPayloadKey(changeItem *abstract.ChangeItem, snapshot bo
 	return util.JSONMarshalUnescape(afterKey.V)
 }
 
-// ToKafkaSchemaVal - generate a schema for a val message
+// ToKafkaSchemaVal - generate a schema for a val message.
 func (m *Emitter) ToKafkaSchemaVal(changeItem *abstract.ChangeItem, snapshot bool) ([]byte, error) {
 	fieldsVal, err := arrColSchemaToFieldsDescr(changeItem.TableSchema.Columns(), snapshot, m.connectorParameters)
 	if err != nil {
@@ -449,7 +449,7 @@ func (m *Emitter) ToKafkaPayloadVal(changeItem *abstract.ChangeItem, payloadTSMS
 	return util.JSONMarshalUnescape(payloadObj)
 }
 
-// valPayload - generate a payload for a val message
+// valPayload - generate a payload for a val message.
 func (m *Emitter) valPayload(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, emitType emitType) (map[string]interface{}, error) {
 	op, err := kindToOp(changeItem.Kind, snapshot, emitType)
 	if err != nil {
@@ -622,7 +622,7 @@ func (m *Emitter) emitOneDebeziumMessage(
 	return string(key), &valStr, nil
 }
 
-// EmitKV - main exported method - generates kafka key & kafka value
+// EmitKV - main exported method - generates kafka key & kafka value.
 func (m *Emitter) emitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, sessionPackers packer.SessionPackers) ([]debeziumcommon.KeyValue, error) {
 	if changeItem.Kind != abstract.InsertKind && changeItem.Kind != abstract.UpdateKind && changeItem.Kind != abstract.DeleteKind {
 		return []debeziumcommon.KeyValue{}, nil
@@ -673,7 +673,7 @@ func (m *Emitter) emitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time,
 	return []debeziumcommon.KeyValue{{DebeziumKey: key, DebeziumVal: val}}, nil
 }
 
-// EmitKV - main exported method - generates kafka key & kafka value
+// EmitKV - main exported method - generates kafka key & kafka value.
 func (m *Emitter) EmitKV(changeItem *abstract.ChangeItem, payloadTSMS time.Time, snapshot bool, sessionPackers packer.SessionPackers) ([]debeziumcommon.KeyValue, error) {
 	result, err := m.emitKV(changeItem, payloadTSMS, snapshot, sessionPackers)
 	if err != nil {

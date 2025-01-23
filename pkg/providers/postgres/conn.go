@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-// go-sumtype:decl DataTypesOption
+// go-sumtype:decl DataTypesOption.
 type DataTypesOption interface {
 	isDataTypeOption()
 }

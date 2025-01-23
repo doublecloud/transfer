@@ -16,7 +16,7 @@ import (
 
 // defaultMinReserve should cover Go runtime resources + all background tasks
 // like sending logs, metrics, upload state, etc.
-// It may also help to survive spontaneous large batch from source
+// It may also help to survive spontaneous large batch from source.
 const defaultMinReserve = 200 * humanize.MiByte
 
 type Config struct {
@@ -28,7 +28,7 @@ type Config struct {
 // DefaultConfig makes default config for memory throttler algo
 //
 // totalBytes parameter should define total memory amount available
-// to the process, not VM size or smth
+// to the process, not VM size or smth.
 func DefaultConfig(totalBytes uint64) Config {
 	return Config{
 		totalBytes: totalBytes,
@@ -48,7 +48,7 @@ func DefaultConfig(totalBytes uint64) Config {
 // in single AsyncPush call. It's believed that all sources should produce reasonably small batches in future
 //
 // It use simple adaptive algorithm to determine and control flush threshold
-// depending on current memory usage
+// depending on current memory usage.
 func MemoryThrottler(cfg Config, lgr log.Logger) abstract.AsyncMiddleware {
 	return func(sink abstract.AsyncSink) abstract.AsyncSink {
 		return newMemoryThrottler(cfg, lgr, sink)

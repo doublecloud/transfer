@@ -15,12 +15,12 @@ import (
 )
 
 const (
-	// TODO(@kry127) tune constant, or make more deterministic approach of measuring pipeline BSON size
+	// TODO(@kry127) tune constant, or make more deterministic approach of measuring pipeline BSON size.
 	DefaultKeySizeThreshold   = 4 * 1024 * 1024 // soft upper border for batch size in bytes (if one key is bigger, it'll fit)
 	DefaultBatchFlushInterval = 5 * time.Second // batch is guaranteed to be flushed every five seconds, but it may flush more frequently
 	DefaultBatchSizeLimit     = 500             // limit of amount of events inside one batch
 
-	// desired part size of collection
+	// desired part size of collection.
 	TablePartByteSize = 1024 * 1024 * 1024
 
 	DataTransferSystemDatabase = "__data_transfer"
@@ -182,7 +182,7 @@ var (
 )
 
 // BuildPipeline returns mongo pipeline that should be able
-// to filter the oplog from unwanted changes in database 'forDatabaseName'
+// to filter the oplog from unwanted changes in database 'forDatabaseName'.
 func (f MongoCollectionFilter) BuildPipeline(forDatabaseName string) (mongo.Pipeline, error) {
 	excluded := map[string]struct{}{}
 	included := map[string]struct{}{}

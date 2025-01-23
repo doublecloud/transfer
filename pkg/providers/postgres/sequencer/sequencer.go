@@ -7,13 +7,13 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// Sequencer takes items and updates progressInfo
+// Sequencer takes items and updates progressInfo.
 type Sequencer struct {
 	mutex    sync.Mutex
 	progress *progressInfo
 }
 
-// StartProcessing receives changes in correct transaction order because we read from server synchronously
+// StartProcessing receives changes in correct transaction order because we read from server synchronously.
 func (s *Sequencer) StartProcessing(changes []abstract.ChangeItem) error {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()

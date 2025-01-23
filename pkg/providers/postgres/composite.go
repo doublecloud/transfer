@@ -61,7 +61,7 @@ func (c *composite) FullName() TypeFullName {
 func (c *composite) DependsOn() []pgtype.OID {
 	var fieldTypes []pgtype.OID
 	for _, f := range c.fields {
-		fieldTypes = append(fieldTypes, pgtype.OID(f.oid))
+		fieldTypes = append(fieldTypes, f.oid)
 	}
 	return fieldTypes
 }
@@ -116,9 +116,9 @@ func selectCompositeTypes(ctx context.Context, conn *pgx.Conn, complexTypes map[
 			return xerrors.Errorf("scan: %w", err)
 		}
 
-		typ, ok := complexTypes[pgtype.OID(oid)].(*composite)
+		typ, ok := complexTypes[oid].(*composite)
 		if !ok {
-			complexTypes[pgtype.OID(oid)] = &composite{
+			complexTypes[oid] = &composite{
 				oid:       oid,
 				namespace: namespace.String,
 				name:      name.String,

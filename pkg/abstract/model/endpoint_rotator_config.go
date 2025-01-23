@@ -13,7 +13,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// RotationTZ -- rotation is happened in preconfigured timezone, by default - Europe/Moscow
+// RotationTZ -- rotation is happened in preconfigured timezone, by default - Europe/Moscow.
 var RotationTZ *time.Location
 
 func init() {
@@ -52,7 +52,7 @@ var (
 	ErrRotatorConfigInvalidKeepPartCount = errors.New("keep part count should be positive (KeepPartCount > 0)")
 )
 
-// TODO remove workaround when proper fix rolls out: YCDESIGN-1338 TM-1891
+// TODO remove workaround when proper fix rolls out: YCDESIGN-1338 TM-1891.
 func (p *RotatorConfig) NilWorkaround() *RotatorConfig {
 	if p == nil {
 		return p
@@ -89,7 +89,7 @@ func (p *RotatorConfig) Validate() error {
 }
 
 // breaks up months by partitions with size PartSize
-// note, that if PartSize=5, the partitions would be uneven: [0,1,2,3,4], [5,6,7,8,9], [10,11]
+// note, that if PartSize=5, the partitions would be uneven: [0,1,2,3,4], [5,6,7,8,9], [10,11].
 func (p *RotatorConfig) getMonthPartitioned(m time.Month) time.Month {
 	if p == nil {
 		return m
@@ -118,7 +118,7 @@ func (p *RotatorConfig) offsetDate(timestamp time.Time, offset int) time.Time {
 	return timestamp
 }
 
-// getPartitionBin returns bin representative in which date is falling based on PartSize and PartType parameters
+// getPartitionBin returns bin representative in which date is falling based on PartSize and PartType parameters.
 func (p *RotatorConfig) getPartitionBin(t time.Time) dateBin {
 	if p != nil {
 		switch p.PartType {
@@ -134,7 +134,7 @@ func (p *RotatorConfig) getPartitionBin(t time.Time) dateBin {
 	return dateBin(t)
 }
 
-// formatDate formats date according to PartType parameters
+// formatDate formats date according to PartType parameters.
 func (p *RotatorConfig) dateBinToPartitionName(db dateBin) partitionName {
 	t := time.Time(db)
 	if p != nil {
@@ -150,7 +150,7 @@ func (p *RotatorConfig) dateBinToPartitionName(db dateBin) partitionName {
 	return partitionName(t.Format(MonthFormat))
 }
 
-// format function produces concrete formatted string given by name and partition
+// format function produces concrete formatted string given by name and partition.
 func (p *RotatorConfig) format(name string, partition partitionName) string {
 	if p.TableNameTemplate == "" {
 		return fmt.Sprintf("%v/%v", name, partition)
@@ -160,7 +160,7 @@ func (p *RotatorConfig) format(name string, partition partitionName) string {
 	return strings.ReplaceAll(templ, "{{partition}}", string(partition))
 }
 
-// BaseTime defines TTL of tables w.r.t. KeepPartCount window size parameter
+// BaseTime defines TTL of tables w.r.t. KeepPartCount window size parameter.
 func (p *RotatorConfig) BaseTime() time.Time {
 	return p.baseTime(time.Now())
 }
@@ -174,7 +174,7 @@ func (p *RotatorConfig) baseTime(now time.Time) time.Time {
 	return time.Date(0, 0, 0, 0, 0, 0, 0, RotationTZ)
 }
 
-// AnnotateWithTime produces rotated name with custom time `v` provided as argument
+// AnnotateWithTime produces rotated name with custom time `v` provided as argument.
 func (p *RotatorConfig) AnnotateWithTime(name string, v time.Time) string {
 	if p == nil {
 		return name
@@ -190,19 +190,19 @@ func (p *RotatorConfig) AnnotateWithTime(name string, v time.Time) string {
 }
 
 // Annotate is the default way to acquire rotated name based on the current time
-// and structure settings: PartSize, PartType
+// and structure settings: PartSize, PartType.
 func (p *RotatorConfig) Annotate(name string) string {
 	return p.AnnotateWithTime(name, time.Now())
 }
 
-// Next returns rotated name with respect to current date
+// Next returns rotated name with respect to current date.
 func (p *RotatorConfig) Next(name string) string {
 	return p.AnnotateWithTime(name, p.offsetDate(time.Now(), 1))
 }
 
 // AnnotateWithTimeFromColumn gives rotated name according to column with name TimeColumn as the time source
 //
-// if column is absent, default Annotate method will be used
+// if column is absent, default Annotate method will be used.
 func (p *RotatorConfig) AnnotateWithTimeFromColumn(name string, item abstract.ChangeItem) string {
 	if p == nil {
 		return name

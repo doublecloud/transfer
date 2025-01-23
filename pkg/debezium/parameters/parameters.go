@@ -13,7 +13,7 @@ import (
 
 // Parameters names.
 const (
-	// automatically filled settings, user can override it, if user wants:
+	// automatically filled settings, user can override it, if user wants:.
 
 	DatabaseDBName = "database.dbname" // "db" in debezium payload - it's just field in "source". Present in pg-connector, absent in mysql-connector
 	TopicPrefix    = "topic.prefix"    // "name" in debezium payload - it's prefix for topic_name & it's field "name" in "source" (used to be called "db.server.name", but was renamed)
@@ -25,7 +25,7 @@ const (
 	BatchingMaxSize           = "dt.batching.max.size"
 	WriteIntoOneFullTopicName = "dt.write.into.one.topic"
 
-	// other settings:
+	// other settings:.
 
 	TimePrecisionMode           = "time.precision.mode"
 	DecimalHandlingMode         = "decimal.handling.mode"

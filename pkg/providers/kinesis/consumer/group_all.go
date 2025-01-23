@@ -13,7 +13,7 @@ import (
 )
 
 // NewAllGroup returns an intitialized AllGroup for consuming
-// all shards on a stream
+// all shards on a stream.
 func NewAllGroup(ksis kinesisiface.KinesisAPI, store Store, streamName string, logger log.Logger) *AllGroup {
 	return &AllGroup{
 		Store:      store,
@@ -87,7 +87,7 @@ func (g *AllGroup) findNewShards(shardc chan *kinesis.Shard) {
 	}
 }
 
-// listShards pulls a list of shard IDs from the kinesis api
+// listShards pulls a list of shard IDs from the kinesis api.
 func listShards(ksis kinesisiface.KinesisAPI, streamName string) ([]*kinesis.Shard, error) {
 	var ss []*kinesis.Shard
 	var listShardsInput = &kinesis.ListShardsInput{

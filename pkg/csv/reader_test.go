@@ -10,7 +10,7 @@ import (
 	"golang.org/x/text/encoding/charmap"
 )
 
-// this function needed to check simultaneously: ReadAll() & ValidateOneLine() - they always should give the same result
+// this function needed to check simultaneously: ReadAll() & ValidateOneLine() - they always should give the same result.
 func csvReaderReadAll(t *testing.T, reader *Reader) ([][]string, error) {
 	result, errExpected := reader.ReadAll()
 	for _, el := range result {

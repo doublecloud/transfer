@@ -15,7 +15,7 @@ type Includeable interface {
 	AllIncludes() []string
 }
 
-// FilteredMap filters IN-PLACE and returns its first argument
+// FilteredMap filters IN-PLACE and returns its first argument.
 func FilteredMap(m abstract.TableMap, incls ...abstract.Includeable) abstract.TableMap {
 TABLES:
 	for tID := range m {

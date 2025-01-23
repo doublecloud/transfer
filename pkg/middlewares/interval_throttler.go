@@ -7,7 +7,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// IntervalThrottler blocks Push until a given interval since the finish of the previous Push passes
+// IntervalThrottler blocks Push until a given interval since the finish of the previous Push passes.
 func IntervalThrottler(logger log.Logger, interval time.Duration) func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newIntervalThrottler(s, logger, interval)

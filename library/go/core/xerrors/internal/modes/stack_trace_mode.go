@@ -19,9 +19,9 @@ func (m StackTraceMode) String() string {
 const defaultStackTraceMode = StackTraceModeFrames
 
 var (
-	// Default mode
+	// Default mode.
 	stackTraceMode = defaultStackTraceMode
-	// Known modes (used in tests)
+	// Known modes (used in tests).
 	knownStackTraceModes = []StackTraceMode{
 		StackTraceModeFrames,
 		StackTraceModeStacks,

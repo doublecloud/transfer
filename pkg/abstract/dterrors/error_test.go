@@ -27,7 +27,7 @@ func TestCheckForTableUploadError(t *testing.T) {
 	})
 }
 
-// replacement showcase
+// replacement showcase.
 type ValueError int
 
 func (v ValueError) Error() string { return "value error" }

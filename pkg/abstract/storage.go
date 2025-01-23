@@ -156,20 +156,17 @@ overFQTNRunes:
 		if !previousWasDoubleQuote {
 			return nil, xerrors.Errorf("missing ending \" in position [%d]", len(identifier)-1)
 		}
-		previousWasDoubleQuote = false
-		insideDoubleQuotedIdentifier = false
 	}
 	result = append(result, idPartBuilder.String())
 	idPartBuilder.Reset()
-	identifierInProgress = false
 
 	return result, nil
 }
 
 type TableInfo struct {
-	EtaRow uint64
-	IsView bool
-	Schema *TableSchema
+	EtaRow uint64       `json:"eta_row"`
+	IsView bool         `json:"is_view"`
+	Schema *TableSchema `json:"schema"`
 }
 
 type TableMap map[TableID]TableInfo
@@ -279,7 +276,7 @@ func (t *TableDescription) String() string {
 	return fmt.Sprintf("%s [filter %q offset %d]", t.Fqtn(), t.Filter, t.Offset)
 }
 
-// TableIDsIntersection returns an intersection of two lists of TableIDs
+// TableIDsIntersection returns an intersection of two lists of TableIDs.
 func TableIDsIntersection(a []TableID, b []TableID) []TableID {
 	if len(b) == 0 {
 		return a
@@ -318,7 +315,7 @@ type Storage interface {
 	TableExists(table TableID) (bool, error)
 }
 
-// PositionalStorage some storages may provide specific position for snapshot consistency
+// PositionalStorage some storages may provide specific position for snapshot consistency.
 type PositionalStorage interface {
 	// Position provide info about snapshot read position
 	Position(ctx context.Context) (*LogPosition, error)
@@ -330,12 +327,12 @@ type LogPosition struct {
 	TxID string
 }
 
-// SchemaStorage allow to resolve DB Schema from storage
+// SchemaStorage allow to resolve DB Schema from storage.
 type SchemaStorage interface {
 	LoadSchema() (DBSchema, error)
 }
 
-// SampleableStorage is for dataplane tests
+// SampleableStorage is for dataplane tests.
 type SampleableStorage interface {
 	Storage
 
@@ -346,12 +343,12 @@ type SampleableStorage interface {
 	TableAccessible(table TableDescription) bool
 }
 
-// ShardingStorage is for in table sharding
+// ShardingStorage is for in table sharding.
 type ShardingStorage interface {
 	ShardTable(ctx context.Context, table TableDescription) ([]TableDescription, error)
 }
 
-// Storage has data, that need to be shared with all workers
+// Storage has data, that need to be shared with all workers.
 type ShardingContextStorage interface {
 	// ShardingContext Return shared data, used on *MAIN* worker;
 	// Take care, method return OperationState_ShardedUploadState, but only fill field Context;

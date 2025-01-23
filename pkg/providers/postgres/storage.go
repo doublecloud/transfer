@@ -276,7 +276,7 @@ func (s *Storage) Ping() error {
 	return nil
 }
 
-// TableList in PostgreSQL returns a table map with schema
+// TableList in PostgreSQL returns a table map with schema.
 func (s *Storage) TableList(filter abstract.IncludeTableList) (abstract.TableMap, error) {
 	ctx := context.TODO()
 
@@ -486,7 +486,7 @@ func (s *Storage) TableExists(table abstract.TableID) (bool, error) {
 	return exists, nil
 }
 
-// RowCount queries the storage and returns the exact number of rows in the given table
+// RowCount queries the storage and returns the exact number of rows in the given table.
 func RowCount(ctx context.Context, conn *pgx.Conn, table *abstract.TableDescription) (uint64, error) {
 	query := exactCountQuery(table)
 	var count uint64
@@ -999,7 +999,7 @@ func ParseLsn(lsn string) uint64 {
 	return outputLsn
 }
 
-// go-sumtype:decl StorageOpt
+// go-sumtype:decl StorageOpt.
 type StorageOpt interface {
 	isStorageOpt()
 }
@@ -1029,7 +1029,7 @@ func (s *Storage) RunSlotMonitor(ctx context.Context, serverSource interface{}, 
 	}
 }
 
-// Named BeginPGSnapshot to NOT match abstract.SnapshotableStorage
+// Named BeginPGSnapshot to NOT match abstract.SnapshotableStorage.
 func (s *Storage) BeginPGSnapshot(ctx context.Context) error {
 	rb := util.Rollbacks{}
 	defer rb.Do()
@@ -1094,7 +1094,7 @@ func isAurora(ctx context.Context, conn pgxtype.Querier, lgr log.Logger) bool {
 	return true
 }
 
-// Named EndPGSnapshot to NOT match abstract.SnapshotableStorage
+// Named EndPGSnapshot to NOT match abstract.SnapshotableStorage.
 func (s *Storage) EndPGSnapshot(ctx context.Context) error {
 	if s.snapshotConnection == nil || s.snapshotTransaction == nil {
 		return nil

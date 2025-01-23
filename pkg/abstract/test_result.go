@@ -5,16 +5,16 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
 )
 
-// CheckType test check type
+// CheckType test check type.
 type CheckType string
 
-// CheckResult describe particular check result that was performed against endpoint / transfer
+// CheckResult describe particular check result that was performed against endpoint / transfer.
 type CheckResult struct {
 	Error   error
 	Success bool
 }
 
-// TestResult aggregated result of test for endpoint
+// TestResult aggregated result of test for endpoint.
 type TestResult struct {
 	Checks  map[CheckType]CheckResult
 	Schema  TableMap
@@ -27,7 +27,7 @@ func (t *TestResult) Add(extraChecks ...CheckType) {
 	}
 }
 
-// Combine combines the two checkResult maps into one
+// Combine combines the two checkResult maps into one.
 func (t *TestResult) Combine(partialResults *TestResult) {
 	for checkType, checkVal := range partialResults.Checks {
 		t.Checks[checkType] = checkVal

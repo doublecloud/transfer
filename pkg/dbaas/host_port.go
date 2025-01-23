@@ -12,7 +12,7 @@ import (
 // If port present in 'host' string - it overrides 'port' from config
 // At least it's very useful for testing - you can to upraise locally pgHA installation
 // And it also can be useful for any user, who has postgres servers on >1 port
-// It can be used with any HA installation - for now it's used only with pg
+// It can be used with any HA installation - for now it's used only with pg.
 func ResolveHostPortWithOverride(host string, port uint16) (string, uint16, error) {
 	if host == "" {
 		return host, port, nil

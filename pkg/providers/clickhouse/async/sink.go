@@ -168,7 +168,7 @@ func (s *sink) mergePart(partID abstract.TablePartID) error {
 	}
 }
 
-// flushPart commits all uncommited part data but allows to continue writing to the same part
+// flushPart commits all uncommited part data but allows to continue writing to the same part.
 func (s *sink) flushPart(partID abstract.TablePartID) chan error {
 	return s.withBacklog(partID, false, func() error {
 		s.lgr.Info("Need to synchronize, flushing part",

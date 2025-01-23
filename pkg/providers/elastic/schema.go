@@ -51,7 +51,7 @@ func (s *Storage) getSchemaFromElasticMapping(mappings mappingProperties, isHomo
 		var originalType string
 
 		if field.Type == "" && field.Properties != nil {
-			ok := false
+			var ok bool
 			// object type
 			schemaType, ok = rules[objectType]
 			if !ok {
@@ -60,7 +60,7 @@ func (s *Storage) getSchemaFromElasticMapping(mappings mappingProperties, isHomo
 			originalType = objectType
 		}
 		if field.Type != "" {
-			ok := false
+			var ok bool
 			if field.Type == aliasType && field.Path != "" {
 				actualType, err := getOriginalTypeFromAliasField(mappings, field.Path)
 				if err != nil {

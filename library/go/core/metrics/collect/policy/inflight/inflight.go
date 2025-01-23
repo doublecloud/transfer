@@ -2,7 +2,6 @@ package inflight
 
 import (
 	"context"
-	"sync"
 	"sync/atomic"
 	"time"
 
@@ -13,8 +12,7 @@ import (
 var _ metrics.CollectPolicy = (*inflightPolicy)(nil)
 
 type inflightPolicy struct {
-	addCollectLock sync.Mutex
-	collect        atomic.Value // func(ctx context.Context)
+	collect atomic.Value // func(ctx context.Context)
 
 	minUpdateInterval time.Duration
 	lastUpdate        time.Time

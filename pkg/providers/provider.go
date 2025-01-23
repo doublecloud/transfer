@@ -16,45 +16,45 @@ type Provider interface {
 }
 
 // Snapshot add to provider `abstract.Storage` factory to provider.
-// this means that provider can read historycal snapshots of data
+// this means that provider can read historycal snapshots of data.
 type Snapshot interface {
 	Provider
 	Storage() (abstract.Storage, error)
 }
 
 // Replication add to provider `abstract.Source` factory to provider.
-// this means that provider can do data replication
+// this means that provider can do data replication.
 type Replication interface {
 	Provider
 	Source() (abstract.Source, error)
 }
 
 // Abstract2Provider add `base.DataProvider` factory to provider.
-// this means that provider can do abstract2 data provider
+// this means that provider can do abstract2 data provider.
 type Abstract2Provider interface {
 	Provider
 	DataProvider() (base.DataProvider, error)
 }
 
-// Abstract2Sinker add abstract2 writer factory to provider
+// Abstract2Sinker add abstract2 writer factory to provider.
 type Abstract2Sinker interface {
 	Provider
 	Target(...abstract.SinkOption) (base.EventTarget, error)
 }
 
-// Sinker add generic writer factory to provider
+// Sinker add generic writer factory to provider.
 type Sinker interface {
 	Provider
 	Sink(config middlewares.Config) (abstract.Sinker, error)
 }
 
-// SnapshotSinker optional separate writer for snapshots. Will always called for snapshots with all control events
+// SnapshotSinker optional separate writer for snapshots. Will always called for snapshots with all control events.
 type SnapshotSinker interface {
 	Provider
 	SnapshotSink(config middlewares.Config) (abstract.Sinker, error)
 }
 
-// AsyncSinker add ability to setup async-sink instead of sync-sink for provider
+// AsyncSinker add ability to setup async-sink instead of sync-sink for provider.
 type AsyncSinker interface {
 	Provider
 	AsyncSink(middleware abstract.Middleware) (abstract.AsyncSink, error)

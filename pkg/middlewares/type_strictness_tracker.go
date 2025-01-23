@@ -70,7 +70,7 @@ func newStrictnessChecker() *strictnessChecker {
 	}
 }
 
-// HasNonStrictTypes checks whether an item contain types which do not fulfill the strictness guarantee
+// HasNonStrictTypes checks whether an item contain types which do not fulfill the strictness guarantee.
 func (c *strictnessChecker) HasNonStrictTypes(item *abstract.ChangeItem) bool {
 	tSchema, ok := c.tableSchemas[item.TableID()]
 	if !ok {

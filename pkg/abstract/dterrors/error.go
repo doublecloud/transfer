@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
 
-// FatalError denotes an error which must stop the transfer completely, forbidding to restart it automatically
+// FatalError denotes an error which must stop the transfer completely, forbidding to restart it automatically.
 type FatalError interface {
 	error
 	IsFatal()
@@ -15,7 +15,7 @@ func IsFatal(err error) bool {
 	return xerrors.As(err, &target)
 }
 
-// baseFatalError is a default implementation of FatalError interface
+// baseFatalError is a default implementation of FatalError interface.
 type baseFatalError struct{ error }
 
 func (b baseFatalError) IsFatal() {}

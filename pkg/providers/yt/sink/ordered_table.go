@@ -496,8 +496,8 @@ func NewOrderedTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColS
 		ctx,
 		ytClient,
 		yt2.SafeChild(dir, "meta", tableName+"__partition_to_tablet_index"),
-		*new(PartitionToTabletIndexKey),
-		*new(PartitionToTabletIndexVal),
+		PartitionToTabletIndexKey{},
+		PartitionToTabletIndexVal{},
 		cfg.CellBundle(),
 		map[string]interface{}{
 			"primary_medium":     cfg.PrimaryMedium(),
@@ -513,8 +513,8 @@ func NewOrderedTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColS
 		ctx,
 		ytClient,
 		yt2.SafeChild(dir, "meta", tableName+"__lb_offset_to_row_index"),
-		*new(LbOffsetToRowIndexKey),
-		*new(LbOffsetToRowIndexVal),
+		LbOffsetToRowIndexKey{},
+		LbOffsetToRowIndexVal{},
 		cfg.CellBundle(),
 		map[string]interface{}{
 			"primary_medium":     cfg.PrimaryMedium(),

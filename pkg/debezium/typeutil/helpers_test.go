@@ -419,11 +419,11 @@ func TestDateTest(t *testing.T) {
 	})
 	t.Run("datetime", func(t *testing.T) {
 		date := time.Date(2020, 2, 2, 0, 0, 2, 0, time.UTC)
-		require.Equal(t, date, TimeFromDatetime(int64(DatetimeToSecs(date))))
+		require.Equal(t, date, TimeFromDatetime(DatetimeToSecs(date)))
 	})
 	t.Run("timestamp", func(t *testing.T) {
 		date := time.Date(2020, 2, 2, 0, 0, 0, 2000, time.UTC)
-		require.Equal(t, date, TimeFromTimestamp(int64(DatetimeToMicrosecs(date))))
+		require.Equal(t, date, TimeFromTimestamp(DatetimeToMicrosecs(date)))
 	})
 }
 

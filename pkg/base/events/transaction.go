@@ -6,7 +6,7 @@ import (
 
 type TransactionState int
 
-// It is important for serialization not to use iota
+// It is important for serialization not to use iota.
 const (
 	TransactionBegin  TransactionState = TransactionState(1)
 	TransactionCommit TransactionState = TransactionState(2)

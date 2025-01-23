@@ -25,9 +25,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-var (
-	noDataErr = xerrors.NewSentinel("no data")
-)
+var noDataErr = xerrors.NewSentinel("no data")
 
 type reader interface {
 	CommitMessages(ctx context.Context, msgs ...kgo.Record) error
@@ -231,7 +229,6 @@ func (p *Source) Fetch() ([]abstract.ChangeItem, error) {
 				res = data
 			}
 			if p.executor != nil {
-				res = nil // reset result
 				transformed, err := p.executor.Do(data)
 				if err != nil {
 					return nil, xerrors.Errorf("failed to execute a batch of changeitems: %w", err)

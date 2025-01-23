@@ -65,7 +65,7 @@ func (e *CSVEvent) ToOldChangeItem() (*abstract.ChangeItem, error) {
 		ColumnNames:  e.colNames,
 		ColumnValues: row,
 		TableSchema:  e.cols,
-		OldKeys:      *new(abstract.OldKeysType),
+		OldKeys:      abstract.OldKeysType{},
 		TxID:         "",
 		Query:        "",
 		Size:         abstract.EmptyEventSize(),

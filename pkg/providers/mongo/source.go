@@ -195,7 +195,7 @@ func (s *mongoSource) pingParallelizationUnits(changeStreams map[Parallelization
 }
 
 // used for extra processing error
-// it is possible to implement here fallback mechanics on different behaviour (ChangeStreamWatcher) when certain errors occur
+// it is possible to implement here fallback mechanics on different behaviour (ChangeStreamWatcher) when certain errors occur.
 func (s *mongoSource) watcherFallback(watcher ChangeStreamWatcher, pu ParallelizationUnit, reason error) (ChangeStreamWatcher, error) {
 	// always close watcher, it will not be reused on fallback
 	defer func() {
@@ -600,7 +600,7 @@ func (s *mongoSource) getCollectionFilter(client *MongoClientWrapper) (*MongoCol
 	return &result, nil
 }
 
-// openChangeStreams is mongo version dependent function
+// openChangeStreams is mongo version dependent function.
 func (s *mongoSource) openChangeStreams() (map[ParallelizationUnit]ChangeStreamWatcher, error) {
 	mongoVersion, err := GetVersion(s.ctx, s.client, s.config.AuthSource)
 	if err != nil {

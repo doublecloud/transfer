@@ -123,7 +123,7 @@ func makeCastUint64ToBytes(originalType string) func(value any) (any, error) {
 	}
 }
 
-// typeLengthModifier returns -1 if there is no length modifier for the type
+// typeLengthModifier returns -1 if there is no length modifier for the type.
 func typeLengthModifier(originalType string) (int, error) {
 	bracesOpenIdx := strings.Index(originalType, "(")
 	if bracesOpenIdx < 0 {

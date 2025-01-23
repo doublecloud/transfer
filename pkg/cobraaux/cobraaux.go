@@ -6,7 +6,7 @@ import (
 )
 
 // RegisterCommand is like parent.AddCommand(child), but also
-// makes chaining of PersistentPreRunE and PersistentPreRun
+// makes chaining of PersistentPreRunE and PersistentPreRun.
 func RegisterCommand(parent, child *cobra.Command) {
 	parentPpre := parent.PersistentPreRunE
 	childPpre := child.PersistentPreRunE

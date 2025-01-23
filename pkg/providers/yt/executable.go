@@ -3,9 +3,7 @@ package yt
 import (
 	"context"
 	"io"
-	"math/rand"
 	"os"
-	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -24,7 +22,7 @@ var (
 	exeVersion string
 )
 
-// InitExe uploads exe and initializes related variables
+// InitExe uploads exe and initializes related variables.
 func InitExe() {
 	if !env.IsTest() {
 		return
@@ -78,7 +76,6 @@ func uploadExe(exePrefix, exePath string) error {
 	}
 	defer client.Stop()
 
-	rand.Seed(time.Now().UnixNano())
 	exeVersion = exePrefix + randutil.GenerateAlphanumericString(8)
 	ExePath = DataplaneExecutablePath("", exeVersion)
 	if _, err := client.CreateNode(context.Background(), ExePath, yt.NodeFile, &yt.CreateNodeOptions{Recursive: true}); err != nil {

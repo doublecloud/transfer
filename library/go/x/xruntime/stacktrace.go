@@ -41,7 +41,7 @@ func NewFrame(skip int) *StackTrace {
 }
 
 func (st *StackTrace) Frames() []runtime.Frame {
-	frames := runtime.CallersFrames(st.frames[:])
+	frames := runtime.CallersFrames(st.frames)
 	if !st.full {
 		if _, ok := frames.Next(); !ok {
 			return nil

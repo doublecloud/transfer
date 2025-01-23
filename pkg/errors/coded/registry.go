@@ -9,7 +9,7 @@ import (
 )
 
 // Code define provider defined stable code. Each provider has own code-registry, but we have global registry to dedup them
-// in case we have duplicate we will panic at start
+// in case we have duplicate we will panic at start.
 type Code string
 
 func (c Code) ID() string {

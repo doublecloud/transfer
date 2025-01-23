@@ -144,7 +144,7 @@ func filterTablesList(config *PgSource) ([]abstract.TableID, error) {
 }
 
 // wal2jsonTableFromTableID formats TableID so that it can be passed as a parameter to wal2json.
-// The specification is at https://github.com/eulerto/wal2json/blob/821147b21cb3672d8c67f708440ff4732e320e0e/README.md#parameters, `filter-tables`
+// The specification is at https://github.com/eulerto/wal2json/blob/821147b21cb3672d8c67f708440ff4732e320e0e/README.md#parameters, `filter-tables`.
 func wal2jsonTableFromTableID(tableID abstract.TableID) string {
 	parts := make([]string, 0, 2)
 	if len(tableID.Namespace) > 0 {
@@ -174,7 +174,7 @@ func wal2jsonEscape(identifier string) string {
 	return builder.String()
 }
 
-// wal2jsonTableList converts the given list of FQTNs into wal2json format
+// wal2jsonTableList converts the given list of FQTNs into wal2json format.
 func wal2jsonTableList(tableIDs []abstract.TableID) string {
 	parts := make([]string, 0, len(tableIDs))
 	for _, tableID := range tableIDs {
@@ -321,7 +321,7 @@ WHERE slot_name = '%v' AND active_pid IS NOT NULL;`, config.SlotID)
 			rb.Cancel()
 			return res, nil
 		}
-		//todo this should be resolved too!!
+		// todo this should be resolved too!!
 		if config.ClusterID != "" {
 			return nil, xerrors.Errorf("unable to init replication connection: %w", err)
 		}

@@ -58,7 +58,7 @@ func (p *PgStorageParams) TLSConfigTemplate() (*tls.Config, error) {
 	return nil, nil
 }
 
-// tlsStatusString returns a string describing the TLS connection status of the params
+// tlsStatusString returns a string describing the TLS connection status of the params.
 func (p *PgStorageParams) secureConnectionStatusString() string {
 	if len(p.TLSFile) > 0 {
 		return "secure, user-provided CA certificate"

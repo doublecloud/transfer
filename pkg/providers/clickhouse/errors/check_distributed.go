@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	// ClickhouseDDLTimeout is default value of distributed_ddl_task_timeout CH setting, used as fallback
+	// ClickhouseDDLTimeout is default value of distributed_ddl_task_timeout CH setting, used as fallback.
 	ClickhouseDDLTimeout = 180
-	// DDLTimeoutCorrection is added to DDL query timeout to have a chance to catch CH error, instead of ContextDeadlineExceeded
+	// DDLTimeoutCorrection is added to DDL query timeout to have a chance to catch CH error, instead of ContextDeadlineExceeded.
 	DDLTimeoutCorrection  = 2
 	ClickhouseReadTimeout = 30 * time.Second
 )
@@ -35,7 +35,7 @@ type ErrDistributedDDLTimeout struct {
 	wrapped    error
 }
 
-// Unwrap implements xerrors.Uwrapper
+// Unwrap implements xerrors.Uwrapper.
 func (e *ErrDistributedDDLTimeout) Unwrap() error {
 	return e.wrapped
 }
@@ -46,7 +46,7 @@ func (e *ErrDistributedDDLTimeout) Error() string {
 
 var distrTaskRe = regexp.MustCompile(`(/clickhouse/task_queue/ddl/[\w-]+)`)
 
-// AsDistributedDDLTimeout checks whether err is clickhouse DDL timeout error and finds DDL task path
+// AsDistributedDDLTimeout checks whether err is clickhouse DDL timeout error and finds DDL task path.
 func AsDistributedDDLTimeout(err error) *ErrDistributedDDLTimeout {
 	chError := new(clickhouse.Exception)
 	// Distributed DDL Timeout has code 159 (TIMEOUT_EXCEEDED) and

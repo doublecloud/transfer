@@ -135,7 +135,7 @@ func (l *SnapshotLoader) CheckIncludeDirectives(tables []abstract.TableDescripti
 	return nil
 }
 
-// TODO Remove, legacy hacks
+// TODO Remove, legacy hacks.
 func (l *SnapshotLoader) endpointsPreSnapshotActions(sourceStorage abstract.Storage) {
 	switch specificStorage := sourceStorage.(type) {
 	case *greenplum.Storage:
@@ -153,7 +153,7 @@ func (l *SnapshotLoader) endpointsPreSnapshotActions(sourceStorage abstract.Stor
 	}
 }
 
-// TODO Remove, legacy hacks
+// TODO Remove, legacy hacks.
 func (l *SnapshotLoader) endpointsPostSnapshotActions() {
 	switch dst := l.transfer.Dst.(type) {
 	case model.HackableTarget:

@@ -40,7 +40,7 @@ func GroupByUniqueKey[S ~[]T, T any, K comparable](s S, keyGetter func(T) K) (ma
 	return res, nil
 }
 
-// IndexedEntity stores an entity of original slice with its initial index in that slice
+// IndexedEntity stores an entity of original slice with its initial index in that slice.
 type IndexedEntity[T any] struct {
 	Value T
 	Index int

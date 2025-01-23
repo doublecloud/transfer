@@ -39,9 +39,6 @@ type GpSourceAdvancedProps struct {
 	// EnforceConsistency enables *enforcement* of consistent snapshot. When it is not set, the user is responsible for snapshot consistency
 	EnforceConsistency bool
 
-	batchLimitRows int             // deprecated: is not used anymore
-	batchLimitSize model.BytesSize // deprecated: is not used anymore
-
 	ServiceSchema string
 
 	// AllowCoordinatorTxFailure disables coordinator TX monitoring (liveness monitor) and enables the transfer to finish snapshot successfully even if the coordinator TX fails
@@ -161,7 +158,7 @@ func (s *GpCluster) SegByID(id int) *GpHAP {
 	return s.Segments[id]
 }
 
-// GpHAP stands for "Greenplum Highly Available host Pair"
+// GpHAP stands for "Greenplum Highly Available host Pair".
 type GpHAP struct {
 	Primary *GpHP
 	Mirror  *GpHP
@@ -204,7 +201,7 @@ func GpHAPFromGreenplumUIHAPair(hap greenplumHAPair) *GpHAP {
 	return pair
 }
 
-// GpHP stands for "Greenplum Host/Port"
+// GpHP stands for "Greenplum Host/Port".
 type GpHP struct {
 	Host string
 	Port int
@@ -217,7 +214,7 @@ func NewGpHP(host string, port int) *GpHP {
 	}
 }
 
-// NewGpHpWithMDBReplacement replaces domain names for Cloud Preprod & Prod and returns a new host-port pair
+// NewGpHpWithMDBReplacement replaces domain names for Cloud Preprod & Prod and returns a new host-port pair.
 func NewGpHpWithMDBReplacement(host string, port int) *GpHP {
 	if mdbPreprodDomainRe.MatchString(host) {
 		host = mdbPreprodDomainRe.ReplaceAllLiteralString(host, mdbServiceDomainExternalCloud)

@@ -197,15 +197,6 @@ func staticYTSchema(item abstract.ChangeItem) []schema.Column {
 	return result
 }
 
-func findCorrespondingIndex(cols []abstract.ColSchema, name string) int {
-	for i, colSchema := range cols {
-		if colSchema.ColumnName == name {
-			return i
-		}
-	}
-	return -1
-}
-
 func getNameFromTableID(tID abstract.TableID) string {
 	if tID.Namespace == "public" || len(tID.Namespace) == 0 {
 		return tID.Name
@@ -240,7 +231,7 @@ func (t *StaticTable) Push(items []abstract.ChangeItem) error {
 		switch item.Kind {
 		case abstract.InsertKind:
 			if prevTableID != tableID {
-				ok := false
+				var ok bool
 
 				writer, ok = t.getWriter(tableID)
 				if !ok {

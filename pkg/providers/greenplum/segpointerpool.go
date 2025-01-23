@@ -4,7 +4,7 @@ import (
 	"math/rand"
 )
 
-// SegPointerPool is a set of Greenplum storage segment pointers with additional functions
+// SegPointerPool is a set of Greenplum storage segment pointers with additional functions.
 type SegPointerPool struct {
 	// pool is a set of segments this sink uses to INSERT data to. Is initialized at the first push of a row changeitem
 	pool []GPSegPointer
@@ -12,7 +12,7 @@ type SegPointerPool struct {
 	nextRoundRobinIndex int
 }
 
-// NewRandomSegPointerPool constructs a pool of the given size, the first element of which is chosen randomly from a ring consisting of the given total number of segments
+// NewRandomSegPointerPool constructs a pool of the given size, the first element of which is chosen randomly from a ring consisting of the given total number of segments.
 func NewRandomSegPointerPool(totalSegments int, size int) *SegPointerPool {
 	result := &SegPointerPool{
 		pool:                make([]GPSegPointer, size),

@@ -167,7 +167,7 @@ func (dt *DateTime) Capture(values []string) error {
 	return nil
 }
 
-// delayedParse parse Time from captured string
+// delayedParse parse Time from captured string.
 func (dt *DateTime) delayedParse() error {
 	// This also works for parsing time without a time zone,
 	// since `time.Parse` uses UTC for such a case
@@ -192,7 +192,7 @@ func (f *Float) Capture(values []string) error {
 	return nil
 }
 
-// delayedParse parse string into number
+// delayedParse parse string into number.
 func (f *Float) delayedParse() error {
 	fv, err := strconv.ParseFloat(f.value, 64)
 	if err != nil {
@@ -218,7 +218,7 @@ func (i *Int) Capture(values []string) error {
 	return nil
 }
 
-// delayedParse parse string into number
+// delayedParse parse string into number.
 func (i *Int) delayedParse() error {
 	iv, err := strconv.ParseInt(i.value, 10, 64)
 	if err != nil {
@@ -244,7 +244,7 @@ func (i *Null) Capture(values []string) error {
 	return nil
 }
 
-// delayedParse parse string into value
+// delayedParse parse string into value.
 func (i *Null) delayedParse() error {
 	if i.value == "NULL" || i.value == "NIL" {
 		i.V = true

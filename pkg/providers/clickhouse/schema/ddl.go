@@ -9,9 +9,9 @@ import (
 const matViewEngine = "MaterializedView"
 
 const (
-	// ClickhouseDDLTimeout is default value of distributed_ddl_task_timeout CH setting, used as fallback
+	// ClickhouseDDLTimeout is default value of distributed_ddl_task_timeout CH setting, used as fallback.
 	ClickhouseDDLTimeout = 180
-	// DDLTimeoutCorrection is added to DDL query timeout to have a chance to catch CH error, instead of ContextDeadlineExceeded
+	// DDLTimeoutCorrection is added to DDL query timeout to have a chance to catch CH error, instead of ContextDeadlineExceeded.
 	DDLTimeoutCorrection  = 2
 	ClickhouseReadTimeout = 30 * time.Second
 )

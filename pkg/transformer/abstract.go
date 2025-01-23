@@ -16,7 +16,7 @@ type WithID interface {
 
 // Transformer serializeable one-of wrapper, for backward compatibility
 // will hold both type discriminator and config value itself, config is just an any object
-// on later stages it materializes as real config object, specific to transformer
+// on later stages it materializes as real config object, specific to transformer.
 type Transformer map[abstract.TransformerType]interface{}
 
 func (t Transformer) Type() abstract.TransformerType {

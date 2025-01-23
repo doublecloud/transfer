@@ -7,7 +7,7 @@ import (
 )
 
 // GetFreePort returns free port in operating system that
-// you can use for deploying your service
+// you can use for deploying your service.
 func GetFreePort() (port int, resultError error) {
 	lsnr, err := net.Listen("tcp", ":0")
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// Message is struct describing incoming message
+// Message is struct describing incoming message.
 type Message struct {
 	// Offset is server sequence of message in topic. Must be monotone growing.
 	Offset uint64
@@ -38,7 +38,7 @@ type Parser interface {
 }
 
 // WrappedParser parser can be layered by wrapping them in extra layers.
-// For wrapped parsers we should add extra method for extracting actual parser
+// For wrapped parsers we should add extra method for extracting actual parser.
 type WrappedParser interface {
 	Parser
 	Unwrap() Parser

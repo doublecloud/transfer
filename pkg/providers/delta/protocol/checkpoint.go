@@ -37,12 +37,12 @@ func (t *CheckpointInstance) Compare(other CheckpointInstance) int {
 	}
 }
 
-// IsEarlierThan compare based just on version and amount of parts in checkpoint
+// IsEarlierThan compare based just on version and amount of parts in checkpoint.
 func (t *CheckpointInstance) IsEarlierThan(other CheckpointInstance) bool {
 	return t.IsNotLaterThan(other) || (t.Version == other.Version && t.NumParts < other.NumParts)
 }
 
-// IsNotLaterThan compare based just on version
+// IsNotLaterThan compare based just on version.
 func (t *CheckpointInstance) IsNotLaterThan(other CheckpointInstance) bool {
 	if other.Compare(MaxInstance) == 0 {
 		return true

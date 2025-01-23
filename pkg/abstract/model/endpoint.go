@@ -70,19 +70,19 @@ type WithConnectionID interface {
 }
 
 // Abstract2Source if implemented we must try to create abstract2 source for them
-// to be deleted in favor of `MakeDataProvider` method
+// to be deleted in favor of `MakeDataProvider` method.
 type Abstract2Source interface {
 	IsAbstract2(Destination) bool
 }
 
-// IncrementalSource mark as enable incremental snapshot to transfer
+// IncrementalSource mark as enable incremental snapshot to transfer.
 type IncrementalSource interface {
 	IsIncremental()
 	// SupportsStartCursorValue should return true if incremental source may use custom initial cursor value
 	SupportsStartCursorValue() bool
 }
 
-// TransitionalEndpoint Mark endpoint as type as transitional, so it could be opt-out-ed on snapshot
+// TransitionalEndpoint Mark endpoint as type as transitional, so it could be opt-out-ed on snapshot.
 type TransitionalEndpoint interface {
 	TransitionalWith(right TransitionalEndpoint) bool
 }
@@ -107,7 +107,7 @@ func IsAppendOnlySource(src Source) bool {
 	}
 }
 
-// DefaultMirrorSource marks source as compatible with default mirror protocol (kafka/yds/eventhub)
+// DefaultMirrorSource marks source as compatible with default mirror protocol (kafka/yds/eventhub).
 type DefaultMirrorSource interface {
 	IsDefaultMirror() bool
 }
@@ -120,7 +120,7 @@ func IsDefaultMirrorSource(src Source) bool {
 	}
 }
 
-// Parseable provider unified access to parser config
+// Parseable provider unified access to parser config.
 type Parseable interface {
 	Parser() map[string]interface{}
 }
@@ -130,29 +130,29 @@ func IsParseable(src Source) bool {
 	return ok
 }
 
-// Serializable provider unified access to serializer config
+// Serializable provider unified access to serializer config.
 type Serializable interface {
 	Serializer() (SerializationFormat, bool)
 }
 
 // Runtimeable will force specific runtime for endpoint
-// see logfeller for example
+// see logfeller for example.
 type Runtimeable interface {
 	Runtime() abstract.Runtime
 }
 
 // Dashboardeable will force specific dashboard link for endpoint pair
-// see logfeller for example
+// see logfeller for example.
 type Dashboardeable interface {
 	DashboardLink(linkedEndpoint EndpointParams) string
 }
 
-// SourceCompatibility for destination to check is it compatible with transfer source
+// SourceCompatibility for destination to check is it compatible with transfer source.
 type SourceCompatibility interface {
 	Compatible(src Source, transferType abstract.TransferType) error
 }
 
-// DestinationCompatibility for source to check is it compatible with transfer destination
+// DestinationCompatibility for source to check is it compatible with transfer destination.
 type DestinationCompatibility interface {
 	Compatible(dst Destination) error
 }
@@ -166,7 +166,7 @@ type AsyncPartSource interface {
 	IsAsyncShardPartsSource()
 }
 
-// UnderlayOnlyEndpoint marks endpoint as available only via our service underlay network
+// UnderlayOnlyEndpoint marks endpoint as available only via our service underlay network.
 type UnderlayOnlyEndpoint interface {
 	IsUnderlayOnlyEndpoint()
 }
@@ -178,17 +178,17 @@ type HackableTarget interface {
 	PostSnapshotHacks()
 }
 
-// LegacyFillDependentFields for cp-dp backward compatibility, some fields were calculated on backend side before, so we preserve it
+// LegacyFillDependentFields for cp-dp backward compatibility, some fields were calculated on backend side before, so we preserve it.
 type LegacyFillDependentFields interface {
 	FillDependentFields(transfer *Transfer)
 }
 
-// HostResolver returns a list of hosts to which network availability is required
+// HostResolver returns a list of hosts to which network availability is required.
 type HostResolver interface {
 	HostsNames() ([]string, error)
 }
 
-// For default every destination is support sharding tables, but this interface can be used to override this behavior
+// For default every destination is support sharding tables, but this interface can be used to override this behavior.
 type ShardeableDestination interface {
 	SupportSharding() bool
 }

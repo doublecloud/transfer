@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 var spin = []string{"--", "\\", "|", "/"}
@@ -22,7 +22,7 @@ type spinner struct {
 	delay   time.Duration
 }
 
-// NewSpinner creates pause filler in CLI to make it visually alive
+// NewSpinner creates pause filler in CLI to make it visually alive.
 func NewSpinner(width int, delay time.Duration) *spinner {
 	if width < 0 {
 		width = 3
@@ -36,7 +36,7 @@ func NewSpinner(width int, delay time.Duration) *spinner {
 
 	var stdout interface{} = syscall.Stdout
 	stdoutFD, ok := stdout.(int)
-	isTerminal := terminal.IsTerminal(stdoutFD)
+	isTerminal := term.IsTerminal(stdoutFD)
 
 	return &spinner{
 		isTty:   ok && isTerminal,

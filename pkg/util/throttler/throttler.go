@@ -23,7 +23,7 @@ func (t *MemoryThrottler) AddInflight(size uint64) {
 func (t *MemoryThrottler) ReduceInflight(size uint64) {
 	t.inflightMutex.Lock()
 	defer t.inflightMutex.Unlock()
-	t.inflightBytes = t.inflightBytes - size
+	t.inflightBytes -= size
 }
 
 func NewMemoryThrottler(bufferSize uint64) *MemoryThrottler {

@@ -17,7 +17,7 @@ import (
 
 type Severity int
 
-// 1 – Debug, 2 – Verbose, 3 – Info, 4 – Warn, 5 – Error, 6 – Critical
+// 1 – Debug, 2 – Verbose, 3 – Info, 4 – Warn, 5 – Error, 6 – Critical.
 const (
 	Debug    = Severity(1)
 	Verbose  = Severity(2)
@@ -50,7 +50,7 @@ func SubmitLogs(data []HTTPLogItem, domain, token string) error {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("https://ingress.%s/logs/v1/singles", domain), body)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://ingress.%s/logs/v1/singles", domain), body)
 	if err != nil {
 		return xerrors.Errorf("unable to make request: %w", err)
 	}

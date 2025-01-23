@@ -44,14 +44,14 @@ func (f Fallback) String() string {
 
 // AddFallbackSourceFactory registers a fallbacks for a source of some type
 //
-// This method is expected to be called in the `init()` function of a module which introduces a fallback when some additional behaviour is expected
+// This method is expected to be called in the `init()` function of a module which introduces a fallback when some additional behaviour is expected.
 func AddFallbackSourceFactory(factory FallbackFactory) {
 	registerFallbackFactory(&SourceFallbackFactories, factory)
 }
 
 // AddFallbackTargetFactory registers a fallbacks for a target of some type
 //
-// This method is expected to be called in the `init()` function of a module which introduces a fallback when some additional behaviour is expected
+// This method is expected to be called in the `init()` function of a module which introduces a fallback when some additional behaviour is expected.
 func AddFallbackTargetFactory(factory FallbackFactory) {
 	registerFallbackFactory(&TargetFallbackFactories, factory)
 }

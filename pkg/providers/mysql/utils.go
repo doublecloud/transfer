@@ -187,7 +187,7 @@ func pushCreateTable(ctx context.Context, tx Queryable, table abstract.TableID, 
 	return applyDDLs([]ddlValue{ddlItem}, pusher)
 }
 
-// fileOffset for next file we add this number to LSN
+// fileOffset for next file we add this number to LSN.
 const fileOffset = 1_000_000_000_000
 
 func CalculateLSN(file string, pos uint32) uint64 {

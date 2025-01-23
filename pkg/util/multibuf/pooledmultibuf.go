@@ -7,7 +7,7 @@ import (
 )
 
 // PooledMultiBuffer provides io.Reader interface over multiple bytes.Buffers (like io.MultiReader)
-// buffers are taken from sync.Pool to reduce GC pressure
+// buffers are taken from sync.Pool to reduce GC pressure.
 type PooledMultiBuffer struct {
 	buffers    []io.Reader
 	bufMu      sync.Mutex
@@ -21,7 +21,7 @@ func (q *PooledMultiBuffer) initReaderOnce() {
 }
 
 // Read implements io.Reader interface
-// It is guaranteed that internal buffers read order is the same as the order of AcquireBuffer calls
+// It is guaranteed that internal buffers read order is the same as the order of AcquireBuffer calls.
 func (q *PooledMultiBuffer) Read(p []byte) (int, error) {
 	q.initReaderOnce()
 	return q.rd.Read(p)
@@ -29,7 +29,7 @@ func (q *PooledMultiBuffer) Read(p []byte) (int, error) {
 
 // AcquireBuffer provides a buffer. It may allocate new buffer in memory or take it from internal memory pool.
 // To optimize memory allocations you can set initial buffer capacity if it is known.
-// It is guaranteed that internal buffers read order is the same as the order of AcquireBuffer calls
+// It is guaranteed that internal buffers read order is the same as the order of AcquireBuffer calls.
 func (q *PooledMultiBuffer) AcquireBuffer(initialCap int) *bytes.Buffer {
 	var buf *bytes.Buffer
 	if b := q.pool.Get(); b != nil {
@@ -45,7 +45,7 @@ func (q *PooledMultiBuffer) AcquireBuffer(initialCap int) *bytes.Buffer {
 }
 
 // Close release all acquired buffers and return them into memory pool
-// Read should not be called after close
+// Read should not be called after close.
 func (q *PooledMultiBuffer) Close() {
 	for _, buf := range q.buffers {
 		q.pool.Put(buf)

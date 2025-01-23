@@ -6,7 +6,7 @@ import (
 
 // progressInfo responsible for grouping lsns by transactions
 // it also ensures that only lsns of committed transactions are sent back to server in Standby update
-// and all transactions preceding the one that we send in Standby are already processed
+// and all transactions preceding the one that we send in Standby are already processed.
 type progressInfo struct {
 	processing     map[uint32]*lsnTransaction // transaction id -> all lsns
 	transactionIDs []uint32                   // all transaction ids in correct order
@@ -24,7 +24,7 @@ func (p *progressInfo) add(tid uint32, lsn uint64) error {
 	return nil
 }
 
-// check that this transaction is processing
+// check that this transaction is processing.
 func (p *progressInfo) check(tid uint32) bool {
 	_, ok := p.processing[tid]
 	return ok
@@ -42,7 +42,7 @@ func (p *progressInfo) remove(tid uint32, lsns []uint64) error {
 }
 
 func (p *progressInfo) updateCommitted() uint64 {
-	//in case last transaction is not complete yet
+	// in case last transaction is not complete yet
 	if len(p.transactionIDs) <= 1 {
 		return p.lastCommitted
 	}

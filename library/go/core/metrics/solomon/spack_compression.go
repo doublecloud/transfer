@@ -90,7 +90,7 @@ func (w *lz4CompressionWriteCloser) flushFrame() (written int, err error) {
 }
 
 func (w *lz4CompressionWriteCloser) Write(p []byte) (written int, err error) {
-	q := p[:]
+	q := p
 	for len(q) > 0 {
 		space := compressionFrameLength - len(w.buffer)
 		if space == 0 {

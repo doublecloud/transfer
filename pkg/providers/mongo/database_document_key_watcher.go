@@ -15,7 +15,7 @@ import (
 
 // databaseDocumentKeyWatcher subscribes for changes in database
 // it tries to get only document id's to load changes
-// using this ID's it loads documents directly
+// using this ID's it loads documents directly.
 type databaseDocumentKeyWatcher struct {
 	logger       log.Logger
 	databaseName string
@@ -35,7 +35,7 @@ func (f *databaseDocumentKeyWatcher) Close(ctx context.Context) {
 }
 
 // Watch assumed to run in single thread
-// you should call it exactly once
+// you should call it exactly once.
 func (f *databaseDocumentKeyWatcher) Watch(ctx context.Context, changeEventPusher changeEventPusher) error {
 
 	ctx, cancel := context.WithCancel(ctx)

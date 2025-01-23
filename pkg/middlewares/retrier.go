@@ -12,7 +12,7 @@ import (
 )
 
 // Retrier retries Push operations automatically using the hardcoded delay and interval. Retries can be interrupted using the given context.
-// Push operations containing non-row items are NOT retried
+// Push operations containing non-row items are NOT retried.
 func Retrier(logger log.Logger, ctx context.Context) func(abstract.Sinker) abstract.Sinker {
 	return func(s abstract.Sinker) abstract.Sinker {
 		return newRetrier(s, logger, ctx)

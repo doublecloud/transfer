@@ -415,7 +415,7 @@ func readAllLines(content []byte) ([]string, int, error) {
 	for index, line := range scannedLines {
 		if index == len(scannedLines)-1 {
 			// check if last line is complete
-			if err := fastjson.Validate(string(line)); err != nil {
+			if err := fastjson.Validate(line); err != nil {
 				break
 			}
 		}

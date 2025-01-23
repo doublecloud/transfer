@@ -11,7 +11,7 @@ type RegistryOpts struct {
 	AllowLoadRegisteredMetrics bool
 }
 
-// NewRegistryOpts returns new initialized instance of RegistryOpts
+// NewRegistryOpts returns new initialized instance of RegistryOpts.
 func NewRegistryOpts() *RegistryOpts {
 	return &RegistryOpts{
 		Separator: '.',
@@ -19,13 +19,13 @@ func NewRegistryOpts() *RegistryOpts {
 	}
 }
 
-// SetTags overrides existing tags
+// SetTags overrides existing tags.
 func (o *RegistryOpts) SetTags(tags map[string]string) *RegistryOpts {
 	o.Tags = tags
 	return o
 }
 
-// AddTags merges given tags with existing
+// AddTags merges given tags with existing.
 func (o *RegistryOpts) AddTags(tags map[string]string) *RegistryOpts {
 	for k, v := range tags {
 		o.Tags[k] = v
@@ -33,19 +33,19 @@ func (o *RegistryOpts) AddTags(tags map[string]string) *RegistryOpts {
 	return o
 }
 
-// SetPrefix overrides existing prefix
+// SetPrefix overrides existing prefix.
 func (o *RegistryOpts) SetPrefix(prefix string) *RegistryOpts {
 	o.Prefix = prefix
 	return o
 }
 
-// AppendPrefix adds given prefix as postfix to existing using separator
+// AppendPrefix adds given prefix as postfix to existing using separator.
 func (o *RegistryOpts) AppendPrefix(prefix string) *RegistryOpts {
 	o.Prefix = registryutil.BuildFQName(string(o.Separator), o.Prefix, prefix)
 	return o
 }
 
-// SetSeparator overrides existing separator
+// SetSeparator overrides existing separator.
 func (o *RegistryOpts) SetSeparator(separator rune) *RegistryOpts {
 	o.Separator = separator
 	return o

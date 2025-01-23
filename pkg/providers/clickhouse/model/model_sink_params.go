@@ -11,7 +11,7 @@ const (
 	// BufferTriggingSizeDefault is a recommended default value for bufferer trigging size
 	// Default value assume that we have 4 thread writer in 3gb box (default runtime box)
 	// so each thread would consume at most 256 * 2 (one time for source one time for target) mb + some constant memory
-	// in total it would eat 512 * 4 = 2gb, which is less than 3gb
+	// in total it would eat 512 * 4 = 2gb, which is less than 3gb.
 	BufferTriggingSizeDefault uint64 = 256 * humanize.MiByte
 )
 

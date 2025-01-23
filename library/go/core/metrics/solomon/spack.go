@@ -110,11 +110,11 @@ func (s *spackMetric) writeLabel(se *spackEncoder, namesIdx map[string]uint32, v
 		return err
 	}
 
-	err = writeULEB128(&s.labels, uint32(namesIdx[name]))
+	err = writeULEB128(&s.labels, namesIdx[name])
 	if err != nil {
 		return err
 	}
-	err = writeULEB128(&s.labels, uint32(valuesIdx[value]))
+	err = writeULEB128(&s.labels, valuesIdx[value])
 	if err != nil {
 		return err
 	}
@@ -134,17 +134,17 @@ func (s *spackMetric) writeMetric(w io.Writer, version spackVersion) error {
 		return xerrors.Errorf("binary.Write types failed: %w", err)
 	}
 
-	err = binary.Write(w, binary.LittleEndian, uint8(s.flags))
+	err = binary.Write(w, binary.LittleEndian, s.flags)
 	if err != nil {
 		return xerrors.Errorf("binary.Write flags failed: %w", err)
 	}
 	if version >= version12 {
-		err = writeULEB128(w, uint32(s.nameValueIndex))
+		err = writeULEB128(w, s.nameValueIndex)
 		if err != nil {
 			return xerrors.Errorf("writeULEB128 name value index: %w", err)
 		}
 	}
-	err = writeULEB128(w, uint32(s.labelsCount))
+	err = writeULEB128(w, s.labelsCount)
 	if err != nil {
 		return xerrors.Errorf("writeULEB128 labels count failed: %w", err)
 	}
@@ -255,7 +255,6 @@ func (se *spackEncoder) writeLabels() ([]spackMetric, error) {
 			if err := m.writeLabel(se, namesIdx, valuesIdx, name, value); err != nil {
 				return nil, err
 			}
-
 		}
 		spackMetrics[idx] = m
 	}
@@ -327,7 +326,7 @@ func (se *spackEncoder) writeHeader(w io.Writer) error {
 	ew.binaryWrite(uint16(se.version))              // Version
 	ew.binaryWrite(uint16(24))                      // HeaderSize
 	ew.binaryWrite(uint8(0))                        // TimePrecision(SECONDS)
-	ew.binaryWrite(uint8(se.compression))           // CompressionAlg
+	ew.binaryWrite(se.compression)                  // CompressionAlg
 	ew.binaryWrite(uint32(se.labelNamePool.Len()))  // LabelNamesSize
 	ew.binaryWrite(uint32(se.labelValuePool.Len())) // LabelValuesSize
 	ew.binaryWrite(uint32(len(se.metrics.metrics))) // MetricsCount

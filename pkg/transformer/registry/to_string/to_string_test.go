@@ -103,7 +103,8 @@ func TestToStringTransformer(t *testing.T) {
 			"value1",
 			time.Date(1703, 1, 2, 0, 0, 0, 0, time.UTC),
 			123.123,
-			float32(312.321)},
+			float32(312.321),
+		},
 		TableSchema: table2Schema,
 	}
 	item3 := abstract.ChangeItem{
@@ -128,7 +129,7 @@ func TestToStringTransformer(t *testing.T) {
 
 func TestAllTypesToStringTransformer(t *testing.T) {
 	t.Parallel()
-	var testCases = []struct {
+	testCases := []struct {
 		originalValue interface{}
 		originalType  schema.Type
 		expectedValue string
@@ -153,7 +154,7 @@ func TestAllTypesToStringTransformer(t *testing.T) {
 		{time.Date(14124, 1, 12, 0, 0, 0, 0, time.UTC), schema.TypeDate, "14124-01-12"},
 		{time.Date(2311, 12, 1, 1, 2, 4, 5, time.UTC), schema.TypeDatetime, "2311-12-01T01:02:04.000000005Z"},
 		{time.Date(1231, 5, 23, 9, 8, 7, 6, time.UTC), schema.TypeTimestamp, "1231-05-23T09:08:07.000000006Z"},
-		{time.Duration(12*time.Hour + 53*time.Minute + 21*time.Second + 87*time.Millisecond + 182*time.Microsecond + 124*time.Nanosecond), schema.TypeInterval, "12h53m21.087182124s"},
+		{12*time.Hour + 53*time.Minute + 21*time.Second + 87*time.Millisecond + 182*time.Microsecond + 124*time.Nanosecond, schema.TypeInterval, "12h53m21.087182124s"},
 		// check nulls
 		{nil, schema.TypeDate, "<nil>"},
 		{nil, schema.TypeDatetime, "<nil>"},

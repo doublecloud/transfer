@@ -99,10 +99,6 @@ func (r *RawDocGroupTransformer) Apply(input []abstract.ChangeItem) abstract.Tra
 	}
 }
 
-func (r *RawDocGroupTransformer) containsAllKeys(colNames []string) bool {
-	return allFieldsPresent(colNames, rawDocFields, r.Keys)
-}
-
 func (r *RawDocGroupTransformer) containsAllFields(colNames []string) bool {
 	return allFieldsPresent(colNames, rawDocFields, append(r.Keys, r.Fields...))
 }
@@ -214,5 +210,4 @@ func NewRawDocGroupTransformer(config RawDocGrouperConfig) (*RawDocGroupTransfor
 		targetSchemas: make(map[string]*abstract.TableSchema),
 		schemasLock:   sync.RWMutex{},
 	}, nil
-
 }

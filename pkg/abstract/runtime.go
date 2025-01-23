@@ -55,10 +55,10 @@ func KnownRuntime(r RuntimeType) bool {
 	return ok
 }
 
-// Parallelism params
+// Parallelism params.
 type ShardUploadParams struct {
-	JobCount     int //Workers count
-	ProcessCount int //Threads count
+	JobCount     int // Workers count
+	ProcessCount int // Threads count
 }
 
 func NewShardUploadParams(jobCount int, processCount int) *ShardUploadParams {

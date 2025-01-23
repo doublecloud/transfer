@@ -140,24 +140,6 @@ func TestParser_TableSplitterSpecChar(t *testing.T) {
 	require.Equal(t, test6TableName[:len(test6TableExpectedPrefix)], test6TableExpectedPrefix)
 }
 
-func changeItemFactoryForMetrica(tableName string, appVersionName string, receiveTimestamp int64, apiKey int32, deviceID interface{}) *abstract.ChangeItem {
-	table1Schema := abstract.NewTableSchema(abstract.TableColumns{
-		abstract.MakeTypedColSchema("AppVersionName", string(schema.TypeString), true),
-		abstract.MakeTypedColSchema("ReceiveTimestamp", string(schema.TypeInt64), false),
-		abstract.MakeTypedColSchema("APIKey", string(schema.TypeInt32), false),
-		abstract.MakeTypedColSchema("DeviceID", string(schema.TypeAny), false),
-	})
-	item1 := abstract.ChangeItem{
-		Kind:         "Insert",
-		Schema:       "db",
-		Table:        tableName,
-		ColumnNames:  []string{"AppVersionName", "ReceiveTimestamp", "APIKey", "DeviceID"},
-		ColumnValues: []interface{}{appVersionName, receiveTimestamp, apiKey, deviceID},
-		TableSchema:  table1Schema,
-	}
-	return &item1
-}
-
 func testTableSplitterOnChangeItem(
 	t *testing.T,
 	originalTableName string,
@@ -224,7 +206,6 @@ func TestGenericParser_DoSensitive(t *testing.T) {
 				fieldsWithSecretErasure++
 			}
 		}
-
 	}
 	logger.Log.Debug("Example of secret erasure", log.Any("res", res))
 	require.Greater(t, fieldsWithSecretErasure, 0, "there should be at least one erasured secret")
@@ -245,7 +226,6 @@ func TestGenericParser_DoSensitiveDisabled(t *testing.T) {
 				fieldsWithSecretErasure++
 			}
 		}
-
 	}
 	logger.Log.Debug("Example of keeping secrets unerasured to increase performance", log.Any("res", res))
 	require.Equal(t, 0, fieldsWithSecretErasure, "secrets should not be processed in order to increase performance")
@@ -440,9 +420,9 @@ func TestGenericParser_Parse_vs_Do(t *testing.T) {
 				return
 			}
 			require.NoError(t, err)
-			//genericParserImpl := GetGenericParserImpl(parser)
+			// genericParserImpl := GetGenericParserImpl(parser)
 			res := parser.Do(samples.Data[k], *new(abstract.Partition))
-			//batch := genericParserImpl.Parse(samples.Data[k], *new(abstract.Partition))
+			// batch := genericParserImpl.Parse(samples.Data[k], *new(abstract.Partition))
 			var changes []abstract.ChangeItem
 			//for batch.Next() {
 			//	ev, err := batch.Event()
@@ -458,7 +438,7 @@ func TestGenericParser_Parse_vs_Do(t *testing.T) {
 			abstract.Dump(res)
 			t.Logf("new parser: %v len", len(changes))
 			abstract.Dump(changes)
-			//require.Equal(t, len(res), len(changes))
+			// require.Equal(t, len(res), len(changes))
 		})
 	}
 }

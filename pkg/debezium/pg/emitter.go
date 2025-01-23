@@ -486,7 +486,7 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 	case `pg:citext`:
 		v.AddVal(colName, colVal.(string))
 	case `pg:hstore`:
-		result := ""
+		var result string
 		var err error
 		switch t := colVal.(type) {
 		case map[string]interface{}:

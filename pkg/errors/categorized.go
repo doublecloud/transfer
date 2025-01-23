@@ -5,7 +5,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/errors/categories"
 )
 
-// Categorized is an error with an attached category
+// Categorized is an error with an attached category.
 type Categorized interface {
 	error
 	xerrors.Wrapper
@@ -18,7 +18,7 @@ type categorizedImpl struct {
 	category categories.Category
 }
 
-// CategorizedErrorf produces a xerrors-wrapped error with a given assigned category
+// CategorizedErrorf produces a xerrors-wrapped error with a given assigned category.
 func CategorizedErrorf(category categories.Category, format string, a ...any) error {
 	errorf := xerrors.Errorf(format, a...)
 	var categorized Categorized = nil

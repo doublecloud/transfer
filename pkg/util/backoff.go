@@ -7,7 +7,7 @@ import (
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
-// BackoffLogger uses level "warn" by default
+// BackoffLogger uses level "warn" by default.
 func BackoffLogger(logger log.Logger, msg string) func(error, time.Duration) {
 	return BackoffLoggerWarn(logger, msg)
 }

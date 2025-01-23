@@ -62,7 +62,7 @@ func isSystemTable(tableName string) bool {
 
 const ProviderType = abstract.ProviderType("mysql")
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Snapshot    = (*Provider)(nil)
 	_ providers.Replication = (*Provider)(nil)

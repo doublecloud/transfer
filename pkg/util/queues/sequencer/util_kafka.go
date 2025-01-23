@@ -4,14 +4,14 @@ import (
 	"fmt"
 )
 
-// BuildMapPartitionToOffsetsRange - is used only in logging
+// BuildMapPartitionToOffsetsRange - is used only in logging.
 func BuildMapPartitionToOffsetsRange(messages []QueueMessage) string {
 	sequencer := NewSequencer()
 	_ = sequencer.StartProcessing(messages)
 	return sequencer.ToStringRanges()
 }
 
-// BuildPartitionOffsetLogLine - is used only in logging
+// BuildPartitionOffsetLogLine - is used only in logging.
 func BuildPartitionOffsetLogLine(messages []QueueMessage) string {
 	if len(messages) == 0 {
 		return ""
@@ -23,7 +23,7 @@ func BuildPartitionOffsetLogLine(messages []QueueMessage) string {
 	return result[0 : len(result)-1]
 }
 
-// BuildMapTopicPartitionToOffsetsRange - is used only in logging
+// BuildMapTopicPartitionToOffsetsRange - is used only in logging.
 func BuildMapTopicPartitionToOffsetsRange(messages []QueueMessage) string {
 	sequencer := NewSequencer()
 	_ = sequencer.StartProcessing(messages)

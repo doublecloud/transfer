@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// MakeMapColNameToIndex returns a mapping of a column name to an index in the given slice
+// MakeMapColNameToIndex returns a mapping of a column name to an index in the given slice.
 func MakeMapColNameToIndex(in []ColSchema) map[string]int {
 	result := make(map[string]int)
 	for i, column := range in {
@@ -24,7 +24,7 @@ func KeyNames(in []ColSchema) []string {
 	return result
 }
 
-// Sniff dat data
+// Sniff dat data.
 func Sniff(input []ChangeItem) string {
 	tables := make(map[TableID]ChangeItem)
 	tablesCntr := make(map[TableID]int)

@@ -61,10 +61,6 @@ func (t *Timer) isMemOnly() bool {
 	return t.memOnly
 }
 
-func (t *Timer) setMemOnly() {
-	t.memOnly = true
-}
-
 // MarshalJSON implements json.Marshaler.
 func (t *Timer) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {

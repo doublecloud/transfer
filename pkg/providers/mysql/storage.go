@@ -216,7 +216,6 @@ func (s *Storage) Position(ctx context.Context) (*abstract.LogPosition, error) {
 		if xerrors.As(err, &notMaster) || xerrors.As(err, notMaster) {
 			isSlave = true
 			logger.Log.Info(notMaster.Error())
-			err = nil
 		} else {
 			return nil, xerrors.Errorf("unable to get binlog position: %w", err)
 		}

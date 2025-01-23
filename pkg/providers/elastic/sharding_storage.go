@@ -33,7 +33,7 @@ func UnmarshalFilter(marshalledFilter string) (ShardingFilter, error) {
 }
 
 func filterFromTable(table abstract.TableDescription) (ShardingFilter, error) {
-	filter := ShardingFilter(emptyFilter)
+	filter := emptyFilter
 
 	if table.Filter != "" {
 		var err error

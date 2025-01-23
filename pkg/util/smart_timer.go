@@ -94,7 +94,7 @@ func (t *SmartTimer) Pause() {
 }
 
 // deactivateLastRoutine deactivates the last routine run by smart timer and cleans up the alarm channel.
-// This method must be run with mtx already taken
+// This method must be run with mtx already taken.
 func (t *SmartTimer) deactivateLastRoutine() {
 	if t.lastRoutineCanceler == nil {
 		return

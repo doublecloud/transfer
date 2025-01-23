@@ -14,7 +14,7 @@ var InfiniteTimestampError = xerrors.NewSentinel("infinity is unparseable by the
 // Parse converts a text representation of an PostgreSQL-formatted date, timestamp, or timestamptz into time.Time.
 // In contrast with pgtype parsers, this parser supports BC years.
 //
-// TODO: remove this when https://st.yandex-team.ru/TM-5127 is done
+// TODO: remove this when https://st.yandex-team.ru/TM-5127 is done.
 func Parse(timestamp string) (time.Time, error) {
 	switch timestamp {
 	case "":

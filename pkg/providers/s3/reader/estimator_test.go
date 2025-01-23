@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Reader function to return dummy S3Reader with specified sizes
+// Reader function to return dummy S3Reader with specified sizes.
 func dummyReaderF(sizes map[string]int64) readerF {
 	return func(ctx context.Context, filePath string) (*S3Reader, error) {
 		size, exists := sizes[filePath]

@@ -2,8 +2,6 @@
 package yatest
 
 import (
-	"bufio"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path"
@@ -46,9 +44,8 @@ type TestContext struct {
 }
 
 var (
-	context              TestContext
-	isRunningUnderGoTest bool
-	initOnce             sync.Once
+	context  TestContext
+	initOnce sync.Once
 )
 
 func lazyInit() {
@@ -58,49 +55,6 @@ func lazyInit() {
 func verifyContext() {
 	if !context.Initialized {
 		panic("test context isn't initialized")
-	}
-}
-
-func initTestContext() {
-	data, err := os.ReadFile(getenv("YA_TEST_CONTEXT_FILE"))
-	if err != nil {
-		panic(err)
-	}
-
-	err = json.Unmarshal([]byte(data), &context)
-	if err != nil {
-		panic(err)
-	}
-	setupEnv()
-	context.Initialized = true
-}
-
-func setupEnv() {
-	file, err := os.Open(context.Internal.EnvFile)
-	if err != nil {
-		return
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		var objmap map[string]json.RawMessage
-		var val string
-		err := json.Unmarshal([]byte(line), &objmap)
-		if err != nil {
-			panic(err)
-		}
-		for k, v := range objmap {
-			err := json.Unmarshal(v, &val)
-			if err != nil {
-				panic(err)
-			}
-			err = os.Setenv(k, val)
-			if err != nil {
-				panic(err)
-			}
-		}
 	}
 }
 
@@ -204,7 +158,7 @@ func OutputPath(dataPath string) string {
 	return filepath.Join(context.Runtime.OutputPath, dataPath)
 }
 
-// RAMDrivePath returns absolute path to the ramdrive directory
+// RAMDrivePath returns absolute path to the ramdrive directory.
 func RAMDrivePath(dataPath string) string {
 	lazyInit()
 	if path.IsAbs(dataPath) {
@@ -215,7 +169,7 @@ func RAMDrivePath(dataPath string) string {
 	return filepath.Join(context.Runtime.RAMDrivePath, dataPath)
 }
 
-// YtHDDPath returns absolute path to the directory mounted to ext4 fs in YT
+// YtHDDPath returns absolute path to the directory mounted to ext4 fs in YT.
 func YtHDDPath(dataPath string) string {
 	lazyInit()
 	if path.IsAbs(dataPath) {
@@ -226,7 +180,7 @@ func YtHDDPath(dataPath string) string {
 	return filepath.Join(context.Runtime.YtHDDPath, dataPath)
 }
 
-// OutputRAMDrivePath returns absolute path to the ramdrive output directory
+// OutputRAMDrivePath returns absolute path to the ramdrive output directory.
 func OutputRAMDrivePath(dataPath string) string {
 	lazyInit()
 	if path.IsAbs(dataPath) {
@@ -237,7 +191,7 @@ func OutputRAMDrivePath(dataPath string) string {
 	return filepath.Join(context.Runtime.TestOutputRAMDrivePath, dataPath)
 }
 
-// HasRAMDrive returns true if ramdrive is enabled in tests
+// HasRAMDrive returns true if ramdrive is enabled in tests.
 func HasRAMDrive() bool {
 	lazyInit()
 	verifyContext()
@@ -257,21 +211,21 @@ func BinaryPath(dataPath string) (string, error) {
 	}
 }
 
-// ProjectPath returns arcadia-relative path to the test project
+// ProjectPath returns arcadia-relative path to the test project.
 func ProjectPath() string {
 	lazyInit()
 	verifyContext()
 	return context.Runtime.ProjectPath
 }
 
-// BuildType returns build type that was used to compile the test
+// BuildType returns build type that was used to compile the test.
 func BuildType() string {
 	lazyInit()
 	verifyContext()
 	return context.Build.BuildType
 }
 
-// BuildFlag returns the value of the requested build flag
+// BuildFlag returns the value of the requested build flag.
 func BuildFlag(name string) (string, bool) {
 	lazyInit()
 	verifyContext()
@@ -279,7 +233,7 @@ func BuildFlag(name string) (string, bool) {
 	return val, ok
 }
 
-// TestParam returns the value of the requested test parameter
+// TestParam returns the value of the requested test parameter.
 func TestParam(name string) (string, bool) {
 	lazyInit()
 	verifyContext()
@@ -287,7 +241,7 @@ func TestParam(name string) (string, bool) {
 	return val, ok
 }
 
-// Sanitizer returns sanitizer name that was used to compile the test
+// Sanitizer returns sanitizer name that was used to compile the test.
 func Sanitizer() string {
 	lazyInit()
 	verifyContext()

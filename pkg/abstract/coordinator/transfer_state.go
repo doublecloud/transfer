@@ -35,7 +35,7 @@ type YtStaticPartState struct {
 }
 
 // TransferStateData contain transfer state, shared across retries / restarts
-// can contain any generic information about transfer progress
+// can contain any generic information about transfer progress.
 type TransferStateData struct {
 	// Generic is recommended way, you can put anything json serializable here
 	Generic any

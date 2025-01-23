@@ -10,7 +10,7 @@ import (
 
 type TableLoadState int
 
-// It is important for serialization not to use iota
+// It is important for serialization not to use iota.
 const (
 	InitShardedTableLoad = TableLoadState(4)
 	TableLoadBegin       = TableLoadState(1)

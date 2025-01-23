@@ -98,7 +98,7 @@ func waitMaster(cfg *PgStorageParams, hosts []string, duration time.Duration) (s
 }
 
 // checkTwoPostgresIsRunning
-// returns 'true' if needed to check one more time
+// returns 'true' if needed to check one more time.
 func checkTwoPostgresIsRunning(t *testing.T) bool {
 	cmd := `sudo docker ps | grep '\bUp\b.*\bpostgres_\d\b' | wc -l | awk '{print $1}'`
 	out, err := exec.Command("bash", "-c", cmd).Output()
@@ -121,7 +121,7 @@ func checkTwoPostgresIsRunning(t *testing.T) bool {
 }
 
 // checkExactlyOnePostgresIsPrimary
-// returns 'true' if there are two primary
+// returns 'true' if there are two primary.
 func checkExactlyOnePostgresIsPrimary(t *testing.T) bool {
 	cmd1 := `sudo docker exec postgres_1 psql -t -c "select case when pg_is_in_recovery() then 'secondary' else 'primary' end as host_status;" "dbname=habrdb user=habrpguser password=pgpwd4habr" | awk '{print $1}' | grep -v "^$"`
 	out1Arr, err := exec.Command("bash", "-c", cmd1).Output()

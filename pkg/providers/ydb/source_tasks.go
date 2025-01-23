@@ -82,7 +82,7 @@ func createChangeFeedOneTable(ctx context.Context, ydbClient *ydb.Driver, tableP
 }
 
 // checkChangeFeedConsumerOnline
-// with this method we identify changefeed is active if our system consumer is attached to it as well
+// with this method we identify changefeed is active if our system consumer is attached to it as well.
 func checkChangeFeedConsumerOnline(ctx context.Context, ydbClient *ydb.Driver, tablePath, transferID string) (bool, error) {
 	topicPath := makeChangeFeedPath(tablePath, transferID)
 	descr, err := ydbClient.Topic().Describe(ctx, topicPath)

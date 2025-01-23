@@ -10,17 +10,17 @@ import (
 	"github.com/doublecloud/transfer/library/go/x/xruntime"
 )
 
-// NewSentinel acts as New but does not add stack frame
+// NewSentinel acts as New but does not add stack frame.
 func NewSentinel(text string) *Sentinel {
 	return &Sentinel{error: errors.New(text)}
 }
 
-// Sentinel error
+// Sentinel error.
 type Sentinel struct {
 	error
 }
 
-// WithFrame adds stack frame to sentinel error (DEPRECATED)
+// WithFrame adds stack frame to sentinel error (DEPRECATED).
 func (s *Sentinel) WithFrame() error {
 	return &sentinelWithStackTrace{
 		err:        s,
@@ -90,7 +90,7 @@ func (e *sentinelWithStackTrace) Is(target error) bool {
 }
 
 // As checks if ew holds the specified error type. Checks only immediate error.
-// It does NOT perform target checks as it relies on errors.As to do it
+// It does NOT perform target checks as it relies on errors.As to do it.
 func (e *sentinelWithStackTrace) As(target interface{}) bool {
 	return xreflect.Assign(e.err, target)
 }
@@ -133,7 +133,7 @@ func (e *sentinelWrapper) Format(s fmt.State, v rune) {
 	}
 }
 
-// Unwrap implements Wrapper interface
+// Unwrap implements Wrapper interface.
 func (e *sentinelWrapper) Unwrap() error {
 	return e.wrapped
 }
@@ -144,7 +144,7 @@ func (e *sentinelWrapper) Is(target error) bool {
 }
 
 // As checks if error holds the specified error type. Checks only immediate error.
-// It does NOT perform target checks as it relies on errors.As to do it
+// It does NOT perform target checks as it relies on errors.As to do it.
 func (e *sentinelWrapper) As(target interface{}) bool {
 	return xreflect.Assign(e.err, target)
 }

@@ -36,7 +36,7 @@ type OperationStatus interface {
 // Sharding coordinate multiple worker for transfer operations
 // transfer utilize MPP aproach, when we have a main (or leader) worker
 // main worker coordinate secondary workers via single coordinator (API or remote storage)
-// main worker is usually first instance of multi-node transfer operation worker
+// main worker is usually first instance of multi-node transfer operation worker.
 type Sharding interface {
 	// GetOperationProgress called by *main* worker to track progress over secondary workers
 	GetOperationProgress(operationID string) (*model.AggregatedProgress, error)
@@ -68,7 +68,7 @@ type Sharding interface {
 	UpdateOperationTablesParts(operationID string, tables []*model.OperationTablePart) error
 }
 
-// Progressable is opt-in interface to show total progress over upload once completed
+// Progressable is opt-in interface to show total progress over upload once completed.
 type Progressable interface {
 	Progress() []*model.OperationTablePart
 }

@@ -153,8 +153,8 @@ func (w localOplogRsWatcher) openOplogCursor(ctx context.Context, ts primitive.T
 func (w localOplogRsWatcher) watchBatchFrom(ctx context.Context, ts primitive.Timestamp, batcher *keyBatcher) (until primitive.Timestamp, eventsRead int, err error) {
 	w.logger.Infof("Begin watching batch from time %v", FromMongoTimestamp(ts))
 	// check that timestamp is still in oplog
-	from, to, err := GetLocalOplogInterval(ctx, w.client)
-	if primitive.CompareTimestamp(ts, from) < 0 {
+	from, to, _ := GetLocalOplogInterval(ctx, w.client)
+	if ts.Compare(from) < 0 {
 		return until, eventsRead, xerrors.Errorf("local.oplog.rs watcher is out of timeline. Requested timestamp %v, actual interval: [%v, %v]",
 			FromMongoTimestamp(ts),
 			FromMongoTimestamp(from),

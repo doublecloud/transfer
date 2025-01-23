@@ -15,7 +15,6 @@ func Agent() MeteringAgent {
 }
 
 func InitializeWithTags(transfer *model.Transfer, task *model.TransferOperation, runtimeTags map[string]interface{}) {
-	return
 }
 
 func WithAgent(agent MeteringAgent) MeteringAgent {

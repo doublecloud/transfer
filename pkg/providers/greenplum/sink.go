@@ -149,7 +149,7 @@ func (s *Sink) processRowChangeItem(ctx context.Context, changeItem *abstract.Ch
 }
 
 // setTemporaryTableForChangeItem sets the temporary table as a target for the given ChangeItem.
-// If an error is returned, ChangeItem is left unchanged
+// If an error is returned, ChangeItem is left unchanged.
 func setTemporaryTableForChangeItem(changeItem *abstract.ChangeItem) {
 	changeItem.Schema, changeItem.Table = temporaryTable(changeItem.Schema, changeItem.Table)
 }
@@ -252,7 +252,7 @@ func (s *Sink) pushChangeItemsToSegment(ctx context.Context, seg GPSegPointer, c
 	return nil
 }
 
-// processCleanupChangeItem flushes ChangeItems and pushes the given one to coordinator
+// processCleanupChangeItem flushes ChangeItems and pushes the given one to coordinator.
 func (s *Sink) processCleanupChangeItem(ctx context.Context, changeItem *abstract.ChangeItem) error {
 	if err := s.flushRowChangeItems(ctx); err != nil {
 		return xerrors.Errorf("failed to flush rows: %w", err)

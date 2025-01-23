@@ -12,7 +12,7 @@ import (
 // isParsedItem - check if table is the result of generic-parser with opts.AddDedupeKeys columns
 // that means we have 4 our system columns in the end of ColumnNames/TableSchema: _timestamp/_partition/_offset/_idx
 // check if _timestamp is schema.TypeTimestamp - just in case.
-// Actually type_system should guarantee it's always be called on old generic_parser, and always should be true
+// Actually type_system should guarantee it's always be called on old generic_parser, and always should be true.
 func isParsedItem(ci *abstract.ChangeItem) bool {
 	if len(ci.TableSchema.Columns()) <= 4 {
 		return false
@@ -31,7 +31,7 @@ func isParsedItem(ci *abstract.ChangeItem) bool {
 // isUnparsedItem - check if table is the result of 'unparsed' case of generic-parser
 // that means we have 6 our system columns: _timestamp/_partition/_offset/_idx/unparsed_row/reason
 // check if _timestamp is schema.TypeTimestamp - just in case.
-// Actually type_system should guarantee it's always be called on old generic_parser, and always should be true
+// Actually type_system should guarantee it's always be called on old generic_parser, and always should be true.
 func isUnparsedItem(ci *abstract.ChangeItem) bool {
 	if len(ci.TableSchema.Columns()) != 6 {
 		return false

@@ -438,7 +438,7 @@ func Test_generatedBounds(t *testing.T) {
 	}, bounds)
 }
 
-// checking that if the table cannot be created, a fatal error is returned
+// checking that if the table cannot be created, a fatal error is returned.
 func Test_create_table(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	require.NoError(t, err)

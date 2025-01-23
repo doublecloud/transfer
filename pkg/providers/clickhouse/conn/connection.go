@@ -25,10 +25,8 @@ func ResolveShards(config model.ChSinkParams, transfer *dp_model.Transfer) error
 		}
 
 		config.SetShards(shards)
-	} else {
-		if len(config.Shards()) == 0 {
-			return abstract.NewFatalError(xerrors.New("shards not set for an on-premises ClickHouse"))
-		}
+	} else if len(config.Shards()) == 0 {
+		return abstract.NewFatalError(xerrors.New("shards not set for an on-premises ClickHouse"))
 	}
 	return nil
 }

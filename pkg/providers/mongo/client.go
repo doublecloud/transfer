@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 	"time"
 
@@ -49,7 +49,7 @@ func (w *MongoClientWrapper) Close(ctx context.Context) error {
 var tmMongoConnectID atomic.Int64
 
 // Connect function should be one and only one valid method of creation mongo client
-// this method logs into 'lgr' about connection options
+// this method logs into 'lgr' about connection options.
 func Connect(ctx context.Context, opts MongoConnectionOptions, lgr log.Logger) (*MongoClientWrapper, error) {
 	if lgr == nil {
 		lgr = logger.Log
@@ -142,17 +142,12 @@ func Connect(ctx context.Context, opts MongoConnectionOptions, lgr log.Logger) (
 }
 
 func newClient(ctx context.Context, connOpts *options.ClientOptions, lgr log.Logger) (*mongo.Client, error) {
-	client, err := mongo.NewClient(connOpts)
+	client, err := mongo.Connect(ctx, connOpts)
 
 	isWithPassword := bool(connOpts != nil && connOpts.Auth != nil && len(connOpts.Auth.Password) > 0)
 	if err != nil && isWithPassword && strings.Contains(err.Error(), connOpts.Auth.Password) {
 		err = xerrors.New(strings.ReplaceAll(err.Error(), connOpts.Auth.Password, "<secret>"))
-	}
 
-	if err != nil {
-		return nil, xerrors.Errorf("unable to create mongo client: %w", err)
-	}
-	if err := client.Connect(ctx); err != nil {
 		return nil, xerrors.Errorf("unable to connect mongo client: %w", err)
 	}
 
@@ -180,7 +175,7 @@ func getClusterInfo(endpoint MongoConnectionOptions) (hosts []string, sharded bo
 			return nil, false, xerrors.Errorf("unable to resolve mongodb hosts: %w", err)
 		}
 		// step of choosing port, shard-ness and type of mongo instances to connect
-		port := 0
+		var port int
 		shardResolver, err := provider.ShardResolver(dbaas.ProviderTypeMongodb, endpoint.ClusterID)
 		if err != nil {
 			return nil, false, xerrors.Errorf("unable to init shard resolver: %w", err)
@@ -221,6 +216,7 @@ func getClusterInfo(endpoint MongoConnectionOptions) (hosts []string, sharded bo
 	}
 	return hosts, sharded, nil
 }
+
 func DriverConnectionSrvOptions(mongoConnectionOptions *MongoConnectionOptions) (*options.ClientOptions, error) {
 	if len(mongoConnectionOptions.Hosts) != 1 {
 		return nil, xerrors.Errorf("Cannot be empty or more than hosts in srv connection")
@@ -256,6 +252,7 @@ func DriverConnectionSrvOptions(mongoConnectionOptions *MongoConnectionOptions) 
 	}
 	return clientOptions, nil
 }
+
 func DriverConnectionOptions(mongoConnectionOptions *MongoConnectionOptions) (*options.ClientOptions, error) {
 	opts := options.ClientOptions{}
 	hosts, sharded, err := getClusterInfo(*mongoConnectionOptions)
@@ -307,7 +304,7 @@ func newTLSConfig(caCert TrustedCACertificate) (*tls.Config, error) {
 	case CACertificatePEMFilePaths:
 		caFilePaths := downcasted
 		for _, cert := range caFilePaths {
-			pemFileContent, err := ioutil.ReadFile(string(cert))
+			pemFileContent, err := os.ReadFile(string(cert))
 			if err != nil {
 				return nil, xerrors.Errorf("Cannot read file %s: %w", cert, err)
 			}

@@ -100,7 +100,7 @@ func (d *DExtension) Value(isHomo, preventJSONRepack bool) DValue {
 
 func (d *DExtension) Map() bson.M {
 	if d.modified {
-		d.cache = d.D.Map()
+		d.cache = d.D.Map() //nolint:staticcheck
 		d.modified = false
 	}
 	return d.cache
@@ -125,7 +125,7 @@ func GetValueByPath(doc any, path string) (any, bool) {
 	val := doc
 	for _, key := range pathTokens {
 		var elem any
-		ok := false
+		var ok bool
 		switch v := val.(type) {
 		case bson.M:
 			elem, ok = getKeyM(v, key)

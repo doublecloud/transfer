@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ abstract.ShardingStorage        = (*Storage)(nil)
 	_ abstract.ShardingContextStorage = (*Storage)(nil)

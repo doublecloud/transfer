@@ -14,7 +14,7 @@ type MetricsVector interface {
 	Reset()
 }
 
-// Vector is base implementation of vector of metrics of any supported type
+// Vector is base implementation of vector of metrics of any supported type.
 type Vector struct {
 	Labels    []string
 	Mtx       sync.RWMutex // Protects metrics.
@@ -60,7 +60,7 @@ func (v *Vector) Reset() {
 var _ metrics.CounterVec = (*CounterVec)(nil)
 
 // CounterVec stores counters and
-// implements metrics.CounterVec interface
+// implements metrics.CounterVec interface.
 type CounterVec struct {
 	Vec MetricsVector
 }
@@ -93,7 +93,7 @@ func (v *CounterVec) Reset() {
 var _ metrics.GaugeVec = new(GaugeVec)
 
 // GaugeVec stores gauges and
-// implements metrics.GaugeVec interface
+// implements metrics.GaugeVec interface.
 type GaugeVec struct {
 	Vec MetricsVector
 }
@@ -126,7 +126,7 @@ func (v *GaugeVec) Reset() {
 var _ metrics.IntGaugeVec = new(IntGaugeVec)
 
 // IntGaugeVec stores gauges and
-// implements metrics.IntGaugeVec interface
+// implements metrics.IntGaugeVec interface.
 type IntGaugeVec struct {
 	Vec MetricsVector
 }
@@ -159,7 +159,7 @@ func (v *IntGaugeVec) Reset() {
 var _ metrics.TimerVec = new(TimerVec)
 
 // TimerVec stores timers and
-// implements metrics.TimerVec interface
+// implements metrics.TimerVec interface.
 type TimerVec struct {
 	Vec MetricsVector
 }
@@ -192,7 +192,7 @@ func (v *TimerVec) Reset() {
 var _ metrics.HistogramVec = (*HistogramVec)(nil)
 
 // HistogramVec stores histograms and
-// implements metrics.HistogramVec interface
+// implements metrics.HistogramVec interface.
 type HistogramVec struct {
 	Vec MetricsVector
 }
@@ -225,7 +225,7 @@ func (v *HistogramVec) Reset() {
 var _ metrics.TimerVec = (*DurationHistogramVec)(nil)
 
 // DurationHistogramVec stores duration histograms and
-// implements metrics.TimerVec interface
+// implements metrics.TimerVec interface.
 type DurationHistogramVec struct {
 	Vec MetricsVector
 }

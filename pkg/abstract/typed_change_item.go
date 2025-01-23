@@ -10,11 +10,13 @@ import (
 	"github.com/valyala/fastjson"
 )
 
-type TypedChangeItem ChangeItem
-type TypedValue struct {
-	Type  string `json:"type"`
-	Value any    `json:"value"`
-}
+type (
+	TypedChangeItem ChangeItem
+	TypedValue      struct {
+		Type  string `json:"type"`
+		Value any    `json:"value"`
+	}
+)
 
 func (t *TypedChangeItem) MarshalJSON() ([]byte, error) {
 	_, err := t.packTypedValues()
@@ -62,22 +64,6 @@ func (t *TypedChangeItem) packTypedValues() ([]TypedValue, error) {
 	}
 	if len(errs) > 0 {
 		return nil, errs
-	}
-	return res, nil
-}
-
-func (t *TypedChangeItem) unpackTypedValues(v *fastjson.Value) ([]interface{}, error) {
-	items, err := v.Array()
-	if err != nil {
-		return nil, xerrors.Errorf("unable to get array: %w", err)
-	}
-	var res []interface{}
-	for _, item := range items {
-		extractedV, err := unpackTypedValue(item)
-		if err != nil {
-			return nil, xerrors.Errorf("unable to unpack: %w", err)
-		}
-		res = append(res, extractedV)
 	}
 	return res, nil
 }
@@ -231,7 +217,7 @@ func packTypedValue(val any) (TypedValue, error) {
 			items = append(items, packedV)
 		}
 		if len(errs) > 0 {
-			return *new(TypedValue), xerrors.Errorf("many errs: %w", errs)
+			return TypedValue{}, xerrors.Errorf("many errs: %w", errs)
 		}
 		return TypedValue{Value: items, Type: typeNameFromValue(val)}, nil
 	case map[string]interface{}:
@@ -243,7 +229,7 @@ func packTypedValue(val any) (TypedValue, error) {
 			errs = util.AppendErr(errs, err)
 		}
 		if len(errs) > 0 {
-			return *new(TypedValue), xerrors.Errorf("many errs: %w", errs)
+			return TypedValue{}, xerrors.Errorf("many errs: %w", errs)
 		}
 		return TypedValue{Value: data, Type: typeNameFromValue(val)}, nil
 	case [][]interface{}: // Clickhouse nested arrays
@@ -259,7 +245,7 @@ func packTypedValue(val any) (TypedValue, error) {
 			data = append(data, items)
 		}
 		if len(errs) > 0 {
-			return *new(TypedValue), xerrors.Errorf("many errs: %w", errs)
+			return TypedValue{}, xerrors.Errorf("many errs: %w", errs)
 		}
 		return TypedValue{Value: data, Type: typeNameFromValue(val)}, nil
 	case *TableSchema:

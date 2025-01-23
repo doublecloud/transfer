@@ -17,10 +17,10 @@ type WhereStatement string
 
 const NoFilter WhereStatement = WhereStatement("")
 
-// bracketType sorts characters into either opening, closing, or not a bracket
+// bracketType sorts characters into either opening, closing, or not a bracket.
 type bracketType int
 
-// TestVersion is the version of unit tests that this will pass
+// TestVersion is the version of unit tests that this will pass.
 const TestVersion = 2
 
 const (
@@ -109,7 +109,7 @@ func FiltersIntersection(a WhereStatement, b WhereStatement) WhereStatement {
 	if b == NoFilter {
 		return a
 	}
-	return WhereStatement("(" + a + ") AND (" + b + ")")
+	return "(" + a + ") AND (" + b + ")"
 }
 
 func NotStatement(a WhereStatement) WhereStatement {

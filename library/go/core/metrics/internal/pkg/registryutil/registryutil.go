@@ -16,7 +16,7 @@ var keyBufferPool = sync.Pool{New: func() any {
 	return bytes.NewBuffer(make([]byte, 0, 512))
 }}
 
-// BuildRegistryKey creates registry name based on given prefix and tags
+// BuildRegistryKey creates registry name based on given prefix and tags.
 func BuildRegistryKey(prefix string, tags map[string]string) string {
 	buffer := keyBufferPool.Get().(*bytes.Buffer)
 	defer func() {
@@ -32,7 +32,7 @@ func BuildRegistryKey(prefix string, tags map[string]string) string {
 }
 
 // BuildFQName returns name parts joined by given separator.
-// Mainly used to append prefix to registry
+// Mainly used to append prefix to registry.
 func BuildFQName(separator string, parts ...string) (name string) {
 	var b strings.Builder
 	for _, p := range parts {
@@ -47,7 +47,7 @@ func BuildFQName(separator string, parts ...string) (name string) {
 	return b.String()
 }
 
-// MergeTags merges 2 sets of tags with the tags from tagsRight overriding values from tagsLeft
+// MergeTags merges 2 sets of tags with the tags from tagsRight overriding values from tagsLeft.
 func MergeTags(leftTags map[string]string, rightTags map[string]string) map[string]string {
 	if leftTags == nil && rightTags == nil {
 		return nil
@@ -90,7 +90,7 @@ func StringifyTags(tags map[string]string, buffer *bytes.Buffer) {
 	}
 }
 
-// VectorHash computes hash of metrics vector element
+// VectorHash computes hash of metrics vector element.
 func VectorHash(tags map[string]string, labels []string) (uint64, error) {
 	if len(tags) != len(labels) {
 		return 0, errors.New("inconsistent tags and labels sets")

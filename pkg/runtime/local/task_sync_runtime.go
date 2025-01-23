@@ -51,7 +51,7 @@ func (s *SyncTask) run() {
 }
 
 // NewSyncTask only used for local debug, can operate properly only on single machine transfer server installation
-// with enable `all_in_one_binary` flag
+// with enable `all_in_one_binary` flag.
 func NewSyncTask(
 	task *model.TransferOperation,
 	cp coordinator.Coordinator,

@@ -114,9 +114,8 @@ func ResolvePrimaryKeyColumns(
 	ctx context.Context,
 	storage abstract.Storage,
 	tableID abstract.TableID,
-	IsSupportedKeyType func(keyType string) bool,
+	isSupportedKeyType func(keyType string) bool,
 ) ([]string, error) {
-
 	schema, err := storage.TableSchema(ctx, tableID)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to get table schema tableID: %s, err: %w", tableID, err)
@@ -129,7 +128,7 @@ func ResolvePrimaryKeyColumns(
 			primaryKey = append(primaryKey, column.ColumnName)
 		}
 
-		if !IsSupportedKeyType(column.OriginalType) {
+		if !isSupportedKeyType(column.OriginalType) {
 			return nil, xerrors.Errorf("unsupported by data-transfer incremental snapshot")
 		}
 	}

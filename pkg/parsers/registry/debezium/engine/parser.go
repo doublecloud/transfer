@@ -26,7 +26,7 @@ type DebeziumImpl struct {
 
 // DoOne message with multiple debezium events inside.
 // Contains multiple debezium events only if messages are
-// serialized using schema registry and started with magic zero-byte
+// serialized using schema registry and started with magic zero-byte.
 func (p *DebeziumImpl) DoOne(partition abstract.Partition, buf []byte, offset uint64, writeTime time.Time) ([]byte, abstract.ChangeItem) {
 	msgLen := len(buf)
 	if len(buf) != 0 {

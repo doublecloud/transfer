@@ -29,8 +29,8 @@ func MakeStubFieldWithOriginalType(colName string, ytType schema.Type, primaryKe
 
 func getOriginalType(original abstract.TableColumns, ytType schema.Type) string {
 	for _, column := range original {
-		//checking if data is from pg and at least 1 original type is present
-		//in this case setting pg original for our column
+		// checking if data is from pg and at least 1 original type is present
+		// in this case setting pg original for our column
 		if strings.Contains(column.OriginalType, pgPrefix) {
 			return getPgTypeFor(ytType)
 		}
@@ -46,7 +46,7 @@ func getPgTypeFor(ytType schema.Type) string {
 	if ytType == schema.TypeDatetime || ytType == schema.TypeTimestamp {
 		return pgTimestamp
 	}
-	//may be throw exception here? then need to change protocol
+	// may be throw exception here? then need to change protocol
 	return pgText
 }
 

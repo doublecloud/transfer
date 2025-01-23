@@ -122,7 +122,7 @@ func (p *ConfluentSrImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeI
 	return result
 }
 
-func NewConfluentSchemaRegistryImpl(srURL string, caCert string, username string, password string, SendSrNotFoundToUnparsed bool, logger log.Logger) *ConfluentSrImpl {
+func NewConfluentSchemaRegistryImpl(srURL string, caCert string, username string, password string, sendSrNotFoundToUnparsed bool, logger log.Logger) *ConfluentSrImpl {
 	client, err := confluent.NewSchemaRegistryClientWithTransport(srURL, caCert, logger)
 	if err != nil {
 		logger.Warnf("Unable to create schema registry client: %v", err)
@@ -132,7 +132,7 @@ func NewConfluentSchemaRegistryImpl(srURL string, caCert string, username string
 	return &ConfluentSrImpl{
 		logger:                   logger,
 		SchemaRegistryClient:     client,
-		SendSrNotFoundToUnparsed: SendSrNotFoundToUnparsed,
+		SendSrNotFoundToUnparsed: sendSrNotFoundToUnparsed,
 		inMDBuilder:              newMDBuilder(),
 	}
 }

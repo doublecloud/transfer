@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// legacy thing - used only for back-compatiblity command-line tools pg*
+// legacy thing - used only for back-compatiblity command-line tools pg*.
 type DBConfig struct {
 	DBHost     string   `json:"db_host" yaml:"db_host"`
 	DBPort     int      `json:"db_port" yaml:"db_port"`

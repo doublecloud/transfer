@@ -89,7 +89,7 @@ func TestNativeS3PathsAreUnescaped(t *testing.T) {
 		Region:           aws.String(sqsRegion),
 		S3ForcePathStyle: aws.Bool(src.ConnectionConfig.S3ForcePathStyle),
 		Credentials: credentials.NewStaticCredentials(
-			sqsUser, string(sqsQueueName), "",
+			sqsUser, sqsQueueName, "",
 		),
 	})
 	require.NoError(t, err)

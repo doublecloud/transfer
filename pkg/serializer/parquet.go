@@ -15,7 +15,7 @@ type parquetStreamSerializer struct {
 	tableSchema abstract.FastTableSchema
 }
 
-// works via stream serializer
+// works via stream serializer.
 type parquetBatchSerializer struct {
 	schema      *parquet.Schema
 	tableSchema abstract.FastTableSchema

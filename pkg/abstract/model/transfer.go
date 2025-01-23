@@ -38,7 +38,7 @@ const (
 	//
 	// Zero value is reserved and MUST NOT be used.
 	//
-	// When incrementing this value, DO ADD a link to the function(s) implementing this fallback to CHANGELOG.md in the current directory
+	// When incrementing this value, DO ADD a link to the function(s) implementing this fallback to CHANGELOG.md in the current directory.
 	LatestVersion int = 10
 	// NewTransfersVersion is the version of the typesystem set for new transfers. It must be less or equal to the LatestVersion.
 	//
@@ -112,7 +112,7 @@ func (f *Transfer) WithDefault() {
 // For now, it's called:
 // - in repository, when building transfer object from the db
 // - in transitive uploading, when creating synthetic transfer
-// - in e2e-tests, when building transfer object from endpoints (helpers: MakeTransfer/InitSrcDst)
+// - in e2e-tests, when building transfer object from endpoints (helpers: MakeTransfer/InitSrcDst).
 func (f *Transfer) FillDependentFields() {
 	if f.TypeSystemVersion == 0 {
 		// the LatestVersion is used here instead of the NewTransfersVersion for test purposes
@@ -256,7 +256,7 @@ func (f *Transfer) TransformationFromJSON(value string) error {
 	return nil
 }
 
-// IsTransitional show transfer that used by kostya and burn our pukans
+// IsTransitional show transfer that used by kostya and burn our pukans.
 func (f *Transfer) IsTransitional() bool {
 	if _, ok := f.Src.(TransitionalEndpoint); ok {
 		return true
@@ -405,7 +405,7 @@ func (f *Transfer) Include(tID abstract.TableID) bool {
 
 // SystemLabel method is used to access system labels for transfer.
 // System labels are special reserved labels which are used to control some
-// hidden experimental transfer features
+// hidden experimental transfer features.
 func (f *Transfer) SystemLabel(name SystemLabel) (string, error) {
 	labelMap := map[string]string{}
 	if err := json.Unmarshal([]byte(f.Labels), &labelMap); err != nil {

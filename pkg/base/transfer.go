@@ -106,7 +106,7 @@ func NewBatchFromBatches(batches []EventBatch) EventBatch {
 	return &iteratorOverBatched{batches: batches, iter: -1}
 }
 
-// Support legacy
+// Support legacy.
 type SupportsOldChangeItem interface {
 	Event
 	ToOldChangeItem() (*abstract.ChangeItem, error)
@@ -118,13 +118,13 @@ type LogPosition interface {
 	Compare(otherPosition LogPosition) (int, error)
 }
 
-// Support legacy
+// Support legacy.
 type SupportsOldLSN interface {
 	LogPosition
 	ToOldLSN() (uint64, error) // To ChangeItem.LSN
 }
 
-// Support legacy
+// Support legacy.
 type SupportsOldCommitTime interface {
 	LogPosition
 	ToOldCommitTime() (uint64, error) // To ChangeItem.CommitTime
@@ -147,7 +147,7 @@ type TransactionalEvent interface {
 	Transaction() Transaction
 }
 
-// For any event source, replication, snapshot, etc
+// For any event source, replication, snapshot, etc.
 type EventSource interface {
 	Running() bool
 	Start(ctx context.Context, target EventTarget) error
@@ -159,7 +159,7 @@ type Discoverable interface {
 }
 
 // Reporting of progress for not endless event sources
-// Like snapshots, schema creation, etc
+// Like snapshots, schema creation, etc.
 type ProgressableEventSource interface {
 	EventSource
 	Progress() (EventSourceProgress, error)
@@ -197,7 +197,7 @@ func (progress *DefaultEventSourceProgress) Total() uint64 {
 	return progress.total
 }
 
-// abstract.AsyncSink for abstract2
+// abstract.AsyncSink for abstract2.
 type EventTarget interface {
 	io.Closer
 	AsyncPush(input EventBatch) chan error

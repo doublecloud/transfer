@@ -27,7 +27,7 @@ func HostPort(host string, port string) error {
 }
 
 func Host(host string) error {
-	matchedHostname, _ := regexp.Match(hostnameRegex, []byte(host))
+	matchedHostname, _ := regexp.MatchString(hostnameRegex, host)
 	if !matchedHostname {
 		// host is ip
 		if ip := net.ParseIP(host); ip == nil {

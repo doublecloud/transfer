@@ -34,7 +34,7 @@ func init() {
 
 const ProviderType = abstract.ProviderType("kafka")
 
-// To verify providers contract implementation
+// To verify providers contract implementation.
 var (
 	_ providers.Replication = (*Provider)(nil)
 	_ providers.Sniffer     = (*Provider)(nil)

@@ -57,10 +57,6 @@ func (g *FuncGauge) isMemOnly() bool {
 	return g.memOnly
 }
 
-func (g *FuncGauge) setMemOnly() {
-	g.memOnly = true
-}
-
 // MarshalJSON implements json.Marshaler.
 func (g *FuncGauge) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {

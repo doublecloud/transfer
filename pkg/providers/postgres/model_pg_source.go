@@ -173,7 +173,7 @@ func (s *PgSource) FillDependentFields(transfer *model.Transfer) {
 	}
 }
 
-// AllHosts - function to move from legacy 'Host' into modern 'Hosts'
+// AllHosts - function to move from legacy 'Host' into modern 'Hosts'.
 func (s *PgSource) AllHosts() []string {
 	return utils.HandleHostAndHosts(s.Host, s.Hosts)
 }

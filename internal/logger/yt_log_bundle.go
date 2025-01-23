@@ -20,7 +20,7 @@ type ytLogBundleImpl struct {
 }
 
 // NewYtLogBundle constructs LogBundle from two loggers: original one and separate logger for YT. Acts like
-// standard zap.Must(config), but hooks system log calls "With" to apply to zap.Must(ytConfig)
+// standard zap.Must(config), but hooks system log calls "With" to apply to zap.Must(ytConfig).
 func NewYtLogBundle(log, ytLogger log.Logger) YtLogBundle {
 	return &ytLogBundleImpl{
 		Logger:   log,
@@ -38,13 +38,13 @@ func (l *ytLogBundleImpl) With(fields ...log.Field) log.Logger {
 	return &lCopy
 }
 
-// ExtractYTLogger extracts preconfigured YT logger with corresponding registered 'With' calls
+// ExtractYTLogger extracts preconfigured YT logger with corresponding registered 'With' calls.
 func (l *ytLogBundleImpl) ExtractYTLogger() log.Logger {
 	return l.ytLogger
 }
 
 // ExtractYTLogger is a helper function to extract YT log. If the `lgr` parameter is not of thge type
-// logger.YtLogBundle, then the log returned itself, otherwise log for YT is returned
+// logger.YtLogBundle, then the log returned itself, otherwise log for YT is returned.
 func ExtractYTLogger(lgr log.Logger) log.Logger {
 	if ytLogBundle, ok := lgr.(YtLogBundle); ok {
 		lgr.Infof("YT Logger extracted successfully")

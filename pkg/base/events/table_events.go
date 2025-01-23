@@ -76,7 +76,7 @@ func (b *insertsBatch) MarshalYSON(w *yson.Writer) error {
 			case types.UInt32Value:
 				w.Uint64(uint64(*v.UInt32Value()))
 			case types.UInt64Value:
-				w.Uint64(uint64(*v.UInt64Value()))
+				w.Uint64(*v.UInt64Value())
 			case types.FloatValue:
 				w.Float64(float64(*v.FloatValue()))
 			case types.DoubleValue:

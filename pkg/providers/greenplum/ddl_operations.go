@@ -140,7 +140,7 @@ func copyTmpTableToTarget(ctx context.Context, schemaCI *abstract.ChangeItem, co
 	return nil
 }
 
-// InsertQueryColumns returns a set of columns (fields, not values) for an INSERT query. Auto-generated columns are removed from the result
+// InsertQueryColumns returns a set of columns (fields, not values) for an INSERT query. Auto-generated columns are removed from the result.
 func InsertQueryColumns(ci *abstract.ChangeItem) []string {
 	result := make([]string, 0)
 	for i := range ci.TableSchema.Columns() {
@@ -154,12 +154,12 @@ func InsertQueryColumns(ci *abstract.ChangeItem) []string {
 	return result
 }
 
-// InsertFromSelectQuery returns a `INSERT INTO ... SELECT FROM` SQL query
+// InsertFromSelectQuery returns a `INSERT INTO ... SELECT FROM` SQL query.
 func InsertFromSelectQuery(tableDst string, tableSrc string, columnNames []string) string {
 	return fmt.Sprintf(`INSERT INTO %[1]s(%[2]s) SELECT %[2]s FROM %[3]s`, tableDst, strings.Join(columnNames, ", "), tableSrc)
 }
 
-// DropTableQuery returns a `DROP TABLE IF EXISTS` SQL query. So the resulting query is "ensuring", not "imperative"
+// DropTableQuery returns a `DROP TABLE IF EXISTS` SQL query. So the resulting query is "ensuring", not "imperative".
 func DropTableQuery(tableFQTN string) string {
 	return fmt.Sprintf(`DROP TABLE IF EXISTS %s`, tableFQTN)
 }

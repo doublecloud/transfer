@@ -28,7 +28,7 @@ const (
 	DefaultTimeout = 3 * time.Minute
 )
 
-// test runner
+// test runner.
 func TestSingleStaticTable(t *testing.T) {
 	t.Run("Simple", simple)
 	t.Run("NilConfigNotAllowed", nilConfigNotAllowed)
@@ -44,7 +44,7 @@ func TestSingleStaticTable(t *testing.T) {
 
 // Utilities
 
-// Haskell-like map :: (a -> b) -> [a] -> [b]
+// Haskell-like map :: (a -> b) -> [a] -> [b].
 func mapValuesToChangeItems(f func([]interface{}) abstract.ChangeItem) func([][]interface{}) []abstract.ChangeItem {
 	return func(ls [][]interface{}) []abstract.ChangeItem {
 		var result []abstract.ChangeItem
@@ -55,7 +55,7 @@ func mapValuesToChangeItems(f func([]interface{}) abstract.ChangeItem) func([][]
 	}
 }
 
-// initializes YT client and sinker config
+// initializes YT client and sinker config.
 func initYt(t *testing.T, path string) (testCfg yt2.YtDestinationModel, client yt.Client) {
 	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
 		Path:          path,
@@ -75,7 +75,7 @@ func initYt(t *testing.T, path string) (testCfg yt2.YtDestinationModel, client y
 }
 
 // create schema config and change items generator common for tests
-// Schema 1: key-value schema where key is designated as primary key
+// Schema 1: key-value schema where key is designated as primary key.
 type arcWarden struct {
 	Key int32  `yson:"key"`
 	Val string `yson:"val"`
@@ -96,7 +96,7 @@ var toArcWardenItems = mapValuesToChangeItems(func(values []interface{}) abstrac
 	}
 })
 
-// Schema 2: the same scheme, but 'key' is not designated as primary
+// Schema 2: the same scheme, but 'key' is not designated as primary.
 type withoutKeys struct {
 	Key int32  `yson:"key"`
 	Val string `yson:"val"`
@@ -117,7 +117,7 @@ var toWithoutKeysItems = mapValuesToChangeItems(func(values []interface{}) abstr
 	}
 })
 
-// Schema 3: all keys schema
+// Schema 3: all keys schema.
 type allKeys struct {
 	Key int32 `yson:"K"`
 	Val int32 `yson:"V"`
@@ -138,7 +138,7 @@ var toAllKeysSchema = mapValuesToChangeItems(func(values []interface{}) abstract
 	}
 })
 
-// tests
+// tests.
 func simple(t *testing.T) {
 	// create single static table for change item consumption
 	path := ypath.Path("//home/cdc/test/TM-1572")

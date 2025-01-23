@@ -17,7 +17,7 @@ const (
 	windowsOS = "windows"
 )
 
-// FindYa returns path to ya for arcadia root at the target path
+// FindYa returns path to ya for arcadia root at the target path.
 func FindYa(path string) (string, error) {
 	arcadiaRoot, err := FindArcadiaRoot(path)
 	if err != nil {
@@ -27,7 +27,7 @@ func FindYa(path string) (string, error) {
 	return yaForPath(arcadiaRoot)
 }
 
-// Ya returns "ya" path for current Arcadia root
+// Ya returns "ya" path for current Arcadia root.
 func Ya() (string, error) {
 	yaOnce.Do(func() {
 		var arcadiaRoot string

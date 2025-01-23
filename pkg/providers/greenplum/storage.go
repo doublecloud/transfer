@@ -400,7 +400,7 @@ func (s *Storage) SetShardingContext(shardedState []byte) error {
 }
 
 // Named BeginGPSnapshot to NOT match abstract.SnapshotableStorage;
-// BeginGPSnapshot starts a Greenplum cluster-global transaction;
+// BeginGPSnapshot starts a Greenplum cluster-global transaction;.
 func (s *Storage) BeginGPSnapshot(ctx context.Context, tables []abstract.TableDescription) error {
 	if err := s.ensureCoordinatorTx(ctx); err != nil {
 		return xerrors.Errorf("failed to start a transaction on Greenplum %s: %w", Coordinator().String(), err)
@@ -452,7 +452,7 @@ func (s *Storage) ensureCoordinatorTx(ctx context.Context) error {
 }
 
 // Named EndGPSnapshot to NOT match abstract.SnapshotableStorage;
-// EndGPSnapshot ceases a Greenplum cluster-global transaction;
+// EndGPSnapshot ceases a Greenplum cluster-global transaction;.
 func (s *Storage) EndGPSnapshot(ctx context.Context) error {
 	s.livenessMonitor.Close()
 

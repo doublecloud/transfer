@@ -80,33 +80,33 @@ func BenchmarkMutex1000_100_20_20(b *testing.B)        { lockByOneMutex(1000, 10
 func BenchmarkMapWithMutex1000_100_20_20(b *testing.B) { lockByMapWithMutex(1000, 100, 20, 20) }
 func BenchmarkMapMutex1000_100_20_20(b *testing.B)     { lockByMapMutex(1000, 100, 20, 20) }
 
-// less key, more conflict for map key
+// less key, more conflict for map key.
 func BenchmarkMutex1000_20_20_20(b *testing.B)        { lockByOneMutex(1000, 20, 20, 20) }
 func BenchmarkMapWithMutex1000_20_20_20(b *testing.B) { lockByMapWithMutex(1000, 20, 20, 20) }
 func BenchmarkMapMutex1000_20_20_20(b *testing.B)     { lockByMapMutex(1000, 20, 20, 20) }
 
-// less key, more goroutine, more conflict for map key
+// less key, more goroutine, more conflict for map key.
 func BenchmarkMutex1000_20_40_20(b *testing.B)        { lockByOneMutex(1000, 20, 40, 20) }
 func BenchmarkMapWithMutex1000_20_40_20(b *testing.B) { lockByMapWithMutex(1000, 20, 40, 20) }
 func BenchmarkMapMutex1000_20_40_20(b *testing.B)     { lockByMapMutex(1000, 20, 40, 20) }
 
 // even we want to use map to avoid unnecessary lock
-// if case of only 2 entries, a lot of locking occurs
+// if case of only 2 entries, a lot of locking occurs.
 func BenchmarkMutex1000_2_40_20(b *testing.B)        { lockByOneMutex(1000, 2, 40, 20) }
 func BenchmarkMapWithMutex1000_2_40_20(b *testing.B) { lockByMapWithMutex(1000, 2, 40, 20) }
 func BenchmarkMapMutex1000_2_40_20(b *testing.B)     { lockByMapMutex(1000, 2, 40, 20) }
 
-// longer time per job, more conflict for map key
+// longer time per job, more conflict for map key.
 func BenchmarkMutex1000_20_40_60(b *testing.B)        { lockByOneMutex(1000, 20, 40, 60) }
 func BenchmarkMapWithMutex1000_20_40_60(b *testing.B) { lockByMapWithMutex(1000, 20, 40, 60) }
 func BenchmarkMapMutex1000_20_40_60(b *testing.B)     { lockByMapMutex(1000, 20, 40, 60) }
 
-// much more actions
+// much more actions.
 func BenchmarkMutex10000_20_40_20(b *testing.B)        { lockByOneMutex(10000, 20, 40, 20) }
 func BenchmarkMapWithMutex10000_20_40_20(b *testing.B) { lockByMapWithMutex(10000, 20, 40, 20) }
 func BenchmarkMapMutex10000_20_40_20(b *testing.B)     { lockByMapMutex(10000, 20, 40, 20) }
 
-// load should be larger than 0
+// load should be larger than 0.
 func splitLoad(load, buckets int) []int {
 	result := make([]int, buckets)
 	avg := load / buckets

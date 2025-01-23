@@ -59,26 +59,3 @@ func copySlice(src []byte) []byte {
 	copy(dst, src)
 	return dst
 }
-
-func copyBytes(source []byte) []byte {
-	dup := make([]byte, len(source))
-	copy(dup, source)
-	return dup
-}
-
-func newConsoleLogger() log.Logger {
-	levels := getEnvLogLevels()
-	if os.Getenv("CONSOLE_LOG_LEVEL") != "" {
-		levels = parseLevel(os.Getenv("CONSOLE_LOG_LEVEL"))
-	}
-
-	levelEnabler := levelEnablerFactory(levels.Zap)
-
-	encoderConfig := zap.CLIConfig(levels.Log).EncoderConfig
-	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
-
-	encoder := zapcore.NewConsoleEncoder(encoderConfig)
-	writeSyncer := zapcore.AddSync(os.Stdout)
-
-	return newLogger(zapcore.NewCore(encoder, writeSyncer, levelEnabler))
-}

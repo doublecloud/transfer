@@ -69,7 +69,7 @@ func (l *SnapshotLoader) GetShardState(ctx context.Context) error {
 	return nil
 }
 
-// OperationStateExists returns true if the state of the operation of the given task exists (is not nil)
+// OperationStateExists returns true if the state of the operation of the given task exists (is not nil).
 func (l *SnapshotLoader) OperationStateExists(ctx context.Context) (bool, error) {
 	result, err := backoff.RetryNotifyWithData(
 		func() (bool, error) {

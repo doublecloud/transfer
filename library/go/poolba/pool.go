@@ -8,13 +8,13 @@ import (
 
 var errPoolClosed = errors.New("pool closed")
 
-// ConstructorFunc will be called for any uninitialized resource upon fetch from pool
+// ConstructorFunc will be called for any uninitialized resource upon fetch from pool.
 type ConstructorFunc[T any] func(context.Context) (T, error)
 
-// DestructorFunc will be called for any closed resource before it will be returned to pool
+// DestructorFunc will be called for any closed resource before it will be returned to pool.
 type DestructorFunc[T any] func(T) error
 
-// Pool represents thread-safe generic resource pool of fixed size
+// Pool represents thread-safe generic resource pool of fixed size.
 type Pool[T any] struct {
 	// cancel context to be used on pool close
 	closeCtx  context.Context
@@ -30,7 +30,7 @@ type Pool[T any] struct {
 	coldResources chan *Resource[T]
 }
 
-// PoolOf returns new generic resource pool of given size
+// PoolOf returns new generic resource pool of given size.
 func PoolOf[T any](size int, opts ...PoolOpt[T]) (*Pool[T], error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -70,7 +70,7 @@ func PoolOf[T any](size int, opts ...PoolOpt[T]) (*Pool[T], error) {
 // Result resource cannot be acquired by another thread,
 // so it must be eventually returned back to pool via Vacay method.
 // This method will block code execution until resource is available,
-// given context canceled or pool closed
+// given context canceled or pool closed.
 func (p *Pool[T]) Borrow(ctx context.Context) (*Resource[T], error) {
 	// checking hot resources first and moving forward if none available
 	select {
@@ -114,7 +114,7 @@ func (p *Pool[T]) Borrow(ctx context.Context) (*Resource[T], error) {
 }
 
 // Close closes pool entirely and destructs all initialized resources.
-// Pool cannot be used after close
+// Pool cannot be used after close.
 func (p *Pool[T]) Close() (err error) {
 	p.closeFunc()
 
@@ -134,13 +134,13 @@ func (p *Pool[T]) Close() (err error) {
 	return
 }
 
-// Resource represents generic reusable resource
+// Resource represents generic reusable resource.
 type Resource[T any] struct {
 	value *T
 	pool  *Pool[T]
 }
 
-// Value returns actual user defined generic resource
+// Value returns actual user defined generic resource.
 func (r *Resource[T]) Value() T {
 	return *r.value
 }
@@ -148,14 +148,14 @@ func (r *Resource[T]) Value() T {
 // Vacay returns resource back to pool.
 // It can be reused without initialization later by another thread.
 // Be aware that resource can be vacated exactly once
-// to avoid data race conditions and resource leaks
+// to avoid data race conditions and resource leaks.
 func (r *Resource[T]) Vacay() {
 	r.pool.hotResources <- r
 }
 
 // Close deinitializes resource and returns it back to pool.
 // Be aware that resource can to closed exactly once
-// to avoid data race conditions and resource leaks
+// to avoid data race conditions and resource leaks.
 func (r *Resource[T]) Close() error {
 	err := r.pool.destructor(*r.value)
 	r.value = nil

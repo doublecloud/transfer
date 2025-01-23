@@ -5,7 +5,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 )
 
-// NativeSerializer - for legacy compatibility: transfers named: realty-rent-prod/realty-rent-test
+// NativeSerializer - for legacy compatibility: transfers named: realty-rent-prod/realty-rent-test.
 type NativeSerializer struct {
 	batchingSettings model.Batching
 	saveTxOrder      bool
@@ -26,7 +26,7 @@ func (s *NativeSerializer) serializeOneTableID(input []abstract.ChangeItem) []Se
 }
 
 // Serialize - serializes []abstract.ChangeItem into map: topic->[]SerializedMessage via json marshalling
-// naive implementation - can be boosted by multi-threading
+// naive implementation - can be boosted by multi-threading.
 func (s *NativeSerializer) Serialize(input []abstract.ChangeItem) (map[abstract.TablePartID][]SerializedMessage, error) {
 	if len(input) == 0 {
 		return nil, nil

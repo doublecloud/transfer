@@ -371,11 +371,9 @@ func expectedAnyCastReplication(value any, oid pgtype.OID, colSchema *abstract.C
 			unmarshalled, successful, unmarshalErr := tryUnmarshalComplexType(v, oid, connInfo)
 			if unmarshalErr != nil {
 				logger.Log.Warn("failed to unpack complex types", log.Error(unmarshalErr))
-			} else {
-				if successful {
-					result, err = unmarshalled, nil
-					break
-				}
+			} else if successful {
+				result, err = unmarshalled, nil
+				break
 			}
 		}
 		switch ClearOriginalType(colSchema.OriginalType) {

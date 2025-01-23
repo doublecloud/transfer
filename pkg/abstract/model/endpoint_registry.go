@@ -12,13 +12,13 @@ var (
 )
 
 // RegisterSource will add new source factory for specific provider type
-// this should be placed inside provider `init() func`
+// this should be placed inside provider `init() func`.
 func RegisterSource(typ abstract.ProviderType, fac func() Source) {
 	knownSources[typ] = fac
 }
 
 // RegisterDestination will add new destination factory for specific provider type
-// this should be placed inside provide `init() func`
+// this should be placed inside provide `init() func`.
 func RegisterDestination(typ abstract.ProviderType, fac func() Destination) {
 	knownDestinations[typ] = fac
 }

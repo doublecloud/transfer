@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/test/yatest"
 )
 
-var isRunningUnderGotest bool
+var isRunningUnderGoTest bool
 
 type canonObject struct {
 	TestName string      `json:"test_name"`
@@ -76,7 +76,7 @@ func saveObject(t *testing.T, item interface{}) {
 }
 
 func SaveJSON(t *testing.T, item interface{}) {
-	if !isRunningUnderGotest {
+	if !isRunningUnderGoTest {
 		saveObject(t, item)
 	}
 }
@@ -96,7 +96,7 @@ func getCanonDestination(t *testing.T, canonFilename string) string {
 }
 
 func SaveFile(t *testing.T, canonFilename string, opts ...Option) {
-	if isRunningUnderGotest {
+	if isRunningUnderGoTest {
 		return
 	}
 

@@ -67,7 +67,7 @@ func marshalTime(colType *columntypes.TypeDescription, v time.Time, buf *bytes.B
 	case colType.IsDateTime64:
 		fullTS := v.UnixNano()
 		if colType.DateTime64Precision() > 0 && colType.DateTime64Precision() < 9 {
-			fullTS = fullTS / int64(math.Pow(10, float64(9-colType.DateTime64Precision())))
+			fullTS /= int64(math.Pow(10, float64(9-colType.DateTime64Precision())))
 		}
 		fmt.Fprintf(buf, "%d", fullTS)
 	case colType.IsDate:
@@ -120,7 +120,7 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 				break
 			}
 			buf.WriteString(`"`)
-			if bytes.ContainsRune([]byte(v), rune('"')) || bytes.ContainsRune([]byte(v), rune('\\')) {
+			if strings.ContainsRune(v, rune('"')) || strings.ContainsRune(v, rune('\\')) {
 				// We  have a " symbol in value, so we must quote string before submit it
 				// we want to preserve bytes as is since, clickhouse can accept them and store properly
 				// that's why we use this custom quote func
@@ -204,7 +204,7 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 			}
 		case []byte:
 			if columntypes.LegacyIsDecimal(colSchema.OriginalType) || colType.IsDecimal {
-				buf.WriteString(string(v))
+				buf.Write(v)
 				break
 			}
 			if colType.IsArray {
@@ -256,7 +256,7 @@ func isNilValue(v interface{}) bool {
 	return vv.Kind() == reflect.Pointer && vv.IsNil()
 }
 
-// questionableQuoter is like strconv.Quote, but do not try to escape non-utf8 chars
+// questionableQuoter is like strconv.Quote, but do not try to escape non-utf8 chars.
 func questionableQuoter(v string) string {
 	return strings.ReplaceAll(strings.ReplaceAll(v, `\`, `\\`), `"`, `\"`)
 }

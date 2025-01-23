@@ -38,7 +38,7 @@ var primitiveTypesMap = map[schema.Type]parquet.Node{
 }
 
 // Parses map[string] -> parquet.Row. Doesn't support repeated
-// fields or composite values. Json fields are saved as string
+// fields or composite values. Json fields are saved as string.
 func toParquetValue(column parquet.Field, col abstract.ColSchema, value any, idx int) (*parquet.Value, error) {
 	defLevel := 0
 	var leafValue parquet.Value

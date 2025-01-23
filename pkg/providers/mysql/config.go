@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// TODO: remove
+// TODO: remove.
 type Config struct {
 	Addr     string
 	User     string

@@ -23,9 +23,7 @@ var (
 	DeltaConfigCheckpointInterval = &TableConfig[int]{
 		Key:          "checkpointInterval",
 		DefaultValue: "10",
-		FromString: func(s string) (int, error) {
-			return strconv.Atoi(s)
-		},
+		FromString:   strconv.Atoi,
 	}
 	EnableExpiredLogCleanupProp = &TableConfig[bool]{
 		Key:          "enableExpiredLogCleanup",
@@ -75,7 +73,7 @@ var timeMultiplexer = map[string]int{
 
 // The string value of this config has to have the following format: interval <number> <unit>.
 // Where <unit> is either week, day, hour, second, millisecond, microsecond or nanosecond.
-// If it's missing in metadata then the `self.default` is used
+// If it's missing in metadata then the `self.default` is used.
 func parseDuration(s string) (time.Duration, error) {
 	fields := strings.Fields(strings.ToLower(s))
 	if len(fields) != 3 {

@@ -13,6 +13,7 @@ import (
 func TestRawCdcDocGroupTransformer(t *testing.T) {
 	t.Parallel()
 	t.Run("duplicate keys fail", func(t *testing.T) {
+		t.Parallel()
 		_, err := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys: []string{"key1", "key1"},
 		})
@@ -20,6 +21,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("duplicate keys and non-keys fail", func(t *testing.T) {
+		t.Parallel()
 		_, err := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys:   []string{"key1", "key3"},
 			Fields: []string{"key1"},
@@ -28,6 +30,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("different keys and special fields ok", func(t *testing.T) {
+		t.Parallel()
 		_, err := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys:   []string{"key3", "key2"},
 			Fields: []string{"etl_updated_at"},
@@ -36,6 +39,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Suitable check by tables", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Tables: filter.Tables{IncludeTables: []string{"table1"}},
 			Keys:   []string{"col1", "col2", "etl_updated_at"},
@@ -62,6 +66,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Wrong columns fail transfer", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Tables: filter.Tables{IncludeTables: []string{"table1"}},
 			Keys:   []string{"col1", "col2"},
@@ -82,6 +87,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Values are parsed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys:   []string{"col1", "col2"},
 			Fields: []string{"col3"},
@@ -114,17 +120,18 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("Different schemas are processed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys:   []string{"col1", "col2"},
 			Fields: []string{"col3"},
 		})
 
 		testChangeItems := []abstract.ChangeItem{
-			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),   //schema 1
-			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}),  //schema 1, diff values
-			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey2, col5NotKey, restCol}), //schema 1, diff values
-			dummyItem([]colParams{col1NotKey2, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), //schema 2 - diff type of col2
-			dummyItem([]colParams{col2Key, col1NotKey, col3Key, restCol}),                                 //schema 3
+			dummyItem([]colParams{col1NotKey, col2NotKey, col3NotKey, col4NotKey, col5NotKey, restCol}),   // schema 1
+			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}),  // schema 1, diff values
+			dummyItem([]colParams{col1NotKey, col2NotKey2, col3NotKey, col4NotKey2, col5NotKey, restCol}), // schema 1, diff values
+			dummyItem([]colParams{col1NotKey2, col2NotKey2, col3NotKey, col4NotKey, col5NotKey, restCol}), // schema 2 - diff type of col2
+			dummyItem([]colParams{col2Key, col1NotKey, col3Key, restCol}),                                 // schema 3
 		}
 
 		differentSchemas := make([]string, 0)
@@ -147,6 +154,7 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 	})
 
 	t.Run("System events schema fixed", func(t *testing.T) {
+		t.Parallel()
 		transformer, _ := NewCdcHistoryGroupTransformer(RawCDCDocGrouperConfig{
 			Keys: []string{"col1", "col2"},
 		})
@@ -173,8 +181,8 @@ func TestRawCdcDocGroupTransformer(t *testing.T) {
 }
 
 func getExpectedValuesCdc(chI abstract.ChangeItem, chItemNumber int) map[string]interface{} {
-	var valuesByColName = make(map[string]interface{})
-	var docField = make(map[string]interface{})
+	valuesByColName := make(map[string]interface{})
+	docField := make(map[string]interface{})
 
 	var colNames []string
 	var colvalues []interface{}
@@ -193,6 +201,6 @@ func getExpectedValuesCdc(chI abstract.ChangeItem, chItemNumber int) map[string]
 	}
 	valuesByColName[etlUpdatedField] = time.Unix(0, int64(updateTime))
 	valuesByColName[rawDataField] = docField
-	valuesByColName[deletedField] = chItemNumber == 0 //chItem 0 is DeleteKind
+	valuesByColName[deletedField] = chItemNumber == 0 // chItem 0 is DeleteKind
 	return valuesByColName
 }

@@ -13,6 +13,6 @@ const (
 	Source Category = "source"
 	// Target is for errors originating from the target endpoint (its configuration, runtime properties, etc.)
 	Target Category = "target"
-	// Internal is for errors caused by the Transfer service's infrastructure and unfixable by the user
+	// Internal is for errors caused by the Transfer service's infrastructure and unfixable by the user.
 	Internal Category = "internal"
 )

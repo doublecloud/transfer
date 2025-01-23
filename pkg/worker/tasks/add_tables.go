@@ -2,7 +2,6 @@ package tasks
 
 import (
 	"context"
-	"encoding/json"
 	"sort"
 
 	"github.com/doublecloud/transfer/internal/logger"
@@ -142,14 +141,4 @@ func setSourceTables(source model.Source, tableSet map[string]bool) {
 	case *postgres.PgSource:
 		src.DBTables = result
 	}
-}
-
-func prepareSourceParamsToStore(source model.Source) string {
-	var params string
-	switch src := source.(type) {
-	case *postgres.PgSource:
-		j, _ := json.Marshal(src)
-		params = string(j)
-	}
-	return params
 }

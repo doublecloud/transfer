@@ -73,7 +73,7 @@ func runTwoConversions(t *testing.T, pgSnapshotChangeItem []byte, isWipeOriginal
 // - debeziumMsg ->
 // - changeItem (without original_type_info) ->
 // - debeziumMsg ->
-// - changeItem
+// - changeItem.
 func TestEmitterCommonWithWipe(t *testing.T) {
 	pgSnapshotChangeItem, err := os.ReadFile(yatest.SourcePath("transfer_manager/go/pkg/debezium/pg/tests/testdata/emitter_chain_test__canon_change_item_original.txt"))
 	require.NoError(t, err)
@@ -95,7 +95,7 @@ func TestEmitterCommonWithWipe(t *testing.T) {
 // - debeziumMsg ->
 // - changeItem (with original_type_info) ->
 // - debeziumMsg ->
-// - changeItem
+// - changeItem.
 func TestEmitterCommonWithoutWipe(t *testing.T) {
 	pgSnapshotChangeItem, err := os.ReadFile(yatest.SourcePath("transfer_manager/go/pkg/debezium/pg/tests/testdata/emitter_chain_test__canon_change_item_original.txt"))
 	require.NoError(t, err)

@@ -52,7 +52,7 @@ type ProtoParserConfig struct {
 	AddSyntheticKeys   bool
 }
 
-// SetDescriptors sets ProtoMessageDesc & ScannerMessageDesc
+// SetDescriptors sets ProtoMessageDesc & ScannerMessageDesc.
 func (c *ProtoParserConfig) SetDescriptors(descFileContent []byte, messageName string, pkgType MessagePackageType) error {
 	rootMsgDesc, err := extractMessageDesc(descFileContent, messageName)
 	if err != nil {

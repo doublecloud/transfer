@@ -11,7 +11,7 @@ type TransferHeartbeat struct {
 	LastError  string
 }
 
-// StatusMessageProvider set time-based status for particular transfer
+// StatusMessageProvider set time-based status for particular transfer.
 type StatusMessageProvider interface {
 	// OpenStatusMessage open new line of error status message
 	// for example: add timeout error for SOURCE db category
@@ -24,7 +24,7 @@ type StatusMessageProvider interface {
 }
 
 // TransferStatus main coordinator interface used by transfer
-// just to start / stop transfer and move it via transfer workflow
+// just to start / stop transfer and move it via transfer workflow.
 type TransferStatus interface {
 	// SetStatus move transfer to certain status
 	SetStatus(transferID string, status model.TransferStatus) error
@@ -34,7 +34,7 @@ type TransferStatus interface {
 	TransferHealth(ctx context.Context, transferID string, health *TransferHeartbeat) error
 }
 
-// TransferState is to manage transfer state, simple K-V structure
+// TransferState is to manage transfer state, simple K-V structure.
 type TransferState interface {
 	// GetTransferState return known transfer state
 	GetTransferState(id string) (map[string]*TransferStateData, error)

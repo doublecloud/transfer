@@ -13,8 +13,8 @@ import (
 	io "io"
 	reflect "reflect"
 
-	log "go.ytsaurus.tech/library/go/core/log"
 	gomock "go.uber.org/mock/gomock"
+	log "go.ytsaurus.tech/library/go/core/log"
 )
 
 // MockHTTPClient is a mock of HTTPClient interface.

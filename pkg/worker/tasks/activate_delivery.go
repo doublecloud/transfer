@@ -174,7 +174,7 @@ func ActivateDelivery(ctx context.Context, task *model.TransferOperation, cp coo
 	return nil
 }
 
-// ObtainAllSrcTables uses a temporary Storage for transfer source to obtain a list of tables
+// ObtainAllSrcTables uses a temporary Storage for transfer source to obtain a list of tables.
 func ObtainAllSrcTables(transfer *model.Transfer, registry metrics.Registry) (abstract.TableMap, error) {
 	srcStorage, err := storage.NewStorage(transfer, coordinator.NewFakeClient(), registry)
 	if err != nil {

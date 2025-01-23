@@ -35,8 +35,10 @@ type Spec struct {
 
 const ReplicationStatusMessagesCategory string = "replication"
 
-const healthReportPeriod time.Duration = 1 * time.Minute
-const replicationRetryInterval time.Duration = 10 * time.Second
+const (
+	healthReportPeriod       time.Duration = 1 * time.Minute
+	replicationRetryInterval time.Duration = 10 * time.Second
+)
 
 func RunReplicationWithMeteringTags(ctx context.Context, cp coordinator.Coordinator, transfer *model.Transfer, registry metrics.Registry, runtimeTags map[string]interface{}) error {
 	metering.InitializeWithTags(transfer, nil, runtimeTags)
@@ -90,7 +92,7 @@ func replicationAttempt(ctx context.Context, cp coordinator.Coordinator, transfe
 		replicationStats.Running.Set(float64(0))
 	}()
 
-	var attemptErr error = nil
+	var attemptErr error
 
 	healthReportTicker := time.NewTicker(healthReportPeriod)
 	defer healthReportTicker.Stop()
@@ -158,7 +160,7 @@ func reportTransferHealth(ctx context.Context, cp coordinator.Coordinator, trans
 	}
 }
 
-// Does not return unless an error occurs
+// Does not return unless an error occurs.
 func iteration(ctx context.Context, cp coordinator.Coordinator, dataFlow *model.Transfer, registry metrics.Registry, lgr log.Logger) (err error) {
 	defer func() {
 		if r := recover(); r != nil {

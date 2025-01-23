@@ -137,7 +137,7 @@ func TransitUpload(ctx context.Context, cp coordinator.Coordinator, transfer mod
 	return nil
 }
 
-// TransitReupload is shitty method mainly for transfers with LB in the middle, same as TransitUpload
+// TransitReupload is shitty method mainly for transfers with LB in the middle, same as TransitUpload.
 func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, registry metrics.Registry) error {
 	snapshotLoader := NewSnapshotLoader(cp, task.OperationID, &transfer, registry)
 	if !transfer.IsMain() {
@@ -221,7 +221,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer m
 	return nil
 }
 
-// TransitionalAddTables same as above
+// TransitionalAddTables same as above.
 func TransitionalAddTables(ctx context.Context, cp coordinator.Coordinator, transfer model.Transfer, task model.TransferOperation, tables []string, registry metrics.Registry) error {
 	linkedTransfers, err := GetLeftTerminalTransfers(cp, transfer)
 	if err != nil {

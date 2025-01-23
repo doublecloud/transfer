@@ -47,21 +47,21 @@ func (f *Filter) Empty() bool {
 	return len(f.IncludeRegexp) == 0 && len(f.ExcludeRegexp) == 0
 }
 
-func NewFilter(IncludeRegexp, ExcludeRegexp []string) (Filter, error) {
+func NewFilter(includeRegexp, excludeRegexp []string) (Filter, error) {
 	res := &Filter{
-		IncludeRegexp:   IncludeRegexp,
+		IncludeRegexp:   includeRegexp,
 		compiledInclude: nil,
-		ExcludeRegexp:   ExcludeRegexp,
+		ExcludeRegexp:   excludeRegexp,
 		compiledExclude: nil,
 	}
-	for _, reg := range IncludeRegexp {
+	for _, reg := range includeRegexp {
 		creg, err := regexp.Compile(reg)
 		if err != nil {
 			return *res, xerrors.Errorf("unable to compile include regexp: %s: %w", reg, err)
 		}
 		res.compiledInclude = append(res.compiledInclude, creg)
 	}
-	for _, reg := range ExcludeRegexp {
+	for _, reg := range excludeRegexp {
 		creg, err := regexp.Compile(reg)
 		if err != nil {
 			return *res, xerrors.Errorf("unable to compile exclude regexp: %s: %w", reg, err)

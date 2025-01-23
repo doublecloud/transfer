@@ -62,8 +62,8 @@ func intermediateRowFromChangeItem(ci abstract.ChangeItem) (intermediateRow, err
 		TopicName:         namespacedTopicName,
 		SourceURI:         "data-transfer",
 		SourceID:          "example-dt-source-id",
-		CommitTimestampMs: int64(message.WriteTime.UnixMilli()),
-		Offset:            int64(message.SeqNo),
+		CommitTimestampMs: message.WriteTime.UnixMilli(),
+		Offset:            message.SeqNo,
 		Shard:             int64(message.Partition),
 		Data:              message.Data,
 	}, nil

@@ -85,13 +85,13 @@ func (o *RegistryOpts) AddCollectors(
 }
 
 // SetNameSanitizer sets a functions which will be called for each metric's name.
-// It allows to alter names, for example to replace invalid characters
+// It allows to alter names, for example to replace invalid characters.
 func (o *RegistryOpts) SetNameSanitizer(v func(string) string) *RegistryOpts {
 	o.NameSanitizer = v
 	return o
 }
 
-// SetStreamFormat sets default metrics stream format
+// SetStreamFormat sets default metrics stream format.
 func (o *RegistryOpts) SetStreamFormat(format expfmt.Format) *RegistryOpts {
 	o.StreamFormat = format
 	return o

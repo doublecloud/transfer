@@ -35,7 +35,7 @@ func jsonSerializeable(val interface{}) bool {
 
 // OneofValueTypeCheckers returns checkers permitting different representations for a particular YT type
 //
-// TODO: TM-4130: switch to StrictValueTypeCheckers()
+// TODO: TM-4130: switch to StrictValueTypeCheckers().
 func OneofValueTypeCheckers() map[schema.Type]ValueTypeChecker {
 	return map[schema.Type]ValueTypeChecker{
 		schema.TypeBoolean:   strict(false),
@@ -59,7 +59,7 @@ func OneofValueTypeCheckers() map[schema.Type]ValueTypeChecker {
 	}
 }
 
-// StrictValueTypeCheckers returns checkers permitting only the single correct representation for a particular YT type
+// StrictValueTypeCheckers returns checkers permitting only the single correct representation for a particular YT type.
 func StrictValueTypeCheckers() map[schema.Type]ValueTypeChecker {
 	return map[schema.Type]ValueTypeChecker{
 		schema.TypeBoolean:   strict(false),

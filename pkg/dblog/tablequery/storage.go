@@ -6,7 +6,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 )
 
-// StorageTableQueryable is storage with table query loading
+// StorageTableQueryable is storage with table query loading.
 type StorageTableQueryable interface {
 	abstract.SampleableStorage
 

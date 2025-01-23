@@ -19,7 +19,7 @@ var _ model.Source = (*S3Source)(nil)
 
 const (
 	// defaultReadBatchSize is magic number by in-leskin, impacts how many rows we push each times
-	// we need to push rather small chunks so our bufferer can buffer effectively
+	// we need to push rather small chunks so our bufferer can buffer effectively.
 	defaultReadBatchSize = 128
 	// defaultBlockSize impacts how many bytes we read fon each request from S3 bucket
 	// its also used in replication as a mem limit to how many inflight bytes we can have.

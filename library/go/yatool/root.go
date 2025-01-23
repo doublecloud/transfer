@@ -53,7 +53,7 @@ func FindArcadiaRoot(arcPath string) (string, error) {
 	}
 }
 
-// ArcadiaRoot returns the current Arcadia root
+// ArcadiaRoot returns the current Arcadia root.
 func ArcadiaRoot() (string, error) {
 	arcadiaRootOnce.Do(func() {
 		arcadiaRoot, arcadiaRootErr = FindArcadiaRoot(".")

@@ -350,7 +350,7 @@ func (s *ClickhouseTransformer) ResultSchema(schema *abstract.TableSchema) (*abs
 	inputStructure := strings.Join(inputCols, ",")
 	cmd := exec.Command(s.clickhousePath, "local", "--input-format", "JSONEachRow", "--output-format", "JSONCompact", "--structure", inputStructure, "--query", s.query, "--no-system-tables")
 	buffer := bytes.Buffer{}
-	buffer.Write([]byte(""))
+	buffer.WriteString("")
 	cmd.Stdin = &buffer
 	output, err := cmd.CombinedOutput()
 	s.logger.Infof("exec: \n%s", strings.Join(cmd.Args, " "))

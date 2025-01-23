@@ -4,7 +4,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 )
 
-// FakeClientWithTransferState is a fake controlplane client which stores sharded object transfer state
+// FakeClientWithTransferState is a fake controlplane client which stores sharded object transfer state.
 type FakeClientWithTransferState struct {
 	coordinator.CoordinatorNoOp
 	state map[string]*coordinator.TransferStateData

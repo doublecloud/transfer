@@ -122,7 +122,7 @@ func (s *Sequencer) StartProcessing(messages []QueueMessage) error {
 		if _, ok := s.processing[partitionName]; !ok {
 			s.processing[partitionName] = &partitionToOffsets{
 				topic:             message.Topic,
-				partition:         int(message.Partition),
+				partition:         message.Partition,
 				offsets:           make([]int64, 0),
 				maxAppendedOffset: 0,
 			}

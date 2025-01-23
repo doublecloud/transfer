@@ -28,7 +28,7 @@ type IsElasticLikeDestination interface {
 	ToElasticSearchDestination() (*ElasticSearchDestination, ServerType)
 }
 
-// sourceHomoElasticSearch returns a non-nil object only for homogenous OpenSearch / ElasticSearch transfers
+// sourceHomoElasticSearch returns a non-nil object only for homogenous OpenSearch / ElasticSearch transfers.
 func srcDstHomoElasticSearch(transfer *model.Transfer) (*ElasticSearchSource, ServerType) {
 	src, srcIsElasticLike := transfer.Src.(IsElasticLikeSource)
 	_, dstIsElasticLike := transfer.Dst.(IsElasticLikeDestination)

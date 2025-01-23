@@ -147,7 +147,7 @@ func (b *JSONProperty) UnmarshalJSON(data []byte) error {
 	return xerrors.Errorf("unable to parse json property: %w", errs)
 }
 
-// JSONProperty type can be array or single string, so had to implement custom unmarshal
+// JSONProperty type can be array or single string, so had to implement custom unmarshal.
 type JSONProperty struct {
 	Type        []string `json:"type"`
 	Format      string   `json:"format"`
