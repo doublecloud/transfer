@@ -43,9 +43,9 @@ func CastToMySQL(val interface{}, typ abstract.ColSchema) string {
 			return fmt.Sprintf("X'%v'", valueHexStr)
 		}
 	}
-	if typ.DataType == string(schema.TypeAny) && !strings.HasPrefix(typ.OriginalType, "mysql:") {
+	if typ.DataType == string(schema.TypeAny) {
 		valueJSON, _ := json.Marshal(val)
-		val = string(valueJSON)
+		return quoteString(string(valueJSON))
 	}
 
 	switch v := val.(type) {
@@ -96,11 +96,6 @@ func CastToMySQL(val interface{}, typ abstract.ColSchema) string {
 	case *float64:
 		return fmt.Sprintf("%v", *v)
 	default:
-		switch typ.OriginalType {
-		case "mysql:json", "mysql:jsonb":
-			valueJSON, _ := json.Marshal(v)
-			return quoteString(string(valueJSON))
-		}
 		return fmt.Sprintf("'%v'", v)
 	}
 }

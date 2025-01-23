@@ -15,6 +15,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/format"
+	unmarshaller "github.com/doublecloud/transfer/pkg/providers/mysql/unmarshaller/replication"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/go-mysql-org/go-mysql/mysql"
@@ -169,8 +170,12 @@ func (h *binlogHandler) OnRow(event *RowsEvent) error {
 	start := time.Now()
 
 	if !h.config.IsHomo {
-		if err := CastRowsToDT(event, h.connectionParams.Location); err != nil {
+		if err := CastRowsToDT(event, h.connectionParams.Location, unmarshaller.UnmarshalHetero); err != nil {
 			return xerrors.Errorf("failed to cast mysql binlog event to YT rows: %w", err)
+		}
+	} else {
+		if err := CastRowsToDT(event, h.connectionParams.Location, unmarshaller.UnmarshalHomo); err != nil {
+			return xerrors.Errorf("failed to cast mysql binlog event to Mysql rows: %w", err)
 		}
 	}
 
