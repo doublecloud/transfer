@@ -590,6 +590,8 @@
   "library/go/test/canon/canon.go":"library/go/test/canon/canon.go",
   "library/go/test/canon/dctest.go":"cloud/doublecloud/transfer/github_os/library/go/test/canon/dctest.go",
   "library/go/test/canon/gotest.go":"library/go/test/canon/gotest.go",
+  "library/go/test/recipe":"library/go/test/recipe",
+  "library/go/test/recipe/recipe.go":"library/go/test/recipe/recipe.go",
   "library/go/test/testhelpers":"library/go/test/testhelpers",
   "library/go/test/testhelpers/recurse.go":"library/go/test/testhelpers/recurse.go",
   "library/go/test/testhelpers/remove_lines.go":"library/go/test/testhelpers/remove_lines.go",
