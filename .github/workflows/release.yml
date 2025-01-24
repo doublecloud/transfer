@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      extra_args:
+        description: Extra args for go-releaser, for example '--snapshot'
+        required: false
+        type: string
       version:
         description: Version of base Transfer image
         required: true
@@ -42,6 +46,6 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --clean
+          args: release --clean ${{ inputs.extra_args }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
