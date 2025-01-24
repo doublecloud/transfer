@@ -2,8 +2,6 @@ package consumer
 
 import (
 	"time"
-
-	"github.com/aws/aws-sdk-go/service/kinesis/kinesisiface"
 )
 
 // Option is used to override defaults when creating a new Consumer
@@ -24,7 +22,7 @@ func WithStore(store Store) Option {
 }
 
 // WithClient overrides the default client
-func WithClient(client kinesisiface.KinesisAPI) Option {
+func WithClient(client KinesisReader) Option {
 	return func(c *Consumer) {
 		c.client = client
 	}
