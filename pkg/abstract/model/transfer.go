@@ -46,7 +46,7 @@ const (
 	// 1. LatestVersion is increased & fallbacks are introduced in the first PR. NewTransfersVersion stays the same!
 	// 2. Controlplane and dataplane are deployed and dataplane now contains the fallbacks for a new version.
 	// 3. The second PR increases NewTransfersVersion. When a controlplane with this change is deployed, dataplanes already have the required fallbacks.
-	NewTransfersVersion int = 9
+	NewTransfersVersion int = 10
 )
 
 func (f *Transfer) SnapshotOnly() bool {
