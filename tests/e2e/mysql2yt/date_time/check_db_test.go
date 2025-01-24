@@ -86,7 +86,7 @@ func TestDateTime(t *testing.T) {
 		))
 	}()
 
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	ctx := context.Background()
 
