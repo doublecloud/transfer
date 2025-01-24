@@ -1,6 +1,10 @@
 on:
   workflow_call:
     inputs:
+      extra_args:
+        description: Extra args for go-releaser, for example '--snapshot'
+        required: false
+        type: string
       version:
         description: Version of base Transfer image
         required: true
