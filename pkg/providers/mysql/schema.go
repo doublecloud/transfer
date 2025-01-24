@@ -179,7 +179,7 @@ func LoadSchema(tx queryExecutor, useFakePrimaryKey bool, includeViews bool) (ab
 				tableSchema[i].FakeKey = true
 			}
 		}
-		tableCols[tID] = makeTableSchema(currSchema, uniq(keys))
+		tableCols[tID] = tableSchema
 	}
 	dbSchema := make(abstract.DBSchema)
 	for tableID, columns := range enrichExpressions(tx, tableCols) {
