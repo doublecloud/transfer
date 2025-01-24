@@ -3,7 +3,7 @@ name: Auto build and publish of Transfer For PR
 on:
   pull_request:
     branches:
-      - 'main'
+      - "*"
 
 jobs:
   trigger-build-pr:
