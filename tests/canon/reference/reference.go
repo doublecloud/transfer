@@ -3,7 +3,6 @@ package reference
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -65,7 +64,7 @@ func ReferenceTestFn(transfer *model.Transfer, sinkAsSource model.Source, items 
 				cwd, err := os.Getwd()
 				require.NoError(t, err)
 				fileForResult := filepath.Join(cwd, "result.txt")
-				require.NoError(t, ioutil.WriteFile(fileForResult, marshalledResult, 0o666))
+				require.NoError(t, os.WriteFile(fileForResult, marshalledResult, 0o666))
 
 				canon.SaveFile(t, fileForResult)
 			})

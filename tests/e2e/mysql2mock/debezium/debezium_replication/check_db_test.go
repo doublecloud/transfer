@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sync"
 	"testing"
@@ -168,7 +167,7 @@ INSERT INTO customers3 VALUES (
 
 func ReadTextFiles(paths []string, out []*string) error {
 	for index, path := range paths {
-		valArr, err := ioutil.ReadFile(yatest.SourcePath(path))
+		valArr, err := os.ReadFile(yatest.SourcePath(path))
 		if err != nil {
 			return xerrors.Errorf("unable to read file %s: %w", path, err)
 		}

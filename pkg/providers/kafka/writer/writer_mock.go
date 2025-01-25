@@ -13,11 +13,11 @@ import (
 	tls "crypto/tls"
 	reflect "reflect"
 
-	log "go.ytsaurus.tech/library/go/core/log"
 	queue "github.com/doublecloud/transfer/pkg/serializer/queue"
 	kafka "github.com/segmentio/kafka-go"
 	sasl "github.com/segmentio/kafka-go/sasl"
 	gomock "go.uber.org/mock/gomock"
+	log "go.ytsaurus.tech/library/go/core/log"
 )
 
 // MockAbstractWriter is a mock of AbstractWriter interface.

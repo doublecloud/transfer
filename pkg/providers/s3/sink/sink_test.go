@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"sync"
 	"testing"
@@ -31,12 +31,12 @@ func canonFile(t *testing.T, client *s3.S3, bucket, file string) {
 		Key:    aws.String(file),
 	})
 	require.NoError(t, err)
-	data, err := ioutil.ReadAll(obj.Body)
+	data, err := io.ReadAll(obj.Body)
 	require.NoError(t, err)
 	logger.Log.Infof("read data: %v", format.SizeInt(len(data)))
 	unzipped, err := gzip.NewReader(bytes.NewReader(data))
 	require.NoError(t, err)
-	unzippedData, err := ioutil.ReadAll(unzipped)
+	unzippedData, err := io.ReadAll(unzipped)
 	require.NoError(t, err)
 	logger.Log.Infof("unpack data: %v", format.SizeInt(len(unzippedData)))
 	logger.Log.Infof("%s content:\n%s", file, string(unzippedData))
@@ -175,13 +175,13 @@ func TestS3SinkerUploadTableGzip(t *testing.T) {
 		}))
 	}()
 	require.NoError(t, err)
-	data, err := ioutil.ReadAll(obj.Body)
+	data, err := io.ReadAll(obj.Body)
 	require.NoError(t, err)
 	logger.Log.Infof("read data: %v", format.SizeInt(len(data)))
 	require.True(t, len(data) > 0)
 	unzipped, err := gzip.NewReader(bytes.NewReader(data))
 	require.NoError(t, err)
-	unzippedData, err := ioutil.ReadAll(unzipped)
+	unzippedData, err := io.ReadAll(unzipped)
 	require.NoError(t, err)
 	logger.Log.Infof("unpack data: %v", format.SizeInt(len(unzippedData)))
 	require.Len(t, unzippedData, 7111120)
@@ -262,7 +262,7 @@ func TestJsonReplication(t *testing.T) {
 			})
 			require.NoError(t, err)
 
-			data, err := ioutil.ReadAll(obj.Body)
+			data, err := io.ReadAll(obj.Body)
 			require.NoError(t, err)
 			require.Equal(t, string(data), tc.expectedResult)
 		})
@@ -299,13 +299,13 @@ func TestRawReplication(t *testing.T) {
 			defer require.NoError(t, sinker.Push([]abstract.ChangeItem{
 				{Kind: abstract.DropTableKind, CommitTime: uint64(time.Now().UnixNano()), Table: "test_table"},
 			}))
-			data, err := ioutil.ReadAll(obj.Body)
+			data, err := io.ReadAll(obj.Body)
 			require.NoError(t, err)
 			logger.Log.Infof("read data: %v", format.SizeInt(len(data)))
 			require.True(t, len(data) > 0)
 			unzipped, err := gzip.NewReader(bytes.NewReader(data))
 			require.NoError(t, err)
-			unzippedData, err := ioutil.ReadAll(unzipped)
+			unzippedData, err := io.ReadAll(unzipped)
 			require.NoError(t, err)
 			logger.Log.Infof("unpack data: %v", format.SizeInt(len(unzippedData)))
 			require.Len(t, unzippedData, 21890)
@@ -463,7 +463,6 @@ func TestParquetReadAfterWrite(t *testing.T) {
 
 	require.NoError(t, sinker.Push(round1))
 	require.NoError(t, sinker.Close())
-
 }
 
 func TestRawReplicationHugeFiles(t *testing.T) {

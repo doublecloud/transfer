@@ -2,7 +2,7 @@ package elastic
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"reflect"
 	"unsafe"
 
@@ -78,7 +78,7 @@ func ConfigFromDestination(logger log.Logger, cfg *ElasticSearchDestination, ser
 	}
 
 	if cfg.ClusterID == "" {
-		var protocol = "http"
+		protocol := "http"
 		if cfg.SSLEnabled {
 			protocol = "https"
 		}
@@ -125,7 +125,7 @@ func getResponseBody(res *esapi.Response, err error) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to read response body: %w", err)
 	}

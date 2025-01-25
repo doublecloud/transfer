@@ -818,7 +818,6 @@ func (s *sinker) insert(tablePath ydbPath, batch []abstract.ChangeItem) error {
 			}
 			return nil
 		})
-
 		if err != nil {
 			return xerrors.Errorf("unable to insert with legacy writer:\n %w", err)
 		}
@@ -1022,15 +1021,15 @@ func (s *sinker) ydbVal(dataType, originalType string, val interface{}) (types.V
 		case schema.TypeBytes:
 			switch v := val.(type) {
 			case string:
-				return types.StringValue([]byte(v)), false, nil
+				return types.BytesValue([]byte(v)), false, nil
 			case []uint8:
-				return types.StringValue(v), false, nil
+				return types.BytesValue(v), false, nil
 			default:
 				r, err := json.Marshal(val)
 				if err != nil {
 					return nil, false, xerrors.Errorf("unable to json marshal: %w", err)
 				}
-				return types.StringValue(r), false, nil
+				return types.BytesValue(r), false, nil
 			}
 		case schema.TypeString:
 			switch v := val.(type) {

@@ -3,7 +3,7 @@ package lambda
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -24,7 +24,7 @@ func TestLambdaTransformer(t *testing.T) {
 		data := functions.Data{}
 		var bodyBytes []byte
 		if r.Body != nil {
-			bodyBytes, _ = ioutil.ReadAll(r.Body)
+			bodyBytes, _ = io.ReadAll(r.Body)
 		}
 		logger.Log.Infof("request into mock server: %v", string(bodyBytes))
 		require.NoError(t, json.Unmarshal(bodyBytes, &data))
