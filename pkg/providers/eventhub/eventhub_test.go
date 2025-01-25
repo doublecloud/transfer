@@ -30,7 +30,6 @@ const (
 var namespace, hub, consumerGroup string
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
 	namespace = os.Getenv("EVENTHUB_NAMESPACE")
 	hub = os.Getenv("EVENTHUB_NAME")
 	consumerGroup = os.Getenv("EVENTHUB_CONSUMER_GROUP")
