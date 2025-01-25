@@ -421,9 +421,10 @@ func (c *Canal) prepareSyncer() error {
 		TLSConfig:               c.cfg.TLSConfig,
 	}
 
-	if strings.Contains(c.cfg.Addr, "/") {
+	switch {
+	case strings.Contains(c.cfg.Addr, "/"):
 		cfg.Host = c.cfg.Addr
-	} else if strings.HasPrefix(c.cfg.Addr, "[") && strings.Contains(c.cfg.Addr, "]:") {
+	case strings.HasPrefix(c.cfg.Addr, "[") && strings.Contains(c.cfg.Addr, "]:"):
 		// addr is ipv6
 		seps := strings.Split(c.cfg.Addr, ":")
 		port, err := strconv.ParseUint(seps[len(seps)-1], 10, 16)
@@ -432,7 +433,7 @@ func (c *Canal) prepareSyncer() error {
 		}
 		cfg.Port = uint16(port)
 		cfg.Host = strings.Join(seps[:len(seps)-1], ":")
-	} else {
+	default:
 		seps := strings.Split(c.cfg.Addr, ":")
 		if len(seps) != 2 {
 			return xerrors.Errorf("invalid mysql addr format %s, must host:port", c.cfg.Addr)

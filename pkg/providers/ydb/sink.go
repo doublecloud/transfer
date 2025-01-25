@@ -818,7 +818,6 @@ func (s *sinker) insert(tablePath ydbPath, batch []abstract.ChangeItem) error {
 			}
 			return nil
 		})
-
 		if err != nil {
 			return xerrors.Errorf("unable to insert with legacy writer:\n %w", err)
 		}
@@ -1303,13 +1302,16 @@ func (s *sinker) isPrimaryKey(ydbType types.Type, column abstract.ColSchema) (bo
 	}
 	allowedIn, ok := primaryIsAllowedFor[ydbType]
 	var res bool
-	if !ok {
+
+	switch {
+	case !ok:
 		res = false
-	} else if s.config.IsTableColumnOriented {
+	case s.config.IsTableColumnOriented:
 		res = allowedIn != OLTP
-	} else {
+	default:
 		res = allowedIn != OLAP
 	}
+
 	if res {
 		return true, nil
 	} else {

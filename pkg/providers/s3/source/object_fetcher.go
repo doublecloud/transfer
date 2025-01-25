@@ -37,17 +37,18 @@ func NewObjectFetcher(ctx context.Context, client s3iface.S3API, logger log.Logg
 		return nil, xerrors.New("missing configuration")
 	}
 
-	if sourceConfig.EventSource.SQS != nil && sourceConfig.EventSource.SQS.QueueName != "" {
+	switch {
+	case sourceConfig.EventSource.SQS != nil && sourceConfig.EventSource.SQS.QueueName != "":
 		source, err := NewSQSSource(ctx, logger, reader, sess, sourceConfig)
 		if err != nil {
 			return nil, xerrors.Errorf("failed to initialize new sqs source: %w", err)
 		}
 		return source, nil
-	} else if sourceConfig.EventSource.SNS != nil {
+	case sourceConfig.EventSource.SNS != nil:
 		return nil, xerrors.New("not yet implemented SNS")
-	} else if sourceConfig.EventSource.PubSub != nil {
+	case sourceConfig.EventSource.PubSub != nil:
 		return nil, xerrors.New("not yet implemented PubSub")
-	} else {
+	default:
 		// default to polling of object list
 		source, err := NewPollingSource(ctx, client, logger, cp, transferID, reader, sourceConfig)
 		if err != nil {

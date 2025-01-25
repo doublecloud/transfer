@@ -90,7 +90,8 @@ func (s *sinker) bulkWrite(ctx context.Context, collID Namespace, bulk []mongo.W
 	startWrite := time.Now()
 	result, err := coll.BulkWrite(ctx, bulk, opts)
 	if err != nil {
-		if strings.Contains(err.Error(), "is too large") {
+		switch {
+		case strings.Contains(err.Error(), "is too large"):
 			s.logger.Warnf("BulkWrite(%v documents) to %v failed: %v. Try serial push instead.", docsNumber, collID.GetFullName(), err)
 
 			serialPushResult, serialPushErr := serialPush()
@@ -98,9 +99,9 @@ func (s *sinker) bulkWrite(ctx context.Context, collID Namespace, bulk []mongo.W
 				return xerrors.Errorf("cannot write %v documents niether by BulkWrite(%v) nor by serial push: %w", docsNumber, err, serialPushErr)
 			}
 			result = &serialPushResult
-		} else if strings.Contains(err.Error(), "could not extract exact shard key") {
+		case strings.Contains(err.Error(), "could not extract exact shard key"):
 			return xerrors.Errorf("cannot write %v documents to sharded collection %v - check if user has clusterManager or mdbShardingManager role: %w", docsNumber, collID.GetFullName(), err)
-		} else {
+		default:
 			return err
 		}
 	}

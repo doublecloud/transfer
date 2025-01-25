@@ -106,11 +106,12 @@ func (r *CSVReader) parseBooleanValue(originalValue string) interface{} {
 			return false
 		}
 	}
-	if contains(r.additionalReaderOptions.TrueValues, originalValue) {
+	switch {
+	case contains(r.additionalReaderOptions.TrueValues, originalValue):
 		return true
-	} else if contains(r.additionalReaderOptions.FalseValues, originalValue) {
+	case contains(r.additionalReaderOptions.FalseValues, originalValue):
 		return false
-	} else {
+	default:
 		// last ditch attempt, try string conversion
 		boolVal, err := strconv.ParseBool(originalValue)
 		if err != nil {

@@ -27,13 +27,14 @@ func changeItemsBitsToDebeziumWA(bits string) string {
 }
 
 func imitateDebeziumBufSize(bitsCount int) int {
-	if bitsCount < 16 {
+	switch {
+	case bitsCount < 16:
 		return 2
-	} else if bitsCount < 32 {
+	case bitsCount < 32:
 		return 4
-	} else if bitsCount < 64 {
+	case bitsCount < 64:
 		return 8
-	} else {
+	default:
 		return int(math.Ceil(float64(bitsCount) / 8)) // honest count
 	}
 }
@@ -74,25 +75,26 @@ func changeItemsBitsStringToDebezium(bits string, bufSize int) string {
 
 func GetBitLength(pgType string) (string, error) {
 	result := ""
-	if strings.HasPrefix(pgType, "pg:bit(") {
+	switch {
+	case strings.HasPrefix(pgType, "pg:bit("):
 		rightIndex := strings.Index(pgType[7:], ")")
 		if rightIndex == -1 {
 			return "", xerrors.Errorf("unsupported pg type, can't find closing bracket: %s", pgType)
 		}
 		result = pgType[7 : 7+rightIndex]
-	} else if strings.HasPrefix(pgType, "pg:bit varying(") {
+	case strings.HasPrefix(pgType, "pg:bit varying("):
 		rightIndex := strings.Index(pgType[15:], ")")
 		if rightIndex == -1 {
 			return "", xerrors.Errorf("unsupported pg type, can't find closing bracket: %s", pgType)
 		}
 		result = pgType[15 : 15+rightIndex]
-	} else if strings.HasPrefix(pgType, "mysql:bit(") {
+	case strings.HasPrefix(pgType, "mysql:bit("):
 		rightIndex := strings.Index(pgType[10:], ")")
 		if rightIndex == -1 {
 			return "", xerrors.Errorf("unsupported pg type, can't find closing bracket: %s", pgType)
 		}
 		result = pgType[10 : 10+rightIndex]
-	} else {
+	default:
 		return "", xerrors.Errorf("unsupported pg type: %s", pgType)
 	}
 	return result, nil
@@ -116,10 +118,12 @@ func GetTimeDivider(originalTypeWithoutProvider string) (int, error) {
 	}
 }
 
-var reTimeWithoutTZ = regexp.MustCompile(`^time\((\d)\) without time zone`)
-var reTimestampWithoutTZ = regexp.MustCompile(`^timestamp\((\d)\) without time zone`)
-var reMysqlTime = regexp.MustCompile(`^mysql:timestamp\((\d)\)`)
-var reMysqlDatetime = regexp.MustCompile(`^mysql:datetime\((\d)\)`)
+var (
+	reTimeWithoutTZ      = regexp.MustCompile(`^time\((\d)\) without time zone`)
+	reTimestampWithoutTZ = regexp.MustCompile(`^timestamp\((\d)\) without time zone`)
+	reMysqlTime          = regexp.MustCompile(`^mysql:timestamp\((\d)\)`)
+	reMysqlDatetime      = regexp.MustCompile(`^mysql:datetime\((\d)\)`)
+)
 
 func GetTimePrecision(colTypeStr string) int {
 	precision := -1
@@ -327,7 +331,8 @@ func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 		return "", xerrors.Errorf("unknown exponential value: %s", in)
 	}
 
-	if sign == "-" {
+	switch sign {
+	case "-":
 		if basePart[0] == '.' {
 			return "0." + strings.Repeat("0", expVal) + basePart[1:], nil
 		} else {
@@ -342,7 +347,7 @@ func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 				return basePart[0:index] + "." + basePart[index:], nil
 			}
 		}
-	} else if sign == "+" {
+	case "+":
 		basePart = basePart[1:]
 		if expVal >= len(basePart) {
 			result, err := fillByZeroesToAlignR(basePart, expVal)
@@ -354,7 +359,7 @@ func exponentialFloatFormToNumericPositivePart(in string) (string, error) {
 			index := len(basePart) - expVal
 			return basePart[0:index] + "." + basePart[index:], nil
 		}
-	} else {
+	default:
 		return "", xerrors.Errorf("unknown sign: %s, string: %s", sign, in)
 	}
 }
@@ -447,10 +452,12 @@ func DecimalToDebeziumPrimitives(decimal string, connectorParameters map[string]
 	}
 }
 
-var pgTimestampLayout0 = "2006-01-02T15:04:05Z"
-var pgTimestampLayout1 = "2006-01-02 15:04:05Z"
-var pgTimestampLayout2 = "2006-01-02T15:04:05-07:00"
-var pgTimestampLayout3 = "2006-01-02 15:04:05-07"
+var (
+	pgTimestampLayout0 = "2006-01-02T15:04:05Z"
+	pgTimestampLayout1 = "2006-01-02 15:04:05Z"
+	pgTimestampLayout2 = "2006-01-02T15:04:05-07:00"
+	pgTimestampLayout3 = "2006-01-02 15:04:05-07"
+)
 
 func ParsePgDateTimeWithTimezone(in string) (time.Time, error) {
 	var result time.Time
@@ -664,10 +671,12 @@ func ParsePgDateTimeWithTimezone2(l, r string) (time.Time, time.Time, error) {
 	return lTime, rTime, nil
 }
 
-var regexHour = *regexp.MustCompile(`(\d+):(\d+):(\d+)`)
-var regexYear = *regexp.MustCompile(`(\d+) years?`)
-var regexMonth = *regexp.MustCompile(`(\d+) (?:mon|months?)`)
-var regexDay = *regexp.MustCompile(`(\d+) days?`)
+var (
+	regexHour  = *regexp.MustCompile(`(\d+):(\d+):(\d+)`)
+	regexYear  = *regexp.MustCompile(`(\d+) years?`)
+	regexMonth = *regexp.MustCompile(`(\d+) (?:mon|months?)`)
+	regexDay   = *regexp.MustCompile(`(\d+) days?`)
+)
 
 func ExtractPostgresIntervalArray(interval string) ([]string, error) {
 	result := make([]string, 7)
@@ -706,13 +715,15 @@ func ExtractPostgresIntervalArray(interval string) ([]string, error) {
 	return result, nil
 }
 
-var timeWithoutTZ0 = "15:04:05"
-var timeWithoutTZ1 = "15:04:05.0"
-var timeWithoutTZ2 = "15:04:05.00"
-var timeWithoutTZ3 = "15:04:05.000"
-var timeWithoutTZ4 = "15:04:05.0000"
-var timeWithoutTZ5 = "15:04:05.00000"
-var timeWithoutTZ6 = "15:04:05.000000"
+var (
+	timeWithoutTZ0 = "15:04:05"
+	timeWithoutTZ1 = "15:04:05.0"
+	timeWithoutTZ2 = "15:04:05.00"
+	timeWithoutTZ3 = "15:04:05.000"
+	timeWithoutTZ4 = "15:04:05.0000"
+	timeWithoutTZ5 = "15:04:05.00000"
+	timeWithoutTZ6 = "15:04:05.000000"
+)
 
 func ParseTimeWithoutTZ(timeStr string) (time.Time, error) {
 	var layout string
@@ -742,13 +753,15 @@ func ParseTimeWithoutTZ(timeStr string) (time.Time, error) {
 	return timeVal, nil
 }
 
-var timestampWithoutTZ0 = "2006-01-02T15:04:05Z"
-var timestampWithoutTZ1 = "2006-01-02T15:04:05.0Z"
-var timestampWithoutTZ2 = "2006-01-02T15:04:05.00Z"
-var timestampWithoutTZ3 = "2006-01-02T15:04:05.000Z"
-var timestampWithoutTZ4 = "2006-01-02T15:04:05.0000Z"
-var timestampWithoutTZ5 = "2006-01-02T15:04:05.00000Z"
-var timestampWithoutTZ6 = "2006-01-02T15:04:05.000000Z"
+var (
+	timestampWithoutTZ0 = "2006-01-02T15:04:05Z"
+	timestampWithoutTZ1 = "2006-01-02T15:04:05.0Z"
+	timestampWithoutTZ2 = "2006-01-02T15:04:05.00Z"
+	timestampWithoutTZ3 = "2006-01-02T15:04:05.000Z"
+	timestampWithoutTZ4 = "2006-01-02T15:04:05.0000Z"
+	timestampWithoutTZ5 = "2006-01-02T15:04:05.00000Z"
+	timestampWithoutTZ6 = "2006-01-02T15:04:05.000000Z"
+)
 
 func ParseTimestamp(timeStr string) (time.Time, error) {
 	var layout string
@@ -832,12 +845,14 @@ func BufToChangeItemsBits(in []byte) string {
 	return result
 }
 
-var yearMS = int64(31557600000000)
-var monthMS = int64(2629800000000)
-var dayMS = int64(3600 * 24 * 1000 * 1000)
-var hourMS = int64(3600 * 1000 * 1000)
-var minuteMS = int64(60 * 1000 * 1000)
-var secondMS = int64(1000 * 1000)
+var (
+	yearMS   = int64(31557600000000)
+	monthMS  = int64(2629800000000)
+	dayMS    = int64(3600 * 24 * 1000 * 1000)
+	hourMS   = int64(3600 * 1000 * 1000)
+	minuteMS = int64(60 * 1000 * 1000)
+	secondMS = int64(1000 * 1000)
+)
 
 func EmitPostgresInterval(val int64) string {
 	y := val / yearMS
@@ -1106,8 +1121,10 @@ func OriginalTypeWithoutProvider(originalType string) string {
 	return originalType[index+1:]
 }
 
-var pgTimeWithoutTimeZoneParam = *regexp.MustCompile(`pg:time\((\d)\) without time zone`)
-var pgNumeric = *regexp.MustCompile(`pg:numeric\(\d+,\d+\)`)
+var (
+	pgTimeWithoutTimeZoneParam = *regexp.MustCompile(`pg:time\((\d)\) without time zone`)
+	pgNumeric                  = *regexp.MustCompile(`pg:numeric\(\d+,\d+\)`)
+)
 
 func PgTimeWithoutTimeZonePrecision(originalType string) int {
 	if originalType == "pg:time without time zone" {

@@ -307,12 +307,13 @@ func (a *Storage) parse(data []byte) (*Message, []string) {
 		}
 		var r Message
 		err := json.Unmarshal(row, &r)
-		if err != nil {
+		switch {
+		case err != nil:
 			a.logger.Debugf("row: %v, err: %v", string(row), err)
 			logs = append(logs, string(row))
-		} else if r.Type == MessageTypeLog {
+		case r.Type == MessageTypeLog:
 			logs = append(logs, r.Log.Message)
-		} else {
+		default:
 			res = &r
 		}
 	}

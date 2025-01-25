@@ -137,7 +137,8 @@ func arrColSchemaToFieldsDescrKeys(arrColSchema []abstract.ColSchema, snapshot b
 
 // add - function for adding (with conversion) one field
 func add(colSchema *abstract.ColSchema, colName string, colVal interface{}, originalType string, ignoreUnknownSources, snapshot bool, connectorParameters map[string]string, result *debeziumcommon.Values) error {
-	if strings.HasPrefix(originalType, "pg:") {
+	switch {
+	case strings.HasPrefix(originalType, "pg:"):
 		if strings.HasSuffix(originalType, "[]") {
 			if colVal == nil {
 				result.AddVal(colName, nil)
@@ -169,17 +170,17 @@ func add(colSchema *abstract.ColSchema, colName string, colVal interface{}, orig
 				return xerrors.Errorf("unable to convert pg event, err: %w", err)
 			}
 		}
-	} else if strings.HasPrefix(originalType, "mysql:") {
+	case strings.HasPrefix(originalType, "mysql:"):
 		err := mysql.AddMysql(result, colName, colVal, originalType, snapshot, connectorParameters)
 		if err != nil {
 			return xerrors.Errorf("unable to convert mysql event, err: %w", err)
 		}
-	} else if strings.HasPrefix(originalType, "ydb:") {
+	case strings.HasPrefix(originalType, "ydb:"):
 		err := ydb.AddYDB(result, colName, colVal, originalType, connectorParameters)
 		if err != nil {
 			return xerrors.Errorf("unable to convert ydb event, err: %w", err)
 		}
-	} else {
+	default:
 		if ignoreUnknownSources {
 			err := addCommon(result, colSchema, colVal)
 			if err != nil {

@@ -116,15 +116,16 @@ func CHSharder(cfg model.ChSinkParams, transferID string) Sharder {
 	} else if cfg.ShardCol() != "" {
 		keyGen = ColumnShardingKeyGen(cfg.ShardCol())
 	}
-	if keyGen != nil {
+	switch {
+	case keyGen != nil:
 		if len(cfg.ColumnToShardName()) > 0 {
 			return KeyGenUserMappingHandler(keyGen, GetShardIndexUserMapping(cfg), len(cfg.Shards()))
 		} else {
 			return KeyGenHashHandler(keyGen, len(cfg.Shards()))
 		}
-	} else if cfg.ShardByRoundRobin() {
+	case cfg.ShardByRoundRobin():
 		return RoundRobinSharder(len(cfg.Shards()))
-	} else {
+	default:
 		return ConstSharder()
 	}
 }

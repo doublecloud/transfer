@@ -123,11 +123,12 @@ func (rc *MeteringOpts) SourceID(schema MetricSchema) string {
 }
 
 func (rc *MeteringOpts) getInstanceID() string {
-	if rc.ComputeVMID != "" {
+	switch {
+	case rc.ComputeVMID != "":
 		return rc.ComputeVMID
-	} else if rc.YtJobID != "" {
+	case rc.YtJobID != "":
 		return rc.YtJobID
-	} else {
+	default:
 		host, _ := os.Hostname()
 		return host
 	}

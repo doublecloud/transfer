@@ -65,11 +65,12 @@ func marshalChangeItem(row abstract.ChangeItem, schema map[string]abstract.ColSc
 		rowVal := row.ColumnValues[i]
 		colType := cols[col]
 		colSch := schema[col]
-		if rowVal == nil {
+		switch {
+		case rowVal == nil:
 			vals[i] = rowVal
-		} else if colType.IsArray && strings.ToLower(colSch.DataType) == "any" {
+		case colType.IsArray && strings.ToLower(colSch.DataType) == "any":
 			vals[i] = rowVal
-		} else if colType.IsString {
+		case colType.IsString:
 			switch rowValDowncasted := rowVal.(type) {
 			case string, byte:
 				vals[i] = rowVal
@@ -79,7 +80,7 @@ func marshalChangeItem(row abstract.ChangeItem, schema map[string]abstract.ColSc
 				b, _ := json.Marshal(rowVal)
 				vals[i] = string(b)
 			}
-		} else if colType.IsDecimal {
+		case colType.IsDecimal:
 			var val decimal.Decimal
 			switch v := rowVal.(type) {
 			case string:
@@ -103,7 +104,7 @@ func marshalChangeItem(row abstract.ChangeItem, schema map[string]abstract.ColSc
 				return nil, colMarshallingError(providers.DataValueError, col, rowVal, fmt.Sprintf("error converting to decimal: %s", err))
 			}
 			vals[i] = val
-		} else {
+		default:
 			vals[i] = columntypes.Restore(colSch, rowVal)
 			if v, ok := vals[i].(string); ok && (colType.IsDateTime64 || colType.IsDateTime || colType.IsDate) {
 				// FIXME: market hack/workaround, should rethink and rewrite this part before public release

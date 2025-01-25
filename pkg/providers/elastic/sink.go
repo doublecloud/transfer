@@ -36,11 +36,13 @@ type Sink struct {
 
 func makeIndexNameFromTableID(id abstract.TableID) (string, error) {
 	var out string
-	if id.Namespace == "" {
+
+	switch {
+	case id.Namespace == "":
 		out = id.Name
-	} else if id.Name == "" {
+	case id.Name == "":
 		out = id.Namespace
-	} else {
+	default:
 		out = id.Namespace + "." + id.Name
 	}
 
@@ -215,10 +217,10 @@ func sanitizeKeysInMap(in map[string]interface{}) []map[string]interface{} {
 
 func sanitizeMapKey(in string) string {
 	runes := []rune(in)
-	var outStringLen = 0
+	outStringLen := 0
 
-	var startCopyStr = 0
-	var isEmptyCopyStr = true
+	startCopyStr := 0
+	isEmptyCopyStr := true
 	for i := 0; i <= len(runes); i++ {
 		if i == len(runes) || runes[i] == '.' {
 			if !isEmptyCopyStr {
@@ -300,7 +302,7 @@ func (s *Sink) pushBatch(changeItems []abstract.ChangeItem) error {
 	if len(changeItems) == 0 {
 		return nil
 	}
-	var indexResult = make(chan error)
+	indexResult := make(chan error)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go func() {

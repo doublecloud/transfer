@@ -382,7 +382,6 @@ func loadIntoTableMapForTable(ctx context.Context, table tableIDWithInfo, extrac
 
 func (s *Storage) GetInheritedTables(ctx context.Context) (map[abstract.TableID]abstract.TableID, error) {
 	tablesParents, err := MakeChildParentMap(ctx, s.Conn)
-
 	if err != nil {
 		logger.Log.Error("failed query for extraction pg inherits", log.Error(err))
 		return nil, xerrors.Errorf("failed query for extraction pg inherits: %w", err)
@@ -517,13 +516,14 @@ func (m *loadTableMode) ExcludeDescendants() (exclude bool, reason string) {
 }
 
 func (m *loadTableMode) SkipLoading() (skip bool, reason string) {
-	if m.tableInfo.IsView && m.isHomo {
+	switch {
+	case m.tableInfo.IsView && m.isHomo:
 		skip = true
 		reason = fmt.Sprintf("Table %s is a view, skipping it", m.table.Fqtn())
-	} else if m.tableInfo.IsPartitioned && !m.loadDescending {
+	case m.tableInfo.IsPartitioned && !m.loadDescending:
 		skip = true
 		reason = fmt.Sprintf("Table %v is partitioned, skipping it because it is empty and all data is in partitions", m.table.Fqtn())
-	} else if m.tableInfo.IsInherited && m.loadDescending {
+	case m.tableInfo.IsInherited && m.loadDescending:
 		skip = true
 		reason = fmt.Sprintf("Table %v is child, but we load all in all-descending mode, skipping it because we may duplicate data within descendings", m.table.Fqtn())
 	}
@@ -1268,7 +1268,6 @@ func (s *Storage) loadTable(
 	schema *abstract.TableSchema,
 	startTime time.Time,
 ) error {
-
 	if skip, reason := loadMode.SkipLoading(); skip {
 		logger.Log.Infof("Skip load table %v: %v", table.Fqtn(), reason)
 		return nil

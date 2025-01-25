@@ -21,28 +21,29 @@ func getFieldDescr(colSchema abstract.ColSchema, connectorParameters map[string]
 	var typeDescr *debeziumcommon.KafkaTypeDescr
 	var err error
 	var originalTypeProperties map[string]string
-	if colSchema.OriginalType == "" {
+	switch {
+	case colSchema.OriginalType == "":
 		typeDescr, err = colSchemaToOriginalType(&colSchema)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to get type description, err: %w", err)
 		}
-	} else if strings.HasPrefix(colSchema.OriginalType, "pg:") {
+	case strings.HasPrefix(colSchema.OriginalType, "pg:"):
 		typeDescr, err = pg.GetKafkaTypeDescrByPgType(&colSchema)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to get pg fieldDescr: %s, err: %w", colSchema.OriginalType, err)
 		}
 		originalTypeProperties = pg.GetOriginalTypeProperties(&colSchema)
-	} else if strings.HasPrefix(colSchema.OriginalType, "mysql:") {
+	case strings.HasPrefix(colSchema.OriginalType, "mysql:"):
 		typeDescr, err = mysql.GetKafkaTypeDescrByMysqlType(colSchema.OriginalType)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to get mysql fieldDescr: %s, err: %w", colSchema.OriginalType, err)
 		}
-	} else if strings.HasPrefix(colSchema.OriginalType, "ydb:") {
+	case strings.HasPrefix(colSchema.OriginalType, "ydb:"):
 		typeDescr, err = ydb.GetKafkaTypeDescrByYDBType(colSchema.OriginalType)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to get ydb fieldDescr: %s, err: %w", colSchema.OriginalType, err)
 		}
-	} else {
+	default:
 		return nil, xerrors.Errorf("unknown original type: %s", colSchema.OriginalType)
 	}
 

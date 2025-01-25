@@ -448,16 +448,17 @@ func (s *sink) batchInsert(input []abstract.ChangeItem) error {
 				continue
 			}
 			if _, err := s.conn.Exec(context.TODO(), fmt.Sprintf("truncate table %v;", item.PgName())); err != nil {
-				if IsPgError(err, ErrcWrongObjectType) {
+				switch {
+				case IsPgError(err, ErrcWrongObjectType):
 					s.logger.Infof("truncate table %v returns: %v, so this is view, no need to truncate", item.PgName(), err.Error())
 					continue
-				} else if IsPgError(err, ErrcRelationDoesNotExists) {
+				case IsPgError(err, ErrcRelationDoesNotExists):
 					s.logger.Infof("truncate table %v skip: table not exists", item.PgName())
 					continue
-				} else if IsPgError(err, ErrcSchemaDoesNotExists) {
+				case IsPgError(err, ErrcSchemaDoesNotExists):
 					s.logger.Infof("truncate table %v skip: schema %v not exists", item.PgName(), item.Schema)
 					continue
-				} else {
+				default:
 					//nolint:descriptiveerrors
 					return err
 				}
@@ -537,13 +538,13 @@ func Represent(val interface{}, colSchema abstract.ColSchema) (string, error) {
 
 		if strings.HasPrefix(colSchema.OriginalType, "pg:time") &&
 			!strings.HasPrefix(colSchema.OriginalType, "pg:timestamp") {
-			//by default Value of time always returns as array of bytes which can not be processed in plain insert
-			//however if we cast decoder to pgtype.Time while unmarshalling it will lead to errors in tests because
-			//pgtype.Time doesn't store the precision and always uses the maximum(6)
+			// by default Value of time always returns as array of bytes which can not be processed in plain insert
+			// however if we cast decoder to pgtype.Time while unmarshalling it will lead to errors in tests because
+			// pgtype.Time doesn't store the precision and always uses the maximum(6)
 			if vvv, ok := vv.([]byte); ok && vv != nil {
 				coder := new(pgtype.Time)
 
-				//we only use binary->binary (de)serialization in homogeneous pg->pg
+				// we only use binary->binary (de)serialization in homogeneous pg->pg
 				if err := coder.DecodeBinary(nil, vvv); err == nil {
 					//nolint:descriptiveerrors
 					return Represent(coder, colSchema)
@@ -946,7 +947,7 @@ func (s *sink) insert(ctx context.Context, table string, schema []abstract.ColSc
 		return xerrors.Errorf("failed to build queries to process items at sink: %w", err)
 	}
 
-	//s.logger.Infof("Prepare query %v rows %v for table %v", len(items), format.SizeInt(len(queries)), table)
+	// s.logger.Infof("Prepare query %v rows %v for table %v", len(items), format.SizeInt(len(queries)), table)
 	execStart := time.Now()
 	processedQueries := 0
 	for processedQueries < len(queries) {

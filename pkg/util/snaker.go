@@ -5,8 +5,10 @@ import (
 	"strings"
 )
 
-var matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
-var matchAllCap = regexp.MustCompile("([a-z0-9])([A-Z])")
+var (
+	matchFirstCap = regexp.MustCompile("(.)([A-Z][a-z]+)")
+	matchAllCap   = regexp.MustCompile("([a-z0-9])([A-Z])")
+)
 
 func Snakify(str string) string {
 	snake := matchFirstCap.ReplaceAllString(str, "${1}_${2}")
@@ -30,14 +32,15 @@ func camelCase(s string, upper bool) string {
 
 	stringIter(s, func(prev, curr, next rune) {
 		if !isDelimiter(curr) {
-			if isDelimiter(prev) || (upper && prev == 0) {
+			switch {
+			case isDelimiter(prev) || (upper && prev == 0):
 				buffer = append(buffer, toUpper(curr))
-			} else if isLower(prev) {
+			case isLower(prev):
 				buffer = append(buffer, curr)
-			} else if isUpper(prev) && isUpper(curr) && isLower(next) {
+			case isUpper(prev) && isUpper(curr) && isLower(next):
 				// Assume a case like "R" for "XRequestId"
 				buffer = append(buffer, curr)
-			} else {
+			default:
 				buffer = append(buffer, toLower(curr))
 			}
 		}

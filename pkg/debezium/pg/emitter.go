@@ -506,7 +506,8 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 		v.AddVal(colName, result)
 		return nil
 	default:
-		if postgres.IsPgTypeTimeWithTimeZone(originalType) {
+		switch {
+		case postgres.IsPgTypeTimeWithTimeZone(originalType):
 			val, casts := colVal.(string)
 			if !casts {
 				return xerrors.Errorf("pg - unable to process %s: expected string, got %T", originalType, colVal)
@@ -523,7 +524,7 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 			}
 			v.AddVal(colName, t.Format(tFormat))
 			return nil
-		} else if postgres.IsPgTypeTimeWithoutTimeZone(originalType) {
+		case postgres.IsPgTypeTimeWithoutTimeZone(originalType):
 			t := new(pgtype.Time)
 			if err := t.Scan(colVal); err != nil {
 				return xerrors.Errorf("pg - unable to parse %s %v: %w", originalType, colVal, err)
@@ -546,7 +547,7 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 			}
 			v.AddVal(colName, result)
 			return nil
-		} else if postgres.IsPgTypeTimestampWithoutTimeZone(originalType) {
+		case postgres.IsPgTypeTimestampWithoutTimeZone(originalType):
 			ts := new(pgtype.Timestamp)
 			if err := ts.Set(colVal); err != nil {
 				return xerrors.Errorf("pg - unable to parse %s %v: %w", originalType, colVal, err)
@@ -567,7 +568,7 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 			result := ts.Time.UnixMicro() / int64(divider)
 			v.AddVal(colName, result)
 			return nil
-		} else if postgres.IsPgTypeTimestampWithTimeZone(originalType) {
+		case postgres.IsPgTypeTimestampWithTimeZone(originalType):
 			switch t := colVal.(type) {
 			case time.Time: // original snapshot
 				v.AddVal(colName, typeutil.SprintfDebeziumTime(t))
@@ -580,7 +581,7 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 			default:
 				return xerrors.Errorf("unknown type of value for 'pg:timestamp with time zone': %T", colVal)
 			}
-		} else if typeutil.IsPgNumeric(originalType) {
+		case typeutil.IsPgNumeric(originalType):
 			var val string
 			var err error
 			switch t := colVal.(type) {
@@ -605,23 +606,23 @@ func AddPg(v *debeziumcommon.Values, colSchema *abstract.ColSchema, colName stri
 			}
 			v.AddVal(colName, result)
 			return nil
-		} else if strings.HasPrefix(originalType, "pg:bit(") || strings.HasPrefix(originalType, "pg:bit varying(") {
+		case strings.HasPrefix(originalType, "pg:bit(") || strings.HasPrefix(originalType, "pg:bit varying("):
 			v.AddVal(colName, typeutil.ChangeItemsBitsToDebeziumHonest(colVal.(string)))
 			return nil
-		} else if strings.HasPrefix(originalType, "pg:character(") || strings.HasPrefix(originalType, "pg:character varying(") || originalType == "pg:character" || originalType == "pg:character varying" { // strong equality - into ARRAY
+		case strings.HasPrefix(originalType, "pg:character(") || strings.HasPrefix(originalType, "pg:character varying(") || originalType == "pg:character" || originalType == "pg:character varying": // strong equality - into ARRAY
 			v.AddVal(colName, colVal.(string))
 			return nil
-		} else if strings.HasPrefix(originalType, "pg:interval") {
+		case strings.HasPrefix(originalType, "pg:interval"):
 			val, err := typeutil.ParsePostgresInterval(colVal.(string), v.ConnectorParameters[debeziumparameters.IntervalHandlingMode])
 			if err != nil {
 				return xerrors.Errorf("pg - interval - unknown interval: %s, err: %w", colVal.(string), err)
 			}
 			v.AddVal(colName, val)
 			return nil
-		} else if postgres.GetPropertyEnumAllValues(colSchema) != nil {
+		case postgres.GetPropertyEnumAllValues(colSchema) != nil:
 			v.AddVal(colName, colVal.(string))
 			return nil
-		} else {
+		default:
 			return debeziumcommon.NewUnknownTypeError(xerrors.Errorf("unknown column type: %s, column name: %s", originalType, colName))
 		}
 	}

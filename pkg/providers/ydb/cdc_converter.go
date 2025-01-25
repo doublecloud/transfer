@@ -342,21 +342,22 @@ func convertToChangeItem(
 	msgSize uint64,
 	fillDefaults bool,
 ) (*abstract.ChangeItem, error) {
-	if event.Update != nil {
+	switch {
+	case event.Update != nil:
 		// insert/update
 		result, err := makeUpdateChangeItem(tablePath, schema, event, writeTime, offset, partitionID, msgSize, fillDefaults)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to make update changeItem, err: %w", err)
 		}
 		return result, nil
-	} else if event.Erase != nil {
+	case event.Erase != nil:
 		// delete
 		result, err := makeDeleteChangeItem(tablePath, schema, event, writeTime, offset, partitionID, msgSize)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to make delete changeItem, err: %w", err)
 		}
 		return result, nil
-	} else {
+	default:
 		return nil, xerrors.Errorf("unknown case: empty both: update & erase")
 	}
 }

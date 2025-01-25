@@ -54,11 +54,13 @@ func jsonpathGet(key string, in map[string]interface{}) (interface{}, error) {
 	jsonPathKey := reArr.ReplaceAllString(key, "[$1].")
 	expr := jp.MustParseString(jsonPathKey)
 	result := expr.Get(in)
-	if len(result) == 0 {
+
+	switch len(result) {
+	case 0:
 		return nil, nil
-	} else if len(result) == 1 {
+	case 1:
 		return result[0], nil
-	} else {
+	default:
 		arr, _ := json.Marshal(in)
 		return nil, xerrors.Errorf("impossible case: len(result)>1, jsonPath:%s, json:%s", jsonPathKey, arr)
 	}

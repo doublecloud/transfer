@@ -66,8 +66,8 @@ func (h *history) checkVersionExists(versionToCkeck int64, sr *SnapshotReader) e
 }
 
 func (h *history) activeCommitAtTime(sr *SnapshotReader, timestamp int64,
-	canReturnLastCommit bool, mustBeRecreatable bool, canReturnEarliestCommit bool) (*commit, error) {
-
+	canReturnLastCommit bool, mustBeRecreatable bool, canReturnEarliestCommit bool,
+) (*commit, error) {
 	timeInMill := timestamp
 	var earliestVersion int64
 	var err error
@@ -192,11 +192,12 @@ func (h *history) getEarliestReproducibleCommitVersion() (int64, error) {
 		}
 	}
 
-	if lastCompleteCheckpoint > 0 && lastCompleteCheckpoint >= smallestDeltaVersion {
+	switch {
+	case lastCompleteCheckpoint > 0 && lastCompleteCheckpoint >= smallestDeltaVersion:
 		return lastCompleteCheckpoint, nil
-	} else if smallestDeltaVersion < math.MaxInt64 {
+	case smallestDeltaVersion < math.MaxInt64:
 		return 0, xerrors.Errorf("no reproducible commit found in: %s", h.logStore.Root())
-	} else {
+	default:
 		return 0, xerrors.Errorf("no files found in the log dir: %s", h.logStore.Root())
 	}
 }

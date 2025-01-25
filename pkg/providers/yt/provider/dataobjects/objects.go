@@ -174,13 +174,14 @@ func (objs *YTDataObjects) uniformParts() (map[int]int, error) {
 			logReason = "being less than desired part size"
 		} else {
 			rawShards := float64(restParts) * (float64(pair.TableWeight) / float64(totalWeight))
-			if rawShards == 0 {
+			switch {
+			case rawShards == 0:
 				shards = 1
 				logReason = "being proportionally too small"
-			} else if (float64(objs.tbls[pair.TableIndex].DataWeight) / rawShards) < float64(objs.cfg.DesiredPartSizeBytes) {
+			case (float64(objs.tbls[pair.TableIndex].DataWeight) / rawShards) < float64(objs.cfg.DesiredPartSizeBytes):
 				shards = int(math.Floor(float64(objs.tbls[pair.TableIndex].DataWeight) / float64(objs.cfg.DesiredPartSizeBytes)))
 				logReason = "using desired part size"
-			} else {
+			default:
 				shards = int(rawShards)
 				logReason = "keeping proportional parts distribution"
 			}

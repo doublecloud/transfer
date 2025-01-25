@@ -746,11 +746,12 @@ func compareGeometry(obj1, obj2 string, parser func(string) (interface{}, error)
 	lObj, lErr := parser(obj1)
 	rObj, rErr := parser(obj2)
 
-	if lErr != nil {
+	switch {
+	case lErr != nil:
 		return false, xerrors.Errorf(`unable to parse first comparison object: %w`, lErr)
-	} else if rErr != nil {
+	case rErr != nil:
 		return false, xerrors.Errorf(`unable to parse second comparison object: %w`, rErr)
-	} else {
+	default:
 		return reflect.DeepEqual(lObj, rObj), nil
 	}
 }

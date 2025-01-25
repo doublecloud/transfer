@@ -98,11 +98,12 @@ func MakeFormatSettingsWithTopicPrefix(format model.SerializationFormat, topicPr
 		formatSettingsCopy[k] = v
 	}
 	if _, ok := formatSettingsCopy[debeziumparameters.TopicPrefix]; !ok {
-		if topicPrefix != "" {
+		switch {
+		case topicPrefix != "":
 			formatSettingsCopy[debeziumparameters.TopicPrefix] = topicPrefix
-		} else if topicFullPath != "" {
+		case topicFullPath != "":
 			formatSettingsCopy[debeziumparameters.TopicPrefix] = topicFullPath
-		} else {
+		default:
 			formatSettingsCopy[debeziumparameters.TopicPrefix] = defaultTopicPrefix
 		}
 	}

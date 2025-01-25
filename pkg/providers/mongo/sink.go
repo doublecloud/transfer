@@ -152,13 +152,14 @@ func (s *sinker) splitByDDLAndCollection(items []abstract.ChangeItem, index *int
 	result := map[Namespace][]abstract.ChangeItem{}
 	for ; *index < len(items); *index++ {
 		item := &items[*index]
-		if s.isDDLItem(item) {
+		switch {
+		case s.isDDLItem(item):
 			return nil, result, nil
-		} else if s.isDataItem(item) {
+		case s.isDataItem(item):
 			namespace := s.mongoCollection(item.TableID())
 			item.Schema = namespace.Database // in any case schema bounded to namespace database
 			result[namespace] = append(result[namespace], *item)
-		} else {
+		default:
 			return nil, nil, xerrors.Errorf("operation not supported: %s", item.Kind)
 		}
 	}

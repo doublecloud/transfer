@@ -14,11 +14,12 @@ import (
 func getDocument(chgItem *abstract.ChangeItem, shardKey *shardedCollectionSinkContext) (bson.D, error) {
 	var document bson.D
 	var err error
-	if IsUpdateDocumentSchema(chgItem.TableSchema.Columns()) {
+	switch {
+	case IsUpdateDocumentSchema(chgItem.TableSchema.Columns()):
 		document = GetUpdatedDocument(chgItem.ColumnValues)
-	} else if IsNativeMongoSchema(chgItem.TableSchema.Columns()) {
+	case IsNativeMongoSchema(chgItem.TableSchema.Columns()):
 		document = GetDocument(chgItem.ColumnValues)
-	} else { // heterogeneous transfer
+	default:
 		document, err = buildBsonDValues(chgItem)
 		if err != nil {
 			return nil, xerrors.Errorf("cannot build document bson.D from input event item: %w", err)
@@ -201,15 +202,13 @@ func copyDocument(orig any) (any, error) {
 	}
 }
 
-var (
-	complexKinds = map[reflect.Kind]bool{
-		reflect.Array:  true,
-		reflect.Map:    true,
-		reflect.Slice:  true,
-		reflect.String: true,
-		reflect.Struct: true,
-	}
-)
+var complexKinds = map[reflect.Kind]bool{
+	reflect.Array:  true,
+	reflect.Map:    true,
+	reflect.Slice:  true,
+	reflect.String: true,
+	reflect.Struct: true,
+}
 
 func copyAny(orig any) (any, error) {
 	copyComplex := func(in, out any) error {

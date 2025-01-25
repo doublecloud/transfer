@@ -42,7 +42,8 @@ func NewEventTarget(
 	logger log.Logger,
 	asyncSink abstract.AsyncSink,
 	cleanupType model.CleanupType,
-	tmpPolicy *model.TmpPolicyConfig) base.EventTarget {
+	tmpPolicy *model.TmpPolicyConfig,
+) base.EventTarget {
 	parallelism := runtime.GOMAXPROCS(0)
 	t := &legacyEventTarget{
 		logger:      logger,
@@ -63,11 +64,12 @@ func (t *legacyEventTarget) pusher() {
 	for task := range t.pushQ {
 		convRes := <-task.convertCh
 		pushRes, err := t.push(convRes)
-		if err != nil {
+		switch {
+		case err != nil:
 			task.resCh <- err
-		} else if pushRes == nil {
+		case pushRes == nil:
 			task.resCh <- nil
-		} else {
+		default:
 			go func(inCh, outCh chan error) {
 				outCh <- <-inCh
 			}(pushRes, task.resCh)

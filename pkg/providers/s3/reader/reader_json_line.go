@@ -230,11 +230,12 @@ func (r *JSONLineReader) constructCI(row map[string]any, fname string, lastModif
 			}
 		}
 		if !known {
-			if r.unexpectedFieldBehavior == s3.Infer {
+			switch r.unexpectedFieldBehavior {
+			case s3.Infer:
 				rest[key] = val
-			} else if r.unexpectedFieldBehavior == s3.Ignore {
+			case s3.Ignore:
 				continue
-			} else {
+			default:
 				return nil, xerrors.NewSentinel("unexpected json field found in jsonline file")
 			}
 		}

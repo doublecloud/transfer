@@ -41,19 +41,20 @@ func IsDeltaFile(path string) bool {
 }
 
 func GetFileVersion(path string) (int64, error) {
-	if IsCheckpointFile(path) {
+	switch {
+	case IsCheckpointFile(path):
 		v, err := CheckpointVersion(path)
 		if err != nil {
 			return 0, xerrors.Errorf("unable to parse checkpoint version: %s: %w", path, err)
 		}
 		return v, nil
-	} else if IsDeltaFile(path) {
+	case IsDeltaFile(path):
 		v, err := LogVersion(path)
 		if err != nil {
 			return 0, xerrors.Errorf("unable to parse log version: %s: %w", path, err)
 		}
 		return v, nil
-	} else {
+	default:
 		return -1, xerrors.Errorf("unexpected file type: %s", path)
 	}
 }

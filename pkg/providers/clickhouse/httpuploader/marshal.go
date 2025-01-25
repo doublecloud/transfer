@@ -183,19 +183,20 @@ func MarshalCItoJSON(row abstract.ChangeItem, rules *MarshallingRules, buf *byte
 				buf.WriteByte('"')
 			}
 		case bool:
-			if colSchema.DataType == schema.TypeBoolean.String() {
+			switch {
+			case colSchema.DataType == schema.TypeBoolean.String():
 				if v {
 					buf.WriteString("true")
 				} else {
 					buf.WriteString("false")
 				}
-			} else if (strings.ToLower(colSchema.DataType) == "any" && rules.AnyAsString) || colType.IsString {
+			case (strings.ToLower(colSchema.DataType) == "any" && rules.AnyAsString) || colType.IsString:
 				if v {
 					buf.WriteString(`"true"`)
 				} else {
 					buf.WriteString(`"false"`)
 				}
-			} else {
+			default:
 				if v {
 					buf.WriteString(`1`)
 				} else {

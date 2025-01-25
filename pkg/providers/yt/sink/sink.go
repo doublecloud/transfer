@@ -151,9 +151,7 @@ var schemaMismatchRes = []*regexp.Regexp{
 	reNonKeyComputed,
 }
 
-var (
-	TableProgressSchema = schema.MustInfer(new(TableProgress))
-)
+var TableProgressSchema = schema.MustInfer(new(TableProgress))
 
 func (s *sinker) pushWalSlice(input []abstract.ChangeItem) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(s.config.WriteTimeoutSec())*time.Second)
@@ -564,17 +562,18 @@ func (s *sinker) pushSlice(batch []abstract.ChangeItem, table string) error {
 					log.Any("table", table),
 					log.Error(err),
 				)
-				if strings.Contains(err.Error(), "value is too long:") && s.config.LoseDataOnError() {
+				switch {
+				case strings.Contains(err.Error(), "value is too long:") && s.config.LoseDataOnError():
 					s.logger.Warn("Value is too big", log.Error(err))
-				} else if s.config.DiscardBigValues() &&
+				case s.config.DiscardBigValues() &&
 					(strings.Contains(err.Error(), "is too long for dynamic data") ||
-						strings.Contains(err.Error(), "memory limit exceeded while parsing YSON stream: allocated")) {
+						strings.Contains(err.Error(), "memory limit exceeded while parsing YSON stream: allocated")):
 					s.logger.Warn("batch was discarded", log.Error(err))
 					for _, item := range chunk {
 						keys := item.KeysAsMap()
 						s.logger.Warn("change item was discarded", log.String("table", item.Fqtn()), log.Any("keys", keys))
 					}
-				} else {
+				default:
 					return err
 				}
 			}

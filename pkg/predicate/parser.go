@@ -135,21 +135,22 @@ func (p *Parser) scanWithMapping() (Token, string) {
 	case scanner.Ident:
 		ttU := strings.ToUpper(tt)
 
-		if ttU == "AND" {
+		switch ttU {
+		case "AND":
 			tok = AND
-		} else if ttU == "OR" {
+		case "OR":
 			tok = OR
-		} else if ttU == "NOT" {
+		case "NOT":
 			_, tmp := p.scan()
 			if tmp == "(" {
 				p.unscan()
 				tok = NOT
 			}
-		} else if ttU == "TRUE" {
+		case "TRUE":
 			tok = TRUE
-		} else if ttU == "FALSE" {
+		case "FALSE":
 			tok = FALSE
-		} else {
+		default:
 			tok = ILLEGAL
 		}
 	}
@@ -201,7 +202,6 @@ func (p *Parser) parseExpr() (Expr, error) {
 			expr = &BinaryExpr{LHS: expr, RHS: rhs, Op: op}
 		}
 	}
-
 }
 
 // parseUnaryExpr parses an non-binary expression.

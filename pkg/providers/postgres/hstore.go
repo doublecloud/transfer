@@ -25,11 +25,12 @@ func HstoreToMap(colVal string) (map[string]interface{}, error) {
 }
 
 func HstoreToJSON(colVal string) (string, error) {
-	if colVal == "" {
+	switch {
+	case colVal == "":
 		return "{}", nil
-	} else if colVal[0] == '{' {
+	case colVal[0] == '{':
 		return colVal, nil
-	} else {
+	default:
 		resultMap, err := HstoreToMap(colVal)
 		if err != nil {
 			return "", xerrors.Errorf("unable to parse hstore, val: %s, err: %w", colVal, err)

@@ -219,11 +219,12 @@ func NewGpHP(host string, port int) *GpHP {
 
 // NewGpHpWithMDBReplacement replaces domain names for Cloud Preprod & Prod and returns a new host-port pair
 func NewGpHpWithMDBReplacement(host string, port int) *GpHP {
-	if mdbPreprodDomainRe.MatchString(host) {
+	switch {
+	case mdbPreprodDomainRe.MatchString(host):
 		host = mdbPreprodDomainRe.ReplaceAllLiteralString(host, mdbServiceDomainExternalCloud)
-	} else if mdbProdDomainRe.MatchString(host) {
+	case mdbProdDomainRe.MatchString(host):
 		host = mdbProdDomainRe.ReplaceAllLiteralString(host, mdbServiceDomainExternalCloud)
-	} else if mdbInternalProdDomainRe.MatchString(host) {
+	case mdbInternalProdDomainRe.MatchString(host):
 		host = mdbInternalProdDomainRe.ReplaceAllLiteralString(host, mdbServiceDomainInternalCloud)
 	}
 	return NewGpHP(host, port)

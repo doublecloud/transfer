@@ -403,19 +403,21 @@ func buildChangeItemArgs(changeItem *abstract.ChangeItem, cols []abstract.ColSch
 		suffixWithDeleteTime := []interface{}{changeItem.CommitTime, changeItem.CommitTime}
 		suffixWithoutDeleteTime := []interface{}{changeItem.CommitTime, uint64(0)}
 
-		if changeItem.Kind == abstract.DeleteKind {
+		switch {
+		case changeItem.Kind == abstract.DeleteKind:
 			args = buildDeleteKindArgs(changeItem, suffixWithDeleteTime, cols)
-		} else if changeItem.KeysChanged() {
+		case changeItem.KeysChanged():
 			result := make([][]interface{}, 0)
 			result = append(result, buildDeleteKindArgs(changeItem, suffixWithDeleteTime, cols))
 			result = append(result, append(restoreVals(changeItem.ColumnValues, cols), suffixWithoutDeleteTime...))
 			return result
-		} else {
+		default:
 			args = append(restoreVals(changeItem.ColumnValues, cols), suffixWithoutDeleteTime...)
 		}
 	} else {
 		args = restoreVals(changeItem.ColumnValues, cols)
 	}
+
 	return [][]interface{}{args}
 }
 

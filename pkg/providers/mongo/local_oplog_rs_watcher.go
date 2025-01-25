@@ -69,11 +69,13 @@ func (w *localOplogRsWatcher) Watch(ctx context.Context, pusher changeEventPushe
 }
 
 func buildRegex(mongoNsSlice []string) string {
-	if len(mongoNsSlice) > 1 {
+	l := len(mongoNsSlice)
+	switch {
+	case l > 1:
 		return fmt.Sprintf("^(%s)$", strings.Join(mongoNsSlice, "|"))
-	} else if len(mongoNsSlice) == 1 {
+	case l == 1:
 		return fmt.Sprintf("^%s$", mongoNsSlice[0])
-	} else {
+	default:
 		return "^$"
 	}
 }

@@ -214,13 +214,14 @@ func (c *Consumer) getShardIterator(ctx context.Context, streamName, shardID, se
 		StreamName: aws.String(streamName),
 	}
 
-	if seqNum != "" {
+	switch {
+	case seqNum != "":
 		params.ShardIteratorType = aws.String(kinesis.ShardIteratorTypeAfterSequenceNumber)
 		params.StartingSequenceNumber = aws.String(seqNum)
-	} else if c.initialTimestamp != nil {
+	case c.initialTimestamp != nil:
 		params.ShardIteratorType = aws.String(kinesis.ShardIteratorTypeAtTimestamp)
 		params.Timestamp = c.initialTimestamp
-	} else {
+	default:
 		params.ShardIteratorType = aws.String(c.initialShardIteratorType)
 	}
 

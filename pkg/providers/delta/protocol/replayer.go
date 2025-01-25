@@ -2,8 +2,8 @@ package protocol
 
 import (
 	"encoding/json"
+	"path/filepath"
 	"sort"
-	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/providers/delta/action"
@@ -125,7 +125,7 @@ type replayTuple struct {
 type MemoryOptimizedLogReplay struct {
 	files    []string
 	logStore store.Store
-	//timezone      time.Location
+	// timezone      time.Location
 	checkpointReader CheckpointReader
 }
 
@@ -143,9 +143,7 @@ func (m *MemoryOptimizedLogReplay) GetReverseIterator() iter.Iter[*replayTuple] 
 	}
 }
 
-var (
-	_ iter.Iter[*replayTuple] = new(customJSONIterator)
-)
+var _ iter.Iter[*replayTuple] = new(customJSONIterator)
 
 type customJSONIterator struct {
 	iter iter.Iter[string]
@@ -209,25 +207,25 @@ type logReplayIterator struct {
 }
 
 func (l *logReplayIterator) getNextIter() (iter.Iter[*replayTuple], error) {
-
 	nextFile, err := l.reverseFilesIter.Value()
 	if err != nil {
 		return nil, xerrors.Errorf("unable to read reversed values: %w", err)
 	}
 
-	if strings.HasSuffix(nextFile, ".json") {
+	switch filepath.Ext(nextFile) {
+	case ".json":
 		lines, err := l.logStore.Read(nextFile)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to read json checkpoint: %w", err)
 		}
 		return &customJSONIterator{iter: lines}, nil
-	} else if strings.HasSuffix(nextFile, ".parquet") {
+	case ".parquet":
 		lines, err := l.checkpointReader.Read(nextFile)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to read parquet checkpoint: %w", err)
 		}
 		return &customParquetIterator{iter: lines}, nil
-	} else {
+	default:
 		return nil, xerrors.Errorf("unexpected log file path: %s", nextFile)
 	}
 }
