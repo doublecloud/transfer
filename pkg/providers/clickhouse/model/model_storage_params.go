@@ -123,5 +123,5 @@ func (c *ChStorageParams) ToConnParams() connConfigWrapper {
 }
 
 func (c *ChStorageParams) String() string {
-	return fmt.Sprintf("%s:[%v|%v]/%v", c.Shards, c.NativePort, c.HTTPPort, c.Database)
+	return fmt.Sprintf("%v:[%v|%v]/%v", c.Shards, c.NativePort, c.HTTPPort, c.Database)
 }
