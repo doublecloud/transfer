@@ -31,7 +31,6 @@ var (
 )
 
 func init() {
-	t.Setenv("YC", "1") // to not go to vanga
 	Source.WithDefaults()
 }
 
@@ -41,6 +40,8 @@ func TestMain(m *testing.M) {
 }
 
 func TestGroup(t *testing.T) {
+	t.Setenv("YC", "1") // to not go to vanga
+
 	targetPort, err := helpers.GetPortFromStr(Target.Cluster())
 	require.NoError(t, err)
 	defer func() {

@@ -183,7 +183,6 @@ func getMonthPartitionedTestHeavy(t *testing.T) {
 
 func offsetDateTest(t *testing.T) {
 	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
-	t.Parallel()
 	t.Run("Hours", offsetDateTestHours)
 	t.Run("Days", offsetDateTestDays)
 	// t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
