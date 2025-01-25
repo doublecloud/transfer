@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 // ---
 // ch
 
@@ -118,4 +120,8 @@ func (w connConfigWrapper) PemFileContent() string {
 
 func (c *ChStorageParams) ToConnParams() connConfigWrapper {
 	return connConfigWrapper{p: c}
+}
+
+func (c *ChStorageParams) String() string {
+	return fmt.Sprintf("%s:[%v|%v]/%v", c.Shards, c.NativePort, c.HTTPPort, c.Database)
 }
