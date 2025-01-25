@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"hash/fnv"
-	"math/big"
 	"strconv"
 	"strings"
 	"sync"
@@ -216,21 +215,6 @@ const (
 	SequenceMask      = (1 << 4) - 1
 )
 
-// parseSeqNo try to extract lsn from seq-no
-// the sequenceNumber in Kinesis streams is only guaranteed to be unique within each shard (partition key is what determines the shard).
-// but we know that for certain version (186 bit length) we can extract sequence mask
-// this code is extracted from here: https://github.com/awslabs/amazon-kinesis-client/blob/master/amazon-kinesis-client/src/main/java/software/amazon/kinesis/checkpoint/SequenceNumberValidator.java#L39
-func parseSeqNo(id string) int64 {
-	bigint, ok := new(big.Int).SetString(id, 10)
-	if !ok {
-		return hash(id)
-	}
-	if bigint.BitLen() != ExpectedBitLength {
-		return hash(id)
-	}
-	return bigint.Rsh(bigint, SequenceMask).Int64()
-}
-
 func hash(id string) int64 {
 	algorithm := fnv.New64a()
 	_, _ = algorithm.Write([]byte(id))
@@ -321,5 +305,4 @@ func NewSource(
 		consumer:      c,
 		lastError:     nil,
 	}, nil
-
 }

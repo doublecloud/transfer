@@ -39,9 +39,6 @@ type GpSourceAdvancedProps struct {
 	// EnforceConsistency enables *enforcement* of consistent snapshot. When it is not set, the user is responsible for snapshot consistency
 	EnforceConsistency bool
 
-	batchLimitRows int             // deprecated: is not used anymore
-	batchLimitSize model.BytesSize // deprecated: is not used anymore
-
 	ServiceSchema string
 
 	// AllowCoordinatorTxFailure disables coordinator TX monitoring (liveness monitor) and enables the transfer to finish snapshot successfully even if the coordinator TX fails

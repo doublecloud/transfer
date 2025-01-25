@@ -33,7 +33,6 @@ const (
 
 var (
 	source        = *helpers.WithMysqlInclude(helpers.RecipeMysqlSource(), []string{tableName})
-	tablePath     = ypath.Path(fmt.Sprintf("//home/cdc/test/mysql2yt/date_time/%s_%s", source.Database, tableName))
 	targetCluster = os.Getenv("YT_PROXY")
 )
 

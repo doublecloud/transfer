@@ -27,15 +27,6 @@ import (
 var (
 	Source = *helpers.WithMysqlInclude(helpers.RecipeMysqlSource(), []string{"__test_a", "__test_b", "__test_c", "__test_d"})
 	Target = yt_helpers.RecipeYtTarget("//home/cdc/test/mysql2yt_e2e_alters")
-
-	db = os.Getenv("RECIPE_MYSQL_SOURCE_DATABASE")
-
-	tableNames = []abstract.TableDescription{
-		{Name: fmt.Sprintf("%s___test_a", db)},
-		{Name: fmt.Sprintf("%s___test_b", db)},
-		{Name: fmt.Sprintf("%s___test_c", db)},
-		{Name: fmt.Sprintf("%s___test_d", db)},
-	}
 )
 
 func init() {

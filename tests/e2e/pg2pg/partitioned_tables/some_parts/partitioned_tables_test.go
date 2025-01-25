@@ -3,7 +3,6 @@ package replication
 import (
 	"context"
 	"os"
-	"strconv"
 	"testing"
 	"time"
 
@@ -29,8 +28,7 @@ var (
 	), pgrecipe.WithEdit(func(pg *postgres.PgSource) {
 		pg.UseFakePrimaryKey = true
 	}))
-	dstPort, _ = strconv.Atoi(os.Getenv("DB0_PG_LOCAL_PORT"))
-	Target     = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
+	Target = *pgrecipe.RecipeTarget(pgrecipe.WithPrefix("DB0_"))
 )
 
 func init() {
@@ -178,24 +176,24 @@ func Load(t *testing.T) {
 	compareParams := helpers.NewCompareStorageParams()
 	compareParams.TableFilter = func(tables abstract.TableMap) []abstract.TableDescription {
 		return []abstract.TableDescription{
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited_y2006m02",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited_y2006m04",
 				Schema: "public",
 			},
-			//skip measurement_declarative because of turned UseFakePrimaryKey option on (limitation of outdated 10.5 PG version)
-			abstract.TableDescription{
+			// skip measurement_declarative because of turned UseFakePrimaryKey option on (limitation of outdated 10.5 PG version)
+			{
 				Name:   "measurement_declarative_y2006m02",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_declarative_y2006m04",
 				Schema: "public",
 			},
