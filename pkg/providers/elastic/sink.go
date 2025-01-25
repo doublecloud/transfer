@@ -101,13 +101,13 @@ func (s *Sink) applyIndexDump(item abstract.ChangeItem) error {
 	if err != nil {
 		return xerrors.Errorf("unable to check if index %q exists: %w", indexName, err)
 	}
-	if response.StatusCode == 200 {
+	if response.StatusCode == http.StatusOK {
 		s.existsIndexesMutex.Lock()
 		defer s.existsIndexesMutex.Unlock()
 		s.existsIndexes.Add(tableID)
 		return nil
 	}
-	if response.StatusCode != 404 {
+	if response.StatusCode != http.StatusNotFound {
 		return xerrors.Errorf("wrong status code when checking index %q: %s", indexName, response.String())
 	}
 
@@ -215,10 +215,10 @@ func sanitizeKeysInMap(in map[string]interface{}) []map[string]interface{} {
 
 func sanitizeMapKey(in string) string {
 	runes := []rune(in)
-	var outStringLen = 0
+	outStringLen := 0
 
-	var startCopyStr = 0
-	var isEmptyCopyStr = true
+	startCopyStr := 0
+	isEmptyCopyStr := true
 	for i := 0; i <= len(runes); i++ {
 		if i == len(runes) || runes[i] == '.' {
 			if !isEmptyCopyStr {
@@ -300,7 +300,7 @@ func (s *Sink) pushBatch(changeItems []abstract.ChangeItem) error {
 	if len(changeItems) == 0 {
 		return nil
 	}
-	var indexResult = make(chan error)
+	indexResult := make(chan error)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	go func() {
