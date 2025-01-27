@@ -3,6 +3,7 @@ package elastic
 import (
 	"fmt"
 	"io"
+	"net"
 	"reflect"
 	"unsafe"
 
