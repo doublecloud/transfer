@@ -17,7 +17,7 @@ import (
 )
 
 func TestCanonSource(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	testCasePath := "test_csv_all_types"
 	src := s3.PrepareCfg(t, "", "")
@@ -189,7 +189,7 @@ func TestCanonSource(t *testing.T) {
 var processed []abstract.ChangeItem
 
 func TestNativeS3WithProvidedSchemaAndSystemCols(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	processed = make([]abstract.ChangeItem, 0)
 	testCasePath := "test_csv_all_types"
@@ -258,7 +258,7 @@ func storeItems(item []abstract.ChangeItem) []abstract.ChangeItem {
 }
 
 func TestNativeS3MissingColumnsAreFilled(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	processed = make([]abstract.ChangeItem, 0)
 	testCasePath := "test_csv_all_types"

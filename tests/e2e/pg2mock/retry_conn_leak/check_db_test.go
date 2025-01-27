@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -35,7 +34,7 @@ func (s *mockSinker) Push(input []abstract.ChangeItem) error {
 }
 
 func TestReplication(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	sinker := &mockSinker{}
 	transfer := model.Transfer{
 		ID: "test_id",

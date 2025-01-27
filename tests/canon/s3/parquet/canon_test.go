@@ -18,7 +18,7 @@ import (
 )
 
 func TestUnsopportedData(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	absPath, err := filepath.Abs("unsupported_data")
 	require.NoError(t, err)
 	files, err := os.ReadDir(absPath)
@@ -82,7 +82,7 @@ func (r *rowsCutter) Push(items []abstract.ChangeItem) error {
 }
 
 func TestCanonSource(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	absPath, err := filepath.Abs("data")
 	require.NoError(t, err)
 	files, err := os.ReadDir(absPath)

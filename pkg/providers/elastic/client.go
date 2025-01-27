@@ -29,7 +29,7 @@ func openSearchResolveHosts(clusterID string) ([]string, error) {
 	result := make([]string, 0)
 	for _, currHost := range hosts {
 		if currHost.Type == "OPENSEARCH" {
-			result = append(result, fmt.Sprintf("https://%s:%d", currHost.Name, 9200))
+			result = append(result, fmt.Sprintf("https://%s", net.JoinHostPort(currHost.Name, "9200")))
 		}
 	}
 	return result, nil
@@ -43,7 +43,7 @@ func elasticSearchResolveHosts(clusterID string) ([]string, error) {
 	result := make([]string, 0)
 	for _, currHost := range hosts {
 		if currHost.Type == "DATA_NODE" {
-			result = append(result, fmt.Sprintf("https://%s:%d", currHost.Name, 9200))
+			result = append(result, fmt.Sprintf("https://%s", net.JoinHostPort(currHost.Name, "9200")))
 		}
 	}
 	return result, nil

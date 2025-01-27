@@ -1,7 +1,6 @@
 package clickhouse
 
 import (
-	"os"
 	"sort"
 	"strings"
 	"testing"
@@ -50,7 +49,7 @@ func getBaseType(colSchema abstract.ColSchema) string {
 }
 
 func TestCanonSource(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	Source := &model.ChSource{
 		ShardsList: []model.ClickHouseShard{
 			{

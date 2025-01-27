@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/binary"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/cenkalti/backoff/v4"
@@ -11,15 +12,17 @@ import (
 	"github.com/doublecloud/transfer/pkg/parsers"
 	genericparser "github.com/doublecloud/transfer/pkg/parsers/generic"
 	"github.com/doublecloud/transfer/pkg/schemaregistry/confluent"
+	"github.com/doublecloud/transfer/pkg/schemaregistry/warmup"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
 type ConfluentSrImpl struct {
-	logger                   log.Logger
-	SchemaRegistryClient     *confluent.SchemaRegistryClient
-	SendSrNotFoundToUnparsed bool
-	inMDBuilder              *mdBuilder
+	logger                    log.Logger
+	SchemaRegistryClient      *confluent.SchemaRegistryClient
+	schemaRegistryClientMutex sync.Mutex
+	SendSrNotFoundToUnparsed  bool
+	inMDBuilder               *mdBuilder
 }
 
 func (p *ConfluentSrImpl) doWithSchema(partition abstract.Partition, schema *confluent.Schema, refs map[string]confluent.Schema, name string, buf []byte, offset uint64, writeTime time.Time, isCloudevents bool) ([]byte, []abstract.ChangeItem) {
@@ -115,6 +118,7 @@ func (p *ConfluentSrImpl) Do(msg parsers.Message, partition abstract.Partition) 
 }
 
 func (p *ConfluentSrImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
+	warmup.WarmUpSRCache(p.logger, &p.schemaRegistryClientMutex, batch, p.SchemaRegistryClient, p.SendSrNotFoundToUnparsed)
 	result := make([]abstract.ChangeItem, 0, len(batch.Messages))
 	for _, msg := range batch.Messages {
 		result = append(result, p.Do(msg, abstract.Partition{Cluster: "", Partition: batch.Partition, Topic: batch.Topic})...)
@@ -130,9 +134,10 @@ func NewConfluentSchemaRegistryImpl(srURL string, caCert string, username string
 	}
 	client.SetCredentials(username, password)
 	return &ConfluentSrImpl{
-		logger:                   logger,
-		SchemaRegistryClient:     client,
-		SendSrNotFoundToUnparsed: SendSrNotFoundToUnparsed,
-		inMDBuilder:              newMDBuilder(),
+		logger:                    logger,
+		SchemaRegistryClient:      client,
+		schemaRegistryClientMutex: sync.Mutex{},
+		SendSrNotFoundToUnparsed:  SendSrNotFoundToUnparsed,
+		inMDBuilder:               newMDBuilder(),
 	}
 }

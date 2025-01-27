@@ -1,7 +1,6 @@
 package config
 
 import (
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,10 +8,8 @@ import (
 )
 
 func TestParseTransferYaml_WithEnvSubstitution(t *testing.T) {
-	require.NoError(t, os.Setenv("FOO", "secret1"))
-	require.NoError(t, os.Setenv("BAR", "secret2"))
-	defer os.Unsetenv("FOO")
-	defer os.Unsetenv("BAR")
+	t.Setenv("FOO", "secret1")
+	t.Setenv("BAR", "secret2")
 
 	transfer, err := ParseTransferYaml([]byte(`
 src:
@@ -31,10 +28,8 @@ dst:
 }
 
 func TestParserTransferYaml_WithRawYaml(t *testing.T) {
-	require.NoError(t, os.Setenv("FOO", "secret1"))
-	require.NoError(t, os.Setenv("BAR", "secret2"))
-	defer os.Unsetenv("FOO")
-	defer os.Unsetenv("BAR")
+	t.Setenv("FOO", "secret1")
+	t.Setenv("BAR", "secret2")
 
 	transfer, err := ParseTransferYaml([]byte(`
 src:
@@ -53,10 +48,8 @@ dst:
 }
 
 func TestParserTransferYaml_WithYaml(t *testing.T) {
-	require.NoError(t, os.Setenv("FOO", "secret1"))
-	require.NoError(t, os.Setenv("BAR", "secret2"))
-	defer os.Unsetenv("FOO")
-	defer os.Unsetenv("BAR")
+	t.Setenv("FOO", "secret1")
+	t.Setenv("BAR", "secret2")
 
 	transfer, err := ParseTransferYaml([]byte(`
 src:
