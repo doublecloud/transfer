@@ -29,7 +29,8 @@ func filterYdbTableColumns(filter []YdbColumnsFilter, description options.Descri
 		if err != nil {
 			return nil, xerrors.Errorf("unable to compile regexp: %s: %w", filterRule.ColumnNamesRegexp, err)
 		}
-		filteredColumns := make([]options.Column, 0)
+		var filteredColumns []options.Column
+
 		for _, column := range description.Columns {
 			hasMatch := columnsToFilterRegExp.MatchString(column.Name)
 			if (filterRule.Type == YdbColumnsWhiteList && hasMatch) ||
