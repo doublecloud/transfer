@@ -50,7 +50,7 @@ func SubmitLogs(data []HTTPLogItem, domain, token string) error {
 	}
 	body := bytes.NewReader(payloadBytes)
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("https://ingress.%s/logs/v1/singles", domain), body)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("https://ingress.%s/logs/v1/singles", domain), body)
 	if err != nil {
 		return xerrors.Errorf("unable to make request: %w", err)
 	}

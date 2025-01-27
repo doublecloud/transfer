@@ -34,7 +34,7 @@ func TestLambdaTransformer(t *testing.T) {
 		}
 		js, err := json.Marshal(data)
 		require.NoError(t, err)
-		w.WriteHeader(200)
+		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")
 		_, err = w.Write(js)
 		require.NoError(t, err)

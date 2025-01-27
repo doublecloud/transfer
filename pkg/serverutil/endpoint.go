@@ -13,7 +13,7 @@ import (
 )
 
 func PingFunc(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "Application/json")
 	res, _ := json.Marshal(map[string]interface{}{"ping": "pong", "ts": time.Now()})
 	if _, err := w.Write(res); err != nil {
