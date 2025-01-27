@@ -6,9 +6,12 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/mount"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/docker"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
@@ -19,26 +22,35 @@ type runner struct {
 	cfg *Config
 
 	transfer *model.Transfer
+
+	docker *docker.DockerWrapper
 }
 
-func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) *runner {
+func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
+	dockerWrapper, err := docker.NewDockerWrapper(nil)
+	if err != nil {
+		return nil, err
+	}
+
 	return &runner{
 		dst: dst,
 		cfg: cfg,
 
 		transfer: transfer,
-	}
+
+		docker: dockerWrapper,
+	}, nil
 }
 
 func (r *runner) Run(ctx context.Context) error {
-	r.cleanupConfiguration(ctx)
+	r.cleanupConfiguration()
 	if err := r.initializeDocker(ctx); err != nil {
 		return xerrors.Errorf("failed to initialize docker for DBT: %w", err)
 	}
 	if err := r.initializeConfiguration(ctx); err != nil {
 		return xerrors.Errorf("failed to initialize DBT configuration files: %w", err)
 	}
-	defer r.cleanupConfiguration(ctx)
+	defer r.cleanupConfiguration()
 	if err := r.run(ctx); err != nil {
 		return xerrors.Errorf("failed to run DBT: %w", err)
 	}
@@ -46,7 +58,7 @@ func (r *runner) Run(ctx context.Context) error {
 }
 
 func (r *runner) initializeDocker(ctx context.Context) error {
-	if err := executeCommand(ctx, "docker", "pull", r.fullImageID()); err != nil {
+	if err := r.docker.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
 		return xerrors.Errorf("docker initialization failed: %w", err)
 	}
 	return nil
@@ -145,32 +157,51 @@ func (r *runner) gitCloneCommands() []string {
 	return result
 }
 
-func (r *runner) cleanupConfiguration(ctx context.Context) {
-	if err := executeCommand(ctx, "rm", "-r", "-f", pathProject()); err != nil {
+func (r *runner) cleanupConfiguration() {
+	if err := os.RemoveAll(pathProject()); err != nil {
 		logger.Log.Warn("DBT project cleanup failed", log.Error(err))
 	}
-	if err := executeCommand(ctx, "rm", "-f", pathProfiles()); err != nil {
+	if err := os.Remove(pathProfiles()); err != nil {
 		logger.Log.Warn("DBT profiles cleanup failed", log.Error(err))
 	}
 }
 
 func (r *runner) run(ctx context.Context) error {
-	if err := executeCommand(
-		ctx,
-		"docker", "run",
-		"--rm",
-		"--network", "host",
-		"--add-host", "host.docker.internal:host-gateway",
-		"--mount", fmt.Sprintf("type=bind,source=%s,target=/usr/app", pathProject()),
-		"--mount", fmt.Sprintf("type=bind,source=%s,target=/root/.dbt/profiles.yml", pathProfiles()),
-		"--env", "AWS_EC2_METADATA_DISABLED=true", // this will disable going into metadata for IAM tokens
-		"--log-driver", "local", // log driver options are needed to avoid disk overfill by container logs
-		"--log-opt", "max-size=100m",
-		"--log-opt", "max-file=3",
-		r.fullImageID(),
-		r.cfg.Operation,
-	); err != nil {
+	opts := docker.DockerOpts{
+		Volumes:   map[string]string{},
+		LogDriver: "local",
+		LogOptions: map[string]string{
+			"max-size": "100m",
+			"max-file": "3",
+		},
+		Image:   r.fullImageID(),
+		Network: "host",
+		Command: []string{
+			r.cfg.Operation,
+		},
+		Env: []string{
+			"AWS_EC2_METADATA_DISABLED=true",
+		},
+		AutoRemove: true,
+		Mounts: []mount.Mount{
+			{
+				Type:   mount.TypeBind,
+				Source: pathProject(),
+				Target: "/usr/app",
+			},
+			{
+				Type:   mount.TypeBind,
+				Source: pathProfiles(),
+				Target: "/root/.dbt/profiles.yml",
+			},
+		},
+		AttachStdout: true,
+		AttachStderr: true,
+	}
+
+	if _, _, err := r.docker.RunContainer(ctx, opts); err != nil {
 		return xerrors.Errorf("docker run failed: %w", err)
 	}
+
 	return nil
 }

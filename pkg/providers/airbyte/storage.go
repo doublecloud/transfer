@@ -6,8 +6,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
-	"os/exec"
 	"sort"
 	"strings"
 
@@ -81,8 +81,7 @@ func (a *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 		fmt.Sprintf("/data/%s", catalogFile),
 	}
 
-  stdout, stderr, err := a.runRawCommand(args...)
-
+	stdout, stderr, err := a.runRawCommand(args...)
 	if err != nil {
 		return xerrors.Errorf("%s unable to start: %w", table.ID().String(), err)
 	}
@@ -168,14 +167,7 @@ func (a *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	if len(data) > 0 {
 		a.logger.Warnf("stderr: %v\nlast error:%v", string(data), lastAirbyteError)
 	}
-	if cmd != nil && cmd.Process != nil {
-		if err := cmd.Process.Kill(); err != nil && !strings.Contains(err.Error(), "process already finished") {
-			return xerrors.Errorf("%s unable to kill container: %w", table.ID().String(), err)
-		}
-	}
-	if err := cmd.Wait(); err != nil {
-		return xerrors.Errorf("%s read command failed: %w", table.ID().String(), err)
-	}
+
 	return nil
 }
 
@@ -391,10 +383,12 @@ func (a *Storage) baseOpts() docker.DockerOpts {
 			"max-size": "100m",
 			"max-file": "3",
 		},
+		AttachStdout: true,
+		AttachStderr: true,
 	}
 }
 
-func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader,, error) {
+func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader, error) {
 	ctx := context.Background()
 
 	opts := a.baseOpts()
@@ -424,6 +418,10 @@ func (a *Storage) runCommand(args ...string) ([]byte, error) {
 	}
 
 	if err != nil {
+		// TODO: duplicated code
+		opts := a.baseOpts()
+		opts.Command = args
+
 		a.logger.Errorf("command: %s stdout:\n%s", opts.String(), outBuf.String())
 		a.logger.Errorf("command: %s stderr:\n%s", opts.String(), errBuf.String())
 

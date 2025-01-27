@@ -23,6 +23,7 @@ import (
 
 type DockerOpts struct {
 	Volumes       map[string]string
+	Mounts        []mount.Mount
 	LogDriver     string
 	LogOptions    map[string]string
 	Image         string
@@ -54,7 +55,7 @@ func (opts *DockerOpts) String() string {
 		args = append(args, "--network", opts.Network)
 	}
 
-	// Volumes
+	// Volumes (handled with -v)
 	if len(opts.Volumes) > 0 {
 		var volumeKeys []string
 		for hostPath := range opts.Volumes {
@@ -64,6 +65,22 @@ func (opts *DockerOpts) String() string {
 		for _, hostPath := range volumeKeys {
 			containerPath := opts.Volumes[hostPath]
 			args = append(args, "-v", fmt.Sprintf("%s:%s", hostPath, containerPath))
+		}
+	}
+
+	// Mounts (handled with --mount)
+	if len(opts.Mounts) > 0 {
+		for _, m := range opts.Mounts {
+			mountOpts := []string{
+				fmt.Sprintf("type=%s", m.Type),
+				fmt.Sprintf("source=%s", m.Source),
+				fmt.Sprintf("target=%s", m.Target),
+			}
+			if m.ReadOnly {
+				mountOpts = append(mountOpts, "readonly")
+			}
+
+			args = append(args, "--mount", strings.Join(mountOpts, ","))
 		}
 	}
 
@@ -156,19 +173,27 @@ func (dw *DockerWrapper) isDockerReady() bool {
 	return true
 }
 
+func (dw *DockerWrapper) Pull(ctx context.Context, image string, opts types.ImagePullOptions) error {
+	_, _, err := dw.cli.ImageInspectWithRaw(ctx, image)
+	if client.IsErrNotFound(err) {
+		reader, err := dw.cli.ImagePull(ctx, image, types.ImagePullOptions{})
+		if err != nil {
+			return err
+		}
+		defer reader.Close()
+	} else if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (dw *DockerWrapper) RunContainer(ctx context.Context, opts DockerOpts) (stdout io.Reader, stderr io.Reader, err error) {
 	if dw.cli == nil {
 		return nil, nil, xerrors.Errorf("docker unavailable")
 	}
 
-	_, _, err = dw.cli.ImageInspectWithRaw(ctx, opts.Image)
-	if client.IsErrNotFound(err) {
-		reader, err := dw.cli.ImagePull(ctx, opts.Image, types.ImagePullOptions{})
-		if err != nil {
-			return nil, nil, err
-		}
-		defer reader.Close()
-	} else if err != nil {
+	if err := dw.Pull(ctx, opts.Image, types.ImagePullOptions{}); err != nil {
 		return nil, nil, err
 	}
 
@@ -180,6 +205,7 @@ func (dw *DockerWrapper) RunContainer(ctx context.Context, opts DockerOpts) (std
 			Target: containerPath,
 		})
 	}
+	mountsList = append(mountsList, opts.Mounts...)
 
 	containerConfig := &container.Config{
 		Image:  opts.Image,
