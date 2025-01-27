@@ -6,18 +6,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"sort"
 	"strings"
-	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"github.com/doublecloud/transfer/pkg/docker"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -38,6 +37,8 @@ type Storage struct {
 	metrics  *stats.SourceStats
 	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
+
+	docker *docker.DockerWrapper
 }
 
 func (a *Storage) Close() {}
@@ -69,29 +70,23 @@ func (a *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	}
 	var lastAirbyteError error
 	var currentState json.RawMessage
-	args := append(
-		a.baseArgs(),
+
+	args := []string{
 		"read",
 		"--config",
 		"/data/config.json",
 		"--state",
-		"/data/"+stateFile,
+		fmt.Sprintf("/data/%s", stateFile),
 		"--catalog",
-		"/data/"+catalogFile,
-	)
-	a.logger.Infof("docker %v", strings.Join(args, " "))
-	cmd := exec.Command("docker", args...)
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return xerrors.Errorf("%s unable to init stdout pipe: %w", table.ID().String(), err)
+		fmt.Sprintf("/data/%s", catalogFile),
 	}
-	stderr, err := cmd.StderrPipe()
+
+  stdout, stderr, err := a.runRawCommand(args...)
+
 	if err != nil {
-		return xerrors.Errorf("%s unable to init stderr pipe: %w", table.ID().String(), err)
-	}
-	if err := cmd.Start(); err != nil {
 		return xerrors.Errorf("%s unable to start: %w", table.ID().String(), err)
 	}
+
 	var batch *RecordBatch
 	cntr := 0
 	batch = NewRecordBatch(cntr, stream.Stream.AsModel())
@@ -166,7 +161,7 @@ func (a *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	if err := a.storeState(table.ID(), currentState); err != nil {
 		return xerrors.Errorf("unable to store incremental state: %w", err)
 	}
-	data, err := ioutil.ReadAll(stderr)
+	data, err := io.ReadAll(stderr)
 	if err != nil {
 		return xerrors.Errorf("%s stderr read all failed: %w", table.ID().String(), err)
 	}
@@ -323,7 +318,7 @@ func (a *Storage) writeFile(fileName, fileData string) error {
 	fullPath := fmt.Sprintf("%v/%v", a.config.DataDir(), fileName)
 	a.logger.Debugf("%s -> \n%s", fileName, fileData)
 	defer a.logger.Infof("file(%s) %s written", format.SizeInt(len(fileData)), fullPath)
-	return ioutil.WriteFile(
+	return os.WriteFile(
 		fullPath,
 		[]byte(fileData),
 		0664,
@@ -380,38 +375,62 @@ func (a *Storage) discover() error {
 	return nil
 }
 
-func (a *Storage) baseArgs() []string {
-	return []string{
-		"run",
-		"-v",
-		fmt.Sprintf("%v:/data", a.config.DataDir()),
-		"--network",
-		"host",
-		"--env",
-		// this will disable going into metadata for IAM tokens
-		"AWS_EC2_METADATA_DISABLED=true",
-		"--rm",
-		// log driver options are needed to avoid disk overfill by container logs
-		"--log-driver", "local",
-		"--log-opt", "max-size=100m",
-		"--log-opt", "max-file=3",
-		a.config.DockerImage(),
+func (a *Storage) baseOpts() docker.DockerOpts {
+	return docker.DockerOpts{
+		Image: a.config.DockerImage(),
+		Volumes: map[string]string{
+			a.config.DataDir(): "/data",
+		},
+		Network: "host",
+		Env: []string{
+			"AWS_EC2_METADATA_DISABLED=true",
+		},
+		AutoRemove: true,
+		LogDriver:  "local",
+		LogOptions: map[string]string{
+			"max-size": "100m",
+			"max-file": "3",
+		},
 	}
 }
 
+func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader,, error) {
+	ctx := context.Background()
+
+	opts := a.baseOpts()
+	opts.Command = args
+
+	a.logger.Info(opts.String())
+
+	return a.docker.RunContainer(ctx, opts)
+}
+
 func (a *Storage) runCommand(args ...string) ([]byte, error) {
-	dockerArgs := append(a.baseArgs(), args...)
-	a.logger.Infof("docker %v", strings.Join(dockerArgs, " "))
-	cmd := exec.Command("docker", dockerArgs...)
-	var outBuf, errBuf bytes.Buffer
-	cmd.Stdout = &outBuf
-	cmd.Stderr = &errBuf
-	if err := cmd.Run(); err != nil {
-		a.logger.Errorf("command: %s stdout:\n%s", strings.Join(dockerArgs, " "), outBuf.String())
-		a.logger.Errorf("command: %s stderr:\n%s", strings.Join(dockerArgs, " "), errBuf.String())
+	outReader, errReader, err := a.runRawCommand(args...)
+
+	outBuf := new(bytes.Buffer)
+	errBuf := new(bytes.Buffer)
+
+	if outReader != nil {
+		if _, err := outBuf.ReadFrom(outReader); err != nil {
+			return nil, xerrors.Errorf("failed to read stdout: %w", err)
+		}
+	}
+
+	if errReader != nil {
+		if _, err := errBuf.ReadFrom(outReader); err != nil {
+			return nil, xerrors.Errorf("failed to read stdout: %w", err)
+		}
+	}
+
+	if err != nil {
+		a.logger.Errorf("command: %s stdout:\n%s", opts.String(), outBuf.String())
+		a.logger.Errorf("command: %s stderr:\n%s", opts.String(), errBuf.String())
+
 		return nil, xerrors.Errorf("failed: %w", err)
 	}
-	scr := bufio.NewScanner(&errBuf)
+
+	scr := bufio.NewScanner(errReader)
 	var errs util.Errors
 	for scr.Scan() {
 		errs = append(errs, xerrors.New(scr.Text()))
@@ -452,74 +471,6 @@ func (a *Storage) storeState(id abstract.TableID, state json.RawMessage) error {
 	return nil
 }
 
-func ensureDocker(lgr log.Logger, supervisorConfigPath string, timeout time.Duration) error {
-	if supervisorConfigPath == "" {
-		// no supervisor, assume docker is already running.
-		if !isDockerReady(lgr) {
-			return xerrors.New("docker is not ready")
-		}
-		return nil
-	}
-	// Command to start supervisord
-	st := time.Now()
-	var stdoutBuf, stderrBuf bytes.Buffer
-
-	supervisorCmd := exec.Command("supervisord", "-n", "-c", supervisorConfigPath)
-	supervisorCmd.Stdout = &stdoutBuf
-	supervisorCmd.Stderr = &stderrBuf
-
-	// Start supervisord in a separate goroutine
-	errCh := make(chan error, 1)
-	go func() {
-		errCh <- supervisorCmd.Run()
-		lgr.Infof("supervisord: output: \n%s", stdoutBuf.String())
-		if stderrBuf.Len() > 0 {
-			lgr.Warnf("supervidord: stderr: \n%s", stderrBuf.String())
-		}
-	}()
-
-	// Wait for dockerd to be ready
-	dockerReady := make(chan bool)
-	go func() {
-		for {
-			if isDockerReady(lgr) {
-				close(dockerReady)
-				return
-			}
-			time.Sleep(1 * time.Second)
-		}
-	}()
-
-	select {
-	case <-dockerReady:
-		lgr.Infof("Docker is ready in %v!", time.Since(st))
-		return nil
-	case err := <-errCh:
-		return xerrors.Errorf("supervisord exited unexpectedly: %w", err)
-	case <-time.After(timeout):
-		return xerrors.Errorf("timeout: %v waiting for Docker to be ready", timeout)
-	}
-}
-
-func isDockerReady(lgr log.Logger) bool {
-	cmd := exec.Command("docker", "info")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		lgr.Debug("Docker check failed: "+string(output), log.Error(err))
-		return false
-	}
-
-	// Check for a key string that indicates Docker is operational
-	scanner := bufio.NewScanner(strings.NewReader(string(output)))
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.Contains(line, "Server Version:") {
-			return true
-		}
-	}
-	return false
-}
-
 func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, cfg *AirbyteSource, transfer *model.Transfer) (*Storage, error) {
 	state, err := cp.GetTransferState(transfer.ID)
 	if err != nil {
@@ -528,7 +479,9 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 	if len(state) > 0 {
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
-	if err := ensureDocker(lgr, os.Getenv("SUPERVISORD_PATH"), 30*time.Second); err != nil {
+
+	dockerWrapper, err := docker.NewDockerWrapper(lgr)
+	if err != nil {
 		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
 	}
 
@@ -541,5 +494,6 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		metrics:  stats.NewSourceStats(registry),
 		transfer: transfer,
 		state:    state,
+		docker:   dockerWrapper,
 	}, nil
 }
