@@ -31,7 +31,6 @@ var (
 )
 
 func init() {
-	_ = os.Setenv("YC", "1") // to not go to vanga
 	Source.WithDefaults()
 }
 
@@ -41,6 +40,8 @@ func TestMain(m *testing.M) {
 }
 
 func TestGroup(t *testing.T) {
+	t.Setenv("YC", "1") // to not go to vanga
+
 	targetPort, err := helpers.GetPortFromStr(Target.Cluster())
 	require.NoError(t, err)
 	defer func() {
@@ -56,7 +57,7 @@ func TestGroup(t *testing.T) {
 }
 
 func Load(t *testing.T) {
-	_ = os.Setenv("CH_LOCAL_PATH", os.Getenv("RECIPE_CLICKHOUSE_BIN"))
+	t.Setenv("CH_LOCAL_PATH", os.Getenv("RECIPE_CLICKHOUSE_BIN"))
 
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, Target, abstract.TransferTypeSnapshotOnly)
 	require.NoError(t, transfer.TransformationFromJSON(`

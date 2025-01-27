@@ -29,7 +29,7 @@ var (
 )
 
 func TestCanonizeSequences(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 	Source := &pgcommon.PgSource{
 		ClusterID: os.Getenv("PG_CLUSTER_ID"),
 		Hosts:     []string{"localhost"},
