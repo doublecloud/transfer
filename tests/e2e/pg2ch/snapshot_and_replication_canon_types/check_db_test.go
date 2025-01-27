@@ -3,7 +3,6 @@ package replication
 import (
 	"context"
 	"fmt"
-	"os"
 	"testing"
 	"time"
 
@@ -25,11 +24,11 @@ var (
 )
 
 func TestSnapshotAndIncrement(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	Source := pgrecipe.RecipeSource(pgrecipe.WithPrefix(""))
 	Target := chrecipe.MustTarget(chrecipe.WithInitDir("dump/ch"), chrecipe.WithDatabase(databaseName))
-	_ = os.Setenv("YC", "1")                                             // to not go to vanga
+	t.Setenv("YC", "1")                                                  // to not go to vanga
 	helpers.InitSrcDst(helpers.TransferID, Source, Target, TransferType) // to WithDefaults() & FillDependentFields(): IsHomo, helpers.TransferID, IsUpdateable
 	defer func() {
 		require.NoError(t, helpers.CheckConnections(

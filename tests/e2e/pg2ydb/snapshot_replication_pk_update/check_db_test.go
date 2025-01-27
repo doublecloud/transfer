@@ -32,7 +32,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 		Instance: helpers.GetEnvOfFail(t, "YDB_ENDPOINT"),
 	}
 
-	_ = os.Setenv("YC", "1")                                             // to not go to vanga
+	t.Setenv("YC", "1")                                                  // to not go to vanga
 	helpers.InitSrcDst(helpers.TransferID, Source, Target, TransferType) // to WithDefaults() & FillDependentFields(): IsHomo, helpers.TransferID, IsUpdateable
 
 	defer func() {

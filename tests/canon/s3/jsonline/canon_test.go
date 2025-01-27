@@ -15,7 +15,7 @@ import (
 )
 
 func TestCanonSource(t *testing.T) {
-	_ = os.Setenv("YC", "1") // to not go to vanga
+	t.Setenv("YC", "1") // to not go to vanga
 
 	testCasePath := "test_jsonline_all_types"
 	src := s3.PrepareCfg(t, "", "")

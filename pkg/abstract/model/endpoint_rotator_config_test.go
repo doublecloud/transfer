@@ -1,7 +1,6 @@
 package model
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -178,7 +177,7 @@ func getMonthPartitionedTestHeavy(t *testing.T) {
 }
 
 func offsetDateTest(t *testing.T) {
-	t.Parallel()
+	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
 	t.Run("Hours", offsetDateTestHours)
 	t.Run("Days", offsetDateTestDays)
 	// t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
@@ -206,8 +205,6 @@ func offsetDateTestHours(t *testing.T) {
 
 func offsetDateTestDays(t *testing.T) {
 	t.Parallel()
-	_ = os.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
-	defer os.Unsetenv("TZ")
 	rcDays := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartDay, PartSize: 1, TimeColumn: ""}
 	rcDaysTimestamp := time.Now()
 

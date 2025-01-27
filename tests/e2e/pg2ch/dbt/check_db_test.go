@@ -20,8 +20,8 @@ import (
 
 func TestSnapshot(t *testing.T) {
 	t.Skip()
-	_ = os.Setenv("DBT_CONTAINER_REGISTRY", "12197361.preprod")
-	_ = os.Setenv("DBT_IMAGE_TAG", "public.ecr.aws/t9p9v8b9")
+	t.Setenv("DBT_CONTAINER_REGISTRY", "12197361.preprod")
+	t.Setenv("DBT_IMAGE_TAG", "public.ecr.aws/t9p9v8b9")
 
 	source := pgrecipe.RecipeSource(
 		pgrecipe.WithInitFiles(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2ch/dbt/init_pg.sql")),
