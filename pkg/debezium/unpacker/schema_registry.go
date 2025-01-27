@@ -26,10 +26,13 @@ func (s *SchemaRegistry) Unpack(message []byte) ([]byte, []byte, error) {
 
 	schema, _ := backoff.RetryNotifyWithData(func() (*confluent.Schema, error) {
 		return s.schemaRegistryClient.GetSchema(int(schemaID))
-	}, backoff.NewConstantBackOff(time.Second), util.BackoffLogger(logger.Log, "getting schema"),
-	)
+	}, backoff.NewConstantBackOff(time.Second), util.BackoffLogger(logger.Log, "getting schema"))
 
 	return []byte(schema.Schema), message[5:], nil
+}
+
+func (s *SchemaRegistry) SchemaRegistryClient() *confluent.SchemaRegistryClient {
+	return s.schemaRegistryClient
 }
 
 func NewSchemaRegistry(srClient *confluent.SchemaRegistryClient) *SchemaRegistry {

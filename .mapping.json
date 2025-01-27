@@ -1951,6 +1951,7 @@
   "pkg/schemaregistry/format/gotest/canondata/result.json":"transfer_manager/go/pkg/schemaregistry/format/gotest/canondata/result.json",
   "pkg/schemaregistry/format/json_schema_format.go":"transfer_manager/go/pkg/schemaregistry/format/json_schema_format.go",
   "pkg/schemaregistry/format/json_schema_format_test.go":"transfer_manager/go/pkg/schemaregistry/format/json_schema_format_test.go",
+  "pkg/schemaregistry/warmup/warmup.go":"transfer_manager/go/pkg/schemaregistry/warmup/warmup.go",
   "pkg/serializer/batch.go":"transfer_manager/go/pkg/serializer/batch.go",
   "pkg/serializer/batch_test.go":"transfer_manager/go/pkg/serializer/batch_test.go",
   "pkg/serializer/csv.go":"transfer_manager/go/pkg/serializer/csv.go",

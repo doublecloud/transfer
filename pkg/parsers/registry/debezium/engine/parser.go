@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -12,6 +13,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/generic"
 	"github.com/doublecloud/transfer/pkg/schemaregistry/confluent"
+	"github.com/doublecloud/transfer/pkg/schemaregistry/warmup"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/pool"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -21,7 +23,8 @@ type DebeziumImpl struct {
 	logger           log.Logger
 	debeziumReceiver *debezium.Receiver
 
-	threadsNumber uint64
+	threadsNumber             uint64
+	schemaRegistryClientMutex sync.Mutex
 }
 
 // DoOne message with multiple debezium events inside.
@@ -96,7 +99,24 @@ func (p *DebeziumImpl) Do(msg parsers.Message, partition abstract.Partition) []a
 	return p.DoBuf(partition, msg.Value, msg.Offset, msg.WriteTime)
 }
 
+// It's important to warn-up Schema-Registry cache single-thread, to not to DDoS Schema-Registry
+func (p *DebeziumImpl) warmUpSRCache(batch parsers.MessageBatch) {
+	type SRClient interface {
+		SchemaRegistryClient() *confluent.SchemaRegistryClient
+	}
+
+	var schemaRegistryClient *confluent.SchemaRegistryClient
+	if sr, ok := p.debeziumReceiver.Unpacker.(SRClient); ok {
+		schemaRegistryClient = sr.SchemaRegistryClient()
+	} else {
+		return
+	}
+
+	warmup.WarmUpSRCache(p.logger, &p.schemaRegistryClientMutex, batch, schemaRegistryClient, false)
+}
+
 func (p *DebeziumImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem {
+	p.warmUpSRCache(batch)
 	if p.threadsNumber > 1 {
 		return p.doMultiThread(batch)
 	}
@@ -109,8 +129,9 @@ func (p *DebeziumImpl) DoBatch(batch parsers.MessageBatch) []abstract.ChangeItem
 
 func NewDebeziumImpl(logger log.Logger, schemaRegistry *confluent.SchemaRegistryClient, threads uint64) *DebeziumImpl {
 	return &DebeziumImpl{
-		logger:           logger,
-		debeziumReceiver: debezium.NewReceiver(nil, schemaRegistry),
-		threadsNumber:    threads,
+		logger:                    logger,
+		debeziumReceiver:          debezium.NewReceiver(nil, schemaRegistry),
+		threadsNumber:             threads,
+		schemaRegistryClientMutex: sync.Mutex{},
 	}
 }

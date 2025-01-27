@@ -16,7 +16,7 @@ import (
 
 type Receiver struct {
 	originalTypes         map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo // map: table -> [fieldName -> originalType]
-	unpacker              unpacker.Unpacker
+	Unpacker              unpacker.Unpacker
 	schemaFormat          string
 	tableSchemaCache      map[string]tableSchemaCacheItem
 	tableSchemaCacheMutex *sync.RWMutex
@@ -139,7 +139,7 @@ func (r *Receiver) convertSchemaFormat(schema []byte) ([]byte, error) {
 }
 
 func (r *Receiver) Receive(in string) (*abstract.ChangeItem, error) {
-	schema, payload, err := r.unpacker.Unpack([]byte(in))
+	schema, payload, err := r.Unpacker.Unpack([]byte(in))
 	if err != nil {
 		return nil, xerrors.Errorf("can't unpack message: %w", err)
 	}
@@ -225,7 +225,7 @@ func NewReceiver(originalTypes map[abstract.TableID]map[string]*debeziumcommon.O
 	}
 	return &Receiver{
 		originalTypes:         originalTypes,
-		unpacker:              currUnpacker,
+		Unpacker:              currUnpacker,
 		schemaFormat:          schemaFormat,
 		tableSchemaCache:      make(map[string]tableSchemaCacheItem),
 		tableSchemaCacheMutex: new(sync.RWMutex),
