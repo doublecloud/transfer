@@ -2865,6 +2865,8 @@
   "tests/e2e/pg2mock/slow_receiver/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/slow_receiver/init_source/dump.sql",
   "tests/e2e/pg2mock/strange_types/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mock/strange_types/check_db_test.go",
   "tests/e2e/pg2mock/strange_types/init_source/dump.sql":"transfer_manager/go/tests/e2e/pg2mock/strange_types/init_source/dump.sql",
+  "tests/e2e/pg2mock/subpartitioning/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mock/subpartitioning/check_db_test.go",
+  "tests/e2e/pg2mock/subpartitioning/dump/initial.sql":"transfer_manager/go/tests/e2e/pg2mock/subpartitioning/dump/initial.sql",
   "tests/e2e/pg2mysql/snapshot/check_db_test.go":"transfer_manager/go/tests/e2e/pg2mysql/snapshot/check_db_test.go",
   "tests/e2e/pg2mysql/snapshot/dump/type_check.sql":"transfer_manager/go/tests/e2e/pg2mysql/snapshot/dump/type_check.sql",
   "tests/e2e/pg2pg/access/check_db_test.go":"transfer_manager/go/tests/e2e/pg2pg/access/check_db_test.go",
