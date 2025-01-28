@@ -135,6 +135,8 @@ func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Re
 		return nil, nil, err
 	}
 
+	waitCh, errCh := dw.cli.ContainerWait(ctx, resp.ID, container.WaitConditionNextExit)
+
 	if err := dw.cli.ContainerStart(ctx, resp.ID, container.StartOptions{}); err != nil {
 		return nil, nil, err
 	}
@@ -164,19 +166,24 @@ func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Re
 		stdcopy.StdCopy(stdoutBuf, stderrBuf, attachResp.Reader)
 	}()
 
-	waitCh, errCh := dw.cli.ContainerWait(ctx, resp.ID, container.WaitConditionNextExit)
-
 	select {
 	case err := <-errCh:
 		if err != nil {
 			return nil, nil, err
+		}
+	case <-waitCh:
+		select {
+		case err := <-errCh:
+			if err != nil {
+				return nil, nil, err
+			}
+		default:
 		}
 	case <-ctx.Done():
 		dw.cli.ContainerKill(ctx, resp.ID, "SIGKILL")
 		return nil, nil, ctx.Err()
 	}
 
-	<-waitCh
 	<-copyCh
 
 	return stdoutBuf, stderrBuf, nil

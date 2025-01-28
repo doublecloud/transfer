@@ -349,12 +349,10 @@ func TestDockerWrapper_Run_Success(t *testing.T) {
 
 			waitCh := make(chan container.WaitResponse, 1)
 			waitCh <- container.WaitResponse{StatusCode: 0}
-			close(waitCh)
 			errCh := make(chan error, 1)
 			if tc.expectError {
 				errCh <- testErrNotFound{}
 			}
-			close(errCh)
 
 			mockClient.On("ContainerWait", mock.Anything, "container-id", container.WaitConditionNextExit).
 				Return((<-chan container.WaitResponse)(waitCh), (<-chan error)(errCh)).Once()
