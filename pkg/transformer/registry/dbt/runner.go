@@ -1,10 +1,10 @@
 package dbt
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/mount"
@@ -13,6 +13,8 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/docker"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
+	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
 )
@@ -23,7 +25,7 @@ type runner struct {
 
 	transfer *model.Transfer
 
-	docker *docker.DockerWrapper
+	dw *docker.DockerWrapper
 }
 
 func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
@@ -38,7 +40,7 @@ func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) 
 
 		transfer: transfer,
 
-		docker: dockerWrapper,
+		dw: dockerWrapper,
 	}, nil
 }
 
@@ -58,27 +60,9 @@ func (r *runner) Run(ctx context.Context) error {
 }
 
 func (r *runner) initializeDocker(ctx context.Context) error {
-	if err := r.docker.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
+	if err := r.dw.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
 		return xerrors.Errorf("docker initialization failed: %w", err)
 	}
-	return nil
-}
-
-// executeCommand executes the given command, automatically logs its stdout and stderr and returns a detailed error if a command failed.
-//
-// The command itself is logged partially: only its name and the first arg are logged. Stdout and stderr are logged completely.
-func executeCommand(ctx context.Context, name string, args ...string) error {
-	commandNameToLog := name
-	if len(args) > 0 {
-		commandNameToLog = commandNameToLog + " " + args[0]
-	}
-	cmd := exec.CommandContext(ctx, name, args...)
-	output, err := cmd.CombinedOutput() // note this method also executes the command!
-	if err != nil {
-		logger.Log.Error(fmt.Sprintf("failed to execute `%s`\nstdout:%s", commandNameToLog, string(output)), log.String("stdout", string(output)), log.Error(err))
-		return xerrors.Errorf("failed to execute `%s`, see logs for the detailed command output. Direct cause: %w", commandNameToLog, err)
-	}
-	logger.Log.Info(fmt.Sprintf("successfully executed `%s`", commandNameToLog), log.String("stdout", string(output)))
 	return nil
 }
 
@@ -122,9 +106,15 @@ func (r *runner) initializeConfiguration(ctx context.Context) error {
 		return xerrors.Errorf("failed to write the profile file to '%s': %w", pathProfiles(), err)
 	}
 
-	if err := executeCommand(ctx, "git", r.gitCloneCommands()...); err != nil {
+	outBuf := new(bytes.Buffer)
+	opts := r.gitCloneCommands()
+	opts.Progress = outBuf
+
+	if _, err := git.PlainClone(pathProject(), false, opts); err != nil {
 		return xerrors.Errorf("failed to clone a remote repository: %w", err)
 	}
+	logger.Log.Info(fmt.Sprintf("successfully executed `git clone %s %s`",
+		r.cfg.GitRepositoryLink, pathProject()), log.String("stdout", outBuf.String()))
 
 	return nil
 }
@@ -148,13 +138,18 @@ func pathProject() string {
 	return fmt.Sprintf("%s/%s", dataDirectory(), "project")
 }
 
-func (r *runner) gitCloneCommands() []string {
-	result := []string{"clone", "--depth", "1"}
-	if branch := r.cfg.GitBranch; len(branch) > 0 {
-		result = append(result, "--branch", branch)
+func (r *runner) gitCloneCommands() *git.CloneOptions {
+	opts := &git.CloneOptions{
+		URL:   r.cfg.GitRepositoryLink,
+		Depth: 1,
 	}
-	result = append(result, r.cfg.GitRepositoryLink, pathProject())
-	return result
+
+	if branch := r.cfg.GitBranch; len(branch) > 0 {
+		opts.ReferenceName = plumbing.NewBranchReferenceName(branch)
+		opts.SingleBranch = true
+	}
+
+	return opts
 }
 
 func (r *runner) cleanupConfiguration() {
@@ -199,7 +194,7 @@ func (r *runner) run(ctx context.Context) error {
 		AttachStderr: true,
 	}
 
-	if _, _, err := r.docker.RunContainer(ctx, opts); err != nil {
+	if _, _, err := r.dw.Run(ctx, opts); err != nil {
 		return xerrors.Errorf("docker run failed: %w", err)
 	}
 

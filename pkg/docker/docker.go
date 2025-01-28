@@ -37,116 +37,18 @@ type DockerOpts struct {
 	AttachStderr  bool
 }
 
-func (opts *DockerOpts) String() string {
-	var args []string
-
-	// AutoRemove
-	if opts.AutoRemove {
-		args = append(args, "--rm")
-	}
-
-	// ContainerName
-	if opts.ContainerName != "" {
-		args = append(args, "--name", opts.ContainerName)
-	}
-
-	// Network
-	if opts.Network != "" {
-		args = append(args, "--network", opts.Network)
-	}
-
-	// Volumes (handled with -v)
-	if len(opts.Volumes) > 0 {
-		var volumeKeys []string
-		for hostPath := range opts.Volumes {
-			volumeKeys = append(volumeKeys, hostPath)
-		}
-		sort.Strings(volumeKeys)
-		for _, hostPath := range volumeKeys {
-			containerPath := opts.Volumes[hostPath]
-			args = append(args, "-v", fmt.Sprintf("%s:%s", hostPath, containerPath))
-		}
-	}
-
-	// Mounts (handled with --mount)
-	if len(opts.Mounts) > 0 {
-		for _, m := range opts.Mounts {
-			mountOpts := []string{
-				fmt.Sprintf("type=%s", m.Type),
-				fmt.Sprintf("source=%s", m.Source),
-				fmt.Sprintf("target=%s", m.Target),
-			}
-			if m.ReadOnly {
-				mountOpts = append(mountOpts, "readonly")
-			}
-
-			args = append(args, "--mount", strings.Join(mountOpts, ","))
-		}
-	}
-
-	// Environment Variables
-	if len(opts.Env) > 0 {
-		for _, envVar := range opts.Env {
-			args = append(args, "-e", envVar)
-		}
-	}
-
-	// Log Driver and Options
-	if opts.LogDriver != "" {
-		args = append(args, "--log-driver", opts.LogDriver)
-		if len(opts.LogOptions) > 0 {
-			var logOptKeys []string
-			for key := range opts.LogOptions {
-				logOptKeys = append(logOptKeys, key)
-			}
-			sort.Strings(logOptKeys)
-			for _, key := range logOptKeys {
-				value := opts.LogOptions[key]
-				args = append(args, "--log-opt", fmt.Sprintf("%s=%s", key, value))
-			}
-		}
-	}
-
-	// Attach options
-	var attachOptions []string
-	if opts.AttachStderr {
-		attachOptions = append(attachOptions, "stderr")
-	}
-	if opts.AttachStdout {
-		attachOptions = append(attachOptions, "stdout")
-	}
-	if len(attachOptions) > 0 {
-		sort.Strings(attachOptions)
-		for _, attach := range attachOptions {
-			args = append(args, "--attach", attach)
-		}
-	}
-
-	// Image
-	if opts.Image != "" {
-		args = append(args, opts.Image)
-	}
-
-	// Command
-	if len(opts.Command) > 0 {
-		args = append(args, opts.Command...)
-	}
-
-	// Prepend "docker run"
-	cmd := append([]string{"docker", "run"}, args...)
-
-	// Join all arguments with spaces
-	return strings.Join(cmd, " ")
-}
-
 type DockerWrapper struct {
-	cli    *client.Client
+	cli    DockerClient
 	logger log.Logger
 }
 
-func NewDockerWrapper(logger log.Logger) (*DockerWrapper, error) {
+func NewDockerWrapper(logger log.Logger, cli ...DockerClient) (*DockerWrapper, error) {
 	dw := &DockerWrapper{
 		logger: logger,
+	}
+
+	if cli != nil && len(cli) > 0 {
+		dw.cli = cli[0]
 	}
 
 	if err := dw.ensureDocker(os.Getenv("SUPERVISORD_PATH"), 30*time.Second); err != nil {
@@ -188,7 +90,7 @@ func (dw *DockerWrapper) Pull(ctx context.Context, image string, opts types.Imag
 	return nil
 }
 
-func (dw *DockerWrapper) RunContainer(ctx context.Context, opts DockerOpts) (stdout io.Reader, stderr io.Reader, err error) {
+func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Reader, stderr io.Reader, err error) {
 	if dw.cli == nil {
 		return nil, nil, xerrors.Errorf("docker unavailable")
 	}
@@ -336,4 +238,110 @@ func (dw *DockerWrapper) ensureDocker(supervisorConfigPath string, timeout time.
 	case <-time.After(timeout):
 		return xerrors.Errorf("timeout: %v waiting for Docker to be ready", timeout)
 	}
+}
+
+func (opts *DockerOpts) String() string {
+	var args []string
+
+	// AutoRemove
+	if opts.AutoRemove {
+		args = append(args, "--rm")
+	}
+
+	// ContainerName
+	if opts.ContainerName != "" {
+		args = append(args, "--name", opts.ContainerName)
+	}
+
+	// Network
+	if opts.Network != "" {
+		args = append(args, "--network", opts.Network)
+	}
+
+	// Volumes (handled with -v)
+	if len(opts.Volumes) > 0 {
+		var volumeKeys []string
+		for hostPath := range opts.Volumes {
+			volumeKeys = append(volumeKeys, hostPath)
+		}
+		sort.Strings(volumeKeys)
+		for _, hostPath := range volumeKeys {
+			containerPath := opts.Volumes[hostPath]
+			args = append(args, "-v", fmt.Sprintf("%s:%s", hostPath, containerPath))
+		}
+	}
+
+	// Mounts (handled with --mount)
+	if len(opts.Mounts) > 0 {
+		sort.Slice(opts.Mounts, func(i, j int) bool {
+			ikey := fmt.Sprintf("%s/%s/%s", opts.Mounts[i].Type, opts.Mounts[i].Source, opts.Mounts[i].Target)
+			jkey := fmt.Sprintf("%s/%s/%s", opts.Mounts[j].Type, opts.Mounts[j].Source, opts.Mounts[j].Target)
+			return ikey < jkey
+		})
+		for _, m := range opts.Mounts {
+			mountOpts := []string{
+				fmt.Sprintf("type=%s", m.Type),
+				fmt.Sprintf("source=%s", m.Source),
+				fmt.Sprintf("target=%s", m.Target),
+			}
+			if m.ReadOnly {
+				mountOpts = append(mountOpts, "readonly")
+			}
+
+			args = append(args, "--mount", strings.Join(mountOpts, ","))
+		}
+	}
+
+	// Environment Variables
+	if len(opts.Env) > 0 {
+		sort.Strings(opts.Env)
+		for _, envVar := range opts.Env {
+			args = append(args, "-e", envVar)
+		}
+	}
+
+	// Log Driver and Options
+	if opts.LogDriver != "" {
+		args = append(args, "--log-driver", opts.LogDriver)
+		if len(opts.LogOptions) > 0 {
+			var logOptKeys []string
+			for key := range opts.LogOptions {
+				logOptKeys = append(logOptKeys, key)
+			}
+			sort.Strings(logOptKeys)
+			for _, key := range logOptKeys {
+				value := opts.LogOptions[key]
+				args = append(args, "--log-opt", fmt.Sprintf("%s=%s", key, value))
+			}
+		}
+	}
+
+	// Attach options
+	var attachOptions []string
+	if opts.AttachStderr {
+		attachOptions = append(attachOptions, "stderr")
+	}
+	if opts.AttachStdout {
+		attachOptions = append(attachOptions, "stdout")
+	}
+	if len(attachOptions) > 0 {
+		sort.Strings(attachOptions)
+		for _, attach := range attachOptions {
+			args = append(args, "--attach", attach)
+		}
+	}
+
+	// Image
+	if opts.Image != "" {
+		args = append(args, opts.Image)
+	}
+
+	// Command
+	if len(opts.Command) > 0 {
+		args = append(args, opts.Command...)
+	}
+
+	cmd := append([]string{"docker", "run"}, args...)
+
+	return strings.Join(cmd, " ")
 }

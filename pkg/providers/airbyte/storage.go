@@ -38,7 +38,7 @@ type Storage struct {
 	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
 
-	docker *docker.DockerWrapper
+	dw *docker.DockerWrapper
 }
 
 func (a *Storage) Close() {}
@@ -396,7 +396,7 @@ func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader, error) {
 
 	a.logger.Info(opts.String())
 
-	return a.docker.RunContainer(ctx, opts)
+	return a.dw.Run(ctx, opts)
 }
 
 func (a *Storage) runCommand(args ...string) ([]byte, error) {
@@ -492,6 +492,6 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		metrics:  stats.NewSourceStats(registry),
 		transfer: transfer,
 		state:    state,
-		docker:   dockerWrapper,
+		dw:       dockerWrapper,
 	}, nil
 }
