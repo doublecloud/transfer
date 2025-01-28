@@ -20,12 +20,11 @@ builds:
     binary: trcli
 
 archives:
-  - format: tar.gz
+  - formats: ["tar.gz"]
     name_template: >-
       {{ .ProjectName }}_
       {{- .Os }}_
       {{- .Arch }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
 
 changelog:
   sort: asc
@@ -44,12 +43,16 @@ release:
 dockers:
   - image_templates:
       - "ghcr.io/doublecloud/transfer:{{.Version}}-amd64"
+    goos: linux
+    goarch: amd64
     use: buildx
     dockerfile: Dockerfile
     build_flag_templates:
       - "--platform=linux/amd64"
   - image_templates:
       - "ghcr.io/doublecloud/transfer:{{.Version}}-arm64"
+    goos: linux
+    goarch: arm64
     use: buildx
     dockerfile: Dockerfile
     build_flag_templates:
