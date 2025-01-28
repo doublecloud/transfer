@@ -27,8 +27,7 @@ func (t *tableColumns) hasKey(name columnName) bool {
 	if !ok {
 		return false
 	}
-	col := &t.columns[columnPos]
-	return col.PrimaryKey
+	return t.columns[columnPos].PrimaryKey
 }
 
 func newTableColumns(columns []abstract.ColSchema) tableColumns {
