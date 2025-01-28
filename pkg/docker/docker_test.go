@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
+	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/doublecloud/transfer/internal/logger"
-
-	"github.com/docker/docker/api/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -299,11 +299,18 @@ func TestDockerWrapper_Run_Success(t *testing.T) {
 	mockClient.On("ContainerStart", mock.Anything, "container-id", mock.Anything).
 		Return(nil).Once()
 
-	stdoutBuffer := bytes.NewBufferString("mock stdout\n")
-	stderrBuffer := bytes.NewBufferString("mock stderr\n")
+	stdbuf := new(bytes.Buffer)
+
+	wout := stdcopy.NewStdWriter(stdbuf, stdcopy.Stdout)
+	werr := stdcopy.NewStdWriter(stdbuf, stdcopy.Stderr)
+
+	go func() {
+		wout.Write([]byte("mock stdout\n"))
+		werr.Write([]byte("mock stderr\n"))
+	}()
 
 	hijackedResp := types.HijackedResponse{
-		Reader: bufio.NewReader(io.MultiReader(stdoutBuffer, stderrBuffer)),
+		Reader: bufio.NewReader(stdbuf),
 	}
 	mockClient.On("ContainerAttach", mock.Anything, "container-id", mock.Anything).
 		Return(hijackedResp, nil).Once()
@@ -327,11 +334,23 @@ func TestDockerWrapper_Run_Success(t *testing.T) {
 		ContainerName: "test-container",
 		Command:       []string{"echo", "Hello, World!"},
 		AutoRemove:    true,
+		AttachStdout:  true,
+		AttachStderr:  true,
 	}
 
-	_, _, err := dw.Run(context.Background(), opts)
-
+	stdout, stderr, err := dw.Run(context.Background(), opts)
 	assert.NoError(t, err)
+
+	stdoutBytes := new(bytes.Buffer)
+	stderrBytes := new(bytes.Buffer)
+
+	_, err = stdoutBytes.ReadFrom(stdout)
+	assert.NoError(t, err)
+	assert.Equal(t, "mock stdout\n", stdoutBytes.String())
+
+	_, err = stderrBytes.ReadFrom(stderr)
+	assert.NoError(t, err)
+	assert.Equal(t, "mock stderr\n", stderrBytes.String())
 
 	mockClient.AssertExpectations(t)
 }

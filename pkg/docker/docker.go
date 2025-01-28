@@ -47,7 +47,7 @@ func NewDockerWrapper(logger log.Logger, cli ...DockerClient) (*DockerWrapper, e
 		logger: logger,
 	}
 
-	if cli != nil && len(cli) > 0 {
+	if len(cli) > 0 {
 		dw.cli = cli[0]
 	}
 
@@ -150,14 +150,18 @@ func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Re
 		return nil, nil, err
 	}
 
-	stdoutReader, stdoutWriter := io.Pipe()
-	stderrReader, stderrWriter := io.Pipe()
+	// TODO: don't hold stdoutBuf and stderrBuf in memory
+	stdoutBuf := new(bytes.Buffer)
+	stderrBuf := new(bytes.Buffer)
+
+	copyCh := make(chan struct{})
 
 	go func() {
-		defer attachResp.Close()
-		defer stdoutWriter.Close()
-		defer stderrWriter.Close()
-		stdcopy.StdCopy(stdoutWriter, stderrWriter, attachResp.Reader)
+		defer close(copyCh)
+		if attachResp.Conn != nil {
+			defer attachResp.Close()
+		}
+		stdcopy.StdCopy(stdoutBuf, stderrBuf, attachResp.Reader)
 	}()
 
 	waitCh, errCh := dw.cli.ContainerWait(ctx, resp.ID, container.WaitConditionNextExit)
@@ -173,7 +177,9 @@ func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Re
 		return nil, nil, ctx.Err()
 	}
 
-	return stdoutReader, stderrReader, nil
+	<-copyCh
+
+	return stdoutBuf, stderrBuf, nil
 }
 
 func (dw *DockerWrapper) ensureDocker(supervisorConfigPath string, timeout time.Duration) error {
