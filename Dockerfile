@@ -59,7 +59,7 @@ VOLUME /var/lib/docker
 # Create a non-root user and group
 RUN addgroup --system trcligroup && adduser --system --ingroup trcligroup trcliuser
 
-# Copy the Go binary from Stage 1 (builder)
+# Copy the Go binary
 COPY trcli /usr/local/bin/trcli
 
 RUN chmod +x /usr/local/bin/trcli
