@@ -3,10 +3,10 @@
 version: 2
 project_name: "transfer"
 
-#before:
-#  hooks:
-#    - go mod tidy
-#    - go generate ./...
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
 
 builds:
   - env:
