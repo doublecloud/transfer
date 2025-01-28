@@ -291,74 +291,113 @@ func TestDockerWrapper_Pull(t *testing.T) {
 }
 
 func TestDockerWrapper_Run_Success(t *testing.T) {
-	mockClient := new(MockDockerClient)
-	logger := logger.Log
-
-	mockClient.On("ImageInspectWithRaw", mock.Anything, "alpine").
-		Return(types.ImageInspect{}, []byte{}, testErrNotFound{})
-
-	mockClient.On("ImagePull", mock.Anything, "alpine", types.ImagePullOptions{}).
-		Return(io.NopCloser(strings.NewReader("")), nil).Once()
-
-	containerCreateResponse := container.CreateResponse{ID: "container-id"}
-	mockClient.On("ContainerCreate", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, "test-container").
-		Return(containerCreateResponse, nil).Once()
-
-	mockClient.On("ContainerStart", mock.Anything, "container-id", mock.Anything).
-		Return(nil).Once()
-
-	stdbuf := new(bytes.Buffer)
-
-	wout := stdcopy.NewStdWriter(stdbuf, stdcopy.Stdout)
-	werr := stdcopy.NewStdWriter(stdbuf, stdcopy.Stderr)
-
-	go func() {
-		wout.Write([]byte("mock stdout\n"))
-		werr.Write([]byte("mock stderr\n"))
-	}()
-
-	hijackedResp := types.HijackedResponse{
-		Reader: bufio.NewReader(stdbuf),
-	}
-	mockClient.On("ContainerAttach", mock.Anything, "container-id", mock.Anything).
-		Return(hijackedResp, nil).Once()
-
-	waitCh := make(chan container.WaitResponse, 1)
-	waitCh <- container.WaitResponse{StatusCode: 0}
-	close(waitCh)
-	errCh := make(chan error)
-	close(errCh)
-
-	mockClient.On("ContainerWait", mock.Anything, "container-id", container.WaitConditionNextExit).
-		Return((<-chan container.WaitResponse)(waitCh), (<-chan error)(errCh)).Once()
-
-	dw := &DockerWrapper{
-		cli:    mockClient,
-		logger: logger,
+	testCases := []struct {
+		name         string
+		expectError  bool
+		expectStderr bool
+	}{
+		{
+			name:        "success",
+			expectError: false,
+		},
+		{
+			name:         "runtime error",
+			expectError:  false,
+			expectStderr: true,
+		},
+		{
+			name:        "container error",
+			expectError: true,
+		},
 	}
 
-	opts := DockerOpts{
-		Image:         "alpine",
-		ContainerName: "test-container",
-		Command:       []string{"echo", "Hello, World!"},
-		AutoRemove:    true,
-		AttachStdout:  true,
-		AttachStderr:  true,
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			mockClient := new(MockDockerClient)
+			logger := logger.Log
+
+			mockClient.On("ImageInspectWithRaw", mock.Anything, "alpine").
+				Return(types.ImageInspect{}, []byte{}, testErrNotFound{})
+
+			mockClient.On("ImagePull", mock.Anything, "alpine", types.ImagePullOptions{}).
+				Return(io.NopCloser(strings.NewReader("")), nil).Once()
+
+			containerCreateResponse := container.CreateResponse{ID: "container-id"}
+			mockClient.On("ContainerCreate", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, "test-container").
+				Return(containerCreateResponse, nil).Once()
+
+			mockClient.On("ContainerStart", mock.Anything, "container-id", mock.Anything).
+				Return(nil).Once()
+
+			stdbuf := new(bytes.Buffer)
+
+			wout := stdcopy.NewStdWriter(stdbuf, stdcopy.Stdout)
+			werr := stdcopy.NewStdWriter(stdbuf, stdcopy.Stderr)
+
+			go func() {
+				wout.Write([]byte("mock stdout\n"))
+				if tc.expectStderr {
+					werr.Write([]byte("mock stderr\n"))
+				}
+			}()
+
+			hijackedResp := types.HijackedResponse{
+				Reader: bufio.NewReader(stdbuf),
+			}
+			mockClient.On("ContainerAttach", mock.Anything, "container-id", mock.Anything).
+				Return(hijackedResp, nil).Once()
+
+			waitCh := make(chan container.WaitResponse, 1)
+			waitCh <- container.WaitResponse{StatusCode: 0}
+			close(waitCh)
+			errCh := make(chan error, 1)
+			if tc.expectError {
+				errCh <- testErrNotFound{}
+			}
+			close(errCh)
+
+			mockClient.On("ContainerWait", mock.Anything, "container-id", container.WaitConditionNextExit).
+				Return((<-chan container.WaitResponse)(waitCh), (<-chan error)(errCh)).Once()
+
+			dw := &DockerWrapper{
+				cli:    mockClient,
+				logger: logger,
+			}
+
+			opts := DockerOpts{
+				Image:         "alpine",
+				ContainerName: "test-container",
+				Command:       []string{"echo", "Hello, World!"},
+				AutoRemove:    true,
+				AttachStdout:  true,
+				AttachStderr:  true,
+			}
+
+			stdout, stderr, err := dw.Run(context.Background(), opts)
+			if tc.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+
+				stdoutBytes := new(bytes.Buffer)
+				stderrBytes := new(bytes.Buffer)
+
+				_, err = stdoutBytes.ReadFrom(stdout)
+				assert.NoError(t, err)
+				assert.Equal(t, "mock stdout\n", stdoutBytes.String())
+
+				if tc.expectStderr {
+					_, err = stderrBytes.ReadFrom(stderr)
+					assert.NoError(t, err)
+					assert.Equal(t, "mock stderr\n", stderrBytes.String())
+				} else {
+					_, err = stderrBytes.ReadFrom(stderr)
+					assert.NoError(t, err)
+					assert.Equal(t, "", stderrBytes.String())
+				}
+			}
+
+			mockClient.AssertExpectations(t)
+		})
 	}
-
-	stdout, stderr, err := dw.Run(context.Background(), opts)
-	assert.NoError(t, err)
-
-	stdoutBytes := new(bytes.Buffer)
-	stderrBytes := new(bytes.Buffer)
-
-	_, err = stdoutBytes.ReadFrom(stdout)
-	assert.NoError(t, err)
-	assert.Equal(t, "mock stdout\n", stdoutBytes.String())
-
-	_, err = stderrBytes.ReadFrom(stderr)
-	assert.NoError(t, err)
-	assert.Equal(t, "mock stderr\n", stderrBytes.String())
-
-	mockClient.AssertExpectations(t)
 }
