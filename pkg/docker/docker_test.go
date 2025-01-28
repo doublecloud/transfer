@@ -228,7 +228,7 @@ func TestDockerOptsString(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			result := tc.opts.String()
 			if result != tc.expected {
-				t.Errorf("Teste %s falhou:\nEsperado: %q\nObtido:   %q", tc.name, tc.expected, result)
+				t.Errorf("Test %s failed:\nExpected: %q\nGot:   %q", tc.name, tc.expected, result)
 			}
 		})
 	}
@@ -239,47 +239,55 @@ type testErrNotFound struct{}
 func (t testErrNotFound) Error() string { return "" }
 func (t testErrNotFound) NotFound()     {}
 
-func TestDockerWrapper_Pull_Success(t *testing.T) {
-	mockClient := new(MockDockerClient)
-	logger := logger.Log
-
-	mockClient.On("ImageInspectWithRaw", mock.Anything, "alpine").
-		Return(types.ImageInspect{}, []byte{}, testErrNotFound{})
-
-	mockClient.On("ImagePull", mock.Anything, "alpine", types.ImagePullOptions{}).
-		Return(io.NopCloser(strings.NewReader("")), nil).Once()
-
-	dw := &DockerWrapper{
-		cli:    mockClient,
-		logger: logger,
+func TestDockerWrapper_Pull(t *testing.T) {
+	testCases := []struct {
+		name        string
+		imageExists bool
+	}{
+		{
+			name:        "image exists",
+			imageExists: true,
+		},
+		{
+			name:        "image does not exist",
+			imageExists: false,
+		},
 	}
 
-	err := dw.Pull(context.Background(), "alpine", types.ImagePullOptions{})
-	assert.NoError(t, err)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			mockClient := new(MockDockerClient)
+			logger := logger.Log
 
-	mockClient.AssertExpectations(t)
-}
+			if tc.imageExists {
+				imageInspect := types.ImageInspect{}
+				mockClient.On("ImageInspectWithRaw", mock.Anything, "alpine").
+					Return(imageInspect, []byte{}, nil)
 
-func TestDockerWrapper_Pull_ImageAlreadyExists(t *testing.T) {
-	mockClient := new(MockDockerClient)
-	logger := logger.Log
+				mockClient.On("ImagePull", mock.Anything, "nginx", mock.Anything).Return(nil, nil).Maybe()
+			} else {
+				mockClient.On("ImageInspectWithRaw", mock.Anything, "alpine").
+					Return(types.ImageInspect{}, []byte{}, testErrNotFound{})
 
-	imageInspect := types.ImageInspect{}
-	mockClient.On("ImageInspectWithRaw", mock.Anything, "nginx").
-		Return(imageInspect, []byte{}, nil)
+				mockClient.On("ImagePull", mock.Anything, "alpine", types.ImagePullOptions{}).
+					Return(io.NopCloser(strings.NewReader("")), nil).Once()
+			}
 
-	mockClient.On("ImagePull", mock.Anything, "nginx", mock.Anything).Return(nil, nil).Maybe()
+			dw := &DockerWrapper{
+				cli:    mockClient,
+				logger: logger,
+			}
 
-	dw := &DockerWrapper{
-		cli:    mockClient,
-		logger: logger,
+			err := dw.Pull(context.Background(), "alpine", types.ImagePullOptions{})
+			assert.NoError(t, err)
+
+			mockClient.AssertExpectations(t)
+
+			if tc.imageExists {
+				mockClient.AssertNotCalled(t, "ImagePull", mock.Anything, mock.Anything, mock.Anything)
+			}
+		})
 	}
-
-	err := dw.Pull(context.Background(), "nginx", types.ImagePullOptions{})
-	assert.NoError(t, err)
-
-	mockClient.AssertExpectations(t)
-	mockClient.AssertNotCalled(t, "ImagePull", mock.Anything, mock.Anything, mock.Anything)
 }
 
 func TestDockerWrapper_Run_Success(t *testing.T) {
