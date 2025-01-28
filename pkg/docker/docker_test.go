@@ -245,11 +245,11 @@ func TestDockerWrapper_Pull(t *testing.T) {
 		imageExists bool
 	}{
 		{
-			name:        "image exists",
+			name:        "ImageExists",
 			imageExists: true,
 		},
 		{
-			name:        "image does not exist",
+			name:        "ImageDoesNotExist",
 			imageExists: false,
 		},
 	}
@@ -297,16 +297,16 @@ func TestDockerWrapper_Run_Success(t *testing.T) {
 		expectStderr bool
 	}{
 		{
-			name:        "success",
+			name:        "Cuccess",
 			expectError: false,
 		},
 		{
-			name:         "runtime error",
+			name:         "RuntimeError",
 			expectError:  false,
 			expectStderr: true,
 		},
 		{
-			name:        "container error",
+			name:        "ContainerError",
 			expectError: true,
 		},
 	}

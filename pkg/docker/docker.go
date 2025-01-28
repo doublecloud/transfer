@@ -171,12 +171,12 @@ func (dw *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Re
 		if err != nil {
 			return nil, nil, err
 		}
-	case <-waitCh:
 	case <-ctx.Done():
 		dw.cli.ContainerKill(ctx, resp.ID, "SIGKILL")
 		return nil, nil, ctx.Err()
 	}
 
+	<-waitCh
 	<-copyCh
 
 	return stdoutBuf, stderrBuf, nil
