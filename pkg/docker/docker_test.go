@@ -20,8 +20,8 @@ import (
 func TestDockerOptsString(t *testing.T) {
 	testCases := []struct {
 		name     string
-		opts     DockerOpts
 		expected string
+		opts     DockerOpts
 	}{
 		{
 			name: "AutoRemoveTrue",

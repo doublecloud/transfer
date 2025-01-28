@@ -11,7 +11,6 @@ import (
 	"github.com/docker/docker/api/types/network"
 )
 
-// DockerClient é uma interface que encapsula os métodos do cliente Docker usados.
 type DockerClient interface {
 	ImageInspectWithRaw(ctx context.Context, image string) (types.ImageInspect, []byte, error)
 	ImagePull(ctx context.Context, ref string, options types.ImagePullOptions) (io.ReadCloser, error)
