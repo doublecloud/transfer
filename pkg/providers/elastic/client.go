@@ -2,7 +2,7 @@ package elastic
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"reflect"
 	"unsafe"
@@ -126,7 +126,7 @@ func getResponseBody(res *esapi.Response, err error) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to read response body: %w", err)
 	}

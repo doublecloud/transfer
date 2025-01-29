@@ -3,9 +3,7 @@ package yt
 import (
 	"context"
 	"fmt"
-	"math/rand"
 	"testing"
-	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -89,7 +87,6 @@ func TestMountUnmount(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	rand.Seed(time.Now().UnixNano())
 	testDir := randutil.GenerateAlphanumericString(10)
 
 	path := ypath.Path("//home/cdc/test/mount_unmount").Child(testDir)

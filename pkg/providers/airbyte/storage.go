@@ -6,7 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"os/exec"
 	"sort"
@@ -166,7 +166,7 @@ func (a *Storage) LoadTable(ctx context.Context, table abstract.TableDescription
 	if err := a.storeState(table.ID(), currentState); err != nil {
 		return xerrors.Errorf("unable to store incremental state: %w", err)
 	}
-	data, err := ioutil.ReadAll(stderr)
+	data, err := io.ReadAll(stderr)
 	if err != nil {
 		return xerrors.Errorf("%s stderr read all failed: %w", table.ID().String(), err)
 	}
@@ -323,7 +323,7 @@ func (a *Storage) writeFile(fileName, fileData string) error {
 	fullPath := fmt.Sprintf("%v/%v", a.config.DataDir(), fileName)
 	a.logger.Debugf("%s -> \n%s", fileName, fileData)
 	defer a.logger.Infof("file(%s) %s written", format.SizeInt(len(fileData)), fullPath)
-	return ioutil.WriteFile(
+	return os.WriteFile(
 		fullPath,
 		[]byte(fileData),
 		0664,
