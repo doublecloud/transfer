@@ -44,14 +44,6 @@ const (
 	ClusterTimeCollName = "__dt_cluster_time"
 )
 
-func isSystemTable(tableName string) bool {
-	switch tableName {
-	case SystemDatabase, ClusterTimeCollName:
-		return true
-	}
-	return false
-}
-
 const ProviderType = abstract.ProviderType("mongo")
 
 // To verify providers contract implementation

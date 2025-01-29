@@ -165,32 +165,6 @@ func ParseMergeTreeFamilyEngine(sql string) (*MergeTreeFamilyEngine, string, err
 	return GetEngine(engineStr)
 }
 
-type substr struct {
-	startIdx int
-	endIdx   int
-}
-
-func grepEngineFull(sql string) (substr, error) {
-	startIdx := strings.Index(sql, "ENGINE = ")
-	if startIdx == -1 {
-		return substr{}, xerrors.Errorf("Cannot find engine definition in '%v'", sql)
-	}
-	startIdx += len("ENGINE = ")
-
-	endIdx := -1
-	if endIdx = TryFindNextStatement(sql, startIdx); endIdx == -1 {
-		if endIdx = strings.Index(sql[startIdx:], ")"); endIdx == -1 {
-			if endIdx = strings.Index(sql[startIdx:], " "); endIdx == -1 {
-				return substr{}, xerrors.Errorf("Cannot find engine definition in '%v'", sql)
-			}
-		} else {
-			endIdx += 1 // need include closing parenthesis
-		}
-		endIdx += startIdx
-	}
-	return substr{startIdx: startIdx, endIdx: endIdx}, nil
-}
-
 func TryFindNextStatement(sql string, from int) int {
 	possibleStatements := []string{
 		" ORDER BY",

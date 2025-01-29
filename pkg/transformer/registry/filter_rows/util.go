@@ -10,9 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util/set"
 )
 
-var (
-	errIntOverflow = xerrors.Errorf("Provided value overflows int64")
-)
+var errIntOverflow = xerrors.Errorf("Provided value overflows int64")
 
 func stringToTime(str string) (time.Time, bool) {
 	layouts := []string{
@@ -78,24 +76,6 @@ func toInt64E(i interface{}) (int64, error) {
 	default:
 		return 0, fmt.Errorf("unable to cast %#v of type %T to int64", i, i)
 	}
-}
-
-func trimZeroDecimal(s string) string {
-	// It is copy-paste of https://github.com/spf13/cast/blob/master/caste.go trimZeroDecimal function.
-	var foundZero bool
-	for i := len(s); i > 0; i-- {
-		switch s[i-1] {
-		case '.':
-			if foundZero {
-				return s[:i-1]
-			}
-		case '0':
-			foundZero = true
-		default:
-			return s
-		}
-	}
-	return s
 }
 
 func valuesListToSet(valList filter.Value) (*set.Set[interface{}], error) {

@@ -22,9 +22,8 @@ var (
 	kafkaTopic = "topic1"
 	source     = *kafkasink.MustSourceRecipe()
 
-	chDatabase     = "public"
-	target         = *chrecipe.MustTarget(chrecipe.WithInitDir("dump/ch"), chrecipe.WithDatabase(chDatabase))
-	targetAsSource = *chrecipe.MustSource(chrecipe.WithInitDir("dump/ch"), chrecipe.WithDatabase(chDatabase))
+	chDatabase = "public"
+	target     = *chrecipe.MustTarget(chrecipe.WithInitDir("dump/ch"), chrecipe.WithDatabase(chDatabase))
 
 	timestampToUse = time.Date(2024, 03, 19, 0, 0, 0, 0, time.Local)
 )

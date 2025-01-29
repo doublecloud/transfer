@@ -1824,7 +1824,6 @@
   "pkg/providers/yt/lfstaging/close_gaps_test.go":"transfer_manager/go/pkg/providers/yt/lfstaging/close_gaps_test.go",
   "pkg/providers/yt/lfstaging/intermediate_writer.go":"transfer_manager/go/pkg/providers/yt/lfstaging/intermediate_writer.go",
   "pkg/providers/yt/lfstaging/intermediate_writer_test.go":"transfer_manager/go/pkg/providers/yt/lfstaging/intermediate_writer_test.go",
-  "pkg/providers/yt/lfstaging/lock.go":"transfer_manager/go/pkg/providers/yt/lfstaging/lock.go",
   "pkg/providers/yt/lfstaging/logbroker_metadata.go":"transfer_manager/go/pkg/providers/yt/lfstaging/logbroker_metadata.go",
   "pkg/providers/yt/lfstaging/logbroker_metadata_test.go":"transfer_manager/go/pkg/providers/yt/lfstaging/logbroker_metadata_test.go",
   "pkg/providers/yt/lfstaging/rows.go":"transfer_manager/go/pkg/providers/yt/lfstaging/rows.go",
