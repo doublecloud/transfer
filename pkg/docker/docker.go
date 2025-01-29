@@ -26,13 +26,9 @@ type DockerWrapper struct {
 	logger log.Logger
 }
 
-func NewDockerWrapper(logger log.Logger, cli DockerClient) (*DockerWrapper, error) {
+func NewDockerWrapper(logger log.Logger) (*DockerWrapper, error) {
 	d := &DockerWrapper{
 		logger: logger,
-	}
-
-	if cli != nil {
-		d.cli = cli
 	}
 
 	if err := d.ensureDocker(os.Getenv("SUPERVISORD_PATH"), 30*time.Second); err != nil {
