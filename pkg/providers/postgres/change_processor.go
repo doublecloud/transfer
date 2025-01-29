@@ -17,6 +17,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/doublecloud/transfer/pkg/util/strict"
+	"github.com/doublecloud/transfer/pkg/util/xlocale"
 	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgtype"
 	"github.com/jackc/pgx/v4"
@@ -62,7 +63,7 @@ func newChangeProcessor(
 		// use UTC in homo transfers, otherwise timestamps WITHOUT time zone cannot be inserted with COPY
 		connTimezone = time.UTC.String()
 	}
-	location, err := time.LoadLocation(connTimezone)
+	location, err := xlocale.Load(connTimezone)
 	if err != nil {
 		logger.Log.Warn("failed to parse time zone", log.String("timezone", connTimezone), log.Error(err))
 		location = time.UTC
