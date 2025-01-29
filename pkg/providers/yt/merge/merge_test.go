@@ -2,9 +2,7 @@ package merge
 
 import (
 	"context"
-	"math/rand"
 	"testing"
-	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -43,7 +41,6 @@ func testYT(t *testing.T, testName string, test func(t *testing.T, ctx context.C
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	rand.Seed(time.Now().UnixNano())
 	testDir := randutil.GenerateAlphanumericString(10)
 
 	path := yt2.SafeChild("//home/cdc/test", testName, testDir)
@@ -93,7 +90,8 @@ func TestMergeBasic(t *testing.T) {
 				{Key: "7"},
 				{Key: "8"},
 				{Key: "9"},
-			}}, false)
+			},
+		}, false)
 		nodes, err := yt2.ListNodesWithAttrs(ctx, client, path, "", false)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(nodes))
@@ -136,7 +134,8 @@ func TestMergeBasicCleanup(t *testing.T) {
 				{Key: "7"},
 				{Key: "8"},
 				{Key: "9"},
-			}}, false)
+			},
+		}, false)
 		nodes, err := yt2.ListNodesWithAttrs(ctx, client, path, "", false)
 		require.NoError(t, err)
 		require.Equal(t, 1, len(nodes))

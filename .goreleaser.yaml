@@ -1,12 +1,12 @@
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
-version: 1
+version: 2
 project_name: "transfer"
 
-#before:
-#  hooks:
-#    - go mod tidy
-#    - go generate ./...
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
 
 builds:
   - env:
@@ -16,18 +16,15 @@ builds:
     goarch:
       - amd64
       - arm64
-    goarm:
-      - 8
     main: ./cmd/trcli
     binary: trcli
 
 archives:
-  - format: tar.gz
+  - formats: ["tar.gz"]
     name_template: >-
       {{ .ProjectName }}_
       {{- .Os }}_
       {{- .Arch }}
-      {{- if .Arm }}v{{ .Arm }}{{ end }}
 
 changelog:
   sort: asc
@@ -46,18 +43,22 @@ release:
 dockers:
   - image_templates:
       - "ghcr.io/doublecloud/transfer:{{.Version}}-amd64"
+    goos: linux
+    goarch: amd64
     use: buildx
     dockerfile: Dockerfile
     build_flag_templates:
       - "--platform=linux/amd64"
   - image_templates:
-      - "ghcr.io/doublecloud/transfer:{{.Version}}-arm64v8"
+      - "ghcr.io/doublecloud/transfer:{{.Version}}-arm64"
+    goos: linux
+    goarch: arm64
     use: buildx
     dockerfile: Dockerfile
     build_flag_templates:
-      - "--platform=linux/arm64/v8"
+      - "--platform=linux/arm64"
 docker_manifests:
   - name_template: "ghcr.io/doublecloud/transfer:{{.Version}}"
     image_templates:
       - "ghcr.io/doublecloud/transfer:{{.Version}}-amd64"
-      - "ghcr.io/doublecloud/transfer:{{.Version}}-arm64v8"
+      - "ghcr.io/doublecloud/transfer:{{.Version}}-arm64"

@@ -6,7 +6,6 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/providers"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -32,7 +31,6 @@ var (
 type Provider struct {
 	logger   log.Logger
 	registry metrics.Registry
-	cp       coordinator.Coordinator
 	transfer *model.Transfer
 }
 

@@ -3,7 +3,7 @@ package xtls
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"io/ioutil"
+	"os"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
@@ -14,7 +14,7 @@ func Pool(rootCACertPaths []string) (*x509.CertPool, error) {
 		return nil, err
 	}
 	for _, certPath := range rootCACertPaths {
-		caCertificatePEM, err := ioutil.ReadFile(certPath)
+		caCertificatePEM, err := os.ReadFile(certPath)
 		if err != nil {
 			return nil, xerrors.Errorf("Cannot read file %s: %w", certPath, err)
 		}

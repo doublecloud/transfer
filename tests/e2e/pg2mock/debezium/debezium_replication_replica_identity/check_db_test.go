@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sync"
 	"testing"
@@ -33,7 +32,7 @@ func init() {
 
 func ReadTextFiles(paths []string, out []*string) error {
 	for index, path := range paths {
-		valArr, err := ioutil.ReadFile(yatest.SourcePath(path))
+		valArr, err := os.ReadFile(yatest.SourcePath(path))
 		if err != nil {
 			return xerrors.Errorf("unable to read file %s: %w", path, err)
 		}

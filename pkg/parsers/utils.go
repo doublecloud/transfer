@@ -19,10 +19,8 @@ import (
 )
 
 type schema struct {
-	Path     ypath.Path
-	Fields   []abstract.ColSchema `json:"fields"`
-	revision int
-	dead     chan bool
+	Path   ypath.Path
+	Fields []abstract.ColSchema `json:"fields"`
 }
 
 func adjustType(s string) string {

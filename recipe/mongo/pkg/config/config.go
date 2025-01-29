@@ -184,10 +184,3 @@ func GetKey(original interface{}, path []string) (interface{}, bool) {
 	}
 	return GetKey(value, path[1:])
 }
-
-func defaultizePathValue(original interface{}, path []string, value interface{}) interface{} {
-	if _, ok := GetKey(original, path); ok {
-		return OverridePathValue(original, path, value)
-	}
-	return original
-}

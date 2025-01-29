@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -33,9 +32,9 @@ func TestSnapshot(t *testing.T) {
 		helpers.LabeledPort{Label: "PG source", Port: Source.Port},
 	))
 
-	canonizedDebeziumKeyBytes, err := ioutil.ReadFile(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_snapshot/testdata/change_item_key.txt"))
+	canonizedDebeziumKeyBytes, err := os.ReadFile(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_snapshot/testdata/change_item_key.txt"))
 	require.NoError(t, err)
-	canonizedDebeziumValBytes, err := ioutil.ReadFile(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_snapshot/testdata/change_item_val.txt"))
+	canonizedDebeziumValBytes, err := os.ReadFile(yatest.SourcePath("transfer_manager/go/tests/e2e/pg2mock/debezium/debezium_snapshot/testdata/change_item_val.txt"))
 	require.NoError(t, err)
 	canonizedDebeziumVal := string(canonizedDebeziumValBytes)
 

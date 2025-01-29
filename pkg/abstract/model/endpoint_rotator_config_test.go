@@ -35,11 +35,6 @@ var monthList = []time.Month{
 	time.June, time.July, time.August, time.September, time.October, time.November, time.December,
 }
 
-var (
-	monthDayCount     = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-	monthDayCountLeap = []int{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-)
-
 // scenario tests
 func scenarioTesting(t *testing.T) {
 	// this tests based on real user scenarios
@@ -90,6 +85,7 @@ func scenarioTestingDTSUPPORT693(t *testing.T) {
 		timestamp = timestamp.Add(time.Hour)
 		require.Equal(t, rotator.KeepPartCount, len(rotationTables), "Check that there is always window of six tables")
 	}
+
 }
 
 // tests
@@ -179,18 +175,18 @@ func getMonthPartitionedTestHeavy(t *testing.T) {
 			require.Equal(t, monthList[i-(i%partSize)], rc.getMonthPartitioned(month))
 		}
 	}
+
 }
 
 func offsetDateTest(t *testing.T) {
 	t.Setenv("TZ", "Europe/Moscow") // this test is timezone aware
 	t.Run("Hours", offsetDateTestHours)
 	t.Run("Days", offsetDateTestDays)
-	// t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
+	//t.Run("MonthHeavy", offsetDateTestMonthHeavy) // TODO(@kry127) temporary switched off
 	t.Run("NilReceiver", offsetDateTestNilReceiver)
 }
 
 func offsetDateTestHours(t *testing.T) {
-	t.Parallel()
 	rcHours := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartHour, PartSize: 1, TimeColumn: ""}
 	rcHoursTimestamp := time.Now()
 
@@ -209,7 +205,6 @@ func offsetDateTestHours(t *testing.T) {
 }
 
 func offsetDateTestDays(t *testing.T) {
-	t.Parallel()
 	rcDays := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartDay, PartSize: 1, TimeColumn: ""}
 	rcDaysTimestamp := time.Now()
 
@@ -249,6 +244,11 @@ func isLeap(year int) bool {
 }
 
 func countDaysForYearAcc(year, month, offset int, acc int64) int64 {
+	var (
+		monthDayCount     = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+		monthDayCountLeap = []int{31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+	)
+
 	switch {
 	case offset > 0:
 		dayDiff := 0
@@ -288,11 +288,9 @@ func countDaysForYear(year, month, offset int) int64 {
 	return countDaysForYearAcc(year, month, offset, 0)
 }
 
-func offsetDateTestMonthHeavy(t *testing.T) {
-	t.Parallel()
+func TestOffsetDateTestMonthHeavy(t *testing.T) {
 	checkYear := func(t *testing.T, year, partSize int) {
 		t.Helper()
-		t.Parallel()
 		rcMonths := RotatorConfig{KeepPartCount: 0, PartType: RotatorPartMonth, PartSize: partSize, TimeColumn: ""}
 		nowTimestamp := time.Now()
 		for offset := 1; offset < 15; offset++ {
