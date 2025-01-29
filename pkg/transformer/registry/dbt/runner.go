@@ -29,7 +29,7 @@ type runner struct {
 }
 
 func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
-	dockerWrapper, err := docker.NewDockerWrapper(nil)
+	dockerWrapper, err := docker.NewDockerWrapper(logger.Log, nil)
 	if err != nil {
 		return nil, err
 	}

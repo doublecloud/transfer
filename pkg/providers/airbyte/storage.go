@@ -478,7 +478,7 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
 
-	dockerWrapper, err := docker.NewDockerWrapper(lgr)
+	dockerWrapper, err := docker.NewDockerWrapper(lgr, nil)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
 	}
