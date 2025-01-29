@@ -38,6 +38,10 @@ func upload(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml, uplo
 
 		transfer.Runtime = rt
 
+		if transfer.Telemetry != nil && transfer.Telemetry.Prefix != "" {
+			registry = registry.WithPrefix(transfer.Telemetry.Prefix)
+		}
+
 		tables, err := config.TablesFromYaml(uploadTablesYaml)
 		if err != nil {
 			return xerrors.Errorf("unable to load tables: %w", err)

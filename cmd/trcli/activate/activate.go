@@ -42,6 +42,11 @@ func activate(
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
+
+		if transfer.Telemetry != nil && transfer.Telemetry.Prefix != "" {
+			registry = registry.WithPrefix(transfer.Telemetry.Prefix)
+		}
+
 		return RunActivate(*cp, transfer, registry, delay)
 	}
 }
@@ -76,7 +81,6 @@ func RunActivate(
 			"name":        transfer.TransferName,
 		}),
 	)
-
 	if err != nil {
 		return xerrors.Errorf("activation failed with: %w", err)
 	}

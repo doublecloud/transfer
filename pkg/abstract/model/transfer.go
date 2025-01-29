@@ -24,6 +24,7 @@ type Transfer struct {
 	DataObjects       *DataObjects
 	TypeSystemVersion int
 	TmpPolicy         *TmpPolicyConfig
+	Telemetry         *Telemetry
 
 	// TODO: remove
 	FolderID string
