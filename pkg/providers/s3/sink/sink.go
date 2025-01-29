@@ -19,6 +19,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/serializer"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/doublecloud/transfer/pkg/util/xlocale"
 	"go.ytsaurus.tech/library/go/core/log"
 	"golang.org/x/sync/semaphore"
 )
@@ -251,7 +252,7 @@ func (s *sinker) bucket(row abstract.ChangeItem) string {
 		rowBucketTime = model.ExtractTimeCol(row, s.cfg.LayoutColumn)
 	}
 	if s.cfg.LayoutTZ != "" {
-		loc, _ := time.LoadLocation(s.cfg.LayoutTZ)
+		loc, _ := xlocale.Load(s.cfg.LayoutTZ)
 		rowBucketTime = rowBucketTime.In(loc)
 	}
 	return rowBucketTime.Format(s.cfg.Layout)
