@@ -123,6 +123,7 @@ jobs:
           { group: "pkg", name: "worker", path: "worker" },
           { group: "pkg", name: "schemaregistry", path: "schemaregistry" },
           { group: "pkg", name: "parsers-generic", path: "parsers/generic" },
+          { group: "pkg", name: "parsers-tests", path: "parsers/tests" },
           { group: "pkg", name: "parsers-scanner", path: "parsers/scanner" }
         ]
     steps:

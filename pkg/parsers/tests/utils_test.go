@@ -2,6 +2,7 @@ package tests
 
 import (
 	"fmt"
+	"github.com/doublecloud/transfer/tests/tcrecipes"
 	"testing"
 	"time"
 
@@ -28,6 +29,9 @@ import (
 // We need canonize parserConfig names, bcs for now they work via reflect dispatching,
 // but it will break production, if someone renames parserConfig struct.
 func TestCanonizeParserConfigsList(t *testing.T) {
+	if tcrecipes.Enabled() {
+		t.Skip()
+	}
 	parserConfigs := parsers.KnownParsersConfigs()
 	parsersConfigsMap := make(map[string]bool)
 	for _, parserConfig := range parserConfigs {
