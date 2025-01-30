@@ -35,10 +35,6 @@ func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *s
 		}
 		transfer.Runtime = rt
 
-		if transfer.Telemetry != nil && transfer.Telemetry.Prefix != "" {
-			registry = registry.WithPrefix(transfer.Telemetry.Prefix)
-		}
-
 		return RunReplication(*cp, transfer, registry)
 	}
 }
