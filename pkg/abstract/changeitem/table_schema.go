@@ -49,6 +49,18 @@ func (s *TableSchema) Hash() (string, error) {
 	return s.hash, nil
 }
 
+func (s *TableSchema) Equal(o *TableSchema) bool {
+	sh, err := s.Hash()
+	if err != nil {
+		return false
+	}
+	oh, err := o.Hash()
+	if err != nil {
+		return false
+	}
+	return sh == oh
+}
+
 func NewTableSchema(columns []ColSchema) *TableSchema {
 	return &TableSchema{
 		columns: columns,

@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
 	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -29,6 +30,7 @@ type SortedTable struct {
 	archiveSpawned bool
 	config         yt2.YtDestinationModel
 	sem            *semaphore.Weighted
+	tableSchema    *changeitem.TableSchema
 }
 
 func (t *SortedTable) Init() error {
@@ -104,6 +106,9 @@ func (t *SortedTable) prepareDataRows(input []abstract.ChangeItem, commitTime ui
 	var dataBatch ytDataBatch
 	dataBatch.insertOptions.Update = &upd
 	dataBatch.deleteRows = t.makeDataRowDeleter(commitTime)
+	if changeitem.InsertsOnly(input) {
+		dataBatch.toInsert = make([]any, 0, len(input))
+	}
 
 	for _, item := range input {
 		if item.Kind == abstract.UpdateKind {
@@ -248,6 +253,9 @@ func (t *SortedTable) Write(input []abstract.ChangeItem) error {
 	}
 
 	for _, item := range input {
+		if t.tableSchema.Equal(item.TableSchema) {
+			continue
+		}
 		schemaCompatible, err := t.ensureSchema(item.TableSchema.Columns())
 		if err != nil {
 			return xerrors.Errorf("Table %s: %w", t.path.String(), err)
@@ -442,7 +450,14 @@ func (t *SortedTable) spawnArchive(ctx context.Context) error {
 	return nil
 }
 
-func NewSortedTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColSchema, cfg yt2.YtDestinationModel, metrics *stats.SinkerStats, logger log.Logger) (GenericTable, error) {
+func NewSortedTable(
+	ytClient yt.Client,
+	path ypath.Path,
+	schema []abstract.ColSchema,
+	cfg yt2.YtDestinationModel,
+	metrics *stats.SinkerStats,
+	logger log.Logger,
+) (*SortedTable, error) {
 	t := SortedTable{
 		ytClient:       ytClient,
 		path:           path,
@@ -453,6 +468,7 @@ func NewSortedTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColSc
 		archiveSpawned: false,
 		config:         cfg,
 		sem:            semaphore.NewWeighted(10),
+		tableSchema:    changeitem.NewTableSchema(schema),
 	}
 
 	if err := t.Init(); err != nil {
