@@ -106,7 +106,11 @@ const dbtStatusMessageCategory = "dbt"
 func (r *pluggableTransformer) run() error {
 	ctx := context.Background()
 	for configurationI, configuration := range r.configurations {
-		if err := newRunner(r.dst, configuration, r.transfer).Run(ctx); err != nil {
+		runner, err := newRunner(r.dst, configuration, r.transfer)
+		if err != nil {
+			return err
+		}
+		if err := runner.Run(ctx); err != nil {
 			if errOSM := r.cp.OpenStatusMessage(
 				r.transfer.ID,
 				dbtStatusMessageCategory,
