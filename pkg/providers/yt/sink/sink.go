@@ -15,6 +15,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/maplock"
@@ -286,6 +287,9 @@ func (s *sinker) checkPrimaryKeyChanges(input []abstract.ChangeItem) error {
 		return nil
 	}
 
+	if changeitem.InsertsOnly(input) {
+		return nil
+	}
 	start := time.Now()
 	for i := range input {
 		item := &input[i]
@@ -525,12 +529,19 @@ func (s *sinker) pushOneBatch(table string, batch []abstract.ChangeItem) error {
 		return xerrors.Errorf("Check table (%v) error: %w", table, err)
 	}
 
-	// YT have a-b-a problem with PKey update, this would split such changes in sub-batches without PKey updates.
-	for _, subslice := range abstract.SplitUpdatedPKeys(batch) {
-		if err := s.pushSlice(subslice, table); err != nil {
+	if changeitem.InsertsOnly(batch) {
+		if err := s.pushSlice(batch, table); err != nil {
 			return xerrors.Errorf("unable to upload batch: %w", err)
 		}
-		s.logger.Infof("Upload %v changes delay %v", len(subslice), time.Since(start))
+		s.logger.Infof("Upload %v changes delay %v", len(batch), time.Since(start))
+	} else {
+		// YT have a-b-a problem with PKey update, this would split such changes in sub-batches without PKey updates.
+		for _, subslice := range abstract.SplitUpdatedPKeys(batch) {
+			if err := s.pushSlice(subslice, table); err != nil {
+				return xerrors.Errorf("unable to upload batch: %w", err)
+			}
+			s.logger.Infof("Upload %v changes delay %v", len(subslice), time.Since(start))
+		}
 	}
 	return nil
 }
@@ -848,6 +859,10 @@ func (s *sinker) newStaticTable(schema []abstract.ColSchema, table string) (Gene
 	return NewSingleStaticTable(s.ytClient, s.dir, table, schema, s.config, s.jobIndex, s.transferID, s.config.CleanupMode(), s.metrics, s.logger, s.pathToBinary)
 }
 
+func (s *sinker) OverrideClient(client yt.Client) {
+	s.ytClient = client
+}
+
 func NewSinker(
 	cfg yt2.YtDestinationModel,
 	transferID string,
@@ -923,6 +938,7 @@ func newSinker(cfg yt2.YtDestinationModel, transferID string, jobIndex int, lgr 
 
 func NewGenericTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColSchema, cfg yt2.YtDestinationModel, metrics *stats.SinkerStats, logger log.Logger) (GenericTable, error) {
 	logger.Info("create generic table", log.Any("name", path), log.Any("schema", schema))
+	originalSchema := schema
 	if !cfg.DisableDatetimeHack() {
 		schema = hackTimestamps(schema)
 		logger.Warn("nasty hack that replace datetime -> int64", log.Any("name", path), log.Any("schema", schema))
@@ -959,6 +975,10 @@ func NewGenericTable(ytClient yt.Client, path ypath.Path, schema []abstract.ColS
 	sortedTable, err := NewSortedTable(ytClient, path, schema, cfg, metrics, logger)
 	if err != nil {
 		return nil, xerrors.Errorf("cannot create sorted table: %w", err)
+	}
+	if !cfg.DisableDatetimeHack() {
+		// this hack force agly code, if hack is enabled we rebuild EVERY change item schema, which is very costly
+		sortedTable.tableSchema = abstract.NewTableSchema(originalSchema)
 	}
 	return sortedTable, nil
 }

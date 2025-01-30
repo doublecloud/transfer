@@ -6,6 +6,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/util/xlocale"
 	"github.com/gofrs/uuid"
 	"github.com/jackc/pgproto3/v2"
 	"github.com/jackc/pgtype"
@@ -24,7 +25,7 @@ func MakeUnmarshallerData(isHomo bool, conn *pgx.Conn) UnmarshallerData {
 		// use UTC in homo transfers, otherwise timestamps WITHOUT time zone cannot be inserted with COPY
 		marshalTimezone = time.UTC.String()
 	}
-	location, err := time.LoadLocation(marshalTimezone)
+	location, err := xlocale.Load(marshalTimezone)
 	if err != nil {
 		logger.Log.Warn("failed to parse time zone", log.String("timezone", marshalTimezone), log.Error(err))
 		location = time.UTC

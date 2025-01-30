@@ -27,7 +27,7 @@ func TestUnmarshalMessage(t *testing.T) {
 //---------------------------------------------------------------------------------------------------------------------
 // utils
 
-func synthesizeDebeziumMessage(t *testing.T, changeItem *abstract.ChangeItem) string {
+func synthesizeDebeziumMessage(t require.TestingT, changeItem *abstract.ChangeItem) string {
 	emitter, err := debezium.NewMessagesEmitter(map[string]string{
 		debeziumparameters.DatabaseDBName:   "pguser",
 		debeziumparameters.TopicPrefix:      "fullfillment",
@@ -73,7 +73,7 @@ func ReceiveStr(r *debezium.Receiver, in string) (string, error) {
 	return changeItem.ToJSONString(), err
 }
 
-func receiveWrapper(t *testing.T, debeziumMsg, canonizedChangeItem string, originalTypes map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo) {
+func receiveWrapper(t require.TestingT, debeziumMsg, canonizedChangeItem string, originalTypes map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo) {
 	canonDebeziumMsgWithoutSequence := wipeSequenceAndIncremental(debeziumMsg)
 	receiver := debezium.NewReceiver(originalTypes, nil)
 	changeItemStr, err := ReceiveStr(receiver, canonDebeziumMsgWithoutSequence)
