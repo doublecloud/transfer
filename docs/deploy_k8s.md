@@ -112,8 +112,10 @@ Be caution: in template you must replace **<Your-Prometheus-source-ID>** before 
 To add a prefix to metrics, use the `--metrics-prefix` flag. For example, to add a prefix of `transfer` to all metrics, use the following command:
 
 ```
-trcli --metrics-prefix transfer ...
+trcli replicate --metrics-prefix transfer ...
 ```
+
+Note: `--metrics-prefix` flag is only available for `activate`, `replicate` and `upload` commands.
 
 ### 6. Secrets management
 

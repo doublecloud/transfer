@@ -18,22 +18,29 @@ import (
 
 func ReplicateCommand(cp *coordinator.Coordinator, rt abstract.Runtime, registry metrics.Registry) *cobra.Command {
 	var transferParams string
+	var metricsPrefix string
+
 	replicationCommand := &cobra.Command{
 		Use:   "replicate",
 		Short: "Start local replication",
-		RunE:  replicate(cp, rt, &transferParams, registry),
+		RunE:  replicate(cp, rt, &transferParams, registry, metricsPrefix),
 	}
 	replicationCommand.Flags().StringVar(&transferParams, "transfer", "./transfer.yaml", "path to yaml file with transfer configuration")
+	replicationCommand.Flags().StringVar(&metricsPrefix, "metrics-prefix", "", "Optional prefix por Prometheus metrics")
 	return replicationCommand
 }
 
-func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string, registry metrics.Registry) func(cmd *cobra.Command, args []string) error {
+func replicate(cp *coordinator.Coordinator, rt abstract.Runtime, transferYaml *string, registry metrics.Registry, metricsPrefix string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		transfer, err := config.TransferFromYaml(transferYaml)
 		if err != nil {
 			return xerrors.Errorf("unable to load transfer: %w", err)
 		}
 		transfer.Runtime = rt
+
+		if metricsPrefix != "" {
+			registry = registry.WithPrefix(metricsPrefix)
+		}
 
 		return RunReplication(*cp, transfer, registry)
 	}
