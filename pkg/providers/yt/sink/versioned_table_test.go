@@ -116,6 +116,24 @@ func TestVersionedTable_CustomAttributes(t *testing.T) {
 	require.Equal(t, true, data)
 }
 
+func TestVersionedTable_IncludeTimeoutAttribute(t *testing.T) {
+	env, cancel := recipe.NewEnv(t)
+	defer cancel()
+	defer teardown(env.YT, testVersionedTablePath)
+	cfg := yt.NewYtDestinationV1(versionTableYtConfig())
+	cfg.WithDefaults()
+	table, err := newSinker(cfg, "some_uniq_transfer_id", 0, logger.Log, metrics.NewRegistry(), client2.NewFakeClient())
+	require.NoError(t, err)
+	input := append(generateVersionRows(2, 2), generateVersionRows(2, 1)...)
+	require.NoError(t, table.Push(input))
+	var timeout int64
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path(fmt.Sprintf("%s/@expiration_timeout", testVersionedTablePath)), &timeout, nil))
+	require.Equal(t, int64(604800000), timeout)
+	var expTime string
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path(fmt.Sprintf("%s/@expiration_time", testVersionedTablePath)), &expTime, nil))
+	require.Equal(t, "2200-01-12T03:32:51.298047Z", expTime)
+}
+
 func readVersionedTableStored(t *testing.T, env *yttest.Env) []testVersionedRow {
 	rows, err := env.YT.SelectRows(
 		env.Ctx,
@@ -181,7 +199,9 @@ func versionTableYtConfig() yt.YtDestination {
 		Path:          "//home/cdc/test/versioned",
 		Cluster:       os.Getenv("YT_PROXY"),
 		CustomAttributes: map[string]string{
-			"test": "%true",
+			"test":               "%true",
+			"expiration_timeout": "604800000",
+			"expiration_time":    "\"2200-01-12T03:32:51.298047Z\"",
 		},
 	}
 }

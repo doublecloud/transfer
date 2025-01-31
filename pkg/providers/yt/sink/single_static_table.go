@@ -240,9 +240,8 @@ func (t *SingleStaticTable) commit(ctx context.Context) error {
 			return abstract.NewFatalError(NoKeyColumnsFound)
 		}
 		// table without keys is already done for making it ordered and dynamic
-		if _, err := t.tx.MoveNode(ctx, tmpTableYPath, mergedTableYPath, &yt.MoveNodeOptions{
-			Force: true,
-		}); err != nil {
+		moveOptions := yt2.ResolveMoveOptions(t.ytClient, tmpTableYPath, false)
+		if _, err := t.tx.MoveNode(ctx, tmpTableYPath, mergedTableYPath, moveOptions); err != nil {
 			t.logger.Error("cannot move tmp table, aborting transaction", log.String("table", t.mergedTableName),
 				log.Any("transaction", t.tx.ID()), log.Any("path", tmpTableYPath))
 			//nolint:descriptiveerrors

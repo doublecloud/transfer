@@ -138,9 +138,8 @@ func (t *StaticTable) commit(tableID abstract.TableID) error {
 			return xerrors.Errorf("unable to merge: %w", err)
 		}
 
-		if _, err := twr.runningTx.MoveNode(ctx, twr.tmp, twr.target, &yt.MoveNodeOptions{
-			Force: true,
-		}); err != nil {
+		moveOptions := yt2.ResolveMoveOptions(twr.runningTx, twr.tmp, false)
+		if _, err := twr.runningTx.MoveNode(ctx, twr.tmp, twr.target, moveOptions); err != nil {
 			t.logger.Error("cannot move tmp table, aborting transaction", log.Any("table", tableID.Fqtn()), log.Any("transaction", twr.runningTx.ID()), log.Any("path", twr.tmp))
 			_ = twr.runningTx.Abort()
 			//nolint:descriptiveerrors

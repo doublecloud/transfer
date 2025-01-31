@@ -93,6 +93,7 @@ func TestStaticTable(t *testing.T) {
 	t.Run("simple test", staticTableSimple)
 	t.Run("wrong schema test", wrongOrderOfValuesInChangeItem)
 	t.Run("custom attributes test", TestCustomAttributesStaticTable)
+	t.Run("timeout attribute test", includeTimeoutAttributeStaticTable)
 }
 
 func staticTableSimple(t *testing.T) {
@@ -291,4 +292,61 @@ func TestCustomAttributesStaticTable(t *testing.T) {
 	var attr bool
 	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/static/test_table/ns_weird_table_2/@test"), &attr, nil))
 	require.Equal(t, true, attr)
+}
+
+func includeTimeoutAttributeStaticTable(t *testing.T) {
+	_, cancel := recipe.NewEnv(t)
+	defer cancel()
+
+	path := ypath.Path("//home/cdc/test/TM-8315/TimeoutAttributeStaticTable")
+	cfg, ytClient := initYt(t, path.String())
+	defer ytClient.Stop()
+	defer teardown(ytClient, path)
+	// schema might be unknown during initialization
+	tableID := abstract.TableID{
+		Namespace: "ns",
+		Name:      "weird_table_2",
+	}
+	statTable, err := NewRotatedStaticSink(cfg, metrics.NewRegistry(), logger.Log, coordinator.NewFakeClient(), "test_transfer")
+	require.NoError(t, err)
+	// generate some amount of random change items
+	var items []abstract.ChangeItem
+	for i := 0; i < 1; i++ {
+		row := newBigRow()
+		items = append(items, row.toChangeItem(tableID.Namespace, tableID.Name))
+	}
+	// push initial items
+	require.NoError(t, statTable.Push([]abstract.ChangeItem{{
+		TableSchema: bigRowSchema,
+		Kind:        abstract.InitShardedTableLoad,
+		Schema:      tableID.Namespace,
+		Table:       tableID.Name,
+	}}))
+	require.NoError(t, statTable.Push([]abstract.ChangeItem{{
+		TableSchema: bigRowSchema,
+		Kind:        abstract.InitTableLoad,
+		Schema:      tableID.Namespace,
+		Table:       tableID.Name,
+	}}))
+	// write change items
+	require.NoError(t, statTable.Push(items))
+	// push final items
+	require.NoError(t, statTable.Push([]abstract.ChangeItem{{
+		TableSchema: bigRowSchema,
+		Kind:        abstract.DoneTableLoad,
+		Schema:      tableID.Namespace,
+		Table:       tableID.Name,
+	}}))
+	require.NoError(t, statTable.Push([]abstract.ChangeItem{{
+		TableSchema: bigRowSchema,
+		Kind:        abstract.DoneShardedTableLoad,
+		Schema:      tableID.Namespace,
+		Table:       tableID.Name,
+	}}))
+	var timeout int64
+	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/TM-8315/TimeoutAttributeStaticTable/ns_weird_table_2/@expiration_timeout"), &timeout, nil))
+	require.Equal(t, int64(604800000), timeout)
+	var expTime string
+	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/TM-8315/TimeoutAttributeStaticTable/ns_weird_table_2/@expiration_time"), &expTime, nil))
+	require.Equal(t, "2200-01-12T03:32:51.298047Z", expTime)
 }

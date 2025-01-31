@@ -86,7 +86,8 @@ func (s *sinker) Move(ctx context.Context, src, dst abstract.TableID) error {
 		}
 	}
 
-	_, err = s.ytClient.MoveNode(ctx, srcPath, dstPath, &yt.MoveNodeOptions{Force: true})
+	moveOptions := yt2.ResolveMoveOptions(s.ytClient, srcPath, false)
+	_, err = s.ytClient.MoveNode(ctx, srcPath, dstPath, moveOptions)
 	if err != nil {
 		return xerrors.Errorf("unable to move: %w", err)
 	}

@@ -64,7 +64,9 @@ func initYt(t *testing.T, path string) (testCfg yt2.YtDestinationModel, client y
 		CellBundle:    "default",
 		Spec:          *yt2.NewYTSpec(map[string]interface{}{"max_row_weight": 128 * 1024 * 1024}),
 		CustomAttributes: map[string]string{
-			"test": "%true",
+			"test":               "%true",
+			"expiration_timeout": "604800000",
+			"expiration_time":    "\"2200-01-12T03:32:51.298047Z\"",
 		},
 	})
 	cfg.WithDefaults()
@@ -666,4 +668,72 @@ func TestCustomAttributesSingleStaticTable(t *testing.T) {
 	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/generic/temp/test_table/@test"), &data, nil))
 	require.Equal(t, true, data)
 	teardown(ytClient, ypath.Path(cfg.Path()))
+}
+
+func TestIncludeTimeoutAttributeSingleStaticTable(t *testing.T) {
+	if recipe.TestContainerEnabled() {
+		t.Skip()
+	}
+	schema_ := abstract.NewTableSchema([]abstract.ColSchema{
+		{
+			DataType:   "double",
+			ColumnName: "test",
+			PrimaryKey: true,
+		},
+	})
+	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
+		Atomicity:     yt.AtomicityFull,
+		CellBundle:    "default",
+		PrimaryMedium: "default",
+		CustomAttributes: map[string]string{
+			"expiration_timeout": "604800000",
+			"expiration_time":    "\"2200-01-12T03:32:51.298047Z\"",
+		},
+		Path:                     "//home/cdc/test/generic/temp",
+		UseStaticTableOnSnapshot: true,
+		Cluster:                  os.Getenv("YT_PROXY")},
+	)
+	cfg.WithDefaults()
+	table, err := newSinker(cfg, "some_uniq_transfer_id", 0, logger.Log, metrics.NewRegistry(), coordinator.NewFakeClient())
+	require.NoError(t, err)
+	require.NoError(t, table.Push([]abstract.ChangeItem{{
+		TableSchema: schema_,
+		Kind:        abstract.InitShardedTableLoad,
+		Table:       "test_timeout_table",
+	}}))
+	require.NoError(t, table.Push([]abstract.ChangeItem{{
+		TableSchema: schema_,
+		Kind:        abstract.InitTableLoad,
+		Table:       "test_timeout_table",
+	}}))
+	require.NoError(t, table.Push([]abstract.ChangeItem{
+		{
+			TableSchema:  schema_,
+			Kind:         abstract.InsertKind,
+			ColumnNames:  []string{"test"},
+			ColumnValues: []interface{}{3.99},
+			Table:        "test_timeout_table",
+		},
+	}))
+	require.NoError(t, table.Push([]abstract.ChangeItem{{
+		TableSchema: schema_,
+		Kind:        abstract.DoneTableLoad,
+		Table:       "test_timeout_table",
+	}}))
+	require.NoError(t, table.Push([]abstract.ChangeItem{{
+		TableSchema: schema_,
+		Kind:        abstract.DoneShardedTableLoad,
+		Table:       "test_timeout_table",
+	}}))
+
+	ytClient, err := ytclient.FromConnParams(cfg, logger.Log)
+	require.NoError(t, err)
+	defer teardown(ytClient, ypath.Path(cfg.Path()))
+
+	var timeout int64
+	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/generic/temp/test_timeout_table/@expiration_timeout"), &timeout, nil))
+	require.Equal(t, int64(604800000), timeout)
+	var expTime string
+	require.NoError(t, ytClient.GetNode(context.Background(), ypath.Path("//home/cdc/test/generic/temp/test_timeout_table/@expiration_time"), &expTime, nil))
+	require.Equal(t, "2200-01-12T03:32:51.298047Z", expTime)
 }

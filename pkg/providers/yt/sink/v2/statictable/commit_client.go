@@ -6,6 +6,7 @@ import (
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
+	yt2 "github.com/doublecloud/transfer/pkg/providers/yt"
 	"go.ytsaurus.tech/yt/go/mapreduce"
 	"go.ytsaurus.tech/yt/go/mapreduce/spec"
 	"go.ytsaurus.tech/yt/go/schema"
@@ -115,9 +116,8 @@ func (c *commitClient) moveTables(src ypath.Path, dst ypath.Path) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	if _, err := c.Tx.MoveNode(ctx, src, dst, &yt.MoveNodeOptions{
-		Force: true,
-	}); err != nil {
+	moveOptions := yt2.ResolveMoveOptions(c.Tx, src, false)
+	if _, err := c.Tx.MoveNode(ctx, src, dst, moveOptions); err != nil {
 		return err
 	}
 	return nil

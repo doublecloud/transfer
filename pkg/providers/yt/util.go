@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/ptr"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"go.ytsaurus.tech/library/go/core/log"
 	"go.ytsaurus.tech/yt/go/migrate"
@@ -196,4 +197,21 @@ func WaitMountingPreloadState(yc yt.Client, path ypath.Path) error {
 		case <-tick.C:
 		}
 	}
+}
+
+func ResolveMoveOptions(client yt.CypressClient, table ypath.Path, isRecursive bool) *yt.MoveNodeOptions {
+	ctx := context.Background()
+
+	var tableTimeout int64
+	var tableExpirationTime string
+	preserveExpirationTimeoutErr := client.GetNode(ctx, table.Attr("expiration_timeout"), &tableTimeout, nil)
+	preserveExpirationTimeErr := client.GetNode(ctx, table.Attr("expiration_time"), &tableExpirationTime, nil)
+
+	result := &yt.MoveNodeOptions{
+		Force:                     true,
+		Recursive:                 isRecursive,
+		PreserveExpirationTimeout: ptr.Bool(preserveExpirationTimeoutErr == nil),
+		PreserveExpirationTime:    ptr.Bool(preserveExpirationTimeErr == nil),
+	}
+	return result
 }

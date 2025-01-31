@@ -248,7 +248,8 @@ func moveAndMount(
 		}
 	}
 
-	if _, err := client.MoveNode(ctx, src, dst, &yt.MoveNodeOptions{Recursive: true, Force: true}); err != nil {
+	moveOptions := ResolveMoveOptions(client, src, true)
+	if _, err := client.MoveNode(ctx, src, dst, moveOptions); err != nil {
 		return xerrors.Errorf("unable to move from %q to %q: %w", src, dst, err)
 	}
 

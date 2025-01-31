@@ -169,6 +169,34 @@ func TestOrderedTable_CustomAttributes(t *testing.T) {
 	require.Equal(t, true, data)
 }
 
+func TestOrderedTable_IncludeTimeoutAttribute(t *testing.T) {
+	env, cancel := recipe.NewEnv(t)
+	defer cancel()
+	defer teardown(env.YT, testDirPath)
+	cfg := yt.NewYtDestinationV1(yt.YtDestination{
+		Atomicity:     ytsdk.AtomicityFull,
+		CellBundle:    "default",
+		PrimaryMedium: "default",
+		Ordered:       true,
+		CustomAttributes: map[string]string{
+			"expiration_timeout": "604800000",
+			"expiration_time":    "\"2200-01-12T03:32:51.298047Z\"",
+		},
+		Path:    testDirPath.String(),
+		Cluster: os.Getenv("YT_PROXY"),
+	})
+	cfg.WithDefaults()
+	table, err := newSinker(cfg, "some_uniq_transfer_id", 0, logger.Log, metrics.NewRegistry(), client2.NewFakeClient())
+	require.NoError(t, err)
+	require.NoError(t, table.Push(generateBullets(2, 10)))
+	var timeout int64
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path(fmt.Sprintf("%s/@expiration_timeout", testTablePath.String())), &timeout, nil))
+	require.Equal(t, int64(604800000), timeout)
+	var expTime string
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path(fmt.Sprintf("%s/@expiration_time", testTablePath.String())), &expTime, nil))
+	require.Equal(t, "2200-01-12T03:32:51.298047Z", expTime)
+}
+
 func generateBullets(partNum, count int) []abstract.ChangeItem {
 	res := make([]abstract.ChangeItem, 0)
 	dc := []string{"sas", "vla", "man", "iva", "myt"}[partNum%5]

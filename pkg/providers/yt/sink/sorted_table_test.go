@@ -99,6 +99,48 @@ func TestCustomAttributes(t *testing.T) {
 	require.Equal(t, true, data)
 }
 
+func TestIncludeTimeoutAttribute(t *testing.T) {
+	env, cancel := recipe.NewEnv(t)
+	defer cancel()
+	defer teardown(env.YT, "//home/cdc/test/generic/temp")
+	schema_ := abstract.NewTableSchema([]abstract.ColSchema{
+		{
+			DataType:   "double",
+			ColumnName: "test",
+			PrimaryKey: true,
+		},
+	})
+	cfg := yt2.NewYtDestinationV1(yt2.YtDestination{
+		Atomicity:     yt.AtomicityFull,
+		CellBundle:    "default",
+		PrimaryMedium: "default",
+		CustomAttributes: map[string]string{
+			"expiration_timeout": "604800000",
+			"expiration_time":    "\"2200-01-12T03:32:51.298047Z\"",
+		},
+		Path:    "//home/cdc/test/generic/temp",
+		Cluster: os.Getenv("YT_PROXY")},
+	)
+	cfg.WithDefaults()
+	table, err := newSinker(cfg, "some_uniq_transfer_id", 0, logger.Log, metrics.NewRegistry(), client2.NewFakeClient())
+	require.NoError(t, err)
+	require.NoError(t, table.Push([]abstract.ChangeItem{
+		{
+			TableSchema:  schema_,
+			Kind:         "insert",
+			ColumnNames:  []string{"test"},
+			ColumnValues: []interface{}{3.99},
+			Table:        "test_timeout_table",
+		},
+	}))
+	var timeout int64
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path("//home/cdc/test/generic/temp/test_timeout_table").Attr("expiration_timeout"), &timeout, nil))
+	require.Equal(t, int64(604800000), timeout)
+	var expTime string
+	require.NoError(t, env.YT.GetNode(env.Ctx, ypath.Path("//home/cdc/test/generic/temp/test_timeout_table").Attr("expiration_time"), &expTime, nil))
+	require.Equal(t, "2200-01-12T03:32:51.298047Z", expTime)
+}
+
 func TestSortedTable_Write_With_Indexes(t *testing.T) {
 	env, cancel := recipe.NewEnv(t)
 	defer cancel()
