@@ -26,10 +26,10 @@ This guide assumes that you already have a running kubernetes cluster. If you're
 The deployment will use a Helm chart which is a package for Kubernetes applications, acting like a blueprint or template that defines the resources needed to deploy an application on a Kubernetes cluster. Charts are stored in `helm-repo`.
 
 To add a remote helm repo:
+
 1. Run: `helm pull oci://ghcr.io/doublecloud/transfer-helm/transfer`. It will pull latest **transfer** helm chart locally
 
 2. After adding the repo, perform the repo indexing process by running `helm repo update`.
-
 
 ### 2. Create a Namespace for Transfer
 
@@ -61,12 +61,10 @@ transferSpec:
   type: INCREMENT_ONLY # type of transfer, one of: INCREMENT_ONLY, SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
   src:
     type: source_type # for example: pg, s3, kafka ...
-    params:
-      ... # source type params, all params can be founded in `model_source.go` for provider folder
+    params: ... # source type params, all params can be founded in `model_source.go` for provider folder
   dst:
     type: target_type # for example: s3, ch, kafka ...
-    params:
-      ... # target type params, all params can be founded in `model_destination.go` for provider folder
+    params: ... # target type params, all params can be founded in `model_destination.go` for provider folder
 ```
 
 ### 4. Installing Transfer
@@ -96,9 +94,9 @@ By default, transfer pods will expose metrics on `9091` ports, and add a default
 
 ```yaml
 annotations:
-    prometheus.io/path: /metrics
-    prometheus.io/port: '9091'
-    prometheus.io/scrape: 'true'
+  prometheus.io/path: /metrics
+  prometheus.io/port: "9091"
+  prometheus.io/scrape: "true"
 ```
 
 This will expose metrics scrapper for k8s scrapper. You can re-use our grafana dashboard template from Grafana template [here](../assets/grafana.tmpl.json).
@@ -109,28 +107,43 @@ This template will generate for you something like this:
 
 Be caution: in template you must replace **<Your-Prometheus-source-ID>** before deployement to grafana.
 
+#### Add a prefix to metrics
+
+To add a prefix to metrics, use the `--metrics-prefix` flag. For example, to add a prefix of `transfer` to all metrics, use the following command:
+
+```
+trcli replicate --metrics-prefix transfer ...
+```
+
+Note: `--metrics-prefix` flag is only available for `activate`, `replicate` and `upload` commands.
+
 ### 6. Secrets management
 
 For secrets management we recommend to use env-vars in paar with secret operator, for example [Hashicorp Vault](https://developer.hashicorp.com/vault/docs/platform/k8s/injector/examples)
 
 #### specify secrets in transferSpec
+
 Use ENV-vars substitute for src and dst params, you may specify
 
 ##### Hashicorp Vault
+
 [Hashicorp Vault](https://developer.hashicorp.com/vault/docs/platform/k8s/injector/examples)
+
 ```yaml
 transferSpec:
-    dst:
-      type: ch
-      params:
-          Password: "${FOO}"
+  dst:
+    type: ch
+    params:
+      Password: "${FOO}"
 
 env:
   FOO: "/vault/secret"
 ```
 
 ##### K8s secret
+
 [k8s secret](https://kubernetes.io/docs/concepts/configuration/secret/)
+
 ```yaml
 secret_env:
   - env_name: FOO
@@ -139,18 +152,21 @@ secret_env:
 ```
 
 ##### ENV-vars
+
 Don't recommend to use this way, but you may specify env-vars directly in values.yaml
+
 ```yaml
 env:
   FOO: "secret"
 ```
 
-#### After load 
+#### After load
+
 After load this transfer yaml would be:
 
 ```yaml
 dst:
   type: ch
   params:
-      Password: "secret"
+    Password: "secret"
 ```

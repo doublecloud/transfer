@@ -48,6 +48,7 @@ func main() {
 	runProfiler := false
 
 	promRegistry, registry := internal_metrics.NewPrometheusRegistryWithNameProcessor()
+
 	rootCommand := &cobra.Command{
 		Use:          "trcli",
 		Short:        "Transfer cli",
