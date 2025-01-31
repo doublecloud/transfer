@@ -45,7 +45,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20
 	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4
 	github.com/montanaflynn/stats v0.7.1
-	github.com/ohler55/ojg v1.15.0
+	github.com/ohler55/ojg v1.26.1
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/opencontainers/image-spec v1.1.0
 	github.com/parquet-go/parquet-go v0.24.0
