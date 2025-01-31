@@ -128,6 +128,7 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 
 	err = s.src.Run(asyncSink)
 	if err != nil {
+		s.src.Stop()
 		return xerrors.Errorf("unable to run worker: %w", err)
 	}
 
