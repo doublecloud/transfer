@@ -13,6 +13,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/parsequeue"
+	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/jsonx"
 	"github.com/doublecloud/transfer/pkg/util/queues/sequencer"
@@ -32,7 +33,9 @@ const (
 type Source struct {
 	cfg      *YdbSource
 	feedName string
-	logger   log.Logger
+
+	logger  log.Logger
+	metrics *stats.SourceStats
 
 	once       sync.Once
 	ctx        context.Context
@@ -114,6 +117,8 @@ func (s *Source) run(parseQ *parsequeue.WaitableParseQueue[[]batchWithSize]) err
 		}
 
 		// send into sink
+		s.metrics.Size.Add(int64(bufSize))
+		s.metrics.Count.Add(int64(messagesCount))
 		s.logger.Info(fmt.Sprintf("begin to process batch: %v items with %v", messagesCount, format.SizeInt(int(bufSize))),
 			log.String("offsets", sequencer.BuildMapTopicPartitionToOffsetsRange(batchesToQueueMessages(buffer))))
 
@@ -136,6 +141,7 @@ func (s *Source) parse(buffer []batchWithSize) []abstract.ChangeItem {
 		s.memThrottler.ReduceInflight(batchesSize(buffer))
 	})
 
+	st := time.Now()
 	items := make([]abstract.ChangeItem, 0)
 	for _, batch := range buffer {
 		for i := range batch.messageValues {
@@ -166,6 +172,9 @@ func (s *Source) parse(buffer []batchWithSize) []abstract.ChangeItem {
 	}
 	rollbackOnError.Cancel()
 
+	s.metrics.DecodeTime.RecordDuration(time.Since(st))
+	s.metrics.ChangeItems.Add(int64(len(items)))
+
 	return items
 }
 
@@ -193,6 +202,7 @@ func (s *Source) ack(buffer []batchWithSize, pushSt time.Time, err error) {
 		}
 	}
 
+	s.metrics.PushTime.RecordDuration(time.Since(pushSt))
 	s.logger.Info(
 		fmt.Sprintf("Commit messages done in %v", time.Since(pushSt)),
 		log.String("pushed", pushed),
@@ -285,7 +295,7 @@ func discoverChangeFeedMode(ydbClient *ydb.Driver, tablePath, changeFeedName str
 	return result, nil
 }
 
-func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.Registry) (*Source, error) {
+func NewSource(transferID string, cfg *YdbSource, logger log.Logger, registry metrics.Registry) (*Source, error) {
 	clientCtx, cancelFunc := context.WithCancel(context.Background())
 	var rb util.Rollbacks
 	defer rb.Do()
@@ -328,6 +338,7 @@ func NewSource(transferID string, cfg *YdbSource, logger log.Logger, _ metrics.R
 		cfg:          cfg,
 		feedName:     feedName,
 		logger:       logger,
+		metrics:      stats.NewSourceStats(registry),
 		once:         sync.Once{},
 		ctx:          clientCtx,
 		cancelFunc:   cancelFunc,
