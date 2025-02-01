@@ -1,7 +1,6 @@
 package pg
 
 import (
-	"encoding/json"
 	"math"
 	"strconv"
 	"strings"
@@ -14,6 +13,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/debezium/typeutil"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/goccy/go-json"
 	"github.com/jackc/pgtype"
 )
 

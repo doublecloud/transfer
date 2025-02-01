@@ -14,6 +14,23 @@ import (
 
 func BenchmarkReceiverTest(b *testing.B) {
 	b.Run("parse", func(b *testing.B) {
+		b.Run("citext", func(b *testing.B) {
+			canonDebeziumMsgWithoutSequence := wipeSequenceAndIncremental(debeziumMsg25)
+			receiver := debezium.NewReceiver(map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
+				{Namespace: "public", Name: "basic_types"}: {
+					"id":  {OriginalType: "pg:integer"},
+					"val": {OriginalType: `pg:citext`},
+				},
+			}, nil)
+
+			b.ResetTimer()
+			for n := 0; n < b.N; n++ {
+				co, err := receiver.Receive(canonDebeziumMsgWithoutSequence)
+				require.NoError(b, err)
+				b.SetBytes(int64(co.Size.Read))
+			}
+			b.ReportAllocs()
+		})
 		b.Run("tz", func(b *testing.B) {
 			canonDebeziumMsgWithoutSequence := wipeSequenceAndIncremental(debeziumMsg30)
 			receiver := debezium.NewReceiver(map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
@@ -27,7 +44,7 @@ func BenchmarkReceiverTest(b *testing.B) {
 			for n := 0; n < b.N; n++ {
 				co, err := receiver.Receive(canonDebeziumMsgWithoutSequence)
 				require.NoError(b, err)
-				b.SetBytes(int64(co.Size.Values))
+				b.SetBytes(int64(co.Size.Read))
 			}
 			b.ReportAllocs()
 		})
@@ -44,7 +61,7 @@ func BenchmarkReceiverTest(b *testing.B) {
 			for n := 0; n < b.N; n++ {
 				co, err := receiver.Receive(canonDebeziumMsgWithoutSequence)
 				require.NoError(b, err)
-				b.SetBytes(int64(co.Size.Values))
+				b.SetBytes(int64(co.Size.Read))
 			}
 			b.ReportAllocs()
 		})

@@ -1,10 +1,9 @@
 package unpacker
 
 import (
-	"encoding/json"
-
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/util"
+	"github.com/goccy/go-json"
 )
 
 type IncludeSchema struct {
