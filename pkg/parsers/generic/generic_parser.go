@@ -623,7 +623,8 @@ func wrapIntoEmptyInterface(v *fastjson.Value, useNumbers bool) interface{} {
 		return v.GetBool()
 	case fastjson.TypeNumber:
 		if useNumbers {
-			return json.Number(v.MarshalTo(nil))
+			// v.String do wierd magic trick that prevent escape string to heap
+			return json.Number(v.String())
 		}
 		return v.GetFloat64()
 	default:
