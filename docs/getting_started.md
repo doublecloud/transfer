@@ -30,7 +30,7 @@ Below is a sample `transfer.yaml` configuration file for transferring data from 
 ```yaml
 source:
   type: "pg"
-  params: |
+  params:
     host: "source-db-host"
     port: 5432
     database: "source_database"
@@ -41,7 +41,7 @@ source:
 
 target:
   type: "ch"
-  params: |
+  params:
     host: "clickhouse-db-host"
     port: 9000
     database: "target_database"
