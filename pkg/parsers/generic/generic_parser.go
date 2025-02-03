@@ -203,6 +203,9 @@ type GenericParser struct {
 
 	name           string
 	jsonParserPool fastjson.ParserPool
+
+	avgRowSize    int
+	parsedBatches int
 }
 
 type lfResult struct {
@@ -517,8 +520,28 @@ func (p *GenericParser) doLfParser(msg parsers.Message, partition abstract.Parti
 	return res
 }
 
+func (p *GenericParser) estimateRows(size int) int {
+	if p.avgRowSize == 0 {
+		return 0
+	}
+	return size / p.avgRowSize
+}
+
+func (p *GenericParser) updateEstimate(size int, rowCount int) {
+	if rowCount == 0 {
+		return
+	}
+	// this code is euristic, expected that data is evenly spread, so no need to calc stats for too long
+	if p.parsedBatches > 1024 {
+		return
+	}
+	avgSize := size / rowCount
+	p.avgRowSize = (p.avgRowSize*p.parsedBatches + avgSize) / (p.parsedBatches + 1)
+	p.parsedBatches++
+}
+
 func (p *GenericParser) doGenericParser(msg parsers.Message, partition abstract.Partition) []abstract.ChangeItem {
-	res := make([]abstract.ChangeItem, 0)
+	res := make([]abstract.ChangeItem, 0, p.estimateRows(len(msg.Value)))
 	idx := 0
 	// TODO(@kry127) implement secrets processing in generic parser
 	scanner := bufio.NewScanner(bytes.NewReader(msg.Value))
@@ -552,6 +575,7 @@ func (p *GenericParser) doGenericParser(msg parsers.Message, partition abstract.
 			}
 		}
 	}
+	p.updateEstimate(len(msg.Value), idx)
 	return res
 }
 
@@ -1184,19 +1208,21 @@ func NewGenericParser(cfg ParserConfig, fields []abstract.ColSchema, logger log.
 	}
 	logger.Info("Final schema", log.Any("columns", colNames), log.Any("s", finalSchema))
 	return &GenericParser{
-		rawFields:        fields,
-		known:            known,
-		schema:           abstract.NewTableSchema(finalSchema),
-		auxFieldsToIndex: auxFieldsToIndex,
-		columns:          colNames,
-		colTypeMap:       colType,
 		logger:           logger,
 		metrics:          registry,
 		lfParser:         isLf,
 		lfCfg:            lfCfg,
 		genericCfg:       genericCfg,
 		auxOpts:          opts,
+		rawFields:        fields,
+		known:            known,
+		schema:           abstract.NewTableSchema(finalSchema),
+		auxFieldsToIndex: auxFieldsToIndex,
+		columns:          colNames,
+		colTypeMap:       colType,
 		name:             strings.ReplaceAll(opts.Topic, "/", "_"),
 		jsonParserPool:   fastjson.ParserPool{},
+		avgRowSize:       0,
+		parsedBatches:    0,
 	}
 }

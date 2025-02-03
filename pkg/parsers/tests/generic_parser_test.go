@@ -450,45 +450,32 @@ func BenchmarkGenericParser(b *testing.B) {
 		samples.MdbSample,     // json
 		samples.JSONSample,    // json
 	} {
-		parser, err := parsers.NewParserFromMap(ParserConfigMap(testCase), false, logger.LoggerWithLevel(zapcore.WarnLevel), stats.NewSourceStats(metrics.NewRegistry()))
-		require.NoError(b, err)
-		genericParserImpl := GetGenericParserImpl(parser)
-		for _, size := range []int{1, 5, 10} {
-			d := samples.Data[testCase]
-			for i := 1; i < size; i++ {
-				d.Value = append(d.Value, []byte("\n")...)
-				d.Value = append(d.Value, d.Value...)
-			}
-			b.Run(fmt.Sprintf("Abstract2 %v %v", testCase, size), func(b *testing.B) {
-				b.ResetTimer()
-				for n := 0; n < b.N; n++ {
-					r := genericParserImpl.Parse(d, abstract.Partition{})
-					cntr := 0
-					for r.Next() {
-						cntr++
+		b.Run(testCase, func(b *testing.B) {
+			cfg := ParserConfigMap(testCase)
+			parser, err := parsers.NewParserFromMap(
+				cfg,
+				false,
+				logger.LoggerWithLevel(zapcore.WarnLevel),
+				stats.NewSourceStats(metrics.NewRegistry()),
+			)
+			require.NoError(b, err)
+			for _, size := range []int{1, 5, 10} {
+				b.Run(fmt.Sprintf("batch_size_%v", size), func(b *testing.B) {
+					d := samples.Data[testCase]
+					for i := 1; i < size; i++ {
+						d.Value = append(d.Value, []byte("\n")...)
+						d.Value = append(d.Value, d.Value...)
 					}
-					require.True(b, cntr > 0)
-				}
-				b.SetBytes(int64(len(d.Value) * b.N))
-				b.ReportAllocs()
-			})
-		}
-		for _, size := range []int{1, 5, 10} {
-			d := samples.Data[testCase]
-			for i := 1; i < size; i++ {
-				d.Value = append(d.Value, []byte("\n")...)
-				d.Value = append(d.Value, d.Value...)
+					b.ResetTimer()
+					for n := 0; n < b.N; n++ {
+						r := parser.Do(d, abstract.Partition{})
+						require.True(b, len(r) > 0)
+						b.SetBytes(int64(len(d.Value)))
+					}
+					b.ReportAllocs()
+				})
 			}
-			b.Run(fmt.Sprintf("Abstract1 %v %v", testCase, size), func(b *testing.B) {
-				b.ResetTimer()
-				for n := 0; n < b.N; n++ {
-					r := parser.Do(d, abstract.Partition{})
-					require.True(b, len(r) > 0)
-				}
-				b.SetBytes(int64(len(d.Value) * b.N))
-				b.ReportAllocs()
-			})
-		}
+		})
 	}
 }
 
