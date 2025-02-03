@@ -17,7 +17,10 @@ import (
 type parserFactory func(interface{}, bool, log.Logger, *stats.SourceStats) (Parser, error)
 
 var parsersRegistry = make(map[string]parserFactory)
+
 var parserConfigRegistry = make(map[string]AbstractParserConfig)
+
+var UnknownParserErr = xerrors.NewSentinel("unregistered parser")
 
 func Register(foo parserFactory, configs []AbstractParserConfig) {
 	parserName := util.ToSnakeCase(strings.TrimPrefix(getFuncName(foo), "NewParser"))
@@ -84,7 +87,7 @@ func ParserConfigMapToStruct(in map[string]interface{}) (AbstractParserConfig, e
 
 	registeredStruct, ok := parserConfigRegistry[parserConfigName]
 	if !ok {
-		return nil, xerrors.Errorf("unregistered parser_config name: %s, known_parsers: %v", parserConfigName, KnownParsers())
+		return nil, xerrors.Errorf("parser_config name: %s, known_parsers: %v: %w", parserConfigName, KnownParsers(), UnknownParserErr)
 	}
 	pointerToRegisteredStructCopy := reflect.New(reflect.ValueOf(registeredStruct).Type().Elem()).Interface()
 
