@@ -41,6 +41,91 @@ func makePersqueueReadMessage(i int, rawLine string) parsers.Message {
 	}
 }
 
+func BenchmarkNumberType(b *testing.B) {
+	rawLines := strings.Split(string(parserTestNumbers), "\n")
+
+	fields := []abstract.ColSchema{
+		{
+			ColumnName: "id",
+			DataType:   schema.TypeInt8.String(),
+		},
+		{
+			ColumnName: "number_field",
+			DataType:   schema.TypeInt64.String(),
+		},
+		{
+			ColumnName: "float_field",
+			DataType:   schema.TypeFloat64.String(),
+		},
+		{
+			ColumnName: "obj_field",
+			DataType:   schema.TypeAny.String(),
+		},
+		{
+			ColumnName: "array_field",
+			DataType:   schema.TypeAny.String(),
+		},
+	}
+
+	parserConfig := &GenericParserConfig{
+		Format:             "json",
+		SchemaResourceName: "",
+		Fields:             fields,
+		AuxOpts: AuxParserOpts{
+			Topic: "my_topic_name",
+		},
+	}
+	parser := NewGenericParser(parserConfig, fields, logger.Log, stats.NewSourceStats(metrics.NewRegistry().WithTags(map[string]string{"id": "TestParserNumberTypes"})))
+
+	parserConfigUseNumbers := &GenericParserConfig{
+		Format:             "json",
+		SchemaResourceName: "",
+		Fields:             fields,
+		AuxOpts: AuxParserOpts{
+			Topic:           "my_topic_name",
+			UseNumbersInAny: true,
+		},
+	}
+	parserWithNumbers := NewGenericParser(parserConfigUseNumbers, fields, logger.Log, stats.NewSourceStats(metrics.NewRegistry().WithTags(map[string]string{"id": "TestParserNumberTypes"})))
+
+	b.Run("no-num", func(b *testing.B) {
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			size := int64(0)
+			for i, line := range rawLines {
+				if line == "" {
+					continue
+				}
+				msg := makePersqueueReadMessage(i, line)
+
+				result := parser.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: ""})
+				require.True(b, len(result) > 0)
+				size += int64(len(msg.Value))
+			}
+			b.SetBytes(size)
+		}
+		b.ReportAllocs()
+	})
+	b.Run("num", func(b *testing.B) {
+		b.ResetTimer()
+		for n := 0; n < b.N; n++ {
+			size := int64(0)
+			for i, line := range rawLines {
+				if line == "" {
+					continue
+				}
+				msg := makePersqueueReadMessage(i, line)
+
+				result := parserWithNumbers.Do(msg, abstract.Partition{Cluster: "", Partition: 0, Topic: ""})
+				require.True(b, len(result) > 0)
+				size += int64(len(msg.Value))
+			}
+			b.SetBytes(size)
+		}
+		b.ReportAllocs()
+	})
+}
+
 func TestParserNumberTypes(t *testing.T) {
 	rawLines := strings.Split(string(parserTestNumbers), "\n")
 
