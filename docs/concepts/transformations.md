@@ -325,7 +325,6 @@ FROM table
 ## Additional Configuration Options
 - `debugmode`: Enables or disables debug mode for transformation execution.
 - `errorsoutput`: Defines how transformation errors should be handled.
-- `data_objects.include_objects`: Specifies which data objects should be included in the transformation process.
-- `type_system_version`: Defines the transformation system version to ensure compatibility.
+- `transformerId`: Assign for each transformer, useful for logging
 
 This YAML-based approach to configuring transformations in **DoubleCloud Transfer** provides a structured and flexible way to modify and optimize data flows, ensuring smooth and efficient data pipeline operations.
