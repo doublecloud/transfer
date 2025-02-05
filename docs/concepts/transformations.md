@@ -227,21 +227,18 @@ This transformation allows you to apply filtering to the list of columns to tran
 
 This transformation gives you a capability to associate the table name on the source with a new table name on the target without changing the contents of the transferred table.
 
-1. Under **Tables list to rename**, click **+ Table**.
-
-1. Under **Table 1** → **Source table name**:
-
-    * For {{ PG }} data sources, use the **Named schema** field to provide the source table schema. Leave empty for the data sources that don't support schema and/or database abstractions.
-
-    * Specify the initial **Table name** on the source.
-
-1. Under **Target table name**:
-
-    * For {{ PG }} data sources, use the **Named schema** field to provide the target table schema. Leave empty for the data sources that don't support schema and/or database abstractions.
-
-    * Specify the intended **Table name** on the target.
-
-{% endcut %}
+```yaml
+  transformation:
+    transformers:
+      - renameTables:
+          renameTables:
+            - newName:
+                name: old_name
+                nameSpace: 'public'
+              originalName:
+                name: new_name
+                nameSpace: fancy_shmancy
+```
 
 {% cut "Replace primary key" %}
 
@@ -275,29 +272,15 @@ This transformation allows you to reassign the primary key column on the target 
 
 This transformation allows you to convert a certain data column in a specified table to a string.
 
-1. Under **Tables**, click **+ Tables** and specify the following:
-
-    * **Included tables** restricts the set of tables to transfer.
-
-    * **Excluded tables** allow transferring all data except the specified tables.
-
-   Set these table names as regular expressions:
-
-   {% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Columns**, specify the following:
-
-    * **Included columns** restricts the set of columns to transfer from the tables specified above.
-
-    * **Excluded columns** allow transferring all columns except the specified ones.
-
-   Set these column names as regular expressions:
-
-   {% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Key columns names**, click **+** to add a name of the column containing the primary key.
-
-1. Under **Non-key column names**, click **+** to add a column without a primary key.
+```yaml
+transformation:
+   transformers:
+      - raw_doc_grouper:
+         tables:
+              IncludeRegexp: ''
+              ExcludeRegexp: ''
+         columns: []
+```
 
 The conversion will be applied to the columns listed in both sections.
 
@@ -307,31 +290,14 @@ The conversion will be applied to the columns listed in both sections.
 
 This transformation gives you a capability to convert a certain data column in a specified table to a raw JSON.
 
-1. Under **Tables**, specify the following:
-
-* **Included tables** restricts the set of tables to transfer.
-
-* **Excluded tables** allow transferring all data except the specified tables.
-
-Set these table names as regular expressions:
-
-{% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Columns**, specify the following:
-
-* **Included columns** restricts the set of columns to transfer from the tables specified above.
-
-* **Excluded columns** allow transferring all columns except the specified ones.
-
-Set these column names as regular expressions:
-
-{% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Key columns names**, click **+** to add a name of the column containing the primary key.
-
-1. Under **Non-key column names**, click **+** to add a column without a primary key.
-
-The conversion will be applied to the columns listed in both sections.
+```yaml
+transformation:
+   transformers:
+      - raw_doc_grouper:
+         tables: []
+         keys: []
+         fields: []
+```
 
 {% endcut %}
 
@@ -339,23 +305,14 @@ The conversion will be applied to the columns listed in both sections.
 
 This transformation allows you to distribute the tables between multiple shards on the {{ CH }} data destination.
 
-1. Under **Tables**, click **+ Tables** and specify the following:
-
-* **Included tables** restricts the set of tables to transfer.
-
-* **Excluded tables** allow transferring all data except the specified tables.
-
-Set these table names as regular expressions:
-
-{% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Columns**, click **+ Columns** and specify the following:
-
-* **Included columns** restricts the set of columns to transfer from the tables specified above.
-
-* **Excluded columns** allow transferring all columns except the specified ones.
-
-1. Enter the **Count of shards** between which you want to distribute the table data.
+```yaml
+transformation:
+   transformers:
+      - sharder_transformer:
+         tables: []
+         columns: []
+         shardsCount: '42'
+```
 
 {% endcut %}
 
@@ -363,25 +320,81 @@ Set these table names as regular expressions:
 
 This transformation allows you to convert the [change data capture (CDC) data ![external link](../_assets/external-link.svg)](https://en.wikipedia.org/wiki/Change_data_capture) to raw JSON with history.
 
-1. Under **Tables**, click **+ Tables** and specify the following:
-
-* **Included tables** restricts the set of tables to transfer.
-
-* **Excluded tables** allow transferring all data except the specified tables.
-
-Set these table names as regular expressions:
-
-{% include notitle [regular-expressions](../_includes/transfers/regular-expressions.md) %}
-
-1. Under **Key columns names**, click **+** to add a name of the column containing the primary key.
-
-1. Under **Non-key column names**, click **+** to add a column without a primary key.
-
-The conversion will be applied to the columns listed in both sections.
+```yaml
+transformation:
+   transformers:
+      - raw_cdc_doc_grouper:
+         tables: []
+         keys: []
+         fields: []
+```
 
 {% endcut %}
 
 {% cut "SQL" %}
+
+Here is basic example of SQL transformer:
+
+```yaml
+transformation:
+   transformers:
+      - sql:
+            tables:                                                                       
+                include_tables:                                                             
+                - '"public"."included_data"'                                                
+                exclude_tables:                                                             
+                - '"public"."excluded_data"'                                                
+            query: |
+                select
+                    *, 42 as important_column
+                from table
+```
+
+{% endcut %}
+
+{% cut "dbt" %}
+
+Apply your dbt project to the snapshot of the data transferred to {{ CH }}.
+
+For more information on how to apply dbt transformation to your data.
+
+1. Specify the address of the **GitRepositoryLink** containing your dbt project. It must start with `https://`. The root directory of the repository must contain a `dbt_project.yml` file.
+1. Under **GitBranch**, specify the branch or a tag of the git repository containing your dbt project.
+1. Provide the **ProfileName** which will be created automatically using the settings of the destination endpoint. The name must match the `profile` property in the `dbt_project.yml` file.
+1. From the dropdown list, select the **Operation** for your dbt project to perform. For more information, see the [official dbt documentation ![external link](../_assets/external-link.svg)](https://docs.getdbt.com/docs/build/hooks-operations#about-operations).
+
+```yaml
+transformation:
+   transformers:
+      - dbt:                                               
+         ProfileName: ''
+         GitBranch: ''
+         GitRepositoryLink: ''
+         Operation: ''
+```
+
+{% endcut %}
+
+
+# Configuration Model
+# DoubleCloud Transfer YAML Transformations
+
+## 1. SQL Transformer
+- **Purpose**: Performs SQL-like in-memory data transformations based on a provided query in the ClickHouse® SQL dialect.
+- **Configuration**:
+   - `query`: The SQL query to execute.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - sql:
+      query: SELECT * FROM table
+      tables:
+        includeTables:
+          - public.test
+        excludeTables: null
+    transformerId: ""
+  ```
+
 
 This transformer accepts {{ CH }} SQL dialect and allows you to produce SQL-like in-memory data transformation. The solution is based on [{{ CH }} Local ![external link](../_assets/external-link.svg)](https://clickhouse.com/docs/en/operations/utilities/clickhouse-local/)
 
@@ -441,25 +454,198 @@ SELECT
 FROM table
 ```
 
-{% endcut %}
 
-{% cut "dbt" %}
+## 2. Mask Field Transformer
+- **Purpose**: Applies a hash function to specified columns to protect sensitive data during transfer.
+- **Configuration**:
+   - `columns`: List of columns to mask.
+   - `maskFunctionHash`: Defines the hash function and includes a user-defined salt for hashing.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - maskField:
+      columns:
+        - address
+      maskFunctionHash:
+        userDefinedSalt: random_secret_string
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-Apply your dbt project to the snapshot of the data transferred to {{ CH }}.
+## 3. Filter Columns Transformer
+- **Purpose**: Filters the list of columns transferred from the data source.
+- **Configuration**:
+   - `columns`:
+      - `includeColumns`: List of columns to include (supports regular expressions).
+      - `excludeColumns`: List of columns to exclude.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - filterColumns:
+      columns:
+        includeColumns:
+          - ^.*
+        excludeColumns: null
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-For more information on how to apply dbt transformation to your data.
+## 4. Rename Tables Transformer
+- **Purpose**: Renames tables during the transfer process.
+- **Configuration**:
+   - `renameTables`: List of renaming rules, each specifying the original and new table names and namespaces.
+- **Example**:
+  ```yaml
+  - renameTables:
+      renameTables:
+        - originalName:
+            name: foo
+            nameSpace: public
+          newName:
+            name: schmancy
+            nameSpace: fancy
+    transformerId: ""
+  ```
 
-1. Specify the address of the **Git repository** containing your dbt project. It must start with `https://`. The root directory of the repository must contain a `dbt_project.yml` file.
-1. Under **Git branch**, specify the branch or a tag of the git repository containing your dbt project.
-1. Provide the **DBT profile name** which will be created automatically using the settings of the destination endpoint. The name must match the `profile` property in the `dbt_project.yml` file.
-1. From the dropdown list, select the **Operation** for your dbt project to perform. For more information, see the [official dbt documentation ![external link](../_assets/external-link.svg)](https://docs.getdbt.com/docs/build/hooks-operations#about-operations).
+## 5. Replace Primary Key Transformer
+- **Purpose**: Reassigns the primary key columns on the target table.
+- **Configuration**:
+   - `keys`: List of columns to be used as primary keys.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - replacePrimaryKey:
+      keys:
+        - id
+        - first_name
+        - last_name
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-{% endcut %}
+## 6. Convert to String Transformer
+- **Purpose**: Converts specified data columns in a table to string format.
+- **Configuration**:
+   - `columns`:
+      - `includeColumns`: List of columns to include for conversion.
+      - `excludeColumns`: List of columns to exclude from conversion.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - convertToString:
+      columns:
+        includeColumns:
+          - salary
+        excludeColumns: null
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-{% note tip "Deleting a transformation layer" %}
+## 7. Raw Document Grouper Transformer
+- **Purpose**: Converts data into raw JSON format, grouping specified fields.
+- **Configuration**:
+   - `keys`: List of primary key columns for grouping.
+   - `fields`: List of fields to be grouped into a raw document.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - rawDocGrouper:
+      keys:
+        - id
+      fields:
+        - salary
+        - address
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-To delete a transformation layer,
-click ![three horizontal dots](../_assets/horizontal-ellipsis.svg)
-to the right of the transformation type dropdown menu → **Delete** .
+## 8. Raw CDC Document Grouper Transformer
+- **Purpose**: Similar to the Raw Document Grouper but optimized for Change Data Capture (CDC) processing, grouping fields based on a specified key.
+- **Configuration**:
+   - `keys`: List of primary key columns for grouping.
+   - `fields`: List of fields to be grouped into a raw document.
+   - `tables`: Specifies which tables to include or exclude for this transformation.
+- **Example**:
+  ```yaml
+  - rawCdcDocGrouper:
+      keys:
+        - id
+      fields:
+        - salary
+        - address
+      tables:
+        includeTables:
+          - public.foo
+        excludeTables: null
+    transformerId: ""
+  ```
 
-{% endnote %}
+## 9. Lambda Transformer
+- **Purpose**: Calls an external cloud function to process data before storing it in the target database.
+- **Configuration**:
+   - `Options`:
+      - `CloudFunction`: The name of the external cloud function.
+      - `CloudFunctionsBaseURL`: The base URL for the function service (e.g., AWS Lambda, Google Cloud Functions).
+      - `InvocationTimeout`: Maximum execution time for the function.
+      - `NumberOfRetries`: Number of retries in case of failure.
+      - `BufferSize`: Size of the buffer before sending data.
+      - `BufferFlushInterval`: Interval for flushing the buffer.
+      - `Headers`: Any additional headers required for API calls.
+   - `TableID`: Defines the target table for transformation.
+- **Example**:
+  ```yaml
+  - lambda:
+      Options:
+        CloudFunction: test_func
+        CloudFunctionsBaseURL: aws_url
+        InvocationTimeout: 1e+10
+        NumberOfRetries: 3
+        BufferSize: 1.048576e+06
+        BufferFlushInterval: 1e+09
+        Headers: null
+      TableID:
+        Name: test
+        Namespace: public
+    transformerId: ""
+  ```
+
+## 10. DBT Transformer
+- **Purpose**: Executes a dbt model to transform data within the target database.
+- **Configuration**:
+   - `ProfileName`: Name of the dbt profile matching the `profile` property in `dbt_project.yml`.
+   - `GitBranch`: Branch or tag of the Git repository containing the dbt project.
+   - `GitRepositoryLink`: URL to the Git repository with the dbt project (must start with `https://`).
+   - `Operation`: The operation to execute within the dbt project.
+- **Example**:
+  ```yaml
+  - dbt:
+      ProfileName: ''
+      GitBranch: ''
+      GitRepositoryLink: ''
+      Operation: ''
+  ```
+
+---
+
+## Additional Configuration Options
+- `debugmode`: Enables or disables debug mode for transformation execution.
+- `errorsoutput`: Defines how transformation errors should be handled.
+- `data_objects.include_objects`: Specifies which data objects should be included in the transformation process.
+- `type_system_version`: Defines the transformation system version to ensure compatibility.
+
+This YAML-based approach to configuring transformations in **DoubleCloud Transfer** provides a structured and flexible way to modify and optimize data flows, ensuring smooth and efficient data pipeline operations.
