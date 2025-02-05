@@ -31,12 +31,15 @@ links:
   - title: Deploy in k8s
     description: Create and configure your first production ready transfer in k8s.
     href: "deploy_k8s.md"
-  - title: Connectors
-    description: See the list of all available connectors for {{product-name}}.
-    href: "connectors/index.md"
   - title: Concepts
     description: Familiarize yourself with {{product-name}} concepts.
     href: "concepts/index.md"
+  - title: Connectors
+    description: See the list of all available connectors for {{product-name}}.
+    href: "connectors/index.md"
+  - title: Transformers
+    description: See the list of all available transformers for {{product-name}}.
+    href: "transformers/index.md"
   - title: Integrations
     description: See how to integrate {{product-name}} with other services
     href: "integrations/index.md"
