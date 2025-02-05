@@ -320,6 +320,62 @@ FROM table
       Operation: ''
   ```
 
+### Full Example Configuration
+```yaml
+id: test
+type: SNAPSHOT_AND_INCREMENT
+src:
+  type: mysql
+  params:
+    Host: mysql
+    User: myuser
+    Password: mypassword
+    Database: mydb
+    Port: 3306
+dst:
+  type: ch
+  params:
+    ShardsList:
+      - Hosts:
+          - clickhouse
+    HTTPPort: 8123
+    NativePort: 9000
+    Database: default
+    User: default
+    Password: "ch_password"
+transformation:
+  debugmode: false
+  transformers:
+    - sql:
+        query: SELECT * FROM mydb.table
+        tables:
+          includeTables:
+            - public.test
+          excludeTables: null
+      transformerId: ""
+    - maskField:
+        columns:
+          - address
+        maskFunctionHash:
+          userDefinedSalt: random_secret_string
+        tables:
+          includeTables:
+            - public.foo
+          excludeTables: null
+      transformerId: ""
+    - dbt:
+        ProfileName: 'my_dbt_profile'
+        GitBranch: 'main'
+        GitRepositoryLink: 'https://github.com/myorg/mydbtproject'
+        Operation: 'run'
+      transformerId: ""
+errorsoutput: null
+data_objects:
+  include_objects:
+    - public.test
+type_system_version: 9
+```
+
 ---
 
 ## Additional Configuration Options
