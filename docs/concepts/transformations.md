@@ -347,7 +347,7 @@ transformation:
   debugmode: false
   transformers:
     - sql:
-        query: SELECT * FROM mydb.table
+        query: SELECT * FROM table
         tables:
           includeTables:
             - public.test
@@ -360,7 +360,7 @@ transformation:
           userDefinedSalt: random_secret_string
         tables:
           includeTables:
-            - public.foo
+            - public.test
           excludeTables: null
       transformerId: ""
     - dbt:
