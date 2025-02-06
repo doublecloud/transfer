@@ -87,6 +87,31 @@ items:
       - name: YTSaurus
         href: connectors/ytsaurus.md
 
+  - name: Transformers
+    items:
+      - name: Overview
+        href: transformers/index.md
+      - name: SQL
+        href: transformers/sql.md
+      - name: Convert to string
+        href: transformers/convert_to_string.md
+      - name: DBT
+        href: transformers/dbt.md
+      - name: Filter Columns
+        href: transformers/filter_columns.md
+      - name: Lambda
+        href: transformers/lambda.md
+      - name: Mask Field
+        href: transformers/mask_field.md
+      - name: Group Doc CDC
+        href: transformers/raw_cdc_doc_grouper.md
+      - name: Group Doc
+        href: transformers/raw_doc_grouper.md
+      - name: Rename Table
+        href: transformers/rename_tables.md
+      - name: Replace PKey
+        href: transformers/replace_primary_key.md
+
   - name: Integrations
     items:
       - name: All integrations
