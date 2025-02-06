@@ -118,13 +118,21 @@ func buildSelectQuery(table abstract.TableDescription, tableSchema []abstract.Co
 	)
 
 	if table.Filter != "" {
-		resultQuery += " WHERE " + string(table.Filter)
+		if IsPartition(table.Filter) {
+			resultQuery += string(table.Filter)
+		} else {
+			resultQuery += " WHERE " + string(table.Filter)
+		}
 	}
 	if table.Offset != 0 {
 		resultQuery += fmt.Sprintf(" OFFSET %d", table.Offset)
 	}
 
 	return resultQuery
+}
+
+func IsPartition(filter abstract.WhereStatement) bool {
+	return strings.HasPrefix(string(filter), "PARTITION")
 }
 
 func MakeArrBacktickedColumnNames(tableSchema *[]abstract.ColSchema) []string {
