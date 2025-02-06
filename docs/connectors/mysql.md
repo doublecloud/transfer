@@ -124,7 +124,8 @@ You can use this connector both for **source** and **target** endpoints.
       "ConsistentSnapshot": true,
       "SnapshotDegreeOfParallelism": 4,
       "AllowDecimalAsFloat": false,
-      "RootCAFiles": ["/path/to/ca1.pem", "/path/to/ca2.pem"]
+      "RootCAFiles": ["/path/to/ca1.pem", "/path/to/ca2.pem"],
+      "ReplicationFlushInterval": 5000000000
     }
     ```
     
@@ -169,6 +170,9 @@ You can use this connector both for **source** and **target** endpoints.
       - **PlzNoHomo** (`bool`): Forces disabling of homogeneous features, primarily used for testing and specific configurations.
     
       - **RootCAFiles** (`[]string`): List of paths to root CA files for validating SSL connections to the MySQL server.
+      
+      - **ReplicationFlushInterval** (`time.Duration`): Specifies the replication flush interval. Defined in nanoseconds.
+        - Example: `5000000000` (5 seconds)
     
     ---
     

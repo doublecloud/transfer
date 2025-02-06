@@ -1,19 +1,20 @@
 package mysql
 
 import (
+	"github.com/doublecloud/transfer/pkg/abstract"
+	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"hash/fnv"
 	"regexp"
 	"strings"
-
-	"github.com/doublecloud/transfer/pkg/abstract"
-	"github.com/doublecloud/transfer/pkg/abstract/model"
+	"time"
 )
 
 type MysqlFlavorType string
 
 const (
-	MysqlFlavorTypeMysql   = "mysql"
-	MysqlFlavorTypeMariaDB = "mariadb"
+	MysqlFlavorTypeMysql            = "mysql"
+	MysqlFlavorTypeMariaDB          = "mariadb"
+	DefaultReplicationFlushInterval = time.Second
 )
 
 type MysqlTrackerStorage string
@@ -52,6 +53,8 @@ type MysqlSource struct {
 	PlzNoHomo    bool                // forcefully disable homo features, mostly for tests
 	RootCAFiles  []string
 	ConnectionID string
+
+	ReplicationFlushInterval time.Duration
 }
 
 var _ model.Source = (*MysqlSource)(nil)
@@ -162,6 +165,9 @@ func (s *MysqlSource) WithDefaults() {
 	}
 	if s.SnapshotDegreeOfParallelism <= 0 {
 		s.SnapshotDegreeOfParallelism = 4
+	}
+	if s.ReplicationFlushInterval == 0 {
+		s.ReplicationFlushInterval = DefaultReplicationFlushInterval
 	}
 }
 
