@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/gob"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -235,7 +234,7 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 			return xerrors.Errorf("Failed in accordance with configuration: %w", err)
 		}
 		if src.DBLogEnabled {
-			logger.Log.Info("DBLog enabled")
+			p.logger.Info("DBLog enabled")
 			if err := p.DBLogUpload(ctx, tables); err != nil {
 				return xerrors.Errorf("DBLog snapshot loading failed: %w", err)
 			}
@@ -299,7 +298,7 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 	}
 
 	// ensure SignalTable exists
-	_, err = dblog.NewSignalTable(ctx, storage.DB, logger.Log, p.transfer.ID, src.Database)
+	_, err = dblog.NewSignalTable(ctx, storage.DB, p.logger, p.transfer.ID, src.Database)
 	if err != nil {
 		return xerrors.Errorf("unable to create signal table: %w", err)
 	}
@@ -322,7 +321,7 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 	for _, table := range tableDescs {
 		asyncSink, err := abstract_sink.MakeAsyncSink(
 			p.transfer,
-			logger.Log,
+			p.logger,
 			p.registry,
 			p.cp,
 			middlewares.MakeConfig(middlewares.WithEnableRetries),
@@ -335,11 +334,11 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 		}
 
 		if err = backoff.Retry(func() error {
-			logger.Log.Infof("Starting upload table: %s", table.String())
+			p.logger.Infof("Starting upload table: %s", table.String())
 
 			err := dblogStorage.LoadTable(ctx, table, pusher)
 			if err == nil {
-				logger.Log.Infof("Upload table %s successfully", table.String())
+				p.logger.Infof("Upload table %s successfully", table.String())
 			}
 			return err
 		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10)); err != nil {
