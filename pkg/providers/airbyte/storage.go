@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/docker"
+	"github.com/doublecloud/transfer/pkg/container"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -38,7 +38,7 @@ type Storage struct {
 	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
 
-	dw *docker.DockerWrapper
+	dw *container.DockerWrapper
 }
 
 func (a *Storage) Close() {}
@@ -367,8 +367,8 @@ func (a *Storage) discover() error {
 	return nil
 }
 
-func (a *Storage) baseOpts() docker.DockerOpts {
-	return docker.DockerOpts{
+func (a *Storage) baseOpts() container.DockerOpts {
+	return container.DockerOpts{
 		Volumes: map[string]string{
 			a.config.DataDir(): "/data",
 		},
@@ -482,7 +482,7 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
 
-	dockerWrapper, err := docker.NewDockerWrapper(lgr)
+	dockerWrapper, err := container.NewDockerWrapper(lgr)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
 	}

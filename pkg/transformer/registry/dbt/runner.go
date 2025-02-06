@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/docker"
+	"github.com/doublecloud/transfer/pkg/container"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -25,11 +25,11 @@ type runner struct {
 
 	transfer *model.Transfer
 
-	dw *docker.DockerWrapper
+	dw *container.DockerWrapper
 }
 
 func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
-	dockerWrapper, err := docker.NewDockerWrapper(logger.Log)
+	dockerWrapper, err := container.NewDockerWrapper(logger.Log)
 	if err != nil {
 		return nil, err
 	}
@@ -162,7 +162,7 @@ func (r *runner) cleanupConfiguration() {
 }
 
 func (r *runner) run(ctx context.Context) error {
-	opts := docker.DockerOpts{
+	opts := container.DockerOpts{
 		Volumes: map[string]string{},
 		Mounts: []mount.Mount{
 			{
