@@ -52,6 +52,8 @@ type MysqlSource struct {
 	PlzNoHomo    bool                // forcefully disable homo features, mostly for tests
 	RootCAFiles  []string
 	ConnectionID string
+
+	DBLogEnabled bool // force DBLog snapshot instead of common
 }
 
 var _ model.Source = (*MysqlSource)(nil)
