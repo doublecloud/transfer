@@ -5,6 +5,8 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
+	"os/exec"
 	"strings"
 	"testing"
 	"time"
@@ -16,6 +18,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+
+	"github.com/stretchr/testify/require"
 )
 
 type K8sWrapperTest struct {
@@ -306,4 +310,70 @@ func TestK8sWrapper_RunPod_Timeout(t *testing.T) {
 	assert.Equal(t, "", stdout.String())
 
 	mockClient.AssertExpectations(t)
+}
+
+func TestIntegration_RunPod(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test in short mode")
+	}
+
+	kindClusterName := "integration-test-cluster"
+
+	// Create a new Kind cluster.
+	createCmd := exec.Command("kind", "create", "cluster", "--name", kindClusterName)
+	createOut, err := createCmd.CombinedOutput()
+	require.NoError(t, err, "Failed to create Kind cluster: %s", string(createOut))
+	// Ensure that we delete the cluster upon test completion.
+	defer func() {
+		deleteCmd := exec.Command("kind", "delete", "cluster", "--name", kindClusterName)
+		deleteOut, err := deleteCmd.CombinedOutput()
+		if err != nil {
+			t.Logf("Failed to delete Kind cluster: %s. Output: %s", err, string(deleteOut))
+		}
+	}()
+
+	// Wait a bit for the cluster to be fully up.
+	time.Sleep(15 * time.Second)
+
+	// Retrieve the kubeconfig for the new Kind cluster.
+	kubeconfigCmd := exec.Command("kind", "get", "kubeconfig", "--name", kindClusterName)
+	kubeconfigData, err := kubeconfigCmd.Output()
+	require.NoError(t, err, "Failed to retrieve kubeconfig for Kind cluster")
+
+	// Write the kubeconfig to a temporary file.
+	tmpFile, err := os.CreateTemp("", "kind-kubeconfig-")
+	require.NoError(t, err, "Failed to create temporary kubeconfig file")
+	_, err = tmpFile.Write(kubeconfigData)
+	require.NoError(t, err, "Failed to write kubeconfig data to file")
+	err = tmpFile.Close()
+	require.NoError(t, err, "Failed to close temporary kubeconfig file")
+	// Clean up the temporary file later.
+	defer os.Remove(tmpFile.Name())
+
+	// Create a new Kubernetes client using the test kubeconfig.
+	wrapper, err := NewK8sWrapperFromKubeconfig(tmpFile.Name())
+	require.NoError(t, err, "Failed to create K8sWrapper from kubeconfig")
+
+	// Define pod options that will run a simple command.
+	opts := K8sOpts{
+		Namespace:     "default",
+		PodName:       "integration-pod",
+		Image:         "busybox", // Using busybox as a lightweight image.
+		Command:       []string{"sh", "-c"},
+		Args:          []string{"echo Integration test successful"},
+		RestartPolicy: corev1.RestartPolicyNever,
+		Timeout:       60 * time.Second,
+	}
+
+	ctx := context.Background()
+	stdout, err := wrapper.RunPod(ctx, opts)
+	require.NoError(t, err, "Failed to run pod in integration test")
+
+	// Read the pod's output.
+	outputData, err := io.ReadAll(stdout)
+	require.NoError(t, err, "Failed to read pod output")
+
+	// Validate that the output contains the expected string.
+	expectedOutput := "Integration test successful"
+	require.Contains(t, string(outputData), expectedOutput, "Pod output did not contain expected message")
 }

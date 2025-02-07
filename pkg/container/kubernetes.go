@@ -6,6 +6,8 @@ import (
 	"io"
 	"time"
 
+	"k8s.io/client-go/tools/clientcmd"
+
 	"github.com/docker/docker/api/types"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	corev1 "k8s.io/api/core/v1"
@@ -110,4 +112,16 @@ waitLoop:
 
 	_ = w.client.CoreV1().Pods(opts.Namespace).Delete(ctx, opts.PodName, metav1.DeleteOptions{})
 	return stdout, nil
+}
+
+func NewK8sWrapperFromKubeconfig(kubeconfigPath string) (*K8sWrapper, error) {
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfigPath)
+	if err != nil {
+		return nil, err
+	}
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+	return &K8sWrapper{client: clientset}, nil
 }
