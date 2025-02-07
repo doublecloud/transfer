@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/apache/iceberg-go/catalog/glue"
 	"github.com/apache/iceberg-go/catalog/rest"
+	"github.com/doublecloud/transfer/pkg/abstract/changeitem"
 	"strings"
 
 	"github.com/apache/iceberg-go/catalog"
@@ -48,15 +49,60 @@ func (s *Storage) LoadTable(ctx context.Context, tid abstract.TableDescription, 
 	if err != nil {
 		return xerrors.Errorf("unable to load table: %v: %w", tbl, err)
 	}
-	_, records, err := itable.Scan().ToArrowRecords(ctx)
+	_, arrowReadeer, err := itable.Scan().ToArrowRecords(ctx)
 	if err != nil {
 		return xerrors.Errorf("unable to read arrow table: %v: %w", tbl, err)
 	}
-	for row, err := range records {
+
+	batch := make([]abstract.ChangeItem, 0, defaultReadBatchSize)
+	tSchema, err := s.TableSchema(ctx, tid.ID())
+	if err != nil {
+		return xerrors.Errorf("unable to resolve schema: %w", err)
+	}
+	for page, err := range arrowReadeer {
 		if err != nil {
 			return xerrors.Errorf("unable to read record: %w", err)
 		}
-		s.logger.Infof("row: %v", row)
+		for i := range page.NumRows() {
+			if len(batch) == defaultReadBatchSize {
+				if err := pusher(batch); err != nil {
+					return xerrors.Errorf("unable to push batch: %w", err)
+				}
+				batch = make([]abstract.ChangeItem, 0, defaultReadBatchSize)
+			}
+			row := abstract.ChangeItem{
+				ID:           uint32(itable.CurrentSnapshot().SnapshotID),
+				LSN:          uint64(i),
+				CommitTime:   uint64(itable.CurrentSnapshot().TimestampMs) * uint64(1000000),
+				Counter:      int(i),
+				Kind:         abstract.InsertKind,
+				Schema:       tid.Schema,
+				Table:        tid.Name,
+				PartID:       "",
+				ColumnNames:  tSchema.ColumnNames(),
+				ColumnValues: make([]interface{}, len(tSchema.ColumnNames())),
+				TableSchema:  tSchema,
+				OldKeys:      changeitem.OldKeysType{},
+				TxID:         "",
+				Query:        "",
+				Size:         changeitem.EventSize{},
+			}
+			for j := range page.NumCols() {
+				if page.Column(int(j)).IsNull(int(i)) {
+					continue
+				}
+				row.ColumnValues[j] = abstract.Restore(
+					tSchema.Columns()[int(j)],
+					page.Column(int(j)).GetOneForMarshal(int(i)),
+				)
+			}
+			batch = append(batch, row)
+		}
+	}
+	if len(batch) > 0 {
+		if err := pusher(batch); err != nil {
+			return xerrors.Errorf("unable to push batch: %w", err)
+		}
 	}
 	return nil
 }
@@ -77,6 +123,9 @@ func (s *Storage) TableList(filter abstract.IncludeTableList) (abstract.TableMap
 	}
 	res := abstract.TableMap{}
 	for _, tbl := range tbls {
+		if filter != nil && !filter.Include(s.AsTableID(tbl)) {
+			continue
+		}
 		itable, err := s.cat.LoadTable(context.TODO(), tbl, s.props)
 		if err != nil {
 			return nil, xerrors.Errorf("unable to load table: %v: %w", tbl, err)
@@ -90,7 +139,7 @@ func (s *Storage) TableList(filter abstract.IncludeTableList) (abstract.TableMap
 			totalCount = totalCount + uint64(file.File.Count())
 		}
 		res[s.AsTableID(tbl)] = abstract.TableInfo{
-			EtaRow: 0,
+			EtaRow: totalCount,
 			IsView: false,
 			Schema: s.FromIcebergSchema(itable.Schema()),
 		}
@@ -184,7 +233,7 @@ func trimSuffix(s string) string {
 	return sss[0]
 }
 
-func NewStorage(src *IcebergSource, logger log.Logger, registry metrics.Registry) (abstract.Storage, error) {
+func NewStorage(src *IcebergSource, logger log.Logger, registry metrics.Registry) (*Storage, error) {
 	var cat catalog.Catalog
 	if src.CatalogType == "rest" {
 		var err error
@@ -202,5 +251,4 @@ func NewStorage(src *IcebergSource, logger log.Logger, registry metrics.Registry
 		props:    src.Properties,
 		cat:      cat,
 	}, nil
-
 }

@@ -32,6 +32,7 @@ func TestStorage(t *testing.T) {
 				EtaRow: 0,
 				Offset: 0,
 			}, func(items []abstract.ChangeItem) error {
+				abstract.Dump(items)
 				return nil
 			}))
 		})
