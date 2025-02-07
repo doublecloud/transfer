@@ -17,10 +17,9 @@ func SourceRecipe() (*IcebergSource, error) {
 				io.S3AccessKeyID:     "admin",
 				io.S3SecretAccessKey: "password",
 				"type":               "rest",
-				"url":                os.Getenv("CATALOG_ENDPOINT"),
 			},
 			CatalogType: "rest",
-			CatalogURI:  os.Getenv("CATALOG_URL"),
+			CatalogURI:  os.Getenv("CATALOG_ENDPOINT"),
 			Schema:      "default",
 		}, nil
 	}
