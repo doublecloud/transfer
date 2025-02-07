@@ -2,6 +2,7 @@ package iceberg
 
 import (
 	"context"
+	"go.ytsaurus.tech/library/go/core/log"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -16,6 +17,7 @@ func TestStorage(t *testing.T) {
 	if err != nil {
 		t.Skip("No recipe defined")
 	}
+	logger.Log.Info("recipe", log.Any("src", src))
 	storage, err := NewStorage(src, logger.Log, solomon.NewRegistry(solomon.NewRegistryOpts()))
 	require.NoError(t, err)
 	tables, err := storage.TableList(nil)

@@ -75,7 +75,7 @@ jobs:
           docker compose -f pkg/providers/iceberg/recipe/docker-compose.yml exec -T spark-iceberg ipython ./provision.py
           sleep 5
           echo "AWS_S3_ENDPOINT=http://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' minio):9000" >> $GITHUB_ENV
-
+          echo "CATALOG_ENDPOINT=http://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iceberg-rest):8181" >> $GITHUB_ENV
       - shell: bash
         if: matrix.suite.yt
         name: prepare local YT
@@ -92,6 +92,7 @@ jobs:
         if: always()
         env:
           AWS_S3_ENDPOINT: "${{ env.AWS_S3_ENDPOINT }}"
+          CATALOG_ENDPOINT: "${{ env.CATALOG_ENDPOINT }}"
           AWS_REGION: "us-east-1"
         with:
           name: test-reports-${{ matrix.suite.name }}
