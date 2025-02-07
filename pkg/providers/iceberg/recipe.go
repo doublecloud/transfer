@@ -14,7 +14,7 @@ func SourceRecipe() (*IcebergSource, error) {
 		return &IcebergSource{
 			Properties: go_iceberg.Properties{
 				io.S3Region:          "us-east-1",
-				io.S3AccessKeyID:     os.Getenv("S3_USER"),
+				io.S3AccessKeyID:     "admin",
 				io.S3SecretAccessKey: "password",
 				"type":               "rest",
 				"url":                os.Getenv("CATALOG_ENDPOINT"),
