@@ -38,7 +38,7 @@ type Storage struct {
 	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
 
-	dw *container.DockerWrapper
+	cw container.ContainerImpl
 }
 
 func (a *Storage) Close() {}
@@ -367,12 +367,16 @@ func (a *Storage) discover() error {
 	return nil
 }
 
-func (a *Storage) baseOpts() container.DockerOpts {
-	return container.DockerOpts{
-		Volumes: map[string]string{
-			a.config.DataDir(): "/data",
+func (a *Storage) baseOpts() container.ContainerOpts {
+	return container.ContainerOpts{
+		Volumes: []container.Volume{
+			{
+				Name:          "data",
+				HostPath:      a.config.DataDir(),
+				ContainerPath: "/data",
+				VolumeType:    "bind",
+			},
 		},
-		Mounts:    nil,
 		LogDriver: "local",
 		LogOptions: map[string]string{
 			"max-size": "100m",
@@ -382,8 +386,8 @@ func (a *Storage) baseOpts() container.DockerOpts {
 		Network:       "host",
 		ContainerName: "",
 		Command:       nil,
-		Env: []string{
-			"AWS_EC2_METADATA_DISABLED=true",
+		Env: map[string]string{
+			"AWS_EC2_METADATA_DISABLED": "true",
 		},
 		Timeout:      0,
 		AutoRemove:   true,
@@ -400,7 +404,7 @@ func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader, error) {
 
 	a.logger.Info(opts.String())
 
-	return a.dw.Run(ctx, opts)
+	return a.cw.Run(ctx, opts)
 }
 
 func (a *Storage) runCommand(args ...string) ([]byte, error) {
@@ -482,7 +486,7 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
 
-	dockerWrapper, err := container.NewDockerWrapper(lgr)
+	containerImpl, err := container.NewContainerImpl(lgr)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
 	}
@@ -496,6 +500,6 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		metrics:  stats.NewSourceStats(registry),
 		transfer: transfer,
 		state:    state,
-		dw:       dockerWrapper,
+		cw:       containerImpl,
 	}, nil
 }

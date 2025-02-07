@@ -25,11 +25,11 @@ type runner struct {
 
 	transfer *model.Transfer
 
-	dw *container.DockerWrapper
+	cw container.ContainerImpl
 }
 
 func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
-	dockerWrapper, err := container.NewDockerWrapper(logger.Log)
+	containerImpl, err := container.NewContainerImpl(logger.Log)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) 
 
 		transfer: transfer,
 
-		dw: dockerWrapper,
+		cw: containerImpl,
 	}, nil
 }
 
@@ -60,7 +60,7 @@ func (r *runner) Run(ctx context.Context) error {
 }
 
 func (r *runner) initializeDocker(ctx context.Context) error {
-	if err := r.dw.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
+	if err := r.cw.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
 		return xerrors.Errorf("docker initialization failed: %w", err)
 	}
 	return nil
@@ -162,18 +162,19 @@ func (r *runner) cleanupConfiguration() {
 }
 
 func (r *runner) run(ctx context.Context) error {
-	opts := container.DockerOpts{
-		Volumes: map[string]string{},
-		Mounts: []mount.Mount{
+	opts := container.ContainerOpts{
+		Volumes: []container.Volume{
 			{
-				Type:   mount.TypeBind,
-				Source: pathProject(),
-				Target: "/usr/app",
+				Name:          "project",
+				VolumeType:    string(mount.TypeBind),
+				HostPath:      pathProject(),
+				ContainerPath: "/usr/app",
 			},
 			{
-				Type:   mount.TypeBind,
-				Source: pathProfiles(),
-				Target: "/root/.dbt/profiles.yml",
+				Name:          "profiles",
+				VolumeType:    string(mount.TypeBind),
+				HostPath:      pathProfiles(),
+				ContainerPath: "/root/.dbt/profiles.yml",
 			},
 		},
 		LogDriver: "local",
@@ -187,8 +188,8 @@ func (r *runner) run(ctx context.Context) error {
 		Command: []string{
 			r.cfg.Operation,
 		},
-		Env: []string{
-			"AWS_EC2_METADATA_DISABLED=true",
+		Env: map[string]string{
+			"AWS_EC2_METADATA_DISABLED": "true",
 		},
 		Timeout:      0,
 		AutoRemove:   true,
@@ -196,7 +197,7 @@ func (r *runner) run(ctx context.Context) error {
 		AttachStderr: true,
 	}
 
-	if _, _, err := r.dw.Run(ctx, opts); err != nil {
+	if _, _, err := r.cw.Run(ctx, opts); err != nil {
 		return xerrors.Errorf("docker run failed: %w", err)
 	}
 
