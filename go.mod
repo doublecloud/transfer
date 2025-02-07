@@ -9,7 +9,7 @@ require (
 	cloud.google.com/go/bigquery v1.64.0
 	cuelang.org/go v0.4.3
 	github.com/Azure/azure-amqp-common-go/v3 v3.2.3
-	github.com/Azure/azure-event-hubs-go/v3 v3.3.20
+	github.com/Azure/azure-event-hubs-go/v3 v3.6.2
 	github.com/ClickHouse/clickhouse-go/v2 v2.18.0
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/DataDog/datadog-api-client-go/v2 v2.17.0
@@ -109,8 +109,9 @@ require (
 	cloud.google.com/go/storage v1.43.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
+	github.com/Azure/azure-amqp-common-go/v4 v4.2.0 // indirect
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible // indirect
-	github.com/Azure/go-amqp v1.0.5 // indirect
+	github.com/Azure/go-amqp v1.3.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/Azure/go-autorest v14.2.0+incompatible // indirect
 	github.com/Azure/go-autorest/autorest v0.11.28 // indirect
@@ -210,7 +211,6 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle v1.3.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/jonboulle/clockwork v0.4.0 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
@@ -251,7 +251,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/protocolbuffers/txtpbfmt v0.0.0-20240116145035-ef3ab179eed6 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.4.0 // indirect
 	github.com/rekby/fixenv v0.7.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
@@ -266,17 +265,7 @@ require (
 	github.com/substrait-io/substrait-go/v3 v3.5.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.12 // indirect
 	github.com/tklauser/numcpus v0.6.1 // indirect
-	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/twmb/murmur3 v1.1.8 // indirect
-	github.com/uptrace/bun v1.2.8 // indirect
-	github.com/uptrace/bun/dialect/mssqldialect v1.2.8 // indirect
-	github.com/uptrace/bun/dialect/mysqldialect v1.2.8 // indirect
-	github.com/uptrace/bun/dialect/oracledialect v1.2.8 // indirect
-	github.com/uptrace/bun/dialect/pgdialect v1.2.8 // indirect
-	github.com/uptrace/bun/dialect/sqlitedialect v1.2.8 // indirect
-	github.com/uptrace/bun/extra/bundebug v1.2.8 // indirect
-	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
-	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect

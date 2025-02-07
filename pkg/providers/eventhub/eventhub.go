@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Azure/azure-amqp-common-go/v3/sas"
+	"github.com/Azure/azure-amqp-common-go/v4/sas"
 	eventhubs "github.com/Azure/azure-event-hubs-go/v3"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
