@@ -51,7 +51,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.22.0"
+          go-version: "1.23.6"
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
@@ -146,7 +146,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.22.0"
+          go-version: "1.23.6"
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
