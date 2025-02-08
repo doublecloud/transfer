@@ -24,9 +24,9 @@ var (
 	_ abstract.Storage = (*Storage)(nil)
 )
 
-// defaultReadBatchSize is magic number by in-leskin
+// defaultReadBatchSize is magic number
 // we need to push rather small chunks so our bufferer can buffer effectively
-const defaultReadBatchSize = 128
+const defaultReadBatchSize = 10 * 1024
 
 type Storage struct {
 	cfg      *IcebergSource
@@ -70,6 +70,10 @@ func (s *Storage) LoadTable(ctx context.Context, tid abstract.TableDescription, 
 				}
 				batch = make([]abstract.ChangeItem, 0, defaultReadBatchSize)
 			}
+			evenSize := changeitem.EventSize{
+				Read:   0,
+				Values: 0,
+			}
 			row := abstract.ChangeItem{
 				ID:           uint32(itable.CurrentSnapshot().SnapshotID),
 				LSN:          uint64(i),
@@ -85,7 +89,7 @@ func (s *Storage) LoadTable(ctx context.Context, tid abstract.TableDescription, 
 				OldKeys:      changeitem.OldKeysType{},
 				TxID:         "",
 				Query:        "",
-				Size:         changeitem.EventSize{},
+				Size:         evenSize,
 			}
 			for j := range page.NumCols() {
 				if page.Column(int(j)).IsNull(int(i)) {
