@@ -2,9 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
-	"strings"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -91,16 +89,45 @@ func fieldsMismatch(params []byte, dummy model.EndpointParams) ([]string, []stri
 	return md.Unused, md.Unset, nil
 }
 
+// substituteEnv recursively iterates over an interface{} (which might be a string,
+// a map, or a slice) and applies os.ExpandEnv to all string values.
+func substituteEnv(val interface{}) interface{} {
+	switch v := val.(type) {
+	case string:
+		return os.ExpandEnv(v)
+	case map[string]interface{}:
+		for key, inner := range v {
+			v[key] = substituteEnv(inner)
+		}
+		return v
+	case []interface{}:
+		for i, inner := range v {
+			v[i] = substituteEnv(inner)
+		}
+		return v
+	default:
+		return v
+	}
+}
+
 func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 	var transfer TransferYamlView
 	if err := yaml.Unmarshal(rawData, &transfer); err != nil {
 		return nil, err
 	}
-	for _, v := range os.Environ() {
-		pair := strings.SplitN(v, "=", 2)
-		transfer.Src.Params = strings.ReplaceAll(transfer.Src.RawParams(), fmt.Sprintf("${%v}", pair[0]), pair[1])
-		transfer.Dst.Params = strings.ReplaceAll(transfer.Dst.RawParams(), fmt.Sprintf("${%v}", pair[0]), pair[1])
+
+	var srcParams map[string]interface{}
+	if err := yaml.Unmarshal([]byte(transfer.Src.RawParams()), &srcParams); err != nil {
+		return nil, xerrors.Errorf("unable to parse source params: %w", err)
 	}
+	transfer.Src.Params = substituteEnv(srcParams).(map[string]interface{})
+
+	var dstParams map[string]interface{}
+	if err := yaml.Unmarshal([]byte(transfer.Dst.RawParams()), &dstParams); err != nil {
+		return nil, xerrors.Errorf("unable to parse destination params: %w", err)
+	}
+	transfer.Dst.Params = substituteEnv(dstParams).(map[string]interface{})
+
 	res, err := sig_yaml.YAMLToJSON([]byte(transfer.Src.RawParams()))
 	if err == nil {
 		transfer.Src.Params = string(res)
