@@ -11,8 +11,8 @@ type Volume struct {
 	Name          string
 	HostPath      string
 	ContainerPath string
+	VolumeType    string
 	ReadOnly      bool
-	VolumeType    string // "bind", "volume", etc., Docker specific
 }
 
 type ContainerOpts struct {
