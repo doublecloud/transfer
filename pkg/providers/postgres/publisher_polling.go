@@ -14,6 +14,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/stats"
+	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/dustin/go-humanize"
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pglogrepl"
@@ -174,7 +175,7 @@ func (p *poller) processWindow(
 				return err
 			}
 			return nil
-		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
+		}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5))
 		if err != nil {
 			p.logger.Error("Unable to commit offset", log.Error(err))
 			//nolint:descriptiveerrors
@@ -291,7 +292,7 @@ func (p *poller) Run(sink abstract.AsyncSink) error {
 					return err
 				}
 				return nil
-			}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 3))
+			}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 3))
 			if err != nil {
 				p.logger.Error("Unable to process window", log.Error(err))
 				//nolint:descriptiveerrors
@@ -547,9 +548,9 @@ func NewPollingPublisher(
 	transferID string,
 	lgr log.Logger,
 	cp coordinator.Coordinator,
+	dbLogSnapshot bool,
 ) (abstract.Source, error) {
-	_, hasLSNTrack := slot.(*LsnTrackedSlot)
-	wal2jsonArgs, err := newWal2jsonArguments(cfg, hasLSNTrack, objects)
+	wal2jsonArgs, err := newWal2jsonArguments(cfg, objects, dbLogSnapshot)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to build wal2json arguments: %w", err)
 	}

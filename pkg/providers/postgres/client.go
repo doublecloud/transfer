@@ -16,6 +16,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/errors/coded"
 	"github.com/doublecloud/transfer/pkg/pgha"
 	"github.com/doublecloud/transfer/pkg/providers"
+	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -217,7 +218,7 @@ func findNonStaleReplica(conn *connection.ConnectionPG, lsn string, aliveReplica
 		}
 		logger.Log.Infof("Could not find replica with Lsn greater than %v between hosts %v", lsn, aliveReplicas)
 		return xerrors.Errorf("Could not find replica with Lsn greater than %v", lsn)
-	}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
+	}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5))
 
 	if err != nil {
 		return nil, err

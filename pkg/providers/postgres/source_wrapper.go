@@ -15,18 +15,19 @@ import (
 )
 
 type Worker struct {
-	status     chan error
-	src        *PgSource
-	transferID string
-	logger     log.Logger
-	metrics    *stats.SourceStats
-	tableLsns  map[string]uint64
-	publisher  abstract.Source
-	keeper     *Keeper
-	slot       AbstractSlot
-	conn       *pgxpool.Pool
-	cp         coordinator.Coordinator
-	objects    *model.DataObjects
+	status        chan error
+	src           *PgSource
+	transferID    string
+	logger        log.Logger
+	metrics       *stats.SourceStats
+	tableLsns     map[string]uint64
+	publisher     abstract.Source
+	keeper        *Keeper
+	slot          AbstractSlot
+	conn          *pgxpool.Pool
+	cp            coordinator.Coordinator
+	objects       *model.DataObjects
+	dbLogSnapshot bool
 }
 
 func (w *Worker) Run(sink abstract.AsyncSink) error {
@@ -75,6 +76,7 @@ func (w *Worker) run(sink abstract.AsyncSink) error {
 		w.logger,
 		w.slot,
 		w.cp,
+		w.dbLogSnapshot,
 	)
 	if err != nil {
 		//nolint:descriptiveerrors
@@ -120,33 +122,42 @@ func (w *Worker) Stop() {
 	}
 }
 
-func NewSourceWrapper(src *PgSource, transferID string, objects *model.DataObjects, lgr log.Logger, registry *stats.SourceStats, cp coordinator.Coordinator) (abstract.Source, error) {
+func NewSourceWrapper(
+	src *PgSource,
+	transferID string,
+	objects *model.DataObjects,
+	lgr log.Logger,
+	registry *stats.SourceStats,
+	cp coordinator.Coordinator,
+	dbLogSnapshot bool,
+) (abstract.Source, error) {
 	var rollbacks util.Rollbacks
 	defer rollbacks.Do()
 
 	worker := &Worker{
-		status:     make(chan error),
-		src:        src,
-		transferID: transferID,
-		logger:     lgr,
-		metrics:    registry,
-		tableLsns:  make(map[string]uint64),
-		cp:         cp,
-		publisher:  nil,
-		keeper:     nil,
-		slot:       nil,
-		conn:       nil,
-		objects:    objects,
+		status:        make(chan error),
+		src:           src,
+		transferID:    transferID,
+		logger:        lgr,
+		metrics:       registry,
+		tableLsns:     make(map[string]uint64),
+		cp:            cp,
+		publisher:     nil,
+		keeper:        nil,
+		slot:          nil,
+		conn:          nil,
+		objects:       objects,
+		dbLogSnapshot: dbLogSnapshot,
 	}
 	rollbacks.Add(worker.Stop)
 
 	connConfig, err := MakeConnConfigFromSrc(lgr, src)
 	if err != nil {
-		return nil, xerrors.Errorf("unable to contruct connection config: %w", err)
+		return nil, xerrors.Errorf("unable to construct connection config: %w", err)
 	}
 	conn, err := NewPgConnPool(connConfig, lgr)
 	if err != nil {
-		return nil, xerrors.Errorf("unable to contruct connection pool: %w", err)
+		return nil, xerrors.Errorf("unable to construct connection pool: %w", err)
 	}
 	worker.conn = conn
 	tracker := NewTracker(transferID, cp)

@@ -21,6 +21,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	sink_factory "github.com/doublecloud/transfer/pkg/sink"
+	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/set"
 	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -740,7 +741,7 @@ func pgContainsUserDefinedTypes(ctx context.Context, src *PgSource) (bool, error
 		}
 		return nil
 	}
-	err = backoff.Retry(checkType, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 3))
+	err = backoff.Retry(checkType, backoff.WithMaxRetries(util.NewExponentialBackOff(), 3))
 	if err != nil {
 		return false, err
 	}

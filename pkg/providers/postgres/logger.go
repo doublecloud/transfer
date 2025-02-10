@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 
+	"github.com/doublecloud/transfer/pkg/contextutil"
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jackc/pgx/v4"
 	"go.ytsaurus.tech/library/go/core/log"
@@ -12,7 +13,22 @@ type pgxLogger struct {
 	logger log.Logger
 }
 
-func (p pgxLogger) Log(_ context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
+var pgLoggerNotToLog = contextutil.NewContextKey()
+
+func withNotToLog(ctx context.Context) context.Context {
+	return context.WithValue(ctx, pgLoggerNotToLog, true)
+}
+
+func isNotToLogInContext(ctx context.Context) bool {
+	_, ok := ctx.Value(pgLoggerNotToLog).(bool)
+	return ok
+}
+
+func (p pgxLogger) Log(ctx context.Context, level pgx.LogLevel, msg string, data map[string]interface{}) {
+	if isNotToLogInContext(ctx) {
+		return
+	}
+
 	var params []log.Field
 	for k, v := range data {
 		if k == "sql" {

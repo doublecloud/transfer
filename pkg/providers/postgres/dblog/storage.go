@@ -71,9 +71,9 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		if err != nil {
 			return xerrors.Errorf("unable to generate chunk size: %w", err)
 		}
-		s.logger.Infof("Storage::LoadTable - inferred chunkSize: %d", chunkSize)
+		s.logger.Infof("Storage.LoadTable - inferred chunkSize: %d", chunkSize)
 	} else {
-		s.logger.Infof("Storage::LoadTable - from config chunkSize: %d", chunkSize)
+		s.logger.Infof("Storage.LoadTable - from config chunkSize: %d", chunkSize)
 	}
 
 	pgSignalTable, err := NewPgSignalTable(ctx, s.conn, s.logger, s.transferID, s.keeperSchema)
@@ -82,9 +82,9 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 	}
 
 	tableQuery := tablequery.NewTableQuery(tableDescr.ID(), true, "", 0, chunkSize)
-	s.logger.Infof("Storage::LoadTable - tableQuery: %v", tableQuery)
+	s.logger.Infof("Storage.LoadTable - tableQuery: %v", tableQuery)
 	lowBound := pgSignalTable.resolveLowBound(ctx, tableDescr.ID())
-	s.logger.Infof("Storage::LoadTable - lowBound: %v", lowBound)
+	s.logger.Infof("Storage.LoadTable - lowBound: %v", lowBound)
 
 	iterator, err := dblog.NewIncrementalIterator(
 		s.logger,
@@ -106,7 +106,7 @@ func (s *Storage) LoadTable(ctx context.Context, tableDescr abstract.TableDescri
 		return xerrors.Errorf("failed to do initial iteration: %w", err)
 	}
 
-	s.logger.Infof("Storage::LoadTable - first iteration done, extacted items: %d", len(items))
+	s.logger.Infof("Storage.LoadTable - first iteration done, extacted items: %d", len(items))
 
 	chunk, err := dblog.ResolveChunkMapFromArr(items, pkColNames, s.represent)
 	if err != nil {

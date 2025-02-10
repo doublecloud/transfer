@@ -90,10 +90,9 @@ func (s *IncrementalAsyncSink) AsyncPush(items []abstract.ChangeItem) chan error
 		}
 
 		if ok, watermarkType := s.signalTable.IsWatermark(&item, s.tableID, s.expectedUUID()); ok {
-			s.logger.Info("watermark found")
+			s.logger.Infof("watermark found: %s", watermarkType)
 
 			if !s.isExpectedWatermarkOfType(watermarkType) {
-				s.logger.Info("wrong watermark found")
 				continue
 			}
 

@@ -11,7 +11,7 @@ import (
 	"github.com/doublecloud/transfer/internal/metrics"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
-	pgsink "github.com/doublecloud/transfer/pkg/providers/postgres"
+	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/dblog"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
 	"github.com/doublecloud/transfer/pkg/stats"
@@ -47,7 +47,7 @@ func TestIncrementalSnapshot(t *testing.T) {
 		))
 	}()
 	sinkParams := Source.ToSinkParams()
-	sink, err := pgsink.NewSink(logger.Log, helpers.TransferID, sinkParams, helpers.EmptyRegistry())
+	sink, err := postgres.NewSink(logger.Log, helpers.TransferID, sinkParams, helpers.EmptyRegistry())
 	require.NoError(t, err)
 
 	arrColSchema := abstract.NewTableSchema([]abstract.ColSchema{
@@ -60,22 +60,24 @@ func TestIncrementalSnapshot(t *testing.T) {
 
 	helpers.CheckRowsCount(t, Source, "public", testTableName, rowsAfterInserts)
 
-	pgStorage, err := pgsink.NewStorage(Source.ToStorageParams(nil))
+	pgStorage, err := postgres.NewStorage(Source.ToStorageParams(nil))
 	require.NoError(t, err)
 
-	err = pgsink.CreateReplicationSlot(&Source)
+	err = postgres.CreateReplicationSlot(&Source)
 	require.NoError(t, err)
 
-	src, err := pgsink.NewSourceWrapper(
+	src, err := postgres.NewSourceWrapper(
 		&Source,
 		Source.SlotID,
 		nil,
 		logger.Log,
 		stats.NewSourceStats(metrics.NewRegistry()),
-		coordinator.NewFakeClient())
+		coordinator.NewFakeClient(),
+		true,
+	)
 	require.NoError(t, err)
 
-	storage, err := dblog.NewStorage(logger.Log, src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, "public", pgsink.Represent)
+	storage, err := dblog.NewStorage(logger.Log, src, pgStorage, pgStorage.Conn, incrementalLimit, Source.SlotID, "public", postgres.Represent)
 	require.NoError(t, err)
 
 	sourceTables, err := storage.TableList(nil)

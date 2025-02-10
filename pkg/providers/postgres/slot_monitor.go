@@ -144,7 +144,7 @@ func (m *SlotMonitor) slotExists(ctx context.Context) (bool, error) {
 		}
 		return nil
 	}
-	err := backoff.Retry(checkSlot, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
+	err := backoff.Retry(checkSlot, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5))
 	if err != nil {
 		return false, err
 	}
@@ -155,7 +155,7 @@ func (m *SlotMonitor) validateSlot(ctx context.Context) error {
 	// Was disabled: https://st.yandex-team.ru/TM-4783
 	// Enabled for now https://st.yandex-team.ru/TM-7938, it is only used to check removed WAL segment
 	validateSlot := func() error {
-		rows, _ := m.conn.Query(ctx, peekFromSlotQuery, m.slotName)
+		rows, _ := m.conn.Query(withNotToLog(ctx), peekFromSlotQuery, m.slotName)
 		for rows.Next() {
 		}
 		if err := rows.Err(); err != nil {
@@ -166,7 +166,7 @@ func (m *SlotMonitor) validateSlot(ctx context.Context) error {
 		rows.Close()
 		return nil
 	}
-	if err := backoff.Retry(validateSlot, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5)); err != nil {
+	if err := backoff.Retry(validateSlot, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5)); err != nil {
 		return err
 	}
 	return nil
@@ -182,7 +182,7 @@ func (m *SlotMonitor) getLag(monitorQ string) (int64, error) {
 		}
 		return err
 	}
-	err := backoff.Retry(getByteLag, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
+	err := backoff.Retry(getByteLag, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5))
 	return slotByteLag, err
 }
 

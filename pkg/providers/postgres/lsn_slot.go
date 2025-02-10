@@ -123,7 +123,7 @@ COMMIT;
 		l.logger.Infof("slot created from lsn:%v", lsn)
 		rb.Cancel()
 		return nil
-	}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10))
+	}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 10))
 }
 
 func (l *LsnTrackedSlot) Move(lsn string) error {

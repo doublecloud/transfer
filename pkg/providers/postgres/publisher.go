@@ -35,12 +35,12 @@ var commonWal2jsonArguments = []argument{
 
 type wal2jsonArguments []argument
 
-func newWal2jsonArguments(config *PgSource, trackLSN bool, objects *model.DataObjects) (wal2jsonArguments, error) {
+func newWal2jsonArguments(config *PgSource, objects *model.DataObjects, dbLogSnapshot bool) (wal2jsonArguments, error) {
 	var result []argument
 
 	result = append(result, commonWal2jsonArguments...)
 
-	addList, err := addTablesList(config, trackLSN, objects)
+	addList, err := addTablesList(config, objects, dbLogSnapshot)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to compose a list of included tables: %w", err)
 	}
@@ -78,7 +78,7 @@ func (a wal2jsonArguments) toSQLFormat() string {
 	return result
 }
 
-func addTablesList(config *PgSource, trackLSN bool, objects *model.DataObjects) ([]abstract.TableID, error) {
+func addTablesList(config *PgSource, objects *model.DataObjects, dbLogSnapshot bool) ([]abstract.TableID, error) {
 	sourceIncludeTableIDs := make([]abstract.TableID, 0, len(config.DBTables))
 	for _, directive := range config.DBTables {
 		parsedDirective, err := abstract.ParseTableID(directive)
@@ -106,13 +106,13 @@ func addTablesList(config *PgSource, trackLSN bool, objects *model.DataObjects) 
 	consumerKeeperID := *abstract.NewTableID(config.KeeperSchema, TableConsumerKeeper)
 	mustAddConsumerKeeper := true
 	signalTableID := *dblog.SignalTableTableID(config.KeeperSchema)
-	mustAddsignalTable := config.DBLogEnabled
+	mustAddsignalTable := dbLogSnapshot // the only case when we need to add signalTable into replication - snapshot stage when dblog turned-on
 
 	for _, t := range result {
 		if mustAddConsumerKeeper && t.Equals(consumerKeeperID) {
 			mustAddConsumerKeeper = false
 		}
-		if mustAddsignalTable && t.Equals(signalTableID) {
+		if mustAddsignalTable && t.Equals(signalTableID) { // signalTable already added by user - strage, but ok - then we dont need to add it one more time
 			mustAddsignalTable = false
 		}
 	}
@@ -210,18 +210,7 @@ func walDataSample(data []byte) string {
 	return string(data[:maxSampleLength])
 }
 
-func lastFullLSN(changes []abstract.ChangeItem, lastID uint32, prevLSN, lastMaxLSN uint64) uint64 {
-	txs := abstract.SplitByID(changes)
-	if len(txs) <= 1 {
-		if changes[len(changes)-1].ID != lastID {
-			return prevLSN
-		}
-		return lastMaxLSN
-	}
-	return changes[txs[len(txs)-2].Right-1].LSN
-}
-
-func newWalSource(config *PgSource, objects *model.DataObjects, transferID string, registry *stats.SourceStats, lgr log.Logger, slot AbstractSlot, cp coordinator.Coordinator) (abstract.Source, error) {
+func newWalSource(config *PgSource, objects *model.DataObjects, transferID string, registry *stats.SourceStats, lgr log.Logger, slot AbstractSlot, cp coordinator.Coordinator, dbLogSnapshot bool) (abstract.Source, error) {
 	rb := util.Rollbacks{}
 	defer rb.Do()
 
@@ -245,8 +234,7 @@ func newWalSource(config *PgSource, objects *model.DataObjects, transferID strin
 	version := ResolveVersion(connPoolWithoutLogger)
 	connPoolWithoutLogger.Close()
 
-	_, hasLSNTrack := slot.(*LsnTrackedSlot)
-	wal2jsonArgs, err := newWal2jsonArguments(config, hasLSNTrack, objects)
+	wal2jsonArgs, err := newWal2jsonArguments(config, objects, dbLogSnapshot)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to build wal2json arguments: %w", err)
 	}
@@ -314,7 +302,7 @@ WHERE slot_name = '%v' AND active_pid IS NOT NULL;`, config.SlotID)
 			}
 			res = pblsr
 			return nil
-		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5)); err != nil {
+		}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5)); err != nil {
 			lgr.Warn("Cannot establish replication connection; falling back to polling", log.Error(err))
 		}
 		if res != nil {
@@ -328,7 +316,7 @@ WHERE slot_name = '%v' AND active_pid IS NOT NULL;`, config.SlotID)
 	}
 
 	rb.Cancel()
-	return NewPollingPublisher(version, connPool, slot, registry, config, objects, transferID, lgr, cp)
+	return NewPollingPublisher(version, connPool, slot, registry, config, objects, transferID, lgr, cp, dbLogSnapshot)
 }
 
 func validateChangeItemsPtrs(wal2jsonItems []*Wal2JSONItem) error {

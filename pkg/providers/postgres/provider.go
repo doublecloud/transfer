@@ -19,6 +19,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/postgres/dblog"
 	abstract_sink "github.com/doublecloud/transfer/pkg/sink"
 	"github.com/doublecloud/transfer/pkg/stats"
+	"github.com/doublecloud/transfer/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -93,7 +94,7 @@ func (p *Provider) Cleanup(ctx context.Context, task *model.TransferOperation) e
 	}
 	if src.DBLogEnabled {
 		if err := p.DBLogCleanup(ctx, src); err != nil {
-			return xerrors.Errorf("unable to cleenup dblog resourses")
+			return xerrors.Errorf("unable to cleanup dblog resourses")
 		}
 	}
 	return nil
@@ -142,8 +143,17 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 		}
 	}
 	p.logger.Info("Preparing PostgreSQL source")
-	if !p.transfer.SnapshotOnly() {
-		tracker := NewTracker(p.transfer.ID, p.cp)
+	tracker := NewTracker(p.transfer.ID, p.cp)
+	if src.DBLogEnabled && !p.transfer.IncrementOnly() { // if there are present SNAPSHOT stage with turned-on DBLog
+		if err := p.DBLogCreateSlotAndInit(ctx, tracker); err != nil {
+			return xerrors.Errorf("unable to init dblog, err: %w", err)
+		}
+		callbacks.Rollbacks.Add(func() {
+			if err := DropReplicationSlot(src, tracker); err != nil {
+				logger.Log.Error("Unable to drop replication slot", log.Error(err), log.String("slot_name", src.SlotID))
+			}
+		})
+	} else if !p.transfer.SnapshotOnly() { // if there are present REPLICATION stage
 		if err := CreateReplicationSlot(src, tracker); err != nil {
 			return xerrors.Errorf("failed to create a replication slot %q at source: %w", src.SlotID, err)
 		}
@@ -153,6 +163,7 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 			}
 		})
 	}
+
 	if !p.transfer.IncrementOnly() {
 		if err := callbacks.Cleanup(tables); err != nil {
 			return xerrors.Errorf("failed to cleanup sink: %w", err)
@@ -260,14 +271,14 @@ func (p *Provider) Source() (abstract.Source, error) {
 	var src abstract.Source
 	st := stats.NewSourceStats(p.registry)
 	if err := backoff.Retry(func() error {
-		if source, err := NewSourceWrapper(s, p.transfer.ID, p.transfer.DataObjects, p.logger, st, p.cp); err != nil {
+		if source, err := NewSourceWrapper(s, p.transfer.ID, p.transfer.DataObjects, p.logger, st, p.cp, false); err != nil {
 			p.logger.Error("unable to init", log.Error(err))
 			return xerrors.Errorf("unable to create new pg source: %w", err)
 		} else {
 			src = source
 		}
 		return nil
-	}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 3)); err != nil {
+	}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 3)); err != nil {
 		return nil, err
 	}
 	return src, nil
@@ -375,6 +386,35 @@ func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
 }
 
+func (p *Provider) DBLogCreateSlotAndInit(ctx context.Context, tracker *Tracker) error {
+	src, ok := p.transfer.Src.(*PgSource)
+	if !ok {
+		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
+	}
+
+	exists, err := CreateReplicationSlotIfNotExists(src, tracker)
+	if err != nil {
+		return xerrors.Errorf("failed to create a replication slot (1) %q at source: %w", src.SlotID, err)
+	}
+
+	pgStorage, err := NewStorage(src.ToStorageParams(p.transfer))
+	if err != nil {
+		return xerrors.Errorf("failed to create postgres storage: %w", err)
+	}
+	// ensure SignalTable exists
+	_, err = dblog.NewPgSignalTable(ctx, pgStorage.Conn, logger.Log, p.transfer.ID, src.KeeperSchema)
+	if err != nil {
+		return xerrors.Errorf("unable to create signal table: %w", err)
+	}
+	if !exists {
+		// delete previous watermarks - only if slot previously not existed. It existed - it's just dataplane restart
+		if err := dblog.DeleteWatermarks(ctx, pgStorage.Conn, src.KeeperSchema, p.transfer.ID); err != nil {
+			return xerrors.Errorf("unable to delete watermarks: %w", err)
+		}
+	}
+	return nil
+}
+
 func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) error {
 	src, ok := p.transfer.Src.(*PgSource)
 	if !ok {
@@ -383,26 +423,6 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 	pgStorage, err := NewStorage(src.ToStorageParams(p.transfer))
 	if err != nil {
 		return xerrors.Errorf("failed to create postgres storage: %w", err)
-	}
-
-	// ensure SignalTable exists
-	_, err = dblog.NewPgSignalTable(ctx, pgStorage.Conn, logger.Log, p.transfer.ID, src.KeeperSchema)
-	if err != nil {
-		return xerrors.Errorf("unable to create signal table: %w", err)
-	}
-	// delete previous watermarks
-	if err := dblog.DeleteWatermarks(ctx, pgStorage.Conn, src.KeeperSchema, p.transfer.ID); err != nil {
-		return xerrors.Errorf("unable to delete watermarks: %w", err)
-	}
-
-	sourceWrapper, err := NewSourceWrapper(src, src.SlotID, p.transfer.DataObjects, p.logger, stats.NewSourceStats(p.registry), p.cp)
-	if err != nil {
-		return xerrors.Errorf("failed to create source wrapper: %w", err)
-	}
-
-	dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, p.transfer.ID, src.KeeperSchema, Represent)
-	if err != nil {
-		return xerrors.Errorf("failed to create DBLog storage: %w", err)
 	}
 
 	tableDescs := tables.ConvertToTableDescriptions()
@@ -424,12 +444,25 @@ func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) er
 		if err = backoff.Retry(func() error {
 			logger.Log.Infof("Starting upload table: %s", table.String())
 
-			err := dblogStorage.LoadTable(ctx, table, pusher)
-			if err == nil {
-				logger.Log.Infof("Upload table %s successfully", table.String())
+			sourceWrapper, err := NewSourceWrapper(src, src.SlotID, p.transfer.DataObjects, p.logger, stats.NewSourceStats(p.registry), p.cp, true)
+			if err != nil {
+				return xerrors.Errorf("failed to create source wrapper: %w", err)
 			}
-			return err
-		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10)); err != nil {
+
+			dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, pgStorage, pgStorage.Conn, src.ChunkSize, p.transfer.ID, src.KeeperSchema, Represent)
+			if err != nil {
+				return xerrors.Errorf("failed to create DBLog storage: %w", err)
+			}
+
+			err = dblogStorage.LoadTable(ctx, table, pusher)
+			if abstract.IsFatal(err) {
+				return backoff.Permanent(xerrors.Errorf("fatal error ocurred in dblogStorage.LoadTable, err: %w", err))
+			} else if err != nil {
+				return xerrors.Errorf("unable to dblogStorage.LoadTable, err: %w", err)
+			}
+			logger.Log.Infof("Upload table %s successfully", table.String())
+			return nil
+		}, util.NewExponentialBackOff()); err != nil {
 			return xerrors.Errorf("failed to load table: %w", err)
 		}
 	}
