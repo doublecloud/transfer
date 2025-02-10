@@ -6,10 +6,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 )
 
 type DockerOpts struct {
+	RestartPolicy container.RestartPolicy
 	Mounts        []mount.Mount
 	LogDriver     string
 	LogOptions    map[string]string
@@ -110,6 +112,11 @@ func (o DockerOpts) String() string {
 	// Command
 	if len(o.Command) > 0 {
 		args = append(args, o.Command...)
+	}
+
+	// RestartPolicy
+	if o.RestartPolicy.Name != "" {
+		args = append(args, "--restart", string(o.RestartPolicy.Name))
 	}
 
 	cmd := append([]string{"docker", "run"}, args...)

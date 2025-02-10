@@ -3,6 +3,7 @@ package container
 import (
 	"time"
 
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	corev1 "k8s.io/api/core/v1"
 )
@@ -58,7 +59,18 @@ func (c *ContainerOpts) ToDockerOpts() DockerOpts {
 		})
 	}
 
+	var restartPolicy container.RestartPolicy
+	switch c.RestartPolicy {
+	case corev1.RestartPolicyAlways:
+		restartPolicy.Name = container.RestartPolicyAlways
+	case corev1.RestartPolicyOnFailure:
+		restartPolicy.Name = container.RestartPolicyOnFailure
+	case corev1.RestartPolicyNever:
+		restartPolicy.Name = container.RestartPolicyDisabled
+	}
+
 	return DockerOpts{
+		RestartPolicy: restartPolicy,
 		Mounts:        mounts,
 		LogDriver:     c.LogDriver,
 		LogOptions:    c.LogOptions,

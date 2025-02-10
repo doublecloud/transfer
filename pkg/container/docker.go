@@ -94,6 +94,10 @@ func (d *DockerWrapper) RunContainer(ctx context.Context, opts DockerOpts) (stdo
 		LogConfig:  container.LogConfig{Type: opts.LogDriver, Config: opts.LogOptions},
 	}
 
+	if opts.RestartPolicy.Name != "" {
+		hostConfig.RestartPolicy = opts.RestartPolicy
+	}
+
 	networkingConfig := &network.NetworkingConfig{}
 	if opts.Network != "" {
 		networkingConfig.EndpointsConfig = map[string]*network.EndpointSettings{

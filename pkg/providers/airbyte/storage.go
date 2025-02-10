@@ -22,6 +22,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/doublecloud/transfer/pkg/util/math"
 	"go.ytsaurus.tech/library/go/core/log"
+	v1 "k8s.io/api/core/v1"
 )
 
 const AirbyteStateKey = "airbyte_state"
@@ -369,6 +370,7 @@ func (a *Storage) discover() error {
 
 func (a *Storage) baseOpts() container.ContainerOpts {
 	return container.ContainerOpts{
+		RestartPolicy: v1.RestartPolicyNever,
 		Volumes: []container.Volume{
 			{
 				Name:          "data",

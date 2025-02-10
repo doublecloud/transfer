@@ -40,6 +40,17 @@ func TestDockerOptsString(t *testing.T) {
 			expected: "docker run --name my-container nginx",
 		},
 		{
+			name: "WithRestartPolicy",
+			opts: DockerOpts{
+				ContainerName: "my-container",
+				Image:         "nginx",
+				RestartPolicy: container.RestartPolicy{
+					Name: container.RestartPolicyAlways,
+				},
+			},
+			expected: "docker run --name my-container nginx --restart always",
+		},
+		{
 			name: "WithNetwork",
 			opts: DockerOpts{
 				Network: "my-network",

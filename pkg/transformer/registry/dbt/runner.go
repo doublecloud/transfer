@@ -17,6 +17,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
+	v1 "k8s.io/api/core/v1"
 )
 
 type runner struct {
@@ -163,6 +164,7 @@ func (r *runner) cleanupConfiguration() {
 
 func (r *runner) run(ctx context.Context) error {
 	opts := container.ContainerOpts{
+		RestartPolicy: v1.RestartPolicyNever,
 		Volumes: []container.Volume{
 			{
 				Name:          "project",
