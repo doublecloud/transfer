@@ -69,7 +69,7 @@ require (
 	github.com/valyala/fastjson v1.6.4
 	github.com/xitongsys/parquet-go v1.6.2
 	github.com/xitongsys/parquet-go-source v0.0.0-20220315005136-aec0fe3e777c
-	github.com/ydb-platform/ydb-go-sdk/v3 v3.99.5
+	github.com/ydb-platform/ydb-go-sdk/v3 v3.99.7
 	github.com/ydb-platform/ydb-go-yc-metadata v0.6.1
 	go.mongodb.org/mongo-driver v1.17.1
 	go.uber.org/atomic v1.11.0
@@ -123,7 +123,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.2.1 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Microsoft/hcsshim v0.11.7 // indirect
-	github.com/ProtonMail/go-crypto v0.0.0-20230528122434-6f98819771a1 // indirect
+	github.com/ProtonMail/go-crypto v1.1.5 // indirect
 	github.com/acomagu/bufpipe v1.0.4 // indirect
 	github.com/alecthomas/chroma/v2 v2.14.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
@@ -138,7 +138,7 @@ require (
 	github.com/charmbracelet/lipgloss v0.12.1 // indirect
 	github.com/charmbracelet/x/ansi v0.1.4 // indirect
 	github.com/charmbracelet/x/exp/golden v0.0.0-20240815200342-61de596daa2b // indirect
-	github.com/cloudflare/circl v1.3.3 // indirect
+	github.com/cloudflare/circl v1.5.0 // indirect
 	github.com/cockroachdb/apd/v2 v2.0.2 // indirect
 	github.com/containerd/containerd v1.7.20 // indirect
 	github.com/containerd/log v0.1.0 // indirect
