@@ -260,6 +260,8 @@ require (
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
 
+exclude github.com/keybase/go.dbus v0.0.0-20220506165403-5aa21ea2c23a
+
 replace github.com/insomniacslk/dhcp => github.com/insomniacslk/dhcp v0.0.0-20210120172423-cc9239ac6294
 
 replace cloud.google.com/go/pubsub => cloud.google.com/go/pubsub v1.30.0
