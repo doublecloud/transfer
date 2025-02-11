@@ -16,8 +16,8 @@ import (
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/cloudevents/engine/testutils"
 	confluentsrmock "github.com/doublecloud/transfer/tests/helpers/confluent_schema_registry_mock"
-	"github.com/golang/protobuf/proto"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/proto"
 )
 
 var idToBuf = make(map[int]string)

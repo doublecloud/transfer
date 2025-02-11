@@ -32,7 +32,7 @@ func PluggableTransformer(transfer *model.Transfer, _ metrics.Registry, cp coord
 	}
 
 	return func(s abstract.Sinker) abstract.Sinker {
-		return newPluggableTransformer(s, cp, transfer, context.Background(), supportedDestination, dbtConfigurations)
+		return newPluggableTransformer(s, cp, transfer, supportedDestination, dbtConfigurations)
 	}
 }
 
@@ -67,7 +67,6 @@ func newPluggableTransformer(
 	s abstract.Sinker,
 	cp coordinator.Coordinator,
 	transfer *model.Transfer,
-	ctx context.Context,
 	dst SupportedDestination,
 	configurations []*Config,
 ) *pluggableTransformer {

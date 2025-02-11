@@ -76,7 +76,7 @@ func (l *SnapshotLoader) sendTableControlEventV2(
 	return nil
 }
 
-func (l *SnapshotLoader) sendStateEventV2(ctx context.Context, state events.TableLoadState, provider base.SnapshotProvider, target base.EventTarget, tables ...*model.OperationTablePart) error {
+func (l *SnapshotLoader) sendStateEventV2(state events.TableLoadState, provider base.SnapshotProvider, target base.EventTarget, tables ...*model.OperationTablePart) error {
 	eventFactory := func(part *model.OperationTablePart) (base.Event, error) {
 		dataObjectPart, err := provider.TablePartToDataObjectPart(part.ToTableDescription())
 		if err != nil {
@@ -265,7 +265,7 @@ func (l *SnapshotLoader) uploadV2Single(ctx context.Context, snapshotProvider ba
 		return xerrors.Errorf("unable cleanup tables: %w", err)
 	}
 
-	if err := l.sendStateEventV2(ctx, events.InitShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
+	if err := l.sendStateEventV2(events.InitShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
 		return xerrors.Errorf("unable to start loading tables: %w", err)
 	}
 
@@ -279,7 +279,7 @@ func (l *SnapshotLoader) uploadV2Single(ctx context.Context, snapshotProvider ba
 		return xerrors.Errorf("unable to upload data objects: %w", err)
 	}
 
-	if err := l.sendStateEventV2(ctx, events.DoneShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
+	if err := l.sendStateEventV2(events.DoneShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
 		return xerrors.Errorf("unable to start loading tables: %w", err)
 	}
 
@@ -421,7 +421,7 @@ func (l *SnapshotLoader) uploadV2Main(ctx context.Context, snapshotProvider base
 		return xerrors.Errorf("unable cleanup tables: %w", err)
 	}
 
-	if err := l.sendStateEventV2(ctx, events.InitShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
+	if err := l.sendStateEventV2(events.InitShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
 		return xerrors.Errorf("unable to start loading tables: %w", err)
 	}
 
@@ -433,7 +433,7 @@ func (l *SnapshotLoader) uploadV2Main(ctx context.Context, snapshotProvider base
 		return xerrors.Errorf("unable to wait shard completed: %w", err)
 	}
 
-	if err := l.sendStateEventV2(ctx, events.DoneShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
+	if err := l.sendStateEventV2(events.DoneShardedTableLoad, snapshotProvider, dataTarget, parts...); err != nil {
 		return xerrors.Errorf("unable to start loading tables: %w", err)
 	}
 

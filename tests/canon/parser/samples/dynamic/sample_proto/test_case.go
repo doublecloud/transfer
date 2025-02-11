@@ -9,9 +9,9 @@ import (
 	"github.com/doublecloud/transfer/tests/canon/parser/samples/dynamic/sample_proto/sample_proto"
 	"github.com/doublecloud/transfer/tests/canon/parser/testcase"
 	"github.com/golang/protobuf/descriptor"
-	"github.com/golang/protobuf/proto"
 	"github.com/jhump/protoreflect/desc"
 	"go.ytsaurus.tech/library/go/core/log"
+	"google.golang.org/protobuf/proto"
 )
 
 func makeDesc() ([]byte, error) {

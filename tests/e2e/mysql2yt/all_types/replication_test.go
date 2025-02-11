@@ -210,7 +210,7 @@ func TestReplication(t *testing.T) {
 		checkDataWithDelay(expected, time.Second)
 	}
 
-	worker1 := startWorker(t, transfer, fakeClient)
+	worker1 := startWorker(transfer, fakeClient)
 	defer stopWorker(worker1)
 
 	CheckInsert(t, db, checkDataF)
@@ -364,7 +364,7 @@ func readAllRows(t *testing.T, ytClient yt.Client, ctx context.Context, ytPath y
 	return rows
 }
 
-func startWorker(t *testing.T, transfer server.Transfer, cp coordinator.Coordinator) *local.LocalWorker {
+func startWorker(transfer server.Transfer, cp coordinator.Coordinator) *local.LocalWorker {
 	w := local.NewLocalWorker(cp, &transfer, helpers.EmptyRegistry(), logger.Log)
 	w.Start()
 	return w

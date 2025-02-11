@@ -51,7 +51,7 @@ func scenarioTestingDTSUPPORT693(t *testing.T) {
 	timestamp := time.Now()
 
 	addProcedure := func(tableList []string, currentTime time.Time) []string {
-		return append(rotationTables, rotator.AnnotateWithTime("whatever", timestamp))
+		return append(tableList, rotator.AnnotateWithTime("whatever", currentTime))
 	}
 	dropProcedure := func(tableList []string, currentTime time.Time) []string {
 		var filteredTableList []string

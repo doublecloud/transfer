@@ -276,7 +276,6 @@ func (l *SnapshotLoader) beginSnapshot(
 func (l *SnapshotLoader) endSnapshot(
 	ctx context.Context,
 	sourceStorage abstract.Storage,
-	tables []abstract.TableDescription,
 ) error {
 	switch specificStorage := sourceStorage.(type) {
 	case abstract.SnapshotableStorage:
@@ -365,7 +364,7 @@ func (l *SnapshotLoader) uploadSharded(ctx context.Context, tables []abstract.Ta
 		return nil
 	}
 
-	if err := l.uploadSecondary(ctx, updateIncrementalState); err != nil {
+	if err := l.uploadSecondary(ctx); err != nil {
 		return xerrors.Errorf("unable to sharded upload(secondary worker) tables: %w", err)
 	}
 	return nil
@@ -492,7 +491,7 @@ func (l *SnapshotLoader) uploadMain(ctx context.Context, tables []abstract.Table
 		return xerrors.Errorf("failed to upload %d tables: %w", len(tables), joinedErr)
 	}
 
-	if err := l.endSnapshot(ctx, sourceStorage, tables); err != nil {
+	if err := l.endSnapshot(ctx, sourceStorage); err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "unable to end snapshot: %w", err)
 	}
 
@@ -563,7 +562,7 @@ func (l *SnapshotLoader) startSnapshotIncremental(
 	return nextIncrementalState, tables, nil
 }
 
-func (l *SnapshotLoader) uploadSecondary(ctx context.Context, updateIncrementalState bool) error {
+func (l *SnapshotLoader) uploadSecondary(ctx context.Context) error {
 	runtime, ok := l.transfer.Runtime.(abstract.ShardingTaskRuntime)
 	if !ok || runtime.WorkersNum() <= 1 {
 		return errors.CategorizedErrorf(categories.Internal, "run sharding upload with non sharding runtime for operation '%v'", l.operationID)
@@ -704,7 +703,7 @@ func (l *SnapshotLoader) uploadSingle(ctx context.Context, tables []abstract.Tab
 		return errors.CategorizedErrorf(categories.Source, "slot monitor detected an error: %w", err)
 	}
 
-	if err := l.endSnapshot(ctx, sourceStorage, tables); err != nil {
+	if err := l.endSnapshot(ctx, sourceStorage); err != nil {
 		return errors.CategorizedErrorf(categories.Internal, "unable to end snapshot: %w", err)
 	}
 

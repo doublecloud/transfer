@@ -52,7 +52,7 @@ func Segment(index int) GPSegPointer {
 
 // openPGStorage is a specification of a constructor of PostgreSQL storage for Greenplum.
 // May modify the passed storage parameters
-func openPGStorage(ctx context.Context, config *postgres.PgStorageParams) (*postgres.Storage, error) {
+func openPGStorage(config *postgres.PgStorageParams) (*postgres.Storage, error) {
 	// this creates a TCP connection to the segment!
 	var errs util.Errors
 
@@ -125,7 +125,7 @@ func (s *Storage) openPGStorageForAnyInPair(ctx context.Context, sp GPSegPointer
 		cfg.AllHosts = []string{hp.Host}
 		cfg.Port = hp.Port
 		logger.Log.Infof("trying to connect to Greenplum %s (%s)", sp.String(), cfg.String())
-		result, err := openPGStorage(ctx, cfg)
+		result, err := openPGStorage(cfg)
 		if err != nil {
 			_ = isGPMirrorErr(err, hp.String())
 			wrappedErr := xerrors.Errorf("failed to connect to Greenplum %s (%s): %w", sp.String(), cfg.String(), err)

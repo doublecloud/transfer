@@ -10,7 +10,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/storage"
 )
 
-func checkReuploadAllowed(src model.Source, dst model.Destination) error {
+func checkReuploadAllowed(src model.Source) error {
 	if appendOnlySource, ok := src.(model.AppendOnlySource); ok && appendOnlySource.IsAppendOnly() {
 		return xerrors.New("Reupload from append only source is not allowed")
 	}
@@ -30,7 +30,7 @@ func Reupload(ctx context.Context, cp coordinator.Coordinator, transfer model.Tr
 		}
 		return nil
 	}
-	if err := checkReuploadAllowed(transfer.Src, transfer.Dst); err != nil {
+	if err := checkReuploadAllowed(transfer.Src); err != nil {
 		return xerrors.Errorf("Reupload is forbidden: %w", err)
 	}
 

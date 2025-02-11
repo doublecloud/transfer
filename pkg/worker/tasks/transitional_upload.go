@@ -162,7 +162,7 @@ func TransitReupload(ctx context.Context, cp coordinator.Coordinator, transfer m
 
 	for _, src := range srcs {
 		for _, dst := range dsts {
-			if err := checkReuploadAllowed(src, dst); err != nil {
+			if err := checkReuploadAllowed(src); err != nil {
 				return xerrors.Errorf("Reupload is forbidden: %w", err)
 			}
 

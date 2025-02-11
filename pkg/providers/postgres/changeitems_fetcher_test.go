@@ -45,7 +45,7 @@ func TestCanonFetcherData(t *testing.T) {
 func runB(b *testing.B, data []byte, limit int) {
 	fetcher := new(ChangeItemsFetcher)
 	stubData := &stubRows{iter: 0, limit: limit}
-	require.NoError(b, json.Unmarshal(fetcherData, stubData))
+	require.NoError(b, json.Unmarshal(data, stubData))
 	stubData.init()
 	fetcher.connInfo = pgtype.NewConnInfo()
 	fetcher.parseSchema = stubData.ParseSchema

@@ -157,7 +157,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	}, "1.1.2.Final", false, logger.Log)
 	require.NoError(t, err)
 	originalTypes := map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
-		abstract.TableID{Namespace: "public", Name: "basic_types"}: {
+		{Namespace: "public", Name: "basic_types"}: {
 			"i":                    {OriginalType: "pg:integer"},
 			"bl":                   {OriginalType: "pg:boolean"},
 			"b":                    {OriginalType: "pg:bit(1)"},

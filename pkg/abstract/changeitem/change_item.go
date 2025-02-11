@@ -21,7 +21,7 @@ var (
 	_ yson.Marshaler   = (*ChangeItem)(nil)
 	_ yson.Unmarshaler = (*ChangeItem)(nil)
 
-	ysonEncoderOptions *yson.EncoderOptions = nil // for tests
+	ysonEncoderOptions *yson.EncoderOptions = nil // for tests // nolint:staticcheck
 )
 
 type ChangeItem struct {

@@ -63,7 +63,7 @@ func TestSnapshotAndReplicationSerDeViaDebeziumExternal(t *testing.T) {
 	}, "1.1.2.Final", false, logger.Log)
 	require.NoError(t, err)
 	originalTypes := map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
-		abstract.TableID{Namespace: "", Name: pathOut}: {
+		{Namespace: "", Name: pathOut}: {
 			"id":            {OriginalType: "ydb:Uint64"},
 			"Bool_":         {OriginalType: "ydb:Bool"},
 			"Int8_":         {OriginalType: "ydb:Int8"},

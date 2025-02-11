@@ -219,7 +219,7 @@ func (p *ProtoParser) makeValues(iterSt *iterState, protoMsg protoreflect.Messag
 		res = append(res, val)
 	}
 
-	auxRes := p.makeAuxValues(iterSt, protoMsg)
+	auxRes := p.makeAuxValues(iterSt)
 	res = append(res, auxRes...)
 
 	if len(res) != len(p.columns) {
@@ -319,7 +319,7 @@ func extractLeafValue(val protoreflect.Value) (interface{}, error) {
 	}
 }
 
-func (p *ProtoParser) makeAuxValues(iterSt *iterState, protoMsg protoreflect.Message) []interface{} {
+func (p *ProtoParser) makeAuxValues(iterSt *iterState) []interface{} {
 	res := make([]interface{}, len(p.auxFieldsIndexMap))
 	if id, ok := p.auxFieldsIndexMap[parsers.SyntheticTimestampCol]; ok {
 		res[id] = time.Time{} // TODO (or maybe drop)

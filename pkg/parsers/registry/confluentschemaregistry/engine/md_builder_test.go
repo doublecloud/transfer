@@ -5,10 +5,10 @@ import (
 
 	"github.com/doublecloud/transfer/pkg/parsers/registry/confluentschemaregistry/engine/testdata/references"
 	"github.com/doublecloud/transfer/pkg/schemaregistry/confluent"
-	"github.com/golang/protobuf/proto"
 	"github.com/jhump/protoreflect/desc"
 	"github.com/jhump/protoreflect/dynamic"
 	"github.com/stretchr/testify/require"
+	"google.golang.org/protobuf/proto"
 )
 
 func checkMD(t *testing.T, md *desc.MessageDescriptor, buf []byte) {

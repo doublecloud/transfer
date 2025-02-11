@@ -1394,7 +1394,7 @@ func TestMarshalYSON(t *testing.T) {
 		var buf bytes.Buffer
 		writer := yson.NewWriterConfig(&buf, yson.WriterConfig{Format: yson.FormatPretty})
 		encoder := yson.NewEncoderWriter(writer)
-		require.NoError(t, encoder.Encode(&testChangeItem))
+		require.NoError(t, encoder.Encode(&value))
 		return buf.String()
 	}
 

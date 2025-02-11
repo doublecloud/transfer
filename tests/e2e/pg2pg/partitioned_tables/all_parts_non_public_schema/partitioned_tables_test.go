@@ -130,32 +130,32 @@ func load(t *testing.T, transfer *model.Transfer, updateSource bool) {
 	compareParams := helpers.NewCompareStorageParams()
 	compareParams.TableFilter = func(tables abstract.TableMap) []abstract.TableDescription {
 		return []abstract.TableDescription{
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited",
 				Schema: "second_schema",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited_y2006m02",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited_y2006m03",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_inherited_y2006m04",
 				Schema: "second_schema",
 			},
 			//skip measurement_declarative because of turned UseFakePrimaryKey option on (limitation of outdated 10.5 PG version)
-			abstract.TableDescription{
+			{
 				Name:   "measurement_declarative_y2006m02",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_declarative_y2006m03",
 				Schema: "public",
 			},
-			abstract.TableDescription{
+			{
 				Name:   "measurement_declarative_y2006m04",
 				Schema: "second_schema",
 			},

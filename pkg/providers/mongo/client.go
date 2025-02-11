@@ -91,7 +91,7 @@ func Connect(ctx context.Context, opts MongoConnectionOptions, lgr log.Logger) (
 	}
 
 	// create client
-	client, err := newClient(ctx, driverConnectionOptions, lgr)
+	client, err := newClient(ctx, driverConnectionOptions)
 	if err != nil {
 		if driverConnectionOptions.TLSConfig != nil {
 			lgr.Error("Error initializing mongo client",
@@ -117,7 +117,7 @@ func Connect(ctx context.Context, opts MongoConnectionOptions, lgr log.Logger) (
 		)
 		// tls might be enforced on server side
 		driverConnectionOptions.TLSConfig = new(tls.Config)
-		clientWithTLS, err := newClient(ctx, driverConnectionOptions, lgr)
+		clientWithTLS, err := newClient(ctx, driverConnectionOptions)
 		if err != nil {
 			lgr.Error("Error initializing TLS enforced mongo client",
 				log.Int64("mongo_client_wrapper_id", id),
@@ -141,7 +141,7 @@ func Connect(ctx context.Context, opts MongoConnectionOptions, lgr log.Logger) (
 	}, nil
 }
 
-func newClient(ctx context.Context, connOpts *options.ClientOptions, lgr log.Logger) (*mongo.Client, error) {
+func newClient(ctx context.Context, connOpts *options.ClientOptions) (*mongo.Client, error) {
 	client, err := mongo.Connect(ctx, connOpts)
 
 	isWithPassword := bool(connOpts != nil && connOpts.Auth != nil && len(connOpts.Auth.Password) > 0)

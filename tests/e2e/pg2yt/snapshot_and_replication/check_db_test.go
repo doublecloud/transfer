@@ -54,7 +54,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	// insert/update/delete several record
 
 	exec := func(ctx context.Context, conn *pgxpool.Pool, query string) {
-		rows, err := conn.Query(context.Background(), query)
+		rows, err := conn.Query(ctx, query)
 		require.NoError(t, err)
 		rows.Close()
 	}

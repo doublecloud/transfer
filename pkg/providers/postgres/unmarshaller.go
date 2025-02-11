@@ -90,7 +90,7 @@ func (c *Unmarshaller) Cast(input []byte) (any, error) {
 
 	var result any = nil
 	if c.castData.isHomo {
-		result = unmarshalFieldHomo(c.decoder, c.schema, c.connInfo)
+		result = unmarshalFieldHomo(c.decoder, c.schema)
 		c.decoder = nil
 	} else {
 		r, err := unmarshalFieldHetero(c.decoder, c.schema, c.connInfo)
@@ -142,7 +142,7 @@ func (c *Unmarshaller) reconstructDecoder() error {
 	return nil
 }
 
-func unmarshalFieldHomo(val any, schema *abstract.ColSchema, connInfo *pgtype.ConnInfo) any {
+func unmarshalFieldHomo(val any, schema *abstract.ColSchema) any {
 	switch v := val.(type) {
 	case [16]byte:
 		if schema.OriginalType != "pg:uuid" {

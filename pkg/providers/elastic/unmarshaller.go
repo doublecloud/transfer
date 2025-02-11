@@ -67,7 +67,7 @@ func unmarshalField(value any, colSchema *abstract.ColSchema) (any, error) {
 	case schema.TypeString:
 		result, err = strict.Expected[*json.RawMessage](value, castx.ToStringE)
 	case schema.TypeAny:
-		result, err = expectedAnyCast(value, colSchema)
+		result, err = expectedAnyCast(value)
 	default:
 		return nil, abstract.NewFatalError(xerrors.Errorf(
 			"unexpected target type %s (original type %q, value of type %T), unmarshalling is not implemented",
@@ -132,7 +132,7 @@ func handleTimestamp(value any, colSchema *abstract.ColSchema) (any, error) {
 	return result, nil
 }
 
-func expectedAnyCast(value any, colSchema *abstract.ColSchema) (any, error) {
+func expectedAnyCast(value any) (any, error) {
 	var result any
 	var err error
 

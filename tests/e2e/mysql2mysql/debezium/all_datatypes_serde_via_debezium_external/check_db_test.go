@@ -161,7 +161,7 @@ func TestSnapshotAndIncrement(t *testing.T) {
 	}, "1.1.2.Final", false, logger.Log)
 	require.NoError(t, err)
 	originalTypes := map[abstract.TableID]map[string]*debeziumcommon.OriginalTypeInfo{
-		abstract.TableID{Namespace: "", Name: "customers3"}: {
+		{Namespace: "", Name: "customers3"}: {
 			"pk":               {OriginalType: "mysql:int(10) unsigned"},
 			"bool1":            {OriginalType: "mysql:tinyint(1)"},
 			"bool2":            {OriginalType: "mysql:tinyint(1)"},
