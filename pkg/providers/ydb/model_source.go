@@ -74,8 +74,9 @@ type YdbSource struct {
 	OAuth2Config     *v3credential.OAuth2Config
 
 	// storage
-	IsSnapshotSharded bool
-	CopyFolder        string
+	IsSnapshotSharded     bool
+	CopyFolder            string
+	ParseQueueParallelism int
 }
 
 var _ model.Source = (*YdbSource)(nil)

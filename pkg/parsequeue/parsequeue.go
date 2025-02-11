@@ -111,6 +111,8 @@ func (p *ParseQueue[TData]) ackLoop() {
 	}
 }
 
+const DefaultParallelism = 10
+
 func New[TData any](
 	lgr log.Logger,
 	parallelism int,
@@ -118,6 +120,9 @@ func New[TData any](
 	parseF ParseFunc[TData],
 	ackF AckFunc[TData],
 ) *ParseQueue[TData] {
+	if parallelism == 0 {
+		parallelism = DefaultParallelism
+	}
 	if parallelism < 2 {
 		parallelism = 2
 	}

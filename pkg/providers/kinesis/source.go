@@ -87,7 +87,7 @@ func (s *Source) reduceInflight(size int) {
 }
 
 func (s *Source) Run(sink abstract.AsyncSink) error {
-	parseQ := parsequeue.NewWaitable(s.logger, 10, sink, s.parse, s.ack)
+	parseQ := parsequeue.NewWaitable(s.logger, s.config.ParseQueueParallelism, sink, s.parse, s.ack)
 	defer parseQ.Close()
 
 	return s.run(parseQ)

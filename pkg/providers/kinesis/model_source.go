@@ -11,13 +11,14 @@ var (
 )
 
 type KinesisSource struct {
-	Endpoint     string
-	Region       string
-	Stream       string
-	BufferSize   int
-	AccessKey    string
-	SecretKey    model.SecretString
-	ParserConfig map[string]interface{}
+	Endpoint              string
+	Region                string
+	Stream                string
+	BufferSize            int
+	AccessKey             string
+	SecretKey             model.SecretString
+	ParserConfig          map[string]interface{}
+	ParseQueueParallelism int
 }
 
 func (k *KinesisSource) GetProviderType() abstract.ProviderType {

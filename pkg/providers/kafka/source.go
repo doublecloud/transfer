@@ -99,7 +99,7 @@ func (p *Source) Run(sink abstract.AsyncSink) error {
 		}
 		return p.parse(buffer)
 	}
-	parseQ := parsequeue.NewWaitable(p.logger, 10, sink, parseWrapper, p.ack)
+	parseQ := parsequeue.NewWaitable(p.logger, p.config.ParseQueueParallelism, sink, parseWrapper, p.ack)
 	defer parseQ.Close()
 
 	return p.run(parseQ)

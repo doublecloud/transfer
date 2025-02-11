@@ -26,7 +26,6 @@ import (
 )
 
 const (
-	parallelism            = 10
 	bufferFlushingInterval = time.Millisecond * 500
 )
 
@@ -50,7 +49,7 @@ type Source struct {
 }
 
 func (s *Source) Run(sink abstract.AsyncSink) error {
-	parseQ := parsequeue.NewWaitable(s.logger, parallelism, sink, s.parse, s.ack)
+	parseQ := parsequeue.NewWaitable(s.logger, s.cfg.ParseQueueParallelism, sink, s.parse, s.ack)
 	defer parseQ.Close()
 
 	return s.run(parseQ)
