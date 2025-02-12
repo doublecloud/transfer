@@ -35,6 +35,7 @@ jobs:
           { group: "cmd", name: "cmd", path: "" },
           # providers suites, some of the providers are too heavy to run as single test
           { group: "pkg/providers", name: "yt", path: "yt", yt: true },
+          { group: "pkg/providers", name: "iceberg", path: "iceberg", iceberg: true },
           { group: "pkg/providers", name: "providers-postgres", path: "postgres" },
           # e2e test suites
           { group: "tests/e2e", name: "kafka2ch", path: "kafka2ch" },
@@ -50,7 +51,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.22.0"
+          go-version: "1.23.6"
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
@@ -66,6 +67,16 @@ jobs:
         run: |
           pg_dump --version
       - shell: bash
+        if: matrix.suite.iceberg
+        name: prepare local Spark
+        run: |
+          docker compose -f pkg/providers/iceberg/recipe/docker-compose.yml up -d
+          sleep 5
+          docker compose -f pkg/providers/iceberg/recipe/docker-compose.yml exec -T spark-iceberg ipython ./provision.py
+          sleep 5
+          echo "AWS_S3_ENDPOINT=http://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' minio):9000" >> $GITHUB_ENV
+          echo "CATALOG_ENDPOINT=http://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' iceberg-rest):8181" >> $GITHUB_ENV
+      - shell: bash
         if: matrix.suite.yt
         name: prepare local YT
         run: |
@@ -79,6 +90,10 @@ jobs:
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         if: always()
+        env:
+          AWS_S3_ENDPOINT: "${{ env.AWS_S3_ENDPOINT }}"
+          CATALOG_ENDPOINT: "${{ env.CATALOG_ENDPOINT }}"
+          AWS_REGION: "us-east-1"
         with:
           name: test-reports-${{ matrix.suite.name }}
           path: reports/*.xml
@@ -132,7 +147,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.22.0"
+          go-version: "1.23.6"
       - shell: bash
         run: |
           go install gotest.tools/gotestsum@latest
