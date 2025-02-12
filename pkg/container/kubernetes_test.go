@@ -317,6 +317,10 @@ func TestIntegration_RunPod(t *testing.T) {
 		t.Skip("Skipping integration test in short mode")
 	}
 
+	if os.Getenv("TEST_KUBERNETES_INTEGRATION") == "" {
+		t.Skip("Skipping integration test. To run, set TEST_KUBERNETES_INTEGRATION=1")
+	}
+
 	kindClusterName := "integration-test-cluster"
 
 	// Create a new Kind cluster.
