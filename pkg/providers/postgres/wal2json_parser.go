@@ -1,9 +1,10 @@
 package postgres
 
 import (
-	"encoding/json"
 	"sync"
 	"time"
+
+	"github.com/goccy/go-json"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/util"
