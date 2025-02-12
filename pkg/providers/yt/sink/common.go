@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -270,16 +271,18 @@ func unionSchemas(current, expected schema.Schema) (schema.Schema, error) {
 
 func onConflictTryAlterWithoutNarrowing(ctx context.Context, ytClient yt.Client) migrate.ConflictFn {
 	return func(path ypath.Path, actual, expected schema.Schema) error {
+		logger.Log.Info("table schema conflict detected", log.String("path", path.String()), log.Reflect("expected", expected), log.Reflect("actual", actual))
 		if isSuperset(actual, expected) {
 			// No error, do not retry schema comparison
+			logger.Log.Info("actual schema is superset of the expected; proceeding without alter", log.String("path", path.String()))
 			return nil
 		}
 
 		unitedSchema, err := unionSchemas(actual, expected)
-
 		if err != nil {
 			return xerrors.Errorf("got incompatible schema changes in '%s': %w", path.String(), err)
 		}
+		logger.Log.Info("united schema computed", log.String("path", path.String()), log.Reflect("united_schema", unitedSchema))
 
 		if err := migrate.UnmountAndWait(ctx, ytClient, path); err != nil {
 			return xerrors.Errorf("unmount error: %w", err)
@@ -291,6 +294,7 @@ func onConflictTryAlterWithoutNarrowing(ctx context.Context, ytClient yt.Client)
 			return xerrors.Errorf("mount error: %w", err)
 		}
 		// Schema has been altered, no need to retry schema comparison
+		logger.Log.Info("schema altered", log.String("path", path.String()))
 		return nil
 	}
 }
