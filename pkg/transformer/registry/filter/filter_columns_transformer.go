@@ -180,8 +180,36 @@ func (f *FilterColumnsTransformer) trimChangeItem(original abstract.ChangeItem, 
 		transformed.ColumnValues[newIndex] = original.ColumnValues[origIndex]
 	}
 
-	transformed.OldKeys = copyOldKeys(&original.OldKeys)
+	transformed.OldKeys = copyAndTrimOldKeys(&original.OldKeys, filteredSchema.ColNames)
 	return transformed, nil
+}
+
+func copyAndTrimOldKeys(oldKeys *abstract.OldKeysType, filteredColumns set.Set[string]) abstract.OldKeysType {
+	newLen := 0
+	for _, keyName := range oldKeys.KeyNames {
+		if filteredColumns.Contains(keyName) {
+			newLen++
+		}
+	}
+	if newLen == len(oldKeys.KeyNames) {
+		return copyOldKeys(oldKeys)
+	}
+	trimmedOldKeys := abstract.OldKeysType{
+		KeyNames:  make([]string, 0, newLen),
+		KeyTypes:  make([]string, 0, newLen),
+		KeyValues: make([]interface{}, 0, newLen),
+	}
+	for i, keyName := range oldKeys.KeyNames {
+		if !filteredColumns.Contains(keyName) {
+			continue
+		}
+		trimmedOldKeys.KeyNames = append(trimmedOldKeys.KeyNames, oldKeys.KeyNames[i])
+		trimmedOldKeys.KeyValues = append(trimmedOldKeys.KeyValues, oldKeys.KeyValues[i])
+		if len(oldKeys.KeyTypes) == len(oldKeys.KeyNames) {
+			trimmedOldKeys.KeyTypes = append(trimmedOldKeys.KeyTypes, oldKeys.KeyTypes[i])
+		}
+	}
+	return trimmedOldKeys
 }
 
 func (f *FilterColumnsTransformer) Suitable(table abstract.TableID, schema *abstract.TableSchema) bool {
