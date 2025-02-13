@@ -6,7 +6,7 @@ import (
 	"regexp"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 const (

@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 const InstanceMetadataAddr = "169.254.169.254"
