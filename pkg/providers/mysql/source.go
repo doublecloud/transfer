@@ -90,7 +90,7 @@ func (h *binlogHandler) OnDDL(nextPos mysql.Position, queryEvent *replication.Qu
 		if len(h.inflight) == 0 {
 			break
 		}
-		time.Sleep(time.Second)
+		time.Sleep(h.config.ReplicationFlushInterval)
 	}
 	h.logger.Warn("DDL Query", log.Any("query", string(queryEvent.Query)), log.Any("position", nextPos))
 	execTS := time.Now()
@@ -550,7 +550,7 @@ func (p *publisher) flusher() {
 		h := p.handler
 		h.metrics.Master.Set(1)
 		if len(h.inflight) == 0 {
-			time.Sleep(time.Second)
+			time.Sleep(h.config.ReplicationFlushInterval)
 			continue
 		}
 		start := time.Now()
