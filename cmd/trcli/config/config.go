@@ -3,6 +3,8 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"reflect"
+	"time"
 
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
@@ -10,7 +12,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/transformer"
 	"github.com/mitchellh/mapstructure"
-	"gopkg.in/yaml.v3"
+	"gopkg.in/yaml.v2"
 	sig_yaml "sigs.k8s.io/yaml"
 )
 
@@ -62,31 +64,51 @@ func ParseTransfer(yaml []byte) (*model.Transfer, error) {
 	return transfer, nil
 }
 
-func fieldsMismatch(params []byte, dummy model.EndpointParams) ([]string, []string, error) {
+func StringToDurationHookFunc() mapstructure.DecodeHookFunc {
+	return func(
+		f reflect.Type,
+		t reflect.Type,
+		data interface{},
+	) (interface{}, error) {
+		// Check if the source is a string and the target is time.Duration
+		if f.Kind() == reflect.String && t == reflect.TypeOf(time.Duration(0)) {
+			return time.ParseDuration(data.(string))
+		}
+		return data, nil
+	}
+}
+
+func fieldsMismatch(params []byte, dummy model.EndpointParams) ([]byte, []string, []string, error) {
 	foomap := make(map[string]interface{})
 	err := json.Unmarshal(params, &foomap)
 	if err != nil {
-		return nil, nil, xerrors.Errorf("failed to remap model: %w", err)
+		return nil, nil, nil, xerrors.Errorf("failed to remap model: %w", err)
 	}
 
 	// create a mapstructure decoder
 	var md mapstructure.Metadata
 	decoder, err := mapstructure.NewDecoder(
 		&mapstructure.DecoderConfig{
-			Metadata: &md,
-			Result:   &dummy,
-			TagName:  "json",
+			Metadata:   &md,
+			Result:     &dummy,
+			TagName:    "json",
+			DecodeHook: mapstructure.ComposeDecodeHookFunc(StringToDurationHookFunc()),
 		})
 	if err != nil {
-		return nil, nil, xerrors.Errorf("failed to prepare decoder: %w", err)
+		return nil, nil, nil, xerrors.Errorf("failed to prepare decoder: %w", err)
 	}
 
 	// decode the unmarshalled map into the given struct
 	if err := decoder.Decode(foomap); err != nil {
-		return nil, nil, xerrors.Errorf("failed to decode: %w", err)
+		return nil, nil, nil, xerrors.Errorf("failed to decode: %w", err)
 	}
 
-	return md.Unused, md.Unset, nil
+	raw, err := json.Marshal(dummy)
+	if err != nil {
+		return nil, nil, nil, xerrors.Errorf("unable to marshal struct to json: %w", err)
+	}
+
+	return raw, md.Unused, md.Unset, nil
 }
 
 // substituteEnv recursively iterates over an interface{} (which might be a string,
@@ -164,7 +186,7 @@ func source(tr *TransferYamlView) (model.Source, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Src.Type, err)
 	}
-	unused, unset, err := fieldsMismatch([]byte(tr.Src.RawParams()), dummy)
+	rawJSON, unused, unset, err := fieldsMismatch([]byte(tr.Src.RawParams()), dummy)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
 	}
@@ -174,7 +196,8 @@ func source(tr *TransferYamlView) (model.Source, error) {
 	if len(unset) > 0 {
 		logger.Log.Infof("config for: %s source has %v unset fields", tr.Src.Type, unset)
 	}
-	return model.NewSource(tr.Src.Type, tr.Src.RawParams())
+
+	return model.NewSource(tr.Src.Type, string(rawJSON))
 }
 
 func target(tr *TransferYamlView) (model.Destination, error) {
@@ -182,7 +205,7 @@ func target(tr *TransferYamlView) (model.Destination, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("unable to init empty model: %s: %w", tr.Dst.Type, err)
 	}
-	unused, unset, err := fieldsMismatch([]byte(tr.Dst.RawParams()), dummy)
+	rawJSON, unused, unset, err := fieldsMismatch([]byte(tr.Dst.RawParams()), dummy)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to construct missed fields: %w", err)
 	}
@@ -192,7 +215,7 @@ func target(tr *TransferYamlView) (model.Destination, error) {
 	if len(unset) > 0 {
 		logger.Log.Infof("config for: %s destination has %v unset fields", tr.Dst.Type, unset)
 	}
-	return model.NewDestination(tr.Dst.Type, tr.Dst.RawParams())
+	return model.NewDestination(tr.Dst.Type, string(rawJSON))
 }
 
 func transfer(source model.Source, target model.Destination, tr *TransferYamlView) *model.Transfer {

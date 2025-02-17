@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/doublecloud/transfer/pkg/providers/mongo"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -99,4 +101,24 @@ dst:
 
 	expectTLSParams := strings.ReplaceAll(string(pem.EncodeToMemory(privateKeyPEM)), "\n", "\\n")
 	assert.Equal(t, fmt.Sprintf("{\"Password\":\"secret2\",\"tlsfile\":\"%s\"}", expectTLSParams), transfer.Dst.Params)
+}
+
+func TestYamlDuration(t *testing.T) {
+	transfer, err := ParseTransferYaml([]byte(`
+src:
+  type: mongo
+  params:
+    BatchingParams:
+      BatchFlushInterval: 10s
+dst:
+  type: stdout
+  params:
+    ShowData: false
+`))
+	require.NoError(t, err)
+	src, err := source(transfer)
+	require.NoError(t, err)
+	msrc, ok := src.(*mongo.MongoSource)
+	require.True(t, ok)
+	require.Equal(t, msrc.BatchingParams.BatchFlushInterval, 10*time.Second)
 }
