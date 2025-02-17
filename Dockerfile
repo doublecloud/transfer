@@ -9,16 +9,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo $TZ > /etc/timezone && \
   ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
-RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends gnupg wget lsb-release curl ca-certificates openssh-client \
-    iptables supervisor apt-transport-https dirmngr nano vim telnet less tcpdump net-tools \
-    tzdata lsof libaio1 unzip git && \
-    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgresql.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/postgresql.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    apt-get update -qq && \
-    apt-get install -y --no-install-recommends postgresql-client-16 || apt-get install -y --no-install-recommends postgresql-client-15 && \
-    rm -rf /var/lib/apt/lists/*
-
 # Pre-configure debconf to avoid ClickHouse prompts (password or confirmation)
 RUN echo "clickhouse-client clickhouse-server/root_password password root" | debconf-set-selections && \
   echo "clickhouse-client clickhouse-server/root_password_again password root" | debconf-set-selections
