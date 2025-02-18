@@ -1,19 +1,15 @@
-package docker
+package container
 
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"os"
 	"os/exec"
-	"sort"
-	"strings"
 	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
-	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
@@ -71,7 +67,11 @@ func (d *DockerWrapper) Pull(ctx context.Context, image string, opts types.Image
 	return nil
 }
 
-func (d *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Reader, stderr io.Reader, err error) {
+func (d *DockerWrapper) Run(ctx context.Context, opts ContainerOpts) (stdout io.Reader, stderr io.Reader, err error) {
+	return d.RunContainer(ctx, opts.ToDockerOpts())
+}
+
+func (d *DockerWrapper) RunContainer(ctx context.Context, opts DockerOpts) (stdout io.Reader, stderr io.Reader, err error) {
 	if d.cli == nil {
 		return nil, nil, xerrors.Errorf("docker unavailable")
 	}
@@ -79,16 +79,6 @@ func (d *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Rea
 	if err := d.Pull(ctx, opts.Image, types.ImagePullOptions{}); err != nil {
 		return nil, nil, err
 	}
-
-	var mountsList []mount.Mount
-	for hostPath, containerPath := range opts.Volumes {
-		mountsList = append(mountsList, mount.Mount{
-			Type:   mount.TypeBind,
-			Source: hostPath,
-			Target: containerPath,
-		})
-	}
-	mountsList = append(mountsList, opts.Mounts...)
 
 	containerConfig := &container.Config{
 		Image:  opts.Image,
@@ -99,9 +89,13 @@ func (d *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Rea
 	}
 
 	hostConfig := &container.HostConfig{
-		Mounts:     mountsList,
+		Mounts:     opts.Mounts,
 		AutoRemove: opts.AutoRemove,
 		LogConfig:  container.LogConfig{Type: opts.LogDriver, Config: opts.LogOptions},
+	}
+
+	if opts.RestartPolicy.Name != "" {
+		hostConfig.RestartPolicy = opts.RestartPolicy
 	}
 
 	networkingConfig := &network.NetworkingConfig{}
@@ -176,6 +170,11 @@ func (d *DockerWrapper) Run(ctx context.Context, opts DockerOpts) (stdout io.Rea
 
 func (d *DockerWrapper) ensureDocker(supervisorConfigPath string, timeout time.Duration) error {
 	if supervisorConfigPath == "" {
+		cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+		if err != nil {
+			return xerrors.Errorf("unable to init docker cli: %w", err)
+		}
+		d.cli = cli
 		// no supervisor, assume docker is already running.
 		if !d.isDockerReady() {
 			return xerrors.New("docker is not ready")
@@ -236,126 +235,4 @@ func (d *DockerWrapper) ensureDocker(supervisorConfigPath string, timeout time.D
 	case <-time.After(timeout):
 		return xerrors.Errorf("timeout: %v waiting for Docker to be ready", timeout)
 	}
-}
-
-type DockerOpts struct {
-	Volumes       map[string]string
-	Mounts        []mount.Mount
-	LogDriver     string
-	LogOptions    map[string]string
-	Image         string
-	Network       string
-	ContainerName string
-	Command       []string
-	Env           []string
-	Timeout       time.Duration
-	AutoRemove    bool
-	AttachStdout  bool
-	AttachStderr  bool
-}
-
-func (o *DockerOpts) String() string {
-	var args []string
-
-	// AutoRemove
-	if o.AutoRemove {
-		args = append(args, "--rm")
-	}
-
-	// ContainerName
-	if o.ContainerName != "" {
-		args = append(args, "--name", o.ContainerName)
-	}
-
-	// Network
-	if o.Network != "" {
-		args = append(args, "--network", o.Network)
-	}
-
-	// Volumes (handled with -v)
-	if len(o.Volumes) > 0 {
-		var volumeKeys []string
-		for hostPath := range o.Volumes {
-			volumeKeys = append(volumeKeys, hostPath)
-		}
-		sort.Strings(volumeKeys)
-		for _, hostPath := range volumeKeys {
-			containerPath := o.Volumes[hostPath]
-			args = append(args, "-v", fmt.Sprintf("%s:%s", hostPath, containerPath))
-		}
-	}
-
-	// Mounts (handled with --mount)
-	if len(o.Mounts) > 0 {
-		sort.Slice(o.Mounts, func(i, j int) bool {
-			ikey := fmt.Sprintf("%s/%s/%s", o.Mounts[i].Type, o.Mounts[i].Source, o.Mounts[i].Target)
-			jkey := fmt.Sprintf("%s/%s/%s", o.Mounts[j].Type, o.Mounts[j].Source, o.Mounts[j].Target)
-			return ikey < jkey
-		})
-		for _, m := range o.Mounts {
-			mountOpts := []string{
-				fmt.Sprintf("type=%s", m.Type),
-				fmt.Sprintf("source=%s", m.Source),
-				fmt.Sprintf("target=%s", m.Target),
-			}
-			if m.ReadOnly {
-				mountOpts = append(mountOpts, "readonly")
-			}
-
-			args = append(args, "--mount", strings.Join(mountOpts, ","))
-		}
-	}
-
-	// Environment Variables
-	if len(o.Env) > 0 {
-		sort.Strings(o.Env)
-		for _, envVar := range o.Env {
-			args = append(args, "-e", envVar)
-		}
-	}
-
-	// Log Driver and Options
-	if o.LogDriver != "" {
-		args = append(args, "--log-driver", o.LogDriver)
-		if len(o.LogOptions) > 0 {
-			var logOptKeys []string
-			for key := range o.LogOptions {
-				logOptKeys = append(logOptKeys, key)
-			}
-			sort.Strings(logOptKeys)
-			for _, key := range logOptKeys {
-				value := o.LogOptions[key]
-				args = append(args, "--log-opt", fmt.Sprintf("%s=%s", key, value))
-			}
-		}
-	}
-
-	// Attach options
-	var attachOptions []string
-	if o.AttachStderr {
-		attachOptions = append(attachOptions, "stderr")
-	}
-	if o.AttachStdout {
-		attachOptions = append(attachOptions, "stdout")
-	}
-	if len(attachOptions) > 0 {
-		sort.Strings(attachOptions)
-		for _, attach := range attachOptions {
-			args = append(args, "--attach", attach)
-		}
-	}
-
-	// Image
-	if o.Image != "" {
-		args = append(args, o.Image)
-	}
-
-	// Command
-	if len(o.Command) > 0 {
-		args = append(args, o.Command...)
-	}
-
-	cmd := append([]string{"docker", "run"}, args...)
-
-	return strings.Join(cmd, " ")
 }

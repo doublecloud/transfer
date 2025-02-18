@@ -16,7 +16,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/coordinator"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/docker"
+	"github.com/doublecloud/transfer/pkg/container"
 	"github.com/doublecloud/transfer/pkg/format"
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
@@ -38,7 +38,7 @@ type Storage struct {
 	transfer *model.Transfer
 	state    map[string]*coordinator.TransferStateData
 
-	dw *docker.DockerWrapper
+	cw container.ContainerImpl
 }
 
 func (a *Storage) Close() {}
@@ -367,28 +367,36 @@ func (a *Storage) discover() error {
 	return nil
 }
 
-func (a *Storage) baseOpts() docker.DockerOpts {
-	return docker.DockerOpts{
-		Volumes: map[string]string{
-			a.config.DataDir(): "/data",
+func (a *Storage) baseOpts() container.ContainerOpts {
+	return container.ContainerOpts{
+		Env: map[string]string{
+			"AWS_EC2_METADATA_DISABLED": "true",
 		},
-		Mounts:    nil,
-		LogDriver: "local",
 		LogOptions: map[string]string{
 			"max-size": "100m",
 			"max-file": "3",
 		},
+		Namespace:     "",
+		RestartPolicy: "Never",
+		PodName:       "",
 		Image:         a.config.DockerImage(),
+		LogDriver:     "local",
 		Network:       "host",
 		ContainerName: "",
-		Command:       nil,
-		Env: []string{
-			"AWS_EC2_METADATA_DISABLED=true",
+		Volumes: []container.Volume{
+			{
+				Name:          "data",
+				HostPath:      a.config.DataDir(),
+				ContainerPath: "/data",
+				VolumeType:    "bind",
+			},
 		},
+		Command:      nil,
+		Args:         nil,
 		Timeout:      0,
-		AutoRemove:   true,
 		AttachStdout: true,
 		AttachStderr: true,
+		AutoRemove:   true,
 	}
 }
 
@@ -400,7 +408,7 @@ func (a *Storage) runRawCommand(args ...string) (io.Reader, io.Reader, error) {
 
 	a.logger.Info(opts.String())
 
-	return a.dw.Run(ctx, opts)
+	return a.cw.Run(ctx, opts)
 }
 
 func (a *Storage) runCommand(args ...string) ([]byte, error) {
@@ -482,7 +490,7 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		lgr.Info("airbyte storage constructed with state", log.Any("state", state))
 	}
 
-	dockerWrapper, err := docker.NewDockerWrapper(lgr)
+	containerImpl, err := container.NewContainerImpl(lgr)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to ensure dockerd running, please ensure you have specified supervisord with it: %w", err)
 	}
@@ -496,6 +504,6 @@ func NewStorage(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordi
 		metrics:  stats.NewSourceStats(registry),
 		transfer: transfer,
 		state:    state,
-		dw:       dockerWrapper,
+		cw:       containerImpl,
 	}, nil
 }

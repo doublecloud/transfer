@@ -1,4 +1,4 @@
-package docker
+package container
 
 import (
 	"bufio"
@@ -40,22 +40,23 @@ func TestDockerOptsString(t *testing.T) {
 			expected: "docker run --name my-container nginx",
 		},
 		{
+			name: "WithRestartPolicy",
+			opts: DockerOpts{
+				ContainerName: "my-container",
+				Image:         "nginx",
+				RestartPolicy: container.RestartPolicy{
+					Name: container.RestartPolicyAlways,
+				},
+			},
+			expected: "docker run --name my-container nginx --restart always",
+		},
+		{
 			name: "WithNetwork",
 			opts: DockerOpts{
 				Network: "my-network",
 				Image:   "ubuntu",
 			},
 			expected: "docker run --network my-network ubuntu",
-		},
-		{
-			name: "WithVolumes",
-			opts: DockerOpts{
-				Volumes: map[string]string{
-					"/host/data": "/container/data",
-				},
-				Image: "busybox",
-			},
-			expected: "docker run -v /host/data:/container/data busybox",
 		},
 		{
 			name: "WithEnvVariables",
@@ -97,19 +98,15 @@ func TestDockerOptsString(t *testing.T) {
 				AutoRemove:    true,
 				ContainerName: "full-container",
 				Network:       "full-network",
-				Volumes: map[string]string{
-					"/host/vol1": "/container/vol1",
-					"/host/vol2": "/container/vol2",
-				},
-				Env:          []string{"ENV1=val1", "ENV2=val2"},
-				LogDriver:    "syslog",
-				LogOptions:   map[string]string{"syslog-address": "tcp://192.168.0.42:123"},
-				AttachStdout: true,
-				AttachStderr: false,
-				Image:        "full-image",
-				Command:      []string{"bash", "-c", "echo Full Test"},
+				Env:           []string{"ENV1=val1", "ENV2=val2"},
+				LogDriver:     "syslog",
+				LogOptions:    map[string]string{"syslog-address": "tcp://192.168.0.42:123"},
+				AttachStdout:  true,
+				AttachStderr:  false,
+				Image:         "full-image",
+				Command:       []string{"bash", "-c", "echo Full Test"},
 			},
-			expected: "docker run --rm --name full-container --network full-network -v /host/vol1:/container/vol1 -v /host/vol2:/container/vol2 -e ENV1=val1 -e ENV2=val2 --log-driver syslog --log-opt syslog-address=tcp://192.168.0.42:123 --attach stdout full-image bash -c echo Full Test",
+			expected: "docker run --rm --name full-container --network full-network -e ENV1=val1 -e ENV2=val2 --log-driver syslog --log-opt syslog-address=tcp://192.168.0.42:123 --attach stdout full-image bash -c echo Full Test",
 		},
 		{
 			name: "WithMountsOnly",
@@ -130,23 +127,6 @@ func TestDockerOptsString(t *testing.T) {
 				Image: "nginx",
 			},
 			expected: "docker run --mount type=bind,source=/host/config,target=/container/config,readonly --mount type=tmpfs,source=,target=/container/tmp nginx",
-		},
-		{
-			name: "WithVolumesAndMounts",
-			opts: DockerOpts{
-				Volumes: map[string]string{
-					"/host/data": "/container/data",
-				},
-				Mounts: []mount.Mount{
-					{
-						Type:   mount.TypeVolume,
-						Source: "myvolume",
-						Target: "/container/volume",
-					},
-				},
-				Image: "postgres",
-			},
-			expected: "docker run -v /host/data:/container/data --mount type=volume,source=myvolume,target=/container/volume postgres",
 		},
 		{
 			name: "WithAttachStdoutOnly",
@@ -185,18 +165,6 @@ func TestDockerOptsString(t *testing.T) {
 				Image: "env-test",
 			},
 			expected: "docker run -e A_VAR=first -e M_VAR=middle -e Z_VAR=last env-test",
-		},
-		{
-			name: "WithMultipleVolumesUnordered",
-			opts: DockerOpts{
-				Volumes: map[string]string{
-					"/host/c": "/container/c",
-					"/host/a": "/container/a",
-					"/host/b": "/container/b",
-				},
-				Image: "vol-test",
-			},
-			expected: "docker run -v /host/a:/container/a -v /host/b:/container/b -v /host/c:/container/c vol-test",
 		},
 		{
 			name: "WithMultipleMountsUnordered",
@@ -371,7 +339,7 @@ func TestDockerWrapper_Run_Success(t *testing.T) {
 				AttachStderr:  true,
 			}
 
-			stdout, stderr, err := dw.Run(context.Background(), opts)
+			stdout, stderr, err := dw.RunContainer(context.Background(), opts)
 			if tc.expectError {
 				assert.Error(t, err)
 			} else {

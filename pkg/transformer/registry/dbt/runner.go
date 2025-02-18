@@ -11,12 +11,13 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
-	"github.com/doublecloud/transfer/pkg/docker"
+	"github.com/doublecloud/transfer/pkg/container"
 	"github.com/doublecloud/transfer/pkg/runtime/shared/pod"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"go.ytsaurus.tech/library/go/core/log"
 	"gopkg.in/yaml.v3"
+	v1 "k8s.io/api/core/v1"
 )
 
 type runner struct {
@@ -25,11 +26,11 @@ type runner struct {
 
 	transfer *model.Transfer
 
-	dw *docker.DockerWrapper
+	cw container.ContainerImpl
 }
 
 func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) (*runner, error) {
-	dockerWrapper, err := docker.NewDockerWrapper(logger.Log)
+	containerImpl, err := container.NewContainerImpl(logger.Log)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +41,7 @@ func newRunner(dst SupportedDestination, cfg *Config, transfer *model.Transfer) 
 
 		transfer: transfer,
 
-		dw: dockerWrapper,
+		cw: containerImpl,
 	}, nil
 }
 
@@ -60,7 +61,7 @@ func (r *runner) Run(ctx context.Context) error {
 }
 
 func (r *runner) initializeDocker(ctx context.Context) error {
-	if err := r.dw.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
+	if err := r.cw.Pull(ctx, r.fullImageID(), types.ImagePullOptions{}); err != nil {
 		return xerrors.Errorf("docker initialization failed: %w", err)
 	}
 	return nil
@@ -162,41 +163,46 @@ func (r *runner) cleanupConfiguration() {
 }
 
 func (r *runner) run(ctx context.Context) error {
-	opts := docker.DockerOpts{
-		Volumes: map[string]string{},
-		Mounts: []mount.Mount{
-			{
-				Type:   mount.TypeBind,
-				Source: pathProject(),
-				Target: "/usr/app",
-			},
-			{
-				Type:   mount.TypeBind,
-				Source: pathProfiles(),
-				Target: "/root/.dbt/profiles.yml",
-			},
+	opts := container.ContainerOpts{
+		Env: map[string]string{
+			"AWS_EC2_METADATA_DISABLED": "true",
 		},
-		LogDriver: "local",
 		LogOptions: map[string]string{
 			"max-size": "100m",
 			"max-file": "3",
 		},
+		Namespace:     "",
+		RestartPolicy: v1.RestartPolicyNever,
+		PodName:       "",
 		Image:         r.fullImageID(),
+		LogDriver:     "local",
 		Network:       "host",
 		ContainerName: "",
+		Volumes: []container.Volume{
+			{
+				Name:          "project",
+				VolumeType:    string(mount.TypeBind),
+				HostPath:      pathProject(),
+				ContainerPath: "/usr/app",
+			},
+			{
+				Name:          "profiles",
+				VolumeType:    string(mount.TypeBind),
+				HostPath:      pathProfiles(),
+				ContainerPath: "/root/.dbt/profiles.yml",
+			},
+		},
 		Command: []string{
 			r.cfg.Operation,
 		},
-		Env: []string{
-			"AWS_EC2_METADATA_DISABLED=true",
-		},
+		Args:         nil,
 		Timeout:      0,
-		AutoRemove:   true,
 		AttachStdout: true,
 		AttachStderr: true,
+		AutoRemove:   true,
 	}
 
-	if _, _, err := r.dw.Run(ctx, opts); err != nil {
+	if _, _, err := r.cw.Run(ctx, opts); err != nil {
 		return xerrors.Errorf("docker run failed: %w", err)
 	}
 
