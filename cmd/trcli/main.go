@@ -119,7 +119,7 @@ func main() {
 				}
 			case "s3":
 				var err error
-				cp, err = s3coordinator.NewS3(coordinatorS3Bucket)
+				cp, err = s3coordinator.NewS3(coordinatorS3Bucket, logger.Log)
 				if err != nil {
 					return xerrors.Errorf("unable to load s3 coordinator: %w", err)
 				}
