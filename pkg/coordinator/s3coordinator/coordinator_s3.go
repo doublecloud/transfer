@@ -32,6 +32,7 @@ type CoordinatorS3 struct {
 	state    map[string]map[string]*coordinator.TransferStateData
 	s3Client *s3.S3
 	bucket   string
+	lgr      log.Logger
 }
 
 // GetTransferState fetches all state objects with a given transferID (prefix).
@@ -72,6 +73,7 @@ func (c *CoordinatorS3) GetTransferState(transferID string) (map[string]*coordin
 		}
 		state[strings.TrimSuffix(key, ".json")] = &transferData
 	}
+	c.lgr.Info("load transfer state", log.Any("transfer_id", transferID), log.Any("state", state))
 
 	return state, nil
 }
@@ -94,6 +96,7 @@ func (c *CoordinatorS3) SetTransferState(transferID string, state map[string]*co
 			return xerrors.Errorf("failed to upload state object: %w", err)
 		}
 	}
+	c.lgr.Info("set transfer state", log.Any("transfer_id", transferID), log.Any("state", state))
 	return nil
 }
 
@@ -110,6 +113,7 @@ func (c *CoordinatorS3) RemoveTransferState(transferID string, keys []string) er
 			return xerrors.Errorf("failed to delete state object: %w", err)
 		}
 	}
+	c.lgr.Info("remove transfer state keys", log.Any("transfer_id", transferID), log.Any("keys", keys))
 	return nil
 }
 
@@ -381,7 +385,7 @@ func (c *CoordinatorS3) listObjects(prefix string) ([]*s3.Object, error) {
 }
 
 // NewS3 creates a new CoordinatorS3 with AWS SDK v1.
-func NewS3(bucket string, cfgs ...*aws.Config) (*CoordinatorS3, error) {
+func NewS3(bucket string, l log.Logger, cfgs ...*aws.Config) (*CoordinatorS3, error) {
 	sess, err := session.NewSession(cfgs...)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to create AWS session: %w", err)
@@ -397,5 +401,6 @@ func NewS3(bucket string, cfgs ...*aws.Config) (*CoordinatorS3, error) {
 		state:           map[string]map[string]*coordinator.TransferStateData{},
 		bucket:          bucket,
 		s3Client:        s3Client,
+		lgr:             log.With(l, log.Any("component", "s3-coordinator")),
 	}, nil
 }

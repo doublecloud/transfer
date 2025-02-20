@@ -55,12 +55,16 @@ func NewS3Recipe(bucket string) (*CoordinatorS3, error) {
 		// No need to check error because maybe the bucket already exists
 		logger.Log.Info("create bucket result", log.Any("res", res), log.Error(err))
 	}
-	cp, err := NewS3(bucket, &aws.Config{
-		Region:           aws.String(region),
-		Credentials:      credentials.NewStaticCredentials(accessKey, secret, ""),
-		Endpoint:         aws.String(endpoint),
-		S3ForcePathStyle: aws.Bool(true), // Enable path-style access
-	})
+	cp, err := NewS3(
+		bucket,
+		logger.Log,
+		&aws.Config{
+			Region:           aws.String(region),
+			Credentials:      credentials.NewStaticCredentials(accessKey, secret, ""),
+			Endpoint:         aws.String(endpoint),
+			S3ForcePathStyle: aws.Bool(true), // Enable path-style access
+		},
+	)
 	if err != nil {
 		return nil, xerrors.Errorf("unable to create s3 coordinator: %w", err)
 	}
