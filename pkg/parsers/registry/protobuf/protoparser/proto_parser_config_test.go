@@ -11,7 +11,7 @@ import (
 )
 
 func protoSampleContent(t *testing.T, filename string) []byte {
-	fp := yatest.SourcePath(filepath.Join("transfer_manager/go/pkg/parsers/registry/protobuf/protoparser/gotest/proto-samples", filename))
+	fp := yatest.SourcePath(filepath.Join("transfer_manager/go/pkg/parsers/registry/protobuf/protoparser/gotest/", filename))
 	fileContent, err := os.ReadFile(fp)
 	require.NoError(t, err)
 	require.Positive(t, len(fileContent))
