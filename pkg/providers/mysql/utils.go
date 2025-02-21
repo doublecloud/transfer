@@ -118,13 +118,23 @@ func buildSelectQuery(table abstract.TableDescription, tableSchema []abstract.Co
 	)
 
 	if table.Filter != "" {
-		resultQuery += " WHERE " + string(table.Filter)
+		if IsPartition(table.Filter) {
+			// we use partition-by sharding mechanism, to query exact partition there is no need to use `where` key-word
+			// see: https://stackoverflow.com/questions/14112283/how-to-select-rows-from-partition-in-mysql
+			resultQuery += string(table.Filter)
+		} else {
+			resultQuery += " WHERE " + string(table.Filter)
+		}
 	}
 	if table.Offset != 0 {
 		resultQuery += fmt.Sprintf(" OFFSET %d", table.Offset)
 	}
 
 	return resultQuery
+}
+
+func IsPartition(filter abstract.WhereStatement) bool {
+	return strings.HasPrefix(string(filter), "PARTITION")
 }
 
 func MakeArrBacktickedColumnNames(tableSchema *[]abstract.ColSchema) []string {
