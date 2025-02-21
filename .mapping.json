@@ -1721,7 +1721,7 @@
   "pkg/providers/s3/pusher/synchronous_pusher.go":"transfer_manager/go/pkg/providers/s3/pusher/synchronous_pusher.go",
   "pkg/providers/s3/reader/estimator.go":"transfer_manager/go/pkg/providers/s3/reader/estimator.go",
   "pkg/providers/s3/reader/estimator_test.go":"transfer_manager/go/pkg/providers/s3/reader/estimator_test.go",
-  "pkg/providers/s3/reader/gotest/dumb/data.log":"transfer_manager/go/pkg/providers/s3/reader/gotest/dumb/data.log",
+  "pkg/providers/s3/reader/gotest/dump/data.log":"transfer_manager/go/pkg/providers/s3/reader/gotest/dump/data.log",
   "pkg/providers/s3/reader/reader.go":"transfer_manager/go/pkg/providers/s3/reader/reader.go",
   "pkg/providers/s3/reader/reader_csv.go":"transfer_manager/go/pkg/providers/s3/reader/reader_csv.go",
   "pkg/providers/s3/reader/reader_csv_test.go":"transfer_manager/go/pkg/providers/s3/reader/reader_csv_test.go",

@@ -22,7 +22,7 @@ import (
 
 var (
 	fname = "data.log"
-	//go:embed gotest/dumb/data.log
+	//go:embed gotest/dump/data.log
 	content []byte
 )
 
