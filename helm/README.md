@@ -1,4 +1,5 @@
-# Transfer Helm Chart <- Based on the original Helm Chart Readme. Work in progress.
+# Transfer Helm Chart 
+
 
 This Helm chart deploys a set of continuous replication service or one-time data upload job using Kubernetes. Chart is created for copying data to Clickhouse from many of different supported sources, but also can be used for any destination database. 
 
