@@ -42,8 +42,10 @@ spec:
       app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
   template:
     metadata:
+        {{- if $.Values.annotations }}
       annotations:
         {{- toYaml $.Values.annotations | nindent 8 }}
+        {{- end }}
       labels:
         app.kubernetes.io/name: {{ $.Release.Name }}
         app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
@@ -91,8 +93,10 @@ spec:
                 name: {{ $.Release.Name }}-{{ .dst }}
             - secretRef:
                 name: {{ $.Release.Name }}-{{ .src }}
+            {{- if $.Values.ports }}
           ports:
             {{- toYaml $.Values.ports | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: config
               mountPath: /config
