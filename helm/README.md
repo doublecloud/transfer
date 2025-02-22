@@ -1,6 +1,5 @@
 # Transfer Helm Chart 
 
-
 This Helm chart deploys a set of continuous replication service or one-time data upload job using Kubernetes. Chart is created for copying data to Clickhouse from many of different supported sources, but also can be used for any destination database. 
 
 Each transfer could be configured separately as:
@@ -42,7 +41,7 @@ helm uninstall <release-name>
 
 There are several configuration options available for the Helm chart. Several sets of Global variables, applied to all transfers, and transfer-specific variables are available.
 
-### Global Configuration
+### Global Parameters
 
 ```yaml
 global:
@@ -56,43 +55,6 @@ image:
 - cluster - is used to build the name of Kubernetes objects, like StatefulSet, Job, etc, and can be used inside ConfigMaps to build a hosts names and such.
 - namespace - is used to deploy the chart to a specific namespace.
 - image - is the Docker image repo used for the transfer. The version is taken from the Chart.yaml file.
-
-### Pod defaults
-
-Those sections are included into StatefulSet and Job templates as a whole in suitable places.
-
-```yaml
-annotations:
-  prometheus.io/path: /metrics
-  prometheus.io/port: '9091'
-  prometheus.io/scrape: 'true'
-
-ports:
-  - name: prometheus
-    protocol: TCP
-    containerPort: 9091
-  - name: pprof
-    protocol: TCP
-    containerPort: 8080
-  - name: health
-    protocol: TCP
-    containerPort: 3000
-
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: node.altinity.cloud/role.clickhouse
-              operator: Exists
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-            - key: node.altinity.cloud/role.zookeeper
-              operator: Exists
-        topologyKey: kubernetes.io/hostname
-```
 
 ### Pod resource limits
 
@@ -188,6 +150,42 @@ The name of the Secret should be the same as the `src` or `dst` name in the tran
 
 Please create and apply Secrets before deploying the Helm Chart.
 
+### Advanced Pod parameters
+
+If provided, those sections are included into StatefulSet and Job manifests as a whole to suitable places.
+
+```yaml
+annotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: '9091'
+  prometheus.io/scrape: 'true'
+
+ports:
+  - name: prometheus
+    protocol: TCP
+    containerPort: 9091
+  - name: pprof
+    protocol: TCP
+    containerPort: 8080
+  - name: health
+    protocol: TCP
+    containerPort: 3000
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node.altinity.cloud/role.clickhouse
+              operator: Exists
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: node.altinity.cloud/role.zookeeper
+              operator: Exists
+        topologyKey: kubernetes.io/hostname
+```
 
 ## Debugging and Monitoring
 
