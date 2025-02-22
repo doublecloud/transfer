@@ -1,0 +1,38 @@
+{{- range .Values.transfers }}
+{{- if ne .mode "disabled" }}
+
+  {{- $cfg := $.Files.Get (printf "configs/%s.yaml" .name) | fromYaml }}
+  {{- $cfg = merge (deepCopy ( fromYaml (tpl ($.Files.Get "configs/defaults.yaml") .) )) $cfg }}
+
+  {{- $srcDefaults := $.Files.Get (printf "db-hosts/%s.yaml" .src) | fromYaml }}
+  {{- $cfg = merge $cfg
+      (dict "src"
+        (merge
+          (default dict $cfg.src)
+          (dict "params" (merge $srcDefaults (default dict $cfg.src.params)))
+        )
+      )
+  }}
+
+  {{- $dstDefaults := $.Files.Get (printf "db-hosts/%s.yaml" .dst) | fromYaml }}
+  {{- $cfg = merge $cfg
+      (dict "dst"
+        (merge
+          (default dict $cfg.dst)
+          (dict "params" (merge $dstDefaults (default dict $cfg.dst.params)))
+        )
+      )
+  }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+data:
+  transfer.yaml: |
+{{ tpl ($cfg | toYaml) $ | nindent 4 }}
+{{- end }}
+{{- end }}

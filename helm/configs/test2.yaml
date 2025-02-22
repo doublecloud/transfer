@@ -1,0 +1,27 @@
+src:
+  type: mongo
+  params:
+    Collections:
+    - DatabaseName: DB
+      CollectionName: COL2
+dst:
+  type: ch
+  params:
+    Database: db2
+    IsUpdateable: true
+    InsertParams:
+      MaterializedViewsIgnoreErrors: true
+transformation:
+  debugmode: false
+  transformers:
+  - renameTables:
+      renameTables:
+      - newName:
+          name: channel
+          nameSpace: ""
+        originalName:
+          name: COL2
+          nameSpace: DB
+data_objects:
+  include_objects:
+  - DB.COL2

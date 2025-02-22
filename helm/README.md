@@ -1,33 +1,32 @@
-# Transfer Helm Chart
+# Transfer Helm Chart <- Based on the original Helm Chart Readme. Work in progress.
 
-This Helm chart deploys a one-time data upload job or continuous replication service using Kubernetes. It supports three deployment types:
+This Helm chart deploys a set of continuous replication service or one-time data upload job using Kubernetes. Chart is created for copying data to Clickhouse from many of different supported sources, but also can be used for any destination database. 
 
-1. **SNAPSHOT_ONLY**: A one-time `Job` for uploading a snapshot of data.
-2. **INCREMENT_ONLY**: A continuous data replication `StatefulSet`.
-3. **SNAPSHOT_AND_INCREMENT**: A `Job` for a one-time data snapshot upload followed by a continuous replication `StatefulSet` after the job completes.
+Each transfer could be configured separately as:
+
+1. **INCREMENT_ONLY** or **SNAPSHOT_AND_INCREMENT**:  Provides continuous data replication. `StatefulSet` used because numeric pod indexing needed for coordinating different instances of trcli between pods. trcli make snapshot before replication if requested.
+2. **SNAPSHOT_ONLY**: A one-time `Job` created for uploading a snapshot of data. Number of retries and parallel instances can be controlled. (not tested yet)
+3. **SNAPSHOT_ONLY** with **cron_expression** defined: The same as above, but `CronJob` will be created for periodic snapshots. (not tested yet)
 
 ## Prerequisites
 
 - Kubernetes 1.18+
 - Helm 3.0+
-- A Docker image with the required commands:
-  - `trctl activate --file /etc/config/config.yaml` for the snapshot job.
-  - `trctl replication --file /etc/config/config.yaml` for continuous replication.
+- A Docker image with trcli, clickhouse-client and pg_dump  
 
 ## Chart Installation
 
 ### 1. Install the Helm chart
 
-To install the chart, run the following command:
+To install the chart, first run the following command:
 
 ```bash
 helm pull oci://ghcr.io/doublecloud/transfer-helm/transfer
 ```
-
-For example:
+After editing the values.yaml file, you can install the chart:
 
 ```bash
-helm install transfer ./transfer --set transferSpec.type=SNAPSHOT_ONLY
+helm install transfer ./transfer 
 ```
 
 ### 2. Uninstall the Helm chart
@@ -40,233 +39,182 @@ helm uninstall <release-name>
 
 ## Configuration
 
-The chart is highly configurable. You can specify various parameters in the `values.yaml` file or through the `--set` option when running the `helm install` command.
+There are several configuration options available for the Helm chart. Several sets of Global variables, applied to all transfers, and transfer-specific variables are available.
 
-### Parameters
-
-| Parameter                                       | Description                                                                      | Default                  |
-|-------------------------------------------------|----------------------------------------------------------------------------------|--------------------------|
-| `transferSpec.id`                               | Unique ID for the data transfer job.                                             | `dtttest`                |
-| `transferSpec.type`                             | Type of deployment: `SNAPSHOT_ONLY`, `INCREMENT_ONLY`, `SNAPSHOT_AND_INCREMENT`. | `SNAPSHOT_ONLY`          |
-| `transferSpec.src.type`                         | Source type (e.g., `pg`).                                                        | `pg`                     |
-| `transferSpec.src.params`                       | Source parameters.                                                               | `{}`                     |
-| `transferSpec.dst.type`                         | Destination type (e.g., `ch`).                                                   | `ch`                     |
-| `transferSpec.dst.params`                       | Destination parameters.                                                          | `{}`                     |
-| `snapshot.worker_count`                         | Number of parallel instances for the snapshot job.                               | `1`                      |
-| `replication.worker_count`                      | Number of replicas for the continuous replication `StatefulSet`.                 | `1`                      |
-| `resources.requests.cpu`                        | CPU resource requests for the pods.                                              | `100m`                   |
-| `resources.requests.memory`                     | Memory resource requests for the pods.                                           | `128Mi`                  |
-| `resources.limits.cpu`                          | CPU resource limits for the pods.                                                | `500m`                   |
-| `resources.limits.memory`                       | Memory resource limits for the pods.                                             | `256Mi`                  |
-| `coordinator.type`                              | Type of external coordinator service, e.g., `s3` or `memory`.                    | `s3`                |
-| `coordinator.job_count`                         | Number of parallel instances the workload.                                       | `1`                 |
-| `coordinator.process_count`                      | How many threads will be run inside each job.                                    | `4`                 |
-| `coordinator.bucket`                            | Name of the S3 bucket for coordination.                                          | `place_your_bucket` |
-| `transferSpec.regular_snapshot.incremental`     | List of objects defining incremental snapshot settings.                          | `[]`                     |
-| `transferSpec.regular_snapshot.enabled`         | Enable or disable the regular snapshot mechanism.                                | `false`                  |
-| `transferSpec.regular_snapshot.cron_expression` | Cron expression for scheduled cron job.                                          | `0 1 * * *`              |
-
-### Example `values.yaml`
+### Global Configuration
 
 ```yaml
-resources:
-  requests:
-    memory: "128Mi"
-    cpu: "100m"
-  limits:
-    memory: "256Mi"
-    cpu: "500m"
-
-coordinator:
-  job_count: 1              # set more than one means work would be sharded, coordinator must be non memory
-  process_count: 4          # default is 4, how many threads will be run inside each job
-  type: s3                  # type of coordination, one of: s3 or memory
-  bucket: place_your_bucket # Bucket with write access, will be used to store state
-
-transferSpec:
-  id: mytransfer         # Unique ID of a transfer
-  name: awesome transfer # Human friendly name for a transfer
-  type: INCREMENT_ONLY   # type of transfer, one of: INCREMENT_ONLY, SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
-  src:
-    type: source_type # for example: pg, s3, kafka ...
-    params:
-      ...             # source type params, all params can be founded in `model_source.go` for provider folder
-  dst:
-    type: target_type # for example: s3, ch, kafka ...
-    params:
-      ...             # target type params, all params can be founded in `model_destination.go` for provider folder
-  regular_snapshot:
-    enabled: true
-    incremental:
-      - namespace: public
-        name: playing_with_neon
-        cursor_field: id
+global:
+  namespace: "altinity-cloud-managed-clickhouse"
+  cluster: "prod"
+  
+image:    
+  repository: ghcr.io/doublecloud/transfer
 ```
 
-### Transfer Spec Configuration
+- cluster - is used to build the name of Kubernetes objects, like StatefulSet, Job, etc, and can be used inside ConfigMaps to build a hosts names and such.
+- namespace - is used to deploy the chart to a specific namespace.
+- image - is the Docker image repo used for the transfer. The version is taken from the Chart.yaml file.
 
-The `transferSpec` section configures the data source (`src`) and destination (`dst`). These fields accept JSON-formatted strings in the `params` section for both source and destination configurations. The `type` defines the kind of source/destination system (e.g., PostgreSQL, ClickHouse).
+### Pod defaults
 
-- **Source Example**:
+Those sections are included into StatefulSet and Job templates as a whole in suitable places.
 
 ```yaml
-src:
-  type: pg  # Postgres source type
-  params:
-    Hosts:
-      - YOUR_NEON_DB
-    Database: YOUR_DB_NAME
-    User: YOUR_DB_USER
-    Password: YOUR_DB_PASSWORD
-    Port: 5432
-    BatchSize: 1024
-    SlotByteLagLimit: 53687091200
-    EnableTLS: true
-    KeeperSchema: public
-    DesiredTableSize: 1073741824
-    SnapshotDegreeOfParallelism: 4
+annotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: '9091'
+  prometheus.io/scrape: 'true'
+
+ports:
+  - name: prometheus
+    protocol: TCP
+    containerPort: 9091
+  - name: pprof
+    protocol: TCP
+    containerPort: 8080
+  - name: health
+    protocol: TCP
+    containerPort: 3000
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node.altinity.cloud/role.clickhouse
+              operator: Exists
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: node.altinity.cloud/role.zookeeper
+              operator: Exists
+        topologyKey: kubernetes.io/hostname
 ```
 
-- **Destination Example**:
+### Pod resource limits
+
+You can adjust defaults the CPU and memory allocation for the pods using the `default_profile` section of the `values.yaml` file. Ensure you tune both `requests` and `limits` accordingly to expected event stream volume.
+
+```
+default_profile:
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+large_profile:
+    limits:
+      cpu: 4000m
+      memory: 4096Mi
+```      
+
+Specific resource settings could be placed to named profiles (like `large_profile`) and can be referred in each transfer configuration by its name using the `resource_profile` field.
+
+### Coordinator Configuration
+
+The `coordinator_s3` section configures an external coordination service, that will be used for coordinating several Pods working on the same source and for storing the position of the replication process for sources that do not have it internally (like mongodb).
 
 ```yaml
-dst:
-  type: ch  # Clickhouse destination type
-  params:
-    User: YOUR_CH_USER
-    Password: YOUR_CH_PASSWORD
-    ShardsList:
-      - Hosts:
-          - YOUR_CH_HOST
-    Database: default
-    HTTPPort: 8443
-    SSLEnabled: true
-    NativePort: 9440
-    MigrationOptions:
-      AddNewColumns: true
-    InsertParams:
-      MaterializedViewsIgnoreErrors: true
-    RetryCount: 20
-    UseSchemaInTableName: true
-    Interval: 1000000000
-    Cleanup: Drop
-    BufferTriggingSize: 536870912
+coordinator_s3:
+    bucket: some-bucket
+    region: us-east-1
+    serviceAccountName: clickhouse-backup
 ```
+`serviceAccountName` needed for providing access to the bucket and should be created before deploying the Helm Chart.
 
-### New Features: Coordinator and Regular Snapshots
 
-#### Coordinator Configuration
-
-The `coordinator` section configures an external coordination service, such as an S3 bucket, that can be used for coordinating data transfers or snapshots. This is useful when external storage or coordination mechanisms are required.
-
-- **Example**:
+### Transfer Configuration
 
 ```yaml
-coordinator:
-  type: s3
-  bucket: my-coordination-bucket
+transfers:
+# full set of parameters
+  - name: test1
+    type: INCREMENT_ONLY          # INCREMENT_ONLY (default), SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
+    cron_expression: "0 1 * * *"  # for SNAPSHOT_ONLY. CronJob will be created instead of Job
+    src:  mongodb                 # ref to db-hosts and Secrets
+    dst:  clickhouse              # ref to db-hosts and Secrets
+    job_count: 1                  # set more than one means work would be sharded, coordinator must be non memory
+    process_count: 4              # how many threads will be run inside each job
+    backoffLimit: 1
+    resource_profile: large_profile # ref to profiles section
+    mode: debug                   # enabled (default), disabled, debug
+    log_level: info               # ("panic", "fatal", "error", "warning", "info", "debug")
+
+# only necessary parameters
+  - name: test2
+    src: mongodb
+    dst:  clickhouse
+
+  - name: test3
+    src: postgresdb
+    dst:  clickhouse
 ```
 
-#### Regular Snapshot with Incremental Configuration
+The minimal set of parameters for each transfer is `name`, `src`, and `dst`. The `name` is used to build the name of the Kubernetes objects, like ConfigMap, StatefulSet, Job, etc. Also the `name` is used to read the transfer configuration from the `configs` directory.
 
-The `regular_snapshot` feature allows for periodic snapshots with optional incremental replication. This is particularly useful when a regular snapshot schedule is needed alongside continuous data replication.
+The `src` and `dst` are references to the database hosts configs in `db-hosts` directory.  Those configs would be defaults for building src/dst config section of produced transfer.yaml (specific keys from config directory will overwrite them). Also  src/dst names is used for attaching Kubernetes `Secrets` thought environmental values (see below).
 
-- **Incremental Snapshot Example**:
+Other parameters are optional and can be used to tune the particular transfer behavior.
+
+
+### Secrets
+
+Secrets are used to hide database passwords and certificates and not managed ny this Helm Chart. Tuning Secret security (like using wallets, etc) is out of scope of this Helm Chart.
+
+Secret will be used to get environment variables while creating the Pod.
+
+Typical Secret file looks like:
 
 ```yaml
-transferSpec:
-  regular_snapshot:
-    enabled: true
-    incremental:
-      - namespace: public
-        name: playing_with_neon
-        cursor_field: id
+apiVersion: v1
+kind: Secret
+metadata:
+  name: transfer-mongodb
+  namespace: altinity-cloud-managed-clickhouse
+type: Opaque
+stringData:
+  mongodb_PASSWORD: "XX"
+  mongodb_TLSFILE: |
+      -----BEGIN CERTIFICATE-----
+      
+      -----END CERTIFICATE-----
 ```
 
-This example enables the `regular_snapshot` feature and specifies that incremental replication should track changes using the `id` field from the `playing_with_neon` table within the `public` namespace.
+The name of the Secret should be the same as the `src` or `dst` name in the transfers configuration section. The prefix should be aligned with Chart name (in Chart.yaml) and the namespace should be the same as the namespace in the global section.
 
-## Deployment Types
+Please create and apply Secrets before deploying the Helm Chart.
 
-### 1. **SNAPSHOT_ONLY**
 
-This mode deploys a one-time `Job` to upload a data snapshot. You can control the number of parallel job instances by setting `job.instanceCount`.
+## Debugging and Monitoring
 
-To deploy:
+### Debug mode
+If you set `mode: debug` for particular transfer, all Kubernetes objects will be created, but instead of trcli, sh will be used as the entrypoint. So you can exec into Pod, manually run trcli to see what is going on, tune settings/config/etc. 
 
-```bash
-helm install transfer ./transfer --set transferSpec.type=SNAPSHOT_ONLY --set job.instanceCount=3
 ```
-
-### 2. **INCREMENT_ONLY**
-
-This mode deploys a `StatefulSet` for continuous data replication. You can control the number of replicas with `statefulSet.replicaCount`.
-
-To deploy:
-
-```bash
-helm install transfer ./transfer --set transferSpec.type=INCREMENT_ONLY --set statefulSet.replicaCount=2
+cd config
+trcli replicate
+trcli replicate --coordinator s3 --coordinator-s3-bucket bucket_name --log-level debug --log-config console --coordinator-job-count 1 --coordinator-process-count 4
 ```
-
-### 3. **SNAPSHOT_AND_INCREMENT**
-
-This mode first runs a `Job` to take a data snapshot, followed by a `StatefulSet` for continuous replication. The `StatefulSet` will only start after the `Job` completes successfully.
-
-To deploy:
-
-```bash
-helm install transfer ./transfer --set transferSpec.type=SNAPSHOT_AND_INCREMENT --set job.instanceCount=2 --set statefulSet.replicaCount=2
-```
-
-## Resource Allocation
-
-You can adjust the CPU and memory allocation for the pods using the `resources` section of the `values.yaml` file. Ensure you specify both `requests` and `limits` for better resource management.
-
-### Example:
-
-```yaml
-resources:
-  requests:
-    memory: "128Mi"
-    cpu: "100m"
-  limits:
-    memory: "256Mi"
-    cpu: "500m"
-```
-
-## Advanced Deployment Options
-
-### Setting Custom Values
 
 You can override any configuration option in the `values.yaml` file by using the `--set` flag when installing the Helm chart. For example:
 
 ```bash
-helm install transfer ./transfer --set transferSpec.id=my-custom-id --set transferSpec.type=INCREMENT_ONLY
+helm upgrade transfer ./ --set transfers.name.mode=debug
 ```
 
-### Monitoring and Logs
+### Monitoring
 
-To view logs of a running `Job` or `StatefulSet` pod, you can use `kubectl`:
+The transfer service exposes Prometheus metrics on port 9091. You can access the metrics by port-forwarding the service to your local machine:
 
-```bash
-kubectl logs <pod-name>
-```
-
-For example, to get
-
-logs from the `Job`:
-
-```bash
-kubectl get pods -l job-name=transfer
-kubectl logs <pod-name>
-```
-
-For the `StatefulSet`:
-
-```bash
-kubectl get pods -l statefulset.kubernetes.io/pod-name=data-upload-statefulset
-kubectl logs <pod-name>
-```
 
 ## Contributing
 
 Feel free to open issues and submit PRs to improve this chart!
+
+
+
+
+ 

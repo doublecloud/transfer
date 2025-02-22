@@ -1,0 +1,25 @@
+src:
+  type: mongo
+  params:
+    Collections:
+    - DatabaseName: DB
+      CollectionName: COL
+dst:
+  type: ch
+  params:
+    Database: db2
+    IsUpdateable: true
+    InsertParams:
+      MaterializedViewsIgnoreErrors: true
+    altnameslist:
+      - from: COL
+        to: collection
+transformation:
+  debugmode: false
+  transformers:
+  - sql:
+      query: "SELECT id, JSONExtractString(document, 'channelId') as channelId
+       from table"
+data_objects:
+  include_objects:
+  - '"DB"."COL"'

@@ -1,0 +1,78 @@
+global:
+  namespace: "altinity-cloud-managed-clickhouse"
+  cluster: "prod"
+
+image:    # version come from Chart.yaml
+  repository: ghcr.io/doublecloud/transfer
+
+annotations:
+  prometheus.io/path: /metrics
+  prometheus.io/port: '9091'
+  prometheus.io/scrape: 'true'
+
+ports:
+  - name: prometheus
+    protocol: TCP
+    containerPort: 9091
+  - name: pprof
+    protocol: TCP
+    containerPort: 8080
+  - name: health
+    protocol: TCP
+    containerPort: 3000
+
+default_profile:
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+large_profile:
+    limits:
+      cpu: 4000m
+      memory: 4096Mi
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: node.altinity.cloud/role.clickhouse
+              operator: Exists
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: node.altinity.cloud/role.zookeeper
+              operator: Exists
+        topologyKey: kubernetes.io/hostname
+
+coordinator_s3:
+    bucket: airs-dev-srov9s5p-backups
+    #path: /{{ $.Values.global.namespace }}/{{ $.Values.global.cluster }}.{{ $.Release.Name }}/  # waiting https://github.com/doublecloud/transfer/issues/224
+    region: us-east-1
+    serviceAccountName: clickhouse-backup
+
+transfers:
+# full set of parameters
+  - name: test1
+    type: INCREMENT_ONLY          # INCREMENT_ONLY (default), SNAPSHOT_ONLY, SNAPSHOT_AND_INCREMENT
+    cron_expression: "0 1 * * *"  # for SNAPSHOT_ONLY. CronJob will be created instead of Job
+    src:  mongodb                 # ref to db-hosts and Secrets
+    dst:  clickhouse              # ref to db-hosts and Secrets
+    job_count: 1                  # set more than one means work would be sharded, coordinator must be non memory
+    process_count: 4              # how many threads will be run inside each job
+    backoffLimit: 1
+    resource_profile: large_profile # ref to profiles section
+    mode: debug                   # enabled (default), disabled, debug
+    log_level: info               # ("panic", "fatal", "error", "warning", "info", "debug")
+
+# only necessary parameters
+  - name: test2
+    src: mongodb
+    dst:  clickhouse
+
+  - name: test3
+    src: postgresdb
+    dst:  clickhouse

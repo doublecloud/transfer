@@ -1,0 +1,28 @@
+Hosts:
+- mongodb-shard-00-00.XXX.mongodb.net
+- mongodb-shard-00-01.XXX.mongodb.net
+Port: 27017
+ReplicaSet: ""
+AuthSource: admin
+User: clickhouse_user
+Password: "${mongodb_PASSWORD}"
+ExcludedCollections: []
+SubNetworkId: ""
+SecurityGroupIds: []
+TechnicalDatabase: ""
+IsHomo: false
+SlotId: ""
+SecondaryPreferredMode: false
+TlsFile: |
+  ${mongodb_TLSFILE}
+ReplicationSource: ""
+BatchingParams:
+  BatchSizeLimit: 5000
+  KeySizeThreshold: 4194304
+  BatchFlushInterval: 5000000000
+DesiredPartSize: 1073741824
+PreventJsonRepack: false
+FilterOpLogWithRegexp: false
+Direct: false
+RootCAFiles: []
+SrvMode: false

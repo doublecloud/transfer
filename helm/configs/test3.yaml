@@ -1,0 +1,25 @@
+src:
+  type: pg
+  params:
+    slotid: dtt9qqh008j2ega4rh90_t
+dst:
+  type: ch
+  params:
+    database: db_ch
+transformation:
+  debugmode: false
+  transformers:
+  - renameTables:
+      renameTables:
+      - newName:
+          name: info_in_ch
+          nameSpace: ""
+        originalName:
+          name: info
+          nameSpace: db_pg
+    transformerId: ""
+  errorsoutput: null
+data_objects:
+  include_objects:
+  - db_pg.info
+

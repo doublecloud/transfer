@@ -1,0 +1,4 @@
+type_system_version: 9
+id: {{ .name }}   # Unique ID of a transfer, used for coordinator dir name on s3 and for monitoring label
+transfername: {{ .name }}  # Human friendly name for a transfer
+type: {{ default "INCREMENT_ONLY" .type }}

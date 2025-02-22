@@ -1,0 +1,34 @@
+MdbClusterId: ""
+ChClusterName: "{{ $.Values.global.cluster }}"
+User: transfer
+Password: "${CH_PASSWORD}"    # ref to Secrets
+Database: ""
+Partition: ""
+SslEnabled: false
+HttpPort: 8123
+NativePort: 9000
+Ttl: ""
+InferSchema: false
+MigrationOptions:
+  AddNewColumns: true
+ProtoColUnspecified: true
+AnyAsString: false
+SystemColumnsFirst: false
+IsUpdateable: false
+UpsertAbsentToastedRows: false
+InsertParams:
+  MaterializedViewsIgnoreErrors: false
+RetryCount: 20
+UseSchemaInTableName: false
+ShardCol: ""
+ShardByTransferId: false
+ShardByRoundRobin: false
+Rotation: null
+Cleanup: Disabled
+BufferTriggeringSize: 268435456
+Interval: 1000000000
+ShardsList:
+- Name: s2
+  Hosts:
+  - chi-{{ $.Values.global.cluster }}-{{ $.Values.global.cluster }}-0-0.altinity-cloud-managed-clickhouse.svc
+  - chi-{{ $.Values.global.cluster }}-{{ $.Values.global.cluster }}-0-1.altinity-cloud-managed-clickhouse.svc

@@ -1,0 +1,109 @@
+{{- range .Values.transfers }}
+{{- if ne .mode "disabled" }}
+
+{{- $profileName := .resource_profile | default "default_profile"}}
+{{- $resources := index $.Values $profileName }}
+{{- $resources = merge $resources $.Values.default_profile }}
+
+{{- $type := .type | default "INCREMENT_ONLY" }}
+{{- $log_level := .log_level | default "info" }}
+
+---
+apiVersion: apps/v1
+  {{- if eq $type "SNAPSHOT_ONLY" }}
+    {{- if .cron_expression }}
+kind: CronJob
+    {{- else }}
+kind: Job
+    {{- end }}
+  {{- else }}
+kind: StatefulSet
+  {{- end }}
+metadata:
+  name: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+  namespace: {{ $.Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ $.Release.Name }}
+    app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+spec:
+    {{- if eq $type "SNAPSHOT_ONLY" }}
+  completions: {{ .job_count | default 1 }}
+  parallelism: {{ .job_count | default 1 }}
+  completionMode: Indexed
+  backoffLimit: {{ .backoffLimit | default 1 }}
+      {{- if .cron_expression }}
+  schedule: {{ .cron_expression }}
+      {{- end }}
+    {{- else }}
+  replicas: {{ .job_count | default 1 }}
+    {{- end }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+  template:
+    metadata:
+      annotations:
+        {{- toYaml $.Values.annotations | nindent 8 }}
+      labels:
+        app.kubernetes.io/name: {{ $.Release.Name }}
+        app.kubernetes.io/component: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+    spec:
+      serviceAccountName: {{ $.Values.coordinator_s3.serviceAccountName }}
+        {{- if $.Values.affinity }}
+      affinity:
+        {{- toYaml $.Values.affinity | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: {{ $.Release.Name }}
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag | default $.Chart.AppVersion }}"
+            {{- if eq .mode "debug" }}
+          command: ["sh", "-c", "sleep infinity"]
+            {{- else }}
+          command:
+            - "/usr/local/bin/trcli"
+            - "replicate"
+            - "--transfer"
+            - "/config/transfer.yaml"
+            - "--log-level"
+            - "{{ $log_level }}"
+            - "--log-config"
+            - "console"
+            - "--metrics-prefix"
+            - "transfer"
+            - "--coordinator"
+            - "s3"
+            - "--coordinator-s3-bucket"
+            - "{{ $.Values.coordinator_s3.bucket }}"
+            - "--coordinator-job-count"
+            - "{{ .job_count | default 1 }}"
+            - "--coordinator-process-count"
+            - "{{ .process_count | default 4 }}"
+            {{- end }}
+          env:
+          - name: GOMEMLIMIT
+            valueFrom:
+              resourceFieldRef:
+                resource: limits.memory
+          - name: AWS_REGION
+            value: {{ $.Values.coordinator_s3.region }}
+          envFrom:
+            - secretRef:
+                name: {{ $.Release.Name }}-{{ .dst }}
+            - secretRef:
+                name: {{ $.Release.Name }}-{{ .src }}
+          ports:
+            {{- toYaml $.Values.ports | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          resources:
+            {{- toYaml $resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ $.Release.Name }}-{{ $.Values.global.cluster }}-{{ .name }}
+            items:
+              - key: transfer.yaml
+                path: transfer.yaml
+{{- end -}}
+{{- end -}}

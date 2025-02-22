@@ -1,0 +1,79 @@
+Hosts:
+- postgresdb.us-east-1.rds.amazonaws.com
+User: postgres
+Password: "${postgresdb_PASSWORD}"
+Port: 5432
+Database: db1
+DbTables: []
+BufferTriggingSize: 5000
+BufferTriggingInterval: 5000000000
+SlotByteLagLimit: 53687091200
+TlsFile: ""
+EnableTls: false
+KeeperSchema: public
+SubNetworkId: ""
+SecurityGroupIds: []
+CollapseInheritTables: false
+UsePolling: false
+ExcludedTables: []
+IsHomo: false
+NoHomo: false
+AutoActivate: false
+PreSteps:
+  Table: true
+  PrimaryKey: true
+  View: true
+  Sequence: true
+  SequenceOwnedBy: true
+  Rule: true
+  Type: true
+  Constraint: false
+  FkConstraint: false
+  Index: false
+  Function: true
+  Collation: true
+  Trigger: false
+  Policy: true
+  Cast: false
+  Default: true
+  MaterializedView: true
+  SequenceSet: true
+  TableAttach: true
+  IndexAttach: false
+PostSteps:
+  Table: false
+  PrimaryKey: false
+  View: false
+  Sequence: false
+  SequenceOwnedBy: false
+  Rule: false
+  Type: false
+  Constraint: true
+  FkConstraint: true
+  Index: true
+  Function: false
+  Collation: false
+  Trigger: true
+  Policy: false
+  Cast: false
+  Default: false
+  MaterializedView: false
+  SequenceSet: false
+  TableAttach: false
+  IndexAttach: true
+UseFakePrimaryKey: false
+IgnoreUserTypes: false
+IgnoreUnknownTables: false
+MaxBufferSize: 0
+ExcludeDescendants: false
+DesiredTableSize: 1073741824
+SnapshotDegreeOfParallelism: 4
+EmitTimeTypes: false
+DbLogEnabled: false
+ChunkSize: 0
+SnapshotSerializationFormat: ""
+ShardingKeyFields: {}
+PgDumpCommand: []
+ConnectionId: ""
+ClusterId: ""
+Host: ""
