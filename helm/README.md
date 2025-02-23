@@ -52,7 +52,7 @@ image:
   repository: ghcr.io/doublecloud/transfer
 ```
 
-- cluster - is used to build the name of Kubernetes objects, like StatefulSet, Job, etc, and can be used inside ConfigMaps to build a hosts names and such.
+- cluster - is used to build the name of Kubernetes objects, like StatefulSet, Job, etc, and can be used inside ConfigMaps to build a hosts names and such. You can consider it as a namespace inside namespace. F.e.the same set of transfer jobs for stage and prod clusters can be deployed in the same namespace.
 - namespace - is used to deploy the chart to a specific namespace.
 - image - is the Docker image repo used for the transfer. The version is taken from the Chart.yaml file.
 
