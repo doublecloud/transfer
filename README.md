@@ -338,7 +338,7 @@ For guidance on using Transfer, we recommend starting with the official document
 
 - [Slack](https://todo.com) (For live discussion with the Community)
 - [GitHub](https://github.com/doublecloud/transfer) (Feature/Bug reports, Contributions)
-- [Twitter](https://twitter.com/tross/) (Get the news fast)
+- [Twitter](https://x.com/laskoviymish) (Get the news fast)
 
 <div align="center">
 
