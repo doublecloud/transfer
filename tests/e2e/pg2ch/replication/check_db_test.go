@@ -2,7 +2,6 @@ package replication
 
 import (
 	"context"
-	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	"os"
 	"testing"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
