@@ -102,7 +102,7 @@ func TestOptimizeCleanup(t *testing.T) {
 	require.NoError(t, err)
 	conn, err := pgcommon.NewPgConnPool(connConfig, logger.Log)
 	require.NoError(t, err)
-
+	Target.IsDeleteable = true
 	// Start transfer
 	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
 	err = tasks.ActivateDelivery(context.Background(), nil, cpclient.NewFakeClient(), *transfer, helpers.EmptyRegistry())

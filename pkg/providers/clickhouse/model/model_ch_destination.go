@@ -229,7 +229,6 @@ func (d *ChDestination) ToReplicationFromPGSinkParams() ChDestinationWrapper {
 func (d *ChDestination) FillDependentFields(transfer *model.Transfer) {
 	if !model.IsAppendOnlySource(transfer.Src) && !transfer.SnapshotOnly() {
 		d.IsUpdateable = true
-		d.IsDeleteable = true
 		if d.ShardCol != "" {
 			d.ShardCol = ""
 			logger.Log.Warn("turned off sharding on ch-dst, sharding is allowed only for queue-src")

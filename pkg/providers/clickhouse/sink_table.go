@@ -133,7 +133,9 @@ func (t *sinkTable) generateDDL(cols []abstract.ColSchema, distributed bool) str
 	if t.config.IsUpdateable() {
 		columnDefinitions = append(columnDefinitions, "`__data_transfer_commit_time` UInt64")
 		columnDefinitions = append(columnDefinitions, "`__data_transfer_delete_time` UInt64")
-		columnDefinitions = append(columnDefinitions, "`__data_transfer_is_deleted` UInt8 MATERIALIZED (if(__data_transfer_delete_time != 0, 1, 0))")
+		if t.config.IsDeleteable() {
+			columnDefinitions = append(columnDefinitions, "`__data_transfer_is_deleted` UInt8 MATERIALIZED (if(__data_transfer_delete_time != 0, 1, 0))")
+		}
 	}
 	_, _ = result.WriteString(fmt.Sprintf(" (%s)", strings.Join(columnDefinitions, ", ")))
 
