@@ -53,6 +53,7 @@ type ChSource struct {
 	BufferSize       uint64
 	IOHomoFormat     ClickhouseIOFormat // one of - https://clickhouse.com/docs/en/interfaces/formats
 	RootCACertPaths  []string
+	IsDeleteable     bool
 }
 
 func (s *ChSource) Describe() model.Doc {
@@ -344,5 +345,19 @@ func (s ChSourceWrapper) SetShards(shards map[string][]string) {
 			Name:  shardName,
 			Hosts: hosts,
 		})
+	}
+}
+
+func (s ChSourceWrapper) IsDeleteable() bool {
+	return s.Model.IsDeleteable
+}
+
+func (s *ChSource) ToSinkParams() ChSourceWrapper {
+	copyChSource := *s
+	copyChSource.IsDeleteable = false // По умолчанию false для source
+	return ChSourceWrapper{
+		Model:    &copyChSource,
+		host:     "",
+		altHosts: nil,
 	}
 }
