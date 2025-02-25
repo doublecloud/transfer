@@ -62,6 +62,7 @@ type ChDestination struct {
 	SystemColumnsFirst      bool
 	IsUpdateable            bool
 	UpsertAbsentToastedRows bool
+	IsDeleteable            bool
 
 	// Insert settings
 	InsertParams InsertParams
@@ -228,6 +229,7 @@ func (d *ChDestination) ToReplicationFromPGSinkParams() ChDestinationWrapper {
 func (d *ChDestination) FillDependentFields(transfer *model.Transfer) {
 	if !model.IsAppendOnlySource(transfer.Src) && !transfer.SnapshotOnly() {
 		d.IsUpdateable = true
+		d.IsDeleteable = true
 		if d.ShardCol != "" {
 			d.ShardCol = ""
 			logger.Log.Warn("turned off sharding on ch-dst, sharding is allowed only for queue-src")
@@ -432,4 +434,8 @@ func (d ChDestinationWrapper) SetShards(shards map[string][]string) {
 			Hosts: hosts,
 		})
 	}
+}
+
+func (d ChDestinationWrapper) IsDeleteable() bool {
+	return d.Model.IsDeleteable
 }

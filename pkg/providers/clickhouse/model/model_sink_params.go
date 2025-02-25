@@ -47,7 +47,12 @@ type ChSinkServerParams interface {
 	//     1) ReplacingMergeTree engine family
 	//     2) table contains data-transfer system columns: '__data_transfer_commit_time', '__data_transfer_delete_time'
 	IsUpdateable() bool
-
+	// IsDeleteable
+	// automatically derived from transfer options.
+	// Deleteable - data-transfer term, means the table satisfies two conditions:
+	//     1) table contains data-transfer system column: '__data_transfer_is_deleted'
+	//     2) ReplacingMergeTree engine has arguments: '__data_transfer_is_deleted'
+	IsDeleteable() bool
 	// UpsertAbsentToastedRows When batch push fails on TOAST, interpret as sequential independent upserts.
 	// Useful in cases:
 	//  1. YDB Source with 'Updates' changefeed mode
