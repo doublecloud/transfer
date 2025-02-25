@@ -351,13 +351,3 @@ func (s ChSourceWrapper) SetShards(shards map[string][]string) {
 func (s ChSourceWrapper) IsDeleteable() bool {
 	return s.Model.IsDeleteable
 }
-
-func (s *ChSource) ToSinkParams() ChSourceWrapper {
-	copyChSource := *s
-	copyChSource.IsDeleteable = false // По умолчанию false для source
-	return ChSourceWrapper{
-		Model:    &copyChSource,
-		host:     "",
-		altHosts: nil,
-	}
-}
