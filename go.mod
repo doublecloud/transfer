@@ -51,9 +51,9 @@ require (
 	github.com/parquet-go/parquet-go v0.24.0
 	github.com/pierrec/lz4 v2.6.1+incompatible
 	github.com/pingcap/parser v0.0.0-20210415081931-48e7f467fd74
-	github.com/prometheus/client_golang v1.19.1
+	github.com/prometheus/client_golang v1.20.5
 	github.com/prometheus/client_model v0.6.1
-	github.com/prometheus/common v0.53.0
+	github.com/prometheus/common v0.62.0
 	github.com/prometheus/procfs v0.15.1
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1
 	github.com/segmentio/kafka-go v0.4.47
@@ -352,11 +352,11 @@ replace github.com/goccy/go-yaml => github.com/goccy/go-yaml v1.9.5
 
 replace github.com/aleroyer/rsyslog_exporter => github.com/prometheus-community/rsyslog_exporter v1.1.0
 
-replace github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.18.0
+replace github.com/prometheus/client_golang => github.com/prometheus/client_golang v1.20.5
 
-replace github.com/prometheus/client_model => github.com/prometheus/client_model v0.5.0
+replace github.com/prometheus/client_model => github.com/prometheus/client_model v0.6.1
 
-replace github.com/prometheus/common => github.com/prometheus/common v0.46.0
+replace github.com/prometheus/common => github.com/prometheus/common v0.62.0
 
 replace github.com/distribution/reference => github.com/distribution/reference v0.5.0
 
