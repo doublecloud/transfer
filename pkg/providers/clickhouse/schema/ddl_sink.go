@@ -2,36 +2,14 @@ package schema
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	parser "github.com/doublecloud/transfer/pkg/providers/clickhouse/schema/ddl_parser"
 )
-
-var createDDLre = regexp.MustCompile(`(?mis)` + // multiline, ignore case, dot matches new line
-	`(create\s+(table|materialized\s+view)(\s+if\s+not\s+exists)?\s+(.+?))` + // create table/mv and name
-	"(\\s+uuid\\s'[^']+')?(\\s+on\\s+cluster(\\s+[^\\s]+|\\s+`[^`]+`|\\s+\"[^\"]+\"|))?" + // uuid, on cluster optional clauses
-	`\s*\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\)\s*` + // table guts
-	`engine\s*=\s*(([^\s]+\s*\([^)]+\))|([^\s]+))`, // engine
-)
-
-func extractNameClusterEngine(createDdlSQL string) (createClause, onClusterClause, engineStr string, found bool) {
-	createDdlSQL = strings.TrimRight(createDdlSQL, "\n\r\t ;")
-	res := createDDLre.FindAllStringSubmatch(createDdlSQL, -1)
-	if res == nil || len(res) > 1 {
-		return createClause, onClusterClause, engineStr, found
-	}
-
-	createClause = res[0][1]
-	onClusterClause = res[0][6]
-	engineStr = res[0][8]
-	found = true
-
-	return createClause, onClusterClause, engineStr, found
-}
 
 func IsDistributedDDL(sql string) bool {
-	_, onCluster, _, found := extractNameClusterEngine(sql)
+	onCluster, _, found := parser.ExtractNameClusterEngine(sql)
 	if !found {
 		return false
 	}
@@ -40,7 +18,7 @@ func IsDistributedDDL(sql string) bool {
 }
 
 func ReplaceCluster(sql, cluster string) string {
-	_, onCluster, _, found := extractNameClusterEngine(sql)
+	onCluster, _, found := parser.ExtractNameClusterEngine(sql)
 	if !found {
 		return sql
 	}

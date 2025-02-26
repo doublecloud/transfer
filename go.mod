@@ -13,6 +13,7 @@ require (
 	github.com/DataDog/datadog-api-client-go/v2 v2.17.0
 	github.com/OneOfOne/xxhash v1.2.8
 	github.com/alecthomas/participle v0.4.1
+	github.com/antlr4-go/antlr/v4 v4.13.0
 	github.com/araddon/dateparse v0.0.0-20190510211750-d2ba70357e92
 	github.com/aws/aws-sdk-go v1.54.12
 	github.com/blang/semver/v4 v4.0.0

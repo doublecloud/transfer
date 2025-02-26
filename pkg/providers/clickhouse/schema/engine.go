@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	parser "github.com/doublecloud/transfer/pkg/providers/clickhouse/schema/ddl_parser"
 )
 
 type EngineType string
@@ -157,7 +158,7 @@ func GetEngine(engineStrSQL string) (engine *MergeTreeFamilyEngine, engineStr st
 }
 
 func ParseMergeTreeFamilyEngine(sql string) (*MergeTreeFamilyEngine, string, error) {
-	_, _, engineStr, found := extractNameClusterEngine(sql)
+	_, engineStr, found := parser.ExtractNameClusterEngine(sql)
 	if !found {
 		return nil, "", fmt.Errorf("invalid sql: could not parse")
 	}

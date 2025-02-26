@@ -183,7 +183,7 @@ func TestAdjustDDLToTarget(t *testing.T) {
 				"PARTITION BY dt ORDER BY tuple()",
 			"ReplicatedMergeTree"), true)
 		require.NoError(t, err)
-		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
+		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr  ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
 			"(dt Date, data String) "+
 			"ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/db/test_distr', '{replica}') "+
 			"PARTITION BY dt ORDER BY tuple()", res)
@@ -211,7 +211,7 @@ func TestAdjustDDLToTarget(t *testing.T) {
 				"PARTITION BY dt ORDER BY tuple()",
 			"SharedMergeTree"), true)
 		require.NoError(t, err)
-		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
+		require.Equal(t, "CREATE TABLE IF NOT EXISTS `distribution_ch_test`.test_distr  ON CLUSTER `179f2d18-5c22-4e2b-9558-55f605a410ca` "+
 			"(dt Date, data String) "+
 			"ENGINE = ReplicatedMergeTree('/clickhouse/tables/{shard}/db/test_distr', '{replica}') "+
 			"PARTITION BY dt ORDER BY tuple()", res)
