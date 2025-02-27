@@ -214,7 +214,6 @@ type lfResult struct {
 
 type lfResultBatch []lfResult
 
-var loc = time.Now().Location()
 var (
 	UnparsedCols = cols(UnparsedSchema.Columns())
 )
@@ -839,7 +838,7 @@ func (p *GenericParser) extractTimeValue(col interface{}, defaultTime time.Time)
 			}
 		}
 
-		if t, err := dateparse.ParseIn(v, loc); err == nil {
+		if t, err := dateparse.ParseLocal(v); err == nil {
 			return &t, true, nil
 		} else {
 			if t, err := time.Parse("2006.01.02 15:04:05.999999", v); err == nil {
@@ -1140,6 +1139,24 @@ func (p *GenericParser) ResultSchema() *abstract.TableSchema {
 	return p.schema
 }
 
+func checkParserCorrectness(opts AuxParserOpts, sch []abstract.ColSchema, lgr log.Logger) {
+	if opts.InferTimeZone || (opts.TimeField != nil && opts.TimeField.Format != "") {
+		return
+	}
+
+	hasDatetime := false
+	for _, col := range sch {
+		if col.DataType == schema.TypeDatetime.String() {
+			hasDatetime = true
+			break
+		}
+	}
+
+	if hasDatetime {
+		lgr.Warn("the datetime fields will be parsed in local timezone, because infer timezone and time field are not configured")
+	}
+}
+
 func NewGenericParser(cfg ParserConfig, fields []abstract.ColSchema, logger log.Logger, registry *stats.SourceStats) *GenericParser {
 	var opts *AuxParserOpts
 	var lfCfg *LogfellerParserConfig
@@ -1184,6 +1201,7 @@ func NewGenericParser(cfg ParserConfig, fields []abstract.ColSchema, logger log.
 		}
 	}
 	logger.Info("Final schema", log.Any("columns", colNames), log.Any("s", finalSchema))
+	checkParserCorrectness(*opts, finalSchema, logger)
 	return &GenericParser{
 		rawFields:        fields,
 		known:            known,

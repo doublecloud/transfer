@@ -16,6 +16,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/parsers"
 	"github.com/doublecloud/transfer/pkg/parsers/generic"
 	_ "github.com/doublecloud/transfer/pkg/parsers/registry"
+	jsonparser "github.com/doublecloud/transfer/pkg/parsers/registry/json"
 	"github.com/doublecloud/transfer/pkg/parsers/registry/tskv"
 	"github.com/doublecloud/transfer/pkg/parsers/tests/samples"
 	"github.com/doublecloud/transfer/pkg/providers/kafka"
@@ -389,6 +390,41 @@ func TestGenericParser_Parse_vs_Do(t *testing.T) {
 			abstract.Dump(changes)
 		})
 	}
+}
+
+func TestGenericParserDatetimeZone(t *testing.T) {
+	parserConfigStruct := &jsonparser.ParserConfigJSONLb{
+		Fields: []abstract.ColSchema{
+			{ColumnName: "timestamp", DataType: schema.TypeDatetime.String()},
+		},
+		TimeField: &abstract.TimestampCol{
+			Col:    "timestamp",
+			Format: "2006-01-02T15:04:05.000Z",
+		},
+	}
+	configMap, err := parsers.ParserConfigStructToMap(parserConfigStruct)
+	require.NoError(t, err)
+	parser, err := parsers.NewParserFromMap(configMap, false, logger.Log, stats.NewSourceStats(metrics.NewRegistry()))
+	require.NoError(t, err)
+
+	res := parser.Do(parsers.Message{
+		Value: []byte("{\"timestamp\":\"2025-02-19T15:43:30.089Z\"}"),
+	}, abstract.Partition{Partition: 0, Topic: "test/topic"})
+
+	require.NotEmpty(t, res)
+	require.NotEmpty(t, res[0].ColumnValues)
+
+	tsIdx := -1
+	for idx, col := range res[0].ColumnNames {
+		if col == "timestamp" {
+			tsIdx = idx
+		}
+	}
+	require.True(t, tsIdx >= 0)
+
+	ts, ok := res[0].ColumnValues[tsIdx].(time.Time)
+	require.True(t, ok)
+	require.Equal(t, time.UTC.String(), ts.Location().String())
 }
 
 func BenchmarkGenericParser(b *testing.B) {
