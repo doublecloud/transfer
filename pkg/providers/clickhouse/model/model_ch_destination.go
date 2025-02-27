@@ -62,6 +62,7 @@ type ChDestination struct {
 	SystemColumnsFirst      bool
 	IsUpdateable            bool
 	UpsertAbsentToastedRows bool
+	IsDeleteable            bool
 
 	// Insert settings
 	InsertParams InsertParams
@@ -432,4 +433,8 @@ func (d ChDestinationWrapper) SetShards(shards map[string][]string) {
 			Hosts: hosts,
 		})
 	}
+}
+
+func (d ChDestinationWrapper) IsDeleteable() bool {
+	return d.Model.IsDeleteable
 }
