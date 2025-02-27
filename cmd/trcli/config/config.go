@@ -158,7 +158,32 @@ func ParseTransferYaml(rawData []byte) (*TransferYamlView, error) {
 	if err == nil {
 		transfer.Dst.Params = string(res)
 	}
+	if transfer.Transformation != nil {
+		for _, tr := range transfer.Transformation.Transformers {
+			for k, v := range tr {
+				tr[k] = convertMap(v)
+			}
+		}
+	}
 	return &transfer, nil
+}
+
+func convertMap(input interface{}) interface{} {
+	switch value := input.(type) {
+	case map[interface{}]interface{}:
+		newMap := make(map[string]interface{})
+		for k, v := range value {
+			if key, ok := k.(string); ok {
+				newMap[key] = convertMap(v)
+			}
+		}
+		return newMap
+	case []interface{}:
+		for i, v := range value {
+			value[i] = convertMap(v)
+		}
+	}
+	return input
 }
 
 func TablesFromYaml(tablesParams *string) (*UploadTables, error) {

@@ -1,10 +1,13 @@
 package config
 
 import (
+	"github.com/doublecloud/transfer/internal/logger"
+	"github.com/doublecloud/transfer/library/go/core/xerrors"
+	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/transformer"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Endpoint struct {
@@ -48,4 +51,21 @@ type TransferYamlView struct {
 	Transformation    *transformer.Transformers `yaml:"transformation"`
 	DataObjects       *model.DataObjects        `yaml:"data_objects"`
 	TypeSystemVersion int                       `yaml:"type_system_version"`
+}
+
+func (v TransferYamlView) Validate() error {
+	if v.Transformation == nil || v.Transformation.Transformers == nil {
+		return nil
+	}
+	var errs error
+	for _, tr := range v.Transformation.Transformers {
+		_, err := transformer.New(tr.Type(), tr.Config(), logger.Log, abstract.TransformationRuntimeOpts{JobIndex: 0})
+		if err != nil {
+			errs = multierr.Append(errs, xerrors.Errorf("unable to construct %s(%s): %w", tr.Type(), tr.ID(), err))
+		}
+	}
+	if errs != nil {
+		return xerrors.Errorf("transformers invalid: %w", errs)
+	}
+	return nil
 }

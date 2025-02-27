@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/doublecloud/transfer/pkg/providers/mongo"
+	_ "github.com/doublecloud/transfer/pkg/transformer/registry"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -121,4 +122,76 @@ dst:
 	msrc, ok := src.(*mongo.MongoSource)
 	require.True(t, ok)
 	require.Equal(t, msrc.BatchingParams.BatchFlushInterval, 10*time.Second)
+}
+
+func TestTransformer(t *testing.T) {
+	t.Run("valid", func(t *testing.T) {
+		transfer, err := ParseTransferYaml([]byte(`
+src:
+  type: mongo
+  params:
+    BatchingParams:
+      BatchFlushInterval: 10s
+dst:
+  type: stdout
+  params:
+    ShowData: false
+regular_snapshot:
+  enabled: false
+  interval: 0s
+  cron_expression: ""
+  increment_delay_seconds: 0
+  incremental: []
+transformation:
+  debugmode: false
+  transformers:
+  - renameTables:
+      renameTables:
+      - newName:
+          name: a
+          nameSpace: ""
+        originalName:
+          name: a
+          nameSpace: a_namespace
+    transformerId: ""
+  errorsoutput: null
+data_objects:
+  include_objects:
+  - sgd6096.order
+type_system_version: 9
+`))
+		require.NoError(t, err)
+		require.Len(t, transfer.Transformation.Transformers, 1)
+		require.NoError(t, transfer.Validate())
+	})
+	t.Run("invalid", func(t *testing.T) {
+		transfer, err := ParseTransferYaml([]byte(`
+src:
+  type: mango
+  params:
+    BatchingParams:
+      BatchFlushInterval: 10s
+dst:
+  type: stdout
+  params:
+    ShowData: false
+transformation:
+  transformers:
+  - boboTables:
+      renameTables:
+      - newName:
+          name: a
+          nameSpace: ""
+        originalName:
+          name: a
+          nameSpace: a_namespace
+    transformerId: ""
+data_objects:
+  include_objects:
+  - sgd6096.order
+type_system_version: 9
+`))
+		require.NoError(t, err)
+		require.Error(t, transfer.Validate())
+	})
 }
