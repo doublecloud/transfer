@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"sync/atomic"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -21,6 +22,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/stats"
 	"github.com/doublecloud/transfer/pkg/util"
 	"go.ytsaurus.tech/library/go/core/log"
+	"golang.org/x/sync/errgroup"
 )
 
 var (
@@ -50,29 +52,49 @@ func (r *GenericParserReader) openReader(ctx context.Context, filePath string) (
 	return sr, nil
 }
 
+// estimateRows calculates approximate rows count of files.
+//
+// Implementation:
+// 1. Open readers for all files to obtain their sizes.
+// 2. Take one random reader, calculate its average line size.
+// 3. Divide size of all files by average line size to get result (total rows count).
 func (r *GenericParserReader) estimateRows(ctx context.Context, files []*aws_s3.Object) (uint64, error) {
-	res := uint64(0)
-	var totalSize int64
-	var sampleReader *S3Reader
+	totalSize := atomic.Int64{}
+	var randomReader *S3Reader
+
+	// 1. Open readers for all files to obtain their sizes.
+	eg := errgroup.Group{}
+	eg.SetLimit(8)
 	for _, file := range files {
-		reader, err := r.openReader(ctx, *file.Key)
-		if err != nil {
-			return 0, xerrors.Errorf("unable to open reader for file: %s: %w", *file.Key, err)
-		}
-		size := reader.Size()
-		if size > 0 {
-			sampleReader = reader
-		}
-		totalSize += reader.Size()
+		eg.Go(func() error {
+			reader, err := r.openReader(ctx, *file.Key)
+			if err != nil {
+				return xerrors.Errorf("unable to open reader for file: %s: %w", *file.Key, err)
+			}
+			size := reader.Size()
+			if randomReader == nil && size > 0 {
+				// Since we need just one random reader, race here is not a problem.
+				randomReader = reader
+			}
+			totalSize.Add(size)
+			return nil
+		})
+	}
+	if err := eg.Wait(); err != nil {
+		return 0, xerrors.Errorf("unable to open readers: %w", err)
 	}
 
-	if totalSize > 0 && sampleReader != nil {
-		buff, err := r.ParseFile(ctx, "", sampleReader)
+	res := uint64(0)
+	if total := totalSize.Load(); total > 0 && randomReader != nil {
+		// 2. Take one random reader, calculate its average line size.
+		buff, err := r.ParseFile(ctx, "", randomReader)
 		if err != nil {
 			return 0, xerrors.Errorf("unable to parse: %w", err)
 		}
-		bytesPerLine := float64(sampleReader.Size()) / float64(len(buff))
-		totalLines := math.Ceil(float64(totalSize) / bytesPerLine)
+		bytesPerLine := float64(randomReader.Size()) / float64(len(buff))
+
+		// 3. Divide size of all files by average line size to get result (total rows count).
+		totalLines := math.Ceil(float64(total) / bytesPerLine)
 		res = uint64(totalLines)
 	}
 	return res, nil
@@ -132,7 +154,6 @@ func (r *GenericParserReader) ParsePassthrough(chunk chunk_pusher.Chunk) []abstr
 
 func (r *GenericParserReader) ParseFile(ctx context.Context, filePath string, s3Reader *S3Reader) ([]abstract.ChangeItem, error) {
 	offset := 0
-	var readBytes int
 
 	var fullFile []byte
 	for {
@@ -153,7 +174,7 @@ func (r *GenericParserReader) ParseFile(ctx context.Context, filePath string, s3
 				return nil, xerrors.Errorf("failed to read from file: %w", err)
 			}
 		}
-		offset += readBytes
+		offset += n
 
 		fullFile = append(fullFile, data...)
 		if lastRound {

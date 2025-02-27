@@ -73,23 +73,23 @@ func ListFiles(bucket, pathPrefix, pathPattern string, client s3iface.S3API, log
 			return nil, xerrors.Errorf("unable to load file list: %w", err)
 		}
 
-		var validFiles []*aws_s3.Object
 		for _, file := range files.Contents {
-			currentMarker = file.Key
 			if SkipObject(file, pathPattern, "|", isObj) {
 				logger.Infof("file did not pass type/path check, skipping: file %s, pathPattern: %s", *file.Key, pathPattern)
 				continue
 			}
-			validFiles = append(validFiles, file)
+			res = append(res, file)
 
 			// for schema resolution we can stop the process of file fetching faster since we need only 1 file
-			if maxResults != nil && *maxResults == len(validFiles) {
+			if maxResults != nil && *maxResults == len(res) {
 				fastStop = true
 				break
 			}
 		}
+		if len(files.Contents) > 0 {
+			currentMarker = files.Contents[len(files.Contents)-1].Key
+		}
 
-		res = append(res, validFiles...)
 		if fastStop || len(files.Contents) < 1000 {
 			break
 		}
