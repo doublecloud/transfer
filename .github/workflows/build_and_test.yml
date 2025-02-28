@@ -75,7 +75,7 @@ jobs:
       - shell: bash
         run: |
           pg_dump --version
-      - uses: engineerd/setup-kind@v0.6.0
+      - uses: engineerd/setup-kind@v0.6.2
         if: matrix.suite.container
         with:
           version: "v0.26.0"
