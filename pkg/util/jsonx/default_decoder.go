@@ -2,8 +2,9 @@ package jsonx
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
+
+	"github.com/goccy/go-json"
 )
 
 // NewDefaultDecoder constructs a default JSON decoder for Data Transfer.
