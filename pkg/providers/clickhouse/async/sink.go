@@ -1,7 +1,6 @@
 package async
 
 import (
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
@@ -36,7 +35,7 @@ var sinkClosedErr = xerrors.New("sink is closed")
 func (s *sink) Close() error {
 	var errs error
 	for partID, part := range s.parts {
-		logger.Log.Debugf("Sink: closing part %s", partID.PartID)
+		s.lgr.Debugf("Sink: closing part %s", partID.PartID)
 		if err := part.Close(); err != nil {
 			errs = multierr.Append(errs, xerrors.Errorf("error closing part %s: %w", partID.PartID, err))
 		}
@@ -45,7 +44,7 @@ func (s *sink) Close() error {
 	if err := s.middleware.Close(); err != nil {
 		errs = multierr.Append(errs, xerrors.Errorf("error closing middleware pipeline: %w", err))
 	}
-	logger.Log.Debug("Sink: closing clusterClient")
+	s.lgr.Debug("Sink: closing clusterClient")
 	if err := s.cl.Close(); err != nil {
 		errs = multierr.Append(errs, xerrors.Errorf("error closing CH cluster client: %w", err))
 	}

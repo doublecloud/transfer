@@ -8,7 +8,6 @@ import (
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/proto"
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -106,7 +105,7 @@ func (c *chV2Streamer) Close() error {
 		c.lgr.Info("Closing streaming batch", log.Error(c.err))
 		c.isClosed = true
 		if !c.batch.IsSent() {
-			logger.Log.Debug("Batch is not sent yet, aborting")
+			c.lgr.Debug("Batch is not sent yet, aborting")
 			if err := c.batch.Abort(); err != nil {
 				errs = multierr.Append(errs, xerrors.Errorf("error aborting CH streaming batch: %w", err))
 			}
@@ -128,7 +127,7 @@ func (c *chV2Streamer) Finish() error {
 	if err := c.closeIfErr(c.batch.Send); err != nil {
 		return xerrors.Errorf("error sending CH streaming batch: %w", err)
 	}
-	logger.Log.Debug("chV2Streamer closing itself after commit")
+	c.lgr.Debug("chV2Streamer closing itself after commit")
 	if err := c.Close(); err != nil {
 		c.lgr.Warn("error closing streamer", log.Error(err))
 	}
@@ -152,7 +151,7 @@ func (c *chV2Streamer) closeIfErr(fn func() error) error {
 		return nil
 	}
 	c.err = err
-	logger.Log.Debugf("chV2Streamer closing itself because of error %v", err)
+	c.lgr.Debugf("chV2Streamer closing itself because of error %v", err)
 	if closeErr := c.Close(); closeErr != nil {
 		c.lgr.Warn("error closing streamer", log.Error(closeErr))
 	}
@@ -160,14 +159,14 @@ func (c *chV2Streamer) closeIfErr(fn func() error) error {
 }
 
 func (c *chV2Streamer) flush() error {
-	logger.Log.Debug("Flushing streamer")
+	c.lgr.Debug("Flushing streamer")
 	err := c.closeIfErr(c.batch.Flush)
 	c.memSize = 0
 	return err
 }
 
 func (c *chV2Streamer) restart() error {
-	logger.Log.Debug("Restarting streamer")
+	c.lgr.Debug("Restarting streamer")
 	return c.closeIfErr(func() error {
 		if err := c.batch.Send(); err != nil {
 			return xerrors.Errorf("error sending streaming batch: %w", err)

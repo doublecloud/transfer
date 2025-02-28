@@ -12,7 +12,6 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/cenkalti/backoff/v4"
-	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/core/xerrors/multierr"
 	"github.com/doublecloud/transfer/library/go/ptr"
@@ -218,7 +217,7 @@ func (s *shardClient) AliveHost() (DDLStreamingClient, error) {
 	opts := *s.opts
 	for i := 0; i < len(s.opts.Addr); i++ {
 		opts.Addr = []string{s.nextHostAddr()}
-		cl, err := NewHostClient(&opts, s.lgr)
+		cl, err := NewHostClient(&opts, log.With(s.lgr, log.String("shardHost", opts.Addr[0])))
 		if err != nil {
 			s.lgr.Warn("Error getting host client", log.String("host", opts.Addr[0]), log.Error(err))
 		} else {
@@ -279,7 +278,7 @@ func (c *clusterClient) ExecDDL(fn db_model.DDLFactory) error {
 func (c *clusterClient) Close() error {
 	var errs error
 	for shardID, shard := range c.ShardMap {
-		logger.Log.Debugf("clusterClient: closing shard %d", shardID)
+		c.lgr.Debugf("clusterClient: closing shard %d", shardID)
 		errs = multierr.Append(errs, shard.Close())
 	}
 	return errs
@@ -294,7 +293,7 @@ func (c *clusterClient) randomShard() ShardClient {
 func NewClusterClient(conn conn.ConnParams, topology *topology2.Topology, shards sharding.ShardMap[[]string], lgr log.Logger) (ClusterClient, error) {
 	clients := make(sharding.ShardMap[ShardClient])
 	for shard, hosts := range shards {
-		cl, err := NewShardClient(hosts, conn, topology, lgr)
+		cl, err := NewShardClient(hosts, conn, topology, log.With(lgr, log.String("shardID", fmt.Sprint(shard))))
 		if err != nil {
 			return nil, xerrors.Errorf("error making shard client for shard %v: %w", shard, err)
 		}
