@@ -903,7 +903,7 @@ func NewStorage(config *model.ChStorageParams, transfer *dp_model.Transfer, opts
 			if errors.IsFatalClickhouseError(err) {
 				return "", backoff.Permanent(xerrors.Errorf("unable to select clickhouse version: %w", err))
 			}
-			return "", xerrors.Errorf("unable to select clickhouse version: %w", err)
+			return "", xerrors.Errorf("unable to select clickhouse %s version: %w", config.String(), err)
 		}
 		return version, nil
 	}, backoff.NewExponentialBackOff(), util.BackoffLoggerWarn(logger.Log, "version resolver"))
