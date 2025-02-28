@@ -9,6 +9,7 @@ import (
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	cpclient "github.com/doublecloud/transfer/pkg/abstract/coordinator"
+	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
 	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	pgcommon "github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/pgrecipe"
@@ -93,4 +94,69 @@ func TestSnapshotAndIncrement(t *testing.T) {
 
 	require.NoError(t, helpers.WaitEqualRowsCount(t, databaseName, "__test", helpers.GetSampleableStorageByModel(t, Source), helpers.GetSampleableStorageByModel(t, Target), 60*time.Second))
 	require.NoError(t, helpers.CompareStorages(t, Source, Target, helpers.NewCompareStorageParams().WithEqualDataTypes(pg2ch.PG2CHDataTypesComparator)))
+}
+
+func TestOptimizeCleanup(t *testing.T) {
+	// Setup same as in TestSnapshotAndIncrement
+	connConfig, err := pgcommon.MakeConnConfigFromSrc(logger.Log, &Source)
+	require.NoError(t, err)
+	conn, err := pgcommon.NewPgConnPool(connConfig, logger.Log)
+	require.NoError(t, err)
+
+	// Start transfer
+	transfer := helpers.MakeTransfer(helpers.TransferID, &Source, &Target, TransferType)
+	err = tasks.ActivateDelivery(context.Background(), nil, cpclient.NewFakeClient(), *transfer, helpers.EmptyRegistry())
+	require.NoError(t, err)
+
+	localWorker := local.NewLocalWorker(cpclient.NewFakeClient(), transfer, helpers.EmptyRegistry(), logger.Log)
+	localWorker.Start()
+	defer localWorker.Stop()
+
+	// Insert test data
+	rows, err := conn.Query(context.Background(), "INSERT INTO __test (id, val1, val2) VALUES (100, 100, 'test_cleanup')")
+	require.NoError(t, err)
+	rows.Close()
+
+	// Wait until data appears in CH
+	require.NoError(
+		t,
+		helpers.WaitEqualRowsCount(
+			t,
+			databaseName,
+			"__test",
+			helpers.GetSampleableStorageByModel(t, Source),
+			helpers.GetSampleableStorageByModel(t, Target),
+			60*time.Second,
+		),
+	)
+
+	// Delete the data
+	rows, err = conn.Query(context.Background(), "DELETE FROM __test WHERE id=100")
+	require.NoError(t, err)
+	rows.Close()
+
+	// Wait until deletion is reflected in CH
+	require.NoError(t, helpers.WaitEqualRowsCount(t, databaseName, "__test",
+		helpers.GetSampleableStorageByModel(t, Source),
+		helpers.GetSampleableStorageByModel(t, Target),
+		60*time.Second))
+
+	// Get CH connection for verification
+	chConn, err := clickhouse.MakeConnection(Target.ToStorageParams())
+	require.NoError(t, err)
+
+	// Run OPTIMIZE ... FINAL CLEANUP
+	_, err = chConn.Exec("OPTIMIZE TABLE public.__test FINAL CLEANUP")
+	require.NoError(t, err)
+
+	// Verify that rows are physically deleted
+	var count int
+	err = chConn.QueryRow("SELECT count() FROM public.__test WHERE id = 100").Scan(&count)
+	require.NoError(t, err)
+	require.Equal(t, 0, count)
+
+	// Verify that rows don't reappear after OPTIMIZE
+	err = chConn.QueryRow("SELECT count() FROM public.__test FINAL WHERE id = 100").Scan(&count)
+	require.NoError(t, err)
+	require.Equal(t, 0, count)
 }

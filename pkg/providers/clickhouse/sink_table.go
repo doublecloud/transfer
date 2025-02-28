@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2/lib/column"
+	"github.com/blang/semver/v4"
 	"github.com/doublecloud/transfer/internal/logger"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/library/go/slices"
@@ -38,7 +39,13 @@ type sinkTable struct {
 	cluster         *sinkCluster
 	timezoneFetched bool
 	timezone        *time.Location
+	version         semver.Version
 }
+
+var (
+	// see: https://github.com/Altinity/clickhouse-sink-connector/issues/206#issuecomment-1529968850
+	deleteableVersion = semver.MustParse("23.2.0")
+)
 
 func normalizeTableName(table string) string {
 	res := strings.ReplaceAll(table, "-", "_")
@@ -133,6 +140,9 @@ func (t *sinkTable) generateDDL(cols []abstract.ColSchema, distributed bool) str
 	if t.config.IsUpdateable() {
 		columnDefinitions = append(columnDefinitions, "`__data_transfer_commit_time` UInt64")
 		columnDefinitions = append(columnDefinitions, "`__data_transfer_delete_time` UInt64")
+		if t.version.GTE(deleteableVersion) {
+			columnDefinitions = append(columnDefinitions, "`__data_transfer_is_deleted` UInt8 MATERIALIZED (if(__data_transfer_delete_time != 0, 1, 0))")
+		}
 	}
 	_, _ = result.WriteString(fmt.Sprintf(" (%s)", strings.Join(columnDefinitions, ", ")))
 
@@ -141,6 +151,9 @@ func (t *sinkTable) generateDDL(cols []abstract.ColSchema, distributed bool) str
 	if t.config.IsUpdateable() {
 		engine = fmt.Sprintf("Replacing%s", engine)
 		engineArgs = append(engineArgs, "__data_transfer_commit_time")
+		if t.version.GTE(deleteableVersion) {
+			engineArgs = append(engineArgs, "__data_transfer_is_deleted")
+		}
 	}
 	if distributed {
 		engine = fmt.Sprintf("Replicated%s", engine)

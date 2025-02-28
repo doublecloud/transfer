@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
+	"github.com/blang/semver/v4"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
@@ -22,6 +23,7 @@ import (
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/errors"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
 	"github.com/doublecloud/transfer/pkg/stats"
+	"github.com/doublecloud/transfer/pkg/util"
 	"github.com/jmoiron/sqlx"
 	"go.ytsaurus.tech/library/go/core/log"
 )
@@ -40,6 +42,7 @@ type SinkServer struct {
 	lastFail      time.Time
 	callbacks     *SinkServerCallbacks // special callback, used only in test
 	cluster       *sinkCluster
+	version       semver.Version
 }
 
 type SinkServerCallbacks struct {
@@ -255,6 +258,7 @@ func (s *SinkServer) GetTable(table string, schema *abstract.TableSchema) (*sink
 		cluster:         s.cluster,
 		timezoneFetched: false,
 		timezone:        nil,
+		version:         s.version,
 	}
 
 	if err := tbl.resolveTimezone(); err != nil {
@@ -327,6 +331,26 @@ func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *st
 		return nil, xerrors.Errorf("native connection error: %w", err)
 	}
 
+	version, err := backoff.RetryNotifyWithData(func() (string, error) {
+		var version string
+
+		if err := db.QueryRow("select version();").Scan(&version); err != nil {
+			if errors.IsFatalClickhouseError(err) {
+				return "", backoff.Permanent(xerrors.Errorf("unable to select clickhouse version: %w", err))
+			}
+			return "", xerrors.Errorf("unable to select clickhouse version: %w", err)
+		}
+		return version, nil
+	}, backoff.NewExponentialBackOff(), util.BackoffLoggerWarn(lgr, "version resolver"))
+	if err != nil {
+		return nil, xerrors.Errorf("unable to extract version: %w", err)
+	}
+
+	parsedVersion, err := parseSemver(version)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to parse semver: %w", err)
+	}
+
 	s := &SinkServer{
 		db:            db,
 		logger:        log.With(lgr, log.String("ch_host", host)),
@@ -341,6 +365,7 @@ func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *st
 		lastFail:      time.Time{},
 		callbacks:     nil,
 		cluster:       cluster,
+		version:       *parsedVersion,
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), errors.ClickhouseReadTimeout)

@@ -118,7 +118,7 @@ func DescribeTable(db *sql.DB, database, table string, knownPrimaryKeys []string
 
 	//add other fields
 	for _, colname := range colNames {
-		if colname == "__data_transfer_commit_time" || colname == "__data_transfer_delete_time" {
+		if colname == "__data_transfer_commit_time" || colname == "__data_transfer_delete_time" || colname == "__data_transfer_is_deleted" {
 			continue
 		}
 		if colPrimary[colname] {
