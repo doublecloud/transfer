@@ -56,6 +56,8 @@ type MysqlSource struct {
 	ConnectionID string
 
 	ReplicationFlushInterval time.Duration
+
+	DBLogEnabled bool // force DBLog snapshot instead of common
 }
 
 var _ model.Source = (*MysqlSource)(nil)
