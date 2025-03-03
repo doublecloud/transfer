@@ -2130,6 +2130,7 @@
   "pkg/transformer/registry/raw_doc_grouper/raw_cdc_doc_grouper.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_cdc_doc_grouper.go",
   "pkg/transformer/registry/raw_doc_grouper/raw_cdc_doc_grouper_test.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_cdc_doc_grouper_test.go",
   "pkg/transformer/registry/raw_doc_grouper/raw_data_utils.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_data_utils.go",
+  "pkg/transformer/registry/raw_doc_grouper/raw_data_utils_test.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_data_utils_test.go",
   "pkg/transformer/registry/raw_doc_grouper/raw_doc_grouper.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_doc_grouper.go",
   "pkg/transformer/registry/raw_doc_grouper/raw_doc_grouper_test.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_doc_grouper_test.go",
   "pkg/transformer/registry/raw_doc_grouper/raw_doc_test_utils.go":"transfer_manager/go/pkg/transformer/registry/raw_doc_grouper/raw_doc_test_utils.go",
