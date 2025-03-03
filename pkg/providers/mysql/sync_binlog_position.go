@@ -60,7 +60,7 @@ func SyncBinlogPosition(src *MysqlSource, id string, cp coordinator.Coordinator)
 	}
 
 	if gtidModeEnabled {
-		logger.Log.Infof("GTID mode is ON")
+		logger.Log.Infof("GTID mode is ON, trying to parse gtid: [%s]", gtid)
 
 		gtidSet, err := mysql.ParseGTIDSet(flavor, gtid)
 		if err != nil {

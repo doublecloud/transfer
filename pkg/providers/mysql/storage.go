@@ -493,22 +493,12 @@ func (s *Storage) LoadSchema() (schema abstract.DBSchema, err error) {
 }
 
 func (s *Storage) getGtid(ctx context.Context, tx Queryable) (string, error) {
-	rows, err := tx.QueryContext(ctx, "show global variables like 'gtid_executed';")
+	var gtidSet string
+	err := tx.QueryRowContext(ctx, "select @@global.gtid_executed;").Scan(&gtidSet)
 	if err != nil {
 		return "", xerrors.Errorf("Unable to get gtid executed: %w", err)
 	}
-	defer rows.Close()
-	for rows.Next() {
-		var name, val string
-		if err := rows.Scan(&name, &val); err != nil {
-			logger.Log.Warnf("Unable to parse variable name: %v", err)
-			continue
-		}
-		if name == "gtid_executed" {
-			return val, nil
-		}
-	}
-	return "", nil
+	return gtidSet, nil
 }
 
 func (s *Storage) EstimateTableRowsCount(table abstract.TableID) (uint64, error) {
