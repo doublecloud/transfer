@@ -132,7 +132,7 @@ func (s *Sink) processRowChangeItem(ctx context.Context, changeItem *abstract.Ch
 		// for INSERT, pure on-segment operation is possible
 		seg, err := s.chooseSegFromPool(ctx)
 		if err != nil {
-			return xerrors.Errorf("failed to determine a segment for a changeitem: %w", err)
+			return xerrors.Errorf("failed to determine a segment for an item: %w", err)
 		}
 		setTemporaryTableForChangeItem(changeItem)
 		s.rowChangeItems[seg] = append(s.rowChangeItems[seg], *changeItem)

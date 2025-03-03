@@ -90,6 +90,21 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 }
 
 func (p *Provider) Sink(config middlewares.Config) (abstract.Sinker, error) {
+	dst, ok := p.transfer.Dst.(*GpDestination)
+	if !ok {
+		return nil, xerrors.Errorf("unexpected dst type: %T", p.transfer.Dst)
+	}
+	isGpfdist, err := p.isGpfdist()
+	if err != nil {
+		return nil, xerrors.Errorf("unable to use gpfdist: %w", err)
+	}
+	if isGpfdist {
+		sink, err := NewGpfdistSink(dst, p.registry)
+		if err != nil {
+			return nil, xerrors.Errorf("unable to create gpfidst sink: %w", err)
+		}
+		return sink, nil
+	}
 	return NewSink(p.transfer, p.registry, p.logger, config)
 }
 
@@ -98,7 +113,28 @@ func (p *Provider) Storage() (abstract.Storage, error) {
 	if !ok {
 		return nil, xerrors.Errorf("unexpected src type: %T", p.transfer.Src)
 	}
+	isGpfdist, err := p.isGpfdist()
+	if err != nil {
+		return nil, xerrors.Errorf("unable to use gpfdist: %w", err)
+	}
+	if isGpfdist {
+		return NewGpfdistStorage(src, p.registry)
+	}
 	return NewStorage(src, p.registry), nil
+}
+
+func (p *Provider) isGpfdist() (bool, error) {
+	var isSrcGpfdist, isDstGpfdist bool
+	if src, ok := p.transfer.Src.(*GpSource); ok {
+		isSrcGpfdist = src.GpfdistParams.IsEnabled
+	}
+	if dst, ok := p.transfer.Dst.(*GpDestination); ok {
+		isDstGpfdist = dst.GpfdistParams.IsEnabled
+	}
+	if isSrcGpfdist != isDstGpfdist { // TODO: TM-8222: Support gpfdist for hetero transfers.
+		return false, xerrors.New("Gpfdist is supported only for gp->gp and should be enabled on both endpoints")
+	}
+	return isSrcGpfdist, nil
 }
 
 func (p *Provider) Type() abstract.ProviderType {

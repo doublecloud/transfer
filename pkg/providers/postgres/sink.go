@@ -126,7 +126,7 @@ func getUniqueIndexKeys(ctx context.Context, conn *pgxpool.Pool) (map[string][]s
 func prepareOriginalTypes(schema []abstract.ColSchema) error {
 	for i, v := range schema {
 		if v.OriginalType == "" || !strings.HasPrefix(v.OriginalType, "pg:") {
-			pgType, err := dataToOriginal(v.DataType)
+			pgType, err := DataToOriginal(v.DataType)
 			if err != nil {
 				return xerrors.Errorf("failed to convert type %q: %w", v.DataType, err)
 			}
@@ -170,7 +170,7 @@ func CreateTableQuery(fullTableName string, schema []abstract.ColSchema) (string
 			queryType = strings.ReplaceAll(queryType, "USER-DEFINED", "TEXT")
 		} else {
 			var err error
-			queryType, err = dataToOriginal(col.DataType)
+			queryType, err = DataToOriginal(col.DataType)
 			if err != nil {
 				return "", xerrors.Errorf("failed to convert column %q to original type: %w", col.ColumnName, err)
 			}
@@ -217,7 +217,7 @@ func (s *sink) checkTable(ctx context.Context, name string, schema []abstract.Co
 	return nil
 }
 
-func dataToOriginal(dataType string) (string, error) {
+func DataToOriginal(dataType string) (string, error) {
 	switch strings.ToLower(dataType) {
 	case "int8", "uint8", "int16", "uint16":
 		return "smallint", nil

@@ -10,6 +10,7 @@ import (
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 	"github.com/doublecloud/transfer/pkg/abstract"
 	"github.com/doublecloud/transfer/pkg/abstract/model"
+	gpfdistbin "github.com/doublecloud/transfer/pkg/providers/greenplum/gpfdist/gpfdist_bin"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 	"github.com/doublecloud/transfer/pkg/providers/postgres/utils"
 )
@@ -21,6 +22,7 @@ type GpSource struct {
 	AdvancedProps    GpSourceAdvancedProps
 	SubnetID         string
 	SecurityGroupIDs []string
+	GpfdistParams    gpfdistbin.GpfdistParams
 }
 
 var _ model.Source = (*GpSource)(nil)
@@ -251,6 +253,7 @@ func (s *GpHP) Valid() bool {
 func (s *GpSource) WithDefaults() {
 	s.Connection.WithDefaults()
 	s.AdvancedProps.WithDefaults()
+	s.GpfdistParams.WithDefaults()
 }
 
 func (s *GpSource) GetProviderType() abstract.ProviderType {

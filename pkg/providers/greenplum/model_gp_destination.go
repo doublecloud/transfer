@@ -8,6 +8,7 @@ import (
 	dp_model "github.com/doublecloud/transfer/pkg/abstract/model"
 	"github.com/doublecloud/transfer/pkg/middlewares/async/bufferer"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
+	gpfdistbin "github.com/doublecloud/transfer/pkg/providers/greenplum/gpfdist/gpfdist_bin"
 	"github.com/doublecloud/transfer/pkg/providers/postgres"
 )
 
@@ -22,7 +23,8 @@ type GpDestination struct {
 	BufferTriggingSize     uint64
 	BufferTriggingInterval time.Duration
 
-	QueryTimeout time.Duration
+	QueryTimeout  time.Duration
+	GpfdistParams gpfdistbin.GpfdistParams
 }
 
 var _ dp_model.Destination = (*GpDestination)(nil)
@@ -38,6 +40,8 @@ func (d *GpDestination) IsDestination() {}
 
 func (d *GpDestination) WithDefaults() {
 	d.Connection.WithDefaults()
+	d.GpfdistParams.WithDefaults()
+
 	if d.CleanupPolicy.IsValid() != nil {
 		d.CleanupPolicy = dp_model.DisabledCleanup
 	}
@@ -94,5 +98,6 @@ func (d *GpDestination) ToGpSource() *GpSource {
 		}()),
 		SubnetID:         "",
 		SecurityGroupIDs: nil,
+		GpfdistParams:    d.GpfdistParams,
 	}
 }
