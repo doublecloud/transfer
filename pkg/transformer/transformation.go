@@ -20,7 +20,6 @@ type transformation struct {
 	config       *Transformers
 	transformers []abstract.Transformer
 	plan         map[abstract.TableID]map[string][]abstract.Transformer
-	outputSchema map[abstract.TableID]map[string]*abstract.TableSchema
 	sink         abstract.Sinker
 
 	registry metrics.Registry
@@ -37,7 +36,6 @@ func (u *transformation) clone() *transformation {
 		config:       u.config,
 		transformers: u.transformers,
 		plan:         make(map[abstract.TableID]map[string][]abstract.Transformer),
-		outputSchema: make(map[abstract.TableID]map[string]*abstract.TableSchema),
 		sink:         nil,
 
 		registry: u.registry,
@@ -74,9 +72,6 @@ func (u *transformation) AddTablePlan(table abstract.TableID, schema *abstract.T
 	if _, ok := u.plan[table]; !ok {
 		u.plan[table] = make(map[string][]abstract.Transformer)
 	}
-	if _, ok := u.outputSchema[table]; !ok {
-		u.outputSchema[table] = make(map[string]*abstract.TableSchema)
-	}
 	u.plan[table][inputSchemaHash] = tablePlan
 	if len(tablePlan) > 0 {
 		u.logger.Infof(
@@ -85,7 +80,6 @@ func (u *transformation) AddTablePlan(table abstract.TableID, schema *abstract.T
 			u.printfSchema(schema.Columns()),
 			u.printfSchema(outputSchema.Columns()),
 		)
-		u.outputSchema[table][inputSchemaHash] = outputSchema
 	} else {
 		u.logger.Infof("no transformations for table %v", table.Fqtn())
 	}
@@ -317,7 +311,6 @@ func (u *transformation) MakeSinkMiddleware() abstract.SinkOption {
 func (u *transformation) AddTransformer(transformer abstract.Transformer) error {
 	u.transformers = append(u.transformers, transformer)
 	u.plan = make(map[abstract.TableID]map[string][]abstract.Transformer)
-	u.outputSchema = make(map[abstract.TableID]map[string]*abstract.TableSchema)
 	return nil
 }
 
@@ -345,7 +338,6 @@ func Sinker(
 			config:       config,
 			transformers: transformers,
 			plan:         make(map[abstract.TableID]map[string][]abstract.Transformer),
-			outputSchema: make(map[abstract.TableID]map[string]*abstract.TableSchema),
 			sink:         s,
 
 			registry: registry,
