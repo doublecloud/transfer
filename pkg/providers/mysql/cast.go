@@ -194,3 +194,7 @@ func typeToYt(dataType string, rawColumnType string) schema.Type {
 		return schema.TypeBytes
 	}
 }
+
+func Represent(val interface{}, colSchema abstract.ColSchema) (string, error) {
+	return CastToMySQL(val, colSchema), nil
+}
