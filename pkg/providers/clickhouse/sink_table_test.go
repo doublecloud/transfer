@@ -180,7 +180,7 @@ func TestTable_doOperation_failed_on_TOAST(t *testing.T) {
 	require.NoError(t, err)
 
 	_, table := makeSchema(cols, true)
-	sinkServer, err := newSinkServerImplWithVersion(table.config, table.logger, table.metrics, nil, semver.Version{})
+	sinkServer, err := NewSinkServerImplWithVersion(table.config, table.logger, table.metrics, nil, semver.Version{})
 	sinkServer.db = db
 	require.NoError(t, err)
 

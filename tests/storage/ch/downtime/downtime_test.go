@@ -1,14 +1,14 @@
 package downtime
 
 import (
+	"github.com/blang/semver/v4"
 	"testing"
 	"time"
 
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
 	"github.com/doublecloud/transfer/pkg/providers/clickhouse"
-	"github.com/doublecloud/transfer/pkg/providers/clickhouse/model"
+	chrecipe "github.com/doublecloud/transfer/pkg/providers/clickhouse/recipe"
 	"github.com/doublecloud/transfer/pkg/stats"
-	"github.com/doublecloud/transfer/tests/helpers"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap/zaptest"
 	"go.ytsaurus.tech/library/go/core/log/zap"
@@ -20,22 +20,17 @@ type TestParams struct {
 }
 
 func test(t *testing.T, params TestParams) {
-	var config model.ChDestination
-	config.User = "default"
-	config.Password = ""
-	config.Database = "downtime_test"
-	config.HTTPPort = helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_HTTP_PORT")
-	config.NativePort = helpers.GetIntFromEnv("RECIPE_CLICKHOUSE_NATIVE_PORT")
-	config.WithDefaults()
+	config := chrecipe.MustTarget(chrecipe.WithInitFile("scripts/init.sql"), chrecipe.WithDatabase("downtime_test"))
 	onPingCalled := false
 
 	storageStats := stats.NewChStats(solomon.NewRegistry(nil))
 
-	sinkServer, err := clickhouse.NewSinkServerImpl(
+	sinkServer, err := clickhouse.NewSinkServerImplWithVersion(
 		config.ToReplicationFromPGSinkParams().MakeChildServerParams(params.Host),
 		&zap.Logger{L: zaptest.NewLogger(t)},
 		storageStats,
 		nil,
+		semver.Version{},
 	)
 	require.NoError(t, err)
 
@@ -61,5 +56,6 @@ func TestAliveNoZK(t *testing.T) {
 }
 
 func TestDowntime(t *testing.T) {
+	// this test is pointless, but I don't want to delete it.
 	test(t, TestParams{Host: "fake", Alive: false})
 }
