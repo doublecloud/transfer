@@ -72,6 +72,7 @@ func (t *Timer) MarshalJSON() ([]byte, error) {
 		Labels    map[string]string `json:"labels"`
 		Value     float64           `json:"value"`
 		Timestamp *int64            `json:"ts,omitempty"`
+		MemOnly   bool              `json:"memOnly,omitempty"`
 	}{
 		Type:  t.metricType.String(),
 		Value: t.value.Load().Seconds(),
@@ -84,6 +85,7 @@ func (t *Timer) MarshalJSON() ([]byte, error) {
 			return labels
 		}(),
 		Timestamp: tsAsRef(t.timestamp),
+		MemOnly:   t.memOnly,
 	})
 }
 
