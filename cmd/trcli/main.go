@@ -29,7 +29,7 @@ import (
 )
 
 var (
-	defaultLogLevel    = "debug"
+	defaultLogLog      = "debug"
 	defaultLogConfig   = "console"
 	defaultCoordinator = "memory"
 )
