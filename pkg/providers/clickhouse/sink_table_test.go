@@ -2,6 +2,7 @@ package clickhouse
 
 import (
 	"encoding/json"
+	"github.com/blang/semver/v4"
 	"testing"
 	"time"
 
@@ -179,7 +180,7 @@ func TestTable_doOperation_failed_on_TOAST(t *testing.T) {
 	require.NoError(t, err)
 
 	_, table := makeSchema(cols, true)
-	sinkServer, err := NewSinkServerImpl(table.config, table.logger, table.metrics, nil)
+	sinkServer, err := newSinkServerImplWithVersion(table.config, table.logger, table.metrics, nil, semver.Version{})
 	sinkServer.db = db
 	require.NoError(t, err)
 
