@@ -74,6 +74,10 @@ func (s *SinkServer) mergeQ() {
 }
 
 func (s *SinkServer) ping() {
+	if s.callbacks != nil {
+		s.callbacks.OnPing(s)
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), errors.ClickhouseReadTimeout)
 	defer cancel()
 	row := s.db.QueryRowContext(ctx, `select 1+1;`)
@@ -85,10 +89,6 @@ func (s *SinkServer) ping() {
 	} else {
 		s.logger.Warn("Ping error", log.Error(err))
 		s.alive = false
-	}
-
-	if s.callbacks != nil {
-		s.callbacks.OnPing(s)
 	}
 }
 
@@ -324,31 +324,17 @@ ORDER BY
 	return nil
 }
 
-func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *stats.ChStats, cluster *sinkCluster) (*SinkServer, error) {
+func NewSinkServerImplWithVersion(
+	cfg model.ChSinkServerParams,
+	lgr log.Logger,
+	metrics *stats.ChStats,
+	cluster *sinkCluster,
+	version semver.Version,
+) (*SinkServer, error) {
 	host := *cfg.Host()
 	db, err := conn.ConnectNative(host, cfg)
 	if err != nil {
 		return nil, xerrors.Errorf("native connection error: %w", err)
-	}
-
-	version, err := backoff.RetryNotifyWithData(func() (string, error) {
-		var version string
-
-		if err := db.QueryRow("select version();").Scan(&version); err != nil {
-			if errors.IsFatalClickhouseError(err) {
-				return "", backoff.Permanent(xerrors.Errorf("unable to select clickhouse version: %w", err))
-			}
-			return "", xerrors.Errorf("unable to select clickhouse version: %w", err)
-		}
-		return version, nil
-	}, backoff.NewExponentialBackOff(), util.BackoffLoggerWarn(lgr, "version resolver"))
-	if err != nil {
-		return nil, xerrors.Errorf("unable to extract version: %w", err)
-	}
-
-	parsedVersion, err := parseSemver(version)
-	if err != nil {
-		return nil, xerrors.Errorf("unable to parse semver: %w", err)
 	}
 
 	s := &SinkServer{
@@ -365,7 +351,7 @@ func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *st
 		lastFail:      time.Time{},
 		callbacks:     nil,
 		cluster:       cluster,
-		version:       *parsedVersion,
+		version:       version,
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), errors.ClickhouseReadTimeout)
@@ -379,13 +365,47 @@ func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *st
 			}
 			s.alive = true
 		} else {
-			lgr.Error("Not CH error", log.Error(err), log.Any("db_host", *cfg.Host()))
+			lgr.Error("Not CH error", log.Error(err), log.Any("db_host", host))
 			s.alive = false
 		}
 	} else {
 		s.alive = true
 	}
 
+	return s, nil
+}
+
+func NewSinkServerImpl(cfg model.ChSinkServerParams, lgr log.Logger, metrics *stats.ChStats, cluster *sinkCluster) (*SinkServer, error) {
+	version, err := backoff.RetryNotifyWithData(func() (string, error) {
+		host := *cfg.Host()
+		db, err := conn.ConnectNative(host, cfg)
+		if err != nil {
+			return "", xerrors.Errorf("native connection error: %w", err)
+		}
+
+		var version string
+
+		if err := db.QueryRow("select version();").Scan(&version); err != nil {
+			if errors.IsFatalClickhouseError(err) {
+				return "", backoff.Permanent(xerrors.Errorf("unable to select clickhouse version: %w", err))
+			}
+			return "", xerrors.Errorf("unable to select clickhouse version: %w", err)
+		}
+		return version, nil
+	}, backoff.WithMaxRetries(util.NewExponentialBackOff(), 5), util.BackoffLoggerWarn(lgr, "version resolver"))
+	if err != nil {
+		return nil, xerrors.Errorf("unable to extract version: %w", err)
+	}
+
+	parsedVersion, err := parseSemver(version)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to parse semver: %w", err)
+	}
+
+	s, err := NewSinkServerImplWithVersion(cfg, lgr, metrics, cluster, *parsedVersion)
+	if err != nil {
+		return nil, xerrors.Errorf("unable to build: %w", err)
+	}
 	return s, nil
 }
 
