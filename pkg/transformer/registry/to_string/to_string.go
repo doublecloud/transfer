@@ -97,10 +97,10 @@ func (f *ToStringTransformer) Suitable(table abstract.TableID, schema *abstract.
 }
 
 func (f *ToStringTransformer) ResultSchema(original *abstract.TableSchema) (*abstract.TableSchema, error) {
-	result := make([]abstract.ColSchema, 0)
-	for _, col := range original.Columns() {
+	result := original.Columns().Copy()
+	for i, col := range result {
 		if f.Columns.Match(col.ColumnName) {
-			result = append(result, col)
+			result[i].DataType = schema.TypeString.String()
 		}
 	}
 	return abstract.NewTableSchema(result), nil
