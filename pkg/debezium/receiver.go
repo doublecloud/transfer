@@ -199,6 +199,10 @@ func (r *Receiver) receive(schema, payload []byte) (*abstract.ChangeItem, error)
 		Query: "",
 		Size:  abstract.RawEventSize(util.DeepSizeof(payload)),
 	}
+	if kind != abstract.DeleteKind {
+		result.ColumnNames = make([]string, 0, len(currDebeziumSchema.Fields))
+		result.ColumnValues = make([]interface{}, 0, len(currDebeziumSchema.Fields))
+	}
 	for i := range currDebeziumSchema.Fields {
 		if val, ok := currValuesMap[currDebeziumSchema.Fields[i].Field]; ok {
 			originalType := r.originalType(payloadStruct.Source.Schema, payloadStruct.Source.Table, currDebeziumSchema.Fields[i].Field)

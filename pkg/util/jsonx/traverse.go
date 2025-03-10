@@ -1,7 +1,7 @@
 package jsonx
 
 import (
-	"encoding/json"
+	"github.com/goccy/go-json"
 
 	"github.com/doublecloud/transfer/library/go/core/xerrors"
 )
