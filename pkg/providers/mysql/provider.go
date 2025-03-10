@@ -3,7 +3,6 @@ package mysql
 import (
 	"context"
 	"encoding/gob"
-
 	"github.com/cenkalti/backoff/v4"
 	"github.com/doublecloud/transfer/library/go/core/metrics"
 	"github.com/doublecloud/transfer/library/go/core/metrics/solomon"
@@ -14,6 +13,8 @@ import (
 	debeziumparameters "github.com/doublecloud/transfer/pkg/debezium/parameters"
 	"github.com/doublecloud/transfer/pkg/middlewares"
 	"github.com/doublecloud/transfer/pkg/providers"
+	"github.com/doublecloud/transfer/pkg/providers/mysql/dblog"
+	abstract_sink "github.com/doublecloud/transfer/pkg/sink"
 	"go.ytsaurus.tech/library/go/core/log"
 )
 
@@ -232,8 +233,15 @@ func (p *Provider) Activate(ctx context.Context, task *model.TransferOperation, 
 		if err := callbacks.CheckIncludes(tables); err != nil {
 			return xerrors.Errorf("Failed in accordance with configuration: %w", err)
 		}
-		if err := callbacks.Upload(tables); err != nil {
-			return xerrors.Errorf("Snapshot loading failed: %w", err)
+		if src.DBLogEnabled {
+			p.logger.Info("DBLog enabled")
+			if err := p.DBLogUpload(ctx, tables); err != nil {
+				return xerrors.Errorf("DBLog snapshot loading failed: %w", err)
+			}
+		} else {
+			if err := callbacks.Upload(tables); err != nil {
+				return xerrors.Errorf("Snapshot loading failed: %w", err)
+			}
 		}
 		if p.transfer.SnapshotOnly() {
 			if err := LoadMysqlSchema(p.transfer, registry, true); err != nil {
@@ -277,6 +285,68 @@ func (p *Provider) Update(ctx context.Context, addedTables []abstract.TableDescr
 
 func (p *Provider) Type() abstract.ProviderType {
 	return ProviderType
+}
+
+func (p *Provider) DBLogUpload(ctx context.Context, tables abstract.TableMap) error {
+	src, ok := p.transfer.Src.(*MysqlSource)
+	if !ok {
+		return xerrors.Errorf("unexpected type: %T", p.transfer.Src)
+	}
+	storage, err := NewStorage(src.ToStorageParams())
+	if err != nil {
+		return xerrors.Errorf("failed to create postgres storage: %w", err)
+	}
+
+	// ensure SignalTable exists
+	_, err = dblog.NewSignalTable(ctx, storage.DB, p.logger, p.transfer.ID, src.Database)
+	if err != nil {
+		return xerrors.Errorf("unable to create signal table: %w", err)
+	}
+	// delete previous watermarks
+	if err := dblog.DeleteWatermarks(ctx, storage.DB, src.Database, p.transfer.ID); err != nil {
+		return xerrors.Errorf("unable to delete watermarks: %w", err)
+	}
+
+	sourceWrapper, err := p.Source()
+	if err != nil {
+		return xerrors.Errorf("failed to create source wrapper: %w", err)
+	}
+
+	dblogStorage, err := dblog.NewStorage(p.logger, sourceWrapper, storage, storage.DB, 10*1024, p.transfer.ID, src.Database, Represent)
+	if err != nil {
+		return xerrors.Errorf("failed to create DBLog storage: %w", err)
+	}
+
+	tableDescs := tables.ConvertToTableDescriptions()
+	for _, table := range tableDescs {
+		asyncSink, err := abstract_sink.MakeAsyncSink(
+			p.transfer,
+			p.logger,
+			p.registry,
+			p.cp,
+			middlewares.MakeConfig(middlewares.WithEnableRetries),
+		)
+
+		pusher := abstract.PusherFromAsyncSink(asyncSink)
+
+		if err != nil {
+			return xerrors.Errorf("failed to make async sink: %w", err)
+		}
+
+		if err = backoff.Retry(func() error {
+			p.logger.Infof("Starting upload table: %s", table.String())
+
+			err := dblogStorage.LoadTable(ctx, table, pusher)
+			if err == nil {
+				p.logger.Infof("Upload table %s successfully", table.String())
+			}
+			return err
+		}, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 10)); err != nil {
+			return xerrors.Errorf("failed to load table: %w", err)
+		}
+	}
+
+	return nil
 }
 
 func New(lgr log.Logger, registry metrics.Registry, cp coordinator.Coordinator, transfer *model.Transfer) providers.Provider {
